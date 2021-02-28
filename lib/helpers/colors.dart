@@ -15,14 +15,15 @@ const Color subTitleColor = Color(0xff9EAFBE);
 const Color lightGreyColor = Color(0xff353B46);
 const Color textColor = Colors.white;
 
-const kPrimaryColor = Color(0xFF65000B);
+const kPrimaryColor = Color(0xFF1b6ca8);
+const kPrimaryColor2 = Color(0xFF65000B);
 const kPrimaryLightColor = Color(0xFF085782);
 const kSecondaryColor = Color.fromRGBO(202, 10, 34, 1);
 const kPrimaryCardColor = Color(0xFFCCCCCC);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
-  colors: [kPrimaryColor, kPrimaryColor],
+  colors: [kPrimaryColor, kPrimaryColor2],
 );
 const kThirdColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);

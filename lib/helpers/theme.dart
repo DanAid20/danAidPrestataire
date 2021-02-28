@@ -23,7 +23,7 @@ ThemeData theme() {
 
 InputDecorationTheme inputDecorationTheme() {
   OutlineInputBorder outlineInputBorder = OutlineInputBorder(
-    //borderRadius: BorderRadius.circular(2),
+    borderRadius: BorderRadius.circular(18),
     borderSide: BorderSide(color: kPrimaryColor),
     gapPadding: 12,
   );
@@ -35,19 +35,19 @@ InputDecorationTheme inputDecorationTheme() {
     contentPadding:
         EdgeInsets.symmetric(horizontal: 42, vertical: 20),
     labelStyle: TextStyle(color: kPrimaryColor),
-    fillColor: kTextLightColor.withOpacity(0.1),
+    fillColor: kTextLightColor.withOpacity(.1),
     filled: true,
     enabledBorder: outlineInputBorder,
     focusedBorder: outlineInputBorder,
     border: outlineInputBorder,
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(0),
-      borderSide: BorderSide(color: Colors.red),
+      borderRadius: BorderRadius.circular(18),
+      borderSide: BorderSide(color: kPrimaryColor2),
       gapPadding: 10,
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(0),
-      borderSide: BorderSide(color: Colors.red),
+      borderRadius: BorderRadius.circular(18),
+      borderSide: BorderSide(color: kPrimaryColor2),
       gapPadding: 10,
     ),
   );

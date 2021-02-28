@@ -1,4 +1,3 @@
-import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +60,7 @@ class KTextFormField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: horizontal(size: 12),
-          vertical: vertical(size: 10)),
+          vertical: vertical(size: 15)),
       child: TextFormField(
         style: TextStyle(fontSize: 18, color: kTextColor),
         validator: validator,
@@ -87,10 +86,9 @@ class KTextFormField extends StatelessWidget {
           labelText: labelText,
           hintText: hintText,
           counterText: "",
-          hintStyle:
-              TextStyle(fontSize: getProportionateScreenWidth(17)),
+          hintStyle: TextStyle(fontSize: fontSize(size: 17)),
           labelStyle: TextStyle(
-              color: kPrimaryColor, fontWeight: FontWeight.w600),
+              color: kPrimaryColor, fontWeight: FontWeight.w800),
           floatingLabelBehavior: FloatingLabelBehavior.always,
         ),
       ),

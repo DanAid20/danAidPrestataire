@@ -2,6 +2,8 @@ import 'package:danaid/core/models/step.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/helpers/strings.dart';
+import 'package:danaid/helpers/styles.dart';
 import 'package:flutter/material.dart';
 
 class OnboardScreen extends StatefulWidget {
@@ -13,7 +15,6 @@ class _OnboardScreenState extends State<OnboardScreen> {
   List<StepModel> list = StepModel.list;
   var _controller = PageController();
   var initialPage = 0;
-  final _mSize = SizeConfig.defaultSize;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,26 @@ class _OnboardScreenState extends State<OnboardScreen> {
         children: <Widget>[
           _appBar(),
           _body(_controller),
-          _indicator(),
+          (initialPage != list.length - 1)
+              ? _indicator()
+              : Container(
+                  margin: EdgeInsets.only(bottom: bottom(size: 30)),
+                  child: ButtonTheme(
+                    minWidth: width(size: 300),
+                    height: height(size: 64),
+                    child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        color: kPrimaryColor,
+                        onPressed: () => Navigator.of(context)
+                            .pushReplacementNamed('/login'),
+                        child: Text(
+                          Strings.START_APP.toUpperCase(),
+                          softWrap: true,
+                          style: Styles.onboardTextStyle,
+                        )),
+                  ),
+                ),
         ],
       ),
     );
@@ -53,7 +73,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
             child: Container(
               width: SizeConfig.defaultSize * 5,
               height: SizeConfig.defaultSize * 5,
-              padding: EdgeInsets.symmetric(horizontal: horizontal(size: 12)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: horizontal(size: 12)),
               decoration: BoxDecoration(
                 color: Colors.grey.withAlpha(50),
                 borderRadius: BorderRadius.all(
@@ -95,13 +116,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
         itemBuilder: (context, index) {
           return Column(
             children: <Widget>[
-              index == 1
-                  ? _displayText(list[index].text)
-                  : _displayImage(list[index].image),
-              VerticalSpacing(of: 25),
-              index == 1
-                  ? _displayImage(list[index].image)
-                  : _displayText(list[index].text),
+              _displayImage(list[index].image),
+              _displayText(list[index].text, list[index].title),
             ],
           );
         },
@@ -157,21 +173,38 @@ class _OnboardScreenState extends State<OnboardScreen> {
     );
   }
 
-  _displayText(String text) {
-    return Text(
-      text,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: fontSize(size: 20),
+  _displayText(String text, String title) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: horizontal(size: 15)),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: kPrimaryColor,
+              fontSize: fontSize(size: 25),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          VerticalSpacing(of: 5),
+          Text(
+            text,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: fontSize(size: 19),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
-      textAlign: TextAlign.center,
     );
   }
 
   _displayImage(String image) {
     return Image.asset(
       image,
-      height: MediaQuery.of(context).size.height * .5,
+      height: MediaQuery.of(context).size.height * .45,
     );
   }
 }
