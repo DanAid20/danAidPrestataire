@@ -4,19 +4,19 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/default_btn.dart';
 import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:danaid/widgets/texts/sign_in_up_tag.dart';
+import 'package:danaid/widgets/texts/welcome_text_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class RegisterView extends StatefulWidget {
+class PasswordResetView extends StatefulWidget{
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  _PasswordResetViewState createState() => _PasswordResetViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _PasswordResetViewState extends State<PasswordResetView> {
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
-  TextEditingController _mPhoneController, _mPasswordController, _mEmailController, _mCountryController;
+  TextEditingController _mPhoneController, _mPasswordController, _mEmailController;
   bool _mIsPass = true;
 
   @override
@@ -24,7 +24,6 @@ class _RegisterViewState extends State<RegisterView> {
     _mPhoneController = TextEditingController();
     _mPasswordController = TextEditingController();
     _mEmailController = TextEditingController();
-    _mCountryController = TextEditingController();
     super.initState();
   }
 
@@ -59,11 +58,11 @@ class _RegisterViewState extends State<RegisterView> {
                               AssetImage('assets/images/male.png'),
                             ),
                           ),
+                          WelcomeHeader(),
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: horizontal(size: 35)),
-                            child: Text('Entrez vos informations afin de créer votre compte '
-                                'et devenez membre de la communauté Danaid.',
+                            child: Text('Re-initialisez votre mot de passe grâce à votre téléphone et adresse email,',
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -87,8 +86,8 @@ class _RegisterViewState extends State<RegisterView> {
                         child: ListView(
                           children: [
                             loginForm(),
-                            DefaultBtn(formKey: _mFormKey, signText: "S'inscrire", signRoute: '/otp',),
-                            SIgnInUpTag(title: 'Déjà membre ? ', subTitle: 'Se connecter', signRoute: '/login',),
+                            DefaultBtn(formKey: _mFormKey, signText: "Re-initialiser mot de passe", signRoute: '/home',),
+                            SIgnInUpTag(title: '', subTitle: 'Annuler', signRoute: '/login',),
                             SizedBox(height: height(size: 25),)
                           ],
                         ),
@@ -109,18 +108,6 @@ class _RegisterViewState extends State<RegisterView> {
         key: _mFormKey,
         child: Column(
           children: [
-            KTextFormField(
-              controller: _mCountryController,
-              labelText: 'Pays',
-              hintText: 'Entrez votre pays',
-              prefixIcon:
-              Icon(SimpleLineIcons.flag),
-              validator: (String country) {
-                return (country.isEmpty)
-                    ? kCountryNullError
-                    : null;
-              },
-            ),
             KTextFormField  (
               controller: _mEmailController,
               labelText: 'Adresse E-mail',
@@ -150,9 +137,9 @@ class _RegisterViewState extends State<RegisterView> {
             KTextFormField(
               controller: _mPasswordController,
               isPassword: _mIsPass,
-              labelText: 'Mot de Passe',
+              labelText: 'Nouveau Mot de Passe',
               hintText:
-              'Entrez votre mot de passe',
+              'Entrez votre nouveau mot de passe',
               prefixIcon:
               Icon(SimpleLineIcons.lock),
               validator: (String pwd) {
@@ -177,4 +164,3 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 }
-
