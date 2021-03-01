@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class SizeConfig {
@@ -65,3 +67,7 @@ class HorizontalSpacing extends StatelessWidget {
     );
   }
 }
+
+  double wv = SizeConfig.screenWidth / 100;
+  double hv = SizeConfig.screenHeight / 100;
+  double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;

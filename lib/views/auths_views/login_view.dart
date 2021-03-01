@@ -172,7 +172,9 @@ class _LoginViewState extends State<LoginView> {
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(18)),
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/home');
+                            },
                           ),
                         ),
                         Container(
