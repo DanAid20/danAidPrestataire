@@ -8,7 +8,6 @@ import 'package:danaid/views/screens/myfamily_screen.dart';
 import 'package:danaid/views/screens/partners_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomePageView extends StatefulWidget {
