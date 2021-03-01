@@ -70,7 +70,7 @@ class _LoginViewState extends State<LoginView> {
                         padding: EdgeInsets.symmetric(
                             horizontal: horizontal(size: 35)),
                         child: Text(
-                          'Entre votre mot de passe et email pour accéder à votre compte.',
+                          'Entrez votre mot de passe et email pour accéder à votre compte.',
                           softWrap: true,
                           textAlign: TextAlign.center,
                           style: TextStyle(

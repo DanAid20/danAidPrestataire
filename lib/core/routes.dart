@@ -1,4 +1,5 @@
 import 'package:danaid/views/auths_views/login_view.dart';
+import 'package:danaid/views/auths_views/register_view.dart';
 import 'package:danaid/views/home_page_view.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
@@ -9,4 +10,5 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/intro-view": (context) => OnboardScreen(),
   "/home": (context) => HomePageView(),
   "/login": (context) => LoginView(),
+  "/register": (context) => RegisterView(),
 };
