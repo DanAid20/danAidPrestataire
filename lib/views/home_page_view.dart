@@ -6,8 +6,10 @@ import 'package:danaid/views/screens/health_book_screen.dart';
 import 'package:danaid/views/screens/hello_screen.dart';
 import 'package:danaid/views/screens/myfamily_screen.dart';
 import 'package:danaid/views/screens/partners_screen.dart';
+import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomePageView extends StatefulWidget {
@@ -38,7 +40,7 @@ class _HomePageViewState extends State<HomePageView> {
           children: [
 
             Container(
-              margin: EdgeInsets.only(bottom: height*10),
+              margin: EdgeInsets.only(bottom: height*8),
               child: getCurrentPage(),
             ),
 
@@ -47,8 +49,19 @@ class _HomePageViewState extends State<HomePageView> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    color: kPrimaryColor,
-                    constraints: BoxConstraints(maxHeight: height*10),
+                    color: Colors.transparent,
+                    height: hv*12,
+                    width: double.infinity,
+                    child: CustomPaint(painter: BottomNavBarBackgroundPainter(),),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    color: Colors.transparent,
+                    height: hv*12,
+                    width: double.infinity,
+                    child: CustomPaint(painter: BottomNavBarPainter(),),
                   ),
                 ),
                 Align(
@@ -60,11 +73,11 @@ class _HomePageViewState extends State<HomePageView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        index == 0 ? iconActive(icon: MdiIcons.viewGridOutline) : Container(),
-                        index == 1 ? iconActive(icon: Icons.home_outlined) : Container(),
-                        index == 2 ? iconActive(icon: MdiIcons.fileDocumentOutline) : Container(),
-                        index == 3 ? iconActive(icon: MdiIcons.mapMarkerOutline) : Container(),
-                        index == 4 ? iconActive(icon: MdiIcons.accountGroupOutline) : Container(),
+                        index == 0 ? iconActive(svgUrl: "assets/icons/Two-tone/Category.svg") : Container(),
+                        index == 1 ? iconActive(svgUrl: "assets/icons/Two-tone/Home.svg") : Container(),
+                        index == 2 ? iconActive(svgUrl: "assets/icons/Two-tone/Paper.svg") : Container(),
+                        index == 3 ? iconActive(svgUrl: "assets/icons/Two-tone/Location.svg") : Container(),
+                        index == 4 ? iconActive(svgUrl: "assets/icons/Two-tone/3User.svg") : Container(),
                       ],
                     ),
                   ),
@@ -73,16 +86,17 @@ class _HomePageViewState extends State<HomePageView> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     height: height*10,
-                    padding: EdgeInsets.symmetric(horizontal: width*3, vertical: height*1.5),
+                    padding: EdgeInsets.symmetric(horizontal: width*3, vertical: height*1.0),
                     decoration: BoxDecoration(color: Colors.transparent,),
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        index == 0 ? SizedBox(width: width*13,) : bottomIcon(icon: MdiIcons.viewGridOutline, title: "Entraide", onTap: entraideTapped),
-                        index == 1 ? SizedBox(width: width*13,) : bottomIcon(icon: Icons.home_outlined, title: "Accueil", onTap: accueilTapped),
-                        index == 2 ? SizedBox(width: width*13,) : bottomIcon(icon: MdiIcons.fileDocumentOutline, title: "Carnet", onTap: carnetTapped),
-                        index == 3 ? SizedBox(width: width*13,) : bottomIcon(icon: MdiIcons.mapMarkerOutline, title: "partenaire", onTap: partenaireTapped),
-                        index == 4 ? SizedBox(width: width*13,) : bottomIcon(icon: MdiIcons.accountGroupOutline, title: "famille", onTap: familleTapped),
+                        index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: "Entraide", onTap: entraideTapped),
+                        index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: accueilTapped),
+                        index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Carnet", onTap: carnetTapped),
+                        index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "partenaire", onTap: partenaireTapped),
+                        index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: "famille", onTap: familleTapped),
                       ],
                     ),
                   ),
@@ -121,7 +135,7 @@ class _HomePageViewState extends State<HomePageView> {
     });
   }
 
-  bottomIcon({IconData icon, String title, Function onTap}){
+  bottomIcon({String svgUrl, String title, Function onTap}){
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -129,7 +143,7 @@ class _HomePageViewState extends State<HomePageView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: Colors.white.withOpacity(0.7)),
+            SvgPicture.asset(svgUrl, width: inch*3, color: Colors.white.withOpacity(0.65)),
             Text(title, style: TextStyle(color: Colors.white.withOpacity(0.7)),)
           ],
         ),
@@ -137,14 +151,14 @@ class _HomePageViewState extends State<HomePageView> {
     );
   }
 
-  iconActive({IconData icon}){
+  iconActive({String svgUrl}){
     return CircleAvatar(
       radius: width*9.2,
       backgroundColor: kPrimaryColor,
       child: CircleAvatar(
         radius: width*7.2,
         backgroundColor: Colors.white,
-        child: Icon(icon, size: inch*4, color: kPrimaryColor.withOpacity(0.65),),
+        child: SvgPicture.asset(svgUrl, width: inch*4, color: kPrimaryColor.withOpacity(0.65)),
       ),
     );
   }

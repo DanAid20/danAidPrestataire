@@ -28,3 +28,5 @@ const kPrimaryGradientColor = LinearGradient(
 const kThirdColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 const kTextLightColor = Color.fromRGBO(237, 237, 237, 1);
+
+const kSouthSeas = Color(0xFF57CECA);
