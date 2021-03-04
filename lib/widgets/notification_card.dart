@@ -25,7 +25,7 @@ class NotificationCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: wv*30,
+              height: wv*25,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*2), topRight: Radius.circular(inch*2)),
                 image: DecorationImage(image: AssetImage("assets/images/detail_illustration.png"), fit: BoxFit.fitWidth)

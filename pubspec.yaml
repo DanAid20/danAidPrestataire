@@ -54,6 +54,7 @@ dependencies:
   data_connection_checker: ^0.3.4
   flutter_share: ^1.0.5
   material_design_icons_flutter: ^4.0.5855
+  flutter_svg: 0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +81,9 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/logos/
+    - assets/icons/Two-tone/
+    - assets/icons/Bulk/
+    #- assets/logos/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
