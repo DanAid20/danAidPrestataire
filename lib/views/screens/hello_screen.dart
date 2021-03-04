@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/advantage_card.dart';
+import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -88,6 +90,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
         unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
         tabs: tabs
       ),
+      Divider(height: 1, thickness: 0.7,),
       Expanded(
         child: TabBarView(
           controller: _tabController,
@@ -102,13 +105,86 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
   Widget getHealthTab(){
     return ListView(
       children: [
-        Container(
-          margin: EdgeInsets.all(inch*2),
-          child: Row(children: [
-            Text("Mes Avantages", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-            Text("Voir plus")
-          ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-        )
+        Column(
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*1),
+              child: Row(children: [
+                Text("Mes Avantages", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                Text("Voir plus..")
+              ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+            ),
+            Column(mainAxisSize: MainAxisSize.min,
+              children: [
+                SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
+                child: Row(children: [
+                  AdvantageCard(
+                    label: "Fond de Soins",
+                    description: "Demander une prise en charge maladie",
+                    state: "DISPONIBLE",
+                    price: "#350.000Xaf",
+                    color: kPrimaryColor,
+                    onTap: (){},
+                  ),
+                  AdvantageCard(
+                    label: "Prêt de santé",
+                    description: "Demander un prêt santé",
+                    state: "DISPONIBLE",
+                    price: "#100.000Xaf",
+                    color: Colors.brown.withOpacity(0.7),
+                    onTap: (){},
+                  ),
+                  AdvantageCard(
+                    label: "Fond de Soins",
+                    description: "Demander une prise en charge maladie",
+                    state: "DISPONIBLE",
+                    price: "#350.000Xaf",
+                    color: Colors.grey,
+                    onTap: (){},
+                  ),
+                ],),
+                ),
+              ],
+            ),
+            Divider(),
+            Container(
+              margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0.5),
+              child: Row(children: [
+                Text("Notifications", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                Text("Voir plus..")
+              ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+            ),
+            Column(mainAxisSize: MainAxisSize.min,
+              children: [
+                SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
+                child: Row(children: [
+                  NotificationCard(
+                    instruction: "Aller au Labo",
+                    description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                  ),
+                  NotificationCard(
+                    instruction: "Aller au Labo",
+                    description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                  ),
+                  NotificationCard(
+                    instruction: "Aller au Labo",
+                    description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                  ),
+                ],),
+                ),
+              ],
+            ),
+            Divider(),
+            Container(
+              margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0),
+              child: Row(children: [
+                Text("Nouvelles du réseau", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                Text("Y aller..")
+              ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+            ),
+            SizedBox(height: 50,)
+          ],
+        ),
       ],
     );
   }
