@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/screens/my_coverage_tab.dart';
 import 'package:danaid/widgets/advantage_card.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,34 +31,62 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      SizedBox(height: 10,),
-      Row(
-        children: [
-          SizedBox(width: 10,),
-          CircleAvatar(
-            radius: wv*8,
-            child: Image.asset("assets/images/avatar-profile.jpg", fit: BoxFit.cover,),
-          ),
-          Column(crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Bonjour Fabrice!", style: TextStyle(fontSize: inch*2.7, color: kPrimaryColor, fontWeight: FontWeight.w600),),
-              Text("Famille"),
-            ],
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          Column(crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Stack(
+    return Scaffold(
+      body: NestedScrollView(floatHeaderSlivers: true, 
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled){
+          return <Widget>[
+            SliverAppBar(
+              toolbarHeight: hv*12,
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              title: Column(
                 children: [
-                  IconButton(
-                    color: kPrimaryColor,
-                    icon: Icon(Icons.notifications_none_rounded, size: wv*8,),
-                    onPressed: (){}),
+                  Row(
+                    children: [
+                      SizedBox(width: 0,),
+                      CircleAvatar(
+                        radius: wv*8,
+                        child: Image.asset("assets/images/avatar-profile.jpg", fit: BoxFit.cover,),
+                      ),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: inch*2.7, color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                          Text("Couverture Accès", style: TextStyle(fontSize: inch*1.5, color: kPrimaryColor)),
+                        ],
+                      ),
+                      Expanded(
+                        child: Container(),
+                      ),
+                      SizedBox(width: 10,)
+                    ],
+                  ),
+                  /*Row(
+                    children: [
+                      Text("12 000 Pts", style: TextStyle(fontSize: inch*1.1, fontWeight: FontWeight.w700, color: kPrimaryColor),),
+                      SizedBox(width: wv*2,),
+                      Icon(MdiIcons.shieldCheck, size: wv*4, color: Colors.red.withOpacity(0.6),),
+                      Icon(MdiIcons.starBox, size: wv*4, color: Colors.teal.withOpacity(0.7),)
+                    ],
+                  ),*/
+                ],
+              ),
+              actions: [
+                Stack(
+                  children: [
+                    SizedBox(width: wv*30),
                     Positioned(
-                      left: wv*7,
+                      right: 0,
+                      child: InkWell(
+                        onTap: (){},
+                        child: Container(
+                          padding: EdgeInsets.all(wv*3),
+                          child: SvgPicture.asset("assets/icons/Two-tone/Notification.svg", width: wv*7,)
+                        ),
+                      ),
+                    ),
+                    
+                    Positioned(
+                      right:wv*1,
                       top: hv*1,
                       child: Container(
                         padding: EdgeInsets.all(3),
@@ -64,46 +94,54 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                           color: Colors.yellow,
                           borderRadius: BorderRadius.circular(100)
                         ),
-                        child: Text("9+", style: TextStyle(fontSize: wv*2.2, fontWeight: FontWeight.w900),),
+                        child: Text("9+", style: TextStyle(fontSize: wv*2.2, color: Colors.teal, fontWeight: FontWeight.w900),),
                       ),
-                    )
-                ],
-              ),
-              Row(
-                children: [
-                  Text("12 000 Pts", style: TextStyle(fontSize: inch*1.1, fontWeight: FontWeight.w700, color: kPrimaryColor),),
-                  SizedBox(width: wv*2,),
-                  Icon(MdiIcons.shieldCheck, size: wv*4, color: Colors.red.withOpacity(0.6),),
-                  Icon(MdiIcons.starBox, size: wv*4, color: Colors.teal.withOpacity(0.7),)
-                ],
-              )
-            ],
-          ),
-          SizedBox(width: 10,)
-        ],
-      ),
+                    ),
 
-      TabBar(
-        indicatorWeight: 3,
-        indicatorColor: kPrimaryColor,
-        isScrollable: true,
-        controller: _tabController,
-        labelColor: kPrimaryColor,
-        labelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: inch*2),
-        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
-        tabs: tabs
-      ),
-      Divider(height: 1, thickness: 0.7,),
-      Expanded(
-        child: TabBarView(
+                    Positioned(
+                      right: wv*1,
+                      top: hv*8,
+                      child: Container(
+                        child: Row(
+                          children: [
+                            Text("12 000 Pts", style: TextStyle(fontSize: inch*1.1, fontWeight: FontWeight.w700, color: kPrimaryColor),),
+                            SizedBox(width: wv*2,),
+                            Icon(MdiIcons.shieldCheck, size: wv*4, color: Colors.red.withOpacity(0.6),),
+                            Icon(MdiIcons.starBox, size: wv*4, color: Colors.teal.withOpacity(0.7),)
+                          ],
+                       ),
+                      ),
+                    ),
+
+                  ],
+                ),
+              ],
+              pinned: true,
+              floating: true,
+              bottom: TabBar(
+                indicatorWeight: 3,
+                indicatorColor: kPrimaryColor,
+                isScrollable: true,
+                controller: _tabController,
+                labelColor: kPrimaryColor,
+                labelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: inch*2),
+                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
+                tabs: tabs
+              ),
+            )
+          ];
+        }, 
+      
+        body: TabBarView(
           controller: _tabController,
           children: <Widget>[
             getHealthTab(),
-            const Text("MaCouverture"),
+            MyCoverageTabView(),
             const Text("Mon Docteur")
-          ],),
-      )
-    ],);
+          ],)
+        
+    )
+    );
   }
   Widget getHealthTab(){
     return Column(
@@ -216,11 +254,11 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                 SizedBox(height: hv*2,),
 
                 Row(children: [
-                  getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),     
-                  getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),     
-                  getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),     
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),     
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
                   Expanded(child: Container()),
                   Container(
                     padding: EdgeInsets.all(10),
@@ -235,13 +273,13 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                 SizedBox(height: hv*2,),
                 
                 Row(children: [
-                  getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: 72),
-                  verticalDivider(),
-                  getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: 122),
-                  verticalDivider(),
-                  getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Followers", occurence: 21),
-                  verticalDivider(),
-                  getProfileStat(imgUrl: "assets/icons/message.svg", title: "Messages", occurence: 3),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: 72),
+                  HomePageComponents().verticalDivider(),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: 122),
+                  HomePageComponents().verticalDivider(),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Followers", occurence: 21),
+                  HomePageComponents().verticalDivider(),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Messages", occurence: 3),
                 ],mainAxisAlignment: MainAxisAlignment.spaceBetween,)
               ],
             ),
@@ -249,44 +287,6 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
         ),
         SizedBox(height: hv*4)
       ],
-    );
-  }
-  getAvatar({String imgUrl}){
-    return Padding(
-      padding: EdgeInsets.only(right: wv*1),
-      child: Stack(children: [
-        CircleAvatar(
-          radius: wv*5.5,
-          child: Image.asset(imgUrl, fit: BoxFit.cover,),
-        ),
-        Positioned(
-          top: wv*7,
-          left: wv*8,
-          child: CircleAvatar(
-            radius: wv*1.5,
-            backgroundColor: primaryColor,
-          ),
-        )
-      ],),
-    );
-  }
-  getProfileStat({String imgUrl, String title, int occurence}){
-    return Row(children: [
-      Container(
-        margin: EdgeInsets.only(right: wv*1),
-        child: SvgPicture.asset(imgUrl, width: wv*7,),
-      ),
-      Column(children: [ 
-        Text("$occurence", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-        Text(title, style: TextStyle(fontSize: inch*1.3))
-      ],)
-    ]);
-  }
-  verticalDivider(){
-    return Container(
-      width: wv*0.5,
-      height: wv*8,
-      color: Colors.grey.withOpacity(0.4),
     );
   }
 }
