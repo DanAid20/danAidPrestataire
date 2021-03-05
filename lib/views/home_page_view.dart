@@ -40,7 +40,7 @@ class _HomePageViewState extends State<HomePageView> {
           children: [
 
             Container(
-              margin: EdgeInsets.only(bottom: height*8),
+              margin: EdgeInsets.only(bottom: height*7),
               child: getCurrentPage(),
             ),
 
