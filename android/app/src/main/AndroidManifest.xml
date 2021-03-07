@@ -9,6 +9,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Danaid"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDo_GVP7wHiUoMuXfS-KmfwWr8PAlLZ8Ww"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
