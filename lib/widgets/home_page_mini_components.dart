@@ -50,7 +50,6 @@ class HomePageComponents {
 
     getMyCoverageHospitalsTiles({String initial, String name, String date, String price, int state}){
       return ListTile(
-        dense: true,
         leading: Container(
           width: wv*13,
           padding: EdgeInsets.symmetric(horizontal: wv*1, vertical: hv*2),
@@ -60,7 +59,7 @@ class HomePageComponents {
           ),
           child: Center(child: Text(initial, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: inch*2, fontWeight: FontWeight.w700))),
         ),
-        title:  Text(name, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+        title:  Text(name, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: inch*1.6),),
         subtitle: Text(date, style: TextStyle(color: kPrimaryColor),),
         trailing: Column(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -71,6 +70,62 @@ class HomePageComponents {
           ],
         ),
       );
+    }
+
+    getMyDoctorAppointmentTile({String label, String doctorName, String date, String type, int state}){
+      return ListTile(
+        leading: Container(
+          width: wv*12,
+          padding: EdgeInsets.symmetric(horizontal: wv*1),
+          decoration: BoxDecoration(
+            color: Colors.teal,
+            borderRadius: BorderRadius.all(Radius.circular(inch*1))
+          ),
+          child: Column(mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("18", style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: inch*1.7, fontWeight: FontWeight.w700)),
+              Text("02/21", style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: inch*1.5, fontWeight: FontWeight.w400)),            ],
+          ),
+        ),
+        title:  Padding(
+          padding: const EdgeInsets.only(top:8.0),
+          child: Text(label, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700, fontSize: inch*2),overflow: TextOverflow.ellipsis,),
+        ),
+        subtitle: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(date, style: TextStyle(color: kPrimaryColor, fontSize: inch*1.4),),
+            Text(doctorName, style: TextStyle(color: kPrimaryColor, fontSize: inch*1.4),),
+          ],
+        ),
+        trailing: Column(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(type, style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7),),
+            Text(
+              getAppointmentStateText(state), 
+              style: TextStyle(color: getAppointmentStateColor(state) , fontSize: inch*1.7),),
+          ],
+        ),
+      );
+    }
+
+    String getAppointmentStateText(int val){
+      if (val == 0)
+        return "En attente";
+      else if(val == 1)
+        return "Approuvé";
+      else if(val == 2)
+        return "Rejetté";
+      else return "Clôturé";
+    }
+
+    Color getAppointmentStateColor(int val){
+      if (val == 0)
+        return primaryColor;
+      else if(val == 1)
+        return Colors.teal;
+      else if(val == 2)
+        return Colors.red;
+      else return Colors.brown;
     }
 
     verticalDivider(){

@@ -1,6 +1,4 @@
 import 'package:danaid/core/utils/config_size.dart';
-import 'package:danaid/helpers/colors.dart';
-import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 
 class AdvantageCard extends StatelessWidget {
@@ -29,6 +27,7 @@ class AdvantageCard extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(inch*2)),
+                image: DecorationImage(image: AssetImage("assets/images/Plant.png"), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.grey.withOpacity(0.2), BlendMode.dstATop)),
                 color: color,
               ),
               child: Stack(
@@ -38,11 +37,6 @@ class AdvantageCard extends StatelessWidget {
                     child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(height: wv*7,),
-                        Container(
-                          width: wv*30,
-                          height: wv*15,
-                          child: CustomPaint(painter: AdvantageCardCurvePainter(),),
-                        ),
                       ],
                     ),
                   ),
@@ -54,23 +48,27 @@ class AdvantageCard extends StatelessWidget {
                         Expanded(child: Container()),
                         Text("DanAid", style: TextStyle(fontSize: inch*1.5, fontWeight: FontWeight.bold, color: Colors.white)),
                       ],),
-                      Align(child: Text(state, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.w400, color: Colors.white)), alignment: Alignment.topLeft,),
+                      Align(child: Text(state, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.w400, color: Colors.white70)), alignment: Alignment.topLeft,),
                       Align(
                         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(price, style: TextStyle(fontSize: inch*2.2, fontWeight: FontWeight.bold, color: Colors.white70),),
+                            Text(price, style: TextStyle(fontSize: inch*2.2, fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.8)),),
                             SizedBox(height: hv*1,),
-                            Container(
-                              width: wv*25,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(inch*1.5)),
-                                color: Colors.white.withOpacity(0.80),
-                              ),
-                              padding: EdgeInsets.only(left: inch*1.5, right: inch*0.5, top: inch*0.3, bottom: inch*0.3),
-                              child: Row(children: [
-                                Text("Demander", style: TextStyle(fontSize: inch*1.6, fontWeight: FontWeight.bold, color: color)),
-                                Icon(Icons.arrow_forward_ios, color: color,),
-                              ],mainAxisAlignment: MainAxisAlignment.spaceBetween, )
+                            SizedBox(
+                              height: 30,
+                              child: TextButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(Colors.white.withOpacity(0.90)),
+                                  padding: MaterialStateProperty.all(EdgeInsets.only(left: inch*1.5, right: inch*0.5, top: 0, bottom: 0)),
+                                  shape: MaterialStateProperty.all( RoundedRectangleBorder(borderRadius: BorderRadius.circular(inch*2)) )
+                                ),
+                                child: Row(children: [
+                                  Text("Demander", style: TextStyle(fontSize: inch*1.6, fontWeight: FontWeight.bold, color: color)),
+                                  SizedBox(width: wv*1.5,),
+                                  Icon(Icons.arrow_forward_ios, color: color, size: inch*2.3,),
+                                ], mainAxisSize: MainAxisSize.min,),
+                                onPressed: (){},
+                                ),
                             )
                           ],
                         ), alignment: Alignment.bottomRight,),

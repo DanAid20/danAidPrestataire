@@ -153,7 +153,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   iconActive({String svgUrl}){
     return CircleAvatar(
-      radius: width*9.2,
+      radius: width*7.5,
       backgroundColor: kPrimaryColor,
       child: CircleAvatar(
         radius: width*7.2,

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/screens/my_coverage_tab.dart';
+import 'package:danaid/views/screens/my_doctor_tab.dart';
 import 'package:danaid/widgets/advantage_card.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/notification_card.dart';
@@ -104,10 +105,10 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                       child: Container(
                         child: Row(
                           children: [
-                            Text("12 000 Pts", style: TextStyle(fontSize: inch*1.1, fontWeight: FontWeight.w700, color: kPrimaryColor),),
+                            Text("12 000 Pts", style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),),
                             SizedBox(width: wv*2,),
-                            Icon(MdiIcons.shieldCheck, size: wv*4, color: Colors.red.withOpacity(0.6),),
-                            Icon(MdiIcons.starBox, size: wv*4, color: Colors.teal.withOpacity(0.7),)
+                            SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,),
+                            SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
                           ],
                        ),
                       ),
@@ -124,7 +125,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                 isScrollable: true,
                 controller: _tabController,
                 labelColor: kPrimaryColor,
-                labelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: inch*2),
+                labelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: inch*1.7),
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
                 tabs: tabs
               ),
@@ -137,7 +138,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           children: <Widget>[
             getHealthTab(),
             MyCoverageTabView(),
-            const Text("Mon Docteur")
+            MyDoctorTabView()
           ],)
         
     )
