@@ -29,6 +29,7 @@ const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";
 const String kNameNullError = "Please Enter your name";
 const String kPhoneNumberNullError = "Please Enter your phone number";
+const String kCountryNullError = "Saisissez votre pays";
 const String kAddressNullError = "Please Enter your address";
 
 final otpInputDecoration = InputDecoration(
@@ -56,3 +57,6 @@ vertical({double size}) => getProportionateScreenHeight(size);
 height({double size}) => getProportionateScreenHeight(size);
 top({double size}) => getProportionateScreenHeight(size);
 bottom({double size}) => getProportionateScreenHeight(size);
+navigateTo({BuildContext context, String routeName, Object args}) => Navigator.of(context).pushNamed(routeName, arguments: args);
+navigateReplaceTo({BuildContext context, String routeName, Object args}) => Navigator.of(context).pushReplacementNamed(routeName, arguments: args);
+
