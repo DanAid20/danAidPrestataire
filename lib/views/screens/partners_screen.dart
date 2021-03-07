@@ -78,9 +78,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
                           ]
                         ),
                         child: Row(children: [
+                          SizedBox(width: 10,),
                           Expanded(
                             child: TextField(
                               decoration: InputDecoration(
+                                fillColor: whiteColor.withOpacity(0.6),
                                 prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
                                 contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                                 enabledBorder: OutlineInputBorder(
@@ -96,7 +98,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 10,),
+                          SizedBox(width: 5,),
                           TextButton(onPressed: (){},
                             child: Text("Annuler", style: TextStyle(color: kBrownCanyon),)
                           ),
