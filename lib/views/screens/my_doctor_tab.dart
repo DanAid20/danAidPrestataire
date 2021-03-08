@@ -3,6 +3,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyDoctorTabView extends StatefulWidget {
   @override
@@ -10,6 +11,14 @@ class MyDoctorTabView extends StatefulWidget {
 }
 
 class _MyDoctorTabViewState extends State<MyDoctorTabView> {
+
+  GoogleMapController mapCardController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapCardController = controller;
+  }
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
@@ -295,7 +304,17 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 15,)
+                              SizedBox(height: 15,),
+                              Container(
+                                height: hv*10,
+                                child: GoogleMap(
+                                  onMapCreated: _onMapCreated,
+                                  initialCameraPosition: CameraPosition(
+                                    target: _center,
+                                    zoom: 11.0,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         )

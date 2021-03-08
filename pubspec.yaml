@@ -55,6 +55,7 @@ dependencies:
   flutter_share: ^1.0.5
   material_design_icons_flutter: ^4.0.5855
   flutter_svg: 0.18.1
+  google_maps_flutter: 1.2.0
 
 dev_dependencies:
   flutter_test:

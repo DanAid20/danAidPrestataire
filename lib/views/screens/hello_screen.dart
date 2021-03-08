@@ -51,7 +51,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                       ),
                       Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: inch*2.7, color: kPrimaryColor, fontWeight: FontWeight.w500),),
+                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: inch*2.7, color: kPrimaryColor, fontWeight: FontWeight.w400),),
                           Text("Couverture Accès", style: TextStyle(fontSize: inch*1.5, color: kPrimaryColor)),
                         ],
                       ),
