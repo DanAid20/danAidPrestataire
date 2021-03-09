@@ -1,8 +1,9 @@
+import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/locator.dart';
 import 'package:danaid/widgets/buttons/default_btn.dart';
-import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,7 @@ class _OtpViewState extends State<OtpView> {
   FocusNode pin5FocusNode, pin6FocusNode;
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
+  final NavigationService _navigationService = locator<NavigationService>();
   bool _mIsPass = true;
 
   @override
@@ -46,6 +48,8 @@ class _OtpViewState extends State<OtpView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
+      bottom: false,
       child: Scaffold(
           body: SizedBox(
             width: double.infinity,
@@ -117,7 +121,7 @@ class _OtpViewState extends State<OtpView> {
                             ),
                             buildTimer(),
                             otpForm(),
-                            DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/home',),
+                            DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
                             SizedBox(height: SizeConfig.screenHeight * .01),
                             GestureDetector(
                               onTap: () => navigateReplaceTo(context: context, routeName: '/register'),

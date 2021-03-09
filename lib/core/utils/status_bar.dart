@@ -6,8 +6,7 @@ class StatusBar {
   setColor({BuildContext context}) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-          statusBarBrightness: Theme.of(context).brightness,
-          statusBarColor: kPrimaryColor,
+          statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light),
     );
   }

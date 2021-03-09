@@ -38,7 +38,7 @@ dependencies:
   line_icons:
   flutter_skeleton:
   cached_network_image: ^2.5.0
-  intl: ^0.16.0
+  intl:
   websafe_svg: ^1.1.2
   flutter_spinkit: ^4.1.2+1
   flat_icons_flutter: ^1.0.2
@@ -48,13 +48,13 @@ dependencies:
   simple_moment:
   percent_indicator:
   simple_animations:
-  advance_pdf_viewer:
   url_launcher:
   getwidget: ^1.2.4
   data_connection_checker: ^0.3.4
   flutter_share: ^1.0.5
-  material_design_icons_flutter: ^4.0.5855
-  flutter_svg: 0.18.1
+  material_design_icons_flutter: ^4.0.5955
+  flutter_svg: ^0.19.3
+  carousel_slider:
 
 dev_dependencies:
   flutter_test:
@@ -81,8 +81,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-    - assets/icons/Two-tone/
-    - assets/icons/Bulk/
     #- assets/logos/
   #   - images/a_dot_ham.jpeg
 

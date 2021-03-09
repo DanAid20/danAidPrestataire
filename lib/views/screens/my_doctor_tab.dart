@@ -2,7 +2,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:websafe_svg/websafe_svg.dart';
 
 class MyDoctorTabView extends StatefulWidget {
   @override
@@ -98,17 +98,17 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                           ),
                           subtitle: Row(
                             children: [
-                              SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20),
+                              WebsafeSvg.asset("assets/icons/Bulk/Video.svg", width: 20),
                               SizedBox(width: 10,),
-                              SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20),
+                              WebsafeSvg.asset("assets/icons/Bulk/Chat.svg", width: 20),
                               SizedBox(width: 10,),
-                              SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: whiteColor),
+                              WebsafeSvg.asset("assets/icons/Bulk/Calling.svg", width: 20, color: whiteColor),
                               SizedBox(width: 10,),
-                              SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
+                              WebsafeSvg.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
                               SizedBox(width: 10,),
-                              SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 20),
+                              WebsafeSvg.asset("assets/icons/Bulk/Calendar.svg", width: 20),
                               SizedBox(width: 10,),
-                              SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20),
+                              WebsafeSvg.asset("assets/icons/Bulk/Profile.svg", width: 20),
                             ],
                           ),
                         ),
@@ -129,7 +129,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                           backgroundColor: Colors.white,
                           child: Padding(
                             padding: EdgeInsets.only(top: inch*1),
-                            child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
+                            child: WebsafeSvg.asset("assets/icons/Bulk/MapLocal.svg"),
                           ),
                         ),
                       ),
@@ -188,7 +188,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                     SizedBox(width: 5,),
                                     TextButton.icon(
                                       onPressed: (){},
-                                      icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg"),
+                                      icon: WebsafeSvg.asset("assets/icons/Bulk/Chat.svg"),
                                       label: Text("Ecrire", style: TextStyle(color: whiteColor),),
                                       style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.all(kPrimaryColor),
@@ -203,7 +203,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       onPressed: (){},
                                       icon: Padding(
                                         padding: const EdgeInsets.only(top: 3.0),
-                                        child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
+                                        child: WebsafeSvg.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
                                       ),
                                       label: Text("Prendre Rendez-vous", style: TextStyle(color: kPrimaryColor),),
                                       style: ButtonStyle(

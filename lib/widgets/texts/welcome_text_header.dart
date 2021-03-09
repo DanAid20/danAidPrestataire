@@ -10,6 +10,7 @@ class WelcomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(top: top(size: 7)),
       child: Text.rich(TextSpan(
           text: 'Bienvenue ',
           style: TextStyle(
