@@ -15,7 +15,7 @@ const Color subTitleColor = Color(0xff9EAFBE);
 const Color lightGreyColor = Color(0xff353B46);
 const Color textColor = Colors.white;
 
-const kPrimaryColor = Color(0xFF1b6ca8);
+const kPrimaryColor = Color(0xFF005b9F);
 const kPrimaryColor2 = Color(0xFF65000B);
 const kPrimaryLightColor = Color(0xFF085782);
 const kSecondaryColor = Color.fromRGBO(202, 10, 34, 1);

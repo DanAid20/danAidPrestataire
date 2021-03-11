@@ -31,6 +31,8 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
+      bottom: false,
       child: Scaffold(
           body: SizedBox(
             width: double.infinity,
@@ -49,6 +51,7 @@ class _RegisterViewState extends State<RegisterView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
+                            margin: EdgeInsets.only(top: top(size: 19)),
                             decoration: BoxDecoration(
                                 border: Border.all(
                                     color: kPrimaryColor, width: 2.3),
@@ -60,14 +63,17 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                           ),
                           Container(
+                            margin: EdgeInsets.only(top: top(size: 14)),
                             padding: EdgeInsets.symmetric(
-                                horizontal: horizontal(size: 35)),
+                                horizontal: horizontal(size: 45)),
                             child: Text('Entrez vos informations afin de créer votre compte '
                                 'et devenez membre de la communauté Danaid.',
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: whiteColor,
+                                  letterSpacing: .72,
+                                  height: 1.4,
                                   fontSize: fontSize(size: 16)),
                             ),
                           )

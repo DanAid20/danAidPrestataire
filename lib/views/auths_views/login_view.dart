@@ -29,6 +29,8 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
+      bottom: false,
       child: Scaffold(
           body: SizedBox(
         width: double.infinity,
@@ -47,6 +49,7 @@ class _LoginViewState extends State<LoginView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
+                        margin: EdgeInsets.only(top: top(size: 14)),
                         decoration: BoxDecoration(
                             border: Border.all(
                                 color: kPrimaryColor, width: 2.3),
@@ -66,6 +69,8 @@ class _LoginViewState extends State<LoginView> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: whiteColor,
+                              letterSpacing: .7,
+                              height: 1.4,
                               fontSize: fontSize(size: 16)),
                         ),
                       )

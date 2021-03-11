@@ -9,8 +9,7 @@ import 'package:danaid/views/screens/partners_screen.dart';
 import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:websafe_svg/websafe_svg.dart';
 
 class HomePageView extends StatefulWidget {
   @override
@@ -143,7 +142,7 @@ class _HomePageViewState extends State<HomePageView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(svgUrl, width: inch*3, color: Colors.white.withOpacity(0.65)),
+            WebsafeSvg.asset(svgUrl, width: inch*3, color: Colors.white.withOpacity(0.65)),
             Text(title, style: TextStyle(color: Colors.white.withOpacity(0.7)),)
           ],
         ),
@@ -158,7 +157,7 @@ class _HomePageViewState extends State<HomePageView> {
       child: CircleAvatar(
         radius: width*7.2,
         backgroundColor: Colors.white,
-        child: SvgPicture.asset(svgUrl, width: inch*4, color: kPrimaryColor.withOpacity(0.65)),
+        child: WebsafeSvg.asset(svgUrl, width: inch*4, color: kPrimaryColor.withOpacity(0.65)),
       ),
     );
   }
