@@ -238,7 +238,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                             margin: EdgeInsets.only(right: 10),
                                             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text("Lundi à Vendredi"),
+                                                Expanded(child: Text("Lundi à Vendredi")),
                                                 Text("08H00 - 16H00"),
                                               ]
                                             ),
@@ -326,7 +326,9 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
             ],
           ),
         ),
+
         Divider(),
+
         Container(
           margin: EdgeInsets.only(left: 15),
           child: Text("Mes Rendez-vous", style: TextStyle(color: Colors.teal[400], fontSize: 17),)
@@ -362,7 +364,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
               label: "Fièvre et toux depuis"
             ),
 
-            SizedBox(height: 20,),
+            SizedBox(height: hv*7+20,),
           ],
         )
       ],),

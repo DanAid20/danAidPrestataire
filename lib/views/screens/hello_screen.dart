@@ -8,7 +8,7 @@ import 'package:danaid/widgets/advantage_card.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HelloScreen extends StatefulWidget {
   @override
@@ -50,8 +50,8 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                       ),
                       Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: inch*2.7, color: kPrimaryColor, fontWeight: FontWeight.w400),),
-                          Text("Couverture Accès", style: TextStyle(fontSize: inch*1.5, color: kPrimaryColor)),
+                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400),),
+                          Text("Couverture Accès", style: TextStyle(fontSize: wv*3, color: kPrimaryColor)),
                         ],
                       ),
                       Expanded(
@@ -80,7 +80,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                         onTap: (){},
                         child: Container(
                           padding: EdgeInsets.all(wv*3),
-                          child: WebsafeSvg.asset("assets/icons/Two-tone/Notification.svg", width: wv*7,)
+                          child: SvgPicture.asset("assets/icons/Two-tone/Notification.svg", width: wv*7,)
                         ),
                       ),
                     ),
@@ -106,8 +106,8 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                           children: [
                             Text("12 000 Pts", style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),),
                             SizedBox(width: wv*2,),
-                            WebsafeSvg.asset("assets/icons/Bulk/Shield Done.svg", width: 18,),
-                            WebsafeSvg.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
+                            SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,),
+                            SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
                           ],
                        ),
                       ),
@@ -280,7 +280,8 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                   HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Followers", occurence: 21),
                   HomePageComponents().verticalDivider(),
                   HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Messages", occurence: 3),
-                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,)
+                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                SizedBox(height: hv*7,)
               ],
             ),
           ),
