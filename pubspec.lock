@@ -28,14 +28,22 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.5.0"
+=======
+    version: "2.5.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   boolean_selector:
     dependency: transitive
     description:
       name: boolean_selector
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.1.0"
+=======
+    version: "2.1.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   build:
     dependency: transitive
     description:
@@ -105,14 +113,22 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.1.0"
+=======
+    version: "1.1.0-nullsafety.5"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   charcode:
     dependency: transitive
     description:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.2.0"
+=======
+    version: "1.2.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   checked_yaml:
     dependency: transitive
     description:
@@ -133,6 +149,7 @@ packages:
       name: clock
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.1.0"
   cloud_firestore:
     dependency: "direct main"
@@ -155,6 +172,9 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+=======
+    version: "1.1.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   code_builder:
     dependency: transitive
     description:
@@ -168,7 +188,11 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.15.0"
+=======
+    version: "1.15.0-nullsafety.5"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   connectivity:
     dependency: "direct main"
     description:
@@ -238,7 +262,11 @@ packages:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.2.0"
+=======
+    version: "1.2.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   ffi:
     dependency: transitive
     description:
@@ -496,7 +524,11 @@ packages:
       name: js
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.6.3"
+=======
+    version: "0.6.3-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   json_annotation:
     dependency: transitive
     description:
@@ -524,7 +556,11 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.12.10"
+=======
+    version: "0.12.10-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   material_design_icons_flutter:
     dependency: "direct main"
     description:
@@ -538,7 +574,11 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.3.0"
+=======
+    version: "1.3.0-nullsafety.6"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   mime:
     dependency: transitive
     description:
@@ -580,7 +620,11 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.8.0"
+=======
+    version: "1.8.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   path_drawing:
     dependency: transitive
     description:
@@ -802,21 +846,47 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.8.0"
+=======
+    version: "1.8.0-nullsafety.4"
+  sqflite:
+    dependency: transitive
+    description:
+      name: sqflite
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.2+3"
+  sqflite_common:
+    dependency: transitive
+    description:
+      name: sqflite_common
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3+1"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   stack_trace:
     dependency: transitive
     description:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.10.0"
+=======
+    version: "1.10.0-nullsafety.6"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   stream_channel:
     dependency: transitive
     description:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.1.0"
+=======
+    version: "2.1.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   stream_transform:
     dependency: transitive
     description:
@@ -830,7 +900,11 @@ packages:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.1.0"
+=======
+    version: "1.1.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   supercharged:
     dependency: transitive
     description:
@@ -851,14 +925,22 @@ packages:
       name: term_glyph
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.2.0"
+=======
+    version: "1.2.0-nullsafety.3"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   test_api:
     dependency: transitive
     description:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "0.2.19"
+=======
+    version: "0.2.19-nullsafety.6"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   timing:
     dependency: transitive
     description:
@@ -872,7 +954,11 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.3.0"
+=======
+    version: "1.3.0-nullsafety.5"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   url_launcher:
     dependency: "direct main"
     description:
@@ -921,7 +1007,11 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "2.1.0"
+=======
+    version: "2.1.0-nullsafety.5"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
   watcher:
     dependency: transitive
     description:
@@ -965,5 +1055,10 @@ packages:
     source: hosted
     version: "2.2.1"
 sdks:
+<<<<<<< HEAD
   dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.24.0-10.1.pre"
+=======
+  dart: ">=2.12.0-0.0 <3.0.0"
+  flutter: ">=1.22.2 <2.0.0"
+>>>>>>> d6cefceb73246dee721d259444212adebff3a6c9
