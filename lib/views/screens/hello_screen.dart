@@ -9,7 +9,6 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HelloScreen extends StatefulWidget {
   @override
@@ -51,8 +50,8 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                       ),
                       Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: inch*2.7, color: kPrimaryColor, fontWeight: FontWeight.w400),),
-                          Text("Couverture Accès", style: TextStyle(fontSize: inch*1.5, color: kPrimaryColor)),
+                          Text("Bonjour Fabrice!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400),),
+                          Text("Couverture Accès", style: TextStyle(fontSize: wv*3, color: kPrimaryColor)),
                         ],
                       ),
                       Expanded(
@@ -281,7 +280,8 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                   HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Followers", occurence: 21),
                   HomePageComponents().verticalDivider(),
                   HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Messages", occurence: 3),
-                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,)
+                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                SizedBox(height: hv*7,)
               ],
             ),
           ),

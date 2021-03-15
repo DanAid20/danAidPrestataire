@@ -6,7 +6,7 @@ import 'colors.dart';
 ThemeData theme() {
   return ThemeData(
     scaffoldBackgroundColor: Colors.white,
-    fontFamily: GoogleFonts.cantarell().fontFamily,
+    fontFamily: GoogleFonts.quicksand().fontFamily,
     appBarTheme: appBarTheme(),
     textTheme: textTheme(),
     primaryColor: kPrimaryColor,

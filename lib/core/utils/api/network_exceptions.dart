@@ -1,3 +1,4 @@
+/*
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -174,3 +175,4 @@ abstract class NetworkExceptions with _$NetworkExceptions {
     return errorMessage;
   }
 }
+*/

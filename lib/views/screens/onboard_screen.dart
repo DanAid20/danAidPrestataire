@@ -5,6 +5,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 
 class OnboardScreen extends StatefulWidget {
   @override
@@ -58,7 +59,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   _appBar() {
     return Container(
-      margin: EdgeInsets.only(top: SizeConfig.defaultSize * 2.5),
+      margin: EdgeInsets.only(top: SizeConfig.defaultSize * 1.4),
       padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,13 +77,13 @@ class _OnboardScreenState extends State<OnboardScreen> {
               padding: EdgeInsets.symmetric(
                   horizontal: horizontal(size: 12)),
               decoration: BoxDecoration(
-                color: Colors.grey.withAlpha(50),
+                color: Colors.transparent,
                 borderRadius: BorderRadius.all(
                   Radius.circular(15),
                 ),
               ),
               child: Icon(
-                Icons.arrow_back_ios,
+                Feather.arrow_left,
                 color: kPrimaryColor,
               ),
             ),
@@ -117,7 +118,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
           return Column(
             children: <Widget>[
               _displayImage(list[index].image),
-              _displayText(list[index].text, list[index].title),
+              Expanded(
+                child: _displayText(list[index].text, list[index].title),
+              ),
             ],
           );
         },
@@ -183,6 +186,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: kPrimaryColor,
+              letterSpacing: .6,
               fontSize: fontSize(size: 25),
             ),
             textAlign: TextAlign.center,
@@ -192,7 +196,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
             text,
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              fontSize: fontSize(size: 19),
+              letterSpacing: .72,
+              height: 1.4,
+              fontSize: fontSize(size: 18),
             ),
             textAlign: TextAlign.center,
           ),

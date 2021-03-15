@@ -1,15 +1,20 @@
+import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
 
+import '../../locator.dart';
+
 class DefaultBtn extends StatelessWidget {
-  const DefaultBtn({
+  DefaultBtn({
     Key key, this.formKey, this.signText, this.signRoute = '/login',
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
   final String signText;
   final String signRoute;
+
+  final NavigationService _navigationService = locator<NavigationService>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class DefaultBtn extends StatelessWidget {
         color: kPrimaryColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18)),
-        onPressed: () => navigateReplaceTo(context: context, routeName: signRoute)
+        onPressed: () => _navigationService.navigateTo(signRoute)
       ),
     );
   }

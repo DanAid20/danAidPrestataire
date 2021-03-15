@@ -10,7 +10,6 @@ import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomePageView extends StatefulWidget {
   @override
@@ -34,78 +33,76 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
 
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
-          children: [
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
 
-            Container(
-              margin: EdgeInsets.only(bottom: height*7),
-              child: getCurrentPage(),
-            ),
+          Container(
+            child: getCurrentPage(),
+          ),
 
-            Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    color: Colors.transparent,
-                    height: hv*12,
-                    width: double.infinity,
-                    child: CustomPaint(painter: BottomNavBarBackgroundPainter(),),
+          Stack(
+            children: [
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: Colors.transparent,
+                  height: hv*12,
+                  width: double.infinity,
+                  child: CustomPaint(painter: BottomNavBarBackgroundPainter(),),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  color: Colors.transparent,
+                  height: hv*12,
+                  width: double.infinity,
+                  child: CustomPaint(painter: BottomNavBarPainter(),),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: height*12,
+                  padding: EdgeInsets.symmetric(horizontal: width*1),
+                  decoration: BoxDecoration(color: Colors.transparent,),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      index == 0 ? iconActive(svgUrl: "assets/icons/Two-tone/Category.svg") : Container(),
+                      index == 1 ? iconActive(svgUrl: "assets/icons/Two-tone/Home.svg") : Container(),
+                      index == 2 ? iconActive(svgUrl: "assets/icons/Two-tone/Paper.svg") : Container(),
+                      index == 3 ? iconActive(svgUrl: "assets/icons/Two-tone/Location.svg") : Container(),
+                      index == 4 ? iconActive(svgUrl: "assets/icons/Two-tone/3User.svg") : Container(),
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    color: Colors.transparent,
-                    height: hv*12,
-                    width: double.infinity,
-                    child: CustomPaint(painter: BottomNavBarPainter(),),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: height*10,
+                  padding: EdgeInsets.symmetric(horizontal: width*3, vertical: height*1.0),
+                  decoration: BoxDecoration(color: Colors.transparent,),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: "Entraide", onTap: entraideTapped),
+                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: accueilTapped),
+                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Carnet", onTap: carnetTapped),
+                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "partenaire", onTap: partenaireTapped),
+                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: "famille", onTap: familleTapped),
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: height*12,
-                    padding: EdgeInsets.symmetric(horizontal: width*1),
-                    decoration: BoxDecoration(color: Colors.transparent,),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        index == 0 ? iconActive(svgUrl: "assets/icons/Two-tone/Category.svg") : Container(),
-                        index == 1 ? iconActive(svgUrl: "assets/icons/Two-tone/Home.svg") : Container(),
-                        index == 2 ? iconActive(svgUrl: "assets/icons/Two-tone/Paper.svg") : Container(),
-                        index == 3 ? iconActive(svgUrl: "assets/icons/Two-tone/Location.svg") : Container(),
-                        index == 4 ? iconActive(svgUrl: "assets/icons/Two-tone/3User.svg") : Container(),
-                      ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    height: height*10,
-                    padding: EdgeInsets.symmetric(horizontal: width*3, vertical: height*1.0),
-                    decoration: BoxDecoration(color: Colors.transparent,),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: "Entraide", onTap: entraideTapped),
-                        index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: accueilTapped),
-                        index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Carnet", onTap: carnetTapped),
-                        index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "partenaire", onTap: partenaireTapped),
-                        index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: "famille", onTap: familleTapped),
-                      ],
-                    ),
-                  ),
-                ),
-                
-              ],
-            )
-          ],
-        ),
+              ),
+              
+            ],
+          )
+        ],
       ),
     );
   }

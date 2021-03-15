@@ -1,0 +1,162 @@
+{
+  "project_info": {
+    "project_number": "907608334806",
+    "firebase_url": "https://danaidapp.firebaseio.com",
+    "project_id": "danaidapp",
+    "storage_bucket": "danaidapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:1ed97e041e6535f8458477",
+        "android_client_info": {
+          "package_name": "com.danaid.danaidmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-32v357tbm1f2v7i429cs6916930iqlpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "65e037a453c95b3b12e270c9dc4c6663b6bd5bba"
+          }
+        },
+        {
+          "client_id": "907608334806-87ea91ir5cnnpbcr51fa9dec8jqpt4eq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "e493d0c5fbb81e0a01c248d73249a7c1791d8ebe"
+          }
+        },
+        {
+          "client_id": "907608334806-b8qctogps6p5h87lmefvl8anlkt9u3vm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "f9d2e1062083acdab5bcff2f9ad2575e4e72374c"
+          }
+        },
+        {
+          "client_id": "907608334806-ncn31vf9nj2jgu4prp1rbj1dog63j680.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "873cb5c828aab975bca417ae94a6376ba3ca71c4"
+          }
+        },
+        {
+          "client_id": "907608334806-tv4btjl4na2lf0l8brbmj9hlgnop1an1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "cb394f848e3cec49ec81704fd752b8d0df23a544"
+          }
+        },
+        {
+          "client_id": "907608334806-vsdtro9fcsvv9n46h56el1c7dnmnqiu3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "6428a6d012c2ca892f4738fa6b4fdaada528903b"
+          }
+        },
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:050e25bd5bc21002458477",
+        "android_client_info": {
+          "package_name": "com.master.danaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-c6o5sfshvstklgcpqiv14d4j9tq4jf18.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.master.danaid",
+            "certificate_hash": "9cf6a76b37254bc78777a0f042ee723fb5d8a8c1"
+          }
+        },
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:9fb407bb499616a1458477",
+        "android_client_info": {
+          "package_name": "com.technolyte.danaidmobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-ofh16i3dbencv84kfr2kb11p3b9ioap6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.technolyte.danaidmobile",
+            "certificate_hash": "873cb5c828aab975bca417ae94a6376ba3ca71c4"
+          }
+        },
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
