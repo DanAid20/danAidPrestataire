@@ -2,7 +2,8 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
-import 'package:websafe_svg/websafe_svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyDoctorTabView extends StatefulWidget {
   @override
@@ -10,6 +11,14 @@ class MyDoctorTabView extends StatefulWidget {
 }
 
 class _MyDoctorTabViewState extends State<MyDoctorTabView> {
+
+  GoogleMapController mapCardController;
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapCardController = controller;
+  }
   bool isExpanded = false;
   @override
   Widget build(BuildContext context) {
@@ -98,17 +107,17 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                           ),
                           subtitle: Row(
                             children: [
-                              WebsafeSvg.asset("assets/icons/Bulk/Video.svg", width: 20),
+                              SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20),
                               SizedBox(width: 10,),
-                              WebsafeSvg.asset("assets/icons/Bulk/Chat.svg", width: 20),
+                              SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20),
                               SizedBox(width: 10,),
-                              WebsafeSvg.asset("assets/icons/Bulk/Calling.svg", width: 20, color: whiteColor),
+                              SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: whiteColor),
                               SizedBox(width: 10,),
-                              WebsafeSvg.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
+                              SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
                               SizedBox(width: 10,),
-                              WebsafeSvg.asset("assets/icons/Bulk/Calendar.svg", width: 20),
+                              SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 20),
                               SizedBox(width: 10,),
-                              WebsafeSvg.asset("assets/icons/Bulk/Profile.svg", width: 20),
+                              SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20),
                             ],
                           ),
                         ),
@@ -129,7 +138,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                           backgroundColor: Colors.white,
                           child: Padding(
                             padding: EdgeInsets.only(top: inch*1),
-                            child: WebsafeSvg.asset("assets/icons/Bulk/MapLocal.svg"),
+                            child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
                           ),
                         ),
                       ),
@@ -188,7 +197,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                     SizedBox(width: 5,),
                                     TextButton.icon(
                                       onPressed: (){},
-                                      icon: WebsafeSvg.asset("assets/icons/Bulk/Chat.svg"),
+                                      icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg"),
                                       label: Text("Ecrire", style: TextStyle(color: whiteColor),),
                                       style: ButtonStyle(
                                         backgroundColor: MaterialStateProperty.all(kPrimaryColor),
@@ -203,7 +212,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       onPressed: (){},
                                       icon: Padding(
                                         padding: const EdgeInsets.only(top: 3.0),
-                                        child: WebsafeSvg.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
+                                        child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
                                       ),
                                       label: Text("Prendre Rendez-vous", style: TextStyle(color: kPrimaryColor),),
                                       style: ButtonStyle(
@@ -229,7 +238,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                             margin: EdgeInsets.only(right: 10),
                                             child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text("Lundi à Vendredi"),
+                                                Expanded(child: Text("Lundi à Vendredi")),
                                                 Text("08H00 - 16H00"),
                                               ]
                                             ),
@@ -295,7 +304,17 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: 15,)
+                              SizedBox(height: 15,),
+                              Container(
+                                height: hv*10,
+                                child: GoogleMap(
+                                  onMapCreated: _onMapCreated,
+                                  initialCameraPosition: CameraPosition(
+                                    target: _center,
+                                    zoom: 11.0,
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         )
@@ -307,7 +326,9 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
             ],
           ),
         ),
+
         Divider(),
+
         Container(
           margin: EdgeInsets.only(left: 15),
           child: Text("Mes Rendez-vous", style: TextStyle(color: Colors.teal[400], fontSize: 17),)
@@ -343,7 +364,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
               label: "Fièvre et toux depuis"
             ),
 
-            SizedBox(height: 20,),
+            SizedBox(height: hv*7+20,),
           ],
         )
       ],),

@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -13,3 +14,4 @@ abstract class ApiState<T> with _$ApiState<T> {
   const factory ApiState.error({@required NetworkExceptions error}) =
       Error<T>;
 }
+*/
