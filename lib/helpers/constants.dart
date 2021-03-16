@@ -15,6 +15,7 @@ final headingStyle = TextStyle(
 // Form Error
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+final RegExp phoneValidatorRegExp = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
 final RegExp validatorRegExp = RegExp(r"^[a-z0-9]");
 final RegExp digitValidatorRegExp = RegExp(r"^[0-9]+$");
 final String textValidatorError =
