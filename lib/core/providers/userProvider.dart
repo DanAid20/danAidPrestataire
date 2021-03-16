@@ -21,6 +21,10 @@ class UserProvider with ChangeNotifier {
   bool get isEnabled => _enabled;
   List<Map> get getPhoneList => _phoneList;
 
+  void setUserId(String val) {
+    _userId = val;
+    notifyListeners();
+  }
   void setMatricule(String val) {
     _matricule = val;
     notifyListeners();

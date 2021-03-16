@@ -47,7 +47,7 @@ class KTextFormField extends StatelessWidget {
       this.onTap,
       this.onChanged,
       this.onSaved,
-      this.maxLength = 7,
+      this.maxLength,
       this.maxLines = 1,
       this.minLines = 1,
       this.inputFormatters,

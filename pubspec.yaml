@@ -60,6 +60,8 @@ dependencies:
   cloud_firestore: ^1.0.1
   firebase_auth: ^1.0.1
   firebase_storage: ^8.0.0
+  country_pickers: ^2.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

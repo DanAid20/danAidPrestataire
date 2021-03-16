@@ -3,9 +3,14 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/locator.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/buttons/default_btn.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 
 class OtpView extends StatefulWidget {
   @override
@@ -15,6 +20,15 @@ class OtpView extends StatefulWidget {
 class _OtpViewState extends State<OtpView> {
   FocusNode pin2FocusNode, pin3FocusNode, pin4FocusNode;
   FocusNode pin5FocusNode, pin6FocusNode;
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  TextEditingController pin1Controller = new TextEditingController();
+  TextEditingController pin2Controller = new TextEditingController();
+  TextEditingController pin3Controller = new TextEditingController();
+  TextEditingController pin4Controller = new TextEditingController();
+  TextEditingController pin5Controller = new TextEditingController();
+  TextEditingController pin6Controller = new TextEditingController();
+
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
   final NavigationService _navigationService = locator<NavigationService>();
@@ -47,6 +61,7 @@ class _OtpViewState extends State<OtpView> {
   }
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     return SafeArea(
       top: false,
       bottom: false,
@@ -111,7 +126,7 @@ class _OtpViewState extends State<OtpView> {
                               padding: EdgeInsets.symmetric(horizontal: 25),
                               alignment: Alignment.center,
                               child: Text(
-                                  "Un code de validation a été envoyé par sms au:  +237 695 000 000",
+                                  "Un code de validation a été envoyé par sms au: ${userProvider.getUserId}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: darkGreyColor,
@@ -121,7 +136,15 @@ class _OtpViewState extends State<OtpView> {
                             ),
                             buildTimer(),
                             otpForm(),
-                            DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
+                            //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
+                            CustomTextButton(
+                              text: "Validez le code", 
+                              color: kPrimaryColor, 
+                              action: 
+                                () async {
+                                  signInWithPhoneNumber();
+                                },
+                            ),
                             SizedBox(height: SizeConfig.screenHeight * .01),
                             GestureDetector(
                               onTap: () => navigateReplaceTo(context: context, routeName: '/register'),
@@ -185,8 +208,9 @@ class _OtpViewState extends State<OtpView> {
                 SizedBox(
                   width: getProportionateScreenWidth(60),
                   child: TextFormField(
+                    controller: pin1Controller,
                     autofocus: true,
-                    obscureText: true,
+                    //obscureText: true,
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
@@ -197,8 +221,9 @@ class _OtpViewState extends State<OtpView> {
                 SizedBox(
                   width: getProportionateScreenWidth(60),
                   child: TextFormField(
+                    controller: pin2Controller,
                     focusNode: pin2FocusNode,
-                    obscureText: true,
+                    //obscureText: true,
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
@@ -209,8 +234,9 @@ class _OtpViewState extends State<OtpView> {
                 SizedBox(
                   width: getProportionateScreenWidth(60),
                   child: TextFormField(
+                    controller: pin3Controller,
                     focusNode: pin3FocusNode,
-                    obscureText: true,
+                    //obscureText: true,
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
@@ -221,8 +247,9 @@ class _OtpViewState extends State<OtpView> {
                 SizedBox(
                   width: getProportionateScreenWidth(60),
                   child: TextFormField(
+                    controller: pin4Controller,
                     focusNode: pin4FocusNode,
-                    obscureText: true,
+                    //obscureText: true,
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
@@ -233,8 +260,9 @@ class _OtpViewState extends State<OtpView> {
                 SizedBox(
                   width: getProportionateScreenWidth(60),
                   child: TextFormField(
+                    controller: pin5Controller,
                     focusNode: pin5FocusNode,
-                    obscureText: true,
+                    //obscureText: true,
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
@@ -245,8 +273,9 @@ class _OtpViewState extends State<OtpView> {
                 SizedBox(
                   width: getProportionateScreenWidth(60),
                   child: TextFormField(
+                    controller: pin6Controller,
                     focusNode: pin6FocusNode,
-                    obscureText: true,
+                    //obscureText: true,
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
@@ -266,5 +295,30 @@ class _OtpViewState extends State<OtpView> {
         ),
       ),
     );
+  }
+
+  void signInWithPhoneNumber() async {
+    PhoneVerificationProvider phoneVerificationProvider = Provider.of<PhoneVerificationProvider>(context, listen: false);
+    String smsCode = pin1Controller.text+pin2Controller.text+pin3Controller.text+pin4Controller.text+pin5Controller.text+pin6Controller.text;
+    print(phoneVerificationProvider.getVerificationId);
+    print(smsCode);
+    try {
+    final AuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: phoneVerificationProvider.getVerificationId,
+      smsCode: smsCode,
+    );
+
+    final User user = (await _auth.signInWithCredential(credential)).user;
+
+    showSnackbar("Successfully signed in UID: ${user.uid}");
+  } catch (e) {
+    showSnackbar("Failed to sign in: " + e.toString());
+  }
+  }
+
+  void showSnackbar(String message) {
+    //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
+    SnackBar snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
