@@ -1,9 +1,11 @@
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../locator.dart';
 
@@ -19,6 +21,7 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
   final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     return SafeArea(
       top: false,
       bottom: false,
@@ -123,7 +126,10 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
                               ],
                             ),
                           ),
-                          onTap: () => _navigationService.navigateTo('/profile-type-adherent'),
+                          onTap: () {
+                            userProvider.setProfileType("ADHERENT");
+                            _navigationService.navigateTo('/profile-type-adherent');
+                          },
                         ),
                         Container(
                           height: height(size: 180),

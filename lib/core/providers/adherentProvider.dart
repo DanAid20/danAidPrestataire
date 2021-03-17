@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../models/adherentFacturationModel.dart';
 
 class AdherentProvider with ChangeNotifier {
-  String _adherentId, _cniName, _otherDocName, _marriageCertificateName, _familyName, _surname, _matricule, _imgUrl, _gender, _email, _profession, _regionOfOrigin, _marriageCertificateUrl, _otherJustificativeDocsUrl, _officialDocUrl, _town, _profileType;
+  String _adherentId, _cniName, _otherDocName, _marriageCertificateName, _familyName, _surname, _matricule, _imgUrl, _gender, _email, _profession, _regionOfOrigin, _marriageCertificateUrl, _otherJustificativeDocsUrl, _officialDocUrl, _town, _profileType, _adherentPlan;
   DateTime _dateCreated, _validityEndDate, _birthDate;
   bool _paymentIsMobile, _profileEnabled, _isMarried;
   List<Map> _phoneList;
   List<AdherentBillModel> _adherentNewBill;
 
-  AdherentProvider(this._adherentId, this._cniName, this._otherDocName, this._marriageCertificateName, this._familyName, this._surname, this._matricule, this._imgUrl, this._gender, this._email, this._profession, this._regionOfOrigin, this._marriageCertificateUrl, this._otherJustificativeDocsUrl, this._officialDocUrl, this._town, this._profileType, this._dateCreated, this._validityEndDate, this._birthDate, this._paymentIsMobile, this._profileEnabled, this._isMarried, this._phoneList, this._adherentNewBill);
+  AdherentProvider(this._adherentId, this._cniName, this._otherDocName, this._marriageCertificateName, this._familyName, this._surname, this._matricule, this._imgUrl, this._gender, this._email, this._profession, this._regionOfOrigin, this._marriageCertificateUrl, this._otherJustificativeDocsUrl, this._officialDocUrl, this._town, this._profileType, this._dateCreated, this._validityEndDate, this._birthDate, this._paymentIsMobile, this._profileEnabled, this._isMarried, this._phoneList, this._adherentNewBill, this._adherentPlan);
 
   String get getAdherentId => _adherentId;
   String get getCniName => _cniName;
@@ -27,6 +27,7 @@ class AdherentProvider with ChangeNotifier {
   String get getOfficialDocUrl => _officialDocUrl;
   String get getTown => _town;
   String get getProfileType => _profileType;
+  String get getAdherentPlan => _adherentPlan;
   DateTime get getDateCreated => _dateCreated;
   DateTime get getValidityEndDate => _validityEndDate;
   DateTime get getBirthDate => _birthDate;
@@ -111,6 +112,11 @@ class AdherentProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAdherentPlan(String val){
+    _adherentPlan = val;
+    notifyListeners();
+  }
+
   void setProfileType(String val){
     _profileType = val;
     notifyListeners();
@@ -128,6 +134,16 @@ class AdherentProvider with ChangeNotifier {
 
   void setBirthDate(DateTime val){
     _birthDate = val;
+    notifyListeners();
+  }
+
+  void setProfileEnableState(bool val){
+    _profileEnabled = val;
+    notifyListeners();
+  }
+
+  void setMatrimonialStatus(bool val){
+    _isMarried = val;
     notifyListeners();
   }
 

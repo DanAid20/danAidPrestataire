@@ -1,3 +1,4 @@
+import 'package:danaid/views/auths_views/adherent_form.dart';
 import 'package:danaid/views/auths_views/login_view.dart';
 import 'package:danaid/views/auths_views/otp_view.dart';
 import 'package:danaid/views/auths_views/password_reset_view.dart';
@@ -19,4 +20,5 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/reset-password": (context) => PasswordResetView(),
   "/profile-type": (context) => ProfileTypeView(),
   "/profile-type-adherent": (context) => AdherentPlanScreen(),
+  "/adherent-reg-form": (context) => AdherentRegistrationFormm(),
 };

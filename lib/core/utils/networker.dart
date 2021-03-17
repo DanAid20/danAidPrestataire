@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 
 import 'env.dart';
 
@@ -37,13 +37,13 @@ class Networker {
       ),
     );
   }
-
+/*
   _getToken() async {
     var prefs = await SharedPreferences.getInstance();
     String token = prefs.getString("token");
     return token;
   }
-
+*/
   Future post(route, {params}) {
     return _dio.post(route, data: params);
   }

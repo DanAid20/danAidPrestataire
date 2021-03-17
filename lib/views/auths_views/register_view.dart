@@ -45,7 +45,6 @@ class _RegisterViewState extends State<RegisterView> {
     _mEmailController = TextEditingController();
     _mCountryController = TextEditingController();
     _mNameController = TextEditingController();
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     super.initState();
   }
 
@@ -336,6 +335,7 @@ class _RegisterViewState extends State<RegisterView> {
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
       showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+      _navigationService.navigateTo('/home');
     };
 
     //Listens for errors with verification, such as too many attempts
@@ -357,7 +357,7 @@ class _RegisterViewState extends State<RegisterView> {
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: userProvider.getUserId,
-          timeout: const Duration(seconds: 25),
+          timeout: const Duration(seconds: 30),
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,
