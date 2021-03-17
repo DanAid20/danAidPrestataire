@@ -35,7 +35,7 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<AdherentProvider>(
                 create: (_) => AdherentProvider(
-                  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, null, null, null, null, null,null, null
+                  "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", null, null, null, null, null, null, null, null, null
                 ),
               ),
               ChangeNotifierProvider<PhoneVerificationProvider>(

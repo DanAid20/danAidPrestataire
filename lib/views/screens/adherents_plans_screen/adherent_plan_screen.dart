@@ -1,8 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../locator.dart';
 
 class AdherentPlanScreen extends StatelessWidget {
   final String _mPackage = 'découverte';
@@ -11,8 +16,10 @@ class AdherentPlanScreen extends StatelessWidget {
   final String _mPackageContent1 = 'Changer de plan';
   final String _mPackageContent2 = 'Ajout d\'un bénéficiaire';
   final _mSize = SizeConfig.defaultSize;
+  final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
+    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
     return SafeArea(
       top: false,
       bottom: false,
@@ -31,6 +38,7 @@ class AdherentPlanScreen extends StatelessWidget {
                         Expanded(
                           flex: 3,
                           child: Container(
+                            margin: EdgeInsets.only(top: 30),
                             child: Image.asset(
                               'assets/images/pricing.png',
                               fit: BoxFit.cover,
@@ -76,7 +84,14 @@ class AdherentPlanScreen extends StatelessWidget {
                               mPackageContent: _mPackageContent,
                               mPackageContent1: _mPackageContent1,
                               mPackageContent2: _mPackageContent2,
-                              mSize: _mSize),
+                              mSize: _mSize,
+                              action: (){
+                                adherentProvider.setAdherentPlan("DECOUVERTE");
+                                adherentProvider.setProfileEnableState(false);
+                                //_navigationService.navigateTo('/adherent-reg-form');
+                                Navigator.pushNamed(context, '/adherent-reg-form');
+                              },
+                              ),
                           PackageCard(
                               mPackage: 'Accès',
                               mPackageAmount: "3500",
@@ -119,6 +134,7 @@ class PackageCard extends StatelessWidget {
     @required String mPackageContent1,
     @required String mPackageContent2,
     @required double mSize,
+    this.action,
   })  : _mPackage = mPackage,
         _mPackageAmount = mPackageAmount,
         _mPackageContent = mPackageContent,
@@ -133,6 +149,7 @@ class PackageCard extends StatelessWidget {
   final String _mPackageContent1;
   final String _mPackageContent2;
   final double _mSize;
+  final Function action;
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +218,7 @@ class PackageCard extends StatelessWidget {
                 color: whiteColor,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(_mSize * 3.15)),
-                onPressed: () {},
+                onPressed: action,
               ),
             ),
           ),

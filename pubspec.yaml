@@ -32,13 +32,13 @@ dependencies:
   dio: ^4.0.0-beta7
   http: ^0.13.0
   google_fonts: ^2.0.0
-  shared_preferences: ^2.0.4
+  #shared_preferences: ^2.0.4
   provider: ^4.3.3
   get_it: ^5.0.6
   connectivity:
   line_icons:
   flutter_skeleton:
-  #cached_network_image: ^2.5.1
+  cached_network_image: ^3.0.0-nullsafety
   intl:
   flutter_spinkit: ^4.1.2+1
   flat_icons_flutter: ^1.0.2
@@ -52,7 +52,7 @@ dependencies:
   getwidget: ^1.2.4
   data_connection_checker: ^0.3.4
   flutter_share: ^1.0.5
-  flutter_svg: ^0.19.3
+  flutter_svg: ^0.21.0-nullsafety.0
   google_maps_flutter: 
   material_design_icons_flutter: ^4.0.5955
   carousel_slider:
@@ -61,7 +61,8 @@ dependencies:
   firebase_auth: ^1.0.1
   firebase_storage: ^8.0.0
   country_pickers: ^2.0.0
-  
+  hive: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
