@@ -28,7 +28,6 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
