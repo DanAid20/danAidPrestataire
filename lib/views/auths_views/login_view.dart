@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:danaid/widgets/loaders.dart';
 
 import '../../locator.dart';
 
@@ -30,6 +31,7 @@ class _LoginViewState extends State<LoginView> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String _verificationId;
   TextEditingController _mPhoneController, _mPasswordController;
+  bool loader = false;
   bool _mIsPass = true;
 
   bool autovalidate = false;
@@ -262,7 +264,9 @@ class _LoginViewState extends State<LoginView> {
                 },
               ),
             ),*/
-            CustomTextButton(
+            loader ? 
+            Loaders().buttonLoader(kPrimaryColor)
+            : CustomTextButton(
               text: "S'inscrire",
               color: kPrimaryColor,
               action: () async {
@@ -273,6 +277,9 @@ class _LoginViewState extends State<LoginView> {
                 print("${_mPhoneController.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
                 
                 if (_mFormKey.currentState.validate()){
+                  setState(() {
+                    loader = true;
+                  });
                   userProvider.setUserId("+$phoneCode${_mPhoneController.text}");
                   print("+${userProvider.getCountryCode}${_mPhoneController.text}");
                   verifyPhoneNumber();
@@ -296,11 +303,17 @@ class _LoginViewState extends State<LoginView> {
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
       showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+      setState((){
+        loader = false;
+      });
       _navigationService.navigateTo('/profile-type');
     };
 
     //Listens for errors with verification, such as too many attempts
     PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
+      setState((){
+        loader = false;
+      });
       showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
     };
 
@@ -308,9 +321,14 @@ class _LoginViewState extends State<LoginView> {
       showSnackbar('Please check your phone for the verification code.');
       if(verificationId != null){
         _verificationId = verificationId;
+        setState((){
+          loader = false;
+        });
         _navigationService.navigateTo('/otp');
       }else{
-        //
+        setState((){
+          loader = false;
+        });
       }
     };
 
@@ -318,12 +336,15 @@ class _LoginViewState extends State<LoginView> {
       phoneVerificationProvider.setVerificationId(verificationId);
       showSnackbar("verification code: " + verificationId);
       _verificationId = verificationId;
+      setState((){
+        loader = false;
+      });
     };
     
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: userProvider.getUserId,
-          timeout: const Duration(seconds: 30),
+          timeout: const Duration(seconds: 60),
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,

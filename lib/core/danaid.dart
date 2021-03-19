@@ -12,21 +12,10 @@ import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import '../locator.dart';
 
 class Danaid extends StatelessWidget {
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   @override
   Widget build(BuildContext context) {
     statusBar.setColor(context: context);
-    return FutureBuilder(
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Checking for errors
-        if (snapshot.hasError) {
-          return Center(child: Text("Error occured"),);
-        }
-
-        // Once complete, show our application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MultiProvider(
+    return MultiProvider(
             providers: [
               ChangeNotifierProvider<UserProvider>(
                 create: (_) => UserProvider(
@@ -51,8 +40,5 @@ class Danaid extends StatelessWidget {
               navigatorKey: locator<NavigationService>().navigatorKey,
             ),
           );
-        }
-      }
-    );
   }
 }

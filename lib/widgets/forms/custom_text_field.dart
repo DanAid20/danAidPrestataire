@@ -39,7 +39,7 @@ class CustomTextField extends StatelessWidget {
               ),
               hintText: hintText,
               hintStyle: TextStyle(color: Colors.grey),
-              suffixIcon: svgIcon != null ? SvgPicture.asset(svgIcon) : null
+              suffixIcon: svgIcon != null ? SvgPicture.asset(svgIcon, height: wv*4, color: Colors.teal,) : null
             ),
           ),
         ],
