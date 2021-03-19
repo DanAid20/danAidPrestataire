@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -5,6 +6,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/locator.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/buttons/default_btn.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class _OtpViewState extends State<OtpView> {
   TextEditingController pin4Controller = new TextEditingController();
   TextEditingController pin5Controller = new TextEditingController();
   TextEditingController pin6Controller = new TextEditingController();
+  bool load = false;
 
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
@@ -137,17 +140,20 @@ class _OtpViewState extends State<OtpView> {
                             buildTimer(),
                             otpForm(),
                             //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
-                            CustomTextButton(
-                              text: "Validez le code", 
-                              color: kPrimaryColor, 
-                              action: 
-                                () async {
-                                  signInWithPhoneNumber();
-                                },
-                            ),
+                            (pin1Controller.text != "" || pin2Controller.text != "" || pin3Controller.text != "" || pin4Controller.text != "" || pin5Controller.text != "" || pin6Controller.text != "") 
+                              ? CustomDisabledTextButton(text: "Validez le code",)
+                              : load ? Loaders().buttonLoader(kPrimaryColor)
+                                : CustomTextButton(
+                                    text: "Validez le code", 
+                                    color: kPrimaryColor, 
+                                    action: 
+                                      () async {
+                                        signInWithPhoneNumber();
+                                      },
+                                  ),
                             SizedBox(height: SizeConfig.screenHeight * .01),
                             GestureDetector(
-                              onTap: () => navigateReplaceTo(context: context, routeName: '/register'),
+                              onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
                               child: Text(
                                 "Renvoyez le code de validation",
                                 textAlign: TextAlign.center,
@@ -299,6 +305,7 @@ class _OtpViewState extends State<OtpView> {
 
   void signInWithPhoneNumber() async {
     PhoneVerificationProvider phoneVerificationProvider = Provider.of<PhoneVerificationProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     String smsCode = pin1Controller.text+pin2Controller.text+pin3Controller.text+pin4Controller.text+pin5Controller.text+pin6Controller.text;
     print(phoneVerificationProvider.getVerificationId);
     print(smsCode);
@@ -310,15 +317,33 @@ class _OtpViewState extends State<OtpView> {
 
     final User user = (await _auth.signInWithCredential(credential)).user;
 
+    await FirebaseFirestore.instance.collection("USERS")
+      .doc(userProvider.getUserId)
+      .set({
+        'createdDate': DateTime.now(),
+        'emailAdress': userProvider.getEmail,
+        'enabled': userProvider.isEnabled,
+        'fullName': "",
+        "imageUrl" : null,
+        "matricule": "",
+        "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+        "profil": "",
+        "regionDorigione": "",
+        "urlCNI": "",
+        "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+        "userCountryName": userProvider.getCountryName
+      }, SetOptions(merge: true))
+      .then((value) => Navigator.pushNamed(context, '/profile-type'));
+
     showSnackbar("Successfully signed in UID: ${user.uid}");
-  } catch (e) {
-    showSnackbar("Failed to sign in: " + e.toString());
-  }
+    } on FirebaseAuthException catch (e) {
+      showSnackbar("Failed to sign in: " + e.message.toString());
+    }
   }
 
   void showSnackbar(String message) {
     //_scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
-    SnackBar snackBar = SnackBar(content: Text(message));
+    SnackBar snackBar = SnackBar(content: Text(message), duration: Duration(seconds: 10),);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
