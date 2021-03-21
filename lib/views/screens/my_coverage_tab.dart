@@ -16,21 +16,30 @@ class MyCoverageTabView extends StatelessWidget {
               color: Colors.grey[200],
               borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
             ),
-            margin: EdgeInsets.symmetric(horizontal: wv*4),
+            margin: EdgeInsets.symmetric(horizontal: wv*3),
             child: IntrinsicHeight(
               child: Row(crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Icon(Icons.message, size: 35, color: Colors.teal[300],),
-                  ),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Vous êtes au Niveau 0: Découverte", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7, fontWeight: FontWeight.bold)),
-                      Text("Votre garantie expire dans 365 jours", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.5))
-                    ],
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Icon(Icons.message, size: 35, color: Colors.teal[300],),
+                    ),
                   ),
                   Expanded(
+                    flex: 7,
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: hv*1,),
+                        Text("Vous êtes au Niveau 0: Découverte", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7, fontWeight: FontWeight.bold)),
+                        Text("Votre garantie expire dans 365 jours", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.5)),
+                        SizedBox(height: hv*1,),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
                     child: Container(
                       margin: EdgeInsets.only(left: 10),
                       padding: EdgeInsets.all(3),

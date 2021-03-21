@@ -2,6 +2,7 @@ import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -38,8 +39,19 @@ class _LoginViewState extends State<LoginView> {
   Country _selectedDialogCountry = CountryPickerUtils.getCountryByPhoneCode('237');
   String phoneCode = "237";
 
+  testHive() async {
+    var registered = await HiveDatabase.getRegisterState();
+    
+    var signedIn = await HiveDatabase.getSignInState();
+    var name = await HiveDatabase.getFamilyName();
+    print("registered:");
+    print(signedIn.toString());
+    print('Name: $name');
+  }
+
   @override
   void initState() {
+    testHive();
     _mPhoneController = TextEditingController();
     _mPasswordController = TextEditingController();
     super.initState();
@@ -125,7 +137,7 @@ class _LoginViewState extends State<LoginView> {
                           ),
                         ),*/
                         //DefaultBtn(formKey: _mFormKey, signRoute: '/home',),
-                        SIgnInUpTag()
+                        //SIgnInUpTag()
                       ],
                     ),
                   ),

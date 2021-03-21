@@ -115,7 +115,10 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                               SizedBox(width: 10,),
                               SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
                               SizedBox(width: 10,),
-                              SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 20),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: whiteColor),
+                              ),
                               SizedBox(width: 10,),
                               SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20),
                             ],
@@ -152,7 +155,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                   color: kSouthSeas,
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
                 ),
-                child: ListTileTheme(
+                child: ListTileTheme( 
                   dense: true,
                   child: Theme(
                     data: ThemeData.light().copyWith(

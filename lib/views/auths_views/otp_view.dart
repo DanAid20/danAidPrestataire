@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
+import 'package:danaid/core/services/hiveDatabase.dart';
 
 class OtpView extends StatefulWidget {
   @override
@@ -315,27 +316,35 @@ class _OtpViewState extends State<OtpView> {
       smsCode: smsCode,
     );
 
-    final User user = (await _auth.signInWithCredential(credential)).user;
+    _auth.signInWithCredential(credential).then((val) async {
+      final User user = val.user;
+      await FirebaseFirestore.instance.collection("USERS")
+        .doc(userProvider.getUserId)
+        .set({
+          'createdDate': DateTime.now(),
+          'emailAdress': userProvider.getEmail,
+          'enabled': userProvider.isEnabled,
+          'fullName': "",
+          "imageUrl" : null,
+          "matricule": "",
+          "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+          "profil": "",
+          "regionDorigione": "",
+          "urlCNI": "",
+          "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+          "userCountryName": userProvider.getCountryName,
+          "authId": user.uid
+        }, SetOptions(merge: true))
+        .then((value) {
+          HiveDatabase.setSignInState(true);
+          Navigator.pushNamed(context, '/profile-type');
+        });
+      showSnackbar("Successfully signed in UID: ${user.uid}");
+    }).catchError((e){
+      showSnackbar("Failed to sign in: " + e.message.toString());
+    });
 
-    await FirebaseFirestore.instance.collection("USERS")
-      .doc(userProvider.getUserId)
-      .set({
-        'createdDate': DateTime.now(),
-        'emailAdress': userProvider.getEmail,
-        'enabled': userProvider.isEnabled,
-        'fullName': "",
-        "imageUrl" : null,
-        "matricule": "",
-        "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
-        "profil": "",
-        "regionDorigione": "",
-        "urlCNI": "",
-        "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
-        "userCountryName": userProvider.getCountryName
-      }, SetOptions(merge: true))
-      .then((value) => Navigator.pushNamed(context, '/profile-type'));
-
-    showSnackbar("Successfully signed in UID: ${user.uid}");
+    
     } on FirebaseAuthException catch (e) {
       showSnackbar("Failed to sign in: " + e.message.toString());
     }
