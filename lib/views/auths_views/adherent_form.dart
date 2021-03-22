@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
@@ -18,6 +17,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:provider/provider.dart';
+import 'package:danaid/core/services/hiveDatabase.dart';
 
 class AdherentRegistrationFormm extends StatefulWidget {
   @override
@@ -37,6 +37,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   DateTime selectedDate = DateTime(1990);
   File imageFileAvatar;
   bool imageLoading = false;
+  bool buttonLoading = false;
   String avatarUrl;
   @override
   Widget build(BuildContext context) {
@@ -205,7 +206,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         hintText: "ex: Centre",
                         controller: _regionController,
                         validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        svgIcon: "assets/icons/Bulk/Discovery.svg",
+                        //svgIcon: "assets/icons/Bulk/Discovery.svg",
                       ),
                     ),
                     Expanded(
@@ -258,7 +259,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
             ),
             imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
             _serviceTermsAccepted ?  
-            CustomTextButton(
+            !buttonLoading ? CustomTextButton(
               text: "Envoyer",
               color: kPrimaryColor,
               action: () async {
@@ -271,12 +272,17 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                 String region = _regionController.text;
                 String town = _townController.text;
                 if (_adherentFormKey.currentState.validate()){
+                  setState(() {
+                    buttonLoading = true;
+                  });
                   AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
                   print("$fname, $sname, $region, $town, $selectedDate, $_gender, $avatarUrl");
                   print("${Algorithms().getMatricule(selectedDate, "Centre", _gender)}");
+                  adherentProvider.setAdherentId(userProvider.getUserId);
                   adherentProvider.setFamilyName(fname);
                   adherentProvider.setSurname(sname);
                   adherentProvider.setBirthDate(selectedDate);
+                  adherentProvider.setImgUrl(avatarUrl);
                   await FirebaseFirestore.instance.collection("USERS")
                     .doc(userProvider.getUserId)
                     .set({
@@ -308,16 +314,29 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           "regionDorigione": region,
                           "statuMatrimonialMarie": false
                         }, SetOptions(merge: true))
-                        .then((value) => Navigator.pushNamed(context, '/home'))
+                        .then((value) async {
+                          await HiveDatabase.setRegisterState(true);
+                          HiveDatabase.setFamilyName(fname);
+                          HiveDatabase.setSurname(sname);
+                          HiveDatabase.setGender(_gender);
+                          HiveDatabase.setImgUrl(avatarUrl);
+                          Navigator.pushNamed(context, '/home');
+                        })
                         .catchError((e) {
                           print(e.toString());
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                          setState(() {
+                            buttonLoading = false;
+                          });
                         })
                         ;
                     })
                     .catchError((e){
                       print(e.toString());
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                      setState(() {
+                        buttonLoading = false;
+                      });
                     })
                     ;
                   
@@ -343,7 +362,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
 */
 
               },
-            ) :
+            ) : Loaders().buttonLoader(kPrimaryColor) :
             CustomDisabledTextButton(
               text: "Envoyer",
             )

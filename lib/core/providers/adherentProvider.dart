@@ -37,6 +37,10 @@ class AdherentProvider with ChangeNotifier {
   List<Map> get getPhoneList => _phoneList;
   List<AdherentBillModel> get getAdherentNewBill => _adherentNewBill;
   
+  void setAdherentId(String val){
+    _adherentId = val;
+    notifyListeners();
+  }
   void setCniName(String val){
     _cniName = val;
     notifyListeners();

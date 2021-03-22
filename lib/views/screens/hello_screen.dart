@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -11,6 +12,7 @@ import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class HelloScreen extends StatefulWidget {
@@ -34,10 +36,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent
-      ),
+    return SafeArea(
       child: Scaffold(
         body: NestedScrollView(floatHeaderSlivers: true, 
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled){
@@ -53,8 +52,11 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                         SizedBox(width: 0,),
                         CircleAvatar(
                           radius: wv*8,
-                          child: Image.asset("assets/images/avatar-profile.jpg", fit: BoxFit.cover,),
+                          backgroundColor: Colors.blueGrey[100],
+                          backgroundImage: (adherentProvider.getImgUrl == "" ||adherentProvider.getImgUrl == null)  ? null : NetworkImage(adherentProvider.getImgUrl),
+                          child: (adherentProvider.getImgUrl == "" ||adherentProvider.getImgUrl == null) ? Icon(LineIcons.user, color: Colors.white, size: wv*13,) : Container(),
                         ),
+                        SizedBox(width: wv*2,),
                         Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Bonjour ${adherentProvider.getSurname}!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400),),
@@ -159,6 +161,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
             children: [
               Column(
                 children: <Widget>[
+                  SizedBox(height: hv*1.5,),
                   Container(
                     margin: EdgeInsets.only(left:inch*2, right:inch*2),
                     child: Row(children: [
