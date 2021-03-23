@@ -63,6 +63,7 @@ class _OtpViewState extends State<OtpView> {
       focusNode.requestFocus();
     }
   }
+  
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);

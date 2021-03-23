@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
@@ -294,7 +295,14 @@ class _LoginViewState extends State<LoginView> {
                   });
                   userProvider.setUserId("+$phoneCode${_mPhoneController.text}");
                   print("+${userProvider.getCountryCode}${_mPhoneController.text}");
-                  verifyPhoneNumber();
+                  bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
+                  if(registered == false){
+                    verifyPhoneNumber();
+                  } else {
+                    HiveDatabase.setSignInState(true);
+                    HiveDatabase.setRegisterState(true);
+                    Navigator.pushReplacementNamed(context, '/home');
+                  }
                   //_navigationService.navigateTo('/otp');
                 }
                 
@@ -304,6 +312,11 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  Future<bool> checkIfUserIsAlreadyRegistered(String phone) async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get();
+    return (doc.exists) ? true : false;
   }
 
   void verifyPhoneNumber() async {
