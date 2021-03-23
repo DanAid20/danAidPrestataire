@@ -86,11 +86,10 @@ class AdherentPlanScreen extends StatelessWidget {
                               mPackageContent2: _mPackageContent2,
                               mSize: _mSize,
                               action: (){
-                                adherentProvider.setAdherentPlan("DECOUVERTE");
+                                adherentProvider.setAdherentPlan(0);
                                 adherentProvider.setProfileEnableState(false);
-                                //_navigationService.navigateTo('/adherent-reg-form');
                                 Navigator.pushNamed(context, '/adherent-reg-form');
-                              },
+                              }
                               ),
                           PackageCard(
                               mPackage: 'Accès',
@@ -98,21 +97,36 @@ class AdherentPlanScreen extends StatelessWidget {
                               mPackageContent: "Couverture santé à 70%",
                               mPackageContent1: "Médécin de famille",
                               mPackageContent2: "Plafond de 350.000 XAF",
-                              mSize: _mSize),
+                              mSize: _mSize,
+                              action: (){
+                                adherentProvider.setAdherentPlan(1);
+                                adherentProvider.setProfileEnableState(false);
+                                Navigator.pushNamed(context, '/adherent-reg-form');
+                              }),
                           PackageCard(
                               mPackage: "Assist",
                               mPackageAmount: "6500",
                               mPackageContent: "Couverture santé à 70%",
                               mPackageContent1: "Médécin de famille",
                               mPackageContent2: "Plafond de 650.000 XAF",
-                              mSize: _mSize),
+                              mSize: _mSize,
+                              action: (){
+                                adherentProvider.setAdherentPlan(2);
+                                adherentProvider.setProfileEnableState(false);
+                                Navigator.pushNamed(context, '/adherent-reg-form');
+                              }),
                           PackageCard(
                               mPackage: 'Sérénité',
                               mPackageAmount: "9500",
                               mPackageContent: "Couverture santé à 70%",
                               mPackageContent1: "Médécin de famille",
                               mPackageContent2: "Plafond de 1.000.000 XAF",
-                              mSize: _mSize),
+                              mSize: _mSize,
+                              action: (){
+                                adherentProvider.setAdherentPlan(3);
+                                adherentProvider.setProfileEnableState(false);
+                                Navigator.pushNamed(context, '/adherent-reg-form');
+                              }),
                         ],
                       )),
                 )

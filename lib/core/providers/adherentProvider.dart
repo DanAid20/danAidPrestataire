@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/adherentFacturationModel.dart';
 
 class AdherentProvider with ChangeNotifier {
-  String _adherentId, _cniName, _otherDocName, _marriageCertificateName, _familyName, _surname, _matricule, _imgUrl, _gender, _email, _profession, _regionOfOrigin, _marriageCertificateUrl, _otherJustificativeDocsUrl, _officialDocUrl, _town, _profileType, _adherentPlan;
+  String _adherentId, _cniName, _otherDocName, _marriageCertificateName, _familyName, _surname, _matricule, _imgUrl, _gender, _email, _profession, _regionOfOrigin, _marriageCertificateUrl, _otherJustificativeDocsUrl, _officialDocUrl, _town, _profileType;
+  int _adherentPlan;
   DateTime _dateCreated, _validityEndDate, _birthDate;
   bool _paymentIsMobile, _profileEnabled, _isMarried;
   List<Map> _phoneList;
@@ -27,7 +28,7 @@ class AdherentProvider with ChangeNotifier {
   String get getOfficialDocUrl => _officialDocUrl;
   String get getTown => _town;
   String get getProfileType => _profileType;
-  String get getAdherentPlan => _adherentPlan;
+  int get getAdherentPlan => _adherentPlan;
   DateTime get getDateCreated => _dateCreated;
   DateTime get getValidityEndDate => _validityEndDate;
   DateTime get getBirthDate => _birthDate;
@@ -116,7 +117,7 @@ class AdherentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAdherentPlan(String val){
+  void setAdherentPlan(int val){
     _adherentPlan = val;
     notifyListeners();
   }

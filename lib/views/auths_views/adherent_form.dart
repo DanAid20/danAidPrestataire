@@ -18,6 +18,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
+import 'package:danaid/core/services/getCities.dart';
 
 class AdherentRegistrationFormm extends StatefulWidget {
   @override
@@ -32,6 +33,12 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   TextEditingController _townController = new TextEditingController();
   bool autovalidate = false;
   String _gender = "H";
+  String _region = "Centre";
+  List<String> myCities = [];
+  String _city;
+  String _stateCode;
+  bool regionChosen = false;
+  bool cityChosen = false;
   bool _serviceTermsAccepted = false;
   String termsAndConditions = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\n\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la s";
   DateTime selectedDate = DateTime(1990);
@@ -41,6 +48,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   String avatarUrl;
   @override
   Widget build(BuildContext context) {
+    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: kPrimaryColor
@@ -199,6 +207,96 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                 SizedBox(height: hv*1.5,),
                 Row(
                   children: [
+                    SizedBox(width: wv*3,),
+                    Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Region", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                          SizedBox(height: 5,),
+                          Container(
+                            constraints: BoxConstraints(minWidth: wv*45),
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  value: _stateCode,
+                                  hint: Text("Choisir une region"),
+                                  items: regions.map((region){
+                                    return DropdownMenuItem(
+                                      child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                                      value: region["key"],
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) async {
+                                    //List<String> reg = getTownNamesFromRegion(cities, value);
+                                    adherentProvider.setRegionOfOrigin(getRegionFromStateCode(regions, value));
+                                    setState(() {
+                                      _stateCode = value;
+                                      _region = getRegionFromStateCode(regions, value);
+                                      _city = null;
+                                      cityChosen = false;
+                                      //myCities = reg;
+                                      regionChosen = true;
+                                    });
+                                  }),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: wv*3,),
+                    regionChosen ? Expanded(
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Choix de la ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                          SizedBox(height: 5,),
+                          Container(
+                            constraints: BoxConstraints(minWidth: wv*45),
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  value: _city,
+                                  hint: Text("Ville"),
+                                  items: getTownNamesFromRegion(cities, _stateCode).map((city){
+                                    print("city: "+city);
+                                    return DropdownMenuItem(
+                                      child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      value: city,
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    adherentProvider.setTown(value);
+                                    setState(() {
+                                      _city = value;
+                                      cityChosen = true;
+                                    });
+                                  }),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ) : Container(),
+                    SizedBox(width: wv*3,),
+                  ],
+                ),
+                SizedBox(height: hv*1.5,),
+                /*Row(
+                  children: [
                     Expanded(
                       flex: 6,
                       child: CustomTextField(
@@ -219,7 +317,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                       ),
                     ),
                   ],
-                ),
+                ),*/
               ],)
             ),
             /*Autocomplete<String>(
@@ -258,7 +356,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
               controlAffinity: ListTileControlAffinity.leading,
             ),
             imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
-            _serviceTermsAccepted ?  
+            (_serviceTermsAccepted & cityChosen) ?  
             !buttonLoading ? CustomTextButton(
               text: "Envoyer",
               color: kPrimaryColor,
@@ -269,14 +367,12 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                 });
                 String fname = _familynameController.text;
                 String sname = _surnameController.text;
-                String region = _regionController.text;
-                String town = _townController.text;
                 if (_adherentFormKey.currentState.validate()){
                   setState(() {
                     buttonLoading = true;
                   });
                   AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
-                  print("$fname, $sname, $region, $town, $selectedDate, $_gender, $avatarUrl");
+                  print("$fname, $sname, $selectedDate, $_gender, $avatarUrl");
                   print("${Algorithms().getMatricule(selectedDate, "Centre", _gender)}");
                   adherentProvider.setAdherentId(userProvider.getUserId);
                   adherentProvider.setFamilyName(fname);
@@ -288,9 +384,9 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                     .set({
                       'fullName': "$fname $sname",
                       "imageUrl" : avatarUrl,
-                      "matricule": Algorithms().getMatricule(selectedDate, region, _gender),
+                      "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                       "profil": "ADHERENT",
-                      "regionDorigione": region
+                      "regionDorigione": adherentProvider.getRegionOfOrigin
                     }, SetOptions(merge: true))
                     .then((value) async {
                       await FirebaseFirestore.instance.collection("ADHERENTS")
@@ -302,7 +398,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           "dateNaissance": selectedDate,
                           "genre": _gender,
                           "imageUrl" : avatarUrl,
-                          "matricule": Algorithms().getMatricule(selectedDate, region, _gender),
+                          "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                           "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                           "nbBeneficiare": 0,
                           "nombreEnfant": 0,
@@ -310,9 +406,10 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           "prenom": sname,
                           "profil": "ADHERENT",
                           "profilEnabled": false,
-                          "protectionLevel": 0,
-                          "regionDorigione": region,
-                          "statuMatrimonialMarie": false
+                          "protectionLevel": adherentProvider.getAdherentPlan,
+                          "regionDorigione": adherentProvider.getRegionOfOrigin,
+                          "statuMatrimonialMarie": false,
+                          "ville": adherentProvider.getTown,
                         }, SetOptions(merge: true))
                         .then((value) async {
                           await HiveDatabase.setRegisterState(true);
@@ -383,16 +480,6 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
       setState(() {
         selectedDate = picked;
       });
-  }
-
-  List<String> getTownNamesFromList(List origin){
-    int i;
-    List target = [];
-    for(i=0; i<origin.length; i++){
-      target.add(origin[i]["name"].toString());
-    }
-    //print(target);
-    return target;
   }
 
   Widget termsAndConditionsDialog(){
@@ -526,7 +613,26 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     );
   }
 
-  
+  List<String> getTownNamesFromRegion(List origin, String region){
+    List<String> target = [];
+    for(int i=0; i<origin.length; i++){
+      if (origin[i]["state_code"] == region){
+       target.add(origin[i]["value"].toString());
+      }
+    }
+    //print(target);
+    return target;
+  }
+
+  String getRegionFromStateCode(List origin, String code){
+    String region;
+    for(int i=0; i<origin.length; i++){
+      if (origin[i]["key"] == code){
+       region = origin[i]["value"];
+      }
+    }
+    return region;
+  }
 
   List towns = [
     {
