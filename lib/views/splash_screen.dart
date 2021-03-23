@@ -1,9 +1,9 @@
 import 'package:danaid/core/providers/adherentProvider.dart';
-import 'package:danaid/views/home_page_view.dart';
-import 'package:danaid/views/screens/onboard_screen.dart';
+import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:provider/provider.dart';
+import 'package:danaid/core/providers/authProvider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,35 +12,48 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
-  Future<Map> checkSignInState() async {
+  checkSignInState() async {
     AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     bool isSignedIn = await HiveDatabase.getSignInState();
     bool isRegistered = await HiveDatabase.getRegisterState();
     String phone = await HiveDatabase.getAuthPhone();
     String fname = await HiveDatabase.getFamilyName();
     String sname = await HiveDatabase.getSurname();
     String imgUrl = await HiveDatabase.getImgUrl();
+    await Future.delayed(Duration(seconds: 1));
+    
+    authProvider.setSignInState(isSignedIn);
+    authProvider.setRegisterState(isRegistered);
     adherentProvider.setAdherentId(phone);
     adherentProvider.setFamilyName(fname);
     adherentProvider.setSurname(sname);
     adherentProvider.setImgUrl(imgUrl);
-    return {
+
+    if (authProvider.getRegisterState == true){
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+    else {
+      Navigator.pushReplacementNamed(context, '/intro-view');
+    }
+    //return true;
+    /*{
       "isSignedIn": isSignedIn,
       "isRegistered": isRegistered
-    };
+    };*/
+  }
+  
+
+  @override
+  void initState() {
+    checkSignInState();
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: checkSignInState(),
-      builder: (context, snapshot) {
-        return snapshot.hasData ? 
-          (snapshot.data["isRegistered"] == true) ?
-            HomePageView() : OnboardScreen()
-        : Scaffold(
+    SizeConfig().init(context);
+    return Scaffold(
           body: Center(child: Text("Splash Screen Temporaire !!!"),),
         );
-      },
-    );
   }
 }

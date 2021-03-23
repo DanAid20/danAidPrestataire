@@ -86,9 +86,8 @@ class AdherentPlanScreen extends StatelessWidget {
                               mPackageContent2: _mPackageContent2,
                               mSize: _mSize,
                               action: (){
-                                adherentProvider.setAdherentPlan("DECOUVERTE");
+                                adherentProvider.setAdherentPlan(0);
                                 adherentProvider.setProfileEnableState(false);
-                                //_navigationService.navigateTo('/adherent-reg-form');
                                 Navigator.pushNamed(context, '/adherent-reg-form');
                               },
                               ),

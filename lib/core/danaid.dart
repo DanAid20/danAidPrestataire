@@ -3,12 +3,12 @@ import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/status_bar.dart';
 import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/theme.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
+import 'package:danaid/core/providers/authProvider.dart';
 import '../locator.dart';
 
 class Danaid extends StatelessWidget {
@@ -29,6 +29,9 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<PhoneVerificationProvider>(
                 create: (_) => PhoneVerificationProvider(null),
+              ),
+              ChangeNotifierProvider<AuthProvider>(
+                create: (_) => AuthProvider(false, false),
               )
             ],
             child: MaterialApp(
@@ -36,7 +39,7 @@ class Danaid extends StatelessWidget {
               theme: theme(),
               debugShowCheckedModeBanner: false,
               routes: routes,
-              initialRoute: '/intro-view',
+              initialRoute: '/splash',
               navigatorKey: locator<NavigationService>().navigatorKey,
             ),
           );

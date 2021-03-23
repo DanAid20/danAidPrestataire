@@ -333,10 +333,11 @@ class _LoginViewState extends State<LoginView> {
       showSnackbar('Please check your phone for the verification code.');
       if(verificationId != null){
         _verificationId = verificationId;
-        setState((){
+        /*setState((){
           loader = false;
-        });
-        _navigationService.navigateTo('/otp');
+        });*/
+        //_navigationService.navigateTo('/otp');
+        showSnackbar("Derniers ajustements..." );
       }else{
         setState((){
           loader = false;
@@ -347,6 +348,7 @@ class _LoginViewState extends State<LoginView> {
     PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
       phoneVerificationProvider.setVerificationId(verificationId);
       showSnackbar("verification code: " + verificationId);
+      _navigationService.navigateTo('/otp');
       _verificationId = verificationId;
       setState((){
         loader = false;
