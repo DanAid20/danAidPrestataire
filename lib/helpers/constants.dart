@@ -18,8 +18,7 @@ final RegExp emailValidatorRegExp =
 final RegExp phoneValidatorRegExp = RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]');
 final RegExp validatorRegExp = RegExp(r"^[a-z0-9]");
 final RegExp digitValidatorRegExp = RegExp(r"^[0-9]+$");
-final String textValidatorError =
-    "Ce champ ne doit contenir que des chiffres";
+final String textValidatorError = "Ce champ ne doit contenir que des chiffres";
 const String kEmailNullError = "Please Enter your email";
 const String kEmailNullErrorFr = "Svp entrez votre email";
 const String kInvalidEmailError = "Please Enter Valid Email";
@@ -32,6 +31,7 @@ const String kNameNullError = "Please Enter your name";
 const String kPhoneNumberNullError = "Please Enter your phone number";
 const String kCountryNullError = "Saisissez votre pays";
 const String kAddressNullError = "Please Enter your address";
+const String kEmptyField = "Ce champ ne doit pas être vide.";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

@@ -38,7 +38,6 @@ dependencies:
   connectivity:
   line_icons:
   flutter_skeleton:
-  #cached_network_image: ^2.5.1
   intl:
   flutter_spinkit: ^4.1.2+1
   flat_icons_flutter: ^1.0.2

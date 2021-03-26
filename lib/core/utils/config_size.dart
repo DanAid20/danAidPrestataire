@@ -70,4 +70,5 @@ class HorizontalSpacing extends StatelessWidget {
 
   double wv = SizeConfig.screenWidth / 100;
   double hv = SizeConfig.screenHeight / 100;
+  double defSize = SizeConfig.defaultSize;
   double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;

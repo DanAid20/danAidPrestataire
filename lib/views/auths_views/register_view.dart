@@ -6,14 +6,12 @@ import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
-import 'package:danaid/widgets/buttons/default_btn.dart';
 import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:danaid/widgets/texts/sign_in_up_tag.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:provider/provider.dart';
 
@@ -317,6 +315,8 @@ class _RegisterViewState extends State<RegisterView> {
                   print("+${userProvider.getCountryCode}${_mPhoneController.text}");
                   verifyPhoneNumber();
                   //_navigationService.navigateTo('/otp');
+                }else{
+                  Navigator.of(context).pushNamed('/profile-type');
                 }
                 
               },

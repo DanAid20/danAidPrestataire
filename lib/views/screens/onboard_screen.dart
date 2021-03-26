@@ -4,8 +4,12 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/styles.dart';
+import 'package:danaid/views/screens/intro_screens/mutelle_intro_screen.dart';
+import 'package:danaid/views/screens/intro_screens/network_intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+
+import 'intro_screens/medecin_intro_screen.dart';
 
 class OnboardScreen extends StatefulWidget {
   @override
@@ -14,6 +18,7 @@ class OnboardScreen extends StatefulWidget {
 
 class _OnboardScreenState extends State<OnboardScreen> {
   List<StepModel> list = StepModel.list;
+  List<Widget> _mPages = [MutuelleIntroScreen(), NetworkIntroScreen(), MedecinIntroScreen()];
   var _controller = PageController();
   var initialPage = 0;
 
@@ -21,6 +26,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
+    _controller = PageController(initialPage: initialPage);
     _controller.addListener(() {
       setState(() {
         initialPage = _controller.page.round();
@@ -28,30 +34,38 @@ class _OnboardScreenState extends State<OnboardScreen> {
     });
 
     return Scaffold(
-      body: Column(
+      body: Stack(
+        alignment: Alignment.center,
         children: <Widget>[
-          _appBar(),
           _body(_controller),
           (initialPage != list.length - 1)
-              ? _indicator()
-              : Container(
-                  margin: EdgeInsets.only(bottom: bottom(size: 30)),
-                  child: ButtonTheme(
-                    minWidth: width(size: 300),
-                    height: height(size: 64),
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8)),
-                        color: kPrimaryColor,
-                        onPressed: () => Navigator.of(context)
-                            .pushReplacementNamed('/login'),
-                        child: Text(
-                          Strings.START_APP.toUpperCase(),
-                          softWrap: true,
-                          style: Styles.onboardTextStyle,
-                        )),
+              ? Positioned(bottom: 0, child: _indicator())
+              : Positioned(
+                bottom: 0,
+                child: Container(
+                    margin: EdgeInsets.only(bottom: bottom(size: 30)),
+                    child: ButtonTheme(
+                      minWidth: width(size: 300),
+                      height: height(size: 64),
+                      child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                          color: kPrimaryColor,
+                          onPressed: () => Navigator.of(context).pushReplacementNamed('/login'),
+                          child: Text(
+                            Strings.START_APP.toUpperCase(),
+                            softWrap: true,
+                            style: Styles.onboardTextStyle,
+                          )),
+                    ),
                   ),
-                ),
+              ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: _appBar(),
+          ),
         ],
       ),
     );
@@ -84,7 +98,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
               ),
               child: Icon(
                 Feather.arrow_left,
-                color: kPrimaryColor,
+                color: whiteColor,
               ),
             ),
           ),
@@ -98,9 +112,9 @@ class _OnboardScreenState extends State<OnboardScreen> {
             child: Text(
               "Skip",
               style: TextStyle(
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
                 fontSize: fontSize(size: 16),
-                color: darkGreyColor,
+                color: whiteColor,
               ),
             ),
           ),
@@ -110,36 +124,25 @@ class _OnboardScreenState extends State<OnboardScreen> {
   }
 
   _body(PageController controller) {
-    return Expanded(
-      child: PageView.builder(
-        controller: controller,
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: <Widget>[
-              _displayImage(list[index].image),
-              Expanded(
-                child: _displayText(list[index].text, list[index].title),
-              ),
-            ],
-          );
-        },
-      ),
+    return PageView.builder(
+      controller: controller,
+      itemCount: _mPages.length,
+      itemBuilder: (context, index) => _mPages.elementAt(index)
     );
   }
 
   _indicator() {
     return Container(
-      width: SizeConfig.defaultSize * 9,
-      height: SizeConfig.defaultSize * 9,
-      margin: EdgeInsets.symmetric(vertical: vertical(size: 13)),
+      width: SizeConfig.defaultSize * 8,
+      height: SizeConfig.defaultSize * 8,
+      margin: EdgeInsets.symmetric(vertical: vertical(size: 14)),
       child: Stack(
         children: <Widget>[
           Align(
             alignment: Alignment.center,
             child: Container(
-              width: 90,
-              height: 90,
+              width: 70,
+              height: 70,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(kPrimaryColor),
                 value: (initialPage + 1) / (list.length + 1),
@@ -156,8 +159,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       curve: Curves.easeIn);
               },
               child: Container(
-                width: SizeConfig.defaultSize * 6.5,
-                height: SizeConfig.defaultSize * 6.5,
+                width: SizeConfig.defaultSize * 5.8,
+                height: SizeConfig.defaultSize * 5.8,
                 decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.all(
@@ -173,44 +176,6 @@ class _OnboardScreenState extends State<OnboardScreen> {
           )
         ],
       ),
-    );
-  }
-
-  _displayText(String text, String title) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: horizontal(size: 15)),
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: kPrimaryColor,
-              letterSpacing: .6,
-              fontSize: fontSize(size: 25),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          VerticalSpacing(of: 5),
-          Text(
-            text,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              letterSpacing: .72,
-              height: 1.4,
-              fontSize: fontSize(size: 18),
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  _displayImage(String image) {
-    return Image.asset(
-      image,
-      height: MediaQuery.of(context).size.height * .45,
     );
   }
 }
