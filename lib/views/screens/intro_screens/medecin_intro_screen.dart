@@ -19,7 +19,7 @@ class MedecinIntroScreen extends StatelessWidget {
           child: Stack(
             children: [
               ImageBox(
-                image: 'https://siriusxm-priprodart.akamaized.net/images/chan/e6/f89b48-9faa-8878-b7ea-a566fd3c54a0.jpg?width=319&amp;height=319',
+                image: 'assets/images/image 9.png',
                 bgColor: Colors.grey,
               ),
               IconContainer(

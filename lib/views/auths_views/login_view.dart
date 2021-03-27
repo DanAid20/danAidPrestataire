@@ -315,8 +315,10 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<bool> checkIfUserIsAlreadyRegistered(String phone) async {
-    DocumentSnapshot doc = await FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get();
-    return (doc.exists) ? true : false;
+    DocumentSnapshot adherent = await FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get();
+    DocumentSnapshot doctor = await FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get();
+    DocumentSnapshot serviceprovider = await FirebaseFirestore.instance.collection('PRESTATAIRE').doc(phone).get();
+    return (adherent.exists | doctor.exists | serviceprovider.exists) ? true : false;
   }
 
   void verifyPhoneNumber() async {
@@ -350,7 +352,7 @@ class _LoginViewState extends State<LoginView> {
           loader = false;
         });*/
         //_navigationService.navigateTo('/otp');
-        showSnackbar("Derniers ajustements..." );
+        showSnackbar("Le code viens d'arriver, patientez encore unpeu ..." );
       }else{
         setState((){
           loader = false;
@@ -371,7 +373,7 @@ class _LoginViewState extends State<LoginView> {
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: userProvider.getUserId,
-          timeout: const Duration(seconds: 60),
+          timeout: const Duration(seconds: 40),
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,

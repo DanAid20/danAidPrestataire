@@ -20,7 +20,7 @@ class NetworkIntroScreen extends StatelessWidget {
           child: Stack(
             children: [
               ImageBox(
-                  image: 'https://www.digitalic.it/wp-content/uploads/2016/04/Futurap_Digital_touch_point.jpg',
+                  image: 'assets/images/image 8.png',
                   bgColor: Colors.grey,
               ),
               IconContainer(),
