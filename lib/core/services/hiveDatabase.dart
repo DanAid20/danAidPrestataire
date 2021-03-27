@@ -4,6 +4,7 @@ class HiveDatabase {
 
   final userBox = Hive.box('user');
   final adherentBox = Hive.box('adherent');
+  final serviceProviderBox = Hive.box('serviceProvider');
   final authBox = Hive.box('auth');
 
   //Setters

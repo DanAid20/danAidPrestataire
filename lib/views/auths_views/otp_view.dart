@@ -186,7 +186,7 @@ class _OtpViewState extends State<OtpView> {
         children: [
           Text("Le code expire dans: ", style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
           TweenAnimationBuilder(
-            tween: Tween(begin: 30.0, end: 0.0),
+            tween: Tween(begin: 40.0, end: 0.0),
             duration: Duration(seconds: 30),
             builder: (_, value, child) => Text(
               "00:${value.toInt()}",

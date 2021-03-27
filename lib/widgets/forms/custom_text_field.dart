@@ -6,9 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CustomTextField extends StatelessWidget {
   final String label, hintText, svgIcon;
   final TextEditingController controller;
+  final TextInputType keyboardType;
   final Function validator;
+  final Widget prefixIcon;
 
-  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator}) : super(key: key);
+  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,10 +20,12 @@ class CustomTextField extends StatelessWidget {
           Text(label, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
           SizedBox(height: 5,),
           TextFormField(
+            keyboardType: keyboardType,
             controller: controller,
             validator: this.validator,
             style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
+              prefixIcon: prefixIcon,
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: Colors.red[300]),
                 borderRadius: BorderRadius.all(Radius.circular(20))
