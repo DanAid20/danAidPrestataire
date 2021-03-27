@@ -95,3 +95,65 @@ class KTextFormField extends StatelessWidget {
     );
   }
 }
+
+
+class ChoiceTile extends StatelessWidget {
+  final bool isActive;
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  ChoiceTile({this.isActive = false, this.onPressed, this.label, this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 90,
+      height: 90,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: isActive ? Theme.of(context).primaryColor : Colors.white,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 4.0,
+            color: Colors.black.withOpacity(0.1),
+          ),
+        ],
+      ),
+      child: Material(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(8.0),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                    icon,
+                    size: 30,
+                    color:
+                    isActive ? Colors.white : kPrimaryColor
+                ),
+                SizedBox(height: 10),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: fontSize(size: 15),
+                    fontWeight: FontWeight.w700,
+                    color: isActive
+                        ? Colors.white
+                        : kPrimaryColor,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
