@@ -173,7 +173,11 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                 ),
                                 DropdownMenuItem(
                                   child: Text("Pharmacie", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                  value: "pharmacie",
+                                  value: "Pharmacie",
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("Laboratoire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                  value: "Laboratoire",
                                 ),
                               ],
                               onChanged: (value) {
@@ -458,8 +462,6 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
-      print("download url: $url");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));
     });
     setState(() {
       imageLoading = false;
