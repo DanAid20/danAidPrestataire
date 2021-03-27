@@ -549,7 +549,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       print("download url: $url");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));
+      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));
     });
     setState(() {
       imageLoading = false;
