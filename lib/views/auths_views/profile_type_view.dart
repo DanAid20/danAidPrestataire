@@ -4,7 +4,6 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/strings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -66,28 +65,28 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
         body: SizedBox(
           width: double.infinity,
           child: Container(
-            child: ListView.builder(
-              itemCount: titleList.length,
-              shrinkWrap: true,
+              child: ListView.builder(
+                itemCount: titleList.length,
+                shrinkWrap: true,
                 itemBuilder: (context, index) => ProfileTypeCard(
-                    title: titleList.elementAt(index),
-                    description: descList.elementAt(index),
-                    image: imageList.elementAt(index),
-                    navigationService: _navigationService,
-                    action: (){
-                      if (index == 0){
-                        adherentAction();
-                      }
-                      else if(index == 1){
-                        doctorAction();
-                      }
-                      else {
-                        serviceProviderAction();
-                      }
-                    },
-                    //route: routeList.elementAt(index),
+                  title: titleList.elementAt(index),
+                  description: descList.elementAt(index),
+                  image: imageList.elementAt(index),
+                  navigationService: _navigationService,
+                  action: (){
+                    if (index == 0){
+                      adherentAction();
+                    }
+                    else if(index == 1){
+                      doctorAction();
+                    }
+                    else {
+                      serviceProviderAction();
+                    }
+                  },
+                  //route: routeList.elementAt(index),
                 ),
-            )
+              )
           ),
         ),
       ),

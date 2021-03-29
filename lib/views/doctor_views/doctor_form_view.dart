@@ -15,6 +15,7 @@ class DoctorFormView extends StatefulWidget {
 
 class _DoctorFormViewState extends State<DoctorFormView> {
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _mFormKey2 = GlobalKey<FormState>();
   TextEditingController _mSurnameController, _mRegionController, _mIdNumberController;
   TextEditingController _mOfficeNameController, _mOfficeCategoryController, _mSpecController,
       _mRegisterOrder, _mHospitalCommuneController, _mCityController;
@@ -189,9 +190,15 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               formKey: _mFormKey,
               signText: 'Continuez',
               onPress: (){
-                setState(() {
-                  _isPersonal = true;
-                });
+                if(_mFormKey.currentState.validate()){
+                  setState(() {
+                    _isPersonal = true;
+                    debugPrint(_mSurnameController.text,);
+                    debugPrint(_mRegionController.text,);
+                    debugPrint(_mCityController.text,);
+                    debugPrint(_mIdNumberController.text,);
+                  });
+                }
               },
             )
           ],
@@ -204,7 +211,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
     return Container(
       margin: EdgeInsets.only(top: top(size: 20)),
       child: Form(
-        key: _mFormKey,
+        key: _mFormKey2,
         child: Column(
           children: [
             KTextFormField(
