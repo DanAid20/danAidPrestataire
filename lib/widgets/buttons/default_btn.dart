@@ -1,4 +1,5 @@
 import 'package:danaid/core/services/navigation_service.dart';
+import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +8,15 @@ import '../../locator.dart';
 
 class DefaultBtn extends StatelessWidget {
   DefaultBtn({
-    Key key, this.formKey, this.signText, this.signRoute = '/login',
+    Key key, this.formKey,
+    this.signText, this.signRoute = '/login', this.onPress, this.bgColor,
   }) : super(key: key);
 
   final GlobalKey<FormState> formKey;
   final String signText;
   final String signRoute;
+  final Function onPress;
+  final Color bgColor;
 
   final NavigationService _navigationService = locator<NavigationService>();
 
@@ -20,9 +24,10 @@ class DefaultBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height(size: 70),
+      width: SizeConfig.screenWidth * .9,
       margin: EdgeInsets.symmetric(
           horizontal: horizontal(size: 15),
-          vertical: vertical(size: 20)),
+          vertical: vertical(size: 25)),
       child: RaisedButton(
         child: Text(
           signText ?? 'Connexion',
@@ -33,10 +38,10 @@ class DefaultBtn extends StatelessWidget {
               fontWeight: FontWeight.w800,
               fontSize: fontSize(size: 17)),
         ),
-        color: kPrimaryColor,
+        color: bgColor ?? kPrimaryColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18)),
-        onPressed: () => _navigationService.navigateTo(signRoute)
+        onPressed: onPress
       ),
     );
   }

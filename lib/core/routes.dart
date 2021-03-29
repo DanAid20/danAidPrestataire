@@ -4,6 +4,7 @@ import 'package:danaid/views/auths_views/otp_view.dart';
 import 'package:danaid/views/auths_views/password_reset_view.dart';
 import 'package:danaid/views/auths_views/profile_type_view.dart';
 import 'package:danaid/views/auths_views/register_view.dart';
+import 'package:danaid/views/doctor_views/doctor_form_view.dart';
 import 'package:danaid/views/home_page_view.dart';
 import 'package:danaid/views/screens/adherents_plans_screen/adherent_plan_screen.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
@@ -23,4 +24,5 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/profile-type": (context) => ProfileTypeView(),
   "/profile-type-adherent": (context) => AdherentPlanScreen(),
   "/adherent-reg-form": (context) => AdherentRegistrationFormm(),
+  "/profile-type-doctor": (context) => DoctorFormView(),
 };
