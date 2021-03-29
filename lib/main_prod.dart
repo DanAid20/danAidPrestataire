@@ -13,5 +13,5 @@ void main() async {
   await Firebase.initializeApp();
   Hive.init(directory.path);
   setupLocator();
-  runApp(Danaid(env: "dev",));
+  runApp(Danaid(env: "prod",));
 }

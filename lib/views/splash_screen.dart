@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/authProvider.dart';
+import 'package:danaid/core/providers/devEnvironmentProvider.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -51,9 +52,10 @@ class _SplashScreenState extends State<SplashScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    DevEnvironmentProvider devEnv = Provider.of<DevEnvironmentProvider>(context, listen: false);
     SizeConfig().init(context);
     return Scaffold(
-          body: Center(child: Text("Splash Screen Temporaire !!!"),),
+          body: Center(child: Text("Splash Screen Temporaire !!!\n\n${devEnv.getEnv}", textAlign: TextAlign.center,),),
         );
   }
 }
