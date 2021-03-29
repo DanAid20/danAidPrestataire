@@ -16,23 +16,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:danaid/core/services/algorithms.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/getCities.dart';
 
-class AdherentRegistrationFormm extends StatefulWidget {
+class ServiceProviderForm extends StatefulWidget {
   @override
-  _AdherentRegistrationFormmState createState() => _AdherentRegistrationFormmState();
+  _ServiceProviderFormState createState() => _ServiceProviderFormState();
 }
 
-class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
+class _ServiceProviderFormState extends State<ServiceProviderForm> {
   final GlobalKey<FormState> _adherentFormKey = GlobalKey<FormState>();
-  TextEditingController _familynameController = new TextEditingController();
-  TextEditingController _surnameController = new TextEditingController();
-  TextEditingController _regionController = new TextEditingController();
-  TextEditingController _townController = new TextEditingController();
+  TextEditingController _companyNameController = new TextEditingController();
+  TextEditingController _contactNameController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
   bool autovalidate = false;
-  String _gender = "H";
+  String _category = "Hôpital";
   String _region = "Centre";
   List<String> myCities = [];
   String _city;
@@ -41,7 +41,6 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   bool cityChosen = false;
   bool _serviceTermsAccepted = false;
   String termsAndConditions = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\n\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la s";
-  DateTime selectedDate = DateTime(1990);
   File imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
@@ -84,7 +83,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         CircleAvatar(
                           backgroundColor: Colors.grey[300],
                           radius: wv*18,
-                          child: imageFileAvatar == null ? Icon(LineIcons.user, color: Colors.white, size: wv*25,) : Container(),
+                          child: imageFileAvatar == null ? Icon(LineIcons.building, color: Colors.white, size: wv*20,) : Container(),
                           backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar),
                         ),
                         Positioned(
@@ -124,85 +123,73 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                 SizedBox(height: hv*6,),
 
                 CustomTextField(
-                  label: "Nom de Famille *",
-                  hintText: "Entrez votre nom de famille",
-                  controller: _familynameController,
+                  prefixIcon: Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
+                  label: "Nom de l'établissement *",
+                  hintText: "ex: Hôpial Centrale",
+                  controller: _companyNameController,
                   validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
                 ),
                 SizedBox(height: hv*1.5,),
                 CustomTextField(
-                  label: "Prénom (s)",
-                  hintText: "Entrez votre prénom",
-                  controller: _surnameController,
+                  prefixIcon: Icon(Icons.account_circle_outlined, color: kDeepTeal,),
+                  label: "Nom complet du contact *",
+                  hintText: "Entrez votre nom",
+                  controller: _contactNameController,
                   validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
                 ),
                 SizedBox(height: hv*1.5,),
-                Row(
-                  children: [
-                    SizedBox(width: wv*3,),
-                    Expanded(
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Genre *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                          SizedBox(height: 5,),
-                          Container(
-                            constraints: BoxConstraints(minWidth: wv*45),
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[100],
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                value: _gender,
-                                items: [
-                                  DropdownMenuItem(
-                                    child: Text("Masculin", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                    value: "H",
-                                  ),
-                                  DropdownMenuItem(
-                                    child: Text("Féminin", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: "F",
-                                  ),
-                                ],
-                                onChanged: (value) {
-                                  setState(() {
-                                    _gender = value;
-                                  });
-                                }),
-                            ),
+                CustomTextField(
+                  prefixIcon: Icon(Icons.email_outlined, color: kDeepTeal,),
+                  keyboardType: TextInputType.emailAddress,
+                  label: "Email du contact",
+                  hintText: "Entrez votre addresse email",
+                  controller: _emailController,
+                  validator: _emailFieldValidator,
+                ),
+                SizedBox(height: hv*1.5,),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: wv*3),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Type d'établissement *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                      SizedBox(height: 5,),
+                      Container(
+                        constraints: BoxConstraints(minWidth: wv*45),
+                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.all(Radius.circular(20))
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButton(
+                              isExpanded: true,
+                              value: _category,
+                              items: [
+                                DropdownMenuItem(
+                                  child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: "Hôpital",
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("Pharmacie", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                  value: "Pharmacie",
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("Laboratoire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                  value: "Laboratoire",
+                                ),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  _category = value;
+                                });
+                              }),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-
-                    SizedBox(width: wv*5,),
-
-                    Expanded(
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Date de naissance *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                          SizedBox(height: 5,),
-                          GestureDetector(
-                            onTap: () => _selectDate(context),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                              child: Row(children: [
-                                SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
-                                VerticalDivider(),
-                                Text( "${selectedDate.toLocal()}".split(' ')[0], style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              ],),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: wv*3,),
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(height: hv*1.5,),
                 Row(
@@ -295,43 +282,8 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                   ],
                 ),
                 SizedBox(height: hv*1.5,),
-                /*Row(
-                  children: [
-                    Expanded(
-                      flex: 6,
-                      child: CustomTextField(
-                        label: "Region",
-                        hintText: "ex: Centre",
-                        controller: _regionController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        //svgIcon: "assets/icons/Bulk/Discovery.svg",
-                      ),
-                    ),
-                    Expanded(
-                      flex: 4,
-                      child: CustomTextField(
-                        label: "Ville",
-                        hintText: "ex: Yaoundé",
-                        controller: _townController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                      ),
-                    ),
-                  ],
-                ),*/
               ],)
             ),
-            /*Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                List<String> myList = getTownNamesFromList(towns);
-                return myList.where((String option) {
-                  return option.contains(textEditingValue.text.toLowerCase());
-                }).toList();
-              },
-              onSelected: (String selection) {
-                print('Selected $selection.');
-              },
-            ),*/
-
             SizedBox(height: hv*1,),
             CheckboxListTile(
               tristate: false,
@@ -365,57 +317,49 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                 setState(() {
                   autovalidate = true;
                 });
-                String fname = _familynameController.text;
-                String sname = _surnameController.text;
+                String companyName = _companyNameController.text;
+                String contactName = _contactNameController.text;
+                String email = _emailController.text;
                 if (_adherentFormKey.currentState.validate()){
                   setState(() {
                     buttonLoading = true;
                   });
                   AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
-                  print("$fname, $sname, $selectedDate, $_gender, $avatarUrl");
-                  print("${Algorithms().getMatricule(selectedDate, "Centre", _gender)}");
+                  print("$companyName, $_category, $avatarUrl");
                   adherentProvider.setAdherentId(userProvider.getUserId);
-                  adherentProvider.setFamilyName(fname);
-                  adherentProvider.setSurname(sname);
-                  adherentProvider.setBirthDate(selectedDate);
                   adherentProvider.setImgUrl(avatarUrl);
+                  //adherentProvider.setFamilyName(fname);
+                  adherentProvider.setSurname(companyName);
                   await FirebaseFirestore.instance.collection("USERS")
                     .doc(userProvider.getUserId)
                     .set({
-                      'fullName': "$fname $sname",
+                      'fullName': "$companyName",
                       "imageUrl" : avatarUrl,
-                      "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
-                      "profil": "ADHERENT",
+                      "profil": "PRESTATAIRE",
                       "regionDorigione": adherentProvider.getRegionOfOrigin
                     }, SetOptions(merge: true))
                     .then((value) async {
-                      await FirebaseFirestore.instance.collection("ADHERENTS")
+                      await FirebaseFirestore.instance.collection("PRESTATAIRE")
                         .doc(userProvider.getUserId)
                         .set({
                           "createdDate": DateTime.now(),
+                          "nomEtablissement": companyName,
+                          "nomCompletPContact": contactName,
+                          "emailPContact": email,
                           "authPhoneNumber": userProvider.getUserId,
-                          "enabled": userProvider.isEnabled,
-                          "dateNaissance": selectedDate,
-                          "genre": _gender,
+                          "categorieEtablissement": _category,
                           "imageUrl" : avatarUrl,
-                          "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                           "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
-                          "nbBeneficiare": 0,
-                          "nombreEnfant": 0,
-                          "nomFamille": fname,
-                          "prenom": sname,
-                          "profil": "ADHERENT",
+                          "profil": "PRESTATAIRE",
                           "profilEnabled": false,
-                          "protectionLevel": adherentProvider.getAdherentPlan,
-                          "regionDorigione": adherentProvider.getRegionOfOrigin,
-                          "statuMatrimonialMarie": false,
-                          "ville": adherentProvider.getTown,
+                          "region": adherentProvider.getRegionOfOrigin,
+                          "villeEtab": adherentProvider.getTown,
+                          "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                          "userCountryName": userProvider.getCountryName
                         }, SetOptions(merge: true))
                         .then((value) async {
-                          await HiveDatabase.setRegisterState(true);
-                          HiveDatabase.setFamilyName(fname);
-                          HiveDatabase.setSurname(sname);
-                          HiveDatabase.setGender(_gender);
+                          HiveDatabase.setRegisterState(true);
+                          HiveDatabase.setSurname(companyName);
                           HiveDatabase.setImgUrl(avatarUrl);
                           Navigator.pushNamed(context, '/home');
                         })
@@ -438,49 +382,19 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                     ;
                   
                 }
-/*
-                await FirebaseFirestore.instance.collection("USERS")
-                  .doc(userProvider.getUserId)
-                  .set({
-                    //'createdDate': DateTime.now(),
-                    //'emailAdress': userProvider.getEmail,
-                    //'enabled': userProvider.isEnabled,
-                    'fullName': sname + ' ' + fname,
-                    "imageUrl" : null,
-                    "matricule": Algorithms().getMatricule(selectedDate, "Centre", _gender),
-                    //"phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
-                    "profil": "ADHERENT",
-                    "regionDorigione": "",
-                    //"urlCNI": "",
-                    //"userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
-                    //"userCountryName": userProvider.getCountryName
-                  }, SetOptions(merge: true))
-                  .then((value) => Navigator.pushNamed(context, '/home'));
-*/
 
               },
             ) : Loaders().buttonLoader(kPrimaryColor) :
             CustomDisabledTextButton(
               text: "Envoyer",
-            )
+            ),
+            SizedBox(height: hv*2,)
           ],
         ),
       ),
     );
   }
 
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate, // Refer step 1
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
 
   Widget termsAndConditionsDialog(){
     return Dialog(
@@ -526,7 +440,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     });
     String fileName = userProvider.getUserId;
 
-    Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_adherents/$fileName'); //.child('photos/profils_adherents/$fileName');
+    Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_prestataires/$fileName'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       contentType: 'image/jpeg',
       customMetadata: {'picked-file-path': file.path}
@@ -548,8 +462,6 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
-      print("download url: $url");
-      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));
     });
     setState(() {
       imageLoading = false;
@@ -633,5 +545,11 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     }
     return region;
   }
-
+  String _emailFieldValidator(String value) {
+    if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value)) {
+      return "Entrer une addresse email valide";
+    }
+  }
 }

@@ -1,10 +1,11 @@
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/strings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../locator.dart';
@@ -20,6 +21,23 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
   final List<String> titleList = ['utilisateur', 'médécin', 'prestataire santé'];
   final List<String> imageList = ['assets/images/User.svg', 'assets/images/Doctor.svg', 'assets/images/Health.svg'];
   final List<String> routeList = ['/profile-type-adherent', '/profile-type-doctor', ''];
+  //final List<Function> actionList = [adherentAction(), doctorAction(), serviceProviderAction()];
+
+  adherentAction(){
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setProfileType("ADHERENT");
+    _navigationService.navigateTo('/profile-type-adherent');
+  }
+  doctorAction(){
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setProfileType("MEDECIN");
+    _navigationService.navigateTo('/profile-type-doctor');
+  }
+  serviceProviderAction(){
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setProfileType("PRESTATAIRE");
+    _navigationService.navigateTo('/profile-type-sprovider');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +73,18 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
                   description: descList.elementAt(index),
                   image: imageList.elementAt(index),
                   navigationService: _navigationService,
-                  route: routeList.elementAt(index),
+                  action: (){
+                    if (index == 0){
+                      adherentAction();
+                    }
+                    else if(index == 1){
+                      doctorAction();
+                    }
+                    else {
+                      serviceProviderAction();
+                    }
+                  },
+                  //route: routeList.elementAt(index),
                 ),
               )
           ),
@@ -69,13 +98,14 @@ class ProfileTypeCard extends StatelessWidget {
   const ProfileTypeCard({
     Key key,
     @required NavigationService navigationService,
-    this.title, this.description, this.image, this.route,
+    this.title, this.description, this.image, this.route, this.action
   }) : _navigationService = navigationService, super(key: key);
 
   final NavigationService _navigationService;
   final String title;
   final String description;
   final String image;
+  final Function action;
   final String route;
 
 
@@ -144,7 +174,7 @@ class ProfileTypeCard extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => _navigationService.navigateTo(route),
+      onTap: action,
     );
   }
 }

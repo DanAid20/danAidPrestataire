@@ -44,6 +44,25 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    flavorDimensions "my-flavor"
+    productFlavors {
+ 
+        dev {
+            dimension "my-flavor"
+            applicationId "com.master.danaid.dev"
+            versionCode 1
+            versionName "1.0"
+        }
+ 
+        prod {
+            dimension "my-flavor"
+            applicationId "com.master.danaid"
+            versionCode 1
+            versionName "1.0"
+        }
     }
 
     buildTypes {

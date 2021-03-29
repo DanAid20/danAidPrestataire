@@ -19,7 +19,7 @@ class MutuelleIntroScreen extends StatelessWidget {
           height: SizeConfig.screenHeight,
           child: Stack(
             children: [
-              ImageBox(image: 'https://chmccook.org/assets/site/homepage-slideshow/slideshownursebaby.jpg'),
+              ImageBox(image: 'assets/images/image 7.png'),
               IconContainer(
                 sizeTop: defSize * 40,
                 sizeRight: defSize * 1.5,

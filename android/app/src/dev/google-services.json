@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "926920992923",
+    "project_id": "danaid-dev",
+    "storage_bucket": "danaid-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:926920992923:android:297754b25854e51515fe3e",
+        "android_client_info": {
+          "package_name": "com.master.danaid.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "926920992923-rc1tk6abb64uc4o0hefvno0ptiftl31n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc09hSOYHalB8THo7Aebny9keF5U6Csn0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "926920992923-rc1tk6abb64uc4o0hefvno0ptiftl31n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

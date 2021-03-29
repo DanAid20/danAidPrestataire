@@ -57,11 +57,13 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                           child: (adherentProvider.getImgUrl == "" ||adherentProvider.getImgUrl == null) ? Icon(LineIcons.user, color: Colors.white, size: wv*13,) : Container(),
                         ),
                         SizedBox(width: wv*2,),
-                        Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Bonjour ${adherentProvider.getSurname}!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400),),
-                            Text("Couverture Accès", style: TextStyle(fontSize: wv*3, color: kPrimaryColor)),
-                          ],
+                        Container(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Bonjour ${adherentProvider.getSurname}!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+                              Text("Couverture Accès", style: TextStyle(fontSize: wv*3, color: kPrimaryColor)),
+                            ],
+                          ),
                         ),
                         Expanded(
                           child: Container(),

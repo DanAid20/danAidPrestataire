@@ -9,14 +9,22 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/providers/authProvider.dart';
+import 'package:danaid/core/providers/devEnvironmentProvider.dart';
 import '../locator.dart';
 
 class Danaid extends StatelessWidget {
+  final String env;
+
+  const Danaid({Key key, this.env}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     statusBar.setColor(context: context);
     return MultiProvider(
             providers: [
+              ChangeNotifierProvider<DevEnvironmentProvider>(
+                create: (_) => DevEnvironmentProvider(env),
+              ),
               ChangeNotifierProvider<UserProvider>(
                 create: (_) => UserProvider(
                   "", "", "", "", "", "", "", "", "237", "Cameroon", false, null
