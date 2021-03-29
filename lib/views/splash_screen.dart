@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
     DevEnvironmentProvider devEnv = Provider.of<DevEnvironmentProvider>(context, listen: false);
     SizeConfig().init(context);
     return Scaffold(
-          body: Center(child: Text("Splash Screen Temporaire !!!\n\n${devEnv.getEnv}", textAlign: TextAlign.center,),),
+          body: Center(child: Text("Splash Screen Temporaire !!!\n${devEnv.getEnv}", textAlign: TextAlign.center,),),
         );
   }
 }
