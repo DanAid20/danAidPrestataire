@@ -111,6 +111,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               labelText: 'Prénom',
               hintText: 'Entrez votre prénom',
               prefixIcon: Icon(SimpleLineIcons.user),
+              onChanged: (value){
+                setState(() {
+                  _mSurnameController.text = value;
+                });
+              },
               validator: (String surname) {
                 return (surname.isEmpty)
                     ? kEmptyField
@@ -122,6 +127,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               labelText: 'Région d\'Origine',
               hintText: 'Entrez votre région d\'origine',
               prefixIcon: Icon(SimpleLineIcons.globe),
+              onChanged: (value){
+                setState(() {
+                  _mRegionController.text = value;
+                });
+              },
               validator: (String origine) {
                 return (origine.isEmpty)
                     ? kEmptyField
@@ -133,6 +143,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               labelText: 'Lieu de résidence',
               hintText: 'Entrez votre ville',
               prefixIcon: Icon(SimpleLineIcons.location_pin),
+              onChanged: (value){
+                setState(() {
+                  _mCityController.text = value;
+                });
+              },
               validator: (String town) {
                 return (town.isEmpty)
                     ? kEmptyField
@@ -151,6 +166,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mIdNumberController.text = value;
+                });
+              },
               validator: (String origine) {
                 return (origine.isEmpty)
                     ? kEmptyField
@@ -225,6 +245,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mOfficeNameController.text = value;
+                });
+              },
               validator: (String office) {
                 return (office.isEmpty)
                     ? kEmptyField
@@ -242,6 +267,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mOfficeCategoryController.text = value;
+                });
+              },
               validator: (String _mOffice) {
                 return (_mOffice.isEmpty)
                     ? kEmptyField
@@ -260,6 +290,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mRegisterOrder.text = value;
+                });
+              },
               validator: (String origine) {
                 return (origine.isEmpty)
                     ? kEmptyField
@@ -277,6 +312,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mSpecController.text = value;
+                });
+              },
               validator: (String spec) {
                 return (spec.isEmpty)
                     ? kEmptyField
@@ -294,6 +334,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mHospitalCommuneController.text = value;
+                });
+              },
               validator: (String commune) {
                 return (commune.isEmpty)
                     ? kEmptyField
