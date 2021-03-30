@@ -21,6 +21,20 @@ class _DoctorFormViewState extends State<DoctorFormView> {
       _mRegisterOrder, _mHospitalCommuneController, _mCityController;
   String _mGender;
   bool _isPersonal = false;
+
+  @override
+  void initState() {
+    _mHospitalCommuneController = TextEditingController();
+    _mRegionController = TextEditingController();
+    _mIdNumberController = TextEditingController();
+    _mOfficeNameController = TextEditingController();
+    _mSurnameController = TextEditingController();
+    _mOfficeCategoryController = TextEditingController();
+    _mSpecController = TextEditingController();
+    _mRegisterOrder = TextEditingController();
+    _mCityController = TextEditingController();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
