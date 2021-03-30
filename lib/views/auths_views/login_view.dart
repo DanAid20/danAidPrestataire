@@ -315,10 +315,8 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<bool> checkIfUserIsAlreadyRegistered(String phone) async {
-    DocumentSnapshot adherent = await FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get();
-    DocumentSnapshot doctor = await FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get();
-    DocumentSnapshot serviceprovider = await FirebaseFirestore.instance.collection('PRESTATAIRE').doc(phone).get();
-    return (adherent.exists | doctor.exists | serviceprovider.exists) ? true : false;
+    DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
+    return (user.exists) ? true : false;
   }
 
   void verifyPhoneNumber() async {

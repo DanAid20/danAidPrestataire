@@ -333,6 +333,14 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                   await FirebaseFirestore.instance.collection("USERS")
                     .doc(userProvider.getUserId)
                     .set({
+                      'createdDate': DateTime.now(),
+                      'emailAdress': userProvider.getEmail,
+                      'enabled': userProvider.isEnabled,
+                      "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+                      "urlCNI": "",
+                      "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                      "userCountryName": userProvider.getCountryName,
+                      "authId": userProvider.getAuthId,
                       'fullName': "$companyName",
                       "imageUrl" : avatarUrl,
                       "profil": "PRESTATAIRE",

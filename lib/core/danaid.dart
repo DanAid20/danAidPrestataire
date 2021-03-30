@@ -27,7 +27,7 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<UserProvider>(
                 create: (_) => UserProvider(
-                  "", "", "", "", "", "", "", "", "237", "Cameroon", false, null
+                  null, "", "", "", "", "", "", "", "", "237", "Cameroon", false, null
                 ),
               ),
               ChangeNotifierProvider<AdherentProvider>(

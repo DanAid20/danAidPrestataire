@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:danaid/helpers/colors.dart';
-import 'package:danaid/views/screens/aid_network_screen.dart';
-import 'package:danaid/views/screens/health_book_screen.dart';
-import 'package:danaid/views/screens/hello_screen.dart';
-import 'package:danaid/views/screens/myfamily_screen.dart';
-import 'package:danaid/views/screens/partners_screen.dart';
+import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
+import 'package:danaid/views/adhrent_views/health_book_screen.dart';
+import 'package:danaid/views/adhrent_views/hello_screen.dart';
+import 'package:danaid/views/adhrent_views/myfamily_screen.dart';
+import 'package:danaid/views/adhrent_views/partners_screen.dart';
 import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';

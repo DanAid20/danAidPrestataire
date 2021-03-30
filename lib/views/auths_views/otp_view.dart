@@ -319,27 +319,9 @@ class _OtpViewState extends State<OtpView> {
 
     _auth.signInWithCredential(credential).then((val) async {
       final User user = val.user;
-      await FirebaseFirestore.instance.collection("USERS")
-        .doc(userProvider.getUserId)
-        .set({
-          'createdDate': DateTime.now(),
-          'emailAdress': userProvider.getEmail,
-          'enabled': userProvider.isEnabled,
-          'fullName': "",
-          "imageUrl" : null,
-          "matricule": "",
-          "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
-          "profil": "",
-          "regionDorigione": "",
-          "urlCNI": "",
-          "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
-          "userCountryName": userProvider.getCountryName,
-          "authId": user.uid
-        }, SetOptions(merge: true))
-        .then((value) {
-          HiveDatabase.setSignInState(true);
-          Navigator.pushNamed(context, '/profile-type');
-        });
+      userProvider.setAuthId(user.uid);
+      HiveDatabase.setSignInState(true);
+      Navigator.pushNamed(context, '/profile-type');
       showSnackbar("Successfully signed in UID: ${user.uid}");
     }).catchError((e){
       showSnackbar("Failed to sign in: " + e.message.toString());

@@ -4,11 +4,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
-import 'package:danaid/views/screens/my_coverage_tab.dart';
-import 'package:danaid/views/screens/my_doctor_tab.dart';
+import 'package:danaid/views/adhrent_views/my_coverage_tab.dart';
+import 'package:danaid/views/adhrent_views/my_doctor_tab.dart';
 import 'package:danaid/widgets/advantage_card.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/notification_card.dart';
+import 'package:danaid/widgets/user_avatar_coverage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,7 +36,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
-    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    //AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         body: NestedScrollView(floatHeaderSlivers: true, 
@@ -47,38 +48,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                 backgroundColor: Colors.white,
                 title: Column(
                   children: [
-                    Row(
-                      children: [
-                        SizedBox(width: 0,),
-                        CircleAvatar(
-                          radius: wv*8,
-                          backgroundColor: Colors.blueGrey[100],
-                          backgroundImage: (adherentProvider.getImgUrl == "" ||adherentProvider.getImgUrl == null)  ? null : NetworkImage(adherentProvider.getImgUrl),
-                          child: (adherentProvider.getImgUrl == "" ||adherentProvider.getImgUrl == null) ? Icon(LineIcons.user, color: Colors.white, size: wv*13,) : Container(),
-                        ),
-                        SizedBox(width: wv*2,),
-                        Container(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Bonjour ${adherentProvider.getSurname}!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
-                              Text("Couverture Accès", style: TextStyle(fontSize: wv*3, color: kPrimaryColor)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        SizedBox(width: 10,)
-                      ],
-                    ),
-                    /*Row(
-                      children: [
-                        Text("12 000 Pts", style: TextStyle(fontSize: inch*1.1, fontWeight: FontWeight.w700, color: kPrimaryColor),),
-                        SizedBox(width: wv*2,),
-                        Icon(MdiIcons.shieldCheck, size: wv*4, color: Colors.red.withOpacity(0.6),),
-                        Icon(MdiIcons.starBox, size: wv*4, color: Colors.teal.withOpacity(0.7),)
-                      ],
-                    ),*/
+                    UserAvatarAndCoverage(),
                   ],
                 ),
                 actions: [

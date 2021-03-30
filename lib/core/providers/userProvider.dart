@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {
   
-  String _userId, _matricule, _fullName, _imgUrl, _email, _profileType, _regionOfOrigin, _cniUrl, _countryCode, _countryName;
+  String _authId,_userId, _matricule, _fullName, _imgUrl, _email, _profileType, _regionOfOrigin, _cniUrl, _countryCode, _countryName;
   bool _enabled;
   List<Map> _phoneList;
 
-  UserProvider(this._userId, this._matricule, this._fullName, this._imgUrl, this._email, this._profileType, this._regionOfOrigin, this._cniUrl, this._countryCode, this._countryName, this._enabled, this._phoneList);
+  UserProvider(this._authId, this._userId, this._matricule, this._fullName, this._imgUrl, this._email, this._profileType, this._regionOfOrigin, this._cniUrl, this._countryCode, this._countryName, this._enabled, this._phoneList);
 
+  String get getAuthId => _authId;
   String get getUserId => _userId;
   String get getMatricule => _matricule;
   String get getFullName => _fullName;
@@ -21,6 +22,10 @@ class UserProvider with ChangeNotifier {
   bool get isEnabled => _enabled;
   List<Map> get getPhoneList => _phoneList;
 
+  void setAuthId(String val) {
+    _authId = val;
+    notifyListeners();
+  }
   void setUserId(String val) {
     _userId = val;
     notifyListeners();
