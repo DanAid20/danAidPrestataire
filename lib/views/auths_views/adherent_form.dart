@@ -421,6 +421,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         }, SetOptions(merge: true))
                         .then((value) async {
                           await HiveDatabase.setRegisterState(true);
+                          HiveDatabase.setAuthPhone(userProvider.getUserId);
                           HiveDatabase.setFamilyName(fname);
                           HiveDatabase.setSurname(sname);
                           HiveDatabase.setGender(_gender);

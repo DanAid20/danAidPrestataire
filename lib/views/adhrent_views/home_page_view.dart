@@ -1,5 +1,8 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
 import 'package:danaid/views/adhrent_views/health_book_screen.dart';
@@ -10,6 +13,8 @@ import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:provider/provider.dart';
 
 class HomePageView extends StatefulWidget {
   @override
@@ -22,14 +27,22 @@ class _HomePageViewState extends State<HomePageView> {
   double height = SizeConfig.screenHeight / 100;
   double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;
 
-  int index = 0;
+  int index = 1;
+  loadAdherentprofile() async {
+    String phone = await HiveDatabase.getAuthPhone();
+    FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) {
+      AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
+      AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+      adherentModelProvider.setAdherentModel(adherent);
+    });
+  }
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    loadAdherentprofile();
     super.initState();
   }
   
-
   @override
   Widget build(BuildContext context) {
 

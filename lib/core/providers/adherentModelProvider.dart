@@ -1,0 +1,138 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
+import 'package:flutter/material.dart';
+
+class AdherentModelProvider with ChangeNotifier {
+
+  AdherentModel _adherent;
+  
+  AdherentModelProvider(this._adherent);
+
+  AdherentModel get getAdherent => _adherent;
+
+  void setAdherentModel(AdherentModel val){
+    _adherent = val;
+    notifyListeners();
+  }
+  void setAdherentId(String val){
+    _adherent.adherentId = val;
+    notifyListeners();
+  }
+  void setCniName(String val){
+    _adherent.cniName = val;
+    notifyListeners();
+  }
+  void setAddress(String val){
+    _adherent.address = val;
+    notifyListeners();
+  }
+  void setOtherDocName(String val){
+    _adherent.otherDocName = val;
+    notifyListeners();
+  }
+
+  void setMarriageCertificateName(String val){
+    _adherent.marriageCertificateName = val;
+    notifyListeners();
+  }
+
+  void setFamilyName(String val){
+    _adherent.familyName = val;
+    notifyListeners();
+  }
+
+  void setSurname(String val){
+    _adherent.surname = val;
+    notifyListeners();
+  }
+
+  void setMatricule(String val){
+    _adherent.matricule = val;
+    notifyListeners();
+  }
+
+  void setImgUrl(String val){
+    _adherent.imgUrl = val;
+    notifyListeners();
+  }
+
+  void setGender(String val){
+    _adherent.gender = val;
+    notifyListeners();
+  }
+
+  void setEmail(String val){
+    _adherent.email = val;
+    notifyListeners();
+  }
+
+  void setProfession(String val){
+    _adherent.profession = val;
+    notifyListeners();
+  }
+
+  void setRegionOfOrigin(String val){
+    _adherent.regionOfOrigin = val;
+    notifyListeners();
+  }
+
+  void setMarriageCertificateUrl(String val){
+    _adherent.marriageCertificateUrl = val;
+    notifyListeners();
+  }
+
+  void setOtherJustificativeDocsUrl(String val){
+    _adherent.otherJustificativeDocsUrl = val;
+    notifyListeners();
+  }
+
+  void setOfficialDocUrl(String val){
+    _adherent.officialDocUrl = val;
+    notifyListeners();
+  }
+
+  void setTown(String val){
+    _adherent.town = val;
+    notifyListeners();
+  }
+
+  void setAdherentPlan(int val){
+    _adherent.adherentPlan = val;
+    notifyListeners();
+  }
+
+  void setProfileType(String val){
+    _adherent.profileType = val;
+    notifyListeners();
+  }
+
+  void setDateCreated(DateTime val){
+    _adherent.dateCreated = Timestamp.fromDate(val);
+    notifyListeners();
+  }
+
+  void setValidityEndDate(DateTime val){
+    _adherent.validityEndDate = Timestamp.fromDate(val);
+    notifyListeners();
+  }
+
+  void setBirthDate(DateTime val){
+    _adherent.birthDate = Timestamp.fromDate(val);
+    notifyListeners();
+  }
+
+  void setProfileEnableState(bool val){
+    _adherent.profileEnabled = val;
+    notifyListeners();
+  }
+
+  void setMatrimonialStatus(bool val){
+    _adherent.isMarried = val;
+    notifyListeners();
+  }
+  void setLocation(Map loc){
+    _adherent.location = loc;
+    notifyListeners();
+  }
+
+}

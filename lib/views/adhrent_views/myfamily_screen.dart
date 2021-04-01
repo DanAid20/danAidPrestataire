@@ -54,6 +54,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
               ),
             ),
             Container(
+              padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: Column(
                 children: [
                   Column(
@@ -65,7 +66,6 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                           TextSpan(text: " dans certaines pharmacies & Labos du réseau DanAid")
                         ]
                       , style: TextStyle(color: kPrimaryColor)),
-                        
                       )
                     ],
                   )
