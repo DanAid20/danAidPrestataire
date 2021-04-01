@@ -366,7 +366,7 @@ class _RegisterViewState extends State<RegisterView> {
             _navigationService.navigateTo('/otp')
           });
     } catch (e) {
-      showSnackbar("Failed to Verify Phone Number: ${e}");
+      showSnackbar("Failed to Verify Phone Number: ${e.toString()}");
     }
   }
 

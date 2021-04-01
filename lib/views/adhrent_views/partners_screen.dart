@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
-import 'package:danaid/views/screens/family_doctors_list_screen.dart';
+import 'package:danaid/views/adhrent_views/family_doctors_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

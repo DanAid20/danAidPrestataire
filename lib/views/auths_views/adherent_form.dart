@@ -382,6 +382,14 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                   await FirebaseFirestore.instance.collection("USERS")
                     .doc(userProvider.getUserId)
                     .set({
+                      'createdDate': DateTime.now(),
+                      'emailAdress': userProvider.getEmail,
+                      'enabled': userProvider.isEnabled,
+                      "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+                      "urlCNI": "",
+                      "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                      "userCountryName": userProvider.getCountryName,
+                      "authId": userProvider.getAuthId,
                       'fullName': "$fname $sname",
                       "imageUrl" : avatarUrl,
                       "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
@@ -413,6 +421,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         }, SetOptions(merge: true))
                         .then((value) async {
                           await HiveDatabase.setRegisterState(true);
+                          HiveDatabase.setAuthPhone(userProvider.getUserId);
                           HiveDatabase.setFamilyName(fname);
                           HiveDatabase.setSurname(sname);
                           HiveDatabase.setGender(_gender);

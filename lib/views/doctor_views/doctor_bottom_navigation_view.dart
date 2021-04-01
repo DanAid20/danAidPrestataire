@@ -1,23 +1,26 @@
 import 'dart:math';
 
+import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
-import 'package:danaid/views/screens/aid_network_screen.dart';
-import 'package:danaid/views/screens/health_book_screen.dart';
-import 'package:danaid/views/screens/hello_screen.dart';
-import 'package:danaid/views/screens/myfamily_screen.dart';
-import 'package:danaid/views/screens/partners_screen.dart';
+import 'package:danaid/views/doctor_views/tabs_doctor_views/doctor_patient_view.dart';
+import 'package:danaid/views/doctor_views/tabs_doctor_views/home_doctor_view.dart';
+import 'package:danaid/views/doctor_views/tabs_doctor_views/profil_doctor_view.dart';
+import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
+import 'package:danaid/views/adhrent_views/partners_screen.dart';
 import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
-import 'package:danaid/core/utils/config_size.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
-class HomePageView extends StatefulWidget {
+class DoctorBottomNavigationView extends StatefulWidget {
+  DoctorBottomNavigationView({Key key}) : super(key: key);
+
   @override
-  _HomePageViewState createState() => _HomePageViewState();
+  _DoctorBottomNavigationViewState createState() =>
+      _DoctorBottomNavigationViewState();
 }
 
-class _HomePageViewState extends State<HomePageView> {
-  
+class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView> {
+
   double width = SizeConfig.screenWidth / 100;
   double height = SizeConfig.screenHeight / 100;
   double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;
@@ -28,7 +31,7 @@ class _HomePageViewState extends State<HomePageView> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     super.initState();
   }
-  
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,43 +93,43 @@ class _HomePageViewState extends State<HomePageView> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: "Entraide", onTap: entraideTapped),
-                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: accueilTapped),
-                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Carnet", onTap: carnetTapped),
-                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "partenaire", onTap: partenaireTapped),
-                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: "famille", onTap: familleTapped),
+                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: "Entraide", onTap: networkView),
+                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: homeView),
+                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Mes Patients", onTap: patientView),
+                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "Partenaires", onTap: partnerView),
+                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: "Profile", onTap: profileView),
                     ],
                   ),
                 ),
               ),
-              
+
             ],
           )
         ],
       ),
     );
   }
-  entraideTapped(){
+  networkView(){
     setState(() {
       index = 0;
     });
   }
-  accueilTapped(){
+  homeView(){
     setState(() {
       index = 1;
     });
   }
-  carnetTapped(){
+  patientView(){
     setState(() {
       index = 2;
     });
   }
-  partenaireTapped(){
+  partnerView(){
     setState(() {
       index = 3;
     });
   }
-  familleTapped(){
+  profileView(){
     setState(() {
       index = 4;
     });
@@ -166,17 +169,16 @@ class _HomePageViewState extends State<HomePageView> {
       return AidNetworkScreen();
     }
     else if(index == 1){
-      return HelloScreen();
+      return HomeDoctorView();
     }
     else if(index == 2){
-      return HealthBookScreen();
+      return DoctorPatientView();
     }
     else if(index == 3){
       return PartnersScreen();
     }
     else if(index == 4){
-      return MyFamilyScreen();
+      return ProfilDoctorView();
     }
   }
-
 }

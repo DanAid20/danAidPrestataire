@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
 
   testHive() async {
     var registered = await HiveDatabase.getRegisterState();
-    
+
     var signedIn = await HiveDatabase.getSignInState();
     var name = await HiveDatabase.getFamilyName();
     print("registered:");
@@ -65,64 +65,64 @@ class _LoginViewState extends State<LoginView> {
       bottom: false,
       child: Scaffold(
           body: SizedBox(
-        width: double.infinity,
-        child: Stack(
-          children: [
-            Container(
-              height: SizeConfig.screenHeight * .45,
-              decoration: BoxDecoration(color: kPrimaryColor),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            width: double.infinity,
+            child: Stack(
               children: [
                 Container(
-                  height: SizeConfig.screenHeight * .3,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: top(size: 14)),
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: kPrimaryColor, width: 2.3),
-                            shape: BoxShape.circle),
-                        child: CircleAvatar(
-                          radius: 45,
-                          backgroundImage:
-                              AssetImage('assets/images/male.png'),
-                        ),
-                      ),
-                      WelcomeHeader(),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: horizontal(size: 35)),
-                        child: Text('Entrez votre mot de passe et email pour accéder à votre compte.',
-                          softWrap: true,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: whiteColor,
-                              letterSpacing: .7,
-                              height: 1.4,
-                              fontSize: fontSize(size: 16)),
-                        ),
-                      )
-                    ],
-                  ),
+                  height: SizeConfig.screenHeight * .45,
+                  decoration: BoxDecoration(color: kPrimaryColor),
                 ),
-                Expanded(
-                  child: Container(
-                    height: SizeConfig.screenHeight * .8,
-                    decoration: BoxDecoration(
-                        color: whiteColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(defaultSize * 2.5),
-                            topRight: Radius.circular(defaultSize * 2.5)
-                        )
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: SizeConfig.screenHeight * .3,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(top: top(size: 14)),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: kPrimaryColor, width: 2.3),
+                                shape: BoxShape.circle),
+                            child: CircleAvatar(
+                              radius: 45,
+                              backgroundImage:
+                              AssetImage('assets/images/male.png'),
+                            ),
+                          ),
+                          WelcomeHeader(),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: horizontal(size: 35)),
+                            child: Text('Entrez votre mot de passe et email pour accéder à votre compte.',
+                              softWrap: true,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: whiteColor,
+                                  letterSpacing: .7,
+                                  height: 1.4,
+                                  fontSize: fontSize(size: 16)),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    child: ListView(
-                      children: [
-                        loginForm(),
-                        /*InkWell(
+                    Expanded(
+                      child: Container(
+                        height: SizeConfig.screenHeight * .8,
+                        decoration: BoxDecoration(
+                            color: whiteColor,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(defaultSize * 2.5),
+                                topRight: Radius.circular(defaultSize * 2.5)
+                            )
+                        ),
+                        child: ListView(
+                          children: [
+                            loginForm(),
+                            /*InkWell(
                           onTap: () => navigateReplaceTo(context: context, routeName: '/reset-password'),
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 15),
@@ -137,54 +137,54 @@ class _LoginViewState extends State<LoginView> {
                             ),
                           ),
                         ),*/
-                        //DefaultBtn(formKey: _mFormKey, signRoute: '/home',),
-                        //SIgnInUpTag()
-                      ],
+                            //DefaultBtn(formKey: _mFormKey, signRoute: '/home',),
+                            //SIgnInUpTag()
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      )),
+            ),
+          )),
     );
   }
 
   void _openCountryPickerDialog() => showDialog(
-    context: context,
-    builder: (context) { 
-      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-      return Theme(
-        data: Theme.of(context).copyWith(primaryColor: Colors.pink),
-        child: CountryPickerDialog(
-          titlePadding: EdgeInsets.all(15.0),
-          searchCursorColor: Colors.pinkAccent,
-          searchInputDecoration: InputDecoration(
-            hintText: 'Chercher...',
-            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
-          ),
-          isSearchable: true,
-          title: Text('Selectionnez votre pays'),
-          onValuePicked: (Country country) {
-            print(country.isoCode);
-            print(country.name);
-            print(country.phoneCode);
-            print(country.iso3Code);
-            userProvider.setCountryCode(country.isoCode);
-            userProvider.setCountryName(country.name);
-            setState(() => _selectedDialogCountry = country);
-            setState(() => phoneCode = country.phoneCode);
-          },
-          //itemFilter: (c) => ['NG', 'DE', 'GB', 'CI'].contains(c.isoCode),
-          priorityList: [
-            CountryPickerUtils.getCountryByPhoneCode('237'),
-            CountryPickerUtils.getCountryByPhoneCode('225'),
-            CountryPickerUtils.getCountryByPhoneCode('234'),
-            ],
-          itemBuilder: _buildCountryDialogItem)
-      );
-    }
+      context: context,
+      builder: (context) {
+        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        return Theme(
+            data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+            child: CountryPickerDialog(
+                titlePadding: EdgeInsets.all(15.0),
+                searchCursorColor: Colors.pinkAccent,
+                searchInputDecoration: InputDecoration(
+                    hintText: 'Chercher...',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
+                ),
+                isSearchable: true,
+                title: Text('Selectionnez votre pays'),
+                onValuePicked: (Country country) {
+                  print(country.isoCode);
+                  print(country.name);
+                  print(country.phoneCode);
+                  print(country.iso3Code);
+                  userProvider.setCountryCode(country.isoCode);
+                  userProvider.setCountryName(country.name);
+                  setState(() => _selectedDialogCountry = country);
+                  setState(() => phoneCode = country.phoneCode);
+                },
+                //itemFilter: (c) => ['NG', 'DE', 'GB', 'CI'].contains(c.isoCode),
+                priorityList: [
+                  CountryPickerUtils.getCountryByPhoneCode('237'),
+                  CountryPickerUtils.getCountryByPhoneCode('225'),
+                  CountryPickerUtils.getCountryByPhoneCode('234'),
+                ],
+                itemBuilder: _buildCountryDialogItem)
+        );
+      }
   );
 
   Widget _buildCountryDialogItem(Country country) {
@@ -205,7 +205,7 @@ class _LoginViewState extends State<LoginView> {
       margin: EdgeInsets.only(top: top(size: 20)),
       child: Form(
         key: _mFormKey,
-        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled, 
+        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
           children: [
             Container(
@@ -235,7 +235,7 @@ class _LoginViewState extends State<LoginView> {
             ),
 
             SizedBox(height: hv*2,),
-            
+
             KTextFormField(
               controller: _mPhoneController,
               labelText: 'Téléphone',
@@ -277,9 +277,9 @@ class _LoginViewState extends State<LoginView> {
                 },
               ),
             ),*/
-            loader ? 
+            loader ?
             Loaders().buttonLoader(kPrimaryColor)
-            : CustomTextButton(
+                : CustomTextButton(
               text: "S'inscrire",
               color: kPrimaryColor,
               action: () async {
@@ -288,7 +288,7 @@ class _LoginViewState extends State<LoginView> {
                 });
                 UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
                 print("${_mPhoneController.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
-                
+
                 if (_mFormKey.currentState.validate()){
                   setState(() {
                     loader = true;
@@ -305,7 +305,7 @@ class _LoginViewState extends State<LoginView> {
                   }
                   //_navigationService.navigateTo('/otp');
                 }
-                
+
               },
             ),
           ],
@@ -315,10 +315,8 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<bool> checkIfUserIsAlreadyRegistered(String phone) async {
-    DocumentSnapshot adherent = await FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get();
-    DocumentSnapshot doctor = await FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get();
-    DocumentSnapshot serviceprovider = await FirebaseFirestore.instance.collection('PRESTATAIRE').doc(phone).get();
-    return (adherent.exists | doctor.exists | serviceprovider.exists) ? true : false;
+    DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
+    return (user.exists) ? true : false;
   }
 
   void verifyPhoneNumber() async {
@@ -369,7 +367,7 @@ class _LoginViewState extends State<LoginView> {
         loader = false;
       });
     };
-    
+
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: userProvider.getUserId,
@@ -388,8 +386,6 @@ class _LoginViewState extends State<LoginView> {
     SnackBar snackBar = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-  
+
 }
-
-
 

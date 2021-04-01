@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
@@ -7,6 +9,7 @@ import 'package:danaid/widgets/texts/welcome_text_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 
 class DoctorFormView extends StatefulWidget {
   @override
@@ -15,11 +18,26 @@ class DoctorFormView extends StatefulWidget {
 
 class _DoctorFormViewState extends State<DoctorFormView> {
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _mFormKey2 = GlobalKey<FormState>();
   TextEditingController _mSurnameController, _mRegionController, _mIdNumberController;
   TextEditingController _mOfficeNameController, _mOfficeCategoryController, _mSpecController,
       _mRegisterOrder, _mHospitalCommuneController, _mCityController;
   String _mGender;
   bool _isPersonal = false;
+
+  @override
+  void initState() {
+    _mHospitalCommuneController = TextEditingController();
+    _mRegionController = TextEditingController();
+    _mIdNumberController = TextEditingController();
+    _mOfficeNameController = TextEditingController();
+    _mSurnameController = TextEditingController();
+    _mOfficeCategoryController = TextEditingController();
+    _mSpecController = TextEditingController();
+    _mRegisterOrder = TextEditingController();
+    _mCityController = TextEditingController();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -110,6 +128,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               labelText: 'Prénom',
               hintText: 'Entrez votre prénom',
               prefixIcon: Icon(SimpleLineIcons.user),
+              onChanged: (value){
+                setState(() {
+                  _mSurnameController.text = value;
+                });
+              },
               validator: (String surname) {
                 return (surname.isEmpty)
                     ? kEmptyField
@@ -121,6 +144,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               labelText: 'Région d\'Origine',
               hintText: 'Entrez votre région d\'origine',
               prefixIcon: Icon(SimpleLineIcons.globe),
+              onChanged: (value){
+                setState(() {
+                  _mRegionController.text = value;
+                });
+              },
               validator: (String origine) {
                 return (origine.isEmpty)
                     ? kEmptyField
@@ -132,6 +160,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               labelText: 'Lieu de résidence',
               hintText: 'Entrez votre ville',
               prefixIcon: Icon(SimpleLineIcons.location_pin),
+              onChanged: (value){
+                setState(() {
+                  _mCityController.text = value;
+                });
+              },
               validator: (String town) {
                 return (town.isEmpty)
                     ? kEmptyField
@@ -150,6 +183,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mIdNumberController.text = value;
+                });
+              },
               validator: (String origine) {
                 return (origine.isEmpty)
                     ? kEmptyField
@@ -189,9 +227,15 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               formKey: _mFormKey,
               signText: 'Continuez',
               onPress: (){
-                setState(() {
-                  _isPersonal = true;
-                });
+                if(_mFormKey.currentState.validate()){
+                  setState(() {
+                    _isPersonal = true;
+                    debugPrint(_mSurnameController.text,);
+                    debugPrint(_mRegionController.text,);
+                    debugPrint(_mCityController.text,);
+                    debugPrint(_mIdNumberController.text,);
+                  });
+                }
               },
             )
           ],
@@ -204,7 +248,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
     return Container(
       margin: EdgeInsets.only(top: top(size: 20)),
       child: Form(
-        key: _mFormKey,
+        key: _mFormKey2,
         child: Column(
           children: [
             KTextFormField(
@@ -218,6 +262,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mOfficeNameController.text = value;
+                });
+              },
               validator: (String office) {
                 return (office.isEmpty)
                     ? kEmptyField
@@ -235,6 +284,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mOfficeCategoryController.text = value;
+                });
+              },
               validator: (String _mOffice) {
                 return (_mOffice.isEmpty)
                     ? kEmptyField
@@ -253,6 +307,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mRegisterOrder.text = value;
+                });
+              },
               validator: (String origine) {
                 return (origine.isEmpty)
                     ? kEmptyField
@@ -270,6 +329,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mSpecController.text = value;
+                });
+              },
               validator: (String spec) {
                 return (spec.isEmpty)
                     ? kEmptyField
@@ -287,6 +351,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   width: 30,
                 ),
               ),
+              onChanged: (value){
+                setState(() {
+                  _mHospitalCommuneController.text = value;
+                });
+              },
               validator: (String commune) {
                 return (commune.isEmpty)
                     ? kEmptyField
@@ -316,8 +385,62 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                     child: DefaultBtn(
                       formKey: _mFormKey,
                       signText: 'Continuez',
-                      onPress: (){
+                      onPress: () async {
+                        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                        String hcommune = _mHospitalCommuneController.text;
+                        String region = _mRegionController.text;
+                        String cni = _mIdNumberController.text;
+                        String officeName = _mOfficeNameController.text;
+                        String surname = _mSurnameController.text;
+                        String officeCategory = _mOfficeCategoryController.text;
+                        String spec = _mSpecController.text;
+                        String registerOrder = _mRegisterOrder.text;
+                        String city = _mCityController.text;
 
+                        await FirebaseFirestore.instance.collection("USERS")
+                          .doc(userProvider.getUserId)
+                          .set({
+                            'createdDate': DateTime.now(),
+                            'enabled': false,
+                            "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+                            "urlCNI": "",
+                            "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                            "userCountryName": userProvider.getCountryName,
+                            "authId": userProvider.getAuthId,
+                            'fullName': surname,
+                            "profil": "MEDECIN",
+                            "regionDorigione": region
+                          }, SetOptions(merge: true))
+                          .then((value) async {
+                            await FirebaseFirestore.instance.collection("MEDECINS")
+                              .doc(userProvider.getUserId)
+                              .set({
+                                "certificatDenregistrmDordre": registerOrder,
+                                "categorieEtablissement": officeCategory,
+                                "communeHospital": hcommune,
+                                "nomEtablissement": officeName,
+                                "specialite": spec,
+                                "cniName": cni,
+                                "createdDate": DateTime.now(),
+                                "id": userProvider.getUserId,
+                                "enabled": false,
+                                "genre": _mGender,
+                                "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+                                "prenom": surname,
+                                "profil": "MEDECIN",
+                                "profilEnabled": false,
+                                "regionDorigione": region,
+                                "statuMatrimonialMarie": false,
+                                "ville": city,
+                              }, SetOptions(merge: true))
+                              .then((value) async {
+                                Navigator.pushNamed(context, '/doctor-home');
+                              })
+                              .catchError((e) {
+                                print(e.toString());
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                              });
+                            });
                       },
                     ),
                   ),
