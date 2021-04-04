@@ -295,14 +295,14 @@ class _LoginViewState extends State<LoginView> {
                   });
                   userProvider.setUserId("+$phoneCode${_mPhoneController.text}");
                   print("+${userProvider.getCountryCode}${_mPhoneController.text}");
-                  bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
+                  verifyPhoneNumber();
+                  /*bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
                   if(registered == false){
-                    verifyPhoneNumber();
                   } else {
                     HiveDatabase.setSignInState(true);
                     HiveDatabase.setRegisterState(true);
                     Navigator.pushReplacementNamed(context, '/home');
-                  }
+                  }*/
                   //_navigationService.navigateTo('/otp');
                 }
 
@@ -314,9 +314,17 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Future<bool> checkIfUserIsAlreadyRegistered(String phone) async {
+  Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
+    String profile;
     DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
-    return (user.exists) ? true : false;
+    bool exists = (user.exists) ? true : false;
+    if (exists) {
+      profile = user.data()["profil"];
+    }
+    return {
+      "exists": exists,
+      "profile": profile
+    };
   }
 
   void verifyPhoneNumber() async {
@@ -331,7 +339,19 @@ class _LoginViewState extends State<LoginView> {
       setState((){
         loader = false;
       });
-      _navigationService.navigateTo('/profile-type');
+      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
+      bool registered = res["exists"];
+      String profile = res["profile"];
+      
+      if(registered == false){
+        Navigator.pushNamed(context, '/profile-type');
+      } else {
+        HiveDatabase.setRegisterState(true);
+        HiveDatabase.setSignInState(true);
+        HiveDatabase.setAuthPhone(userProvider.getUserId);
+        (profile == doctor) ? HiveDatabase.setProfileType(doctor) : (profile == adherent) ? HiveDatabase.setProfileType(adherent) : HiveDatabase.setProfileType(serviceProvider);
+        (profile == "MEDECIN") ? Navigator.pushReplacementNamed(context, '/doctor-home') : Navigator.pushReplacementNamed(context, '/home');
+      }
     };
 
     //Listens for errors with verification, such as too many attempts

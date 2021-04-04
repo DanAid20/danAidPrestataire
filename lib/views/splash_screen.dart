@@ -1,5 +1,8 @@
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:provider/provider.dart';
@@ -14,25 +17,27 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
 
   checkSignInState() async {
-    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     bool isSignedIn = await HiveDatabase.getSignInState();
     bool isRegistered = await HiveDatabase.getRegisterState();
     String phone = await HiveDatabase.getAuthPhone();
-    String fname = await HiveDatabase.getFamilyName();
-    String sname = await HiveDatabase.getSurname();
-    String imgUrl = await HiveDatabase.getImgUrl();
+    //String phone = await HiveDatabase.getAuthPhone();
+    //String fname = await HiveDatabase.getFamilyName();
+    //String sname = await HiveDatabase.getSurname();
+    //String imgUrl = await HiveDatabase.getImgUrl();
+    String profile = await HiveDatabase.getProfileType();
     await Future.delayed(Duration(seconds: 1));
+
+    print("state"+ isRegistered.toString());
     
     authProvider.setSignInState(isSignedIn);
     authProvider.setRegisterState(isRegistered);
-    adherentProvider.setAdherentId(phone);
-    adherentProvider.setFamilyName(fname);
-    adherentProvider.setSurname(sname);
-    adherentProvider.setImgUrl(imgUrl);
 
-    if (authProvider.getRegisterState == true){
-      Navigator.pushReplacementNamed(context, '/home');
+    if (isRegistered == true){
+      //print(phone + "phoone");
+      userProvider.setUserId(phone);
+      (profile == doctor) ? Navigator.pushReplacementNamed(context, '/doctor-home') : Navigator.pushReplacementNamed(context, '/home');
     }
     else {
       Navigator.pushReplacementNamed(context, '/intro-view');

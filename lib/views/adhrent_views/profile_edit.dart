@@ -271,7 +271,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 radius: wv*18,
                                 child: ClipOval(
                                   child: CachedNetworkImage(
-                                    fit: BoxFit.fill,
+                                    height: wv*36,
+                                    width: wv*36,
+                                    fit: BoxFit.cover,
                                     placeholder: (context, url) => Container(
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                                       padding: EdgeInsets.all(20.0),
@@ -533,7 +535,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: _initialcameraposition, zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent.location["latitude"], adherentModelProvider.getAdherent.location["longitude"]), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                 myLocationEnabled: true,
@@ -683,6 +685,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           await FirebaseFirestore.instance.collection("ADHERENTS")
                             .doc(adherentProvider.getAdherent.getAdherentId)
                             .set({
+                              "dateCreated": DateTime.now(),
                               "cniName": cniName,
                               "emailAdress": email,
                               "adresse": address,
@@ -710,6 +713,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               HiveDatabase.setImgUrl(avatarUrl);
 
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
+                              Navigator.pop(context);
                               setState(() {
                                 buttonLoading = false;
                               });

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/doctorModel.dart';
 import 'package:flutter/material.dart';
 
 class AdherentModelProvider with ChangeNotifier {
@@ -14,8 +15,16 @@ class AdherentModelProvider with ChangeNotifier {
     _adherent = val;
     notifyListeners();
   }
+  void setFamilyDoctor(DoctorModel val){
+    _adherent.familyDoctor = val;
+    notifyListeners();
+  }
   void setAdherentId(String val){
     _adherent.adherentId = val;
+    notifyListeners();
+  }
+  void setFamilyDoctorId(String val){
+    _adherent.familyDoctorId= val;
     notifyListeners();
   }
   void setCniName(String val){

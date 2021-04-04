@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
@@ -6,12 +7,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class DoctorInfoCard extends StatelessWidget {
 
   final String name;
+  final String avatarUrl;
   final String title;
   final String speciality;
   final String distance;
+  final bool chat, consultation, teleConsultation, rdv, visiteDomicile;
   final Function onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.distance, this.onTap}) : super(key: key);
+  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.distance, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class DoctorInfoCard extends StatelessWidget {
                       ),
                       child: CircleAvatar(
                           backgroundColor: Colors.grey,
-                          backgroundImage: AssetImage("assets/images/avatar-profile.jpg",),
+                          backgroundImage: avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(avatarUrl),
                           radius: 30,
                       ),
                     ),
@@ -92,7 +95,7 @@ class DoctorInfoCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text("$distance m", style: TextStyle(color: whiteColor, fontSize: 15),),
+                      Text("$distance Km", style: TextStyle(color: whiteColor, fontSize: 15),),
                       SizedBox(width: 15,),
                       Container(
                         margin: EdgeInsets.only(right: 10),
@@ -121,17 +124,20 @@ class DoctorInfoCard extends StatelessWidget {
               Row(
                 children: [
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20),
+                  SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: teleConsultation ? whiteColor : kSouthSeas),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20),
+                  SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20, color: chat ? whiteColor : kSouthSeas),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: whiteColor),
+                  SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: consultation ? whiteColor : kSouthSeas),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
+                  SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: visiteDomicile ? whiteColor : kSouthSeas,),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: rdv ? whiteColor : kSouthSeas),
+                  ),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20),
+                  SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: visiteDomicile ? whiteColor : kSouthSeas),
                 ],
               ),
 

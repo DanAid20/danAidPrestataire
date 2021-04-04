@@ -8,6 +8,10 @@ class HiveDatabase {
   final authBox = Hive.box('auth');
 
   //Setters
+  static setProfileType(String val) async {
+    Box userBox = await Hive.openBox('user');
+    userBox.put('profile', val);
+  }
   static setAuthPhone(String val) async {
     Box adherentBox = await Hive.openBox('adherent');
     adherentBox.put('phone', val);
@@ -47,6 +51,10 @@ class HiveDatabase {
 
   //Getters
 
+  static Future<String> getProfileType() async {
+    Box userBox = await Hive.openBox('user');
+    return userBox.get('profile');
+  }
   static Future<String> getFamilyName() async {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('fname');

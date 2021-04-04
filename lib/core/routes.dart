@@ -13,6 +13,7 @@ import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
 import 'package:danaid/views/splash_screen.dart';
 import 'package:danaid/views/adhrent_views/profile_edit.dart';
+import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -30,6 +31,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/profile-type-doctor": (context) => DoctorFormView(),
   "/profile-type-sprovider": (context) => ServiceProviderForm(),
   "/adherent-profile-edit": (context) => ProfileEdit(),
+  "/doctor-profile": (context) => DoctorProfilePage(),
 
   /**
    * Start section routes that concern the doctor activities in the

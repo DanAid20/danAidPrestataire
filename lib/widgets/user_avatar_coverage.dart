@@ -40,12 +40,12 @@ class UserAvatarAndCoverage extends StatelessWidget {
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Bonjour ${adherentProvider.getAdherent.surname}!", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(adherentProvider.getAdherent != null ? "Bonjour ${adherentProvider.getAdherent.surname} !" :  "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
-                adherentProvider.getAdherent.adherentPlan == 0 ? "Couverture niveau 0: Découverte" :
+                adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? "Couverture niveau 0: Découverte" :
                   adherentProvider.getAdherent.adherentPlan == 1 ? "Couverture niveau I: Accès" :
                     adherentProvider.getAdherent.adherentPlan == 2 ? "Couverture niveau II: Assist" :
-                      adherentProvider.getAdherent.adherentPlan == 3 ? "Couverture niveau III: Sérénité" : "Erreur de connexion"
+                      adherentProvider.getAdherent.adherentPlan == 3 ? "Couverture niveau III: Sérénité" : "Erreur de connexion" : "Couverture niveau 0: Découverte"
                 , style: TextStyle(fontSize: wv*2.8, color: kPrimaryColor)),
             ],
           ),

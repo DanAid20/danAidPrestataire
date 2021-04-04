@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:provider/provider.dart';
 
 class PartnersScreen extends StatefulWidget {
   @override
@@ -23,7 +25,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
   ScrollController _scrollController = new ScrollController();
   GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -31,10 +33,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     return WillPopScope(
       onWillPop: () async {
         if(contentIndex == 0){
-          //Provider Stuff
+          controller.setIndex(1);
         }
         else{
           setState(() {
@@ -54,7 +57,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 child: IconButton(icon: Icon(Icons.arrow_back_ios), 
                 onPressed: (){
                   if(contentIndex == 0){
-                    //Provider Stuff
+                    controller.setIndex(1);
                   }
                   else{
                     setState(() {
@@ -78,7 +81,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               target: _center,
-              zoom: 11.0,
+              zoom: 15.0,
             ),
           ),
           ),
