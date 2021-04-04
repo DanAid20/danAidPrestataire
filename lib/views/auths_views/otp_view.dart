@@ -142,7 +142,7 @@ class _OtpViewState extends State<OtpView> {
                             buildTimer(),
                             otpForm(),
                             //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
-                            (pin1Controller.text != "" || pin2Controller.text != "" || pin3Controller.text != "" || pin4Controller.text != "" || pin5Controller.text != "" || pin6Controller.text != "") 
+                            false 
                               ? CustomDisabledTextButton(text: "Validez le code",)
                               : load ? Loaders().buttonLoader(kPrimaryColor)
                                 : CustomTextButton(
@@ -150,6 +150,9 @@ class _OtpViewState extends State<OtpView> {
                                     color: kPrimaryColor, 
                                     action: 
                                       () async {
+                                        setState(() {
+                                          load = true;
+                                        });
                                         signInWithPhoneNumber();
                                       },
                                   ),
@@ -318,10 +321,27 @@ class _OtpViewState extends State<OtpView> {
     );
 
     _auth.signInWithCredential(credential).then((val) async {
+      
       final User user = val.user;
       userProvider.setAuthId(user.uid);
       HiveDatabase.setSignInState(true);
-      Navigator.pushNamed(context, '/profile-type');
+      HiveDatabase.setRegisterState(true);
+      HiveDatabase.setAuthPhone(userProvider.getUserId);
+      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
+      bool registered = res["exists"];
+      String profile = res["profile"];
+      if(registered == false){
+        setState(() {
+          load = false;
+        });
+        Navigator.pushNamed(context, '/profile-type');
+      } else {
+        setState(() {
+          load = false;
+        });
+        (profile == doctor) ? HiveDatabase.setProfileType(doctor) : (profile == adherent) ? HiveDatabase.setProfileType(adherent) : HiveDatabase.setProfileType(serviceProvider);
+        (profile == doctor) ? Navigator.pushReplacementNamed(context, '/doctor-home') : Navigator.pushReplacementNamed(context, '/home');
+      }
       showSnackbar("Successfully signed in UID: ${user.uid}");
     }).catchError((e){
       showSnackbar("Failed to sign in: " + e.message.toString());
@@ -329,8 +349,24 @@ class _OtpViewState extends State<OtpView> {
 
     
     } on FirebaseAuthException catch (e) {
+      setState(() {
+        load = false;
+      });
       showSnackbar("Failed to sign in: " + e.message.toString());
     }
+  }
+
+  Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
+    String profile;
+    DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
+    bool exists = (user.exists) ? true : false;
+    if (exists) {
+      profile = user.data()["profil"];
+    }
+    return {
+      "exists": exists,
+      "profile": profile
+    };
   }
 
   void showSnackbar(String message) {

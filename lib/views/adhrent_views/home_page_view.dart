@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:provider/provider.dart';
 
 class HomePageView extends StatefulWidget {
@@ -27,14 +29,32 @@ class _HomePageViewState extends State<HomePageView> {
   double height = SizeConfig.screenHeight / 100;
   double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;
 
-  int index = 1;
+  //int index = 1;
   loadAdherentprofile() async {
-    String phone = await HiveDatabase.getAuthPhone();
-    FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) {
-      AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
-      AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-      adherentModelProvider.setAdherentModel(adherent);
-    });
+    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    if(userProvider.getUserId != null || userProvider.getUserId != ""){
+      if(adherentModelProvider.getAdherent != null){
+          //
+        }
+        else {
+          FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) {
+            AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
+            adherentModelProvider.setAdherentModel(adherent);
+          });
+        }
+    } else {
+      String phone = await HiveDatabase.getAuthPhone();
+      if(adherentModelProvider.getAdherent != null){
+          //
+        }
+        else {
+          FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) {
+             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
+            adherentModelProvider.setAdherentModel(adherent);
+          });
+        }
+    }
   }
   @override
   void initState() {
@@ -45,7 +65,8 @@ class _HomePageViewState extends State<HomePageView> {
   
   @override
   Widget build(BuildContext context) {
-
+    BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context);
+    int index = bottomAppBarController.getIndex;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -120,29 +141,24 @@ class _HomePageViewState extends State<HomePageView> {
     );
   }
   entraideTapped(){
-    setState(() {
-      index = 0;
-    });
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    controller.setIndex(0);
   }
   accueilTapped(){
-    setState(() {
-      index = 1;
-    });
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    controller.setIndex(1);
   }
   carnetTapped(){
-    setState(() {
-      index = 2;
-    });
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    controller.setIndex(2);
   }
   partenaireTapped(){
-    setState(() {
-      index = 3;
-    });
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    controller.setIndex(3);
   }
   familleTapped(){
-    setState(() {
-      index = 4;
-    });
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    controller.setIndex(4);
   }
 
   bottomIcon({String svgUrl, String title, Function onTap}){
@@ -174,20 +190,21 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   getCurrentPage(){
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
 
-    if(index == 0){
+    if(controller.getIndex == 0){
       return AidNetworkScreen();
     }
-    else if(index == 1){
+    else if(controller.getIndex == 1){
       return HelloScreen();
     }
-    else if(index == 2){
+    else if(controller.getIndex == 2){
       return HealthBookScreen();
     }
-    else if(index == 3){
+    else if(controller.getIndex == 3){
       return PartnersScreen();
     }
-    else if(index == 4){
+    else if(controller.getIndex == 4){
       return MyFamilyScreen();
     }
   }

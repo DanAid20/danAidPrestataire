@@ -11,6 +11,8 @@ import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/providers/authProvider.dart';
 import 'package:danaid/core/providers/devEnvironmentProvider.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
 import '../locator.dart';
 
 class Danaid extends StatelessWidget {
@@ -44,6 +46,12 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<AdherentModelProvider>(
                 create: (_) => AdherentModelProvider(null),
+              ),
+              ChangeNotifierProvider<BottomAppBarControllerProvider>(
+                create: (_) => BottomAppBarControllerProvider(1),
+              ),
+              ChangeNotifierProvider<DoctorModelProvider>(
+                create: (_) => DoctorModelProvider(null),
               )
             ],
             child: MaterialApp(

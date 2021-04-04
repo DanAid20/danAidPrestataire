@@ -6,13 +6,14 @@ class CustomTextButton extends StatelessWidget {
   final String text;
   final Function action;
   final Color color;
+  final bool expand;
 
-  const CustomTextButton({Key key, this.text, this.action, this.color}) : super(key: key);
+  const CustomTextButton({Key key, this.text, this.action, this.color = kPrimaryColor, this.expand = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: expand ? double.infinity :  null,
       padding: EdgeInsets.symmetric(horizontal: wv*3.2, vertical: hv*2),
       child: TextButton(
         onPressed: action,
@@ -33,13 +34,14 @@ class CustomTextButton extends StatelessWidget {
 
 class CustomDisabledTextButton extends StatelessWidget {
   final String text;
+  final bool expand;
 
-  const CustomDisabledTextButton({Key key, this.text}) : super(key: key);
+  const CustomDisabledTextButton({Key key, this.text, this.expand = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: expand ? double.infinity :  null,
       padding: EdgeInsets.symmetric(horizontal: wv*3.2, vertical: hv*2),
       child: TextButton(
         onPressed: null,

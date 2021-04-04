@@ -61,3 +61,8 @@ bottom({double size}) => getProportionateScreenHeight(size);
 navigateTo({BuildContext context, String routeName, Object args}) => Navigator.of(context).pushNamed(routeName, arguments: args);
 navigateReplaceTo({BuildContext context, String routeName, Object args}) => Navigator.of(context).pushReplacementNamed(routeName, arguments: args);
 
+//Profile Types
+String adherent = "ADHERENT";
+String doctor = "MEDECIN";
+String serviceProvider = "PRESTATAIRE";
+
