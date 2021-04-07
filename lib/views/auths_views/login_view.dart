@@ -10,6 +10,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/buttons/default_btn.dart';
+import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:danaid/widgets/texts/sign_in_up_tag.dart';
 import 'package:danaid/widgets/texts/welcome_text_header.dart';
@@ -17,8 +18,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:danaid/widgets/danAid_default_header.dart';
 
 import '../../locator.dart';
 
@@ -66,85 +69,30 @@ class _LoginViewState extends State<LoginView> {
       child: Scaffold(
           body: SizedBox(
             width: double.infinity,
-            child: Stack(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: SizeConfig.screenHeight * .45,
-                  decoration: BoxDecoration(color: kPrimaryColor),
+                  color: Colors.transparent,
+                  child: DanAidDefaultHeader(showDanAidLogo: true,),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: SizeConfig.screenHeight * .3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(top: top(size: 14)),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kPrimaryColor, width: 2.3),
-                                shape: BoxShape.circle),
-                            child: CircleAvatar(
-                              radius: 45,
-                              backgroundImage:
-                              AssetImage('assets/images/male.png'),
-                            ),
-                          ),
-                          WelcomeHeader(),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: horizontal(size: 35)),
-                            child: Text('Entrez votre mot de passe et email pour accéder à votre compte.',
-                              softWrap: true,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: whiteColor,
-                                  letterSpacing: .7,
-                                  height: 1.4,
-                                  fontSize: fontSize(size: 16)),
-                            ),
-                          )
-                        ],
-                      ),
+                Expanded(
+                  child: Container(
+                    height: SizeConfig.screenHeight * .8,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(defaultSize * 2.5),
+                            topRight: Radius.circular(defaultSize * 2.5)
+                        )
                     ),
-                    Expanded(
-                      child: Container(
-                        height: SizeConfig.screenHeight * .8,
-                        decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(defaultSize * 2.5),
-                                topRight: Radius.circular(defaultSize * 2.5)
-                            )
-                        ),
-                        child: ListView(
-                          children: [
-                            loginForm(),
-                            /*InkWell(
-                          onTap: () => navigateReplaceTo(context: context, routeName: '/reset-password'),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(
-                              'Mot de passe oublié ?',
-                              softWrap: true,
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: fontSize(size: 15),
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),*/
-                            //DefaultBtn(formKey: _mFormKey, signRoute: '/home',),
-                            //SIgnInUpTag()
-                          ],
-                        ),
-                      ),
+                    child: ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        loginForm(),
+                      ],
                     ),
-                  ],
-                )
+                  ),
+                ),
               ],
             ),
           )),
@@ -176,7 +124,6 @@ class _LoginViewState extends State<LoginView> {
                   setState(() => _selectedDialogCountry = country);
                   setState(() => phoneCode = country.phoneCode);
                 },
-                //itemFilter: (c) => ['NG', 'DE', 'GB', 'CI'].contains(c.isoCode),
                 priorityList: [
                   CountryPickerUtils.getCountryByPhoneCode('237'),
                   CountryPickerUtils.getCountryByPhoneCode('225'),
@@ -188,7 +135,6 @@ class _LoginViewState extends State<LoginView> {
   );
 
   Widget _buildCountryDialogItem(Country country) {
-    //Country initialCountry = Country(iso3Code: "CMR", isoCode: "CM", name: "Cameroon", phoneCode: "237");
     return Row(
       children: <Widget>[
         CountryPickerUtils.getDefaultFlagImage(country),
@@ -209,21 +155,19 @@ class _LoginViewState extends State<LoginView> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal: wv*3),
+              margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(15)),
-                boxShadow: [
-                  BoxShadow(blurRadius: 2, spreadRadius: 1.0, color: Colors.grey.withOpacity(0.5) )
-                ],
+                boxShadow: [BoxShadow(blurRadius: 2, spreadRadius: 1.0, color: Colors.grey.withOpacity(0.5) )],
                 //border: Border.all(color: kPrimaryColor)
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    child: Text("Sélectionnez votre pays", style: TextStyle(color: kPrimaryColor, fontSize: wv*4, fontWeight: FontWeight.w600), textAlign: TextAlign.right,),
+                    child: Text("Sélectionnez votre pays", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                   ListTile(
                     onTap: _openCountryPickerDialog,
@@ -236,51 +180,48 @@ class _LoginViewState extends State<LoginView> {
 
             SizedBox(height: hv*2,),
 
-            KTextFormField(
-              controller: _mPhoneController,
-              labelText: 'Téléphone',
-              hintText: 'Entrez votre numéro de téléphone',
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
-              ],
-              prefixIcon:
-              Icon(SimpleLineIcons.phone),
-              validator: (String phone) {
-                return (phone.isEmpty)
-                    ? kPhoneNumberNullError
-                    : (!digitValidatorRegExp.hasMatch(phone))
-                    ? "Entrer un numero de téléphone valide" : null;
-              },
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: wv*3),
+              child: TextFormField(
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  controller: _mPhoneController,
+                  validator: (String phone) {
+                    return (phone.isEmpty)
+                        ? kPhoneNumberNullError
+                        : (!digitValidatorRegExp.hasMatch(phone))
+                        ? "Entrer un numero de téléphone valide" : null;
+                  },
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+                  ],
+                  style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: wv*5),
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(LineIcons.phone),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Colors.red[300]),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    fillColor: Colors.grey[100],
+                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: kPrimaryColor.withOpacity(0.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.2)),
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    hintText: "Numéro de téléphone",
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: wv*4),
+                  ),
+                ),
             ),
-            /*KTextFormField(
-              controller: _mPasswordController,
-              isPassword: _mIsPass,
-              labelText: 'Mot de Passe',
-              hintText:
-                  'Entrez votre mot de passe',
-              prefixIcon:
-                  Icon(SimpleLineIcons.lock),
-              validator: (String pwd) {
-                return (pwd.isEmpty)
-                    ? kPassNullErrorFr
-                    : null;
-              },
-              suffixIcon: IconButton(
-                icon: Icon(_mIsPass
-                    ? SimpleLineIcons.eye
-                    : Feather.eye_off),
-                onPressed: () {
-                  setState(() {
-                    _mIsPass = !_mIsPass;
-                  });
-                },
-              ),
-            ),*/
+
+            SizedBox(height: hv*4,),
             loader ?
             Loaders().buttonLoader(kPrimaryColor)
                 : CustomTextButton(
-              text: "S'inscrire",
+              text: "Continuer",
               color: kPrimaryColor,
               action: () async {
                 setState(() {
@@ -350,7 +291,7 @@ class _LoginViewState extends State<LoginView> {
         HiveDatabase.setSignInState(true);
         HiveDatabase.setAuthPhone(userProvider.getUserId);
         (profile == doctor) ? HiveDatabase.setProfileType(doctor) : (profile == adherent) ? HiveDatabase.setProfileType(adherent) : HiveDatabase.setProfileType(serviceProvider);
-        (profile == "MEDECIN") ? Navigator.pushReplacementNamed(context, '/doctor-home') : Navigator.pushReplacementNamed(context, '/home');
+        (profile == "MEDECIN") ? Navigator.pushReplacementNamed(context, '/home') : Navigator.pushReplacementNamed(context, '/home');
       }
     };
 

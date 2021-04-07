@@ -2,14 +2,19 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
+import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:danaid/views/adhrent_views/health_book_screen.dart';
 import 'package:danaid/views/adhrent_views/hello_screen.dart';
 import 'package:danaid/views/adhrent_views/myfamily_screen.dart';
 import 'package:danaid/views/adhrent_views/partners_screen.dart';
+import 'package:danaid/views/doctor_views/tabs_doctor_views/profil_doctor_view.dart';
 import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -56,15 +61,74 @@ class _HomePageViewState extends State<HomePageView> {
         }
     }
   }
+  loadDoctorProfile() async {
+    DoctorModelProvider doctorModelProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    if(userProvider.getUserId != null || userProvider.getUserId != ""){
+      if(doctorModelProvider.getDoctor != null){
+          //
+        }
+        else {
+          FirebaseFirestore.instance.collection('MEDECINS').doc(userProvider.getUserId).get().then((docSnapshot) {
+            DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
+            doctorModelProvider.setDoctorModel(doc);
+            print(doc.familyName + "gdfgdfgd");
+          });
+        }
+    } else {
+      String phone = await HiveDatabase.getAuthPhone();
+      if(doctorModelProvider.getDoctor != null){
+          //
+        }
+        else {
+          FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get().then((docSnapshot) {
+             DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
+            doctorModelProvider.setDoctorModel(doc);
+          });
+        }
+    }
+  }
+
+  loadUserProfile() async {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    if(userProvider.getProfileType != null || userProvider.getProfileType != ""){
+      if(userProvider.getProfileType == adherent){
+        loadAdherentprofile();
+      }
+      else if(userProvider.getProfileType == doctor) {
+        loadDoctorProfile();
+      }
+      else if(userProvider.getProfileType == serviceProvider){
+        loadAdherentprofile();
+      }
+    }
+    else {
+      String profile = await HiveDatabase.getProfileType();
+      if(profile != null){
+        userProvider.setProfileType(profile);
+        if(profile == adherent){
+          loadAdherentprofile();
+        }
+        else if(userProvider.getProfileType == doctor) {
+          loadDoctorProfile();
+        }
+        else if(userProvider.getProfileType == serviceProvider){
+          loadAdherentprofile();
+        }
+      }
+    }
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-    loadAdherentprofile();
+    loadUserProfile();
     super.initState();
   }
   
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context);
     int index = bottomAppBarController.getIndex;
     return Scaffold(
@@ -109,7 +173,7 @@ class _HomePageViewState extends State<HomePageView> {
                       index == 1 ? iconActive(svgUrl: "assets/icons/Two-tone/Home.svg") : Container(),
                       index == 2 ? iconActive(svgUrl: "assets/icons/Two-tone/Paper.svg") : Container(),
                       index == 3 ? iconActive(svgUrl: "assets/icons/Two-tone/Location.svg") : Container(),
-                      index == 4 ? iconActive(svgUrl: "assets/icons/Two-tone/3User.svg") : Container(),
+                      index == 4 ? iconActive(svgUrl: userProvider.getProfileType != doctor ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg") : Container(),
                     ],
                   ),
                 ),
@@ -128,7 +192,7 @@ class _HomePageViewState extends State<HomePageView> {
                       index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: accueilTapped),
                       index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Carnet", onTap: carnetTapped),
                       index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "partenaire", onTap: partenaireTapped),
-                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: "famille", onTap: familleTapped),
+                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: userProvider.getProfileType != doctor ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", title: userProvider.getProfileType == doctor ? "Profile" : "famille", onTap: familleTapped),
                     ],
                   ),
                 ),
@@ -190,6 +254,7 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   getCurrentPage(){
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
 
     if(controller.getIndex == 0){
@@ -199,13 +264,13 @@ class _HomePageViewState extends State<HomePageView> {
       return HelloScreen();
     }
     else if(controller.getIndex == 2){
-      return HealthBookScreen();
+      return userProvider.getProfileType == doctor ? ProfilDoctorView() : HealthBookScreen();
     }
     else if(controller.getIndex == 3){
-      return PartnersScreen();
+      return userProvider.getProfileType == doctor ? ProfilDoctorView() : PartnersScreen();
     }
     else if(controller.getIndex == 4){
-      return MyFamilyScreen();
+      return userProvider.getProfileType == doctor ? DoctorProfilePage() : MyFamilyScreen();
     }
   }
 

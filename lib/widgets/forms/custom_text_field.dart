@@ -1,6 +1,7 @@
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -11,8 +12,9 @@ class CustomTextField extends StatelessWidget {
   final Widget prefixIcon;
   final bool enabled;
   final Function editAction;
+  final List<TextInputFormatter> inputFormatters;
 
-  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction}) : super(key: key);
+  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,6 +30,7 @@ class CustomTextField extends StatelessWidget {
                 keyboardType: keyboardType,
                 controller: controller,
                 validator: this.validator,
+                inputFormatters: inputFormatters,
                 style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                   prefixIcon: prefixIcon,
