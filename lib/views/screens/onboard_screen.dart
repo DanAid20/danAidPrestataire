@@ -51,7 +51,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8)),
                           color: kPrimaryColor,
-                          onPressed: () => Navigator.of(context).pushReplacementNamed('/login'),
+                          onPressed: () => Navigator.of(context).pushNamed('/login'),
                           child: Text(
                             Strings.START_APP.toUpperCase(),
                             softWrap: true,

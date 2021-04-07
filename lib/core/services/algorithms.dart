@@ -36,4 +36,32 @@ class Algorithms {
           (1 - c((lon2 - lon1) * p))/2;
     return 12742 * asin(sqrt(a));
   }
+  static List<String> getTownNamesFromRegion(List origin, String region){
+    List<String> target = [];
+    for(int i=0; i<origin.length; i++){
+      if (origin[i]["state_code"] == region){
+       target.add(origin[i]["value"].toString());
+      }
+    }
+    //print(target);
+    return target;
+  }
+  static String getRegionFromStateCode(List origin, String code){
+    String region;
+    for(int i=0; i<origin.length; i++){
+      if (origin[i]["key"] == code){
+       region = origin[i]["value"];
+      }
+    }
+    return region;
+  }
+  static String getStateCodeFromRegion(List origin, String region){
+    String code;
+    for(int i=0; i<origin.length; i++){
+      if (origin[i]["value"] == region){
+       code = origin[i]["key"];
+      }
+    }
+    return code;
+  }
 }

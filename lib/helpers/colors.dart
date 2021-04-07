@@ -33,6 +33,7 @@ const kTextColor = Color(0xFF757575);
 const kTextLightColor = Color.fromRGBO(237, 237, 237, 1);
 
 const kSouthSeas = Color(0xFF57CECA);
+const kGold = Color(0xFFECCA33);
 const kDeepTeal = Color(0xFF05837C);
 const kBrownCanyon = Color(0xFFAE9284);
 const kSmoothBrown = Color(0xFFDFD3CE);

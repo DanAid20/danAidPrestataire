@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -12,6 +13,7 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:danaid/helpers/constants.dart' as profile;
 
 class DoctorProfilePage extends StatefulWidget {
   @override
@@ -31,12 +33,13 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: (){}),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
         ],
@@ -120,9 +123,27 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                           Positioned(
                             right: wv*3,
                             bottom: -hv*0,
-                            child: adherentModelProvider.getAdherent.familyDoctorId == null ? TextButton(
-                              onPressed: () => _chooseDoctor(doctor.getDoctor), 
-                              child: Text("Mon médecin", style: TextStyle(color: kPrimaryColor),),
+                            child: userProvider.getProfileType != profile.doctor ? adherentModelProvider.getAdherent.familyDoctorId == null ? 
+                              TextButton(
+                                onPressed: () => _chooseDoctor(doctor.getDoctor), 
+                                child: Text("Mon médecin", style: TextStyle(color: kPrimaryColor),),
+                                style: ButtonStyle(
+                                  padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
+                                  shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                  backgroundColor: MaterialStateProperty.all(whiteColor),
+                                  shadowColor: MaterialStateProperty.all(Colors.grey),
+                                  elevation: MaterialStateProperty.all(10)
+                                ),
+                              ) :
+                            CircleAvatar(
+                              radius: wv*7,
+                              backgroundColor: Colors.white,
+                              child: Icon(LineIcons.stethoscope, size: wv*8, color: kSouthSeas, ),
+                            ) 
+                            :
+                            TextButton(
+                              onPressed: () {Navigator.pushNamed(context, '/doctor-profile-edit');}, 
+                              child: Text("Modifier", style: TextStyle(color: kPrimaryColor),),
                               style: ButtonStyle(
                                 padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
@@ -130,11 +151,6 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 shadowColor: MaterialStateProperty.all(Colors.grey),
                                 elevation: MaterialStateProperty.all(10)
                               ),
-                            ) :
-                            CircleAvatar(
-                              radius: wv*7,
-                              backgroundColor: Colors.white,
-                              child: Icon(LineIcons.stethoscope, size: wv*8, color: kSouthSeas, ),
                             )
                             ,
                           )
@@ -294,7 +310,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                             ),
                           ),
                           SizedBox(width: wv*2,),
-                          Container(
+                          doctor.getDoctor.rate != null ? Container(
                             padding: EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: kSouthSeas.withOpacity(0.7),
@@ -323,7 +339,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 SizedBox(height: 20,)
                               ]
                             ),
-                          ),
+                          ) : Container(),
                           SizedBox(width: 10,)
                         ],
                       ),

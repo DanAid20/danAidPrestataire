@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
+import 'package:danaid/widgets/danAid_default_header.dart';
 
 class OtpView extends StatefulWidget {
   @override
@@ -73,108 +74,70 @@ class _OtpViewState extends State<OtpView> {
       child: Scaffold(
           body: SizedBox(
             width: double.infinity,
-            child: Stack(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  height: SizeConfig.screenHeight * .45,
-                  decoration: BoxDecoration(color: kPrimaryColor),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: SizeConfig.screenHeight * .3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: kPrimaryColor, width: 2.3),
-                                shape: BoxShape.circle),
-                            child: CircleAvatar(
-                              radius: 45,
-                              backgroundImage:
-                              AssetImage('assets/images/male.png'),
+                DanAidDefaultHeader(showDanAidLogo: true,),
+                Expanded(
+                  child: Container(
+                    height: SizeConfig.screenHeight * .8,
+                    decoration: BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(defaultSize * 2.5),
+                            topRight: Radius.circular(defaultSize * 2.5)
+                        )
+                    ),
+                    child: ListView(
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        SizedBox(height: SizeConfig.screenHeight * 0.05),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 25),
+                          alignment: Alignment.center,
+                          child: Text(
+                              "Un code de validation a été envoyé par sms au: ${userProvider.getUserId}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: darkGreyColor,
+                              fontSize: fontSize(size: 17)
                             ),
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: top(size: 5)),
-                            padding: EdgeInsets.symmetric(
-                                horizontal: horizontal(size: 35)),
-                            child: Text(
-                              'Vérification du numéro',
-                              softWrap: true,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: whiteColor,
-                                  fontSize: fontSize(size: 22)),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: SizeConfig.screenHeight * .8,
-                        decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(defaultSize * 2.5),
-                                topRight: Radius.circular(defaultSize * 2.5)
-                            )
                         ),
-                        child: ListView(
-                          children: [
-                            SizedBox(height: SizeConfig.screenHeight * 0.05),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 25),
-                              alignment: Alignment.center,
-                              child: Text(
-                                  "Un code de validation a été envoyé par sms au: ${userProvider.getUserId}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: darkGreyColor,
-                                  fontSize: fontSize(size: 17)
-                                ),
+                        buildTimer(),
+                        otpForm(),
+                        //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
+                        false 
+                          ? CustomDisabledTextButton(text: "Validez le code",)
+                          : load ? Center(child: Loaders().buttonLoader(kPrimaryColor))
+                            : CustomTextButton(
+                                text: "Validez le code", 
+                                color: kPrimaryColor, 
+                                action: 
+                                  () async {
+                                    setState(() {
+                                      load = true;
+                                    });
+                                    signInWithPhoneNumber();
+                                  },
                               ),
-                            ),
-                            buildTimer(),
-                            otpForm(),
-                            //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
-                            false 
-                              ? CustomDisabledTextButton(text: "Validez le code",)
-                              : load ? Loaders().buttonLoader(kPrimaryColor)
-                                : CustomTextButton(
-                                    text: "Validez le code", 
-                                    color: kPrimaryColor, 
-                                    action: 
-                                      () async {
-                                        setState(() {
-                                          load = true;
-                                        });
-                                        signInWithPhoneNumber();
-                                      },
-                                  ),
-                            SizedBox(height: SizeConfig.screenHeight * .01),
-                            GestureDetector(
-                              onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
-                              child: Text(
-                                "Renvoyez le code de validation",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    fontSize: fontSize(size: 18),
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                            SizedBox(height: height(size: 25),)
-                          ],
+                        SizedBox(height: SizeConfig.screenHeight * .01),
+                        GestureDetector(
+                          onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
+                          child: Text(
+                            "Renvoyez le code de validation",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                fontSize: fontSize(size: 18),
+                                fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
+                        SizedBox(height: height(size: 25),)
+                      ],
                     ),
-                  ],
-                )
+                  ),
+                ),
               ],
             ),
           )),
@@ -325,7 +288,6 @@ class _OtpViewState extends State<OtpView> {
       final User user = val.user;
       userProvider.setAuthId(user.uid);
       HiveDatabase.setSignInState(true);
-      HiveDatabase.setRegisterState(true);
       HiveDatabase.setAuthPhone(userProvider.getUserId);
       Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
       bool registered = res["exists"];
@@ -336,14 +298,18 @@ class _OtpViewState extends State<OtpView> {
         });
         Navigator.pushNamed(context, '/profile-type');
       } else {
+        HiveDatabase.setRegisterState(true);
         setState(() {
           load = false;
         });
         (profile == doctor) ? HiveDatabase.setProfileType(doctor) : (profile == adherent) ? HiveDatabase.setProfileType(adherent) : HiveDatabase.setProfileType(serviceProvider);
-        (profile == doctor) ? Navigator.pushReplacementNamed(context, '/doctor-home') : Navigator.pushReplacementNamed(context, '/home');
+        (profile == doctor) ? Navigator.pushReplacementNamed(context, '/home') : Navigator.pushReplacementNamed(context, '/home');
       }
       showSnackbar("Successfully signed in UID: ${user.uid}");
     }).catchError((e){
+      setState(() {
+        load = false;
+      });
       showSnackbar("Failed to sign in: " + e.message.toString());
     });
 

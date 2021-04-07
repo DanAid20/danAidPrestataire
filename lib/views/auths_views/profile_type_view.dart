@@ -1,4 +1,5 @@
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -7,6 +8,7 @@ import 'package:danaid/helpers/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:danaid/widgets/danAid_default_header.dart';
 
 import '../../locator.dart';
 
@@ -25,17 +27,20 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
 
   adherentAction(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.setProfileType("ADHERENT");
+    HiveDatabase.setProfileType(adherent);
+    userProvider.setProfileType(adherent);
     _navigationService.navigateTo('/profile-type-adherent');
   }
   doctorAction(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.setProfileType("MEDECIN");
+    HiveDatabase.setProfileType(doctor);
+    userProvider.setProfileType(doctor);
     _navigationService.navigateTo('/profile-type-doctor');
   }
   serviceProviderAction(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    userProvider.setProfileType("PRESTATAIRE");
+    HiveDatabase.setProfileType(serviceProvider);
+    userProvider.setProfileType(serviceProvider);
     _navigationService.navigateTo('/profile-type-sprovider');
   }
 
@@ -45,49 +50,35 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
       top: false,
       bottom: false,
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(defSize * 15),
-          child: Container(
-            child: Stack(
-              children: [
-                SvgPicture.asset('assets/images/headImage.svg',
-                  width: SizeConfig.screenWidth,
-                  fit: BoxFit.cover,),
-                AppBar(
-                  leading: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white,),
-                      onPressed: (){}),
+        body: Column(
+          children: [
+            DanAidDefaultHeader(showDanAidLogo: true,),
+            Expanded(
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: titleList.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => ProfileTypeCard(
+                    title: titleList.elementAt(index),
+                    description: descList.elementAt(index),
+                    image: imageList.elementAt(index),
+                    navigationService: _navigationService,
+                    action: (){
+                      if (index == 0){
+                        adherentAction();
+                      }
+                      else if(index == 1){
+                        doctorAction();
+                      }
+                      else {
+                        serviceProviderAction();
+                      }
+                    },
+                    //route: routeList.elementAt(index),
+                  ),
                 )
-              ],
             ),
-          ),
-        ),
-        body: SizedBox(
-          width: double.infinity,
-          child: Container(
-              child: ListView.builder(
-                itemCount: titleList.length,
-                shrinkWrap: true,
-                itemBuilder: (context, index) => ProfileTypeCard(
-                  title: titleList.elementAt(index),
-                  description: descList.elementAt(index),
-                  image: imageList.elementAt(index),
-                  navigationService: _navigationService,
-                  action: (){
-                    if (index == 0){
-                      adherentAction();
-                    }
-                    else if(index == 1){
-                      doctorAction();
-                    }
-                    else {
-                      serviceProviderAction();
-                    }
-                  },
-                  //route: routeList.elementAt(index),
-                ),
-              )
-          ),
+          ],
         ),
       ),
     );
@@ -111,24 +102,21 @@ class ProfileTypeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       child: Container(
-        height: height(size: 180),
+        height: height(size: 190),
         width: width(size: 250),
-        padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
-        margin: EdgeInsets.symmetric(
-            horizontal: horizontal(size: 15),
-            vertical: vertical(size: 15)
-        ),
+        padding: EdgeInsets.only(left: horizontal(size: 20), top: vertical(size: 10), bottom: vertical(size: 10)),
+        margin: EdgeInsets.only(right: horizontal(size: 15), left: horizontal(size: 15), bottom: horizontal(size: 15)),
         decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
                   offset: Offset(1.0, 1.0),
-                  blurRadius: 4.2,
-                  spreadRadius: .2,
-                  color: kBgColor.withOpacity(.3)
+                  blurRadius: 12.2,
+                  spreadRadius: 2.2,
+                  color: kBgColor.withOpacity(.1)
               )
             ]
         ),
@@ -143,26 +131,25 @@ class ProfileTypeCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      title.toUpperCase(),
+                      title,
                       softWrap: true,
                       style: TextStyle(
                           color: kPrimaryColor,
-                          fontSize: fontSize(size: 18),
+                          fontSize: fontSize(size: 22),
                           fontWeight: FontWeight.bold
                       ),
                     ),
-                    VerticalSpacing(of: 20),
+                    VerticalSpacing(of: 5),
                     Flexible(
                       child: Text(
                         description,
                         softWrap: true,
-                        textAlign: TextAlign.justify,
                         style: TextStyle(
-                            color: kTextColor,
-                            fontSize: fontSize(size: 14),
+                            color: kTextColor.withOpacity(0.7),
+                            fontSize: fontSize(size: 16),
                             letterSpacing: .7,
                             height: 1.4,
-                            fontWeight: FontWeight.w700
+                            fontWeight: FontWeight.w300
                         ),
                       ),
                     ),

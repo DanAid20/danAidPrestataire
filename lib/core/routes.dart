@@ -14,6 +14,7 @@ import 'package:danaid/views/screens/splashscreen.dart';
 import 'package:danaid/views/splash_screen.dart';
 import 'package:danaid/views/adhrent_views/profile_edit.dart';
 import 'package:danaid/views/adhrent_views/doctor_profile.dart';
+import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -38,6 +39,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
    * application system
    */
   "/doctor-home": (context) => DoctorBottomNavigationView(),
+  "/doctor-profile-edit": (context) => DoctorProfileEdit(),
   /**
    * End section routes that concern the doctor activities in the
    * application system

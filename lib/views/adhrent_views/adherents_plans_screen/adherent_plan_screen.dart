@@ -1,17 +1,22 @@
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
+import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../locator.dart';
 
 class AdherentPlanScreen extends StatelessWidget {
-  final String _mPackage = 'découverte';
-  final String _mPackageAmount = '0';
+  final String _mPackage = 'Découverte';
+  final String _mPackageAmount = '00';
   final String _mPackageContent = 'Réseau de santé';
   final String _mPackageContent1 = 'Changer de plan';
   final String _mPackageContent2 = 'Ajout d\'un bénéficiaire';
@@ -29,51 +34,15 @@ class AdherentPlanScreen extends StatelessWidget {
           child: Container(
             child: Column(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    color: kPrimaryColor,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            margin: EdgeInsets.only(top: 30),
-                            child: Image.asset(
-                              'assets/images/pricing.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: horizontal(size: 25)),
-                            child: Text(
-                              'Le profil adhérent possède plusieurs packages choissez '
-                              'celui qui vous convient le mieux et profitez-en.',
-                              softWrap: true,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: whiteColor,
-                                  fontSize: fontSize(size: 17),
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: .70,
-                                  height: 1.4),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                DanAidDefaultHeader(
+                  title: Text("Choisir un niveau de services", style: TextStyle(color: Colors.white, fontSize: wv*5, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
                 ),
                 Expanded(
-                  flex: 3,
                   child: Container(
                       decoration: BoxDecoration(),
                       child: CarouselSlider(
                         options: CarouselOptions(
-                          height: height(size: 500),
+                          height: hv*65,
                           enlargeCenterPage: true,
                           viewportFraction: .6,
                         ),
@@ -84,6 +53,10 @@ class AdherentPlanScreen extends StatelessWidget {
                               mPackageContent: _mPackageContent,
                               mPackageContent1: _mPackageContent1,
                               mPackageContent2: _mPackageContent2,
+                              titleColor: kSouthSeas,
+                              content: "Accédez au réseau DanAid et gagnez des points que vous pourrez utiliser pour vous soigner",
+                              level: "0",
+                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
                               mSize: _mSize,
                               action: (){
                                 adherentProvider.setAdherentPlan(0);
@@ -93,11 +66,15 @@ class AdherentPlanScreen extends StatelessWidget {
                               ),
                           PackageCard(
                               mPackage: 'Accès',
-                              mPackageAmount: "3500",
+                              mPackageAmount: "3,500",
                               mPackageContent: "Couverture santé à 70%",
                               mPackageContent1: "Médécin de famille",
                               mPackageContent2: "Plafond de 350.000 XAF",
                               mSize: _mSize,
+                              titleColor: kGold,
+                              content: "Niveau Découverte\n+ couverture à 70% des frais\n+ Plafond de soins à 350.000 Cfa/an",
+                              level: "I",
+                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
                               action: (){
                                 adherentProvider.setAdherentPlan(1);
                                 adherentProvider.setProfileEnableState(false);
@@ -105,11 +82,15 @@ class AdherentPlanScreen extends StatelessWidget {
                               }),
                           PackageCard(
                               mPackage: "Assist",
-                              mPackageAmount: "6500",
+                              mPackageAmount: "6,500",
                               mPackageContent: "Couverture santé à 70%",
                               mPackageContent1: "Médécin de famille",
                               mPackageContent2: "Plafond de 650.000 XAF",
                               mSize: _mSize,
+                              titleColor: kGold,
+                              content: "Niveau Découverte\n+ couverture à 70% des frais\n+ Plafond de soins à 650.000 Cfa/an",
+                              level: "II",
+                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
                               action: (){
                                 adherentProvider.setAdherentPlan(2);
                                 adherentProvider.setProfileEnableState(false);
@@ -117,11 +98,15 @@ class AdherentPlanScreen extends StatelessWidget {
                               }),
                           PackageCard(
                               mPackage: 'Sérénité',
-                              mPackageAmount: "9500",
+                              mPackageAmount: "9,500",
                               mPackageContent: "Couverture santé à 70%",
                               mPackageContent1: "Médécin de famille",
                               mPackageContent2: "Plafond de 1.000.000 XAF",
                               mSize: _mSize,
+                              titleColor: kGold,
+                              content: "Niveau Découverte\n+ couverture à 70% des frais\n+ Plafond de soins à 1.000.000 Cfa/an",
+                              level: "III",
+                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
                               action: (){
                                 adherentProvider.setAdherentPlan(3);
                                 adherentProvider.setProfileEnableState(false);
@@ -148,7 +133,7 @@ class PackageCard extends StatelessWidget {
     @required String mPackageContent1,
     @required String mPackageContent2,
     @required double mSize,
-    this.action,
+    this.action, this.titleColor, this.iconUrl, this.level, this.content,
   })  : _mPackage = mPackage,
         _mPackageAmount = mPackageAmount,
         _mPackageContent = mPackageContent,
@@ -162,6 +147,10 @@ class PackageCard extends StatelessWidget {
   final String _mPackageContent;
   final String _mPackageContent1;
   final String _mPackageContent2;
+  final String content;
+  final String level;
+  final Color titleColor;
+  final String iconUrl;
   final double _mSize;
   final Function action;
 
@@ -170,72 +159,53 @@ class PackageCard extends StatelessWidget {
     return Container(
       height: height(size: 180),
       width: width(size: 250),
-      padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
-      margin: EdgeInsets.symmetric(
-          horizontal: horizontal(size: 10), vertical: vertical(size: 5)),
+      //padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
+      margin: EdgeInsets.symmetric(horizontal: horizontal(size: 5), vertical: vertical(size: 5)),
       decoration: BoxDecoration(
           color: kPrimaryColor,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-                offset: Offset(1.0, 1.0),
-                blurRadius: 4.2,
-                spreadRadius: .2,
-                color: kBgColor.withOpacity(.3))
-          ]),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [ BoxShadow(offset: Offset(1.0, 1.0),blurRadius: 4.2,spreadRadius: .2,color: kBgColor.withOpacity(.3))]),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          VerticalSpacing(of: 15),
-          PackageName(
-            mPackage: _mPackage,
-            strokeWidth: 1.1,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1),
+            decoration: BoxDecoration(
+              color: titleColor,
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
+            ),
+            width: double.infinity,
+            child: Column(children: [
+              SvgPicture.asset(iconUrl, color: Colors.white, width: wv*10,),
+              Text(_mPackage, style: TextStyle(fontSize: hv*5, fontWeight: FontWeight.w600, color: Colors.white), ),
+            ],),
           ),
-          VerticalSpacing(of: 20),
-          PackageName(
-            mPackage: _mPackageAmount,
-            size: 70,
-          ),
-          VerticalSpacing(of: 20),
-          PackageName(
-            mPackage: 'cfa',
-            size: 17,
-            strokeWidth: 1,
-          ),
-          VerticalSpacing(of: 20),
+          SizedBox(height: 5,),
+          Align(child: Text("  Niveau "+level, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
+          
+          SizedBox(height: hv*2,),
+          RichText(text: TextSpan(text: _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: wv*15))),
+          SizedBox(height: hv*0.25),
+          Text("par famille / Mois", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: wv*4),),
           Expanded(
-            child: Container(
+            child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  PackageWidget(mPackageContent: _mPackageContent),
-                  PackageWidget(mPackageContent: _mPackageContent1),
-                  PackageWidget(mPackageContent: _mPackageContent2),
+                  Container(
+                    margin: EdgeInsets.only(top: hv*4),
+                    padding: EdgeInsets.symmetric(horizontal: wv*2),
+                    child: Text(content, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: wv*3.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                  ),
                 ],
               ),
             ),
           ),
-          VerticalSpacing(of: 20),
-          Flexible(
-            child: ButtonTheme(
-              minWidth: width(size: _mSize * 20),
-              height: height(size: _mSize * 5.5),
-              child: RaisedButton(
-                child: Text(
-                  'COMMENCEZ',
-                  softWrap: true,
-                  style: TextStyle(
-                      color: kPrimaryColor,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: .7,
-                      fontSize: fontSize(size: 18)),
-                ),
-                color: whiteColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(_mSize * 3.15)),
-                onPressed: action,
-              ),
-            ),
+          SizedBox(height: hv*1,),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: wv*3),
+            child: CustomTextButton(text: "Commencer", color: whiteColor, textColor: kPrimaryColor, action: action,),
           ),
+          SizedBox(height: hv*1,)
         ],
       ),
     );

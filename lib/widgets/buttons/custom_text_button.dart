@@ -6,9 +6,10 @@ class CustomTextButton extends StatelessWidget {
   final String text;
   final Function action;
   final Color color;
+  final Color textColor;
   final bool expand;
 
-  const CustomTextButton({Key key, this.text, this.action, this.color = kPrimaryColor, this.expand = true}) : super(key: key);
+  const CustomTextButton({Key key, this.text, this.action, this.color = kPrimaryColor, this.expand = true, this.textColor = whiteColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class CustomTextButton extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: wv*3.2, vertical: hv*2),
       child: TextButton(
         onPressed: action,
-        child: Text(text, style: TextStyle(color: whiteColor, fontSize: wv*4.5, fontWeight: FontWeight.w600),),
+        child: Text(text, style: TextStyle(color: textColor, fontSize: wv*4.5, fontWeight: FontWeight.w600),),
         style: ButtonStyle(
           padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: 15)),
           backgroundColor: MaterialStateProperty.all(color),
