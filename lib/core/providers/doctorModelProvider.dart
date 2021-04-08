@@ -30,6 +30,11 @@ class DoctorModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAvailability(Map val){
+    _doctor.availability = val;
+    notifyListeners();
+  }
+
   void setFamilyName(String val){
     _doctor.familyName = val;
     notifyListeners();

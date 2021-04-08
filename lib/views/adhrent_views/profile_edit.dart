@@ -778,7 +778,13 @@ class _ProfileEditState extends State<ProfileEdit> {
       File file = File(result.files.single.path);
       uploadDocumentToFirebase(file, name);
     } else {
-      //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucun fichier selectionné'),));
+      setState(() {
+        if (name == "CNI"){
+          cniSpinner = false;
+        } else {
+          otherFileSpinner = false;
+        }
+      });
     }
   }
 

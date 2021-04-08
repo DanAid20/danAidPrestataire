@@ -15,24 +15,26 @@ class FileUploadCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: wv*1),
+      padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1),
       decoration: BoxDecoration(
         color: Colors.white,
         //borderRadius: BorderRadius.circular(10),
         boxShadow: [BoxShadow(blurRadius: 2, spreadRadius: 1, color: Colors.grey[200])]
       ),
       child: Row(children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: state ? kDeepTeal : Colors.red[400],
-              child: Icon(
-                state ? LineIcons.file : LineIcons.times, 
-                color: Colors.white,
-            )),
-            SizedBox(width: wv*3,),
-            Container(child: Text(title, overflow: TextOverflow.fade,), constraints: BoxConstraints(maxWidth: wv*60), ),
-          ],
+        Expanded(
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: state ? kDeepTeal : Colors.red[400],
+                child: Icon(
+                  state ? LineIcons.file : LineIcons.times, 
+                  color: Colors.white,
+              )),
+              SizedBox(width: wv*3,),
+              Expanded(child: Container(child: Text(title, overflow: TextOverflow.fade,), constraints: BoxConstraints(maxWidth: wv*60), )),
+            ],
+          ),
         ),
         Align(alignment: Alignment.centerRight,
           child: !loading ? TextButton(
