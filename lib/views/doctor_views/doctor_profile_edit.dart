@@ -372,6 +372,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                     ),
                       //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                   ),
+                  imageSpinner ? Positioned(
+                    top: hv*7,
+                    right: wv*13,
+                    child: CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
+                  ) : Container(),
                   Positioned(
                     bottom: 2,
                     right: 5,
@@ -1272,13 +1277,15 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
   Future uploadImageToFirebase(PickedFile file) async {
 
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+
     if (file == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     setState(() {
-      imageLoading = true;
+      imageSpinner = true;
     });
     String fileName = userProvider.getUserId;
 
@@ -1303,11 +1310,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
     storageUploadTask.whenComplete(() async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
       String url = await storageReference.getDownloadURL();
+      doctorProvider.setImgUrl(url);
       avatarUrl = url;
       print("download url: $url");
     });
     setState(() {
-      imageLoading = false;
+      imageSpinner = false;
     });
   }
 
@@ -1316,6 +1324,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
     setState(() {
       if (pickedFile != null) {
         imageFileAvatar = File(pickedFile.path);
+        setState(() {
+          imageSpinner = true;
+        });
         //imageLoading = true;
       } else {
         print('No image selected.');
@@ -1329,6 +1340,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
     setState(() {
       if (pickedFile != null) {
         imageFileAvatar = File(pickedFile.path);
+        setState(() {
+          imageSpinner = true;
+        });
         //imageLoading = true;
       } else {
         print('No image selected.');
