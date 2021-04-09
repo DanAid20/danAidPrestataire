@@ -29,7 +29,7 @@ class DoctorServiceChoiceCard extends StatelessWidget {
             SvgPicture.asset(icon, color: !chosen ? kPrimaryColor : whiteColor, width: 20),
             SizedBox(width: wv*1),
             Text(service, style: TextStyle(color: !chosen ? kPrimaryColor : whiteColor),)
-          ],),
+          ], mainAxisAlignment: MainAxisAlignment.center,),
         ),
       ),
     );

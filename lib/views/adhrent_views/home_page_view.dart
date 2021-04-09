@@ -72,7 +72,6 @@ class _HomePageViewState extends State<HomePageView> {
           FirebaseFirestore.instance.collection('MEDECINS').doc(userProvider.getUserId).get().then((docSnapshot) {
             DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
             doctorModelProvider.setDoctorModel(doc);
-            print(doc.familyName + "gdfgdfgd");
           });
         }
     } else {

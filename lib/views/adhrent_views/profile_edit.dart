@@ -85,6 +85,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   void _saveLocation(){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     setState(() {
       positionSpinner = true;
     });
@@ -102,6 +103,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           "longitude": loc.longitude
         };
       });
+      adherentProvider.setLocation(gpsCoords);
     });
   }
 

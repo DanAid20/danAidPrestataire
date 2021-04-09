@@ -21,6 +21,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,6 +48,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   TextEditingController _addressController = new TextEditingController();
   TextEditingController _orderRegistrationNberController = new TextEditingController();
   TextEditingController _officeNameController = new TextEditingController();
+  TextEditingController _rateController = new TextEditingController();
 
   LatLng _initialcameraposition = LatLng(4.044656688777058, 9.695724531228858);
   GoogleMapController _controller;
@@ -65,6 +67,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   bool addressEnabled = true;
   bool orderRegNberEnabled = true;
   bool officeNameEnabled = true;
+  bool rateEnabled = true;
 
   String _city;
   String _stateCode;
@@ -100,18 +103,18 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   Map availability = {
     "monday to friday": {
       "available": true,
-      "start": TimeOfDay(hour: 8, minute: 0),
-      "end": TimeOfDay(hour: 16, minute: 0)
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
     },
     "saturday": {
       "available": false,
-      "start": TimeOfDay(hour: 8, minute: 0),
-      "end": TimeOfDay(hour: 16, minute: 0)
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
     },
     "sunday": {
       "available": false,
-      "start": TimeOfDay(hour: 8, minute: 0),
-      "end": TimeOfDay(hour: 16, minute: 0)
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
     },
   };
 
@@ -119,6 +122,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   }
 
   void _saveLocation(){
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     setState(() {
       positionSpinner = true;
     });
@@ -136,6 +140,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
           "longitude": loc.longitude
         };
       });
+      doctorProvider.setLocation(gpsCoords);
     });
   }
 
@@ -213,6 +218,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
         specialityEnabled = false;
       });
     }
+    if((doctorProvider.getDoctor.rate != null)){
+      setState(() {
+        _rateController.text = doctorProvider.getDoctor.rate["public"].toString();
+        rateEnabled = false;
+      });
+    }
     if((doctorProvider.getDoctor.address != null) & (doctorProvider.getDoctor.address != "")){
       setState(() {
         _addressController.text = doctorProvider.getDoctor.address;
@@ -236,7 +247,6 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       });
     }
     
-    print("inside");
     if (doctorProvider.getDoctor.location != null){
       print(doctorProvider.getDoctor.location.toString() +"inside+");
       if ((doctorProvider.getDoctor.location["latitude"] != null) | (doctorProvider.getDoctor.location["longitude"] != null) | true){
@@ -245,7 +255,6 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
           "latitude": doctorProvider.getDoctor.location["latitude"],
           "longitude": doctorProvider.getDoctor.location["longitude"]
         };
-        print(gpsCoords.toString());
         });
       }
     }
@@ -259,6 +268,59 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       setState(() {
         otherFileUploaded = true;
       });
+    }
+    if((doctorProvider.getDoctor.serviceList != "") & (doctorProvider.getDoctor.serviceList != null)){
+      setState(() {
+          chatChosen = doctorProvider.getDoctor.serviceList["chat"];
+          consultationChosen = doctorProvider.getDoctor.serviceList["consultation"];
+          teleConsultationChosen = doctorProvider.getDoctor.serviceList["tele-consultation"];
+          rdvChosen = doctorProvider.getDoctor.serviceList["rdv"];
+          visiteDomicileChosen = doctorProvider.getDoctor.serviceList["visite-a-domicile"];
+      });
+    }
+    if(doctorProvider.getDoctor.availability != null){
+      Map avail = doctorProvider.getDoctor.availability;
+      if(avail["monday to friday"]["start"] is Timestamp){
+        setState(() {
+          availability = {
+              "monday to friday": {
+                "available": avail["monday to friday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].toDate().hour, avail["monday to friday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].toDate().hour, avail["monday to friday"]["end"].toDate().minute)
+              },
+              "saturday": {
+                "available": avail["saturday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["saturday"]["start"].toDate().hour, avail["saturday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["saturday"]["end"].toDate().hour, avail["saturday"]["end"].toDate().minute)
+              },
+              "sunday": {
+                "available": avail["sunday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["sunday"]["start"].toDate().hour, avail["sunday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["sunday"]["end"].toDate().hour, avail["sunday"]["end"].toDate().minute)
+              },
+            };
+        });
+      } else {
+        setState(() {
+          availability = {
+            "monday to friday": {
+              "available": avail["monday to friday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].hour, avail["monday to friday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].hour, avail["monday to friday"]["end"].minute)
+            },
+            "saturday": {
+              "available": avail["saturday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["saturday"]["start"].hour, avail["saturday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["saturday"]["end"].hour, avail["saturday"]["end"].minute)
+            },
+            "sunday": {
+              "available": avail["sunday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["sunday"]["start"].hour, avail["sunday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["sunday"]["end"].hour, avail["sunday"]["end"].minute)
+            },
+          };
+        });
+      }
     }
   }
 
@@ -558,6 +620,25 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*2,),
 
                       CustomTextField(
+                        prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
+                        label: "Votre tarif par heure",
+                        hintText: "ex: 3500",
+                        enabled: rateEnabled,
+                        controller: _rateController,
+                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+                        ],
+                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        editAction: (){
+                          setState(() {
+                            rateEnabled = true;
+                          });
+                        },
+                      ),
+                      SizedBox(height: hv*2,),
+
+                      CustomTextField(
                         prefixIcon: Icon(LineIcons.hospital, color: kPrimaryColor),
                         label: "Nom de votre établissement",
                         hintText: "ex: Hôpital de District de Limbé",
@@ -651,7 +732,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       ),
                       SizedBox(height: hv*1,),
                       Table(
-                        columnWidths: {2: FlexColumnWidth(1.5),3: FlexColumnWidth(1.5),},
+                        columnWidths: {2: FlexColumnWidth(1.3),3: FlexColumnWidth(1.3),},
                         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                         children: [
                           TableRow(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[200]))),
@@ -668,10 +749,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             children: [
                             TableCell(child: Center(
                               child: Switch(
-                                value: mondayToFridaySwitched,
+                                value: availability["monday to friday"]["available"],
                                 onChanged: (value) {
                                   setState(() {
-                                    mondayToFridaySwitched = value;
                                     availability["monday to friday"]["available"] = value;
                                   });
                                 },
@@ -681,12 +761,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             ),
                             TableCell(child: Text('Lundi à Vendredi'),),
                             TableCell(child: availability["monday to friday"]["available"] ? DoctorServiceChoiceCard(
-                              service: availability["monday to friday"]["start"].format(context),
+                              service: availability["monday to friday"]["start"].hour.toString().padLeft(2, '0').padLeft(2, '0')+" : "+availability["monday to friday"]["start"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
                               action: ()=>_selectStartTimeWeek(context),
                             ) : Center(child: Text("/"))),
                             TableCell(child: availability["monday to friday"]["available"] ? DoctorServiceChoiceCard(
-                              service: availability["monday to friday"]["end"].format(context),
+                              service: availability["monday to friday"]["end"].hour.toString().padLeft(2, '0')+" : "+availability["monday to friday"]["end"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
                               action: ()=>_selectEndTimeWeek(context),
                             ) : Center(child: Text("/"))),
@@ -694,10 +774,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           TableRow(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[200]))), children: [
                             TableCell(child: Center(
                               child: Switch(
-                                value: saturdaySwitched,
+                                value: availability["saturday"]["available"],
                                 onChanged: (value) {
                                   setState(() {
-                                    saturdaySwitched = value;
                                     availability["saturday"]["available"] = value;
                                   });
                                 },
@@ -706,12 +785,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               )),
                             TableCell(child: Text('Samedi'),),
                             TableCell(child: availability["saturday"]["available"] ? DoctorServiceChoiceCard(
-                              service: availability["saturday"]["start"].format(context),
+                              service: availability["saturday"]["start"].hour.toString().padLeft(2, '0')+" : "+availability["saturday"]["start"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
                               action: ()=>_selectStartTimeSaturday(context),
                             ) : Center(child: Text("/"))),
                             TableCell(child: availability["saturday"]["available"] ? DoctorServiceChoiceCard(
-                              service: availability["saturday"]["end"].format(context),
+                              service: availability["saturday"]["end"].hour.toString().padLeft(2, '0')+" : "+availability["saturday"]["end"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
                               action: ()=>_selectEndTimeSaturday(context),
                             ) : Center(child: Text("/"))),
@@ -719,10 +798,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           TableRow(children: [
                             TableCell(child: Center(
                               child: Switch(
-                                value: sundaySwitched,
+                                value: availability["sunday"]["available"],
                                 onChanged: (value) {
                                   setState(() {
-                                    sundaySwitched = value;
                                     availability["sunday"]["available"] = value;
                                   });
                                 },
@@ -731,12 +809,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               )),
                             TableCell(child: Text('Dimanche'),),
                             TableCell(child: availability["sunday"]["available"] ? DoctorServiceChoiceCard(
-                              service: availability["sunday"]["start"].format(context),
+                              service: availability["sunday"]["start"].hour.toString().padLeft(2, '0')+" : "+availability["sunday"]["start"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
                               action: ()=>_selectStartTimeSunday(context),
                             ) : Center(child: Text("/"))),
                             TableCell(child: availability["sunday"]["available"] ? DoctorServiceChoiceCard(
-                              service: availability["sunday"]["end"].format(context),
+                              service: availability["sunday"]["end"].hour.toString().padLeft(2, '0')+" : "+availability["sunday"]["end"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
                               action: ()=>_selectEndTimeSunday(context),
                             ) : Center(child: Text("/"))),
@@ -829,7 +907,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       ),
                       SizedBox(height: hv*2,),
                       Container(
-                        child: (cityChosen) & (_officeCityChosen) ?  
+                        child: cityChosen & _officeCityChosen & _rateController.text.isNotEmpty ?  
                           !buttonLoading ? CustomTextButton(
                             text: "Mettre à jour",
                             color: kPrimaryColor,
@@ -840,23 +918,38 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               String email = _emailController.text;
                               String address = _addressController.text;
                               String speciality =_specialityController.text;
-                              /*Map availabilityConverted = {
+                              String officeName = _officeNameController.text;
+                              String orderReg = _orderRegistrationNberController.text;
+                              double rate = double.parse(_rateController.text);
+                              Map availabilityStamp = {
                                 "monday to friday": {
-                                  "available": availability["monday to friday"]["availability"],
-                                  "start": availability["monday to friday"]["availability"],
-                                  "end": availability["monday to friday"]["availability"],
+                                  "available": availability["monday to friday"]["available"],
+                                  "start": availability["monday to friday"]["start"],
+                                  "end": availability["monday to friday"]["end"]
                                 },
                                 "saturday": {
-                                  "available": false,
-                                  "start": availability["monday to friday"]["availability"],
-                                  "end": availability["monday to friday"]["availability"],
+                                  "available": availability["saturday"]["available"],
+                                  "start": availability["saturday"]["start"],
+                                  "end": availability["saturday"]["end"]
                                 },
                                 "sunday": {
-                                  "available": false,
-                                  "start": availability["monday to friday"]["availability"],
-                                  "end": availability["monday to friday"]["availability"],
+                                  "available": availability["sunday"]["available"],
+                                  "start": availability["sunday"]["start"],
+                                  "end": availability["sunday"]["end"]
                                 },
-                              };*/
+                              };
+                              Map serviceList = {
+                                "consultation" : consultationChosen,
+                                "tele-consultation" : teleConsultationChosen,
+                                "visite-a-domicile" : visiteDomicileChosen,
+                                "chat" : chatChosen,
+                                "rdv" : rdvChosen
+                              };
+                              Map rateMap = {
+                                "public": rate,
+                                "adherent": rate*0.3,
+                                "other": rate*0.98
+                              };
                               Map location = gpsCoords != null ? {
                                 "addresse": address,
                                 "latitude": gpsCoords["latitude"],
@@ -877,7 +970,16 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 doctorProvider.setSpeciality(speciality);
                                 doctorProvider.setAddress(address);
                                 doctorProvider.setCniName(cniName);
-                                doctorProvider.setLocation(location);
+                                doctorProvider.setOrderRegistrationCertificate(orderReg);
+                                doctorProvider.setRate(rateMap);
+                                doctorProvider.setServiceList(serviceList);
+                                doctorProvider.setRegion(_region);
+                                doctorProvider.setTown(_city);
+                                doctorProvider.setOfficeName(officeName);
+                                doctorProvider.setOfficeRegion(_officeRegion);
+                                doctorProvider.setOfficeTown(_officeCity);
+                                doctorProvider.setAvailability(availabilityStamp);
+                                (gpsCoords["latitude"] == null) || (gpsCoords["longitude"] == null) ? doctorProvider.setLocation(location) : print("No data");
                                 doctorProvider.setAvailability(availability);
                                 await FirebaseFirestore.instance.collection("USERS")
                                   .doc(doctorProvider.getDoctor.id)
@@ -891,31 +993,24 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                     await FirebaseFirestore.instance.collection("MEDECINS")
                                       .doc(doctorProvider.getDoctor.id)
                                       .set({
-                                        "dateCreated": DateTime.now(),
                                         "cniName": cniName,
                                         "emailAdress": email,
-                                        "adresse": address,
                                         "nomDefamille": fname,
                                         "prenom": sname,
+                                        "domaine": _type,
+                                        "specialite": speciality,
                                         "regionDorigione": _region,
+                                        "certificatDenregistrmDordre": orderReg,
                                         "ville": _city == null ? doctorProvider.getDoctor.town : _city,
-                                        "localisation": gpsCoords != null ? {
-                                          "addresse": address,
-                                          "latitude": gpsCoords["latitude"],
-                                          "longitude": gpsCoords["longitude"],
-                                          "altitude": 0
-                                        } : {
-                                          "addresse": address,
-                                        },
+                                        "communeHospital": _officeCity,
+                                        "nomEtablissement": officeName,
+                                        "categorieEtablissement": _category,
+                                        "tarif": rateMap,
+                                        "regionEtablissement": _officeRegion,
+                                        "localisation": location,
                                         "addresse": address,
                                         "availability": availability,
-                                        "serviceList": {
-                                          "consultation" : consultationChosen,
-                                          "tele-consultation" : teleConsultationChosen,
-                                          "visite-a-domicile" : visiteDomicileChosen,
-                                          "chat" : chatChosen,
-                                          "rdv" : rdvChosen
-                                        }
+                                        "serviceList": serviceList
                                       }, SetOptions(merge: true))
                                       .then((value) async {
 
@@ -944,7 +1039,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                   ;
                               }
                             },
-                          ) : Loaders().buttonLoader(kPrimaryColor) :
+                          ) : Center(child: Loaders().buttonLoader(kPrimaryColor)) :
                           CustomDisabledTextButton(
                             text: "Mettre à Jour",
                           )
@@ -976,85 +1071,85 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   Future<void> _selectStartTimeWeek(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(
         context: context,
-        initialTime: availability["monday to friday"]["start"], builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: availability["monday to friday"]["start"].hour, minute: availability["monday to friday"]["start"].minute), builder: (BuildContext context, Widget child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );});
 
-    if (picked_s != null && picked_s != availability["monday to friday"]["start"])
+    if (picked_s != null && picked_s != TimeOfDay(hour: availability["monday to friday"]["start"].hour, minute: availability["monday to friday"]["start"].minute))
       setState(() {
-        availability["monday to friday"]["start"] = picked_s;
+        availability["monday to friday"]["start"] = DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
   }
   Future<void> _selectEndTimeWeek(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(
         context: context,
-        initialTime: availability["monday to friday"]["end"], builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: availability["monday to friday"]["end"].hour, minute: availability["monday to friday"]["end"].minute), builder: (BuildContext context, Widget child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );});
 
-    if (picked_s != null && picked_s != availability["monday to friday"]["end"])
+    if (picked_s != null && picked_s != TimeOfDay(hour: availability["monday to friday"]["end"].hour, minute: availability["monday to friday"]["end"].minute))
       setState(() {
-        availability["monday to friday"]["end"] = picked_s;
+        availability["monday to friday"]["end"] = DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
   }
   Future<void> _selectStartTimeSaturday(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(
         context: context,
-        initialTime: availability["saturday"]["start"], builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: availability["saturday"]["start"].hour, minute: availability["saturday"]["start"].minute), builder: (BuildContext context, Widget child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );});
 
-    if (picked_s != null && picked_s != availability["saturday"]["start"])
+    if (picked_s != null && picked_s != TimeOfDay(hour: availability["saturday"]["start"].hour, minute: availability["saturday"]["start"].minute))
       setState(() {
-        availability["saturday"]["start"] = picked_s;
+        availability["saturday"]["start"] = DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
   }
   Future<void> _selectEndTimeSaturday(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(
         context: context,
-        initialTime: availability["saturday"]["end"], builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: availability["saturday"]["end"].hour, minute: availability["saturday"]["end"].minute), builder: (BuildContext context, Widget child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );});
 
-    if (picked_s != null && picked_s != availability["saturday"]["end"])
+    if (picked_s != null && picked_s != TimeOfDay(hour: availability["saturday"]["end"].hour, minute: availability["saturday"]["end"].minute))
       setState(() {
-        availability["saturday"]["end"] = picked_s;
+        availability["saturday"]["end"] = DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
   }
   Future<void> _selectStartTimeSunday(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(
         context: context,
-        initialTime: availability["sunday"]["start"], builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: availability["sunday"]["start"].hour, minute: availability["sunday"]["start"].minute), builder: (BuildContext context, Widget child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );});
 
-    if (picked_s != null && picked_s != availability["sunday"]["start"])
+    if (picked_s != null && picked_s != TimeOfDay(hour: availability["sunday"]["start"].hour, minute: availability["sunday"]["start"].minute))
       setState(() {
-        availability["sunday"]["start"] = picked_s;
+        availability["sunday"]["start"] = DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
   }
   Future<void> _selectEndTimeSunday(BuildContext context) async {
     final TimeOfDay picked_s = await showTimePicker(
         context: context,
-        initialTime: availability["sunday"]["end"], builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: availability["sunday"]["end"].hour, minute: availability["sunday"]["end"].minute), builder: (BuildContext context, Widget child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child,
           );});
 
-    if (picked_s != null && picked_s != availability["sunday"]["end"])
+    if (picked_s != null && picked_s != TimeOfDay(hour: availability["sunday"]["end"].hour, minute: availability["sunday"]["end"].minute))
       setState(() {
-        availability["sunday"]["end"] = picked_s;
+        availability["sunday"]["end"] = DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
   }
 
