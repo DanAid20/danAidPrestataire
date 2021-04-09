@@ -49,6 +49,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   TextEditingController _orderRegistrationNberController = new TextEditingController();
   TextEditingController _officeNameController = new TextEditingController();
   TextEditingController _rateController = new TextEditingController();
+  TextEditingController _aboutController = new TextEditingController();
 
   LatLng _initialcameraposition = LatLng(4.044656688777058, 9.695724531228858);
   GoogleMapController _controller;
@@ -68,6 +69,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   bool orderRegNberEnabled = true;
   bool officeNameEnabled = true;
   bool rateEnabled = true;
+  bool aboutEnabled = true;
 
   String _city;
   String _stateCode;
@@ -204,6 +206,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       setState(() {
         _emailController.text = doctorProvider.getDoctor.email;
         emailEnabled = false;
+      });
+    }
+    if((doctorProvider.getDoctor.about != null) & (doctorProvider.getDoctor.about != "")){
+      setState(() {
+        _aboutController.text = doctorProvider.getDoctor.about;
+        aboutEnabled = false;
       });
     }
     if((doctorProvider.getDoctor.orderRegistrationCertificate != null) & (doctorProvider.getDoctor.orderRegistrationCertificate != "")){
@@ -425,6 +433,21 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         editAction: (){
                           setState(() {
                             cniNameEnabled = true;
+                          });
+                        },
+                      ),
+                      SizedBox(height: hv*2,),
+                      CustomTextField(
+                        prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
+                        label: "A propos",
+                        hintText: "Parlez brièvement de vous..",
+                        enabled: aboutEnabled,
+                        multiLine: true,
+                        controller: _aboutController,
+                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        editAction: (){
+                          setState(() {
+                            aboutEnabled = true;
                           });
                         },
                       ),
@@ -920,6 +943,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               String speciality =_specialityController.text;
                               String officeName = _officeNameController.text;
                               String orderReg = _orderRegistrationNberController.text;
+                              String about = _aboutController.text;
                               double rate = double.parse(_rateController.text);
                               Map availabilityStamp = {
                                 "monday to friday": {
@@ -979,6 +1003,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 doctorProvider.setOfficeRegion(_officeRegion);
                                 doctorProvider.setOfficeTown(_officeCity);
                                 doctorProvider.setAvailability(availabilityStamp);
+                                doctorProvider.setAbout(about);
                                 (gpsCoords["latitude"] == null) || (gpsCoords["longitude"] == null) ? doctorProvider.setLocation(location) : print("No data");
                                 doctorProvider.setAvailability(availability);
                                 await FirebaseFirestore.instance.collection("USERS")
@@ -995,6 +1020,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                       .set({
                                         "cniName": cniName,
                                         "emailAdress": email,
+                                        "about": about,
                                         "nomDefamille": fname,
                                         "prenom": sname,
                                         "domaine": _type,

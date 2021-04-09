@@ -50,6 +50,11 @@ class DoctorModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setAbout(String val){
+    _doctor.about = val;
+    notifyListeners();
+  }
+
   void setSurname(String val){
     _doctor.surname = val;
     notifyListeners();
