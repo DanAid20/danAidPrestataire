@@ -15,15 +15,15 @@ class DoctorPatientView extends StatefulWidget {
 class _DoctorPatientViewState extends State<DoctorPatientView> {
   Widget servicesList() {
     return Container(
-      margin: EdgeInsets.only(top: inch * 1.5, bottom: inch * 1.5),
+      margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
       decoration: BoxDecoration(
         color: Colors.white,
       ),
       child: Column(
         children: [
           Container(
-              margin: EdgeInsets.only(
-                  left: inch * 1.5, right: inch * 1.5, top: inch * 3),
+              margin:
+                  EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: hv * 3),
               width: wv * 90,
               height: hv * 18,
               decoration: BoxDecoration(
@@ -42,8 +42,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   Align(
                     alignment: Alignment.topRight,
                     child: Container(
-                      margin:
-                          EdgeInsets.only(right: inch * 3.5, top: inch * 0.5),
+                      margin: EdgeInsets.only(right: wv * 3.5, top: hv * 0.5),
                       child: SvgPicture.asset(
                         'assets/icons/Bulk/Bookmark.svg',
                         width: wv * 8,
@@ -52,7 +51,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                        left: inch * 2.9, right: inch * 1.5, top: inch * 1),
+                        left: wv * 2.9, right: hv * 1.5, top: hv * 1),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -63,7 +62,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             style: TextStyle(
                                 color: kCardTextColor,
                                 fontWeight: FontWeight.w800,
-                                fontSize: fontSize(size: 20)),
+                                fontSize: fontSize(size: wv * 7)),
                           ),
                         ),
                       ],
@@ -71,7 +70,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   ),
                   Container(
                     margin: EdgeInsets.only(
-                        left: inch * 0.2, right: inch * 1.5, top: inch * 2.5),
+                        left: wv * 0.2, right: hv * 1.5, top: hv * 2.5),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -83,7 +82,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             style: TextStyle(
                                 color: kCardTextColor,
                                 fontWeight: FontWeight.w500,
-                                fontSize: fontSize(size: 19)),
+                                fontSize: fontSize(size: wv * 4)),
+                            overflow: TextOverflow.clip,
                           ),
                         ),
                       ],
@@ -118,8 +118,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     return Column(
       children: [
         Container(
-            margin: EdgeInsets.only(
-                left: inch * 2, right: inch * 1.5, top: inch * 2),
+            margin: EdgeInsets.only(left: wv * 6, right: wv * 1.5, top: hv * 2),
             width: wv * 24,
             height: hv * 10,
             decoration: BoxDecoration(
@@ -137,7 +136,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Container(
-                    margin: EdgeInsets.only(left: inch * 1.5, top: inch * 0.5),
+                    margin: EdgeInsets.only(left: wv * 1.5, top: hv * 0.5),
                     child: SvgPicture.asset(
                       iconesUrl != null
                           ? iconesUrl
@@ -148,7 +147,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: inch * 1.9, right: inch * 1.5, top: inch * 1),
+                      left: wv * 1.9, right: wv * 1.5, top: hv * 1),
                   child: Row(
                     children: [
                       Container(
@@ -158,7 +157,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: fontSize(size: 15)),
+                              fontSize: fontSize(size: wv * 4)),
                         ),
                       ),
                     ],
@@ -241,21 +240,22 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       title: Text(
         nom != null ? nom : 'Fabrice Mbanga',
         style: TextStyle(
-            fontSize: fontSize(size: 16),
+            fontSize: fontSize(size: wv * 5),
             fontWeight: FontWeight.w700,
             color: kPrimaryColor),
       ),
       subtitle: Text(
         subtitle != null ? subtitle : 'Nouvelle Consultation',
         style: TextStyle(
-            fontSize: fontSize(size: 14),
+            fontSize: fontSize(size: wv * 4),
             fontWeight: FontWeight.w500,
             color: kPrimaryColor),
       ),
       trailing: isSpontane == true
           ? Text(
               'Spontane',
-              style: TextStyle(fontSize: fontSize(size: 14), color: kDeepTeal),
+              style:
+                  TextStyle(fontSize: fontSize(size: wv * 5), color: kDeepTeal),
             )
           : Container(
               padding: EdgeInsets.only(top: hv * 1, right: wv * 2),
@@ -264,12 +264,12 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   Text(
                     apointementDate != null ? apointementDate : '12:15',
                     style: TextStyle(
-                        fontSize: fontSize(size: 14), color: kPrimaryColor),
+                        fontSize: fontSize(size: wv * 4), color: kPrimaryColor),
                   ),
                   Text(
                     apointementType != null ? apointementType : 'RDV',
                     style: TextStyle(
-                        fontSize: fontSize(size: 14),
+                        fontSize: fontSize(size: wv * 4),
                         fontWeight: FontWeight.w700,
                         color: primaryColor),
                   ),
