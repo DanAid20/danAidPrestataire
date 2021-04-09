@@ -88,24 +88,24 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               children: [
                 Container(
                   margin: EdgeInsets.only(
-                      left: inch * 1.5, right: inch * 1.5, top: inch * 0),
+                      left: wv * 4, right: wv * 1.5, top: hv * 0),
                   child: Text(
                     "Aujourd'hui",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
-                        fontSize: fontSize(size: 17)),
+                        fontSize: fontSize(size: wv * 4)),
                   ),
                 ),
                 Container(
                   margin: EdgeInsets.only(
-                      left: inch * 1.5, right: inch * 1.5, top: inch * 0),
+                      left: wv * 1.5, right: wv * 1.5, top: hv * 0),
                   child: Text(
                     "Semaines",
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w500,
-                        fontSize: fontSize(size: 17)),
+                        fontSize: fontSize(size: wv * 4)),
                   ),
                 )
               ],
@@ -115,7 +115,6 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       ),
       Container(
         width: wv * 100,
-        height: hv * 54,
         color: Colors.white,
         child: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
@@ -153,29 +152,28 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         decoration: BoxDecoration(
           color: Colors.white,
         ),
-        margin: EdgeInsets.only(
-            left: inch * 1.5, right: inch * 1.5, top: inch * 0.5),
+        margin: EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: hv * 0.5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Container(
-              margin: EdgeInsets.only(
-                  left: inch * 1.5, right: inch * 1.5, top: inch * 0),
+              margin:
+                  EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: hv * 0),
               child: Row(
                 children: [
                   Text("Salle d'attente ",
                       style: TextStyle(
                         color: kPrimaryColor,
                         fontWeight: FontWeight.w500,
-                        fontSize: fontSize(size: 16),
+                        fontSize: fontSize(size: wv * 5),
                       )),
                   Text("Voir plus..",
                       style: TextStyle(
                           color: kBrownCanyon,
                           fontWeight: FontWeight.w700,
-                          fontSize: fontSize(size: 16))),
+                          fontSize: fontSize(size: wv * 5))),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),
@@ -204,10 +202,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       width: wv * 50,
       height: hv * 8,
       margin: EdgeInsets.only(
-        left: inch * 1.5,
-        right: inch * 1.5,
-        top: inch * 2,
-        bottom: inch * 2,
+        left: wv * 1.5,
+        right: wv * 1.5,
+        top: hv * 2,
+        bottom: hv * 2,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -240,29 +238,33 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
           ),
           Column(
             children: [
-              Text('Fabrice Mbanga',
-                  style: const TextStyle(
-                      color: kDateTextColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 18)),
+              Container(
+                child: Text('Fabrice Mbanga',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: kDateTextColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: fontSize(size: wv * 3.5))),
+              ),
               SizedBox(
                 height: hv * .5,
               ),
               Container(
                 padding: EdgeInsets.only(
-                  left: inch * 1,
+                  left: wv * 1,
                 ),
                 child: Flexible(
+                  flex: 1,
                   child: Container(
                     width: wv * 30,
                     child: Text(
                         'Douleurs dentaires et violents mots de tête...',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: const TextStyle(
+                        style: TextStyle(
                             color: kDateTextColor,
                             fontWeight: FontWeight.w500,
-                            fontSize: 15)),
+                            fontSize: fontSize(size: wv * 3.5))),
                   ),
                 ),
               ),
@@ -285,26 +287,27 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: kBgTextColor,
       ),
-      padding: EdgeInsets.only(left: inch * 3.5, right: inch * 1.5),
+      width: wv * 98,
+      padding: EdgeInsets.only(left: wv * 3, right: wv * 3.3),
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.only(left: inch * .5),
+            margin: EdgeInsets.only(left: wv * .5),
             child: Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: inch * 1.5),
+                  margin: EdgeInsets.only(top: wv * 1.5),
                   child: Text(time,
                       style: TextStyle(
                           color: kTextColor,
                           fontWeight: FontWeight.w500,
-                          fontSize: fontSize(size: 18))),
+                          fontSize: fontSize(size: wv * 5))),
                 ),
                 SvgPicture.asset(
                   'assets/icons/Bulk/Line.svg',
-                  height: hv * 5,
+                  height: hv * 3,
                   color: kPrimaryColor,
                   width: wv * 5,
                 ),
@@ -312,7 +315,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             ),
           ),
           Container(
-            width: wv * 100,
+            width: wv * 80,
             height: hv * 12,
             margin: EdgeInsets.only(bottom: wv * 2),
             decoration: BoxDecoration(
@@ -354,7 +357,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   ],
                 ),
                 Container(
-                  width: wv * 46.6,
+                  width: wv * 38.5,
                   margin: EdgeInsets.only(left: wv * 1.5),
                   child: Column(
                     children: [
@@ -362,21 +365,28 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         height: hv * 1.5,
                       ),
                       Container(
-                        margin: EdgeInsets.only(right: wv * .9),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(userName,
-                                style: const TextStyle(
-                                    color: kDateTextColor,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18)),
-                            Text(age,
-                                style: TextStyle(
-                                    color: kCardTextColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: fontSize(size: 18))),
+                            Expanded(
+                              flex: 2,
+                              child: Text(userName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: kDateTextColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 15)),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(age,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: fontSize(size: wv * 4))),
+                            ),
                           ],
                         ),
                       ),
@@ -384,23 +394,26 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         height: hv * 1.3,
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Container(
+                            margin: EdgeInsets.only(right: wv * 6),
                             child: Text(consultationDetails,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: kCardTextColor,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: fontSize(size: 18))),
+                                    fontSize: fontSize(size: wv * 3.5))),
                           ),
                           SizedBox(
                             height: hv * 1,
                           ),
                           Text(consultationType,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: kDeepTeal,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: fontSize(size: 18))),
+                                  fontSize: fontSize(size: wv * 3.5))),
                         ],
                       ),
                     ],
