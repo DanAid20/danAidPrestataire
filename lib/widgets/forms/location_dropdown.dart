@@ -51,7 +51,7 @@ class LocationDropdown extends StatelessWidget {
         regionChosen ? Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Choix de la ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+              Text("Ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
               SizedBox(height: 5,),
               Container(
                 constraints: BoxConstraints(minWidth: wv*45),

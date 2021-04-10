@@ -29,104 +29,204 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     mapCardController = controller;
   }
   bool confirmSpinner = false;
+  Map availability = {
+    "monday to friday": {
+      "available": true,
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
+    },
+    "saturday": {
+      "available": false,
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
+    },
+    "sunday": {
+      "available": false,
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
+    },
+  };
+
+  initAvailanility(){
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    if(doctorProvider.getDoctor.availability != null){
+      Map avail = doctorProvider.getDoctor.availability;
+      if(avail["monday to friday"]["start"] is Timestamp){
+        setState(() {
+          availability = {
+              "monday to friday": {
+                "available": avail["monday to friday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].toDate().hour, avail["monday to friday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].toDate().hour, avail["monday to friday"]["end"].toDate().minute)
+              },
+              "saturday": {
+                "available": avail["saturday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["saturday"]["start"].toDate().hour, avail["saturday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["saturday"]["end"].toDate().hour, avail["saturday"]["end"].toDate().minute)
+              },
+              "sunday": {
+                "available": avail["sunday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["sunday"]["start"].toDate().hour, avail["sunday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["sunday"]["end"].toDate().hour, avail["sunday"]["end"].toDate().minute)
+              },
+            };
+        });
+      } else {
+        setState(() {
+          availability = {
+            "monday to friday": {
+              "available": avail["monday to friday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].hour, avail["monday to friday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].hour, avail["monday to friday"]["end"].minute)
+            },
+            "saturday": {
+              "available": avail["saturday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["saturday"]["start"].hour, avail["saturday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["saturday"]["end"].hour, avail["saturday"]["end"].minute)
+            },
+            "sunday": {
+              "available": avail["sunday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["sunday"]["start"].hour, avail["sunday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["sunday"]["end"].hour, avail["sunday"]["end"].minute)
+            },
+          };
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   
 
   @override
   Widget build(BuildContext context) {
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: (){}),
-        actions: [
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                boxShadow: [BoxShadow(
-                  color: Colors.grey[300],
-                  spreadRadius: 1.5,
-                  blurRadius: 3,
-                  offset: Offset(0, 2)
-                )]
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: kPrimaryColor,
-                    ),
-                    child: Column(children: [
-                      //SizedBox(height: hv*10,),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: wv*2),
-                        child: Row(
+    return WillPopScope(
+      onWillPop: () async {
+        controller.setIndex(1);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>controller.setIndex(1)),
+          actions: [
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  boxShadow: [BoxShadow(
+                    color: Colors.grey[300],
+                    spreadRadius: 1.5,
+                    blurRadius: 3,
+                    offset: Offset(0, 2)
+                  )]
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                      ),
+                      child: Column(children: [
+                        //SizedBox(height: hv*10,),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: wv*2),
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  boxShadow: [BoxShadow(
+                                    color: Colors.black54,
+                                    spreadRadius: 1,
+                                    blurRadius: 1.5,
+                                    offset: Offset(0, 2)
+                                  )]
+                                ),
+                                child: CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                    backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
+                                    radius: 35,
+                                ),
+                              ),
+                              SizedBox(width: 8,),
+                              Expanded(
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Dr. ${doctor.getDoctor.cniName}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
+                                    Text("Medecin de Famille, ${doctor.getDoctor.field}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                    SizedBox(height: hv*1.3,),
+                                    Text(doctor.getDoctor.officeName, style: TextStyle(color: whiteColor, fontSize: 15, fontWeight: FontWeight.w600),),
+                                    Text("Service - ${doctor.getDoctor.speciality}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+
+                        Stack(
+                          clipBehavior: Clip.none,
                           children: [
                             Container(
+                              margin: EdgeInsets.symmetric(vertical: hv*3),
+                              height: 3,
                               decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                boxShadow: [BoxShadow(
-                                  color: Colors.black54,
-                                  spreadRadius: 1,
-                                  blurRadius: 1.5,
-                                  offset: Offset(0, 2)
-                                )]
+                                gradient: LinearGradient(
+                                  colors: [kSouthSeas, kPrimaryColor],
+                                  begin: Alignment.centerLeft,
+                                  stops: [0.25, 0.55],
+                                ),
+                                color: kSouthSeas,
                               ),
-                              child: CircleAvatar(
-                                  backgroundColor: Colors.grey,
-                                  backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
-                                  radius: 35,
-                              ),
+                              child: Divider(color: Colors.transparent,),
                             ),
-                            SizedBox(width: 8,),
-                            Expanded(
-                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Dr. ${doctor.getDoctor.cniName}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
-                                  Text("Medecin de Famille, ${doctor.getDoctor.field}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
-                                  SizedBox(height: hv*1.3,),
-                                  Text(doctor.getDoctor.officeName, style: TextStyle(color: whiteColor, fontSize: 15, fontWeight: FontWeight.w600),),
-                                  Text("Service - ${doctor.getDoctor.speciality}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
 
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: hv*3),
-                            height: 3,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [kSouthSeas, kPrimaryColor],
-                                begin: Alignment.centerLeft,
-                                stops: [0.25, 0.55],
-                              ),
-                              color: kSouthSeas,
-                            ),
-                            child: Divider(color: Colors.transparent,),
-                          ),
-
-                          Positioned(
-                            right: wv*3,
-                            bottom: -hv*0,
-                            child: userProvider.getProfileType != profile.doctor ? adherentModelProvider.getAdherent.familyDoctorId == null ? 
+                            Positioned(
+                              right: wv*3,
+                              bottom: -hv*0,
+                              child: userProvider.getProfileType != profile.doctor ? adherentModelProvider.getAdherent.familyDoctorId == null ? 
+                                TextButton(
+                                  onPressed: () => _chooseDoctor(doctor.getDoctor), 
+                                  child: Text("Mon médecin", style: TextStyle(color: kPrimaryColor),),
+                                  style: ButtonStyle(
+                                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
+                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+                                    backgroundColor: MaterialStateProperty.all(whiteColor),
+                                    shadowColor: MaterialStateProperty.all(Colors.grey),
+                                    elevation: MaterialStateProperty.all(10)
+                                  ),
+                                ) :
+                              CircleAvatar(
+                                radius: wv*7,
+                                backgroundColor: Colors.white,
+                                child: Icon(LineIcons.stethoscope, size: wv*8, color: kSouthSeas, ),
+                              ) 
+                              :
                               TextButton(
-                                onPressed: () => _chooseDoctor(doctor.getDoctor), 
-                                child: Text("Mon médecin", style: TextStyle(color: kPrimaryColor),),
+                                onPressed: () {Navigator.pushNamed(context, '/doctor-profile-edit');}, 
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: 20, color: kPrimaryColor,),
+                                    SizedBox(width: 2,),
+                                    Text("Modifier", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w900),),
+                                  ],
+                                ),
                                 style: ButtonStyle(
                                   padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
                                   shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
@@ -134,259 +234,243 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                   shadowColor: MaterialStateProperty.all(Colors.grey),
                                   elevation: MaterialStateProperty.all(10)
                                 ),
-                              ) :
-                            CircleAvatar(
-                              radius: wv*7,
-                              backgroundColor: Colors.white,
-                              child: Icon(LineIcons.stethoscope, size: wv*8, color: kSouthSeas, ),
-                            ) 
-                            :
-                            TextButton(
-                              onPressed: () {Navigator.pushNamed(context, '/doctor-profile-edit');}, 
-                              child: Text("Modifier", style: TextStyle(color: kPrimaryColor),),
-                              style: ButtonStyle(
-                                padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
-                                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-                                backgroundColor: MaterialStateProperty.all(whiteColor),
-                                shadowColor: MaterialStateProperty.all(Colors.grey),
-                                elevation: MaterialStateProperty.all(10)
-                              ),
+                              )
+                              ,
                             )
-                            ,
-                          )
-                        ],
-                      ),
-
-                      Row(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ListTile(
-                              title: Padding(
-                                padding: EdgeInsets.only(bottom: 5.0),
-                                child: Text("Services Offerts", style: TextStyle(color: whiteColor, fontSize: 15),),
-                              ),
-                              subtitle: Row(
-                                children: [
-                                  SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20),
-                                  SizedBox(width: 10,),
-                                  SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20),
-                                  SizedBox(width: 10,),
-                                  SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: whiteColor),
-                                  SizedBox(width: 10,),
-                                  SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: whiteColor.withOpacity(0.7),),
-                                  SizedBox(width: 10,),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 8.0),
-                                    child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: whiteColor),
-                                  ),
-                                  SizedBox(width: 10,),
-                                  SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5,),
-                    ],),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: kSouthSeas,
-                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                    ),
-                    child: Column(
-                          children: [
-                            SizedBox(height: hv*1),
-                            Row(mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                getFeatureCard(title: "Consultations"),
-                                getFeatureCard(title: "Télé-Consultations"),
-                                getFeatureCard(title: "Visite à domicile"),
-                              ],
-                            ),
-                            Row(mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                getFeatureCard(title: "Chat"),
-                                getFeatureCard(title: "Rendez-vous"),
-                              ],
-                            ),
-                            SizedBox(height: hv*1),
                           ],
                         ),
+
+                        Row(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: ListTile(
+                                title: Padding(
+                                  padding: EdgeInsets.only(bottom: 5.0),
+                                  child: Text("Services Offerts", style: TextStyle(color: whiteColor, fontSize: 15),),
+                                ),
+                                subtitle: Row(
+                                  children: [
+                                    SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: doctor.getDoctor.serviceList["tele-consultation"] ? kSouthSeas : whiteColor),
+                                    SizedBox(width: 10,),
+                                    SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20, color: doctor.getDoctor.serviceList["chat"] ? kSouthSeas : whiteColor),
+                                    SizedBox(width: 10,),
+                                    SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: doctor.getDoctor.serviceList["consultation"] ? kSouthSeas : whiteColor),
+                                    SizedBox(width: 10,),
+                                    SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: doctor.getDoctor.serviceList["visite-a-domicile"] ? kSouthSeas : whiteColor,),
+                                    SizedBox(width: 10,),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: doctor.getDoctor.serviceList["rdv"] ? kSouthSeas : whiteColor),
+                                    ),
+                                    //SizedBox(width: 10,),
+                                    //SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: doctor.getDoctor.serviceList["consultation"] ? kDeepTeal : whiteColor),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 5,),
+                      ],),
+                    ),
+                    doctor.getDoctor.serviceList != null ? Container(
+                      decoration: BoxDecoration(
+                        color: kSouthSeas,
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      ),
+                      child: Column(
+                            children: [
+                              SizedBox(height: hv*1),
+                              Row(mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  doctor.getDoctor.serviceList["consultation"] ? getFeatureCard(title: "Consultations") : Container(),
+                                  doctor.getDoctor.serviceList["tele-consultation"] ? getFeatureCard(title: "Télé-Consultations") : Container(),
+                                  doctor.getDoctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: "Visite à domicile") : Container(),
+                                ],
+                              ),
+                              Row(mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  doctor.getDoctor.serviceList["chat"] ? getFeatureCard(title: "Chat") : Container(),
+                                  doctor.getDoctor.serviceList["rdv"] ? getFeatureCard(title: "Rendez-vous") : Container(),
+                                ],
+                              ),
+                              SizedBox(height: hv*1),
+                            ],
+                          ),
+                    ) : Container()
+                  ],
+                ),
+              ),
+              Column(
+                children: [
+                  SizedBox(height:hv*2),
+                  SizedBox(height: 30,
+                    child: Row(
+                      children: [
+                        SizedBox(width: 5,),
+                        TextButton.icon(
+                          onPressed: (){},
+                          icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg", color: whiteColor),
+                          label: Text("Ecrire", style: TextStyle(color: whiteColor),),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+                            padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
+                            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                          ),
+                        ),
+
+                        SizedBox(width: 10,),
+
+                        TextButton.icon(
+                          onPressed: (){},
+                          icon: Padding(
+                            padding: const EdgeInsets.only(top: 3.0),
+                            child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
+                          ),
+                          label: Text("Prendre Rendez-vous", style: TextStyle(color: kPrimaryColor),),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(whiteColor),
+                            padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
+                            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                            elevation: MaterialStateProperty.all(5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  DefaultTextStyle(
+                    style: TextStyle(color: kPrimaryColor),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("  A propos", style: TextStyle(fontWeight: FontWeight.bold),),
+                        SizedBox(height: 3,),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Text(doctor.getDoctor.about == null ? "R.A.S" : doctor.getDoctor.about),
+                        ),
+                        SizedBox(height: 7,),
+                        Row(
+                          children: [
+                            SizedBox(width: wv*2,),
+                            doctor.getDoctor.availability != null ? Expanded(
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Horaire", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  doctor.getDoctor.availability["monday to friday"]["available"] ? Container(
+                                    margin: EdgeInsets.only(right: 10),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(child: Text("Lundi à Vendredi")),
+                                        Text("${availability["monday to friday"]["start"].hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["start"].minute.toString().padLeft(2, '0')} - ${availability["monday to friday"]["end"].hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["end"].minute.toString().padLeft(2, '0')}"),
+                                      ]
+                                    ),
+                                  ) : Container(),
+                                  doctor.getDoctor.availability["saturday"]["available"] ? Container(
+                                    margin: EdgeInsets.only(right: 10),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Samedi"),
+                                        Text("${availability["saturday"]["start"].hour.toString().padLeft(2, '0')}H${availability["saturday"]["start"].minute.toString().padLeft(2, '0')} - ${availability["saturday"]["end"].hour.toString().padLeft(2, '0')}H${availability["saturday"]["end"].minute.toString().padLeft(2, '0')}"),
+                                      ]
+                                    ),
+                                  ) : Container(),
+                                  doctor.getDoctor.availability["sunday"]["available"] ? Container(
+                                    margin: EdgeInsets.only(right: 10),
+                                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text("Dimanche"),
+                                        Text("${availability["sunday"]["start"].hour.toString().padLeft(2, '0')}H${availability["sunday"]["start"].minute.toString().padLeft(2, '0')} - ${availability["sunday"]["end"].hour.toString().padLeft(2, '0')}H${availability["sunday"]["end"].minute.toString().padLeft(2, '0')}"),
+                                      ]
+                                    ),
+                                  ) : Container(),
+
+                                  SizedBox(height: 10,),
+
+                                  Text("Adresse", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text(doctor.getDoctor.address == null ? "Cameroon" :"${doctor.getDoctor.address}, Cameroun")
+                                ],
+                              ),
+                            )  :  Container(),
+                            SizedBox(width: wv*2,),
+                            doctor.getDoctor.rate != null ? Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: kSouthSeas.withOpacity(0.7),
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text("Tarif publique", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text("${doctor.getDoctor.rate["public"]} f."),
+                                  SizedBox(height: 10,),
+                                  Text("Tarif DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                  Row(
+                                    children: [
+                                      Text("Adhérents"),
+                                      SizedBox(width: 5,),
+                                      Text("${doctor.getDoctor.rate["adherent"]} f."),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Autres"),
+                                      SizedBox(width: 5,),
+                                      Text("${doctor.getDoctor.rate["other"]} f."),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20,)
+                                ]
+                              ),
+                            ) : Container(),
+                            SizedBox(width: 10,)
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: hv*2,),
+                  Stack(
+                    children: [
+                      Container(
+                        height: hv*25,
+                        child: GoogleMap(
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition: CameraPosition(
+                            target: doctor.getDoctor.location == null ? _center : LatLng(doctor.getDoctor.location["latitude"], doctor.getDoctor.location["longitude"]),
+                            zoom: 11.0,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: wv*3,
+                        top: hv*2,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [BoxShadow(
+                              color: Colors.grey[400],
+                              spreadRadius: 1,
+                              blurRadius: 1.5,
+                              offset: Offset(0, 2)
+                            )]
+                          ),
+                          child: CircleAvatar(
+                            radius: wv*8,
+                            backgroundColor: Colors.white,
+                            child: Padding(
+                              padding: EdgeInsets.only(top: inch*1),
+                              child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
-              ),
-            ),
-            Column(
-              children: [
-                SizedBox(height:hv*2),
-                SizedBox(height: 30,
-                  child: Row(
-                    children: [
-                      SizedBox(width: 5,),
-                      TextButton.icon(
-                        onPressed: (){},
-                        icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg"),
-                        label: Text("Ecrire", style: TextStyle(color: whiteColor),),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(kPrimaryColor),
-                          padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
-                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                        ),
-                      ),
-
-                      SizedBox(width: 10,),
-
-                      TextButton.icon(
-                        onPressed: (){},
-                        icon: Padding(
-                          padding: const EdgeInsets.only(top: 3.0),
-                          child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
-                        ),
-                        label: Text("Prendre Rendez-vous", style: TextStyle(color: kPrimaryColor),),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(whiteColor),
-                          padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
-                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                          elevation: MaterialStateProperty.all(5),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10,),
-                DefaultTextStyle(
-                  style: TextStyle(color: kPrimaryColor),
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("  A propos", style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 3,),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(doctor.getDoctor.about == null ? "R.A.S" : doctor.getDoctor.about),
-                      ),
-                      SizedBox(height: 7,),
-                      Row(
-                        children: [
-                          SizedBox(width: wv*2,),
-                          Expanded(
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Horaire", style: TextStyle(fontWeight: FontWeight.w800)),
-                                Container(
-                                  margin: EdgeInsets.only(right: 10),
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(child: Text("Lundi à Vendredi")),
-                                      Text("08H00 - 16H00"),
-                                    ]
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(right: 10),
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Samedi"),
-                                      Text("08H00 - 16H00"),
-                                    ]
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(right: 10),
-                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Dimanche"),
-                                      Text("08H00 - 16H00"),
-                                    ]
-                                  ),
-                                ),
-
-                                SizedBox(height: 10,),
-
-                                Text("Adresse", style: TextStyle(fontWeight: FontWeight.w800)),
-                                Text(doctor.getDoctor.address == null ? "Cameroon" :"${doctor.getDoctor.address}, Cameroun")
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: wv*2,),
-                          doctor.getDoctor.rate != null ? Container(
-                            padding: EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: kSouthSeas.withOpacity(0.7),
-                              borderRadius: BorderRadius.all(Radius.circular(20))
-                            ),
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text("Tarif publique", style: TextStyle(fontWeight: FontWeight.w800)),
-                                Text("${doctor.getDoctor.rate["public"]} f."),
-                                SizedBox(height: 10,),
-                                Text("Tarif DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
-                                Row(
-                                  children: [
-                                    Text("Adhérents"),
-                                    SizedBox(width: 5,),
-                                    Text("${doctor.getDoctor.rate["adherent"]} f."),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Autres"),
-                                    SizedBox(width: 5,),
-                                    Text("${doctor.getDoctor.rate["other"]} f."),
-                                  ],
-                                ),
-                                SizedBox(height: 20,)
-                              ]
-                            ),
-                          ) : Container(),
-                          SizedBox(width: 10,)
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: hv*2,),
-                Stack(
-                  children: [
-                    Container(
-                      height: hv*25,
-                      child: GoogleMap(
-                        onMapCreated: _onMapCreated,
-                        initialCameraPosition: CameraPosition(
-                          target: doctor.getDoctor.location == null ? _center : LatLng(doctor.getDoctor.location["latitude"], doctor.getDoctor.location["longitude"]),
-                          zoom: 11.0,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: wv*3,
-                      top: hv*2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [BoxShadow(
-                            color: Colors.grey[400],
-                            spreadRadius: 1,
-                            blurRadius: 1.5,
-                            offset: Offset(0, 2)
-                          )]
-                        ),
-                        child: CircleAvatar(
-                          radius: wv*8,
-                          backgroundColor: Colors.white,
-                          child: Padding(
-                            padding: EdgeInsets.only(top: inch*1),
-                            child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

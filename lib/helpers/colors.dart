@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const Color primaryColor = Color(0xffFFD343);
 const Color whiteColor = Colors.white;
 const Color kBgColor = Color(0xff1B2026);
+const Color bkgColor = Color(0xff000000);
 const Color accentColor = Color(0xffFA507E);
 const Color textFieldColor = Color(0xff292E36);
 const Color headerColor = Color(0xff292E36);
@@ -16,6 +17,9 @@ const Color lightGreyColor = Color(0xff353B46);
 const Color textColor = Colors.white;
 
 const kPrimaryColor = Color(0xFF005b9F);
+const kCardTextColor = Color(0xFF245483);
+const kDateTextColor = Color(0xFF2B5185);
+const kBgTextColor = Color(0xFFF2F2F2);
 const kFirstIntroColor = Color(0xFF0075AA);
 const kSecIntroColor = Color(0xFFAE9284);
 const kThirdIntroColor = Color(0xFF57CECA);

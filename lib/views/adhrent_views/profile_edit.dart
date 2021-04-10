@@ -85,6 +85,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   void _saveLocation(){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     setState(() {
       positionSpinner = true;
     });
@@ -102,6 +103,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           "longitude": loc.longitude
         };
       });
+      adherentProvider.setLocation(gpsCoords);
     });
   }
 
@@ -778,7 +780,13 @@ class _ProfileEditState extends State<ProfileEdit> {
       File file = File(result.files.single.path);
       uploadDocumentToFirebase(file, name);
     } else {
-      //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucun fichier selectionné'),));
+      setState(() {
+        if (name == "CNI"){
+          cniSpinner = false;
+        } else {
+          otherFileSpinner = false;
+        }
+      });
     }
   }
 

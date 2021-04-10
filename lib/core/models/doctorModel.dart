@@ -25,7 +25,7 @@ class DoctorModel {
       hospitalRegion: doc.data()["regionEtablissement"],
       field: doc.data()["domaine"],
       speciality: doc.data()["specialite"],
-      email: doc.data()["email"],
+      email: doc.data()["emailAdress"],
       personContactName: doc.data()["personneContactName"],
       personContactPhone: doc.data()["personneContactPhone"],
       gender: doc.data()["sexe"],

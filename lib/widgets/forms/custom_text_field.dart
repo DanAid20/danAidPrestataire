@@ -11,10 +11,11 @@ class CustomTextField extends StatelessWidget {
   final Function validator;
   final Widget prefixIcon;
   final bool enabled;
+  final bool multiLine;
   final Function editAction;
   final List<TextInputFormatter> inputFormatters;
 
-  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters}) : super(key: key);
+  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,6 +27,8 @@ class CustomTextField extends StatelessWidget {
           Stack(clipBehavior: Clip.none, alignment: AlignmentDirectional.center,
             children: [
               TextFormField(
+                minLines: 1,
+                maxLines: multiLine ? 3 : 1,
                 enabled: enabled,
                 keyboardType: keyboardType,
                 controller: controller,
@@ -40,7 +43,7 @@ class CustomTextField extends StatelessWidget {
                   ),
                   fillColor: Colors.grey[100],
                   //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(width: 1, color: kPrimaryColor.withOpacity(0.0)),
                     borderRadius: BorderRadius.all(Radius.circular(20))

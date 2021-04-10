@@ -30,8 +30,28 @@ class DoctorModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setRate(Map val){
+    _doctor.rate = val;
+    notifyListeners();
+  }
+
+  void setServiceList(Map val){
+    _doctor.serviceList = val;
+    notifyListeners();
+  }
+
+  void setAvailability(Map val){
+    _doctor.availability = val;
+    notifyListeners();
+  }
+
   void setFamilyName(String val){
     _doctor.familyName = val;
+    notifyListeners();
+  }
+
+  void setAbout(String val){
+    _doctor.about = val;
     notifyListeners();
   }
 
@@ -80,6 +100,16 @@ class DoctorModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setOfficeRegion(String val){
+    _doctor.hospitalRegion = val;
+    notifyListeners();
+  }
+
+  void setOfficeName(String val){
+    _doctor.officeName = val;
+    notifyListeners();
+  }
+
   void setOrderRegistrationCertificate(String val){
     _doctor.orderRegistrationCertificate = val;
     notifyListeners();
@@ -97,6 +127,11 @@ class DoctorModelProvider with ChangeNotifier {
 
   void setTown(String val){
     _doctor.town = val;
+    notifyListeners();
+  }
+
+  void setOfficeTown(String val){
+    _doctor.hospitalTown = val;
     notifyListeners();
   }
 
