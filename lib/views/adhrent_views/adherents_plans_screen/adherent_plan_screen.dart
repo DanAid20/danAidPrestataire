@@ -24,7 +24,7 @@ class AdherentPlanScreen extends StatelessWidget {
   final NavigationService _navigationService = locator<NavigationService>();
   @override
   Widget build(BuildContext context) {
-    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context);
     return SafeArea(
       top: false,
       bottom: false,
@@ -44,7 +44,7 @@ class AdherentPlanScreen extends StatelessWidget {
                         options: CarouselOptions(
                           height: hv*65,
                           enlargeCenterPage: true,
-                          viewportFraction: .6,
+                          viewportFraction: .7,
                         ),
                         items: [
                           PackageCard(
@@ -56,7 +56,7 @@ class AdherentPlanScreen extends StatelessWidget {
                               titleColor: kSouthSeas,
                               content: "Accédez au réseau DanAid et gagnez des points que vous pourrez utiliser pour vous soigner",
                               level: "0",
-                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
+                              iconUrl: 'assets/icons/Bulk/Heart.svg',
                               mSize: _mSize,
                               action: (){
                                 adherentProvider.setAdherentPlan(0);
@@ -158,7 +158,7 @@ class PackageCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height(size: 180),
-      width: width(size: 250),
+      width: wv*70,
       //padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
       margin: EdgeInsets.symmetric(horizontal: horizontal(size: 5), vertical: vertical(size: 5)),
       decoration: BoxDecoration(
@@ -193,7 +193,7 @@ class PackageCard extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: hv*4),
-                    padding: EdgeInsets.symmetric(horizontal: wv*2),
+                    padding: EdgeInsets.symmetric(horizontal: wv*5),
                     child: Text(content, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: wv*3.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                 ],

@@ -49,6 +49,72 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
     }
   }
 
+  Map availability = {
+    "monday to friday": {
+      "available": true,
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
+    },
+    "saturday": {
+      "available": false,
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
+    },
+    "sunday": {
+      "available": false,
+      "start": DateTime(2000, 1, 1, 8, 0),
+      "end": DateTime(2000, 1, 1, 16, 0)
+    },
+  };
+
+  initAvailability(){
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    if(doctorProvider.getDoctor.availability != null){
+      Map avail = doctorProvider.getDoctor.availability;
+      if(avail["monday to friday"]["start"] is Timestamp){
+        setState(() {
+          availability = {
+              "monday to friday": {
+                "available": avail["monday to friday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].toDate().hour, avail["monday to friday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].toDate().hour, avail["monday to friday"]["end"].toDate().minute)
+              },
+              "saturday": {
+                "available": avail["saturday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["saturday"]["start"].toDate().hour, avail["saturday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["saturday"]["end"].toDate().hour, avail["saturday"]["end"].toDate().minute)
+              },
+              "sunday": {
+                "available": avail["sunday"]["available"],
+                "start": DateTime(2000, 1, 1, avail["sunday"]["start"].toDate().hour, avail["sunday"]["start"].toDate().minute),
+                "end": DateTime(2000, 1, 1, avail["sunday"]["end"].toDate().hour, avail["sunday"]["end"].toDate().minute)
+              },
+            };
+        });
+      } else {
+        setState(() {
+          availability = {
+            "monday to friday": {
+              "available": avail["monday to friday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].hour, avail["monday to friday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].hour, avail["monday to friday"]["end"].minute)
+            },
+            "saturday": {
+              "available": avail["saturday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["saturday"]["start"].hour, avail["saturday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["saturday"]["end"].hour, avail["saturday"]["end"].minute)
+            },
+            "sunday": {
+              "available": avail["sunday"]["available"],
+              "start": DateTime(2000, 1, 1, avail["sunday"]["start"].hour, avail["sunday"]["start"].minute),
+              "end": DateTime(2000, 1, 1, avail["sunday"]["end"].hour, avail["sunday"]["end"].minute)
+            },
+          };
+        });
+      }
+    }
+  }
+
   @override
   void initState() {
     loadDoctor();
@@ -74,6 +140,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                     return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
                   }
                   DoctorModel doctor = DoctorModel.fromDocument(snapshot.data);
+                  Map availability = doctor.availability;
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*3),
                     decoration: BoxDecoration(
@@ -297,33 +364,33 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text("Horaire", style: TextStyle(fontWeight: FontWeight.w800)),
-                                                  Container(
+                                                  availability["monday to friday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Expanded(child: Text("Lundi à Vendredi")),
-                                                        Text("08H00 - 16H00"),
+                                                        Text("${availability["monday to friday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["monday to friday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
-                                                  ),
-                                                  Container(
+                                                  ) : Container(),
+                                                  availability["saturday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Text("Samedi"),
-                                                        Text("08H00 - 16H00"),
+                                                        Text("${availability["saturday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["saturday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["saturday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["saturday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
-                                                  ),
-                                                  Container(
+                                                  ) : Container(),
+                                                  availability["sunday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Text("Dimanche"),
-                                                        Text("08H00 - 16H00"),
+                                                        Text("${availability["sunday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["sunday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["sunday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["sunday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
-                                                  ),
+                                                  ) : Container(),
 
                                                   SizedBox(height: 10,),
 
@@ -369,12 +436,15 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       ),
                                       SizedBox(height: 15,),
                                       Container(
-                                        height: hv*10,
-                                        child: GoogleMap(
-                                          onMapCreated: _onMapCreated,
-                                          initialCameraPosition: CameraPosition(
-                                            target: doctor.location == null ? _center : LatLng(doctor.location["latitude"], doctor.location["longitude"]),
-                                            zoom: 11.0,
+                                        height: hv*13,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                          child: GoogleMap(
+                                            onMapCreated: _onMapCreated,
+                                            initialCameraPosition: CameraPosition(
+                                              target: doctor.location == null ? _center : LatLng(doctor.location["latitude"], doctor.location["longitude"]),
+                                              zoom: 11.0,
+                                            ),
                                           ),
                                         ),
                                       )

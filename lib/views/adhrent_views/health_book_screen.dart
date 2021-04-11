@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HealthBookScreen extends StatefulWidget {
   @override
@@ -123,10 +126,14 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
               TextButton(
                 child: Text("Se Déconnecter"),
                 onPressed: () async {
-                  //HiveDatabase.setSignInState(true);
+                  AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
+                  UserProvider user = Provider.of<UserProvider>(context, listen: false);
+                  user.setUserId(null);
+                  user.setProfileType(null);
+                  adherent.setAdherentId(null);
                   HiveDatabase.setRegisterState(false);
                   FirebaseAuth.instance.signOut();
-                  Navigator.pushReplacementNamed(context, '/splash');
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],),
