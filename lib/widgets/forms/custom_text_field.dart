@@ -59,14 +59,15 @@ class CustomTextField extends StatelessWidget {
               ),
               !enabled ?
                 Positioned(
-                  right: wv*2,
-                  child: GestureDetector(
-                    onTap: editAction,
-                    child: CircleAvatar(
+                  right: wv*0,
+                  child: IconButton(
+                    enableFeedback: false,
+                    icon: CircleAvatar(
                         radius: wv*3.5,
                         backgroundColor: kDeepTeal,
                         child: Icon(Icons.edit, color: whiteColor, size: wv*4,),
                       ),
+                    onPressed: editAction,
                   ),
                 ) : Container()
             ],

@@ -50,6 +50,7 @@ class _HomePageViewState extends State<HomePageView> {
         }
     } else {
       String phone = await HiveDatabase.getAuthPhone();
+      userProvider.setUserId(phone);
       if(adherentModelProvider.getAdherent != null){
           //
         }
@@ -61,21 +62,29 @@ class _HomePageViewState extends State<HomePageView> {
         }
     }
   }
+
   loadDoctorProfile() async {
     DoctorModelProvider doctorModelProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
-      if(doctorModelProvider.getDoctor != null){
-          //
-        }
-        else {
-          FirebaseFirestore.instance.collection('MEDECINS').doc(userProvider.getUserId).get().then((docSnapshot) {
-            DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
-            doctorModelProvider.setDoctorModel(doc);
-          });
-        }
+      
+      /*if((doctorModelProvider.getDoctor != null) & (doctorModelProvider.getDoctor.id == userProvider.getUserId)) {
+          print("ok");
+          return;
+      }*/
+        print("iiiin1"+userProvider.getUserId.toString());
+        FirebaseFirestore.instance.collection('MEDECINS').doc(userProvider.getUserId).get().then((docSnapshot) {
+          DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
+          doctorModelProvider.setDoctorModel(doc);
+        print("ok");
+          userProvider.setUserId(doc.id);
+        });
+
     } else {
+          print("iiiiin2");
       String phone = await HiveDatabase.getAuthPhone();
+      print("inside");
+      print("inside"+phone.toString());
       if(doctorModelProvider.getDoctor != null){
           //
         }
@@ -83,6 +92,7 @@ class _HomePageViewState extends State<HomePageView> {
           FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get().then((docSnapshot) {
              DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
             doctorModelProvider.setDoctorModel(doc);
+            userProvider.setUserId(doc.id);
           });
         }
     }

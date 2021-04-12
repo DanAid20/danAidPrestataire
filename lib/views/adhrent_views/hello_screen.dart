@@ -80,8 +80,7 @@ class _HelloScreenState extends State<HelloScreen>
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     //AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(

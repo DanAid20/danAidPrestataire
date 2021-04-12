@@ -419,31 +419,34 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             SizedBox(height: hv*1.5,),
             CustomTextField(
               label: "Nom de l'hôpital'",
-              hintText: "ex: Pédiatre",
+              hintText: "ex: Hôpitale Générale",
               controller: _mOfficeNameController,
               validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
             ),
             SizedBox(height: hv*1.5,),
-            LocationDropdown(
-              city: _officeCity,
-              stateCode: _officeStateCode,
-              cityChosen: _officeCityChosen,
-              regionChosen: _officeRegionChosen,
-              regionOnChanged: (value) async {
+            Padding(
+              padding: EdgeInsets.all(wv*3),
+              child: LocationDropdown(
+                city: _officeCity,
+                stateCode: _officeStateCode,
+                cityChosen: _officeCityChosen,
+                regionChosen: _officeRegionChosen,
+                regionOnChanged: (value) async {
+                  setState(() {
+                    _officeStateCode = value;
+                    _officeRegion = Algorithms.getRegionFromStateCode(regions, value);
+                    _officeCity = null;
+                    _officeCityChosen = false;
+                    _officeRegionChosen = true;
+                  });
+                },
+              cityOnChanged: (value) {
                 setState(() {
-                  _officeStateCode = value;
-                  _officeRegion = Algorithms.getRegionFromStateCode(regions, value);
-                  _officeCity = null;
-                  _officeCityChosen = false;
-                  _officeRegionChosen = true;
+                  _officeCity = value;
+                  _officeCityChosen = true;
                 });
               },
-            cityOnChanged: (value) {
-              setState(() {
-                _officeCity = value;
-                _officeCityChosen = true;
-              });
-            },
+              ),
             ),
             SizedBox(height: hv*1.5,),
             Padding(
@@ -594,6 +597,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
   }
 
   Future uploadImageToFirebase(PickedFile file) async {
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
 
     if (file == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
@@ -626,6 +630,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
     storageUploadTask.whenComplete(() async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
       String url = await storageReference.getDownloadURL();
+      doctorProvider.setImgUrl(url);
       avatarUrl = url;
       print("download url: $url");
       //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));

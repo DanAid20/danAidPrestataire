@@ -92,7 +92,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   bool otherFileUploaded = false;
   bool cniSpinner = false;
   bool otherFileSpinner = false;
-  bool imageSpinner = false;
+  bool imageSpinner;
   bool positionSpinner = false;
 
   String _category;
@@ -334,6 +334,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
   @override
   void initState() {
+    imageSpinner = false;
     initAvailability();
     initRegionDropdown();
     initOfficeRegionDropdown();
@@ -372,11 +373,6 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                     ),
                       //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                   ),
-                  imageSpinner ? Positioned(
-                    top: hv*7,
-                    right: wv*13,
-                    child: CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
-                  ) : Container(),
                   Positioned(
                     bottom: 2,
                     right: 5,
@@ -389,7 +385,13 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         onPressed: (){FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera);}
                       ),
                     ),
-                  )
+                  ),
+                  
+                  imageSpinner ? Positioned(
+                    top: hv*7,
+                    right: wv*13,
+                    child: CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
+                  ) : Container(),
                 ],),
               ),
             ], alignment: AlignmentDirectional.topCenter,),
@@ -515,7 +517,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*2.5,),
+                      SizedBox(height: hv*3.5,),
                       (gpsCoords != null) | (doctorProvider.getDoctor.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -1046,7 +1048,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                       .then((value) async {
 
                                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
-                                        Navigator.pop(context);
+                                        Navigator.pop(context, (value) {
+                                          setState(() {});
+                                        });
                                         setState(() {
                                           buttonLoading = false;
                                         });
@@ -1080,10 +1084,14 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         child: TextButton(
                           child: Text("Se Déconnecter"),
                           onPressed: () async {
-                            //HiveDatabase.setSignInState(true);
+                            DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+                            UserProvider user = Provider.of<UserProvider>(context, listen: false);
+                            user.setUserId(null);
+                            user.setProfileType(null);
+                            doctorProvider.setDoctorId(null);
                             HiveDatabase.setRegisterState(false);
                             FirebaseAuth.instance.signOut();
-                            Navigator.pushReplacementNamed(context, '/splash');
+                            Navigator.pushReplacementNamed(context, '/login');
                           },
                         ),
                       ),
@@ -1284,9 +1292,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    setState(() {
-      imageSpinner = true;
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+        imageSpinner = true;
+    }));
     String fileName = userProvider.getUserId;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_Medecins/$fileName');
@@ -1308,46 +1316,55 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
       String url = await storageReference.getDownloadURL();
       doctorProvider.setImgUrl(url);
+      FirebaseFirestore.instance.collection(doctor+"S")
+        .doc(doctorProvider.getDoctor.id)
+        .update({
+          "urlImage": url,
+        }).then((value) {
+          FirebaseFirestore.instance.collection("USERS")
+            .doc(doctorProvider.getDoctor.id)
+            .update({
+              "imageUrl": url,
+            });
+        });
       avatarUrl = url;
       print("download url: $url");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
     });
-    setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
       imageSpinner = false;
-    });
+    }));
   }
 
   Future getImageFromGallery() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
-    setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
       if (pickedFile != null) {
         imageFileAvatar = File(pickedFile.path);
-        setState(() {
-          imageSpinner = true;
-        });
+        imageSpinner = true;
         //imageLoading = true;
       } else {
         print('No image selected.');
       }
-    });
+    }));
     uploadImageToFirebase(pickedFile);
   }
 
   Future getImageFromCamera() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera, imageQuality: 50);
-    setState(() {
-      if (pickedFile != null) {
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+        imageSpinner = true;
+      }));
+      setState(() {
         imageFileAvatar = File(pickedFile.path);
-        setState(() {
-          imageSpinner = true;
-        });
-        //imageLoading = true;
-      } else {
-        print('No image selected.');
-      }
-    });
+      });
+    } else {
+      print('No image selected.');
+    }
+    
     uploadImageToFirebase(pickedFile);
   }
 }

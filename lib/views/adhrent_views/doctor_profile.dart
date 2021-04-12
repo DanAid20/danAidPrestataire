@@ -47,7 +47,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     },
   };
 
-  initAvailanility(){
+  initAvailability(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     if(doctorProvider.getDoctor.availability != null){
       Map avail = doctorProvider.getDoctor.availability;
@@ -97,6 +97,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   @override
   void initState() {
+    initAvailability();
     // TODO: implement initState
     super.initState();
   }
@@ -104,19 +105,19 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
+    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context);
+    DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     return WillPopScope(
       onWillPop: () async {
-        controller.setIndex(1);
+        (adherentModelProvider.getAdherent != null) ? (adherentModelProvider.getAdherent.adherentId == userProvider.getUserId) ? Navigator.pop(context) : controller.setIndex(1) : controller.setIndex(1);
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>controller.setIndex(1)),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> (adherentModelProvider.getAdherent != null) ? (adherentModelProvider.getAdherent.adherentId == userProvider.getUserId) ? Navigator.pop(context) : controller.setIndex(1) : controller.setIndex(1),),
           actions: [
             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
           ],
@@ -159,8 +160,19 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 ),
                                 child: CircleAvatar(
                                     backgroundColor: Colors.grey,
-                                    backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
-                                    radius: 35,
+                                    //backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
+                                    child: ClipOval(
+                                      child: CachedNetworkImage(
+                                        height: wv*16,
+                                        width: wv*16,
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => Container(
+                                          child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                                          padding: EdgeInsets.all(20.0),
+                                        ),
+                                        imageUrl: doctor.getDoctor.avatarUrl,),
+                                    ),
+                                    radius: wv*8,
                                 ),
                               ),
                               SizedBox(width: 8,),
@@ -240,7 +252,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                           ],
                         ),
 
-                        Row(crossAxisAlignment: CrossAxisAlignment.start,
+                        doctor.getDoctor.serviceList != null ? Row(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: ListTile(
@@ -269,7 +281,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               ),
                             ),
                           ],
-                        ),
+                        ): Container(),
                         SizedBox(height: 5,),
                       ],),
                     ),

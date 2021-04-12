@@ -287,11 +287,13 @@ class _LoginViewState extends State<LoginView> {
       if(registered == false){
         Navigator.pushNamed(context, '/profile-type');
       } else {
-        HiveDatabase.setRegisterState(true);
+        /*HiveDatabase.setRegisterState(true);
         HiveDatabase.setSignInState(true);
         HiveDatabase.setAuthPhone(userProvider.getUserId);
+        print("profile");
+        print(profile);
         (profile == doctor) ? HiveDatabase.setProfileType(doctor) : (profile == adherent) ? HiveDatabase.setProfileType(adherent) : HiveDatabase.setProfileType(serviceProvider);
-        (profile == "MEDECIN") ? Navigator.pushReplacementNamed(context, '/home') : Navigator.pushReplacementNamed(context, '/home');
+        (profile == "MEDECIN") ? Navigator.pushReplacementNamed(context, '/home') : Navigator.pushReplacementNamed(context, '/home');*/
       }
     };
 

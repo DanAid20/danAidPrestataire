@@ -1,4 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -302,8 +306,20 @@ class _OtpViewState extends State<OtpView> {
         setState(() {
           load = false;
         });
-        (profile == doctor) ? HiveDatabase.setProfileType(doctor) : (profile == adherent) ? HiveDatabase.setProfileType(adherent) : HiveDatabase.setProfileType(serviceProvider);
-        (profile == doctor) ? Navigator.pushReplacementNamed(context, '/home') : Navigator.pushReplacementNamed(context, '/home');
+        print("profile");
+        print(profile);
+        if (profile == doctor) {
+          HiveDatabase.setProfileType(doctor);
+          userProvider.setProfileType(doctor);
+        }
+        else if (profile == adherent) {
+          HiveDatabase.setProfileType(adherent);
+          userProvider.setProfileType(adherent);
+        }
+        else {
+          //
+        }
+        Navigator.pushReplacementNamed(context, '/home');
       }
       showSnackbar("Successfully signed in UID: ${user.uid}");
     }).catchError((e){
