@@ -683,7 +683,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                           "regionDorigione": _region
                         }, SetOptions(merge: true))
                         .then((value) async {
-                          print(gpsCoords["latitude"].toString()+ "Laaaaaaat");
                           await FirebaseFirestore.instance.collection("ADHERENTS")
                             .doc(adherentProvider.getAdherent.getAdherentId)
                             .set({

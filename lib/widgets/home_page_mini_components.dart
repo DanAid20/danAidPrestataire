@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/gestures.dart';
@@ -371,6 +372,55 @@ class HomePageComponents {
       width: wv * 0.5,
       height: wv * 8,
       color: Colors.grey.withOpacity(0.4),
+    );
+  }
+
+  static beneficiaryCard({String name, String imgUrl, Function action}){
+    return Container(
+      width: wv*25,
+      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(name, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+          Stack(
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: wv*1),
+                height: hv*18, width: wv*25,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
+                  color: kSouthSeas.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [BoxShadow(color: Colors.grey, spreadRadius: 2.0, blurRadius: 2.0, offset: Offset(0, 1))]
+                ),
+              ),
+              Positioned(
+                bottom: hv*0,
+                child: IconButton(padding: EdgeInsets.all(0),
+                  icon: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,), 
+                  onPressed: action
+                ),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  static accountParameters({String title, String subtitle, String svgIcon, Function action}){
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.0),
+      child: ListTile(
+        title: Padding(
+          padding: EdgeInsets.only(bottom: 5.0),
+          child: Text(title, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: wv*4)),
+        ),
+        subtitle: Row(children: [
+          SvgPicture.asset(svgIcon, color: kSouthSeas, width: wv*7,), SizedBox(width: wv*2,),
+          Expanded(child: Text(subtitle, style: TextStyle(color: kPrimaryColor), overflow: TextOverflow.fade,))
+        ],),
+        trailing: TextButton(onPressed: action, child: Text("Modifier..", style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
+      ),
     );
   }
 }

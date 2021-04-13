@@ -42,3 +42,4 @@ const kDeepTeal = Color(0xFF05837C);
 const kBrownCanyon = Color(0xFFAE9284);
 const kSmoothBrown = Color(0xFFDFD3CE);
 const kBlueForce = Color(0xFF235383);
+const kBlueDeep = Color(0xFF0075AA);
