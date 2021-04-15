@@ -104,12 +104,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                                 physics: BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 children: [
-                                  HomePageComponents.beneficiaryCard(name: "Nathan Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Nathan Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Nathan Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Nathan Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Nathan Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Nathan Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
+                                  HomePageComponents.beneficiaryCard(name: "Nathaniel Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
+                                  HomePageComponents.beneficiaryCard(name: "Emmanuel Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
+                                  HomePageComponents.beneficiaryCard(name: "Simmon Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
+                                  HomePageComponents.beneficiaryCard(name: "Christophe Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
                                 ],
                               ),
                             ),
@@ -119,7 +117,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       Positioned(
                         right: wv*0, bottom: hv*8,
                         child: IconButton(
-                          onPressed: (){},
+                          onPressed: (){ Navigator.pushNamed(context, '/add-beneficiary'); },
                           icon: CircleAvatar(
                             backgroundColor: kPrimaryColor,
                             radius: wv*4,

@@ -1,3 +1,4 @@
+import 'package:danaid/views/adhrent_views/add_beneficiary_form.dart';
 import 'package:danaid/views/auths_views/adherent_form.dart';
 import 'package:danaid/views/auths_views/login_view.dart';
 import 'package:danaid/views/auths_views/otp_view.dart';
@@ -33,6 +34,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/profile-type-sprovider": (context) => ServiceProviderForm(),
   "/adherent-profile-edit": (context) => ProfileEdit(),
   "/doctor-profile": (context) => DoctorProfilePage(),
+  "/add-beneficiary": (context) => AddBeneficiaryForm(),
 
   /**
    * Start section routes that concern the doctor activities in the
