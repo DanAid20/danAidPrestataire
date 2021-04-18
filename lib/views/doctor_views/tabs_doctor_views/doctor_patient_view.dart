@@ -111,10 +111,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 ),
                 displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
-                    title: 'Ajouter un Patient'),
+                    title: 'Suivre mes paiements'),
                 displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
-                    title: 'Ajouter un Patient'),
+                    title: 'Mes Messages'),
               ],
             ),
           ),
