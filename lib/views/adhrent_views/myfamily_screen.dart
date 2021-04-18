@@ -52,7 +52,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                   action: (){}
                 );
             }
-          ) : Center(child: Text("Aucun medecin disponible pour le moment.."),)
+          ) : Center(child: Text("Vous n'avez pas encore ajouté de bénéficiaire..", style: TextStyle(color: kTextBlue, fontSize: wv*4.5)),)
             ),
           ],
         );
