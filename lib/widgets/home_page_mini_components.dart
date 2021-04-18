@@ -4,6 +4,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:line_icons/line_icons.dart';
 
 import '../helpers/constants.dart';
 import '../helpers/styles.dart';
@@ -384,19 +385,25 @@ class HomePageComponents {
           Stack(
             children: [
               Container(
-                margin: EdgeInsets.only(right: wv*1),
+                margin: EdgeInsets.only(right: wv*2),
                 height: hv*18, width: wv*25,
                 decoration: BoxDecoration(
                   image: DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
-                  color: kSouthSeas.withOpacity(0.5),
+                  color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: [BoxShadow(color: Colors.grey, spreadRadius: 2.0, blurRadius: 2.0, offset: Offset(0, 1))]
+                  boxShadow: [BoxShadow(color: Colors.black45, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
                 ),
+                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.white, size: wv*25,) : Container(),
               ),
               Positioned(
                 bottom: hv*0,
                 child: IconButton(padding: EdgeInsets.all(0),
-                  icon: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,), 
+                  icon: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
+                    ),
+                    child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
                   onPressed: action
                 ),
               )

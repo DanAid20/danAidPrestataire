@@ -5,7 +5,7 @@ class BeneficiaryModel{
   String matricule, marriageCertificateName, adherentId, otherDocName, surname, familyName, cniName, gender, otherInfo, relationShip, cniUrl, marriageCertificateUrl, otherDocUrl, birthCertificateUrl, avatarUrl, bloodGroup;
   bool enabled, livesInSameHouse;
   Timestamp dateCreated, validityEndDate, birthDate;
-  Map phoneList;
+  List phoneList;
   List allergies;
   double height, weight;
 

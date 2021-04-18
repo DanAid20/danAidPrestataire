@@ -1,4 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/beneficiaryModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -14,9 +17,52 @@ class MyFamilyScreen extends StatefulWidget {
 }
 
 class _MyFamilyScreenState extends State<MyFamilyScreen> {
+
+  getBeneficiary(){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData){
+          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
+        }
+        print(snapshot.data.toString() + "rfrfr");
+        return Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(text: TextSpan(
+              text: "Bénéficiaires\n",
+              children: [
+                TextSpan(text: snapshot.data.docs.length.toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
+              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*5)),
+            ),
+            SizedBox(height: hv*2,),
+            Container(
+              height: hv*22,
+              child: snapshot.data.docs.length >= 1 ? ListView.builder(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (context, index){
+                DocumentSnapshot doc = snapshot.data.docs[index];
+                BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+                print("name: ");
+                return HomePageComponents.beneficiaryCard(
+                  name: beneficiary.surname, 
+                  imgUrl: beneficiary.avatarUrl, 
+                  action: (){}
+                );
+            }
+          ) : Center(child: Text("Aucun medecin disponible pour le moment.."),)
+            ),
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
@@ -33,7 +79,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                   children: [
                     Text("12 000 Pts", style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),),
                     SizedBox(width: wv*2,),
-                    ((adherentProvider.getAdherentPlan == 1) | (adherentProvider.getAdherentPlan == 2) | (adherentProvider.getAdherentPlan == 3)) ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
+                    ((adherentProvider.getAdherent.adherentPlan == 1) | (adherentProvider.getAdherent.adherentPlan == 2) | (adherentProvider.getAdherent.adherentPlan == 3)) ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
                     SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
                   ],
                 ),
@@ -89,30 +135,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                           color: kSouthSeas.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(15)
                         ),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(text: TextSpan(
-                              text: "Bénéficiaires\n",
-                              children: [
-                                TextSpan(text: "6 personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
-                              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*5)),
-                            ),
-                            SizedBox(height: hv*2,),
-                            Container(
-                              height: hv*22,
-                              child: ListView(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  HomePageComponents.beneficiaryCard(name: "Nathaniel Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Emmanuel Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Simmon Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                  HomePageComponents.beneficiaryCard(name: "Christophe Amombang", imgUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1JeMLIY19gnJzUBlyffJ-l4uCbjYJem11Qg&usqp=CAU", action: (){}),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: getBeneficiary(),
                       ),
                       Positioned(
                         right: wv*0, bottom: hv*8,
