@@ -9,13 +9,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Function validator;
-  final Widget prefixIcon;
+  final Widget prefixIcon, suffixIcon;
   final bool enabled;
   final bool multiLine;
   final Function editAction;
   final List<TextInputFormatter> inputFormatters;
 
-  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false}) : super(key: key);
+  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,7 +54,7 @@ class CustomTextField extends StatelessWidget {
                   ),
                   hintText: hintText,
                   hintStyle: TextStyle(color: Colors.grey),
-                  suffixIcon: svgIcon != null ? SvgPicture.asset(svgIcon, height: wv*4, color: Colors.teal,) : null,
+                  suffixIcon: suffixIcon != null ? suffixIcon : svgIcon != null ? SvgPicture.asset(svgIcon, height: wv*4, color: Colors.teal,) : null,
                 ),
               ),
               !enabled ?
