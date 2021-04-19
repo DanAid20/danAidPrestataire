@@ -17,7 +17,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return Column(children: [
       Container(
         width: wv * 100,
-        height: hv * 15,
+        height: hv * 21,
         decoration: BoxDecoration(
           color: kThirdIntroColor,
           boxShadow: [
@@ -113,87 +113,96 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
           ],
         ),
       ),
-      Container(
-        width: wv * 100,
-        color: Colors.white,
-        child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(children: [
-            timeline(
-              age: '16 ans',
-              consultationDetails: 'Tous et fievre depuis 3 jours',
-              consultationType: 'Nouvelle Consultation',
-              time: '09:30',
-              userImage: 'assets/images/sarahHamidou.png',
-              userName: 'Sarah Amidou',
-            ),
-            timeline(
-              age: '61 ans',
-              consultationDetails: 'J’ai des douleurs à la cheville ',
-              consultationType: 'Suivi',
-              time: '09:30',
-              userImage: 'assets/images/sarahHamidou.png',
-              userName: 'Telesphore Babianou',
-            ),
-            timeline(
-              age: '61 ans',
-              consultationDetails: 'Tous et fievre depuis 3 jours',
-              consultationType: 'Nouvelle Consultation',
-              time: '09:30',
-              userImage: 'assets/images/sarahHamidou.png',
-              userName: 'Sarah Amidou',
-            )
-          ]),
-        ),
-      ),
-      Container(
-        width: wv * 100,
-        height: hv * 13,
-        decoration: BoxDecoration(
+      Stack(children: [
+        Container(
+          width: wv * 100,
           color: Colors.white,
-        ),
-        margin: EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: hv * 0.5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-              margin:
-                  EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: hv * 0),
-              child: Row(
-                children: [
-                  Text("Salle d'attente ",
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontWeight: FontWeight.w500,
-                        fontSize: fontSize(size: wv * 5),
-                      )),
-                  Text("Voir plus..",
-                      style: TextStyle(
-                          color: kBrownCanyon,
-                          fontWeight: FontWeight.w700,
-                          fontSize: fontSize(size: wv * 5))),
-                ],
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
+            children: [
+              Container(
+                child: SingleChildScrollView(
+                  physics: NeverScrollableScrollPhysics(),
+                  child: Column(children: [
+                    timeline(
+                      age: '16 ans',
+                      consultationDetails: 'Tous et fievre depuis 3 jours',
+                      consultationType: 'Nouvelle Consultation',
+                      time: '09:30',
+                      userImage: 'assets/images/sarahHamidou.png',
+                      userName: 'Sarah Amidou',
+                    ),
+                    timeline(
+                      age: '61 ans',
+                      consultationDetails: 'J’ai des douleurs à la cheville ',
+                      consultationType: 'Suivi',
+                      time: '09:30',
+                      userImage: 'assets/images/sarahHamidou.png',
+                      userName: 'Telesphore Babianou',
+                    ),
+                    timeline(
+                      age: '61 ans',
+                      consultationDetails: 'Tous et fievre depuis 3 jours',
+                      consultationType: 'Nouvelle Consultation',
+                      time: '09:30',
+                      userImage: 'assets/images/sarahHamidou.png',
+                      userName: 'Sarah Amidou',
+                    ),
+                  ]),
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: [
-                  waitingRoomListOfUser(),
-                  waitingRoomListOfUser(),
-                  waitingRoomListOfUser(),
-                  waitingRoomListOfUser(),
-                  waitingRoomListOfUser(),
-                ],
+              new Container(
+                width: wv * 100,
+                height: hv * 15,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                margin: EdgeInsets.only(
+                    left: wv * 1.5, right: wv * 1.5, top: hv * 0.5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: wv * 1.5, right: wv * 1.5, top: hv * 0),
+                      child: Row(
+                        children: [
+                          Text("Salle d'attente ",
+                              style: TextStyle(
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: fontSize(size: wv * 5),
+                              )),
+                          Text("Voir plus..",
+                              style: TextStyle(
+                                  color: kBrownCanyon,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: fontSize(size: wv * 5))),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          waitingRoomListOfUser(),
+                          waitingRoomListOfUser(),
+                          waitingRoomListOfUser(),
+                          waitingRoomListOfUser(),
+                          waitingRoomListOfUser(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      ]),
     ]);
   }
 

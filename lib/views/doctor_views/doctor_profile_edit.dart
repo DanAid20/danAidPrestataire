@@ -92,7 +92,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   bool otherFileUploaded = false;
   bool cniSpinner = false;
   bool otherFileSpinner = false;
-  bool imageSpinner;
+  bool imageSpinner = false;
   bool positionSpinner = false;
 
   String _category;
@@ -334,7 +334,6 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
   @override
   void initState() {
-    imageSpinner = false;
     initAvailability();
     initRegionDropdown();
     initOfficeRegionDropdown();
@@ -1340,7 +1339,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
   Future getImageFromGallery() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+    setState(() {
       if (pickedFile != null) {
         imageFileAvatar = File(pickedFile.path);
         imageSpinner = true;
@@ -1348,16 +1347,16 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       } else {
         print('No image selected.');
       }
-    }));
+    });
     uploadImageToFirebase(pickedFile);
   }
 
   Future getImageFromCamera() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
     if (pickedFile != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+      setState(() {
         imageSpinner = true;
-      }));
+      });
       setState(() {
         imageFileAvatar = File(pickedFile.path);
       });

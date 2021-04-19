@@ -111,7 +111,7 @@ class _OtpViewState extends State<OtpView> {
                         buildTimer(),
                         otpForm(),
                         //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
-                        false 
+                        false //!(pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty)
                           ? CustomDisabledTextButton(text: "Validez le code",)
                           : load ? Center(child: Loaders().buttonLoader(kPrimaryColor))
                             : CustomTextButton(

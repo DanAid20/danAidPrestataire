@@ -3,49 +3,98 @@ import 'package:danaid/core/models/doctorModel.dart';
 import 'adherentFacturationModel.dart';
 
 class AdherentModel {
-  String adherentId, familyDoctorId, cniName, otherDocName, marriageCertificateName, familyName, surname, matricule, imgUrl, gender, email, profession, regionOfOrigin, marriageCertificateUrl, otherJustificativeDocsUrl, officialDocUrl, town, profileType, address;
+  String adherentId,
+      familyDoctorId,
+      cniName,
+      otherDocName,
+      marriageCertificateName,
+      familyName,
+      surname,
+      matricule,
+      imgUrl,
+      gender,
+      email,
+      profession,
+      regionOfOrigin,
+      marriageCertificateUrl,
+      otherJustificativeDocsUrl,
+      officialDocUrl,
+      town,
+      profileType,
+      address;
   Timestamp dateCreated, validityEndDate, birthDate;
   int adherentPlan;
-  bool paymentIsMobile, profileEnabled, isMarried;
+  bool paymentIsMobile, profileEnabled, isMarried, enable;
   var phoneList;
   List<AdherentBillModel> adherentNewBill;
   Map location;
   DoctorModel familyDoctor;
 
-  AdherentModel({this.adherentId, this.familyDoctorId, this.familyDoctor, this.cniName, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
+  AdherentModel(
+      {this.adherentId,
+      this.familyDoctorId,
+      this.familyDoctor,
+      this.cniName,
+      this.enable,
+      this.otherDocName,
+      this.marriageCertificateName,
+      this.familyName,
+      this.surname,
+      this.matricule,
+      this.imgUrl,
+      this.gender,
+      this.email,
+      this.profession,
+      this.regionOfOrigin,
+      this.marriageCertificateUrl,
+      this.otherJustificativeDocsUrl,
+      this.officialDocUrl,
+      this.town,
+      this.profileType,
+      this.dateCreated,
+      this.validityEndDate,
+      this.birthDate,
+      this.paymentIsMobile,
+      this.profileEnabled,
+      this.isMarried,
+      this.phoneList,
+      this.adherentNewBill,
+      this.adherentPlan,
+      this.address,
+      this.location});
 
-  factory AdherentModel.fromDocument(DocumentSnapshot doc){
+  factory AdherentModel.fromDocument(DocumentSnapshot doc) {
     return AdherentModel(
-      adherentId: doc.id,
-      familyDoctorId: doc.data()["familyDoctorId"],
-      cniName: doc.data()["cniName"],
-      otherDocName: doc.data()["autrePieceName"],
-      marriageCertificateName: doc.data()["acteMariageName"],
-      familyName: doc.data()["nomFamille"],
-      surname: doc.data()["prenom"],
-      matricule: doc.data()["matricule"],
-      imgUrl: doc.data()["imageUrl"],
-      gender: doc.data()["genre"],
-      email: doc.data()["emailAdress"],
-      profession: doc.data()["profession"],
-      adherentPlan: doc.data()["protectionLevel"],
-      regionOfOrigin: doc.data()["regionDorigione"],
-      marriageCertificateUrl: doc.data()["urlActeMariage"],
-      otherJustificativeDocsUrl: doc.data()["urlAutrePiecesJustificatif"],
-      officialDocUrl: doc.data()["urlDocOficiel"],
-      town: doc.data()["ville"],
-      profileType: doc.data()["profil"],
-      dateCreated: doc.data()["createdDate"],
-      validityEndDate: doc.data()["datFinvalidite"],
-      birthDate: doc.data()["dateNaissance"],
-      paymentIsMobile: doc.data()["isRecptionPaiementMobile"],
-      profileEnabled: doc.data()["profilEnabled"],
-      isMarried: doc.data()["statuMatrimonialMarie"],
-      phoneList: doc.data()["phoneList"],
-      adherentNewBill: doc.data()["NEW_FACTURATIONS_ADHERENT"],
-      address: doc.data()["adresse"],
-      location: doc.data()["localisation"]
-    );
+        adherentId: doc.id,
+        familyDoctorId: doc.data()["familyDoctorId"],
+        cniName: doc.data()["cniName"],
+        otherDocName: doc.data()["autrePieceName"],
+        marriageCertificateName: doc.data()["acteMariageName"],
+        familyName: doc.data()["nomFamille"],
+        enable: doc.data()["enabled"],
+        surname: doc.data()["prenom"],
+        matricule: doc.data()["matricule"],
+        imgUrl: doc.data()["imageUrl"],
+        gender: doc.data()["genre"],
+        email: doc.data()["emailAdress"],
+        profession: doc.data()["profession"],
+        adherentPlan: doc.data()["protectionLevel"],
+        regionOfOrigin: doc.data()["regionDorigione"],
+        marriageCertificateUrl: doc.data()["urlActeMariage"],
+        otherJustificativeDocsUrl: doc.data()["urlAutrePiecesJustificatif"],
+        officialDocUrl: doc.data()["urlDocOficiel"],
+        town: doc.data()["ville"],
+        profileType: doc.data()["profil"],
+        dateCreated: doc.data()["createdDate"],
+        validityEndDate: doc.data()["datFinvalidite"],
+        birthDate: doc.data()["dateNaissance"],
+        paymentIsMobile: doc.data()["isRecptionPaiementMobile"],
+        profileEnabled: doc.data()["profilEnabled"],
+        isMarried: doc.data()["statuMatrimonialMarie"],
+        phoneList: doc.data()["phoneList"],
+        adherentNewBill: doc.data()["NEW_FACTURATIONS_ADHERENT"],
+        address: doc.data()["adresse"],
+        location: doc.data()["localisation"]);
   }
 
   String get getAdherentId => adherentId;
@@ -76,7 +125,7 @@ class AdherentModel {
   List<Map> get getPhoneList => phoneList;
   List<AdherentBillModel> get getAdherentNewBill => adherentNewBill;*/
 
-  void setAdherentId(String val){
+  void setAdherentId(String val) {
     this.adherentId = val;
   }
 }

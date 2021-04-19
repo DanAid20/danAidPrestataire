@@ -537,7 +537,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent.location["latitude"], adherentModelProvider.getAdherent.location["longitude"]), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent.location["latitude"] != null ? adherentModelProvider.getAdherent.location["latitude"] : _initialcameraposition.latitude, adherentModelProvider.getAdherent.location["longitude"] != null ? adherentModelProvider.getAdherent.location["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                 myLocationEnabled: true,
@@ -683,7 +683,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                           "regionDorigione": _region
                         }, SetOptions(merge: true))
                         .then((value) async {
-                          print(gpsCoords["latitude"].toString()+ "Laaaaaaat");
                           await FirebaseFirestore.instance.collection("ADHERENTS")
                             .doc(adherentProvider.getAdherent.getAdherentId)
                             .set({
