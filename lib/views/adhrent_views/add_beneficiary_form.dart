@@ -9,6 +9,7 @@ import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/health_book_screen.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
@@ -227,6 +228,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     Text("Numéro mobile", style: TextStyle(fontSize: wv*4),),
                     SizedBox(height: hv*1,),
                     InternationalPhoneNumberInput(
+                      validator: (String phone) {
+                        return (phone.isEmpty)
+                            ?  "Entrer un numero de téléphone valide" : null;
+                      },
                       onInputChanged: (PhoneNumber number) {
                         phone = number.phoneNumber;
                         print(number.phoneNumber);
@@ -361,7 +366,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     GestureDetector(
                       onTap: (){
                         setState(() {
-                          male = false; female = true; _gender = "F";
+                          _gender = "F"; male = false; female = true;
                         });
                       },
                       child: Container(
@@ -378,7 +383,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     GestureDetector(
                       onTap: (){
                         setState(() {
-                          male = true; female = false; _gender = "H";
+                          _gender = "H"; male = true; female = false;
                         });
                       },
                       child: Container(

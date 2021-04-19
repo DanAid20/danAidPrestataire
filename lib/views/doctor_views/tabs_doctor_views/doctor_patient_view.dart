@@ -1,9 +1,12 @@
+import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../../../locator.dart';
 
 class DoctorPatientView extends StatefulWidget {
   DoctorPatientView({Key key}) : super(key: key);
@@ -13,6 +16,7 @@ class DoctorPatientView extends StatefulWidget {
 }
 
 class _DoctorPatientViewState extends State<DoctorPatientView> {
+  final NavigationService _navigationService = locator<NavigationService>();
   Widget servicesList() {
     return Container(
       margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
@@ -25,7 +29,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               margin:
                   EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: hv * 3),
               width: wv * 90,
-              height: hv * 18,
+              height: hv * 20,
               decoration: BoxDecoration(
                 color: kThirdIntroColor,
                 boxShadow: [
@@ -93,19 +97,24 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               )),
           Container(
             margin: EdgeInsets.symmetric(vertical: 2.0),
-            height: hv * 15,
+            height: hv * 17,
             child: new ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                displsOtherServices(
-                    iconesUrl: 'assets/icons/Bulk/Add User.svg',
-                    title: 'Ajouter un Patient'),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/doctor-add-patient');
+                  },
+                  child: displsOtherServices(
+                      iconesUrl: 'assets/icons/Bulk/Add User.svg',
+                      title: 'Ajouter un Patient'),
+                ),
                 displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
-                    title: 'Ajouter un Patient'),
+                    title: 'Suivre mes paiements'),
                 displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
-                    title: 'Ajouter un Patient'),
+                    title: 'Mes Messages'),
               ],
             ),
           ),
@@ -118,9 +127,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     return Column(
       children: [
         Container(
-            margin: EdgeInsets.only(left: wv * 6, right: wv * 1.5, top: hv * 2),
+            margin: EdgeInsets.only(
+                left: wv * 6, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
             width: wv * 24,
-            height: hv * 10,
+            height: hv * 14,
             decoration: BoxDecoration(
               color: kThirdIntroColor,
               boxShadow: [
