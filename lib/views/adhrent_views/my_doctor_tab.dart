@@ -461,45 +461,47 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                 }
               ),
 
-              Divider(),
-
               Container(
-                margin: EdgeInsets.only(left: 15),
-                child: Text("Mes Rendez-vous", style: TextStyle(color: Colors.teal[400], fontSize: 17),)
-              ),
-              Column(
-                children: [
-                  HomePageComponents().getMyDoctorAppointmentTile(
-                    doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
-                    date: "Mercredi, 18 février 2021, 10:30",
-                    state: 0,
-                    type: "Consultation",
-                    label: "Contrôle"
-                  ),
-                  HomePageComponents().getMyDoctorAppointmentTile(
-                    doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
-                    date: "Lundi, 10 février 2021, 14:00",
-                    state: 1,
-                    type: "Télé-Consultation",
-                    label: "Résultat d'examens"
-                  ),
-                  HomePageComponents().getMyDoctorAppointmentTile(
-                    doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
-                    date: "Mercredi, 22 Janvier 2021, 08:00",
-                    state: 2,
-                    type: "Consultation",
-                    label: "Résultat d'examens"
-                  ),
-                  HomePageComponents().getMyDoctorAppointmentTile(
-                    doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
-                    date: "Mercredi, 10 février 2021, 10:30",
-                    state: 3,
-                    type: "Consultation",
-                    label: "Fièvre et toux depuis"
-                  ),
+                padding: EdgeInsets.symmetric(vertical: hv*2),
+                color: whiteColor,
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 15, bottom: hv*2),
+                      child: Text("Mes Rendez-vous", style: TextStyle(color: Colors.teal[400], fontSize: 17),)
+                    ),
+                    HomePageComponents().getMyDoctorAppointmentTile(
+                      doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
+                      date: "Mercredi, 18 février 2021, 10:30",
+                      state: 0,
+                      type: "Consultation",
+                      label: "Contrôle"
+                    ),
+                    HomePageComponents().getMyDoctorAppointmentTile(
+                      doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
+                      date: "Lundi, 10 février 2021, 14:00",
+                      state: 1,
+                      type: "Télé-Consultation",
+                      label: "Résultat d'examens"
+                    ),
+                    HomePageComponents().getMyDoctorAppointmentTile(
+                      doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
+                      date: "Mercredi, 22 Janvier 2021, 08:00",
+                      state: 2,
+                      type: "Consultation",
+                      label: "Résultat d'examens"
+                    ),
+                    HomePageComponents().getMyDoctorAppointmentTile(
+                      doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
+                      date: "Mercredi, 10 février 2021, 10:30",
+                      state: 3,
+                      type: "Consultation",
+                      label: "Fièvre et toux depuis"
+                    ),
 
-                  SizedBox(height: hv*7+20,),
-                ],
+                    SizedBox(height: hv*7+20,),
+                  ],
+                ),
               )
             ],)
             :

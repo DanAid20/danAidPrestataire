@@ -84,6 +84,7 @@ class _HelloScreenState extends State<HelloScreen>
     //AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey[100],
           body: NestedScrollView(
               floatHeaderSlivers: true,
               headerSliverBuilder:

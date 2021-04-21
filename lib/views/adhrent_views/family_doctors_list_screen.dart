@@ -18,7 +18,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
   String filter;
 
   Stream<QuerySnapshot> query =
-      FirebaseFirestore.instance.collection("MEDECINS").snapshots();
+      FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
 
   getDoctorsList() {
     AdherentModelProvider adherentProvider =

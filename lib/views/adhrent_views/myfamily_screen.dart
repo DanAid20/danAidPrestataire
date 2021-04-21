@@ -32,27 +32,38 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
             RichText(text: TextSpan(
               text: "Bénéficiaires\n",
               children: [
-                TextSpan(text: snapshot.data.docs.length.toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
+                TextSpan(text: (snapshot.data.docs.length++).toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
               ], style: TextStyle(color: kPrimaryColor, fontSize: wv*5)),
             ),
             SizedBox(height: hv*2,),
             Container(
               height: hv*22,
-              child: snapshot.data.docs.length >= 1 ? ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.docs.length,
-              itemBuilder: (context, index){
-                DocumentSnapshot doc = snapshot.data.docs[index];
-                BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-                print("name: ");
-                return HomePageComponents.beneficiaryCard(
-                  name: beneficiary.surname, 
-                  imgUrl: beneficiary.avatarUrl, 
-                  action: (){}
-                );
-            }
-          ) : Center(child: Text("Vous n'avez pas encore ajouté de bénéficiaire..", style: TextStyle(color: kTextBlue, fontSize: wv*4.5)),)
+              child: Row(
+                children: [
+                  HomePageComponents.beneficiaryCard(
+                    name: adherentProvider.getAdherent.surname,
+                    imgUrl: adherentProvider.getAdherent.imgUrl, 
+                    action: (){}
+                  ),
+                  snapshot.data.docs.length >= 1 ? Expanded(
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index){
+                        DocumentSnapshot doc = snapshot.data.docs[index];
+                        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+                        print("name: ");
+                        return HomePageComponents.beneficiaryCard(
+                          name: beneficiary.surname, 
+                          imgUrl: beneficiary.avatarUrl, 
+                          action: (){}
+                        );
+                      }
+                    ),
+                  ) : Container(),
+                ],
+              )
             ),
           ],
         );

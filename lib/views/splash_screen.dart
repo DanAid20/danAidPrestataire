@@ -38,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //print(phone + "phoone");
       userProvider.setUserId(phone);
       userProvider.setProfileType(profile);
-      (profile == doctor) ? Navigator.pushReplacementNamed(context, '/home') : Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home');
     }
     else {
       Navigator.pushReplacementNamed(context, '/intro-view');
