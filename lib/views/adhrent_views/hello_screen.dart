@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -81,7 +82,7 @@ class _HelloScreenState extends State<HelloScreen>
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    //AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.grey[100],
@@ -138,13 +139,13 @@ class _HelloScreenState extends State<HelloScreen>
                             child: Container(
                               child: Row(
                                 children: [
-                                  Text(
-                                    "12 000 Pts",
+                                  userProvider.getProfileType == adherent ? Text(
+                                    adherentProvider.getAdherent != null ? adherentProvider.getAdherent.visitPoints.toString()+" pts" ?? "0 pts" : "0 pts",
                                     style: TextStyle(
                                         fontSize: inch * 1.3,
                                         fontWeight: FontWeight.w700,
                                         color: Colors.teal[400]),
-                                  ),
+                                  ) : Container(),
                                   SizedBox(
                                     width: wv * 2,
                                   ),

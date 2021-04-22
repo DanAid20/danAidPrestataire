@@ -36,16 +36,66 @@ class _HomePageViewState extends State<HomePageView> {
 
   //int index = 1;
   loadAdherentprofile() async {
+
+    DateTime fullDate = DateTime.now();
+    DateTime date = DateTime(fullDate.year, fullDate.month, fullDate.day);
+
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
       if(adherentModelProvider.getAdherent != null){
-          //
+          String lastDateVisited = await HiveDatabase.getVisit();
+          if(lastDateVisited != null){
+            if(date.toString() != lastDateVisited.toString()){
+              FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
+                "visitPoints": FieldValue.increment(10),
+                "visits": FieldValue.arrayUnion([date]),
+                "lastDateVisited": date,
+              }, SetOptions(merge: true));
+              HiveDatabase.setVisit(date);
+              adherentModelProvider.addVisit(date);
+            }
+          } else {
+            lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
+            if(date.toString() != lastDateVisited.toString()){
+              FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
+                "visitPoints": FieldValue.increment(10),
+                "visits": FieldValue.arrayUnion([date]),
+                "lastDateVisited": date,
+              }, SetOptions(merge: true));
+              HiveDatabase.setVisit(date);
+              adherentModelProvider.addVisit(date);
+            }
+          }
         }
         else {
-          FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) {
+          FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
+            String lastDateVisited = await HiveDatabase.getVisit();
+            if(lastDateVisited != null){
+              if(date.toString() != lastDateVisited.toString()){
+                FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
+                  "visitPoints": FieldValue.increment(10),
+                  "visits": FieldValue.arrayUnion([date]),
+                  "lastDateVisited": date,
+                }, SetOptions(merge: true));
+                HiveDatabase.setVisit(date);
+                adherentModelProvider.addVisit(date);
+              }
+            } else {
+              lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
+              if(date.toString() != lastDateVisited.toString()){
+                FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
+                  "visitPoints": FieldValue.increment(10),
+                  "visits": FieldValue.arrayUnion([date]),
+                  "lastDateVisited": date,
+                }, SetOptions(merge: true));
+                HiveDatabase.setVisit(date);
+                adherentModelProvider.addVisit(date);
+              }
+            }
           });
         }
     } else {
