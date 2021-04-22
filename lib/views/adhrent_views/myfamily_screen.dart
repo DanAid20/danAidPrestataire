@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -20,6 +21,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
 
   getBeneficiary(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
       builder: (context, snapshot) {
@@ -43,7 +45,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                   HomePageComponents.beneficiaryCard(
                     name: adherentProvider.getAdherent.surname,
                     imgUrl: adherentProvider.getAdherent.imgUrl, 
-                    action: (){}
+                    action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
                   ),
                   snapshot.data.docs.length >= 1 ? Expanded(
                     child: ListView.builder(
@@ -57,7 +59,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                         return HomePageComponents.beneficiaryCard(
                           name: beneficiary.surname, 
                           imgUrl: beneficiary.avatarUrl, 
-                          action: (){}
+                          action: (){
+                            beneficiaryProvider.setBeneficiaryModel(beneficiary);
+                            Navigator.pushNamed(context, '/edit-beneficiary');
+                          }
                         );
                       }
                     ),

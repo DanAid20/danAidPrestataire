@@ -37,6 +37,7 @@ class BeneficiaryModel{
       allergies: doc.data()["allergies"],
       relationShip: doc.data()["relation"],
       otherInfo: doc.data()["infoSupplementaire"],
+      birthCertificateUrl: doc.data()["urlActeNaissance"],
     );
   }
 }
