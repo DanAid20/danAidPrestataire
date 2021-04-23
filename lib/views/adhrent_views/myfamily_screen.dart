@@ -93,7 +93,9 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
               Container(
                 child: Row(
                   children: [
-                    Text("12 000 Pts", style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),),
+                    Text(adherentProvider.getAdherent != null ? adherentProvider.getAdherent.visitPoints.toString()+" pts" ?? "0 pts" : "0 pts",
+                      style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
+                    ),
                     SizedBox(width: wv*2,),
                     ((adherentProvider.getAdherent.adherentPlan == 1) | (adherentProvider.getAdherent.adherentPlan == 2) | (adherentProvider.getAdherent.adherentPlan == 3)) ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
                     SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
@@ -121,7 +123,8 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
               margin: EdgeInsets.symmetric(horizontal: wv*3),
               decoration: BoxDecoration(
                 color: whiteColor,
-                borderRadius: BorderRadius.circular(15)
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0, 1))]
               ),
               child: Column(
                 children: [
@@ -148,7 +151,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       Container(
                         padding: EdgeInsets.only(bottom: wv*3, right: hv*4, left: wv*3, top: wv*3),
                         decoration: BoxDecoration(
-                          color: kSouthSeas.withOpacity(0.2),
+                          color: kSouthSeas.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(15)
                         ),
                         child: getBeneficiary(),

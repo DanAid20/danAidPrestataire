@@ -16,6 +16,7 @@ class MyCoverageTabView extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
+                  boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
                 ),
                 margin: EdgeInsets.symmetric(horizontal: wv*3),

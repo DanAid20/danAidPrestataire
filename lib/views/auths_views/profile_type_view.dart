@@ -20,7 +20,7 @@ class ProfileTypeView extends StatefulWidget {
 class _ProfileTypeViewState extends State<ProfileTypeView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final List<String> descList = [Strings.USER_DESC, Strings.DOC_DESC, Strings.OTHER_DESC];
-  final List<String> titleList = ['utilisateur', 'médécin', 'prestataire santé'];
+  final List<String> titleList = ['Utilisateur', 'Médécin', 'Prestataire santé'];
   final List<String> imageList = ['assets/images/User.svg', 'assets/images/Doctor.svg', 'assets/images/Health.svg'];
   final List<String> routeList = ['/profile-type-adherent', '/profile-type-doctor', ''];
   //final List<Function> actionList = [adherentAction(), doctorAction(), serviceProviderAction()];

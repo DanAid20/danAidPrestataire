@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -127,10 +129,14 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                 child: Text("Se Déconnecter"),
                 onPressed: () async {
                   AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
+                  ServiceProviderModelProvider sp = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+                  DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
                   UserProvider user = Provider.of<UserProvider>(context, listen: false);
                   user.setUserId(null);
                   user.setProfileType(null);
-                  adherent.setAdherentId(null);
+                  adherent.setAdherentModel(null);
+                  sp.setServiceProviderModel(null);
+                  doctor.setDoctorModel(null);
                   HiveDatabase.setRegisterState(false);
                   FirebaseAuth.instance.signOut();
                   Navigator.pushReplacementNamed(context, '/login');

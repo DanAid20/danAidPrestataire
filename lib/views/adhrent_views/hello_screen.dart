@@ -28,14 +28,38 @@ class _HelloScreenState extends State<HelloScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   List tabs = <Widget>[
-    const Tab(
-      text: "Bienvenue",
+    Tab(
+      child: Row(
+        children: [
+          SvgPicture.asset('assets/icons/Bulk/Hands.svg'),
+          SizedBox(
+            width: wv * 2,
+          ),
+          Text("Bienvenue")
+        ],
+      )
     ),
-    const Tab(
-      text: "Ma Couverture",
+    Tab(
+      child: Row(
+        children: [
+          SvgPicture.asset('assets/icons/Bulk/people-safe.svg'),
+          SizedBox(
+            width: wv * 2,
+          ),
+          Text("Ma Couverture")
+        ],
+      )
     ),
-    const Tab(
-      text: "Mon Docteur",
+    Tab(
+      child: Row(
+        children: [
+          SvgPicture.asset('assets/icons/Bulk/people-safe-one.svg'),
+          SizedBox(
+            width: wv * 2,
+          ),
+          Text("Mon Docteur")
+        ],
+      )
     ),
   ];
   List tabsDoctor = <Widget>[
@@ -92,6 +116,7 @@ class _HelloScreenState extends State<HelloScreen>
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
                   SliverAppBar(
+                    elevation: 1.0,
                     toolbarHeight: hv * 12,
                     automaticallyImplyLeading: false,
                     backgroundColor: Colors.white,
@@ -176,24 +201,24 @@ class _HelloScreenState extends State<HelloScreen>
                             fontWeight: FontWeight.w700, fontSize: inch * 1.7),
                         unselectedLabelStyle:
                             TextStyle(fontWeight: FontWeight.w400),
-                        tabs: userProvider.getProfileType == doctor
-                            ? tabsDoctor
-                            : tabs),
+                        tabs: userProvider.getProfileType == adherent
+                            ? tabs
+                            : tabsDoctor),
                   )
                 ];
               },
               body: TabBarView(
                 controller: _tabController,
                 children: <Widget>[
-                  userProvider.getProfileType == doctor
-                      ? HomeDoctorView()
-                      : MyWelcomeScreen(),
-                  userProvider.getProfileType == doctor
-                      ? DoctorPatientView()
-                      : MyCoverageTabView(),
-                  userProvider.getProfileType == doctor
-                      ? RendezVousDoctorView()
-                      : MyDoctorTabView()
+                  userProvider.getProfileType == adherent
+                      ? MyWelcomeScreen()
+                      : HomeDoctorView(),
+                  userProvider.getProfileType == adherent
+                      ? MyCoverageTabView()
+                      : DoctorPatientView(),
+                  userProvider.getProfileType == adherent
+                      ? MyDoctorTabView()
+                      : RendezVousDoctorView()
                 ],
               ))),
     );
