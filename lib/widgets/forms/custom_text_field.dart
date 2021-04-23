@@ -14,9 +14,6 @@ class CustomTextField extends StatelessWidget {
   final Function editAction;
   final List<TextInputFormatter> inputFormatters;
 
-<<<<<<< Updated upstream
-  const CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters}) : super(key: key);
-=======
   const CustomTextField(
       {Key key,
       this.label,
@@ -28,10 +25,8 @@ class CustomTextField extends StatelessWidget {
       this.prefixIcon,
       this.enabled = true,
       this.editAction,
-      this.inputFormatters,
-      this.multiLine = false})
+      this.inputFormatters})
       : super(key: key);
->>>>>>> Stashed changes
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,12 +60,8 @@ class CustomTextField extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   fillColor: Colors.grey[100],
                   //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
-<<<<<<< Updated upstream
-                  contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-=======
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 15, vertical: 5),
->>>>>>> Stashed changes
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                           width: 1, color: kPrimaryColor.withOpacity(0.0)),
@@ -90,20 +81,6 @@ class CustomTextField extends StatelessWidget {
                       : null,
                 ),
               ),
-<<<<<<< Updated upstream
-              !enabled ?
-                Positioned(
-                  right: wv*2,
-                  child: GestureDetector(
-                    onTap: editAction,
-                    child: CircleAvatar(
-                        radius: wv*3.5,
-                        backgroundColor: kDeepTeal,
-                        child: Icon(Icons.edit, color: whiteColor, size: wv*4,),
-                      ),
-                  ),
-                ) : Container()
-=======
               !enabled
                   ? Positioned(
                       right: wv * 0,
@@ -122,7 +99,6 @@ class CustomTextField extends StatelessWidget {
                       ),
                     )
                   : Container()
->>>>>>> Stashed changes
             ],
           ),
         ],

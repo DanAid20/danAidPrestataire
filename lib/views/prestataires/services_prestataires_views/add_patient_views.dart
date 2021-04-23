@@ -1,27 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
-import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
-import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
-import 'package:danaid/widgets/buttons/custom_text_button.dart';
-import 'package:danaid/widgets/buttons/default_btn.dart';
-import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'dart:io' show Platform;
 
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class AddPatientView extends StatefulWidget {
+class AddPrestairetView extends StatefulWidget {
   @override
-  _AddPatientViewState createState() => _AddPatientViewState();
+  _AddPrestairetViewState createState() => _AddPrestairetViewState();
 }
 
 // Widget offerPartsssss() {
@@ -48,7 +42,7 @@ class AddPatientView extends StatefulWidget {
 //   );
 // }
 
-class _AddPatientViewState extends State<AddPatientView> {
+class _AddPrestairetViewState extends State<AddPrestairetView> {
   bool confirmSpinner = false;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
