@@ -129,89 +129,89 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              isPrestataire?   
-               Container(
-                 height: 200.h ,width: 1.5.sw,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/image 25.png"),
-            fit: BoxFit.cover,
-          ),
-           boxShadow: [
-                BoxShadow(color: kThirdColor, spreadRadius: 2.5, blurRadius: 4),
-              ],
-          borderRadius: BorderRadius.only(
-               bottomLeft: Radius.circular(10),
-               bottomRight: Radius.circular(10),
-              ),
-        ),
-        child: Column(
-           mainAxisAlignment: MainAxisAlignment.end, 
-          children: [
-            Column(
+//               isPrestataire?   
+//                Container(
+//                  height: 200.h ,width: 1.5.sw,
+//         decoration: BoxDecoration(
+//           image: DecorationImage(
+//             image: AssetImage("assets/images/image 25.png"),
+//             fit: BoxFit.cover,
+//           ),
+//            boxShadow: [
+//                 BoxShadow(color: kThirdColor, spreadRadius: 2.5, blurRadius: 4),
+//               ],
+//           borderRadius: BorderRadius.only(
+//                bottomLeft: Radius.circular(10),
+//                bottomRight: Radius.circular(10),
+//               ),
+//         ),
+//         child: Column(
+//            mainAxisAlignment: MainAxisAlignment.end, 
+//           children: [
+//             Column(
               
-  children: <Widget>[
+//   children: <Widget>[
 
-    Stack(
-      overflow: Overflow.visible,
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: 120.h,
-          decoration: BoxDecoration(
+//     Stack(
+//       overflow: Overflow.visible,
+//       children: <Widget>[
+//         Container(
+//           width: MediaQuery.of(context).size.width,
+//           height: 120.h,
+//           decoration: BoxDecoration(
               
-              color: kGold.withOpacity(0.6), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), 
-              )),
-           child: Container(
-                  padding: EdgeInsets.only(
-                      left: 10.w, right: wv * 1.5, top:10),
-                  child: Text(
-                   'Ajouter un Patient',
-                    style: TextStyle(
-                        color: kCardTextColor,
-                        fontWeight: FontWeight.w800,
-                        fontSize:  17.sp),
-                  ),
-                ),
-        ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: ScreenUtil().screenWidth ,
-              height: 70,
-              color: Colors.white.withOpacity(0.5),
-              child: Column(
-                            children: [
+//               color: kGold.withOpacity(0.6), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), 
+//               )),
+//            child: Container(
+//                   padding: EdgeInsets.only(
+//                       left: 10.w, right: wv * 1.5, top:10),
+//                   child: Text(
+//                    'Ajouter un Patient',
+//                     style: TextStyle(
+//                         color: kCardTextColor,
+//                         fontWeight: FontWeight.w800,
+//                         fontSize:  17.sp),
+//                   ),
+//                 ),
+//         ),
+//         Positioned.fill(
+//           child: Align(
+//             alignment: Alignment.bottomCenter,
+//             child: Container(
+//               width: ScreenUtil().screenWidth ,
+//               height: 70,
+//               color: Colors.white.withOpacity(0.5),
+//               child: Column(
+//                             children: [
                               
-                              SizedBox(height: hv*1),
-                              Row(mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                   getFeatureCard(title: "Consultations"),
-                                   getFeatureCard(title: "Télé-Consultations"),
-                                  getFeatureCard(title: "Visite à domicile"),
-                                ],
-                              ),
-                              Row(mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  getFeatureCard(title: "Chat"),
-                                   getFeatureCard(title: "Rendez-vous") ,
-                                ],
-                              ),
+//                               SizedBox(height: hv*1),
+//                               Row(mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                    getFeatureCard(title: "Consultations"),
+//                                    getFeatureCard(title: "Télé-Consultations"),
+//                                   getFeatureCard(title: "Visite à domicile"),
+//                                 ],
+//                               ),
+//                               Row(mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                   getFeatureCard(title: "Chat"),
+//                                    getFeatureCard(title: "Rendez-vous") ,
+//                                 ],
+//                               ),
                              
-                            ],
-                          ),
-            ),
-          ),
-        )
-      ],
-    ),
-  ],
-),
+//                             ],
+//                           ),
+//             ),
+//           ),
+//         )
+//       ],
+//     ),
+//   ],
+// ),
              
-          ],
-        ) /* add child content here */,
-      ):
+//           ],
+//         ) /* add child content here */,
+//       ):
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 decoration: BoxDecoration(

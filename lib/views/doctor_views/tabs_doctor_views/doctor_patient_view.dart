@@ -1,3 +1,5 @@
+import 'package:danaid/core/models/serviceProviderModel.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -21,7 +23,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
 
   Widget servicesList() {
   UserProvider userProvider = Provider.of<UserProvider>(context);
-  bool isPrestataire=true;
+  ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
+  //print(prestataire.);
+  bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
     return Container(
       margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
       decoration: BoxDecoration(
