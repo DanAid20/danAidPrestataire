@@ -5,8 +5,8 @@ class NotificationCard extends StatelessWidget {
 
   final String instruction, description;
   final Function onTap;
-
-  const NotificationCard({Key key,this.instruction, this.description, this.onTap}) : super(key: key);
+  final bool  isprestataire;
+  const NotificationCard({Key key,this.instruction, this.description, this.onTap, this.isprestataire}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class NotificationCard extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Container(
+            isprestataire ? SizedBox.shrink() :  Container(
               height: wv*18,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*2), topRight: Radius.circular(inch*2)),

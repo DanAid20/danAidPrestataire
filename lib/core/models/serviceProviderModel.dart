@@ -11,7 +11,7 @@ class ServiceProviderModel {
 
   factory ServiceProviderModel.fromDocument(DocumentSnapshot doc){
     return ServiceProviderModel(
-      id: doc.id,
+      id: doc.id, 
       dateCreated: doc.data()["createdDate"],
       name: doc.data()["nomEtablissement"],
       contactName: doc.data()["nomCompletPContact"],

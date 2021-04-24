@@ -9,6 +9,7 @@ import 'package:danaid/views/adhrent_views/my_coverage_tab.dart';
 import 'package:danaid/views/adhrent_views/my_doctor_tab.dart';
 import 'package:danaid/views/doctor_views/tabs_doctor_views/doctor_patient_view.dart';
 import 'package:danaid/views/doctor_views/tabs_doctor_views/rendez_vous_doctor.dart';
+import 'package:danaid/views/prestataires/tabs_doctor_views/home_prestataires_view.dart';
 import 'package:danaid/widgets/user_avatar_coverage.dart';
 import 'package:danaid/views/adhrent_views/my_welcome_screen.dart';
 import 'package:flutter/material.dart';
@@ -212,7 +213,7 @@ class _HelloScreenState extends State<HelloScreen>
                 children: <Widget>[
                   userProvider.getProfileType == adherent
                       ? MyWelcomeScreen()
-                      : HomeDoctorView(),
+                      :  HomeDoctorView(),
                   userProvider.getProfileType == adherent
                       ? MyCoverageTabView()
                       : DoctorPatientView(),

@@ -41,10 +41,13 @@ const kTextLightColor = Color.fromRGBO(237, 237, 237, 1);
 
 const kSouthSeas = Color(0xFF57CECA);
 const kGold = Color(0xFFECCA33);
+const kGoldForIconesBg = Color(0xFFECCA33);
+const kGoldlight = Color(0xFFFBDA47);
 const kDeepTeal = Color(0xFF05837C);
 const kDeepTealClair = Color(0xFFC0E3E1);
 const kBrownCanyon = Color(0xFFAE9284);
 const kSmoothBrown = Color(0xFFDFD3CE);
 const kBlueForce = Color(0xFF235383);
+const kblueSky = Color(0xFF57CECA);
 const kBlueDeep = Color(0xFF0075AA);
 const kTextBlue = Color(0xFF4F5F8E);

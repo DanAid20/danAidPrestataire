@@ -6,11 +6,11 @@ import '../../../helpers/colors.dart';
 import '../../../widgets/home_page_mini_components.dart';
 import '../../../widgets/notification_card.dart';
 
-class HomeDoctorView extends StatefulWidget {
-  HomeDoctorView({Key key}) : super(key: key);
+class HomePrestataireView extends StatefulWidget {
+  HomePrestataireView({Key key}) : super(key: key);
 
   @override
-  _HomeDoctorViewState createState() => _HomeDoctorViewState();
+  _HomePrestataireViewState createState() => _HomePrestataireViewState();
 }
 
 Widget notificationWidget() {
@@ -231,7 +231,7 @@ Widget questionDuDocteur() {
   );
 }
 
-class _HomeDoctorViewState extends State<HomeDoctorView> {
+class _HomePrestataireViewState extends State<HomePrestataireView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

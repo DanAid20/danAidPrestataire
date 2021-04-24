@@ -1,10 +1,12 @@
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class RendezVousDoctorView extends StatefulWidget {
   RendezVousDoctorView({Key key}) : super(key: key);
 
@@ -13,13 +15,16 @@ class RendezVousDoctorView extends StatefulWidget {
 }
 
 class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
-  Widget calendar() {
+   var calendarTextValue = 20.sp;
+  Widget calendar({
+    bool isPrestataire
+  }) {
     return Column(children: [
       Container(
         width: wv * 100,
-        height: hv * 21,
+        height: 145,
         decoration: BoxDecoration(
-          color: kThirdIntroColor,
+          color: isPrestataire? kGoldlight :kThirdIntroColor,
           boxShadow: [
             BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
           ],
@@ -36,50 +41,50 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               focusedDay: DateTime.now(),
               calendarFormat: CalendarFormat.week,
               daysOfWeekVisible: true,
-              calendarStyle: const CalendarStyle(
+              calendarStyle:  CalendarStyle(
                   todayDecoration: BoxDecoration(
-                    color: kDateTextColor,
+                    color: isPrestataire? kFirstIntroColor :kBlueForce,
                     borderRadius: BorderRadius.all(
                       Radius.circular(10),
                     ),
                   ),
                   rangeStartTextStyle: TextStyle(
-                      color: Colors.white,
+                      color: isPrestataire? kBlueForce :whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18),
+                      fontSize:calendarTextValue), 
                   weekendTextStyle: TextStyle(
-                      color: Colors.white,
+                      color: isPrestataire? kBlueForce :whiteColor,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18),
+                      fontSize:calendarTextValue), 
                   defaultTextStyle: TextStyle(
-                      color: Colors.white,
+                      color: isPrestataire? kBlueForce :whiteColor,
                       fontWeight: FontWeight.w500,
-                      fontSize: 18),
+                      fontSize:calendarTextValue), 
                   holidayTextStyle: TextStyle(
-                      color: Colors.white,
+                      color: isPrestataire? kBlueForce :whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18),
-                  todayTextStyle: const TextStyle(
-                      color: Colors.white,
+                      fontSize:calendarTextValue), 
+                  todayTextStyle:  TextStyle(
+                      color:isPrestataire? kBlueForce :whiteColor ,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18)),
+                      fontSize: calendarTextValue)), 
               headerStyle: HeaderStyle(
                   formatButtonVisible: false,
                   headerMargin: const EdgeInsets.only(left: 18),
                   headerPadding: const EdgeInsets.only(top: 10, bottom: 10),
                   rightChevronVisible: false,
                   leftChevronVisible: false,
-                  titleTextStyle: const TextStyle(
-                      color: Colors.white,
+                  titleTextStyle:  TextStyle(
+                      color: isPrestataire? kBlueForce :whiteColor,
                       fontWeight: FontWeight.w700,
                       fontSize: 18)),
-              daysOfWeekStyle: const DaysOfWeekStyle(
+              daysOfWeekStyle:  DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
-                  color: Colors.white,
+                  color: isPrestataire? kBlueForce :whiteColor,
                   fontWeight: FontWeight.w500,
                 ),
                 weekendStyle: TextStyle(
-                  color: Colors.white,
+                 color: isPrestataire? kBlueForce :whiteColor,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -92,7 +97,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   child: Text(
                     "Aujourd'hui",
                     style: TextStyle(
-                        color: Colors.white,
+                       color: isPrestataire? kBlueForce :whiteColor,
                         fontWeight: FontWeight.w700,
                         fontSize: fontSize(size: wv * 4)),
                   ),
@@ -101,9 +106,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   margin: EdgeInsets.only(
                       left: wv * 1.5, right: wv * 1.5, top: hv * 0),
                   child: Text(
-                    "Semaines",
+                    "Semaine",
                     style: TextStyle(
-                        color: Colors.white,
+                        color: isPrestataire? kBlueForce :whiteColor,
                         fontWeight: FontWeight.w500,
                         fontSize: fontSize(size: wv * 4)),
                   ),
@@ -113,99 +118,88 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
           ],
         ),
       ),
-      Stack(children: [
-        Container(
-          width: wv * 100,
-          color: Colors.white,
-          child: Column(
+      
+    ]);
+  }
+  
+  Widget waitingRoomListOfUserNew() {
+    return  Container(
+      width: wv * 50,
+      height: hv * 5,
+      margin: EdgeInsets.only(
+        left: wv * 1.5,
+        right: wv * 1.5,
+        top: hv * 2,
+        bottom: hv * 2,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+        ],
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: wv * 15,
+            height: 100.r,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/image 7.png'),
+                  fit: BoxFit.cover,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: kThirdColor,
+                  ),
+                ],
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                )),
+          ),
+          Column(
             children: [
-              Container(
-                child: SingleChildScrollView(
-                  physics: NeverScrollableScrollPhysics(),
-                  child: Column(children: [
-                    timeline(
-                      age: '16 ans',
-                      consultationDetails: 'Tous et fievre depuis 3 jours',
-                      consultationType: 'Nouvelle Consultation',
-                      time: '09:30',
-                      userImage: 'assets/images/sarahHamidou.png',
-                      userName: 'Sarah Amidou',
-                    ),
-                    timeline(
-                      age: '61 ans',
-                      consultationDetails: 'J’ai des douleurs à la cheville ',
-                      consultationType: 'Suivi',
-                      time: '09:30',
-                      userImage: 'assets/images/sarahHamidou.png',
-                      userName: 'Telesphore Babianou',
-                    ),
-                    timeline(
-                      age: '61 ans',
-                      consultationDetails: 'Tous et fievre depuis 3 jours',
-                      consultationType: 'Nouvelle Consultation',
-                      time: '09:30',
-                      userImage: 'assets/images/sarahHamidou.png',
-                      userName: 'Sarah Amidou',
-                    ),
-                  ]),
+               Container(
+                 padding: EdgeInsets.only(
+                  top: 5.w,
                 ),
+                child: Text('Fabrice Mbanga',
+                    overflow: TextOverflow.ellipsis,
+                     textScaleFactor: 1,
+                    style: TextStyle(
+                        color: kDateTextColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize:  13.sp)),
               ),
-              new Container(
-                width: wv * 100,
-                height: hv * 15,
-                decoration: BoxDecoration(
-                  color: Colors.white,
+              SizedBox(
+                height: 5.r,
+              ),
+            
+              Container(
+                padding: EdgeInsets.only(
+                  left: 10.w,
                 ),
-                margin: EdgeInsets.only(
-                    left: wv * 1.5, right: wv * 1.5, top: hv * 0.5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(
-                          left: wv * 1.5, right: wv * 1.5, top: hv * 0),
-                      child: Row(
-                        children: [
-                          Text("Salle d'attente ",
-                              style: TextStyle(
-                                color: kPrimaryColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: fontSize(size: wv * 5),
-                              )),
-                          Text("Voir plus..",
-                              style: TextStyle(
-                                  color: kBrownCanyon,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: fontSize(size: wv * 5))),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      ),
-                    ),
-                    Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          waitingRoomListOfUser(),
-                          waitingRoomListOfUser(),
-                          waitingRoomListOfUser(),
-                          waitingRoomListOfUser(),
-                          waitingRoomListOfUser(),
-                        ],
-                      ),
-                    ),
-                  ],
+                child: Container(
+                  width: wv * 30,
+                  child: Text(
+                      'Douleurs dentaires et violents mots de tête...',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          color: kDateTextColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 11.9.sp)),
                 ),
               ),
             ],
-          ),
-        ),
-      ]),
-    ]);
+          )
+        ],
+      ));
   }
-
   Widget waitingRoomListOfUser() {
     return Container(
       width: wv * 50,
@@ -293,10 +287,11 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     String consultationType,
     String videChatLink,
     String detailsCOnsultationLink,
+    bool isPrestataire,
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: kBgTextColor,
+       
       ),
       width: wv * 98,
       padding: EdgeInsets.only(left: wv * 3, right: wv * 3.3),
@@ -362,6 +357,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         child: SvgPicture.asset(
                           'assets/icons/Bulk/Shield Done.svg',
                           width: wv * 4,
+                          
                         ))
                   ],
                 ),
@@ -382,10 +378,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                               flex: 2,
                               child: Text(userName,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style:  TextStyle(
                                       color: kDateTextColor,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 15)),
+                                      fontSize: 14.sp)),
                             ),
                             Expanded(
                               flex: 1,
@@ -394,7 +390,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                   style: TextStyle(
                                       color: kCardTextColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: fontSize(size: wv * 4))),
+                                      fontSize: 14.sp)),
                             ),
                           ],
                         ),
@@ -412,17 +408,17 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 style: TextStyle(
                                     color: kCardTextColor,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: fontSize(size: wv * 3.5))),
+                                    fontSize: 14.sp)),
                           ),
                           SizedBox(
-                            height: hv * 1,
+                            height: 5.h,
                           ),
                           Text(consultationType,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: kDeepTeal,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: fontSize(size: wv * 3.5))),
+                                  fontSize: 14.sp)),
                         ],
                       ),
                     ],
@@ -436,10 +432,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                       },
                       child: Container(
                         padding: EdgeInsets.all(6),
-                        width: wv * 10,
+                        width: 36.w,
                         height: hv * 6,
                         decoration: BoxDecoration(
-                            color: kSouthSeas,
+                            color: isPrestataire ? kGoldForIconesBg:kSouthSeas,
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -477,18 +473,153 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
-      child: Container(
-        decoration: BoxDecoration(color: Colors.white),
+  Widget timelineApointement(){
+    return  Container(
+              height: 500.h,
+              child:  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                  children: [
+                  timeline(
+                    age: '16 ans',
+                    consultationDetails: 'Tous et fievre depuis 3 jours',
+                    consultationType: 'Nouvelle Consultation',
+                    time: '09:30',
+                    userImage: 'assets/images/sarahHamidou.png',
+                    userName: 'Sarah Amidou',
+                  ),
+                  timeline(
+                    age: '61 ans',
+                    consultationDetails: 'J’ai des douleurs à la cheville ',
+                    consultationType: 'Suivi',
+                    time: '09:30',
+                    userImage: 'assets/images/sarahHamidou.png',
+                    userName: 'Telesphore Babianou',
+                  ),
+                  timeline(
+                    age: '61 ans',
+                    consultationDetails: 'Tous et fievre depuis 3 jours',
+                    consultationType: 'Nouvelle Consultation',
+                    time: '09:30',
+                    userImage: 'assets/images/sarahHamidou.png',
+                    userName: 'Sarah Amidou',
+                  ),
+                ]),
+              ),
+            );
+  }
+
+  bottomWidgetNavigation(){
+    return Container(
+        width: wv * 100,
+        height: 100.h,
+        color: Colors.white,
         child: Column(
           children: [
-            calendar(),
+           
+                  Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        waitingRoomListOfUser(),
+                        waitingRoomListOfUser(),
+                        waitingRoomListOfUser(),
+                        waitingRoomListOfUser(),
+                        waitingRoomListOfUser(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+  bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
+    return Container(
+      child: Column(
+          children: <Widget>[
+            calendar(isPrestataire:isPrestataire),
+            Expanded(
+              child: Container(
+                 padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                alignment: Alignment.center,
+                child:  ListView(
+            shrinkWrap: true,
+            children: [
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+                   timeline(isPrestataire: isPrestataire,age: '16 ans',consultationDetails: 'Tous et fievre depuis 3 jours',consultationType: 'Nouvelle Consultation',time: '09:30',userImage: 'assets/images/sarahHamidou.png',userName: 'Sarah Amidou',),
+            ] ),
+            ),
+            ),
+            Container(
+                height: 120.h,
+                margin: EdgeInsets.only(bottom: 60.h),
+                decoration: BoxDecoration(
+                color: whiteColor,
+                ),
+                child:Column(
+                      children: [
+                         Container(
+                           padding: EdgeInsets.only(
+                           
+                             right: 8.h,
+                             left: 8.h,
+                             top: 5.h,
+                           ),
+                           child: Row(
+                            mainAxisAlignment:  MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Salle d\'attente', style: TextStyle(
+                                color: kBlueDeep,
+                                fontWeight: FontWeight.w500,
+                                fontSize:  17.sp)),
+                              Text('Voir plus ..', style: TextStyle(
+                                color: kBrownCanyon,
+                                fontWeight: FontWeight.w600,
+                                fontSize:  17.sp)),
+                            ],
+                        ),
+                         ),
+                        Container(
+                          height: 90.h,
+                          child: ListView(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                                waitingRoomListOfUserNew(),
+                                waitingRoomListOfUserNew(),
+                                waitingRoomListOfUserNew(),
+                                waitingRoomListOfUserNew(),
+                                waitingRoomListOfUserNew()
+                            ],
+                            
+                          ),
+                        ),
+                       
+                      ],
+                    ),
+                  )
           ],
         ),
-      ),
     );
+    
+    
+     
   }
 }
