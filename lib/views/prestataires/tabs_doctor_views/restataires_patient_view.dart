@@ -8,14 +8,14 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../../locator.dart';
 
-class DoctorPatientView extends StatefulWidget {
-  DoctorPatientView({Key key}) : super(key: key);
+class DoctorPrestataireView extends StatefulWidget {
+  DoctorPrestataireView({Key key}) : super(key: key);
 
   @override
-  _DoctorPatientViewState createState() => _DoctorPatientViewState();
+  _DoctorPrestataireViewState createState() => _DoctorPrestataireViewState();
 }
 
-class _DoctorPatientViewState extends State<DoctorPatientView> {
+class _DoctorPrestataireViewState extends State<DoctorPrestataireView> {
   final NavigationService _navigationService = locator<NavigationService>();
   Widget servicesList() {
     return Container(

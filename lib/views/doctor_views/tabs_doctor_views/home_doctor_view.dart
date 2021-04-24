@@ -1,4 +1,8 @@
+import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/utils/config_size.dart';
 import '../../../core/utils/config_size.dart';
@@ -13,7 +17,12 @@ class HomeDoctorView extends StatefulWidget {
   _HomeDoctorViewState createState() => _HomeDoctorViewState();
 }
 
-Widget notificationWidget() {
+class _HomeDoctorViewState extends State<HomeDoctorView> {
+
+  
+Widget notificationWidget(BuildContext context){
+   UserProvider userProvider = Provider.of<UserProvider>(context);
+   bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
   return Column(
     children: [
       SizedBox(
@@ -50,21 +59,9 @@ Widget notificationWidget() {
               physics: BouncingScrollPhysics(),
               child: Row(
                 children: [
-                  NotificationCard(
-                    instruction: "consulter",
-                    description:
-                        "Vous avez 3 nouveaux devis pour vos examens médicaux",
-                  ),
-                  NotificationCard(
-                    instruction: "consulter",
-                    description:
-                        "Vous avez 3 nouveaux devis pour vos examens médicaux",
-                  ),
-                  NotificationCard(
-                    instruction: "consulter",
-                    description:
-                        "Vous avez 3 nouveaux devis pour vos examens médicaux",
-                  ),
+                  NotificationCard(instruction: "consulter",description:"Vous avez 3 nouveaux devis pour vos examens médicaux",isprestataire: isPrestataire),
+                  NotificationCard(instruction: "consulter",description:"Vous avez 3 nouveaux devis pour vos examens médicaux",isprestataire: isPrestataire,),
+                  NotificationCard(instruction: "consulter",description:"Vous avez 3 nouveaux devis pour vos examens médicaux",isprestataire: isPrestataire,),
                 ],
               ),
             ),
@@ -74,8 +71,33 @@ Widget notificationWidget() {
     ],
   );
 }
+ /// this function get the details of user
+ List<String> getRecapActivitieOfTheDay(BuildContext context){
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    List<String> avatarList;
+    if(userProvider.getProfileType== serviceProvider){
+      /** get the details of userImageProfileList In firebase  */
+    }else if(userProvider.getProfileType== doctor){
+      /** get the details of userList In data base  */
+    }
+    return avatarList;
+ }
 
-Widget recapActivitieOfTheDay() {
+ ///  this function get the details interaction of userCount of the day 
+ Map<String, int> getDetailsInteractionTheDay(BuildContext context){
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    Map<String, int> interActionCOunt;
+    if(userProvider.getProfileType== serviceProvider){
+      /** get the details of userImageProfileList In firebase  */
+    }else if(userProvider.getProfileType== doctor){
+      /** get the details of userList In data base  */
+    }
+    return interActionCOunt ;
+ }
+
+Widget recapActivitieOfTheDay(BuildContext context) {
+  //List<String> getRecapActivitieOfTheDayData= await getRecapActivitieOfTheDay(context)
+  //Map<String, int> getDetailsInteractionTheDayData= await getDetailsInteractionTheDay(context)
   return Column(
     children: [
       Container(
@@ -106,16 +128,12 @@ Widget recapActivitieOfTheDay() {
               ),
               Row(
                 children: [
-                  HomePageComponents()
-                      .getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  HomePageComponents()
-                      .getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  HomePageComponents()
-                      .getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  HomePageComponents()
-                      .getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  HomePageComponents()
-                      .getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  // we will just add foreach here to display de image 
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
+                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
                   Expanded(child: Container()),
                   Container(
                     padding: EdgeInsets.all(10),
@@ -135,25 +153,13 @@ Widget recapActivitieOfTheDay() {
               ),
               Row(
                 children: [
-                  HomePageComponents().getProfileStat(
-                      imgUrl: "assets/icons/posts.svg",
-                      title: "Posts",
-                      occurence: 72),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg",title: "Posts",occurence: 72),
                   HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(
-                      imgUrl: "assets/icons/chat.svg",
-                      title: "Commentaires",
-                      occurence: 122),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg",title: "Commentaires",occurence: 122),
                   HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(
-                      imgUrl: "assets/icons/2users.svg",
-                      title: "Followers",
-                      occurence: 21),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg",title: "Followers",occurence: 21),
                   HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(
-                      imgUrl: "assets/icons/message.svg",
-                      title: "Messages",
-                      occurence: 3),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg",title: "Messages",occurence: 3),
                 ],
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),
@@ -173,6 +179,7 @@ Widget questionDuDocteur() {
   return Column(
     children: [
       Container(
+       
         margin:
             EdgeInsets.only(left: inch * 1.5, right: inch * 1.5, top: inch * 0),
         child: Row(
@@ -189,58 +196,29 @@ Widget questionDuDocteur() {
       ),
       Column(
         children: [
-          HomePageComponents().getDoctorQuestion(
-              imgUrl: "assets/images/avatar-profile.jpg",
-              likeCount: 1,
-              sendcountNumber: 13,
-              userName: 'Fabrice Mbanga',
-              timeAgo: "il y 5 min",
-              text:
-                  'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',
-              commentCount: 3),
-          HomePageComponents().getDoctorQuestion(
-              imgUrl: "assets/images/avatar-profile.jpg",
-              likeCount: 1,
-              sendcountNumber: 13,
-              userName: 'Fabrice Mbanga',
-              timeAgo: "il y 5 min",
-              text:
-                  'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',
-              commentCount: 3),
-          HomePageComponents().getDoctorQuestion(
-              imgUrl: "assets/images/avatar-profile.jpg",
-              likeCount: 1,
-              sendcountNumber: 13,
-              userName: 'Fabrice Mbanga',
-              timeAgo: "il y 5 min",
-              text:
-                  'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',
-              commentCount: 3),
-          HomePageComponents().getDoctorQuestion(
-              imgUrl: "assets/images/avatar-profile.jpg",
-              likeCount: 1,
-              sendcountNumber: 13,
-              userName: 'Fabrice Mbanga',
-              timeAgo: "il y 5 min",
-              text:
-                  'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',
-              commentCount: 3),
+          HomePageComponents().getDoctorQuestion(imgUrl: "assets/images/avatar-profile.jpg",likeCount: 1,sendcountNumber: 13,userName: 'Fabrice Mbanga',timeAgo: "il y 5 min", text:'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',commentCount: 3),
+          HomePageComponents().getDoctorQuestion(imgUrl: "assets/images/avatar-profile.jpg",likeCount: 1,sendcountNumber: 13,userName: 'Fabrice Mbanga', timeAgo: "il y 5 min",text:'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',commentCount: 3),
+          HomePageComponents().getDoctorQuestion(imgUrl: "assets/images/avatar-profile.jpg",likeCount: 1,sendcountNumber: 13,userName: 'Fabrice Mbanga',timeAgo: "il y 5 min",text:'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',commentCount: 3),
+          HomePageComponents().getDoctorQuestion( imgUrl: "assets/images/avatar-profile.jpg",likeCount: 1,sendcountNumber: 13,userName: 'Fabrice Mbanga',timeAgo: "il y 5 min",text:'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',commentCount: 3),
         ],
       )
     ],
   );
 }
 
-class _HomeDoctorViewState extends State<HomeDoctorView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: Column(
         children: [
-          notificationWidget(),
-          recapActivitieOfTheDay(),
-          questionDuDocteur()
+          notificationWidget(context),
+          Container( color: Colors.white,child: Column(
+            children: [
+              recapActivitieOfTheDay(context),
+              questionDuDocteur(),
+            ],
+          ))
         ],
       ),
     );

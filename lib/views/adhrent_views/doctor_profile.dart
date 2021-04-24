@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +15,7 @@ import 'package:danaid/core/models/doctorModel.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/helpers/constants.dart' as profile;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorProfilePage extends StatefulWidget {
   @override
@@ -107,6 +109,8 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
   Widget build(BuildContext context) {
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
+    bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
+
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     return WillPopScope(
@@ -116,7 +120,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
+          backgroundColor: isPrestataire? kGold:kPrimaryColor,
           leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> (adherentModelProvider.getAdherent != null) ? (adherentModelProvider.getAdherent.adherentId == userProvider.getUserId) ? Navigator.pop(context) : controller.setIndex(1) : controller.setIndex(1),),
           actions: [
             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
@@ -125,6 +129,89 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              isPrestataire?   
+               Container(
+                 height: 200.h ,width: 1.5.sw,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/image 25.png"),
+            fit: BoxFit.cover,
+          ),
+           boxShadow: [
+                BoxShadow(color: kThirdColor, spreadRadius: 2.5, blurRadius: 4),
+              ],
+          borderRadius: BorderRadius.only(
+               bottomLeft: Radius.circular(10),
+               bottomRight: Radius.circular(10),
+              ),
+        ),
+        child: Column(
+           mainAxisAlignment: MainAxisAlignment.end, 
+          children: [
+            Column(
+              
+  children: <Widget>[
+
+    Stack(
+      overflow: Overflow.visible,
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: 120.h,
+          decoration: BoxDecoration(
+              
+              color: kGold.withOpacity(0.6), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), 
+              )),
+           child: Container(
+                  padding: EdgeInsets.only(
+                      left: 10.w, right: wv * 1.5, top:10),
+                  child: Text(
+                   'Ajouter un Patient',
+                    style: TextStyle(
+                        color: kCardTextColor,
+                        fontWeight: FontWeight.w800,
+                        fontSize:  17.sp),
+                  ),
+                ),
+        ),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: ScreenUtil().screenWidth ,
+              height: 70,
+              color: Colors.white.withOpacity(0.5),
+              child: Column(
+                            children: [
+                              
+                              SizedBox(height: hv*1),
+                              Row(mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                   getFeatureCard(title: "Consultations"),
+                                   getFeatureCard(title: "Télé-Consultations"),
+                                  getFeatureCard(title: "Visite à domicile"),
+                                ],
+                              ),
+                              Row(mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  getFeatureCard(title: "Chat"),
+                                   getFeatureCard(title: "Rendez-vous") ,
+                                ],
+                              ),
+                             
+                            ],
+                          ),
+            ),
+          ),
+        )
+      ],
+    ),
+  ],
+),
+             
+          ],
+        ) /* add child content here */,
+      ):
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 decoration: BoxDecoration(
@@ -140,7 +227,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: kPrimaryColor,
+                        color:  isPrestataire? kGold: kPrimaryColor,
                       ),
                       child: Column(children: [
                         //SizedBox(height: hv*10,),
@@ -159,8 +246,8 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                   )]
                                 ),
                                 child: CircleAvatar(
-                                    backgroundColor: Colors.grey,
-                                    //backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
+                                    //backgroundColor: Colors.grey,
+                                    backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
                                     child: ClipOval(
                                       child: CachedNetworkImage(
                                         height: wv*16,
@@ -287,7 +374,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                     ),
                     doctor.getDoctor.serviceList != null ? Container(
                       decoration: BoxDecoration(
-                        color: kSouthSeas,
+                        color: isPrestataire? kGold: kSouthSeas,
                         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
                       ),
                       child: Column(
@@ -361,7 +448,69 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                           padding: const EdgeInsets.only(left: 8.0),
                           child: Text(doctor.getDoctor.about == null ? "R.A.S" : doctor.getDoctor.about),
                         ),
-                        SizedBox(height: 7,),
+                        SizedBox(height: 10.h,),
+                        isPrestataire? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 60,
+                                width:  80.w,
+                                padding: EdgeInsets.all(6.w),
+                                 decoration: BoxDecoration(
+                                  color: kblueSky,
+                                  boxShadow: [
+                                    BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+                                  ],
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text('Medecin de famille', textAlign: TextAlign.center, style: TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize:  14.sp )),
+                                    Text('2',textAlign:TextAlign.center, style: TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w400,
+                                fontSize:  15.sp )),
+                                  ],
+                                ),
+
+                              ),
+                              SizedBox(width: 10.w,),
+                              Container(
+                                height: 60,
+                                width:  80.w,
+                                padding: EdgeInsets.all(6.w),
+                                 decoration: BoxDecoration(
+                                  color: kblueSky,
+                                  boxShadow: [
+                                    BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+                                  ],
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text('Personnel inscrit', textAlign: TextAlign.center, style: TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize:  14.sp )),
+                                    Text('2', textAlign: TextAlign.center, style: TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w400,
+                                fontSize:  15.sp )),
+                                  ],
+                                ),
+
+                              )
+                            ],
+                          ),
+                        ):SizedBox.shrink(),
                         Row(
                           children: [
                             SizedBox(width: wv*2,),
