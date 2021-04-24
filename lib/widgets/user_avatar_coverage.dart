@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -16,18 +17,28 @@ class UserAvatarAndCoverage extends StatelessWidget {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    return Row(
+    return (adherentProvider.getAdherent != null) || (doctorProvider.getDoctor != null) ? Row(
       children: [
         SizedBox(width: 0,),
         Stack(clipBehavior: Clip.none,
           children: [
             userProvider.getProfileType == adherent ?
               CircleAvatar(
-                radius: wv*8,
-                backgroundColor: Colors.blueGrey[100],
-                backgroundImage: ((adherentProvider.getAdherent.imgUrl == "") & (adherentProvider.getAdherent.imgUrl == null))  ? null : CachedNetworkImageProvider(adherentProvider.getAdherent.imgUrl),
-                child: (adherentProvider.getAdherent.imgUrl == "") & (adherentProvider.getAdherent.imgUrl == null) ? Icon(LineIcons.user, color: Colors.white, size: wv*13,) : Container(),
-              ) :
+              radius: wv*8,
+              backgroundColor: Colors.blueGrey[100],
+              //backgroundImage: ((doctorProvider.getDoctor.avatarUrl == "") & (doctorProvider.getDoctor.avatarUrl == null))  ? null : CachedNetworkImageProvider(doctorProvider.getDoctor.avatarUrl),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  height: wv*16,
+                  width: wv*16,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                    padding: EdgeInsets.all(20.0),
+                  ),
+                  imageUrl: adherentProvider.getAdherent != null ? adherentProvider.getAdherent.imgUrl : null),
+              ),
+            ) :
             userProvider.getProfileType == doctor ?
               CircleAvatar(
               radius: wv*8,
@@ -82,6 +93,15 @@ class UserAvatarAndCoverage extends StatelessWidget {
         ),
         SizedBox(width: 10,)
       ],
-    );
+    ):
+    Row(
+      children: [
+        Loaders().buttonLoader(kPrimaryColor),
+        SizedBox(width: wv*3,),
+        Text("Bonjour ..", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400))
+      ],
+    )
+    
+    ;
   }
 }

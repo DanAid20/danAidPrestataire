@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -20,6 +21,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
 
   getBeneficiary(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
       builder: (context, snapshot) {
@@ -32,27 +34,41 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
             RichText(text: TextSpan(
               text: "Bénéficiaires\n",
               children: [
-                TextSpan(text: snapshot.data.docs.length.toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
+                TextSpan(text: (snapshot.data.docs.length++).toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
               ], style: TextStyle(color: kPrimaryColor, fontSize: wv*5)),
             ),
             SizedBox(height: hv*2,),
             Container(
               height: hv*22,
-              child: snapshot.data.docs.length >= 1 ? ListView.builder(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data.docs.length,
-              itemBuilder: (context, index){
-                DocumentSnapshot doc = snapshot.data.docs[index];
-                BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-                print("name: ");
-                return HomePageComponents.beneficiaryCard(
-                  name: beneficiary.surname, 
-                  imgUrl: beneficiary.avatarUrl, 
-                  action: (){}
-                );
-            }
-          ) : Center(child: Text("Vous n'avez pas encore ajouté de bénéficiaire..", style: TextStyle(color: kTextBlue, fontSize: wv*4.5)),)
+              child: Row(
+                children: [
+                  HomePageComponents.beneficiaryCard(
+                    name: adherentProvider.getAdherent.surname,
+                    imgUrl: adherentProvider.getAdherent.imgUrl, 
+                    action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
+                  ),
+                  snapshot.data.docs.length >= 1 ? Expanded(
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (context, index){
+                        DocumentSnapshot doc = snapshot.data.docs[index];
+                        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+                        print("name: ");
+                        return HomePageComponents.beneficiaryCard(
+                          name: beneficiary.surname, 
+                          imgUrl: beneficiary.avatarUrl, 
+                          action: (){
+                            beneficiaryProvider.setBeneficiaryModel(beneficiary);
+                            Navigator.pushNamed(context, '/edit-beneficiary');
+                          }
+                        );
+                      }
+                    ),
+                  ) : Container(),
+                ],
+              )
             ),
           ],
         );

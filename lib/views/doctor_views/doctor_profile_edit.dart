@@ -1025,7 +1025,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                       .doc(doctorProvider.getDoctor.id)
                                       .set({
                                         "cniName": cniName,
-                                        "emailAdress": email,
+                                        "email": email,
                                         "about": about,
                                         "nomDefamille": fname,
                                         "prenom": sname,

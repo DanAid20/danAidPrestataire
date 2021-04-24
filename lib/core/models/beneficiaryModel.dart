@@ -7,7 +7,7 @@ class BeneficiaryModel{
   Timestamp dateCreated, validityEndDate, birthDate;
   List phoneList;
   List allergies;
-  double height, weight;
+  var height, weight;
 
   BeneficiaryModel({this.matricule, this.otherDocName, this.marriageCertificateName, this.adherentId, this.surname, this.familyName, this.cniName, this.gender, this.otherInfo, this.relationShip, this.cniUrl, this.marriageCertificateUrl, this.otherDocUrl, this.birthCertificateUrl, this.avatarUrl, this.bloodGroup, this.enabled, this.livesInSameHouse, this.dateCreated, this.validityEndDate, this.birthDate, this.phoneList, this.allergies, this.height, this.weight});
   
@@ -37,6 +37,7 @@ class BeneficiaryModel{
       allergies: doc.data()["allergies"],
       relationShip: doc.data()["relation"],
       otherInfo: doc.data()["infoSupplementaire"],
+      birthCertificateUrl: doc.data()["urlActeNaissance"],
     );
   }
 }

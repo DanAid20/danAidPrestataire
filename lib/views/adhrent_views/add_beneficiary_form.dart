@@ -25,6 +25,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
@@ -438,6 +439,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                           width: wv*30,
                           child: TextFormField(
                             controller: _heightController,
+                            onChanged: (val) => setState((){}),
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
                             ],
@@ -535,7 +537,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
             ),
           ),
           Container(
-            child: ((_bloodGroup != null) & (_gender != null) & (_heightController.text != "") & (_weightController.text != "")) 
+            child: ((_gender != null) & (_heightController.text.isNotEmpty)) 
               ? CustomTextButton(action: (){
                 AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
                 matricule = Algorithms().getMatricule(selectedDate, adherentModelProvider.getAdherent.regionOfOrigin, _gender);
@@ -562,20 +564,23 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   SizedBox(height: hv*1,),
                   Text("Scanner les documents justificatifs (CNI, Actes de naissances, etc..)", style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                   Center(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: hv*2),
-                      child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                    child: InkWell(
+                      onTap: (){getDocument(context);},
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: hv*2),
+                        child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                      ),
                     ),
                   ),
                   FileUploadCard(
-                    title: "Scan de la CNI *",
+                    title: "Scan de la CNI",
                     state: cniUploaded,
                     loading: cniSpinner,
                     action: () async {await getDocFromPhone('CNI');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
-                    title: "Acte de Naissance",
+                    title: "Acte de Naissance *",
                     state: birthCertificateUploaded,
                     loading: birthCertificateSpinner,
                     action: () async {await getDocFromPhone('Acte_De_Naissance');}
@@ -615,7 +620,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
             ),
           ),
         ),
-        ((_confirmFamily == true) & (cniUploaded == true))
+        ((_confirmFamily == true) & (birthCertificateUploaded == true))
           ? !buttonLoading ? CustomTextButton(
             text: "Suivant", 
             action: (){
@@ -647,8 +652,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   "enabled": false,
                   "ifVivreMemeDemeure": _confirmFamily,
                   "phoneList": [{"number": phone}],
-                  "height": double.parse(_heightController.text),
-                  "weight": double.parse(_weightController.text),
+                  "height": _heightController.text,
+                  "weight": _weightController.text,
                   "allergies": allergies,
                   "relation": _relation,
                 }, SetOptions(merge: true)).then((value) {
@@ -810,23 +815,26 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
-    if(result != null) {
-      File file = File(result.files.single.path);
-      uploadDocumentToFirebase(file, name);
-    } else {
-      setState(() {
-        if (name == "Acte_De_Marriage") {
-        marriageCertificateSpinner = false;
-        } else if (name == "CNI"){
-          cniSpinner = false;
-        } else if (name == "Acte_De_Naissance"){
-          birthCertificateSpinner = false;
-        } else {
-          otherFileSpinner = false;
-        }
-      });
-    }
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera, imageQuality: 85);
+    setState(() {
+      if (pickedFile != null) {
+        File file = File(pickedFile.path);
+        uploadDocumentToFirebase(file, name);
+      } else {
+        print('No image selected.');
+        setState(() {
+          if (name == "Acte_De_Marriage") {
+          marriageCertificateSpinner = false;
+          } else if (name == "CNI"){
+            cniSpinner = false;
+          } else if (name == "Acte_De_Naissance"){
+            birthCertificateSpinner = false;
+          } else {
+            otherFileSpinner = false;
+          }
+        });
+      }
+    });
   }
 
   Future uploadDocumentToFirebase(File file, String name) async {
@@ -892,6 +900,86 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     }).catchError((e){
       print(e.toString());
     });
+  }
+
+  Future getDocFromGallery(String name) async {
+
+    setState(() {
+      if (name == "Acte_De_Marriage") {
+        marriageCertificateSpinner = true;
+      } else if (name == "CNI"){
+        cniSpinner = true;
+      } else if (name == "Acte_De_Naissance"){
+        birthCertificateSpinner = true;
+      } else {
+        otherFileSpinner = true;
+      }
+    });
+    
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    if(result != null) {
+      File file = File(result.files.single.path);
+      uploadDocumentToFirebase(file, name);
+    } else {
+      setState(() {
+        if (name == "Acte_De_Marriage") {
+        marriageCertificateSpinner = false;
+        } else if (name == "CNI"){
+          cniSpinner = false;
+        } else if (name == "Acte_De_Naissance"){
+          birthCertificateSpinner = false;
+        } else {
+          otherFileSpinner = false;
+        }
+      });
+    }
+  }
+
+  getDocument(BuildContext context){
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext bc){
+        return SafeArea(
+          child: Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(LineIcons.identificationCard),
+                    title: new Text('CNI (ou passeport)', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    onTap: () {
+                      getDocFromPhone("CNI");
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(MdiIcons.babyFaceOutline),
+                  title: new Text('Acte de naissance', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    getDocFromPhone("Acte_De_Naissance");
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(LineIcons.ring),
+                  title: new Text('Acte de marriage', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    getDocFromPhone("Acte_De_Marriage");
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(LineIcons.certificate),
+                  title: new Text('Autre pièce justificative', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    getDocFromPhone("Pièce_Justificative_Supplémentaire");
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
   }
 
   Widget circleBar(bool isActive) {

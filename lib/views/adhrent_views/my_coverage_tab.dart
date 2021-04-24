@@ -56,27 +56,30 @@ class MyCoverageTabView extends StatelessWidget {
                   ),
                 ),
               ),
-
-              Divider(height: hv*3,),
+              SizedBox(height: hv*2,),
 
               Container(
-                padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
-                margin: EdgeInsets.symmetric(horizontal: wv*3),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
-                  boxShadow: [
-                    BoxShadow(blurRadius: 5.0, color: Colors.grey[400], spreadRadius: 1.0, offset: Offset(0, 5))
-                  ],
-                  image: DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
+                padding: EdgeInsets.symmetric(vertical: hv*2),
+                color: whiteColor,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
+                  margin: EdgeInsets.symmetric(horizontal: wv*3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
+                    boxShadow: [
+                      BoxShadow(blurRadius: 5.0, color: Colors.grey[400], spreadRadius: 1.0, offset: Offset(0, 5))
+                    ],
+                    image: DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
+                  ),
+                  child: Column(children: [
+                    Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
+                    SizedBox(height: hv*5,),
+                    Text("Démarrer une prise en charge", style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
+                    SizedBox(height: hv*1,),
+                    Text("Vous êtes malades ? Commencez ici\npour obtenir la couverture de vos frais", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
+                    SizedBox(height: hv*2,),
+                  ],crossAxisAlignment: CrossAxisAlignment.start, ),
                 ),
-                child: Column(children: [
-                  Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
-                  SizedBox(height: hv*2,),
-                  Text("Démarrer une prise en charge", style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
-                  SizedBox(height: hv*1,),
-                  Text("Vous êtes malades ? Commencez ici\npour obtenir la couverture de vos frais", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
-                  SizedBox(height: hv*2,),
-                ],crossAxisAlignment: CrossAxisAlignment.start, ),
               ),
               SizedBox(height: wv*3,),
               Column(mainAxisSize: MainAxisSize.min,
@@ -103,38 +106,44 @@ class MyCoverageTabView extends StatelessWidget {
                   ),
                 ],
               ),
-              Divider(),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: wv*3),
-                child: Row(children: [
-                  Text("Utilisation", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                  Text("Voir plus..")
-                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+              SizedBox(height: hv*2),
+              Container(
+                color: whiteColor,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                  child: Row(children: [
+                    Text("Utilisation", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    Text("Voir plus..")
+                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                ),
               ),
-              Column(
-                children: [
-                  HomePageComponents().getMyCoverageHospitalsTiles(
-                    initial: "HLD",
-                    name: "Hopital Laquintinie de Douala",
-                    date: "Mercredi, 23 Janvier 2021",
-                    price: "127.000 f.",
-                    state: 0,
-                  ),
-                  HomePageComponents().getMyCoverageHospitalsTiles(
-                    initial: "CNM",
-                    name: "Cabinet Dr. Manaouda Malachie",
-                    date: "Mercredi, 23 Janvier 2021",
-                    price: "6.000 f.",
-                    state: 1,
-                  ),
-                  HomePageComponents().getMyCoverageHospitalsTiles(
-                    initial: "HLD",
-                    name: "Hopital Laquintinie de Douala",
-                    date: "Mercredi, 23 Janvier 2021",
-                    price: "127.000 f.",
-                    state: 0,
-                  ),
-                ],
+              Container(
+                color: whiteColor,
+                child: Column(
+                  children: [
+                    HomePageComponents().getMyCoverageHospitalsTiles(
+                      initial: "HLD",
+                      name: "Hopital Laquintinie de Douala",
+                      date: "Mercredi, 23 Janvier 2021",
+                      price: "127.000 f.",
+                      state: 0,
+                    ),
+                    HomePageComponents().getMyCoverageHospitalsTiles(
+                      initial: "CNM",
+                      name: "Cabinet Dr. Manaouda Malachie",
+                      date: "Mercredi, 23 Janvier 2021",
+                      price: "6.000 f.",
+                      state: 1,
+                    ),
+                    HomePageComponents().getMyCoverageHospitalsTiles(
+                      initial: "HLD",
+                      name: "Hopital Laquintinie de Douala",
+                      date: "Mercredi, 23 Janvier 2021",
+                      price: "127.000 f.",
+                      state: 0,
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: hv*3,),
             ],
