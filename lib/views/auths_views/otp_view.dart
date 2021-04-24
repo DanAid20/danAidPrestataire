@@ -308,17 +308,8 @@ class _OtpViewState extends State<OtpView> {
         });
         print("profile");
         print(profile);
-        if (profile == doctor) {
-          HiveDatabase.setProfileType(doctor);
-          userProvider.setProfileType(doctor);
-        }
-        else if (profile == adherent) {
-          HiveDatabase.setProfileType(adherent);
-          userProvider.setProfileType(adherent);
-        }
-        else {
-          //
-        }
+        HiveDatabase.setProfileType(profile);
+        userProvider.setProfileType(profile);
         Navigator.pushReplacementNamed(context, '/home');
       }
       showSnackbar("Successfully signed in UID: ${user.uid}");
