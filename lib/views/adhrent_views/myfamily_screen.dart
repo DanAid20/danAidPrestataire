@@ -9,6 +9,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/widgets/user_avatar_coverage.dart';
+import 'package:danaid/widgets/streams.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -18,63 +19,6 @@ class MyFamilyScreen extends StatefulWidget {
 }
 
 class _MyFamilyScreenState extends State<MyFamilyScreen> {
-
-  getBeneficiary(){
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData){
-          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
-        }
-        print(snapshot.data.toString() + "rfrfr");
-        return Column(crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(text: TextSpan(
-              text: "Bénéficiaires\n",
-              children: [
-                TextSpan(text: (snapshot.data.docs.length++).toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
-              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*5)),
-            ),
-            SizedBox(height: hv*2,),
-            Container(
-              height: hv*22,
-              child: Row(
-                children: [
-                  HomePageComponents.beneficiaryCard(
-                    name: adherentProvider.getAdherent.surname,
-                    imgUrl: adherentProvider.getAdherent.imgUrl, 
-                    action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
-                  ),
-                  snapshot.data.docs.length >= 1 ? Expanded(
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, index){
-                        DocumentSnapshot doc = snapshot.data.docs[index];
-                        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-                        print("name: ");
-                        return HomePageComponents.beneficiaryCard(
-                          name: beneficiary.surname, 
-                          imgUrl: beneficiary.avatarUrl, 
-                          action: (){
-                            beneficiaryProvider.setBeneficiaryModel(beneficiary);
-                            Navigator.pushNamed(context, '/edit-beneficiary');
-                          }
-                        );
-                      }
-                    ),
-                  ) : Container(),
-                ],
-              )
-            ),
-          ],
-        );
-      }
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +37,9 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
               Container(
                 child: Row(
                   children: [
-                    Text("12 000 Pts", style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),),
+                    Text(adherentProvider.getAdherent != null ? adherentProvider.getAdherent.visitPoints.toString()+" pts" ?? "0 pts" : "0 pts",
+                      style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
+                    ),
                     SizedBox(width: wv*2,),
                     ((adherentProvider.getAdherent.adherentPlan == 1) | (adherentProvider.getAdherent.adherentPlan == 2) | (adherentProvider.getAdherent.adherentPlan == 3)) ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
                     SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
@@ -121,7 +67,8 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
               margin: EdgeInsets.symmetric(horizontal: wv*3),
               decoration: BoxDecoration(
                 color: whiteColor,
-                borderRadius: BorderRadius.circular(15)
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0, 1))]
               ),
               child: Column(
                 children: [
@@ -148,10 +95,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       Container(
                         padding: EdgeInsets.only(bottom: wv*3, right: hv*4, left: wv*3, top: wv*3),
                         decoration: BoxDecoration(
-                          color: kSouthSeas.withOpacity(0.2),
+                          color: kSouthSeas.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(15)
                         ),
-                        child: getBeneficiary(),
+                        child: BeneficiaryStream(standardUse: true),
                       ),
                       Positioned(
                         right: wv*0, bottom: hv*8,

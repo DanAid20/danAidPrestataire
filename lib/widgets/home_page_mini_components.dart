@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -464,7 +466,7 @@ class HomePageComponents {
   }
 
   getMyDoctorAppointmentTile(
-      {String label, String doctorName, String date, String type, int state}) {
+      {String label, String doctorName, DateTime date, String type, int state}) {
     return ListTile(
       leading: Container(
         width: wv * 12,
@@ -475,12 +477,12 @@ class HomePageComponents {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("18",
+            Text(date.day.toString().padLeft(2, '0'),
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
                     fontSize: inch * 1.7,
                     fontWeight: FontWeight.w700)),
-            Text("02/21",
+            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
                     fontSize: inch * 1.5,
@@ -503,7 +505,7 @@ class HomePageComponents {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            date,
+            Algorithms.getFormattedDate(date).trim().substring(0, 1).toUpperCase() + Algorithms.getFormattedDate(date).trim().substring(1),
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
           ),
           Text(
@@ -594,6 +596,107 @@ class HomePageComponents {
             ],
           )
         ],
+      ),
+    );
+  }
+
+  static beneficiaryChoiceCard({String name, String imgUrl, Function editAction, Function selectAction, bool isSelected = false}){
+    return Container(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: selectAction,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  margin: EdgeInsets.symmetric(horizontal: wv*1),
+                  height: isSelected ? hv*21 : hv*18,
+                  width: isSelected ? wv*28 : wv*25,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
+                  ),
+                  child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: wv*25,) : Container(),
+                ),
+              ),
+              Positioned(
+                bottom: hv*0,
+                child: Column(
+                  children: [
+                    IconButton(padding: EdgeInsets.all(0),
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
+                        ),
+                        child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
+                      onPressed: editAction
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Text(name, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
+        ],
+      ),
+    );
+  }
+
+  static appointmentPurpose({String iconPath, String title, bool enable = true, Function action}){
+    return Container(
+      decoration: BoxDecoration(
+        color: kSouthSeas,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+      ),
+      child: Row(children: [
+        SizedBox(width: wv*2.5,),
+        SvgPicture.asset(iconPath, width: wv*7, color: whiteColor,),
+        SizedBox(width: wv*3,),
+        Expanded(child: 
+          CustomTextButton(
+            enable: enable,
+            text: title,
+            color: kPrimaryColor,
+            noPadding: true,
+            action: action,
+          )
+        )
+      ],)
+    );
+  }
+
+  static consultationType({String iconPath, String title, String type, String price, bool selected = false, Function action}){
+    return  GestureDetector(
+      onTap: action,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: hv*1.5),
+        margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: selected ? kDeepTeal.withOpacity(0.4) : Colors.transparent, width: 1.0),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1))]
+        ),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(width: wv*1.5),
+            SvgPicture.asset(iconPath, width: wv*9.5, color: kSouthSeas,),
+            SizedBox(width: wv*2),
+            RichText(text: TextSpan(
+              text: "$title\n",
+              children: [
+                TextSpan(text: "$type\n\n", style: TextStyle(fontSize: wv*4.2, fontWeight: FontWeight.bold),),
+                TextSpan(text: "$price Cfa", style: TextStyle(fontSize: wv*4.2, color: kBlueDeep),)
+              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8)),
+            ),
+            SizedBox(width: wv*4,)
+          ],
+        ),
       ),
     );
   }

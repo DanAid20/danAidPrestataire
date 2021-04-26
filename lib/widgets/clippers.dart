@@ -55,3 +55,52 @@ class WaveClipperTop2 extends CustomClipper<Path>{
     return true;
   }
 }
+
+class BottomNavBarClipper extends CustomClipper<Path> {
+  @override
+  getClip(Size size) {
+    var path = Path();
+
+    // Start Drawing
+
+    path.moveTo(0,size.height*0.30);
+    path.quadraticBezierTo(size.width*0.35, size.height*0.45, size.width*0.68, size.height*0.3);
+    path.quadraticBezierTo(size.width*0.80, size.height*0.25, size.width, size.height*0.4);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    // End Drawing
+    
+    return path;
+
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldDelegate){
+    return true;
+  } 
+}
+
+class BottomNavBarBackgroundClipper extends CustomClipper<Path> {
+  @override
+  getClip(Size size) {
+    var path = Path();
+
+    // Start Drawing
+
+    path.moveTo(0,size.height*0.30);
+    path.quadraticBezierTo(size.width*0.35, size.height*0.0, size.width*0.70, size.height*0.7);
+    path.quadraticBezierTo(size.width*0.80, size.height*0.75, size.width, size.height*0.4);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    // End Drawing
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper oldDelegate){
+    return true;
+  } 
+}

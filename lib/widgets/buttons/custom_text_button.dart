@@ -8,21 +8,16 @@ class CustomTextButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final bool expand;
+  final bool noPadding;
+  final bool enable;
 
-  const CustomTextButton(
-      {Key key,
-      this.text,
-      this.action,
-      this.color = kPrimaryColor,
-      this.expand = true,
-      this.textColor = whiteColor})
-      : super(key: key);
+  const CustomTextButton({Key key, this.text, this.action, this.color = kPrimaryColor, this.expand = true, this.textColor = whiteColor, this.noPadding = false, this.enable = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return enable ? Container(
       width: expand ? double.infinity : null,
-      padding: EdgeInsets.symmetric(horizontal: wv * 3.2, vertical: hv * 2),
+      padding: !noPadding ? EdgeInsets.symmetric(horizontal: wv * 3.2, vertical: hv * 2) : EdgeInsets.zero,
       child: TextButton(
         onPressed: action,
         child: Text(
@@ -39,22 +34,24 @@ class CustomTextButton extends StatelessWidget {
             shape: MaterialStateProperty.all(RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15))))),
       ),
-    );
+    ) : 
+    CustomDisabledTextButton(text: text, noPadding: noPadding,);
   }
 }
 
 class CustomDisabledTextButton extends StatelessWidget {
   final String text;
+  final bool noPadding;
   final bool expand;
 
-  const CustomDisabledTextButton({Key key, this.text, this.expand = true})
+  const CustomDisabledTextButton({Key key, this.text, this.expand = true, this.noPadding = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: expand ? double.infinity : null,
-      padding: EdgeInsets.symmetric(horizontal: wv * 3.2, vertical: hv * 2),
+      padding: !noPadding ? EdgeInsets.symmetric(horizontal: wv * 3.2, vertical: hv * 2) : EdgeInsets.zero,
       child: TextButton(
         onPressed: null,
         child: Text(

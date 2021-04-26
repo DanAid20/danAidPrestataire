@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:intl/intl.dart';
+
 class Algorithms {
   String getMatricule(DateTime date,String region, String gender){
     random(min, max){
@@ -63,5 +65,23 @@ class Algorithms {
       }
     }
     return code;
+  }
+  static String getAppointmentTypeLabel(String val){
+    return val == "consult-today" ? "Consultation" : val == "appointment" ? "Rendez-vous" : val == "emmergency" ? "Urgence"
+      : "Rendez-vous";
+  }
+
+  static String getConsultationTypeLabel(String val){
+    return val == "Cabinet" ? "En Cabinet" : val == "Video" ? "Télé-Consultation" : val == "Domicile" ? "A Domicile"
+      : "Rendez-vous";
+  }
+
+  static String getAppointmentReasonLabel(String val){
+    return val == "nouvelle-consultation" ? "Nouvelle Consultation" : val == "suivi" ? "Contrôle" : val == "referencement" ? "Référencement" : val == "resultat-examen" ? "Résultats d'examen"
+      : "Rendez-vous";
+  }
+
+  static String getFormattedDate(DateTime date){
+    return DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString() + ", "+ date.hour.toString().padLeft(2, '0') + ":" + date.minute.toString().padLeft(2, '0');
   }
 }

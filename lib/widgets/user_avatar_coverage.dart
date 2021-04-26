@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -17,7 +18,8 @@ class UserAvatarAndCoverage extends StatelessWidget {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    return (adherentProvider.getAdherent != null) || (doctorProvider.getDoctor != null) ? Row(
+    ServiceProviderModelProvider serviceProviderMP = Provider.of<ServiceProviderModelProvider>(context);
+    return (adherentProvider.getAdherent != null) || (doctorProvider.getDoctor != null) || (serviceProviderMP.getServiceProvider != null) ? Row(
       children: [
         SizedBox(width: 0,),
         Stack(clipBehavior: Clip.none,
@@ -56,13 +58,30 @@ class UserAvatarAndCoverage extends StatelessWidget {
                   imageUrl: doctorProvider.getDoctor.avatarUrl),
               ),
             ) :
+            userProvider.getProfileType == serviceProvider ?
+              CircleAvatar(
+              radius: wv*8,
+              backgroundColor: Colors.blueGrey[100],
+              //backgroundImage: ((doctorProvider.getDoctor.avatarUrl == "") & (doctorProvider.getDoctor.avatarUrl == null))  ? null : CachedNetworkImageProvider(doctorProvider.getDoctor.avatarUrl),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  height: wv*16,
+                  width: wv*16,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                    padding: EdgeInsets.all(20.0),
+                  ),
+                  imageUrl: serviceProviderMP.getServiceProvider != null ? serviceProviderMP.getServiceProvider.avatarUrl : null),
+              ),
+            ) :
             CircleAvatar(
               radius: wv*8,
               backgroundColor: Colors.blueGrey[100],
               child: Icon(LineIcons.user, color: Colors.white, size: wv*13,),
             ),
             Positioned(child: GestureDetector(
-              onTap: ()=> Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : '/adherent-profile-edit'),
+              onTap: ()=> Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : userProvider.getProfileType == adherent ? '/adherent-profile-edit' : '/serviceprovider-profile-edit'),
               child: CircleAvatar(
                 radius: wv*3,
                 backgroundColor: kDeepTeal,
@@ -75,7 +94,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userProvider.getProfileType == adherent ? "Bonjour ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? "Salut Dr. ${doctorProvider.getDoctor.surname} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(userProvider.getProfileType == adherent ? "Bonjour ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? "Salut Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
                 userProvider.getProfileType == adherent ? 
                 adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? "Couverture niveau 0: Découverte" :

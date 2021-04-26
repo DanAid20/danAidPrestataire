@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_pickers/country.dart';
+import 'package:country_pickers/country_picker_dialog.dart';
+import 'package:country_pickers/utils/utils.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
@@ -12,9 +16,12 @@ import 'package:danaid/widgets/buttons/default_btn.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:io' show Platform;
+import 'package:qrscan/qrscan.dart' as scanner;
 class AddPatientView extends StatefulWidget {
   @override
   _AddPatientViewState createState() => _AddPatientViewState();
@@ -46,8 +53,45 @@ class AddPatientView extends StatefulWidget {
 
 class _AddPatientViewState extends State<AddPatientView> {
   bool confirmSpinner = false;
+  String initialCountry = 'CM';
+  PhoneNumber number = PhoneNumber(isoCode: 'CM');
   TextEditingController adherentNumber = new TextEditingController();
-  Widget offerPart() {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  TextEditingController _outputController;
+  Country _selectedDialogCountry = CountryPickerUtils.getCountryByPhoneCode('237');
+  String phoneCode = "237";
+    String phone;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    adherentNumber = TextEditingController();
+    super.initState();
+  }
+  
+
+  Future _scan() async {
+
+    await Permission.camera.request();
+    String barcode = await scanner.scan();
+    if (barcode == null) {
+      print('nothing return.');
+    } else {
+      this._outputController.text = barcode;
+      print("---------------------------------------------------");
+      print(barcode);
+    }
+  }
+
+ 
+
+  @override
+  void dispose() {
+    adherentNumber.dispose();
+    super.dispose();
+  }
+
+  Widget offerPart(
+      {String consultation, String consultationType, String price}) {
     return Column(
       children: [
         Container(
@@ -83,14 +127,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Consultation',
+                        consultation,
                         style: TextStyle(
                             color: kCardTextColor,
                             fontWeight: FontWeight.w500,
                             fontSize: fontSize(size: wv * 4)),
                       ),
                       Text(
-                        'en Cabinet',
+                        consultationType,
                         style: TextStyle(
                             color: kCardTextColor,
                             fontWeight: FontWeight.w800,
@@ -101,7 +145,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                         child: Container(
                           margin: EdgeInsets.only(top: hv * 2),
                           child: Text(
-                            '2000 cfa',
+                            price,
                             style: TextStyle(
                                 color: kCardTextColor,
                                 fontWeight: FontWeight.w500,
@@ -114,6 +158,59 @@ class _AddPatientViewState extends State<AddPatientView> {
                 ),
               ],
             )),
+      ],
+    );
+  }
+  
+  void _openCountryPickerDialog() => showDialog(
+      context: context,
+      builder: (context) {
+        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        return Theme(
+            data: Theme.of(context).copyWith(primaryColor: Colors.pink),
+            child: CountryPickerDialog(
+                titlePadding: EdgeInsets.all(10.0),
+                searchCursorColor: Colors.pinkAccent,
+                searchInputDecoration: InputDecoration(
+                    hintText: 'Chercher...',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
+                ),
+                isSearchable: true,
+                title: Text('Selectionnez votre pays'),
+                onValuePicked: (Country country) {
+                  print(country.isoCode);
+                  print(country.name);
+                  print(country.phoneCode);
+                  print(country.iso3Code);
+                  userProvider.setCountryCode(country.isoCode);
+                  userProvider.setCountryName(country.name);
+                  setState(() => _selectedDialogCountry = country);
+                  setState(() => phoneCode = country.phoneCode);
+                },
+                priorityList: [
+                  CountryPickerUtils.getCountryByPhoneCode('237'),
+                  CountryPickerUtils.getCountryByPhoneCode('225'),
+                  CountryPickerUtils.getCountryByPhoneCode('234'),
+                ],
+                itemBuilder: _buildCountryDialogItem)
+        );
+      }
+  );
+
+  Widget _buildCountryDialogItem(Country country) {
+    return Row(
+      children: <Widget>[
+        CountryPickerUtils.getDefaultFlagImage(country),
+        SizedBox(width: 5.0),
+        Text("+${country.phoneCode}", style:TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: fontSize(size: wv * 4))),
+        SizedBox(width: 5.0),
+        Flexible(child: Text(country.name,style:TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: fontSize(size: wv * 4))))
       ],
     );
   }
@@ -188,10 +285,18 @@ class _AddPatientViewState extends State<AddPatientView> {
                           child: new ListView(
                             scrollDirection: Axis.horizontal,
                             children: <Widget>[
-                              offerPart(),
-                              offerPart(),
-                              offerPart(),
-                              offerPart(),
+                              offerPart(
+                                  consultation: 'consultation',
+                                  consultationType: 'En cabinet',
+                                  price: '2000 FCFA'),
+                              offerPart(
+                                  consultation: 'consultation',
+                                  consultationType: 'Vidéos',
+                                  price: '2000 FCFA'),
+                              offerPart(
+                                  consultation: 'consultation',
+                                  consultationType: 'Message',
+                                  price: '2000 FCFA'),
                             ],
                           ),
                         ),
@@ -203,7 +308,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                   ),
                   Container(
                     width: wv * 100,
-                    height: hv * 44,
+                    height: hv * 42,
                     color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,92 +350,71 @@ class _AddPatientViewState extends State<AddPatientView> {
                         ),
                         Container(
                           margin: EdgeInsets.only(
-                              left: inch * 2, right: inch * 2, top: inch * 5),
+                              left: inch * 2, right: inch * 2, top: inch * 1),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Recherche par numero de telephone',
-                                  style: TextStyle(
-                                      fontSize: fontSize(size: wv * 4),
-                                      fontWeight: FontWeight.w500,
-                                      color: kFirstIntroColor)),
-                              SizedBox(
-                                height: hv * 2,
-                              ),
-                              Container(
-                                width: wv * 100,
-                                height: hv * 7,
-                                decoration: BoxDecoration(
-                                  color: kBgTextColor,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                child: Row(children: [
-                                  SizedBox(
-                                    width: wv * 2,
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/icons/Bulk/Search.svg',
-                                    color: kSouthSeas,
-                                  ),
-                                  SizedBox(
-                                    height: hv * 2,
-                                  ),
-                                  Container(
-                                    width: wv * 48,
-                                    child: TextFormField(
-                                      controller: adherentNumber,
-                                      textAlign: TextAlign.start,
-                                      keyboardType: TextInputType.phone,
-                                      decoration: InputDecoration(
-                                        errorBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.red[300]),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        fillColor: kBgTextColor,
-                                        //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 15, vertical: 5),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1,
-                                                color: kPrimaryColor
-                                                    .withOpacity(0.0)),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                width: 1, color: kBgTextColor),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
-                                      ),
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: inch * 2,
-                                        right: inch * 2,
-                                        top: inch * 2),
-                                    width: wv * 28,
-                                    height: hv * 7,
-                                    decoration: BoxDecoration(
-                                      color: kBgTextColor,
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(15),
-                                          bottomRight: Radius.circular(15)),
-                                    ),
-                                    child: Text('Rechercher',
-                                        style: TextStyle(
-                                            fontSize: fontSize(size: wv * 4),
-                                            fontWeight: FontWeight.w700,
-                                            color: kSouthSeas)),
-                                  ),
-                                ]),
-                              ),
+                               Form(
+                                 key: formKey,
+                                 child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: wv*2),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Numéro mobile", style: TextStyle(fontSize: wv*4),),
+                    SizedBox(height: hv*1,),
+                    InternationalPhoneNumberInput(
+                      validator: (String phone) {
+                        return (phone.isEmpty)
+                            ?  "Entrer un numero de téléphone valide" : null;
+                      },
+                      onInputChanged: (PhoneNumber number) {
+                        phone = number.phoneNumber;
+                        print(number.phoneNumber);
+                      },
+                      onInputValidated: (bool value) {
+                        print(value);
+                      },
+                      spaceBetweenSelectorAndTextField: 0,
+                      selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
+                      ignoreBlank: false,
+                      textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                      autoValidateMode: AutovalidateMode.disabled,
+                      selectorTextStyle: TextStyle(color: Colors.black),
+                      initialValue: number,
+                      textFieldController: adherentNumber,
+                      formatInput: true,
+                      keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                      inputDecoration:InputDecoration(
+                                          errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.red[300]),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          fillColor: kBgTextColor,
+                                          //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
+                                          contentPadding: EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 5),
+                                          enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: kPrimaryColor
+                                                      .withOpacity(0.0)),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                          focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1, color: kBgTextColor),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                        ),
+                      onSaved: (PhoneNumber number) {
+                        print('On Saved: $number');
+                      }, 
+                    ),
+                  ])),
+                               ),
+                             
                               SizedBox(
                                 height: hv * 2,
                               ),
@@ -344,13 +428,18 @@ class _AddPatientViewState extends State<AddPatientView> {
                                     left: inch * 2,
                                     right: inch * 2,
                                     top: inch * 1),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: SvgPicture.asset(
-                                    'assets/icons/Bulk/Scan.svg',
-                                    color: kSouthSeas,
-                                    height: hv * 12,
-                                    width: wv * 12,
+                                child: GestureDetector(
+                                  onTap: () {
+                                   _scan();
+                                  },
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: SvgPicture.asset(
+                                      'assets/icons/Bulk/Scan.svg',
+                                      color: kSouthSeas,
+                                      height: hv * 12,
+                                      width: wv * 12,
+                                    ),
                                   ),
                                 ),
                               )
@@ -369,15 +458,17 @@ class _AddPatientViewState extends State<AddPatientView> {
                         horizontal: wv * 3.2, vertical: hv * 2),
                     child: TextButton(
                       onPressed: () async {
+                        print('${phone}');
                         setState(() {
                           confirmSpinner = true;
                         });
                         await FirebaseFirestore.instance
                             .collection('ADHERENTS')
-                            .doc('${adherentNumber.text}')
+                            .doc('${phone}')
                             .get()
                             .then((doc) {
                           print(doc.exists);
+
                           setState(() {
                             confirmSpinner = false;
                           });

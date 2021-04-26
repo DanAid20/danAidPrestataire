@@ -15,7 +15,7 @@ class DanAidDefaultHeader extends StatelessWidget {
       ClipPath(
         clipper: WaveClipperTop2(),
         child: Container(
-          height: wv*42,
+          height: hv*22,
           decoration: BoxDecoration(
             color: Colors.grey[200]
           ),
@@ -24,7 +24,7 @@ class DanAidDefaultHeader extends StatelessWidget {
       ClipPath(
         clipper: WaveClipperTop(),
         child: Container(
-          height: wv*42,
+          height: hv*22,
           decoration: BoxDecoration(
             color: kPrimaryColor.withOpacity(0.9)
           ),

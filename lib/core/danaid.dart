@@ -4,6 +4,7 @@ import 'package:danaid/core/utils/status_bar.dart';
 import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
@@ -13,6 +14,7 @@ import 'package:danaid/core/providers/devEnvironmentProvider.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
@@ -21,7 +23,7 @@ class Danaid extends StatelessWidget {
   final String env;
 
   const Danaid({Key key, this.env}) : super(key: key);
-
+   
   @override
   Widget build(BuildContext context) {
     statusBar.setColor(context: context);
@@ -57,15 +59,20 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<BeneficiaryModelProvider>(
                 create: (_) => BeneficiaryModelProvider(BeneficiaryModel()),
+              ),
+              ChangeNotifierProvider<ServiceProviderModelProvider>(
+                create: (_) => ServiceProviderModelProvider(null),
               )
             ],
-            child: MaterialApp(
-              title: Strings.APP_NAME,
-              theme: theme(),
-              debugShowCheckedModeBanner: false,
-              routes: routes,
-              initialRoute: '/splash',
-              navigatorKey: locator<NavigationService>().navigatorKey,
+            child: ScreenUtilInit(
+                 builder: () => MaterialApp(
+                title: Strings.APP_NAME,
+                theme: theme(),
+                debugShowCheckedModeBanner: false,
+                routes: routes,
+                initialRoute: '/splash',
+                navigatorKey: locator<NavigationService>().navigatorKey,
+              ),
             ),
           );
   }

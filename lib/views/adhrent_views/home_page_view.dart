@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
@@ -15,12 +16,15 @@ import 'package:danaid/views/adhrent_views/hello_screen.dart';
 import 'package:danaid/views/adhrent_views/myfamily_screen.dart';
 import 'package:danaid/views/adhrent_views/partners_screen.dart';
 import 'package:danaid/views/doctor_views/tabs_doctor_views/profil_doctor_view.dart';
+import 'package:danaid/widgets/clippers.dart';
 import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 class HomePageView extends StatefulWidget {
@@ -49,7 +53,7 @@ class _HomePageViewState extends State<HomePageView> {
           if(lastDateVisited != null){
             if(date.toString() != lastDateVisited.toString()){
               FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                "visitPoints": FieldValue.increment(10),
+                "visitPoints": FieldValue.increment(25),
                 "visits": FieldValue.arrayUnion([date]),
                 "lastDateVisited": date,
               }, SetOptions(merge: true));
@@ -60,7 +64,7 @@ class _HomePageViewState extends State<HomePageView> {
             lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
             if(date.toString() != lastDateVisited.toString()){
               FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                "visitPoints": FieldValue.increment(10),
+                "visitPoints": FieldValue.increment(25),
                 "visits": FieldValue.arrayUnion([date]),
                 "lastDateVisited": date,
               }, SetOptions(merge: true));
@@ -77,7 +81,7 @@ class _HomePageViewState extends State<HomePageView> {
             if(lastDateVisited != null){
               if(date.toString() != lastDateVisited.toString()){
                 FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                  "visitPoints": FieldValue.increment(10),
+                  "visitPoints": FieldValue.increment(25),
                   "visits": FieldValue.arrayUnion([date]),
                   "lastDateVisited": date,
                 }, SetOptions(merge: true));
@@ -85,10 +89,11 @@ class _HomePageViewState extends State<HomePageView> {
                 adherentModelProvider.addVisit(date);
               }
             } else {
-              lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
+              DateTime dateOnline =adherentModelProvider.getAdherent.lastDateVisited != null ? DateTime(adherentModelProvider.getAdherent.lastDateVisited.toDate().year, adherentModelProvider.getAdherent.lastDateVisited.toDate().month, adherentModelProvider.getAdherent.lastDateVisited.toDate().day) : DateTime(2000);
+              lastDateVisited = dateOnline.toString();
               if(date.toString() != lastDateVisited.toString()){
                 FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                  "visitPoints": FieldValue.increment(10),
+                  "visitPoints": FieldValue.increment(25),
                   "visits": FieldValue.arrayUnion([date]),
                   "lastDateVisited": date,
                 }, SetOptions(merge: true));
@@ -148,6 +153,39 @@ class _HomePageViewState extends State<HomePageView> {
     }
   }
 
+  loadServiceProviderProfile() async {
+   
+    print("prestataire");
+
+    ServiceProviderModelProvider serviceProviderM = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      print("prestataire"+userProvider.getUserId.toString());
+    if(userProvider.getUserId != null && userProvider.getUserId != ""){
+      FirebaseFirestore.instance.collection(serviceProvider).doc(userProvider.getUserId).get().then((docSnapshot) {
+        ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
+        serviceProviderM.setServiceProviderModel(doc);
+        print("ok");
+      });
+    } 
+    else {
+      String phone = await HiveDatabase.getAuthPhone();
+      print("inside");
+      print("inside"+phone.toString());
+      if(serviceProviderM.getServiceProvider != null){
+          //
+      }
+      else {
+        FirebaseFirestore.instance.collection(serviceProvider).doc(phone).get().then((docSnapshot) {
+          ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
+          serviceProviderM.setServiceProviderModel(doc);
+          userProvider.setUserId(doc.id);
+        });
+      }
+    }
+    
+      print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
+  }
+
   loadUserProfile() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     if(userProvider.getProfileType != null || userProvider.getProfileType != ""){
@@ -158,7 +196,7 @@ class _HomePageViewState extends State<HomePageView> {
         loadDoctorProfile();
       }
       else if(userProvider.getProfileType == serviceProvider){
-        loadAdherentprofile();
+        loadServiceProviderProfile();
       }
     }
     else {
@@ -172,7 +210,7 @@ class _HomePageViewState extends State<HomePageView> {
           loadDoctorProfile();
         }
         else if(userProvider.getProfileType == serviceProvider){
-          loadAdherentprofile();
+          loadServiceProviderProfile();
         }
       }
     }
@@ -181,6 +219,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    initializeDateFormatting();
     loadUserProfile();
     super.initState();
   }
@@ -203,20 +242,24 @@ class _HomePageViewState extends State<HomePageView> {
             children: [
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  color: Colors.transparent,
-                  height: hv*12,
-                  width: double.infinity,
-                  child: CustomPaint(painter: BottomNavBarBackgroundPainter(),),
+                child: ClipPath(
+                  clipper: BottomNavBarBackgroundClipper(),
+                  child: Container(
+                    color: Colors.grey.withOpacity(0.2),
+                    height: hv*12,
+                    width: double.infinity
+                  ),
                 ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  color: Colors.transparent,
-                  height: hv*12,
-                  width: double.infinity,
-                  child: CustomPaint(painter: BottomNavBarPainter(),),
+                child: ClipPath(
+                  clipper: BottomNavBarClipper(),
+                  child: Container(
+                    color: userProvider.getProfileType == serviceProvider ? kGold : kPrimaryColor,
+                    height: hv*12,
+                    width: double.infinity
+                  ),
                 ),
               ),
               Align(
@@ -232,7 +275,7 @@ class _HomePageViewState extends State<HomePageView> {
                       index == 1 ? iconActive(svgUrl: "assets/icons/Two-tone/Home.svg") : Container(),
                       index == 2 ? iconActive(svgUrl: "assets/icons/Two-tone/Paper.svg") : Container(),
                       index == 3 ? iconActive(svgUrl: "assets/icons/Two-tone/Location.svg") : Container(),
-                      index == 4 ? iconActive(svgUrl: userProvider.getProfileType != doctor ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg") : Container(),
+                      index == 4 ? iconActive(svgUrl: userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg") : Container(),
                     ],
                   ),
                 ),
@@ -251,7 +294,12 @@ class _HomePageViewState extends State<HomePageView> {
                       index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: "Accueil", onTap: accueilTapped),
                       index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: "Carnet", onTap: carnetTapped),
                       index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: "partenaire", onTap: partenaireTapped),
-                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: userProvider.getProfileType != doctor ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", title: userProvider.getProfileType == doctor ? "Profile" : "famille", onTap: familleTapped),
+                      index == 4 ? SizedBox(width: width*13,) 
+                        : bottomIcon(
+                          svgUrl: userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", 
+                          title: userProvider.getProfileType == adherent ? "famille" : "Profile", 
+                          onTap: familleTapped
+                        ),
                     ],
                   ),
                 ),
@@ -301,18 +349,20 @@ class _HomePageViewState extends State<HomePageView> {
   }
 
   iconActive({String svgUrl}){
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     return CircleAvatar(
       radius: width*7.5,
-      backgroundColor: kPrimaryColor,
+      backgroundColor: userProvider.getProfileType == serviceProvider ? kGold : kPrimaryColor,
       child: CircleAvatar(
         radius: width*7.2,
         backgroundColor: Colors.white,
-        child: SvgPicture.asset(svgUrl, width: inch*4, color: kPrimaryColor.withOpacity(0.65)),
+        child: SvgPicture.asset(svgUrl, width: inch*4, color: userProvider.getProfileType == serviceProvider ? kGold : kPrimaryColor.withOpacity(0.65)),
       ),
     );
   }
 
   getCurrentPage(){
+
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
 
@@ -323,13 +373,13 @@ class _HomePageViewState extends State<HomePageView> {
       return HelloScreen();
     }
     else if(controller.getIndex == 2){
-      return userProvider.getProfileType == doctor ? ProfilDoctorView() : HealthBookScreen();
+      return HealthBookScreen();
     }
     else if(controller.getIndex == 3){
-      return userProvider.getProfileType == doctor ? ProfilDoctorView() : PartnersScreen();
+      return userProvider.getProfileType == adherent ?  PartnersScreen() : ProfilDoctorView();
     }
     else if(controller.getIndex == 4){
-      return userProvider.getProfileType == doctor ? DoctorProfilePage() : MyFamilyScreen();
+      return userProvider.getProfileType == adherent ?  MyFamilyScreen() : DoctorProfilePage();
     }
   }
 

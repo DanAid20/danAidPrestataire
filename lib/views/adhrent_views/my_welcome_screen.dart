@@ -20,86 +20,107 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
             children: [
               Column(
                 children: <Widget>[
-                  SizedBox(height: hv*1.5,),
                   Container(
-                    margin: EdgeInsets.only(left:inch*2, right:inch*2),
-                    child: Row(children: [
-                      Text("Mes Avantages", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                      Text("Voir plus..")
-                    ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                  ),
-                  Column(mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
-                      child: Row(children: [
-                        AdvantageCard(
-                          label: "Fond de Soins",
-                          description: "Demander une prise en charge maladie",
-                          state: "DISPONIBLE",
-                          price: "#350.000Xaf",
-                          color: Colors.teal[500],
-                          onTap: (){},
-                        ),
-                        AdvantageCard(
-                          label: "Prêt de santé",
-                          description: "Demander un prêt santé",
-                          state: "DISPONIBLE",
-                          price: "#100.000Xaf",
-                          color: Colors.brown.withOpacity(0.7),
-                          onTap: (){},
-                        ),
-                        AdvantageCard(
-                          label: "Fond de Soins",
-                          description: "Demander une prise en charge maladie",
-                          state: "DISPONIBLE",
-                          price: "#350.000Xaf",
-                          color: Colors.grey,
-                          onTap: (){},
-                        ),
-                      ],),
-                      ),
-                    ],
-                  ),
-                  Divider(),
-                  Container(
-                    margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0.5),
-                    child: Row(children: [
-                      Text("Notifications", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                      Text("Voir plus..")
-                    ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                  ),
-                  Container(
+                    margin: EdgeInsets.only(top: hv*2),
+                    padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          blurRadius: 20.0,
-                          offset: Offset(0.0, 0.75),
-                          spreadRadius: -15.0
-                        )
-                      ]
+                      color: Colors.white,
+                      boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
                     ),
-                    child: Column(mainAxisSize: MainAxisSize.min,
+                    child: Column(
                       children: [
+                        Container(
+                          margin: EdgeInsets.only(left:inch*2, right:inch*2),
+                          child: Row(children: [
+                            Text("Mes Avantages", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                            Text("Voir plus..")
+                          ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                        ),
                         SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                         child: Row(children: [
-                          NotificationCard(
-                            instruction: "Aller au Labo",
-                            description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                          AdvantageCard(
+                            label: "Fond de Soins",
+                            description: "Demander une prise en charge maladie",
+                            state: "DISPONIBLE",
+                            price: "#350.000Xaf",
+                            color: Colors.teal[500],
+                            onTap: (){},
                           ),
-                          NotificationCard(
-                            instruction: "Aller au Labo",
-                            description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                          AdvantageCard(
+                            label: "Prêt de santé",
+                            description: "Demander un prêt santé",
+                            state: "DISPONIBLE",
+                            price: "#100.000Xaf",
+                            color: Colors.brown.withOpacity(0.7),
+                            onTap: (){},
                           ),
-                          NotificationCard(
-                            instruction: "Aller au Labo",
-                            description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                          AdvantageCard(
+                            label: "Fond de Soins",
+                            description: "Demander une prise en charge maladie",
+                            state: "DISPONIBLE",
+                            price: "#350.000Xaf",
+                            color: Colors.grey,
+                            onTap: (){},
                           ),
                         ],),
                         ),
                       ],
                     ),
                   ),
+
+                  Container(
+                    margin: EdgeInsets.only(top: hv*2),
+                    padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
+                    ),
+                    child: Column(children: [
+                      Container(
+                        margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0.5),
+                        child: Row(children: [
+                          Text("Notifications", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                          Text("Voir plus..")
+                        ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 20.0,
+                              offset: Offset(0.0, 0.75),
+                              spreadRadius: -15.0
+                            )
+                          ]
+                        ),
+                        child: Column(mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
+                            child: Row(children: [
+                              NotificationCard(
+                                isprestataire: false,
+                                instruction: "Aller au Labo",
+                                description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                              ),
+                              NotificationCard(
+                                isprestataire: false,
+                                instruction: "Aller au Labo",
+                                description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                              ),
+                              NotificationCard(
+                                isprestataire: false,
+                                instruction: "Aller au Labo",
+                                description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
+                              ),
+                            ],),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],),
+                  )
+                  
                   
                 ],
               ),

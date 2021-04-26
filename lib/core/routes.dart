@@ -1,5 +1,6 @@
 import 'package:danaid/views/adhrent_views/add_beneficiary_form.dart';
 import 'package:danaid/views/adhrent_views/edit_beneficiary.dart';
+import 'package:danaid/views/adhrent_views/appointment_form.dart';
 import 'package:danaid/views/auths_views/adherent_form.dart';
 import 'package:danaid/views/auths_views/login_view.dart';
 import 'package:danaid/views/auths_views/otp_view.dart';
@@ -20,6 +21,7 @@ import 'package:danaid/views/splash_screen.dart';
 import 'package:danaid/views/adhrent_views/profile_edit.dart';
 import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
+import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -40,6 +42,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/doctor-profile": (context) => DoctorProfilePage(),
   "/add-beneficiary": (context) => AddBeneficiaryForm(),
   "/edit-beneficiary": (context) => EditBeneficiary(),
+  "/rdv": (context) => AppointmentForm(),
 
   /**
    * Start section routes that concern the doctor activities in the
@@ -54,4 +57,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
    * End section routes that concern the doctor activities in the
    * application system
    */
+
+  // Service provider routes (prestataire)
+  "/serviceprovider-profile-edit": (context) => ServiceProviderProfileEdit(),
+  
 };
