@@ -4,6 +4,7 @@ import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -339,7 +340,10 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                             SizedBox(width: 10,),
 
                                             TextButton.icon(
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                doctorProvider.setDoctorModel(doctor);
+                                                Navigator.pushNamed(context, '/rdv');
+                                              },
                                               icon: Padding(
                                                 padding: const EdgeInsets.only(top: 3.0),
                                                 child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
@@ -470,7 +474,51 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                       margin: EdgeInsets.only(left: 15, bottom: hv*2),
                       child: Text("Mes Rendez-vous", style: TextStyle(color: Colors.teal[400], fontSize: 17),)
                     ),
-                    HomePageComponents().getMyDoctorAppointmentTile(
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          StreamBuilder(
+                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").snapshots(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                  ),
+                                );
+                              }
+                              int lastIndex = snapshot.data.docs.length - 1;
+                              return snapshot.data.docs.length >= 1
+                                  ? ListView.builder(
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: snapshot.data.docs.length,
+                                      itemBuilder: (context, index) {
+                                        DocumentSnapshot rdv = snapshot.data.docs[index];
+                                        Map r = rdv.data();
+                                        print("name: ");
+                                        return Padding(
+                                          padding: EdgeInsets.only(
+                                              bottom: lastIndex == index ? hv * 5 : 0),
+                                          child: HomePageComponents().getMyDoctorAppointmentTile(
+                                            doctorName: "Dr. ${r['doctorName']}, Médécin de Famille",
+                                            date: r['start-time'].toDate(),
+                                            state: r['status'],
+                                            type: Algorithms.getConsultationTypeLabel(r['consultation-type']),
+                                            label: Algorithms.getAppointmentReasonLabel(r['title'])
+                                          ),
+                                        );
+                                      })
+                                  : Center(
+                                      child: Container(child: Text("Aucun rendez-vous enrégistré pour le moment..", textAlign: TextAlign.center)),
+                                    );
+                            }),
+                            SizedBox(height: hv*7,),
+                        ],
+                      ),
+                    ),
+                    /*HomePageComponents().getMyDoctorAppointmentTile(
                       doctorName: "Dr. Jean Marie Nka, Médécin de Famille",
                       date: "Mercredi, 18 février 2021, 10:30",
                       state: 0,
@@ -497,9 +545,9 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                       state: 3,
                       type: "Consultation",
                       label: "Fièvre et toux depuis"
-                    ),
+                    ),*/
 
-                    SizedBox(height: hv*7+20,),
+                    //SizedBox(height: hv*7+20,),
                   ],
                 ),
               )
@@ -561,4 +609,5 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
       child: Text(title, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w500, fontSize: 13)),
     );
   }
+
 }

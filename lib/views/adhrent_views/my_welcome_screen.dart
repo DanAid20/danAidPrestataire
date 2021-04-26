@@ -99,14 +99,17 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                             child: Row(children: [
                               NotificationCard(
+                                isprestataire: false,
                                 instruction: "Aller au Labo",
                                 description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
                               ),
                               NotificationCard(
+                                isprestataire: false,
                                 instruction: "Aller au Labo",
                                 description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
                               ),
                               NotificationCard(
+                                isprestataire: false,
                                 instruction: "Aller au Labo",
                                 description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
                               ),

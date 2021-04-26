@@ -24,6 +24,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 
 class HomePageView extends StatefulWidget {
@@ -52,7 +53,7 @@ class _HomePageViewState extends State<HomePageView> {
           if(lastDateVisited != null){
             if(date.toString() != lastDateVisited.toString()){
               FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                "visitPoints": FieldValue.increment(10),
+                "visitPoints": FieldValue.increment(25),
                 "visits": FieldValue.arrayUnion([date]),
                 "lastDateVisited": date,
               }, SetOptions(merge: true));
@@ -63,7 +64,7 @@ class _HomePageViewState extends State<HomePageView> {
             lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
             if(date.toString() != lastDateVisited.toString()){
               FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                "visitPoints": FieldValue.increment(10),
+                "visitPoints": FieldValue.increment(25),
                 "visits": FieldValue.arrayUnion([date]),
                 "lastDateVisited": date,
               }, SetOptions(merge: true));
@@ -80,7 +81,7 @@ class _HomePageViewState extends State<HomePageView> {
             if(lastDateVisited != null){
               if(date.toString() != lastDateVisited.toString()){
                 FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                  "visitPoints": FieldValue.increment(10),
+                  "visitPoints": FieldValue.increment(25),
                   "visits": FieldValue.arrayUnion([date]),
                   "lastDateVisited": date,
                 }, SetOptions(merge: true));
@@ -88,10 +89,11 @@ class _HomePageViewState extends State<HomePageView> {
                 adherentModelProvider.addVisit(date);
               }
             } else {
-              lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
+              DateTime dateOnline =adherentModelProvider.getAdherent.lastDateVisited != null ? DateTime(adherentModelProvider.getAdherent.lastDateVisited.toDate().year, adherentModelProvider.getAdherent.lastDateVisited.toDate().month, adherentModelProvider.getAdherent.lastDateVisited.toDate().day) : DateTime(2000);
+              lastDateVisited = dateOnline.toString();
               if(date.toString() != lastDateVisited.toString()){
                 FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                  "visitPoints": FieldValue.increment(10),
+                  "visitPoints": FieldValue.increment(25),
                   "visits": FieldValue.arrayUnion([date]),
                   "lastDateVisited": date,
                 }, SetOptions(merge: true));
@@ -217,6 +219,7 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    initializeDateFormatting();
     loadUserProfile();
     super.initState();
   }
@@ -373,10 +376,10 @@ class _HomePageViewState extends State<HomePageView> {
       return HealthBookScreen();
     }
     else if(controller.getIndex == 3){
-      return userProvider.getProfileType == doctor ? ProfilDoctorView() : userProvider.getProfileType == adherent ?  PartnersScreen() : Text("Prestataire");
+      return userProvider.getProfileType == adherent ?  PartnersScreen() : ProfilDoctorView();
     }
     else if(controller.getIndex == 4){
-      return userProvider.getProfileType == doctor ? DoctorProfilePage() : userProvider.getProfileType == adherent ?  MyFamilyScreen() : Text("Prestataire");
+      return userProvider.getProfileType == adherent ?  MyFamilyScreen() : DoctorProfilePage();
     }
   }
 

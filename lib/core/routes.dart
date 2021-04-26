@@ -1,5 +1,6 @@
 import 'package:danaid/views/adhrent_views/add_beneficiary_form.dart';
 import 'package:danaid/views/adhrent_views/edit_beneficiary.dart';
+import 'package:danaid/views/adhrent_views/appointment_form.dart';
 import 'package:danaid/views/auths_views/adherent_form.dart';
 import 'package:danaid/views/auths_views/login_view.dart';
 import 'package:danaid/views/auths_views/otp_view.dart';
@@ -41,6 +42,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/doctor-profile": (context) => DoctorProfilePage(),
   "/add-beneficiary": (context) => AddBeneficiaryForm(),
   "/edit-beneficiary": (context) => EditBeneficiary(),
+  "/rdv": (context) => AppointmentForm(),
 
   /**
    * Start section routes that concern the doctor activities in the

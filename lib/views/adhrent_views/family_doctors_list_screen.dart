@@ -17,14 +17,11 @@ class FamilyDoctorList extends StatefulWidget {
 class _FamilyDoctorListState extends State<FamilyDoctorList> {
   String filter;
 
-  Stream<QuerySnapshot> query =
-      FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
+  Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
 
   getDoctorsList() {
-    AdherentModelProvider adherentProvider =
-        Provider.of<AdherentModelProvider>(context, listen: false);
-    DoctorModelProvider doctorProvider =
-        Provider.of<DoctorModelProvider>(context, listen: false);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -52,34 +49,13 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         name: doctor.cniName,
                         title: "Medecin de Famille, " + doctor.field,
                         speciality: doctor.speciality,
-                        teleConsultation: doctor.serviceList != null
-                            ? doctor.serviceList["tele-consultation"]
-                            : false,
-                        consultation: doctor.serviceList != null
-                            ? doctor.serviceList["consultation"]
-                            : false,
-                        chat: doctor.serviceList != null
-                            ? doctor.serviceList["chat"]
-                            : false,
-                        rdv: doctor.serviceList != null
-                            ? doctor.serviceList["rdv"]
-                            : false,
-                        visiteDomicile: doctor.serviceList != null
-                            ? doctor.serviceList["visite-a-domicile"]
-                            : false,
-                        distance:
-                            adherentProvider.getAdherent.location != null &&
-                                    doctor.location != null
-                                ? (Algorithms.calculateDistance(
-                                            adherentProvider.getAdherent
-                                                .location["latitude"],
-                                            adherentProvider.getAdherent
-                                                .location["longitude"],
-                                            doctor.location["latitude"],
-                                            doctor.location["longitude"])
-                                        .toStringAsFixed(2))
-                                    .toString()
-                                : "",
+                        teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
+                        consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
+                        chat: doctor.serviceList != null ? doctor.serviceList["chat"] : false,
+                        rdv: doctor.serviceList != null ? doctor.serviceList["rdv"] : false,
+                        visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
+                        distance: adherentProvider.getAdherent.location != null && doctor.location != null
+                          ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
                         onTap: () {
                           doctorProvider.setDoctorModel(doctor);
                           Navigator.pushNamed(context, "/doctor-profile");

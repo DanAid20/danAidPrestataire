@@ -62,7 +62,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   
   PageController controller = PageController(initialPage: 0, keepPage: false);
   int currentPageValue = 0;
-  List<Widget> introWidgetsList;
+  List<Widget> pageList;
 
   String _gender;
   String _bloodGroup;
@@ -96,7 +96,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
   @override
   Widget build(BuildContext context) {
-    introWidgetsList = <Widget>[
+    pageList = <Widget>[
       formLayout(getForm1()),
       formLayout(getForm2()),
       formLayout(getForm3())
@@ -140,13 +140,13 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   child: PageView.builder(
                     pageSnapping: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: introWidgetsList.length,
+                    itemCount: pageList.length,
                     onPageChanged: (int page) {
                       getChangedPageAndMoveBar(page);
                     },
                     controller: controller,
                     itemBuilder: (context, index) {
-                      return introWidgetsList[index];
+                      return pageList[index];
                     },
                   ),
                 ),
@@ -156,7 +156,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      for (int i = 0; i < introWidgetsList.length; i++)
+                      for (int i = 0; i < pageList.length; i++)
                         if (i == currentPageValue) ...[circleBar(true)] else
                           circleBar(false),
                     ],
@@ -662,9 +662,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     buttonLoading = false;
                   });
                   Navigator.pop(context);
-                })
-                
-                ;
+                });
             },
           ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
           : CustomDisabledTextButton(text: "Suivant",)

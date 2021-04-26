@@ -9,6 +9,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/widgets/user_avatar_coverage.dart';
+import 'package:danaid/widgets/streams.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -18,63 +19,6 @@ class MyFamilyScreen extends StatefulWidget {
 }
 
 class _MyFamilyScreenState extends State<MyFamilyScreen> {
-
-  getBeneficiary(){
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData){
-          return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
-        }
-        print(snapshot.data.toString() + "rfrfr");
-        return Column(crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(text: TextSpan(
-              text: "Bénéficiaires\n",
-              children: [
-                TextSpan(text: (snapshot.data.docs.length++).toString()+" personnes", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.5)),
-              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*5)),
-            ),
-            SizedBox(height: hv*2,),
-            Container(
-              height: hv*22,
-              child: Row(
-                children: [
-                  HomePageComponents.beneficiaryCard(
-                    name: adherentProvider.getAdherent.surname,
-                    imgUrl: adherentProvider.getAdherent.imgUrl, 
-                    action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
-                  ),
-                  snapshot.data.docs.length >= 1 ? Expanded(
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: snapshot.data.docs.length,
-                      itemBuilder: (context, index){
-                        DocumentSnapshot doc = snapshot.data.docs[index];
-                        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-                        print("name: ");
-                        return HomePageComponents.beneficiaryCard(
-                          name: beneficiary.surname, 
-                          imgUrl: beneficiary.avatarUrl, 
-                          action: (){
-                            beneficiaryProvider.setBeneficiaryModel(beneficiary);
-                            Navigator.pushNamed(context, '/edit-beneficiary');
-                          }
-                        );
-                      }
-                    ),
-                  ) : Container(),
-                ],
-              )
-            ),
-          ],
-        );
-      }
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +98,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                           color: kSouthSeas.withOpacity(0.4),
                           borderRadius: BorderRadius.circular(15)
                         ),
-                        child: getBeneficiary(),
+                        child: BeneficiaryStream(standardUse: true),
                       ),
                       Positioned(
                         right: wv*0, bottom: hv*8,

@@ -12,14 +12,16 @@ class DoctorInfoCard extends StatelessWidget {
   final String speciality;
   final String distance;
   final bool chat, consultation, teleConsultation, rdv, visiteDomicile;
+  final bool noPadding, includeHospital;
+  final String field, officeName;
   final Function onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.distance, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile}) : super(key: key);
+  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.distance, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: wv*5, vertical: 5),
+      margin: !noPadding ? EdgeInsets.symmetric(horizontal: wv*5, vertical: 5) : EdgeInsets.zero,
       decoration: BoxDecoration(
         color: kSouthSeas,
         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -63,8 +65,14 @@ class DoctorInfoCard extends StatelessWidget {
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("Dr. $name", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
-                          Text("$title, $speciality", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
-
+                          Text("$title${includeHospital ? "" : " ,"+speciality}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                          includeHospital ? Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: hv*1.3,),
+                              Text(officeName.toString(), style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
+                              Text("Service - ${field.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                            ],
+                          ) : Container(),
                         ],
                       ),
                     )
@@ -95,7 +103,7 @@ class DoctorInfoCard extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Text("$distance Km", style: TextStyle(color: whiteColor, fontSize: 15),),
+                      distance != null ? Text("$distance Km", style: TextStyle(color: whiteColor, fontSize: 15),) : Container(),
                       SizedBox(width: 15,),
                       Container(
                         margin: EdgeInsets.only(right: 10),
@@ -155,7 +163,7 @@ class DoctorInfoCard extends StatelessWidget {
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),
               child: Row(children: [
-                Text("Plus de détails", style: TextStyle(color: Colors.white),),
+                Text(includeHospital ? "Autre médecin..." : "Plus de détails", style: TextStyle(color: Colors.white),),
                 SizedBox(width: 10,),
                 Icon(Icons.arrow_forward_ios, color: Colors.white),
               ],mainAxisAlignment: MainAxisAlignment.end)
