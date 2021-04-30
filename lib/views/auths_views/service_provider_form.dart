@@ -325,6 +325,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                             .set({
                               "createdDate": DateTime.now(),
                               "nomEtablissement": companyName,
+                              "authId": userProvider.getAuthId,
                               "nomCompletPContact": contactName,
                               "emailPContact": email,
                               "authPhoneNumber": userProvider.getUserId,

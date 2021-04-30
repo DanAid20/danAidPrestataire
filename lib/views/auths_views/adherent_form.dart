@@ -362,6 +362,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                             "authId": userProvider.getAuthId,
                             'fullName': "$fname $sname",
                             "imageUrl" : avatarUrl,
+                            "points": 500,
                             "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                             "profil": "ADHERENT",
                             "regionDorigione": adherentProvider.getRegionOfOrigin
@@ -374,8 +375,10 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "authPhoneNumber": userProvider.getUserId,
                                 "enabled": userProvider.isEnabled,
                                 "dateNaissance": selectedDate,
+                                "authId": userProvider.getAuthId,
                                 "genre": _gender,
                                 "imageUrl" : avatarUrl,
+                                "points": 500,
                                 "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                                 "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                                 "nbBeneficiare": 0,

@@ -310,6 +310,7 @@ class _OtpViewState extends State<OtpView> {
         print(profile);
         HiveDatabase.setProfileType(profile);
         userProvider.setProfileType(profile);
+        userProvider.setAuthId(user.uid);
         Navigator.pushReplacementNamed(context, '/home');
       }
       showSnackbar("Successfully signed in UID: ${user.uid}");
