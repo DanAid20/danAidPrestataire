@@ -51,3 +51,21 @@ const kBlueForce = Color(0xFF235383);
 const kblueSky = Color(0xFF57CECA);
 const kBlueDeep = Color(0xFF0075AA);
 const kTextBlue = Color(0xFF4F5F8E);
+
+//  print(_selectedDay);
+//                     print(_selectedDay.runtimeType);
+//                     String startDay= _selectedDay.toString().substring(0,11);
+//                     String sendHours= startDay+"23:59:59.000Z";
+//                     print(sendHours);
+//                     DateTime todayDate = DateTime.parse(sendHours);
+//                    Timestamp myTimeStamp = Timestamp.fromDate(todayDate); 
+//                     print(todayDate);
+//                     print("Date $todayDate");
+//                     print("Date $myTimeStamp");
+                    
+//                     setState(() {
+//                       _selectedDay = selectedDay;
+//                       startDate = selectedDay;
+//                       endDate=myTimeStamp;
+//                       _focusedDay = focusedDay; // update `_focusedDay` here as well
+//                     });

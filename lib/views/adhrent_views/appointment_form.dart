@@ -682,6 +682,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     "start-time": consultationStartDate,
                     "end-time": consultationEndDate,
                     "price": 2000,
+                    "avatarUrl": beneficiary.getBeneficiary.avatarUrl,
+                    "birthDate": beneficiary.getBeneficiary.birthDate,
+                    "username":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,
                     "status" : 0 //En attente
                   }, SetOptions(merge: true)).then((value) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez-vous a bien été enrégistrée'),));

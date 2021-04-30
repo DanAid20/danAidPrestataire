@@ -8,17 +8,292 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icons.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 import '../helpers/constants.dart';
 import '../helpers/styles.dart';
 import '../widgets/readMoreText.dart';
 
 class HomePageComponents {
+  Widget timeline({
+    String time,
+    String userImage,
+    String userName,
+    String consultationDetails,
+    String age,
+    String consultationType,
+    String videChatLink,
+    String detailsCOnsultationLink,
+    bool isPrestataire,
+    String consultationtype
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+       
+      ),
+      width: wv * 98,
+      padding: EdgeInsets.only(left: wv * 3, right: wv * 3.3),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: wv * .5),
+            child: Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: wv * 1.5),
+                  child: Text(time,
+                      style: TextStyle(
+                          color: kTextColor,
+                          fontWeight: FontWeight.w500,
+                          fontSize: fontSize(size: wv * 5))),
+                ),
+                SvgPicture.asset(
+                  'assets/icons/Bulk/Line.svg',
+                  height: hv * 3,
+                  color: kPrimaryColor,
+                  width: wv * 5,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            width: wv * 80,
+            height: hv * 12,
+            margin: EdgeInsets.only(bottom: wv * 2),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+              ],
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Row(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: wv * 30,
+                      height: hv * 12,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image:  NetworkImage(userImage),
+                            fit: BoxFit.cover,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: kThirdColor,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                          )),
+                    ),
+                    Positioned(
+                        bottom: hv * 0.5,
+                        right: wv * 1,
+                        child: SvgPicture.asset(
+                         'assets/icons/Bulk/Shield Done.svg',
+                          width: wv * 4,
+                          
+                        ))
+                  ],
+                ),
+                Container(
+                  width: wv * 38.5,
+                  margin: EdgeInsets.only(left: wv * 1.5),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: hv * 1.5,
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(userName,
+                                  overflow: TextOverflow.ellipsis,
+                                  style:  TextStyle(
+                                      color: kDateTextColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14.sp)),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Text(age,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: hv * 1.3,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(right: wv * 6),
+                            child: Text(consultationDetails,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: kCardTextColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.sp)),
+                          ),
+                          SizedBox(
+                            height: 5.h,
+                          ),
+                          Text(consultationType,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: kDeepTeal,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.sp)),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        // lien la page de l'appel video
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        width: 36.w,
+                        height: hv * 6,
+                        decoration: BoxDecoration(
+                            color: isPrestataire ? kGoldForIconesBg:kSouthSeas,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            )),
+                        child: SvgPicture.asset(
+                        consultationtype=="vidéos"? 'assets/icons/Bulk/Video.svg': consultationtype=="Cabinet"? "assets/icons/Bulk/Profile.svg" : "assets/icons/Bulk/Home.svg",
+                          width: wv * 7,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        // lien vers les detailes des la consultation
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(3),
+                        height: hv * 6,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: SvgPicture.asset(
+                          'assets/icons/Bulk/ArrowRight Circle.svg',
+                          width: wv * 7,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget waitingRoomListOfUser({
+    String userImage,
+    String nom,
+    String syntomes
+  }) {
+    return Container(
+      width: wv * 50,
+      height: hv * 8,
+      margin: EdgeInsets.only(
+        left: wv * 1.5,
+        right: wv * 1.5,
+        top: hv * 2,
+        bottom: hv * 2,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+        ],
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: wv * 15,
+            height: hv * 8,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                  image:  NetworkImage(userImage),
+                  fit: BoxFit.cover,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: kThirdColor,
+                  ),
+                ],
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                )),
+          ),
+          Column(
+            children: [
+              Container(
+                child: Text( nom!=null ? nom :'Fabrice Mbanga',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: kDateTextColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: fontSize(size: wv * 3.5))),
+              ),
+              SizedBox(
+                height: hv * .5,
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                  left: wv * 1,
+                ),
+                child: Flexible(
+                  flex: 1,
+                  child: Container(
+                    width: wv * 30,
+                    child: Text(
+                        syntomes !=null ? syntomes : 'Douleurs dentaires et violents mots de tête...',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: kDateTextColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: fontSize(size: wv * 3.5))),
+                  ),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
   getAdherentsList({AdherentModel adherent, bool isAccountIsExists}) {
     return Container(
       width: wv * 100,
-      height: hv * 67,
       decoration: BoxDecoration(
         color: kBlueForce,
         borderRadius: BorderRadius.all(
@@ -27,6 +302,7 @@ class HomePageComponents {
       ),
       margin: EdgeInsets.only(left: wv * 2, right: hv * 2),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 2),
