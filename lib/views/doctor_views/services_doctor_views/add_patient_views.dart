@@ -487,7 +487,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               MaterialPageRoute(
                                 builder: (context) => InactiveAccount(
                                   data: adherent,
-                                  phoneNumber: adherentNumber.text,
+                                  phoneNumber: phone,
                                   isAccountIsExists: true,
                                 ),
                               ),
