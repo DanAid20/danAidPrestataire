@@ -1015,6 +1015,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 await FirebaseFirestore.instance.collection("USERS")
                                   .doc(doctorProvider.getDoctor.id)
                                   .set({
+                                    "authId": FirebaseAuth.instance.currentUser.uid,
                                     'emailAdress': email,
                                     'fullName': cniName,
                                     "regionDorigione": _region
@@ -1024,6 +1025,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                     await FirebaseFirestore.instance.collection("MEDECINS")
                                       .doc(doctorProvider.getDoctor.id)
                                       .set({
+                                        "authId": FirebaseAuth.instance.currentUser.uid,
                                         "cniName": cniName,
                                         "email": email,
                                         "about": about,

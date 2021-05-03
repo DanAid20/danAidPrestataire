@@ -4,9 +4,10 @@ class ConversationChatModel {
   String conversationId, lastMessage, lastMessageFrom, lastMessageTime;
   int unseenMessages, lastMessageType;
   List users;
+  Map phoneIds;
   bool lastMessageSeen;
 
-  ConversationChatModel({this.conversationId, this.lastMessageFrom, this.lastMessageTime, this.unseenMessages, this.lastMessageType, this.users, this.lastMessageSeen, this.lastMessage});
+  ConversationChatModel({this.conversationId, this.phoneIds, this.lastMessageFrom, this.lastMessageTime, this.unseenMessages, this.lastMessageType, this.users, this.lastMessageSeen, this.lastMessage});
 
   factory ConversationChatModel.fromDocument(DocumentSnapshot doc){
     return ConversationChatModel(
@@ -18,6 +19,7 @@ class ConversationChatModel {
       unseenMessages: doc.data()["unseenMessages"],
       lastMessageType: doc.data()["lastMessageType"],
       users: doc.data()["users"],
+      phoneIds: doc.data()["phoneIds"]
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -359,7 +360,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                             "urlCNI": "",
                             "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                             "userCountryName": userProvider.getCountryName,
-                            "authId": userProvider.getAuthId,
+                            "authId": FirebaseAuth.instance.currentUser.uid,
                             'fullName': "$fname $sname",
                             "imageUrl" : avatarUrl,
                             "points": 500,
@@ -375,7 +376,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "authPhoneNumber": userProvider.getUserId,
                                 "enabled": userProvider.isEnabled,
                                 "dateNaissance": selectedDate,
-                                "authId": userProvider.getAuthId,
+                                "authId": FirebaseAuth.instance.currentUser.uid,
                                 "genre": _gender,
                                 "imageUrl" : avatarUrl,
                                 "points": 500,

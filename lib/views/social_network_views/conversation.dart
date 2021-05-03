@@ -9,6 +9,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
@@ -49,13 +50,13 @@ class _ConversationState extends State<Conversation> {
   String lastMsgFrom = "";
 
   initialization() async {
-    ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: true);
-    ConversationChatModelProvider conversationChat = Provider.of<ConversationChatModelProvider>(context, listen: true);
+    ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
+    ConversationChatModelProvider conversationChat = Provider.of<ConversationChatModelProvider>(context, listen: false);
     String targetId = conversation.getConversation.targetId;
     String id = conversation.getConversation.userId;
     String conversationId = conversation.getConversation.conversationId;
-    await FirebaseFirestore.instance.collection("USERS").doc(id).update({'chattingWith': targetId, 'chat-users': FieldValue.arrayUnion([targetId])});
-    await FirebaseFirestore.instance.collection("USERS").doc(targetId).update({'chat-users': FieldValue.arrayUnion([id])});
+    await FirebaseFirestore.instance.collection("USERS").doc(id).set({'chattingWith': targetId, 'chat-users': FieldValue.arrayUnion([targetId])}, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection("USERS").doc(targetId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).set({"users": FieldValue.arrayUnion([id, targetId])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((doc) {
       ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc);
@@ -136,7 +137,7 @@ class _ConversationState extends State<Conversation> {
                       Text((conversation.getConversation.targetProfileType != doctor ? "" : "Dr. ") + conversation.getConversation.targetName, overflow: TextOverflow.fade, style: TextStyle( color: Colors.white),),
                       SizedBox(height: 1),
                       Text(
-                        "Actif en ce moment",
+                        conversation.getConversation.targetProfileType == doctor ? "Médecin" : conversation.getConversation.targetProfileType == serviceProvider ? "Prestataire" : "Adhérent",
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
@@ -375,6 +376,8 @@ class _ConversationState extends State<Conversation> {
             .collection("CONVERSATIONS")
             .doc(conversation.getConversation.conversationId)
             .set({
+              "users": [conversation.getConversation.userId, conversation.getConversation.targetId],
+              "phoneIds": {conversation.getConversation.userId : conversation.getConversation.userPhoneId, conversation.getConversation.targetId: conversation.getConversation.targetPhoneId},
               'lastMessage': msg,
               "lastMessageType": type,
               "lastMessageTime": DateTime.now().millisecondsSinceEpoch.toString(),
@@ -514,6 +517,8 @@ class _ConversationState extends State<Conversation> {
                 message: msg,
                 userName: conversation.userName,
                 targetName: conversation.targetName,
+                userId: conversation.userId,
+                seen: msg.seen,
               )
             )
           :
@@ -540,6 +545,8 @@ class _ConversationState extends State<Conversation> {
                 message: msg,
                 userName: conversation.userName,
                 targetName: conversation.targetName,
+                userId: conversation.userId,
+                seen: msg.seen,
               ),
             );
     } else if (msg.type == 1) {
@@ -679,10 +686,10 @@ class _ConversationState extends State<Conversation> {
 class MessageBox extends StatelessWidget {
   
   final MessageModel message;
-  final String userAvatar, targetAvatar, userName, targetName;
+  final String userAvatar, targetAvatar, userName, targetName, userId;
   final bool seen;
 
-  const MessageBox({Key key, this.message, this.userAvatar, this.targetAvatar, this.userName, this.targetName, this.seen}) : super(key: key);
+  const MessageBox({Key key, this.message, this.userAvatar, this.targetAvatar, this.userName, this.targetName, this.userId, this.seen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -699,184 +706,181 @@ class MessageBox extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 2),
       width: double.infinity,
       alignment: messageIsLocal ? Alignment.centerRight : Alignment.centerLeft,
-      child: Row(mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(mainAxisAlignment: messageIsLocal ? MainAxisAlignment.end : MainAxisAlignment.start, mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Stack(alignment: Alignment.centerRight,
-              children: <Widget>[
-                Container(
-                  constraints: BoxConstraints(maxWidth: wv * 93, minWidth: wv * 23),
-                  margin: EdgeInsets.only(left: wv*3, right: wv*1.5),
-                  padding: EdgeInsets.only(left: wv * 2.5, bottom: hv * 3.7, right: wv * 2, top: hv * 1),
-                  decoration: BoxDecoration(
-                      boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), offset: new Offset(2.0, 2.0), blurRadius: 4.0, spreadRadius: 4.0),],
-                      color: messageIsLocal ? Colors.teal[50] : Color(0xff605bbd),
-                      borderRadius: messageIsLocal
-                          ? BorderRadius.only(topLeft: Radius.circular(15), bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15),
-                            )
-                          : BorderRadius.only(
-                              topLeft: Radius.circular(15),
-                              topRight: Radius.circular(15),
-                              bottomRight: Radius.circular(15),
-                            )),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      message.replying
-                          ? GestureDetector(
-                              onTap: () {
-                                print("reply tapped");
-                              },
-                              child: Container(
-                                //width: double.infinity,
-                                padding: EdgeInsets.only(
-                                    left: 10, bottom: 5, right: 5, top: 5),
-                                margin:
-                                    EdgeInsets.symmetric(horizontal: 0, vertical: 7),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.05),
-                                  border: Border(
-                                    left: BorderSide(
-                                        color: messageIsLocal
-                                            ? Theme.of(context).primaryColor
-                                            : Colors.white,
-                                        width: 3),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    (message.replyType == 1)||(message.replyType == 2)
-                                        ? Container(
-                                            width: wv * 15,
-                                            height: wv * 15,
-                                            padding: EdgeInsets.only(
-                                                top: 5, bottom: 5, right: 10),
-                                            child: (message.replyType == 1)
-                                                ? CachedNetworkImage(
-                                                    placeholder: (context, url) =>
-                                                        Container(
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation<
-                                                                Color>(Colors.white),
-                                                      ),
-                                                      padding: EdgeInsets.all(70.0),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.grey
-                                                            .withOpacity(0.7),
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(8.0)),
-                                                      ),
-                                                    ),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Material(
-                                                      borderRadius: BorderRadius.all(
-                                                          Radius.circular(8.0)),
-                                                      clipBehavior: Clip.hardEdge,
-                                                      child: Image.asset(
-                                                          "assets/images/not_found.jpeg",
-                                                          fit: BoxFit.cover),
-                                                    ),
-                                                    imageUrl: message.replyContent,
-                                                    fit: BoxFit.cover,
-                                                  )
-                                                : Image.asset(
-                                                    "assets/images/${message.replyContent}.gif",
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                          )
-                                        : Container(),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          message.replierId == conversation.getConversation.targetId
-                                              ? conversation.getConversation.targetName
-                                              : "You",
-                                          style: TextStyle(
-                                              color: messageIsLocal
-                                                  ? Theme.of(context).primaryColor
-                                                  : Colors.white,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(
-                                          height: 3,
-                                        ),
-                                        Container(
-                                            padding: EdgeInsets.only(
-                                              right: 10,
-                                            ),
-                                            constraints: BoxConstraints(
-                                                maxWidth: wv * 50, maxHeight: hv * 5),
-                                            child: Text(
-                                              message.replyType == 0
-                                                  ? message.replyContent
-                                                  : message.replyType == 1
-                                                      ? "Image"
-                                                      : message.replyType == 2
-                                                          ? "Sticker"
-                                                          : "content",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                  color: messageIsLocal
-                                                      ? Colors.grey[400]
-                                                      : Colors.white),
-                                            )),
-                                      ],
-                                    ),
-                                  ],
+          !messageIsLocal ? Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.grey[400],
+              shape: BoxShape.circle,
+              image: userAvatar != null ? DecorationImage(image: CachedNetworkImageProvider(targetAvatar), fit: BoxFit.cover) : null,
+            ),
+            child: userAvatar != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
+          ) : Container(),
+          Stack(alignment: Alignment.centerRight,
+            children: <Widget>[
+              Container(
+                constraints: BoxConstraints(maxWidth: wv * 75, minWidth: wv * 23),
+                margin: EdgeInsets.only(left: wv*3, right: wv*1.5),
+                padding: EdgeInsets.only(left: wv * 2.5, bottom: hv * 3.7, right: wv * 2, top: hv * 1),
+                decoration: BoxDecoration(
+                    boxShadow: messageIsLocal ? [] : [BoxShadow(color: Colors.grey[200], offset: new Offset(1.0, 2.0), blurRadius: 1.0, spreadRadius: 0.5),],
+                    color: messageIsLocal ? Colors.teal[50] : Colors.grey[50],
+                    borderRadius: messageIsLocal
+                        ? BorderRadius.only(topLeft: Radius.circular(15), bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15),)
+                        : BorderRadius.only(bottomLeft: Radius.circular(15), topRight: Radius.circular(15), bottomRight: Radius.circular(15),)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    message.replying
+                        ? GestureDetector(
+                            onTap: () {
+                              print("reply tapped");
+                            },
+                            child: Container(
+                              //width: double.infinity,
+                              padding: EdgeInsets.only(
+                                  left: 10, bottom: 5, right: 5, top: 5),
+                              margin:
+                                  EdgeInsets.symmetric(horizontal: 0, vertical: 7),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.05),
+                                border: Border(
+                                  left: BorderSide(
+                                      color: messageIsLocal
+                                          ? kDeepTeal
+                                          : kPrimaryColor,
+                                      width: 3),
                                 ),
                               ),
-                            )
-                          : Container(
-                              width: 1,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  (message.replyType == 1)||(message.replyType == 2)
+                                      ? Container(
+                                          width: wv * 15,
+                                          height: wv * 15,
+                                          padding: EdgeInsets.only(
+                                              top: 5, bottom: 5, right: 10),
+                                          child: (message.replyType == 1)
+                                              ? CachedNetworkImage(
+                                                  placeholder: (context, url) =>
+                                                      Container(
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(Colors.white),
+                                                    ),
+                                                    padding: EdgeInsets.all(70.0),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.7),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(8.0)),
+                                                    ),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Material(
+                                                    borderRadius: BorderRadius.all(
+                                                        Radius.circular(8.0)),
+                                                    clipBehavior: Clip.hardEdge,
+                                                    child: Image.asset(
+                                                        "assets/images/not_found.jpeg",
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                  imageUrl: message.replyContent,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.asset(
+                                                  "assets/images/${message.replyContent}.gif",
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        )
+                                      : Container(),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        message.replierId == conversation.getConversation.targetId
+                                            ? conversation.getConversation.targetName
+                                            : "You",
+                                        style: TextStyle(
+                                            color: messageIsLocal ? kDeepTeal : kPrimaryColor,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      SizedBox(
+                                        height: 3,
+                                      ),
+                                      Container(
+                                          padding: EdgeInsets.only(
+                                            right: 10,
+                                          ),
+                                          constraints: BoxConstraints(
+                                              maxWidth: wv * 50, maxHeight: hv * 5),
+                                          child: Text(
+                                            message.replyType == 0
+                                                ? message.replyContent
+                                                : message.replyType == 1
+                                                    ? "Image"
+                                                    : message.replyType == 2
+                                                        ? "Sticker"
+                                                        : "content",
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Colors.grey[700]),
+                                          )),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                      Text(
-                        message.content,
-                        style: TextStyle(
-                            color: !messageIsLocal ? Colors.white : Colors.black54,
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
+                          )
+                        : Container(
+                            width: 1,
+                          ),
+                    Text(
+                      message.content,
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ],
                 ),
-                Positioned(
-                    right: 10,
-                    bottom: 5,
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          Algorithms.getDateFromTimestamp(
-                            int.parse(message.timeStamp),
-                          ),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: !messageIsLocal
-                                ? Colors.grey[100]
-                                : Colors.grey,
-                          ),
+              ),
+              Positioned(
+                  right: 10,
+                  bottom: 5,
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        Algorithms.getDateFromTimestamp(
+                          int.parse(message.timeStamp),
                         ),
-                        SizedBox(width: 5),
-                        messageIsLocal
-                            ? Icon(
-                                MdiIcons.checkAll,
-                                color: message.seen == true
-                                    ? Theme.of(context).primaryColor
-                                    : Colors.grey[500],
-                                size: wv * 5,
-                              )
-                            : Container(),
-                      ],
-                    ))
-              ],
-            ),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      messageIsLocal
+                          ? Icon(
+                              MdiIcons.checkAll,
+                              color: message.seen == true
+                                  ? kDeepTeal
+                                  : Colors.grey[500],
+                              size: wv * 5,
+                            )
+                          : Container(),
+                    ],
+                  ))
+            ],
           ),
-          Container(
+          messageIsLocal ? Container(
             width: 40,
             height: 40,
             decoration: BoxDecoration(
@@ -885,7 +889,7 @@ class MessageBox extends StatelessWidget {
               image: userAvatar != null ? DecorationImage(image: CachedNetworkImageProvider(userAvatar), fit: BoxFit.cover) : null,
             ),
             child: userAvatar != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
-          ),
+          ) : Container()
         ],
       ),
     )
@@ -893,10 +897,17 @@ class MessageBox extends StatelessWidget {
     );
   }
     Future _markAsSeen(BuildContext context) async {
-      ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
-      DocumentReference msg = FirebaseFirestore.instance.collection("Conversation").doc(conversation.getConversation.conversationId).collection("MESSAGES").doc(message.id);
-      if ((message.idFrom == conversation.getConversation.targetId && seen == false)) {
-        msg.update({"seen": true});
+      print("dedans");
+      String conversationId = Algorithms.getConversationId(userId: message.idFrom, targetId: message.idTo);
+      print(message.idFrom);
+      print("seen" +seen.toString());
+      print(conversationId);
+      if ((message.idFrom != FirebaseAuth.instance.currentUser.uid && seen == false)) {
+        FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).collection("MESSAGES").doc(message.id).update({"seen": true}).then((value) {
+          print("c bon");
+        }).catchError((e){
+          print(e.toString());
+        });
       }
     }
 }

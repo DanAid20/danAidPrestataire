@@ -342,7 +342,9 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                   targetName: doctor.familyName,
                                                   userAvatar: adherent.getAdherent.imgUrl,
                                                   targetAvatar: doctor.avatarUrl,
-                                                  targetProfileType: constants.doctor
+                                                  targetProfileType: constants.doctor,
+                                                  userPhoneId: adherent.getAdherent.adherentId,
+                                                  targetPhoneId: doctor.id
                                                 );
                                                 conversation.setConversationModel(conversationModel);
                                                 Navigator.pushNamed(context, '/conversation');
