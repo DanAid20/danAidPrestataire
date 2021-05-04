@@ -28,8 +28,6 @@ class _OwnerUserListViewState extends State<OwnerUserListView> {
         .doc('${widget.idOfAdherent}')
         .collection('BENEFICIAIRES')
         .snapshots();
-    AdherentModelProvider adherentProvider =
-        Provider.of<AdherentModelProvider>(context, listen: false);
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -52,11 +50,12 @@ class _OwnerUserListViewState extends State<OwnerUserListView> {
                     DocumentSnapshot doc = snapshot.data.docs[index];
                     AdherentModel doctor = AdherentModel.fromDocument(doc);
                     print("name: ");
-                    return Padding(
-                        padding: EdgeInsets.only(
-                            bottom: lastIndex == index ? hv * 5 : 0),
-                        child: HomePageComponents().getAdherentsList(
-                            adherent: doctor, isAccountIsExists: true));
+                    return Container(
+                      child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: HomePageComponents().getAdherentsList(
+                              adherent: doctor, isAccountIsExists: true)),
+                    );
                   })
               : Center(
                   child: Text("Aucun Adherent  disponible pour le moment.."),

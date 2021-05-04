@@ -1,13 +1,16 @@
+import 'package:danaid/core/models/userModel.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {
   
+  UserModel _user;
   String _authId,_userId, _matricule, _fullName, _imgUrl, _email, _profileType, _regionOfOrigin, _cniUrl, _countryCode, _countryName;
   bool _enabled;
   List<Map> _phoneList;
 
   UserProvider(this._authId, this._userId, this._matricule, this._fullName, this._imgUrl, this._email, this._profileType, this._regionOfOrigin, this._cniUrl, this._countryCode, this._countryName, this._enabled, this._phoneList);
 
+  UserModel get getUserModel => _user;
   String get getAuthId => _authId;
   String get getUserId => _userId;
   String get getMatricule => _matricule;
@@ -22,6 +25,10 @@ class UserProvider with ChangeNotifier {
   bool get isEnabled => _enabled;
   List<Map> get getPhoneList => _phoneList;
 
+  void setUserModel(UserModel val){
+    _user = val;
+    notifyListeners();
+  }
   void setAuthId(String val) {
     _authId = val;
     notifyListeners();

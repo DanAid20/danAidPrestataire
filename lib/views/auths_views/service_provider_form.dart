@@ -7,6 +7,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -307,13 +308,13 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                         .doc(userProvider.getUserId)
                         .set({
                           'createdDate': DateTime.now(),
+                          "authId": FirebaseAuth.instance.currentUser.uid,
                           'emailAdress': userProvider.getEmail,
                           'enabled': userProvider.isEnabled,
                           "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                           "urlCNI": "",
                           "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                           "userCountryName": userProvider.getCountryName,
-                          "authId": userProvider.getAuthId,
                           'fullName': "$companyName",
                           "imageUrl" : avatarUrl,
                           "profil": "PRESTATAIRE",
@@ -324,6 +325,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                             .doc(userProvider.getUserId)
                             .set({
                               "createdDate": DateTime.now(),
+                              "authId": FirebaseAuth.instance.currentUser.uid,
                               "nomEtablissement": companyName,
                               "nomCompletPContact": contactName,
                               "emailPContact": email,

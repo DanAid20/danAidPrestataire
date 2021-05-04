@@ -134,6 +134,7 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                   UserProvider user = Provider.of<UserProvider>(context, listen: false);
                   user.setUserId(null);
                   user.setProfileType(null);
+                  user.setUserModel(null);
                   adherent.setAdherentModel(null);
                   sp.setServiceProviderModel(null);
                   doctor.setDoctorModel(null);

@@ -17,6 +17,7 @@ import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/texts/welcome_text_header.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -542,13 +543,13 @@ class _DoctorFormViewState extends State<DoctorFormView> {
       .doc(userProvider.getUserId)
       .set({
         'emailAdress': email,
+        "authId": FirebaseAuth.instance.currentUser.uid,
         'createdDate': DateTime.now(),
         'enabled': false,
         "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
         "urlCNI": "",
         "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
         "userCountryName": userProvider.getCountryName,
-        "authId": userProvider.getAuthId,
         'fullName': cni,
         "profil": "MEDECIN",
         "regionDorigione": region,
@@ -561,6 +562,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             //"certificatDenregistrmDordre": registerOrder,
             "categorieEtablissement": officeCategory,
             "communeHospital": hcommune,
+            "authId": FirebaseAuth.instance.currentUser.uid,
             "regionEtablissement": hregion,
             "nomEtablissement": officeName,
             "email": email,

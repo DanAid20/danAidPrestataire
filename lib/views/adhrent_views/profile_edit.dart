@@ -10,6 +10,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -678,6 +679,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                       await FirebaseFirestore.instance.collection("USERS")
                         .doc(adherentProvider.getAdherent.getAdherentId)
                         .set({
+                          "authId": FirebaseAuth.instance.currentUser.uid,
                           'emailAdress': email,
                           'fullName': cniName,
                           "regionDorigione": _region
@@ -686,6 +688,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           await FirebaseFirestore.instance.collection("ADHERENTS")
                             .doc(adherentProvider.getAdherent.getAdherentId)
                             .set({
+                              "authId": FirebaseAuth.instance.currentUser.uid,
                               "dateCreated": DateTime.now(),
                               "cniName": cniName,
                               "emailAdress": email,

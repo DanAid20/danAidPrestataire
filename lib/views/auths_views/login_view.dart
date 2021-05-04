@@ -277,6 +277,7 @@ class _LoginViewState extends State<LoginView> {
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
       showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+      userProvider.setAuthId(_auth.currentUser.uid);
       setState((){
         loader = false;
       });

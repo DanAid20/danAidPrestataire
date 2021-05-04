@@ -3,16 +3,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:danaid/core/providers/conversationModelProvider.dart';
+import 'package:danaid/core/models/conversationModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:danaid/helpers/constants.dart' as constants;
 
 class MyDoctorTabView extends StatefulWidget {
   @override
@@ -124,9 +128,10 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
   @override
   Widget build(BuildContext context) {
-    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
-    AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
+    AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context);
+    ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context);
     //DoctorModel doctor = adherent.getAdherent.familyDoctor;
     return Container(
       color: Colors.grey[100],
@@ -327,8 +332,24 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                           children: [
                                             SizedBox(width: 5,),
                                             TextButton.icon(
-                                              onPressed: (){},
-                                              icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg"),
+                                              onPressed: (){
+                                                String userId = FirebaseAuth.instance.currentUser.uid;
+                                                ConversationModel conversationModel = ConversationModel(
+                                                  conversationId: Algorithms.getConversationId(userId: userId, targetId: doctor.authId),
+                                                  userId: userId,
+                                                  targetId: doctor.authId,
+                                                  userName: adherent.getAdherent.cniName,
+                                                  targetName: doctor.familyName,
+                                                  userAvatar: adherent.getAdherent.imgUrl,
+                                                  targetAvatar: doctor.avatarUrl,
+                                                  targetProfileType: constants.doctor,
+                                                  userPhoneId: adherent.getAdherent.adherentId,
+                                                  targetPhoneId: doctor.id
+                                                );
+                                                conversation.setConversationModel(conversationModel);
+                                                Navigator.pushNamed(context, '/conversation');
+                                              },
+                                              icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg", color: whiteColor,),
                                               label: Text("Ecrire", style: TextStyle(color: whiteColor),),
                                               style: ButtonStyle(
                                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),

@@ -17,11 +17,14 @@ import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
+import 'package:danaid/views/social_network_views/chatroom.dart';
+import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/views/splash_screen.dart';
 import 'package:danaid/views/adhrent_views/profile_edit.dart';
 import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
+import 'package:danaid/views/social_network_views/conversation.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -60,5 +63,10 @@ final Map<String, Widget Function(BuildContext)> routes = {
 
   // Service provider routes (prestataire)
   "/serviceprovider-profile-edit": (context) => ServiceProviderProfileEdit(),
+
+  // Social network screens
+  "/social-home": (context) => SocialMediaHomePage(),
+  "/conversation": (context) => Conversation(),
+  "/chatroom": (context) => ChatRoom(),
   
 };

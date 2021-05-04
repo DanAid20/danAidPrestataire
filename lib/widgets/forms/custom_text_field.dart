@@ -97,3 +97,22 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+InputDecoration socialDefaultDecoration({String hintText, Color color}){
+  return InputDecoration(
+    prefixIcon: SizedBox(width: wv*7,),
+    errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(width: 1, color: Colors.red[300]),
+        borderRadius: BorderRadius.all(Radius.circular(20))),
+    fillColor: Colors.white.withOpacity(0.3),
+    contentPadding: EdgeInsets.only(top: hv*1, bottom: hv*1, left: wv*3, right: wv*7),
+    enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(width: 1, color: color.withOpacity(0.0)),
+        borderRadius: BorderRadius.all(Radius.circular(20))),
+    focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(width: 1, color: Colors.white.withOpacity(0.35)),
+        borderRadius: BorderRadius.all(Radius.circular(20))),
+    hintText: hintText,
+    hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+  );
+}
