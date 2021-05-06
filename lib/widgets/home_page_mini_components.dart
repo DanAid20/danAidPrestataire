@@ -15,6 +15,222 @@ import '../helpers/styles.dart';
 import '../widgets/readMoreText.dart';
 
 class HomePageComponents {
+  Widget paienementDetailsListItem({
+    String nom, 
+    String date,
+    String montant, 
+    String etat,
+    String iconesConsultationTypes
+  }){
+    return Container(
+        margin: EdgeInsets.only( top: hv*2) ,
+      child: Row(
+                              children: [
+                                Column(
+                                  children: [
+                                   Container(
+                                       padding: EdgeInsets.all(5) ,
+                                      decoration: BoxDecoration(color: kDeepTeal, boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),],borderRadius: BorderRadius.all(Radius.circular(10))),
+                                     child: SvgPicture.asset(
+                                            iconesConsultationTypes,
+                                            height: 28.h,
+                                            color: kSouthSeas,
+                                            width: wv * 12, 
+                                      ),
+                                   ),
+                                  ],
+                                ),
+                                SizedBox(
+                              width: wv * 2.3,
+                            ),
+                                Column(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Text(nom, overflow: TextOverflow.clip,  style: TextStyle(
+                                            color: kBlueForce,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                        ),
+                                            SizedBox(
+                              width: hv * 2.3,
+                            ),
+                                        Text(date,  style: TextStyle(
+                                          color: kBlueForce,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Spacer(),
+                                Column(
+                                  children: [
+                                    Column(
+                                       crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Text(montant, style: TextStyle(
+                                          color: kBlueForce,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                        Text(etat, style: TextStyle(
+                                          color: kblueSky,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+    );
+  }
+  Widget paiementItem(){
+    return Container(
+        margin: EdgeInsets.all( wv * 3),
+                 decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+      child: Padding(
+                   padding: const EdgeInsets.all(12.0),
+                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                     children: [
+                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                          Column(
+                             mainAxisSize: MainAxisSize.min,
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                                   Container(alignment: Alignment.centerLeft, child: Text('Avril', style: TextStyle(
+                                      color: kDeepTeal,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                   SizedBox( height: hv * 1.3,),
+                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Montant', style: TextStyle(
+                                      color: kBlueForce,
+                                      fontWeight: FontWeight.w500,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('10500 f', style: TextStyle(
+                                      color: kBlueForce,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),],)),
+                             ],
+                           ),
+                          SizedBox(
+                            width: wv * 20.3,
+                          ),
+                          Column(
+                             mainAxisSize: MainAxisSize.min,
+                             crossAxisAlignment: CrossAxisAlignment.end,
+                             children: [
+                                   Container(alignment: Alignment.centerRight, child: Text('En attente', style: TextStyle(
+                                      color: kArgent,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                   SizedBox( height: hv * 1.3,),
+                                   Container(alignment: Alignment.centerRight, child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Text('Delai de paiement ',style: TextStyle(
+                                      color: kBlueForce,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
+                                        alignment: Alignment.centerRight,
+                                        child: Text('31 Mars 2021', style: TextStyle(
+                                        color: kBlueForce,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: wv*3.5), textScaleFactor: 1.0),
+                                      ),],)),
+                             ],
+                           ),
+                          Column(
+                             mainAxisSize: MainAxisSize.min,
+                             children: [
+                                  
+                                 Container(child: Column(children: [SvgPicture.asset(
+                                        'assets/icons/Bulk/Wallet.svg',
+                                        height: hv * 3,
+                                        color: kSouthSeas,
+                                        width: wv * 10, 
+                                  ),
+                                  Text('Auditer', style: TextStyle(
+                                      color: kSouthSeas,
+                                      fontWeight: FontWeight.w600,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0),],)),
+                             ],
+                           ),
+                         ],
+                       ),
+                     ],
+                   ),
+                 ),
+    );
+  }
+  Widget patientsItem(
+      {String imgUrl,
+      String nom,
+      String subtitle,
+      String apointementDate,
+      String apointementType,
+      bool isSpontane = false}) {
+    return ListTile(
+      leading: HomePageComponents().getAvatar(
+          imgUrl: imgUrl,
+          size: wv * 8,
+          renoveIsConnectedButton: false),
+      title: Text(
+        nom != null ? nom : 'Fabrice Mbanga',
+        style: TextStyle(
+            fontSize: 15.sp,
+            fontWeight: FontWeight.w700,
+            color: kPrimaryColor),
+      ),
+      subtitle: Text(
+         subtitle,
+        overflow: TextOverflow.ellipsis,
+         maxLines: 2,
+         softWrap: false,
+        style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: kPrimaryColor),
+      ),
+      trailing: isSpontane == true
+          ? Text(
+              'Spontane',
+              style:
+                  TextStyle(fontSize: 14.sp, color: kDeepTeal),
+            )
+          : Container(
+              padding: EdgeInsets.only(top: hv * 1, right: wv * 2),
+              child: Column(
+                children: [
+                  Text(
+                    apointementDate != null ? apointementDate : '12:15',
+                    style: TextStyle(
+                        fontSize:  14.sp, color: kPrimaryColor),
+                  ),
+                  Text(
+                    apointementType != null ? apointementType : 'RDV',
+                    style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: primaryColor),
+                  ),
+                ],
+              ),
+            ),
+    );
+  }
   Widget timeline({
     String time,
     String userImage,
@@ -631,14 +847,21 @@ class HomePageComponents {
   }
 
   getAvatar({String imgUrl, double size, bool renoveIsConnectedButton = true}) {
+      var stringToCompare="https://firebasestorage.googleapis.com/v0/b/danaid-dev";
+
     return Padding(
       padding: EdgeInsets.only(right: wv * 1),
       child: Stack(
         children: [
+          imgUrl.contains(stringToCompare) ? CircleAvatar(
+                radius:  size != null ? size : wv * 5.5,
+                backgroundImage: NetworkImage(imgUrl),
+                backgroundColor: Colors.transparent,
+          ):
           CircleAvatar(
             radius: size != null ? size : wv * 5.5,
-            child: Image.asset(
-              imgUrl,
+            child:Image.asset(
+              "assets/images/avatar-profile.jpg",
               fit: BoxFit.cover,
             ),
           ),

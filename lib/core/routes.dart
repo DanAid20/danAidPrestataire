@@ -15,6 +15,8 @@ import 'package:danaid/views/adhrent_views/adherents_plans_screen/adherent_plan_
 import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';
+import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart';
+import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
 import 'package:danaid/views/social_network_views/chatroom.dart';
@@ -56,6 +58,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/doctor-add-patient": (context) => AddPatientView(),
   "/inactive-account-patient": (context) => InactiveAccount(),
   "/ownerList-patient": (context) => OwnerUserListView(),
+  "/history-prestation-doctor": (context) => PrestationHistory(),
+  "/details-history-prestation-doctor": (context) => DetailsPrestationHistory(), 
   /**
    * End section routes that concern the doctor activities in the
    * application system
