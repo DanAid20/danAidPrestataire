@@ -58,7 +58,6 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
-          print(snapshot.data.docs.length);
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
@@ -78,6 +77,13 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     future: users.doc(doc.data()["adherentId"]).get(),
                     builder:
                         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData==null) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+              ),
+            );
+          }
                       if (snapshot.hasError) {
                           return Text("Something went wrong");
                         }
@@ -94,9 +100,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   );
 
                   })
-              : Center(
-                  child: Text(" Aucun patient en salee d'attente.."),
-                );
+              : Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                    child: Text(" Aucun patient en sale d'attente.."),
+                  ),
+              );
         });
 
   }
@@ -113,7 +122,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
-          print(snapshot.data.docs.length);
+          
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
@@ -121,7 +130,6 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               ),
             );
           }
-          int lastIndex = snapshot.data.docs.length - 1;
           return snapshot.data.docs.length >= 1
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -135,6 +143,13 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     future: users.doc(doc.data()["adherentId"]).get(),
                     builder:
                         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      if (snapshot.hasData==null) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+              ),
+            );
+          }
                       if (snapshot.hasError) {
                           return Text("Something went wrong");
                         }

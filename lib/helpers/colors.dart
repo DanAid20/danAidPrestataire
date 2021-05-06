@@ -37,10 +37,12 @@ const kPrimaryGradientColor = LinearGradient(
 );
 const kThirdColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
+const kShadowColor = Color(0xFF959da5);
 const kTextLightColor = Color.fromRGBO(237, 237, 237, 1);
 
 const kSouthSeas = Color(0xFF57CECA);
 const kGold = Color(0xFFECCA33);
+const kArgent = Color(0xFFB79708);
 const kGoldForIconesBg = Color(0xFFECCA33);
 const kGoldlight = Color(0xFFFBDA47);
 const kDeepTeal = Color(0xFF05837C);
@@ -48,6 +50,7 @@ const kDeepTealClair = Color(0xFFC0E3E1);
 const kBrownCanyon = Color(0xFFAE9284);
 const kSmoothBrown = Color(0xFFDFD3CE);
 const kBlueForce = Color(0xFF235383);
+const kSimpleForce = Color(0xFF4F5F8E);
 const kblueSky = Color(0xFF57CECA);
 const kBlueDeep = Color(0xFF0075AA);
 const kTextBlue = Color(0xFF4F5F8E);
