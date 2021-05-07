@@ -65,7 +65,7 @@ class _ChatRoomState extends State<ChatRoom> {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
         title: Text("Créer un groupe", style: TextStyle(color: whiteColor),),
         actions: [
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: (){}),
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: (){})],
       ),
       body: Column(
@@ -113,11 +113,14 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                     ),
                 child: ListTile(
                   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    backgroundImage: chatBuddy.imgUrl != null
-                        ? CachedNetworkImageProvider(chatBuddy.imgUrl)
-                        : AssetImage("assets/images/avatar.png"),
+                  leading: Hero(
+                    tag: "heroAvatar",
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      backgroundImage: chatBuddy.imgUrl != null
+                          ? CachedNetworkImageProvider(chatBuddy.imgUrl)
+                          : AssetImage("assets/images/avatar.png"),
+                    ),
                   ),
                   title: Text(chatBuddy.fullName != null ? chatBuddy.fullName : "wait"),
                   subtitle: widget.conversation.lastMessageType == 0

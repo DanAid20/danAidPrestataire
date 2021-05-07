@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -138,6 +139,7 @@ class _SearchState extends State<Search> {
         elevation: 0,
         titleSpacing: 0,
         automaticallyImplyLeading: false,
+        backgroundColor: kDeepTeal,
         title: Row(
           children: <Widget>[
             InkWell(
@@ -146,7 +148,7 @@ class _SearchState extends State<Search> {
                 child: Icon(
                   Icons.arrow_back_ios,
                   size: 20,
-                  color: Colors.grey[600],
+                  color: Colors.white,
                 ),
               ),
               onTap: () {
@@ -169,8 +171,10 @@ class _SearchState extends State<Search> {
                   onChanged: (val) {
                     searchUsers(val);
                   },
-                  cursorColor: Colors.grey,
+                  cursorColor: Colors.white,
+                  style: TextStyle(color: whiteColor),
                   decoration: InputDecoration(
+                    hintStyle: TextStyle(color: whiteColor),
                     focusedBorder: OutlineInputBorder(
                         borderSide:
                             BorderSide(color: Colors.grey.withOpacity(0.0)),
@@ -193,7 +197,7 @@ class _SearchState extends State<Search> {
                     suffixIcon: IconButton(
                       icon: Icon(
                         Icons.cancel,
-                        color: Colors.grey,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         _searchController.clear();
