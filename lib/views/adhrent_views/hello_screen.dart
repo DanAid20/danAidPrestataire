@@ -24,8 +24,7 @@ class HelloScreen extends StatefulWidget {
   _HelloScreenState createState() => _HelloScreenState();
 }
 
-class _HelloScreenState extends State<HelloScreen>
-    with SingleTickerProviderStateMixin {
+class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStateMixin {
   TabController _tabController;
   List tabs = <Widget>[
     Tab(

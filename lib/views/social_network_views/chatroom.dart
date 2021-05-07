@@ -10,6 +10,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -40,13 +41,15 @@ class _ChatRoomState extends State<ChatRoom> {
                             ? ChatRoomTile(conversation: conversation, targetId: targetId)
                             : CircularProgressIndicator();
                       }),
-                ) : Column(
-                  children: <Widget>[
-                    SizedBox(height: 50,),
-                    Icon(Icons.ac_unit, color: Colors.grey[400], size: 85,),
-                    SizedBox(height: 5,),
-                    Text("Start a conversation", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.grey[400] ),),
-                  ],
+                ) : Center(
+                  child: Column(mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      SizedBox(height: hv*30,),
+                      Icon(LineIcons.commentDots, color: Colors.grey[400], size: 85,),
+                      SizedBox(height: 5,),
+                      Text("Commencez une conversation..", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.grey[400]), textAlign: TextAlign.center,),
+                    ],
+                  ),
                 )
               : Center(child: CircularProgressIndicator());
         });
@@ -204,7 +207,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                       widget.conversation.unseenMessages > 0 ?
                       CircleAvatar(
                         radius: 10,
-                        backgroundColor: Theme.of(context).primaryColor,
+                        backgroundColor: kDeepTeal,
                         child: Text(widget.conversation.unseenMessages.toString(),
                           style: TextStyle(fontSize: 12, color: Colors.white))
                       )

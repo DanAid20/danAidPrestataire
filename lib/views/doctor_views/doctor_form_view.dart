@@ -553,7 +553,9 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         'fullName': cni,
         "profil": "MEDECIN",
         "regionDorigione": region,
-        "imageUrl": avatarUrl
+        "imageUrl": avatarUrl,
+        "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+        "nameKeywords": Algorithms.getKeyWords(name + " "+ surname)
       }, SetOptions(merge: true))
       .then((value) async {
         await FirebaseFirestore.instance.collection("MEDECINS")
@@ -581,7 +583,9 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             "regionDorigione": region,
             "statuMatrimonialMarie": false,
             "ville": city,
-            "urlImage": avatarUrl
+            "urlImage": avatarUrl,
+            "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+            "nameKeywords": Algorithms.getKeyWords(name + " "+ surname)
           }, SetOptions(merge: true))
           .then((value) async {
             HiveDatabase.setRegisterState(true);

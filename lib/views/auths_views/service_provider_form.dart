@@ -318,7 +318,9 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                           'fullName': "$companyName",
                           "imageUrl" : avatarUrl,
                           "profil": "PRESTATAIRE",
-                          "regionDorigione": adherentProvider.getRegionOfOrigin
+                          "regionDorigione": adherentProvider.getRegionOfOrigin,
+                          "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                          "nameKeywords": Algorithms.getKeyWords(companyName)
                         }, SetOptions(merge: true))
                         .then((value) async {
                           await FirebaseFirestore.instance.collection("PRESTATAIRE")
@@ -338,7 +340,9 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                               "region": adherentProvider.getRegionOfOrigin,
                               "villeEtab": adherentProvider.getTown,
                               "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
-                              "userCountryName": userProvider.getCountryName
+                              "userCountryName": userProvider.getCountryName,
+                              "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                              "nameKeywords": Algorithms.getKeyWords(companyName)
                             }, SetOptions(merge: true))
                             .then((value) async {
                               HiveDatabase.setRegisterState(true);

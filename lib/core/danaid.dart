@@ -14,7 +14,9 @@ import 'package:danaid/core/providers/devEnvironmentProvider.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderTileModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/conversationChatModelProvider.dart';
@@ -36,7 +38,7 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<UserProvider>(
                 create: (_) => UserProvider(
-                  null, "", "", "", "", "", "", "", "", "237", "Cameroon", false, null
+                  null, null, "", "", "", "", "", "", "", "", "237", "Cameroon", false, null
                 ),
               ),
               ChangeNotifierProvider<AdherentProvider>(
@@ -70,6 +72,12 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<ConversationChatModelProvider>(
                 create: (_) => ConversationChatModelProvider(null),
+              ),
+              ChangeNotifierProvider<DoctorTileModelProvider>(
+                create: (_) => DoctorTileModelProvider(null),
+              ),
+              ChangeNotifierProvider<ServiceProviderTileModelProvider>(
+                create: (_) => ServiceProviderTileModelProvider(null),
               )
             ],
             child: ScreenUtilInit(

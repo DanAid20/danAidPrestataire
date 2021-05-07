@@ -340,7 +340,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                             nameEnabled = true;
                           });}
                       ),
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
                         label: "Prénom (s)",
@@ -354,7 +354,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
                         label: "Nom tel que sur la CNI",
@@ -368,7 +368,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.emailOutline, color: kPrimaryColor),
                         label: "Email",
@@ -388,7 +388,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
                         label: "Profession",
@@ -493,7 +493,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           SizedBox(width: wv*3,),
                         ],
                       ),
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.homeCityOutline, color: kPrimaryColor),
                         label: "Addresse",
@@ -507,7 +507,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*2.5,),
+                      SizedBox(height: hv*4,),
                       (gpsCoords != null) | (adherentModelProvider.getAdherent.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -682,7 +682,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                           "authId": FirebaseAuth.instance.currentUser.uid,
                           'emailAdress': email,
                           'fullName': cniName,
-                          "regionDorigione": _region
+                          "regionDorigione": _region,
+                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
+                          "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                         }, SetOptions(merge: true))
                         .then((value) async {
                           await FirebaseFirestore.instance.collection("ADHERENTS")
@@ -707,7 +709,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 "altitude": 0
                               } : {
                                 "addresse": address,
-                              }
+                              },
+                                "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
+                                "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                             }, SetOptions(merge: true))
                             .then((value) async {
                               textFieldsControl();
@@ -750,19 +754,6 @@ class _ProfileEditState extends State<ProfileEdit> {
         ),
       ),
     );
-  }
-
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate, // Refer step 1
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
   }
 
   Future getDocFromPhone(String name) async {

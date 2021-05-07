@@ -30,6 +30,7 @@ class Algorithms {
 
     return dateUnit+'-'+regionLetter+threeDigit+oneDigit;
   }
+  
   static double calculateDistance(lat1, lon1, lat2, lon2){
     var p = 0.017453292519943295;
     var c = cos;
@@ -87,7 +88,7 @@ class Algorithms {
 
   static List getKeyWords(String input) {
     List getKeys(String input) {
-      var keyWords = [];
+      var keyWords = new List.filled(input.length, "", growable: true);
       for (int i = 0; i < input.length; i++) {
         keyWords[i] = input.substring(0, i + 1).toLowerCase();
       }
@@ -95,7 +96,7 @@ class Algorithms {
     }
 
     List getKeysReversed(String input) {
-      var keyWords = [];
+      var keyWords = new List.filled(input.length, "", growable: true);
       for (int i = 0; i < input.length; i++) {
         keyWords[i] =
             input.substring(0, i + 1).toLowerCase().split('').reversed.join('');
@@ -117,6 +118,8 @@ class Algorithms {
 
     results = results + getKeys(input);
     results = results.toSet().toList();
+
+    print(results.toString());
 
     return results;
   }

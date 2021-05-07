@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class DoctorModel {
   String id, authId, officeCategory, officeName, hospitalRegion, familyName, surname, about, orderRegistrationCertificate, address, cniName, hospitalTown, field, speciality, email, personContactName, personContactPhone, gender, town, region, profile, medicalService, avatarUrl, cniUrl, orderRegistrationCertificateUrl;
   bool profileEnabled;
-  List adherentList, keywords;
+  List adherentList, keywords, phoneKeywords, nameKeywords;
   Timestamp dateCreated;
   var serviceList, phoneList;
   Map location, rate, availability;
 
-  DoctorModel({this.id, this.authId, this.keywords, this.adherentList, this.hospitalRegion, this.rate, this.officeCategory, this.about, this.address, this.officeName, this.familyName, this.surname, this.dateCreated, this.availability, this.serviceList, this.orderRegistrationCertificate, this.cniName, this.hospitalTown, this.field, this.speciality, this.email, this.personContactName, this.personContactPhone, this.gender, this.town, this.region, this.profile, this.medicalService, this.avatarUrl, this.cniUrl, this.orderRegistrationCertificateUrl, this.profileEnabled, this.phoneList, this.location});
+  DoctorModel({this.id, this.authId, this.keywords, this.phoneKeywords, this.nameKeywords, this.adherentList, this.hospitalRegion, this.rate, this.officeCategory, this.about, this.address, this.officeName, this.familyName, this.surname, this.dateCreated, this.availability, this.serviceList, this.orderRegistrationCertificate, this.cniName, this.hospitalTown, this.field, this.speciality, this.email, this.personContactName, this.personContactPhone, this.gender, this.town, this.region, this.profile, this.medicalService, this.avatarUrl, this.cniUrl, this.orderRegistrationCertificateUrl, this.profileEnabled, this.phoneList, this.location});
  
   factory DoctorModel.fromDocument(DocumentSnapshot doc){
     return DoctorModel(
@@ -44,7 +44,9 @@ class DoctorModel {
       adherentList: doc.data()["adherentList"],
       serviceList: doc.data()["serviceList"],
       availability: doc.data()["availability"],
-      rate: doc.data()["tarif"]
+      rate: doc.data()["tarif"],
+      phoneKeywords: doc.data()["phoneKeywords"],
+      nameKeywords: doc.data()["nameKeywords"]
     );
   }
 }

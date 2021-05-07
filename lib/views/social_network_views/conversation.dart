@@ -55,8 +55,8 @@ class _ConversationState extends State<Conversation> {
     String targetId = conversation.getConversation.targetId;
     String id = conversation.getConversation.userId;
     String conversationId = conversation.getConversation.conversationId;
-    await FirebaseFirestore.instance.collection("USERS").doc(id).set({'chattingWith': targetId, 'chat-users': FieldValue.arrayUnion([targetId])}, SetOptions(merge: true));
-    await FirebaseFirestore.instance.collection("USERS").doc(targetId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation.userPhoneId).set({'chattingWith': targetId, 'chat-users': FieldValue.arrayUnion([targetId])}, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation.targetPhoneId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).set({"users": FieldValue.arrayUnion([id, targetId])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((doc) {
       ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc);

@@ -976,6 +976,31 @@ class HomePageComponents {
       ),
     );
   }
+  
+  static publicationType({IconData icon, String title, bool selected = false, Function action}){
+    return  GestureDetector(
+      onTap: action,
+      child: Container(
+        height: hv*16,
+        width: wv*28,
+        padding: EdgeInsets.symmetric(vertical: hv*1.5, horizontal: wv*2),
+        margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: selected ? kDeepTeal.withOpacity(0.8) : Colors.transparent, width: 1.5),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1))]
+        ),
+        child: Column(mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+            Spacer(),
+            Icon(icon, size: 50, color: Colors.grey[400],),
+          ],
+        ),
+      ),
+    );
+  }
 
   static accountParameters({String title, String subtitle, String svgIcon, Function action}){
     return Padding(
