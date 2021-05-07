@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
@@ -8,6 +10,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,7 +23,29 @@ class DoctorPatientView extends StatefulWidget {
 
 class _DoctorPatientViewState extends State<DoctorPatientView> {
   final NavigationService _navigationService = locator<NavigationService>();
-
+  var startDays;
+  var endDay;
+  @override
+  void initState() { 
+    super.initState();
+    triggerGetPatient();
+  }
+  triggerGetPatient() {
+    DateTime dateTimeNow = DateTime.now();
+    String startDay = dateTimeNow.toString().substring(0, 11);
+    String firebaseFormatedDay = startDay + "00:00:00.000Z";
+    String sendHours = startDay + "23:59:59.000Z";
+    DateTime todayDate = DateTime.parse(sendHours);
+    print(firebaseFormatedDay);
+    print(todayDate);
+    print(sendHours);
+    print(startDay);
+    setState(() {
+      startDays = firebaseFormatedDay;
+      endDay = todayDate;
+      
+    });
+  }
   Widget servicesList() {
   UserProvider userProvider = Provider.of<UserProvider>(context);
   ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
@@ -121,10 +146,16 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                       isPrestataire: isPrestataire,
                       ),
                 ),
-                displsOtherServices(
+               GestureDetector(
+                 onTap: (){
+                     Navigator.pushNamed(context, '/history-prestation-doctor');
+                 },
+                 child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
                     title: 'Suivre mes paiements', 
                     isPrestataire: isPrestataire,),
+               ),
+               
                 displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
                     title: 'Mes Messages', 
@@ -193,8 +224,92 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       ],
     );
   }
+  
+  
+  getListOfUser(startDays, endDay, date, doctorId) {
+    print(doctorId);
+    Stream<QuerySnapshot> query = FirebaseFirestore.instance
+        .collection("APPOINTMENTS")
+        .where("doctorId", isEqualTo: doctorId)
+        .where("status", isEqualTo: 0)
+        .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
+        .orderBy("start-time")
+        .snapshots();
+
+    return StreamBuilder(
+        stream: query,
+        builder: (context, snapshot) {
+          //print(snapshot.data.docs.length);
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+              ),
+            );
+          }
+          if(snapshot.data == null) return CircularProgressIndicator();
+          return snapshot.data.docs.length >= 1
+              ? ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot doc = snapshot.data.docs[index];
+
+                    CollectionReference users =
+                        FirebaseFirestore.instance.collection('ADHERENTS');
+                    return FutureBuilder<DocumentSnapshot>(
+                      future: users.doc(doc.data()["adherentId"]).get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.connectionState==ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                              ),
+                            );
+                          }
+                        if (snapshot.hasError) {
+                          return Text("Something went wrong");
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          Map<String, dynamic> data = snapshot.data.data();
+                          Timestamp t = data["dateNaissance"];
+                          DateTime d = t.toDate();
+                          DateTime dateTimeNow = DateTime.now();
+                         
+                          Timestamp day = doc.data()["start-time"];
+                          DateTime dateTime = day.toDate();
+                          String formattedTime =
+                              DateFormat.Hm().format(dateTime);
+                         
+                          return  HomePageComponents().patientsItem(
+                          apointementDate: "$formattedTime",
+                          apointementType: '${doc.data()["consultation-type"]}',
+                          imgUrl: '${data["imageUrl"]}',
+                          nom: '${data["prenom"]} ${data["nomFamille"]}',
+                          subtitle: '${doc.data()["title"]}');
+                        }
+                        return Text("loading");
+                      },
+                    );
+                  })
+              : Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                    child: Text(" Vous n'avez aucun pour le moment.."),
+                  ),
+              );
+        });
+  }
 
   patientOfTodyaList() {
+     UserProvider userProvider = Provider.of<UserProvider>(context);
+    DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    bool isPrestataire =
+        userProvider.getProfileType == serviceProvider ? true : false;
+    
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -221,92 +336,22 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         Container(
           margin: EdgeInsets.symmetric(vertical: 2.0),
           color: Colors.white,
-          child: new ListView(
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            children: <Widget>[
-              patientsItem(
-                  apointementDate: "12:15",
-                  apointementType: 'RDV',
-                  imgUrl: 'assets/images/avatar-profile.jpg',
-                  nom: 'Fabrice Mbanga',
-                  subtitle: 'Nouvelle Consultation'),
-              patientsItem(
-                  apointementDate: "12:05",
-                  apointementType: 'RDV',
-                  imgUrl: 'assets/images/avatar-profile.jpg',
-                  nom: 'Fabrice Mbanga',
-                  subtitle: 'Nouvelle Consultation',
-                  isSpontane: true),
-              patientsItem(
-                  apointementDate: "12:15",
-                  apointementType: 'RDV',
-                  imgUrl: 'assets/images/avatar-profile.jpg',
-                  nom: 'Fabrice Mbanga',
-                  subtitle: 'Nouvelle Consultation'),
-            ],
-          ),
-        ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            userProvider.getProfileType == doctor &&
+                          doctorProvider.getDoctor.id != null &&
+                          startDays != null &&
+                          endDay != null
+                      ? getListOfUser(startDays, endDay, null,
+                          doctorProvider.getDoctor.id): Text("loading")
+          ],)
+        )
       ]),
     );
   }
 
-  Widget patientsItem(
-      {String imgUrl,
-      String nom,
-      String subtitle,
-      String apointementDate,
-      String apointementType,
-      bool isSpontane = false}) {
-    return ListTile(
-      leading: HomePageComponents().getAvatar(
-          imgUrl: imgUrl != null ? imgUrl : "assets/images/avatar-profile.jpg",
-          size: wv * 8,
-          renoveIsConnectedButton: false),
-      title: Text(
-        nom != null ? nom : 'Fabrice Mbanga',
-        style: TextStyle(
-            fontSize: 15.sp,
-            fontWeight: FontWeight.w700,
-            color: kPrimaryColor),
-      ),
-      subtitle: Text(
-         'Nouvelle Consultation',
-        overflow: TextOverflow.ellipsis,
-         maxLines: 2,
-         softWrap: false,
-        style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: kPrimaryColor),
-      ),
-      trailing: isSpontane == true
-          ? Text(
-              'Spontane',
-              style:
-                  TextStyle(fontSize: 14.sp, color: kDeepTeal),
-            )
-          : Container(
-              padding: EdgeInsets.only(top: hv * 1, right: wv * 2),
-              child: Column(
-                children: [
-                  Text(
-                    apointementDate != null ? apointementDate : '12:15',
-                    style: TextStyle(
-                        fontSize:  14.sp, color: kPrimaryColor),
-                  ),
-                  Text(
-                    apointementType != null ? apointementType : 'RDV',
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w700,
-                        color: primaryColor),
-                  ),
-                ],
-              ),
-            ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -317,6 +362,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           color: kBgTextColor,
         ),
         child: Column(
+
           children: [servicesList(), patientOfTodyaList()],
         ),
       ),
