@@ -314,8 +314,7 @@ class _HomePageViewState extends State<HomePageView> {
     );
   }
   entraideTapped(){
-    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
-    controller.setIndex(0);
+    Navigator.pushNamed(context, "/social-home");
   }
   accueilTapped(){
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);

@@ -4,11 +4,10 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/actuality.dart';
-import 'package:danaid/widgets/forms/custom_text_field.dart';
+import 'package:danaid/views/social_network_views/groups.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class SocialMediaHomePage extends StatefulWidget {
@@ -57,33 +56,31 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
               children: [
                 Container(
                   height: hv*12,
-                  child: Row(//crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: IconButton(
-                          icon: Icon(Icons.arrow_back_ios_rounded, size: 25,),
-                          padding: EdgeInsets.only(right: 8),
-                          constraints: BoxConstraints(),
-                          onPressed: (){}),
-                      ),
-                      SizedBox(width: wv*3,),
                       Expanded(
                         child: Container(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              IconButton(
+                                icon: Icon(Icons.arrow_back_ios_rounded, size: 25,),
+                                padding: EdgeInsets.only(right: 8),
+                                constraints: BoxConstraints(),
+                                onPressed: ()=>Navigator.pop(context)),
+                                SizedBox(height: hv*1,),
                               Text("Bonjour ${userProvider.getUserModel.fullName}!", style: TextStyle(color: whiteColor, fontSize: 23),),
                               Text("Bienvenue au réseau d'entraide DanAid", style: TextStyle(color: whiteColor.withOpacity(0.5), fontSize: 12),),
                             ],
                           ),
                         ),
                       ),
-                      Column(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.center,
+                      Column(crossAxisAlignment: CrossAxisAlignment.end, mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Row(children: [
                             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
                             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: (){})
                           ],),
+                          SizedBox(height: hv*1,),
                           IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/Chat.svg', width: wv*10,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/chatroom')),
                         ],
                       )
@@ -104,8 +101,9 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                         Row(mainAxisSize: MainAxisSize.min,
                           children: [
                             Hero(tag: "image", child: SvgPicture.asset('assets/icons/Two-tone/Image.svg', color: kSouthSeas, width: 25)),
-                            Hero(tag: "voice", child: SvgPicture.asset('assets/icons/Two-tone/Voice.svg', color: kSouthSeas, width: 25)),
-                            Hero(tag: "video", child: SvgPicture.asset('assets/icons/Two-tone/Video.svg', color: kSouthSeas, width: 25))
+                            Hero(tag: "document", child: SvgPicture.asset('assets/icons/Two-tone/Document.svg', color: kSouthSeas, width: 25)),
+                            Hero(tag: "video", child: SvgPicture.asset('assets/icons/Two-tone/Video.svg', color: kSouthSeas, width: 25)),
+                            Hero(tag: "voice", child: SvgPicture.asset('assets/icons/Two-tone/Voice.svg', color: kSouthSeas, width: 25))
                           ],
                         )
                       ],
@@ -146,7 +144,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
               children: <Widget>[
                 Center(child: ActualityPage()),
                 Center(child: Text("Amis")),
-                Center(child: Text("Groupes")),
+                Center(child: Groups()),
               ],
             ),
           ),

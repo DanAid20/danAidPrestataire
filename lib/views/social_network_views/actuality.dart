@@ -1,7 +1,10 @@
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:danaid/views/social_network_views/discussions.dart';
+import 'package:danaid/views/social_network_views/posts.dart';
+import 'package:danaid/views/social_network_views/crowd_funding.dart';
+import 'package:danaid/views/social_network_views/questions.dart';
 
 class ActualityPage extends StatefulWidget {
   ActualityPage({Key key}) : super(key: key);
@@ -45,10 +48,10 @@ class _ActualityPageState extends State<ActualityPage> with SingleTickerProvider
           child: TabBarView(
             controller: actualityController,
             children: <Widget>[
-              Center(child: Text("Posts")),
-              Center(child: Text("Q&R")),
-              Center(child: Text("Entraide")),
-              Center(child: Text("Discussions")),
+              Posts(),
+              Questions(),
+              CrowdFunding(),
+              Discussions(),
             ],
           ),
         )

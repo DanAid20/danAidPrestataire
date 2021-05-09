@@ -13,11 +13,12 @@ class CustomTextField extends StatelessWidget {
   final Widget prefixIcon, suffixIcon;
   final bool enabled;
   final bool multiLine;
+  final int minLines, maxLines;
   final Function editAction;
   final Function onChanged;
   final List<TextInputFormatter> inputFormatters;
 
-  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged}) : super(key: key);
+  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +39,8 @@ class CustomTextField extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             children: [
               TextFormField(
-                minLines: 1,
-                maxLines: multiLine ? 3 : 1,
+                minLines: multiLine ? minLines : 1,
+                maxLines: multiLine ? maxLines : 1,
                 enabled: enabled,
                 keyboardType: keyboardType,
                 controller: controller,

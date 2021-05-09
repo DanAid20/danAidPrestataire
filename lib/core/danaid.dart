@@ -20,6 +20,7 @@ import 'package:danaid/core/providers/serviceProviderTileModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/conversationChatModelProvider.dart';
+import 'package:danaid/core/providers/usersListProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
 
@@ -78,7 +79,10 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<ServiceProviderTileModelProvider>(
                 create: (_) => ServiceProviderTileModelProvider(null),
-              )
+              ),
+              ChangeNotifierProvider<UsersListProvider>(
+                create: (_) => UsersListProvider([]),
+              ),
             ],
             child: ScreenUtilInit(
                  builder: () => MaterialApp(
