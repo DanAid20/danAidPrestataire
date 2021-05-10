@@ -109,6 +109,21 @@ class _CrowdFundingState extends State<CrowdFunding> {
 
                     SizedBox(height: hv*2,),
 
+                    Column(crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(((post.amountCollected/post.amount)*100).toString()+" %", style: TextStyle(color: kSouthSeas),),
+                            Spacer(),
+                            Text(post.amount.toString()+ " f.", style: TextStyle(fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                        LinearProgressIndicator(value: post.amountCollected/post.amount, backgroundColor: Colors.grey[200], minHeight: 8, valueColor: AlwaysStoppedAnimation<Color>(kSouthSeas),),
+                      ],
+                    ),
+
+                    SizedBox(height: hv*2,),
+
                     Row(
                       children: [
                         Expanded(
