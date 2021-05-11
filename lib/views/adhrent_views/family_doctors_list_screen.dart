@@ -27,7 +27,8 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
     DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots();
+    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+      : FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -47,11 +48,9 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                     DocumentSnapshot doc = snapshot.data.docs[index];
                     DoctorModel doctor = DoctorModel.fromDocument(doc);
                     print("name: ");
-                    if(doctorProvider.getDoctor.id == doctor.id){
-                      return Container();
-                    }
+
                     return Padding(
-                      padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 15 : 0),
+                      padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 10 : 0),
                       child: DoctorInfoCard(
                         avatarUrl: doctor.avatarUrl,
                         name: doctor.cniName,
