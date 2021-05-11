@@ -5,6 +5,7 @@ import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -18,7 +19,6 @@ import 'package:danaid/views/adhrent_views/partners_screen.dart';
 import 'package:danaid/views/doctor_views/tabs_doctor_views/profil_doctor_view.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/widgets/clippers.dart';
-import 'package:danaid/widgets/painters.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -366,6 +366,8 @@ class _HomePageViewState extends State<HomePageView> {
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
 
     if(controller.getIndex == 0){
       return SocialMediaHomePage();
@@ -377,9 +379,10 @@ class _HomePageViewState extends State<HomePageView> {
       return HealthBookScreen();
     }
     else if(controller.getIndex == 3){
-      return userProvider.getProfileType == adherent ?  PartnersScreen() : ProfilDoctorView();
+      return userProvider.getProfileType != serviceProvider ?  PartnersScreen() : ProfilDoctorView();
     }
     else if(controller.getIndex == 4){
+      userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor) : print("waouu");
       return userProvider.getProfileType == adherent ?  MyFamilyScreen() : DoctorProfilePage();
     }
   }

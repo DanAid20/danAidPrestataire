@@ -11,6 +11,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
+import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -31,8 +32,11 @@ class AppointmentForm extends StatefulWidget {
 class _AppointmentFormState extends State<AppointmentForm> {
 
   TextEditingController _symptomController = new TextEditingController();
+  TextEditingController _hospitalController = new TextEditingController();
+  TextEditingController _otherInfoController = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
   PageController controller = PageController(initialPage: 0, keepPage: false);
+  String emergencyReason;
   int currentPageValue = 0;
   String purpose;
   List<Widget> pageList;
@@ -67,7 +71,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
     BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     pageList = <Widget>[
       formLayout(menu()),
-      formLayout(beneficiaryProvider.getBeneficiary.matricule != null ? chooseDoctor() : Text("Loading..")),
+      formLayout(beneficiaryProvider.getBeneficiary.matricule != null ? purpose != "emmergency" ? chooseDoctor() : emergencyHospital() : Text("Loading..")),
       formLayout(beneficiaryProvider.getBeneficiary.matricule != null ? schedule() : Text("Loading..")),
       formLayout(beneficiaryProvider.getBeneficiary.matricule != null && focusedDay != null && timeSelected != null ? finalize() : Text("Loading.."))
     ];
@@ -93,8 +97,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Démander une prise en charge", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text(currentPageValue == 0 ? "Le guide vous assiste" : currentPageValue == 1 ? "Le guide vous assiste" : currentPageValue == 2 ? "Choisir la date et la période" : "Raison et symptôme", 
+              Text(purpose != "emmergency" ? "Démander une prise en charge" : "Déclarer une urgence", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(purpose != "emmergency" ? currentPageValue == 0 ? "Le guide vous assiste" : currentPageValue == 1 ? "Le guide vous assiste" : currentPageValue == 2 ? "Choisir la date et la période" : "Raison et symptôme" : "Renseignez l'établissement", 
                 style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
               ),
             ],
@@ -110,7 +114,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             child: Column(children: [
               Container(
                 margin: EdgeInsets.only(top: 10),
-                child: Text(currentPageValue == 0 ? "0\n" : currentPageValue == 1 ? "1 / 3\n" : currentPageValue == 2 ? "2 / 3\n" : "3 / 3\n", style: TextStyle(fontWeight: FontWeight.w700,color: kBlueDeep),),
+                child: Text(currentPageValue == 0 ? "0\n" : currentPageValue == 1 ? purpose != "emmergency" ? "1 / 3\n" : "1 / 2\n" : currentPageValue == 2 ? purpose != "emmergency" ? "2 / 3\n" : "2 / 2\n" : "3 / 3\n", style: TextStyle(fontWeight: FontWeight.w700,color: kBlueDeep),),
               ),
               Expanded(
                 child: PageView.builder(
@@ -128,11 +132,20 @@ class _AppointmentFormState extends State<AppointmentForm> {
               ),
               Container(
                 margin: EdgeInsets.only(bottom: hv*3, top: hv*2),
-                child: Row(
+                child: purpose != "emmergency" ? Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     for (int i = 0; i < pageList.length; i++)
+                      if (i == currentPageValue) ...[circleBar(true)] else
+                        circleBar(false),
+                  ],
+                ) :
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    for (int i = 0; i < (pageList.length - 1); i++)
                       if (i == currentPageValue) ...[circleBar(true)] else
                         circleBar(false),
                   ],
@@ -217,6 +230,91 @@ class _AppointmentFormState extends State<AppointmentForm> {
       ),
     );
   }
+
+  Widget emergencyHospital(){
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: kSouthSeas.withOpacity(0.3),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                  ),
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          head(),
+                          SizedBox(width: wv*2,),
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: hv*1),
+                              decoration: BoxDecoration(
+                                color: kSouthSeas.withOpacity(0.5),
+                                borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomLeft: Radius.circular(20))
+                              ),
+                              child: Column(
+                                children: [
+                                  Text("Appeler la mutuelle", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
+                                  SizedBox(height: hv*1,),
+                                  Row(children: [
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: whiteColor,
+                                        shape: BoxShape.circle,
+                                        boxShadow: [BoxShadow(color: Colors.grey[600], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+                                      ),
+                                      child: SvgPicture.asset('assets/icons/Bulk/Calling.svg', color: primaryColor, width: 30,),
+                                    ),
+                                    SizedBox(width: wv*2,),
+                                    Expanded(child: Text("+237 233 419 203", style: TextStyle(color: kTextBlue, fontSize: 17)))
+                                  ],),
+                                ],
+                              )
+                              ),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(color: kTextBlue, fontSize: 13),
+                            children: [
+                              TextSpan(text: "ou - Renseigner l'établissement\n", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 17)),
+                              TextSpan(text: "Sélectioner le patient")
+                            ]
+                          )
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.all(wv*4),
+                  child: CustomTextField(
+                    label: "Hôpital de préférence",
+                    controller: _hospitalController,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        CustomTextButton(
+          enable: consultationType != null,
+          text: "Continuer",
+          action: (){controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);},
+        )
+      ],
+    );
+  }
+
   Widget chooseDoctor(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
