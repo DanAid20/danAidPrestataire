@@ -451,53 +451,63 @@ class HomePageComponents {
       ),
       child: Row(
         children: [
-          Container(
-            width: wv * 15,
-            height: hv * 8,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image:  NetworkImage(userImage),
-                  fit: BoxFit.cover,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: kThirdColor,
+          Expanded(
+            flex: 1,
+             child: Container(
+              width: wv * 15,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image:  NetworkImage(userImage),
+                    fit: BoxFit.cover,
                   ),
-                ],
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                )),
+                  boxShadow: [
+                    BoxShadow(
+                      color: kThirdColor,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomLeft: Radius.circular(10),
+                  )),
+            ),
           ),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: Text( nom!=null ? nom :'Fabrice Mbanga',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: kDateTextColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: fontSize(size: wv * 3.5))),
-              ),
+                margin: EdgeInsets.only(left: 3.h),
+                  child: Flexible(
+                    flex: 1,
+                                      child: Text( nom!=null ? nom :'Fabrice Mbanga',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: kDateTextColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: fontSize(size: wv * 3.5))),
+                  ),
+                ),
               SizedBox(
                 height: hv * .5,
               ),
-              Container(
-                padding: EdgeInsets.only(
-                  left: wv * 1,
-                ),
-                child: Flexible(
-                  flex: 1,
-                  child: Container(
-                    width: wv * 30,
-                    child: Text(
-                        syntomes !=null ? syntomes : 'Douleurs dentaires et violents mots de tête...',
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyle(
-                            color: kDateTextColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: fontSize(size: wv * 3.5))),
+              Flexible(fit: FlexFit.tight , 
+                              child: Container(
+                  padding: EdgeInsets.only(
+                    left: wv * 1,
+                  ),
+                  child: Flexible(
+                    flex: 1,
+                    child: Container(
+                      width: wv * 30,
+                      child: Text(
+                          syntomes !=null ? syntomes : 'Douleurs dentaires et violents mots de tête...',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: kDateTextColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: fontSize(size: wv * 3.5))),
+                    ),
                   ),
                 ),
               ),
@@ -507,184 +517,193 @@ class HomePageComponents {
       ),
     );
   }
-  getAdherentsList({AdherentModel adherent, bool isAccountIsExists}) {
-    return Container(
-      width: wv * 100,
-      decoration: BoxDecoration(
-        color: kBlueForce,
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
-      margin: EdgeInsets.only(left: wv * 2, right: hv * 2),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 2),
-            child: Row(
-              children: [
-                Container(
-                    width: wv * 15,
-                    child: Text('Valide jusqu\'au ',
-                        style: TextStyle(
-                            color: textWhiteColor,
-                            fontSize: fontSize(size: 15),
-                            fontWeight: FontWeight.w500))),
-                Container(
-                    width: wv * 20,
-                    child: Text('10/2021',
-                        style: TextStyle(
-                            color: whiteColor,
-                            fontSize: wv * 4.5,
-                            fontWeight: FontWeight.w700))),
-                Spacer(),
-                SvgPicture.asset(
-                  'assets/icons/Bulk/Male.svg',
-                  color: whiteColor,
-                ),
-                SvgPicture.asset(
-                  'assets/icons/Bulk/Shield Done.svg',
-                  height: hv * 8,
-                  width: wv * 8,
-                )
-              ],
-            ),
+  getAdherentsList({int iSelected, AdherentModel adherent, bool isAccountIsExists, int index, Function onclick}) {
+    return GestureDetector(
+      onTap: ()=>{
+          onclick(index, adherent)
+      },
+      child: Container(
+        width: wv * 78,
+        decoration: BoxDecoration(
+          color: kBlueForce,
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
           ),
-          Container(
-            child: Align(
-              alignment: Alignment.center,
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                      colorFilter: isAccountIsExists == true &&
-                              adherent.enable == true
-                          ? new ColorFilter.mode(
-                              Colors.red.withOpacity(1), BlendMode.dstATop)
-                          : new ColorFilter.mode(
-                              Colors.red.withOpacity(0.5), BlendMode.dstATop),
-                      image: adherent.imgUrl == null
-                          ? AssetImage("assets/images/image 9.png")
-                          : CachedNetworkImageProvider("${adherent.imgUrl}"),
-                      fit: BoxFit.cover,
-                    ),
-                    color: Colors.red,
-                    shape: BoxShape.circle),
-                width: wv * 40,
-                height: hv * 20,
-                child: Stack(children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: Transform.rotate(
-                      angle: -math.pi / 4,
-                      child: Text(
-                        isAccountIsExists == true && adherent.enable == true
-                            ? ''
-                            : 'Compte Inactif',
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(
-                            color: Colors.red,
-                            letterSpacing: 0.5,
-                            fontSize: wv * 6.5,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+           boxShadow: [
+                  BoxShadow(color: iSelected==index? kBlueForce: Colors.transparent, spreadRadius: 2, blurRadius: 4),
+                ],
+        ),
+        margin: EdgeInsets.only(left: wv * 2, right:2.5.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 1),
+              child: Row(
+                children: [
+                  Container(
+                      width: wv * 15,
+                      child: Text('Valide jusqu\'au ',
+                          style: TextStyle(
+                              color: textWhiteColor,
+                              fontSize: fontSize(size: 15),
+                              fontWeight: FontWeight.w500))),
+                  Container(
+                      width: wv * 20,
+                      child: Text('10/2021',
+                          style: TextStyle(
+                              color: whiteColor,
+                              fontSize: wv * 4.5,
+                              fontWeight: FontWeight.w700))),
+                  Spacer(),
+                  SvgPicture.asset(
+                 (adherent!=null && adherent.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                    color: whiteColor,
                   ),
-                  Positioned(
-                    right: 5,
-                    bottom: -hv * 2,
-                    child: Container(
-                      height: hv * 10,
-                      width: wv * 10,
-                      decoration: BoxDecoration(
-                          color: isAccountIsExists == true &&
-                                  adherent.enable == true
-                              ? Colors.green
-                              : Colors.red,
-                          shape: BoxShape.circle),
-                      child:
-                          isAccountIsExists == true && adherent.enable == true
-                              ? SizedBox.shrink()
-                              : Icon(
-                                  Icons.priority_high,
-                                  color: Colors.white,
-                                  size: hv * 4,
-                                ),
-                    ),
-                  ),
-                ]),
+                  SvgPicture.asset(
+                    'assets/icons/Bulk/Shield Done.svg',
+                    height: hv * 8,
+                    width: wv * 8,
+                  )
+                ],
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text('Non du beneficiaire',
-                    style: TextStyle(
-                        color: textWhiteColor,
-                        fontSize: fontSize(size: 15),
-                        fontWeight: FontWeight.w500)),
-                Text(adherent.cniName,
-                    style: TextStyle(
-                        color: textWhiteColor,
-                        fontSize: fontSize(size: 15),
-                        fontWeight: FontWeight.w700))
-              ],
+            Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        colorFilter: isAccountIsExists == true &&
+                               adherent!=null && adherent.enable == true
+                            ? new ColorFilter.mode(
+                                Colors.red.withOpacity(1), BlendMode.dstATop)
+                            : new ColorFilter.mode(
+                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                        image: adherent==null
+                            ? AssetImage("assets/images/image 25.png")
+                            : adherent.imgUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.imgUrl}"),
+                        fit: BoxFit.cover,
+                      ),
+                      color: Colors.red,
+                      shape: BoxShape.circle),
+                  width: wv * 40,
+                  height: hv * 20,
+                  child: Stack(children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: Transform.rotate(
+                        angle: -math.pi / 4,
+                        child: Text(
+                          isAccountIsExists == true && (adherent!=null && adherent.enable) == true
+                              ? ''
+                              : 'Compte Inactif',
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                              color: Colors.red,
+                              letterSpacing: 0.5,
+                              fontSize: wv * 6.5,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 5,
+                      bottom: -hv * 2,
+                      child: Container(
+                        height: hv * 10,
+                        width: wv * 10,
+                        decoration: BoxDecoration(
+                            color: isAccountIsExists == true &&
+                                    (adherent!=null && adherent.enable) == true
+                                ? Colors.green
+                                : Colors.red,
+                            shape: BoxShape.circle),
+                        child:
+                            isAccountIsExists == true && (adherent!=null && adherent.enable) == true
+                                ? SizedBox.shrink()
+                                : Icon(
+                                    Icons.priority_high,
+                                    color: Colors.white,
+                                    size: hv * 4,
+                                  ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text('Numero Matricule',
-                    style: TextStyle(
-                        color: textWhiteColor,
-                        fontSize: fontSize(size: 15),
-                        fontWeight: FontWeight.w500)),
-                Text(
-                    adherent.matricule != null
-                        ? adherent.matricule
-                        : 'Pas defini',
-                    style: TextStyle(
-                        color: textWhiteColor,
-                        fontSize: fontSize(size: 15),
-                        fontWeight: FontWeight.w700))
-              ],
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Non du beneficiaire',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text((adherent!=null && adherent.cniName!=null) ? adherent.cniName : ''  ,
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text('Medecin de Famille ',
-                    style: TextStyle(
-                        color: textWhiteColor,
-                        fontSize: fontSize(size: 15),
-                        fontWeight: FontWeight.w500)),
-                Text(
-                    adherent.familyDoctor != null
-                        ? adherent.familyDoctor.cniName
-                        : 'Pas definie ',
-                    style: TextStyle(
-                        color: textWhiteColor,
-                        fontSize: fontSize(size: 15),
-                        fontWeight: FontWeight.w700))
-              ],
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Numero Matricule',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                    (adherent!=null &&  adherent.matricule!=null)
+                          ?  adherent.matricule
+                          : 'Pas defini',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: hv * 4),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Image.asset('assets/icons/DanaidLogo.png'),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Medecin de Famille ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                       (adherent!=null && adherent.familyDoctor!=null)
+                          ? adherent.familyDoctor.cniName
+                          : 'Pas definie ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
             ),
-          ),
-        ],
+            Container(
+              margin: EdgeInsets.only(top: hv * 4),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset('assets/icons/DanaidLogo.png'),
+              ),
+            ),
+
+          ],
+        ),
       ),
     );
   }

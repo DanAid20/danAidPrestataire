@@ -30,21 +30,16 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     super.initState();
     triggerGetPatient();
   }
-  triggerGetPatient() {
-    DateTime dateTimeNow = DateTime.now();
-    String startDay = dateTimeNow.toString().substring(0, 11);
-    String firebaseFormatedDay = startDay + "00:00:00.000Z";
-    String sendHours = startDay + "23:59:59.000Z";
-    DateTime todayDate = DateTime.parse(sendHours);
-    print(firebaseFormatedDay);
-    print(todayDate);
-    print(sendHours);
-    print(startDay);
-    setState(() {
-      startDays = firebaseFormatedDay;
-      endDay = todayDate;
-      
-    });
+  triggerGetPatient(){
+      var dates =  DateTime.now();
+      var start= new DateTime(dates.year, dates.month, dates.day, 00, 00);
+      var end= new DateTime(dates.year, dates.month, dates.day, 23, 59); 
+      print(start);
+      print(end);
+                    setState(() {
+                      startDays = start;
+                      endDay=end;
+                    });
   }
   Widget servicesList() {
   UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -297,7 +292,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               : Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
-                    child: Text(" Vous n'avez aucun pour le moment.."),
+                    child: Text(" Vous n'avez aucun rendez-vous pour le moment.."),
                   ),
               );
         });

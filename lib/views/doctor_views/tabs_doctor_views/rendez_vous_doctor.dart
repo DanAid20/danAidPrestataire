@@ -29,23 +29,47 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
    var endDay;
    var now = new DateTime.now();
    final df = new DateFormat('dd-MMM-yyyy');
-  
+  var isSelected='Days';
   @override
   void initState() { 
     super.initState();
     triggerGetPatient();
   }
+  //******* cette function get la date d'aujourd'hui en parametre et get la listes rendez-vous pour ce jour */
   triggerGetPatient(){
-      DateTime dateTimeNow = DateTime.now();
-      String startDay= dateTimeNow.toString().substring(0,11);
-      String firebaseFormatedDay= startDay+"00:00:00.000Z";
-      String sendHours= startDay+"23:59:59.000Z";
-      DateTime todayDate = DateTime.parse(sendHours); 
-      print(firebaseFormatedDay);
-      print(todayDate);
-      print(sendHours);
-      print(startDay);
-      setState(() {startDays = firebaseFormatedDay;endDay=todayDate; _focusedDay = startDay;});
+      var dates =  DateTime.now();
+      var start= new DateTime(dates.year, dates.month, dates.day, 00, 00);
+      var end= new DateTime(dates.year, dates.month, dates.day, 23, 59); 
+      print(start);
+      print(end);
+                    setState(() {
+                      _selectedDay = dates;
+                      startDays = start;
+                      endDay=end;
+                      _focusedDay = dates; // update `_focusedDay` here as well
+                      isSelected='Days';
+                    });
+  }
+   DateTime findFirstDateOfTheWeek(DateTime dateTime) {
+  return dateTime.subtract(Duration(days: dateTime.weekday - 1));
+  }
+  DateTime findLastDateOfTheWeek(DateTime dateTime) {
+  return dateTime.add(Duration(days: DateTime.daysPerWeek - dateTime.weekday));
+}
+  //******* cette function get la d'aujourd'hui en parametre et get la listes rendez-vous pour la semaines  */
+  triggerGetPatientForWeek(){
+      var dates =  DateTime.now();
+      var start= findFirstDateOfTheWeek(dates);
+      var end= findLastDateOfTheWeek(dates); 
+      print(start);
+      print(end);
+                    setState(() {
+                      _selectedDay = dates;
+                      startDays = start;
+                      endDay=end;
+                      _focusedDay = dates; // update `_focusedDay` here as well
+                      isSelected='week';
+                    });
   }
   waitingRoomFuture( startDays, endDay,date, doctor){
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
@@ -65,6 +89,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               ),
             );
           }
+          print(snapshot.data.docs.length); 
           return snapshot.data.docs.length >= 1
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -113,9 +138,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   getListOfUser( startDays, endDay,date, doctorId) {
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
-        .where("doctorId", isEqualTo: doctorId)
+         .where("doctorId", isEqualTo: doctorId)
         .where("status",  isEqualTo: 0)
-        .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
+        .where("start-time", isGreaterThanOrEqualTo: startDays, isLessThanOrEqualTo: endDay)
         .orderBy("start-time")
         .snapshots();
        
@@ -130,10 +155,11 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               ),
             );
           }
+          print(snapshot.data.docs.length);
           return snapshot.data.docs.length >= 1
               ? ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  //shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data.docs[index];
@@ -144,12 +170,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     builder:
                         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                       if (snapshot.hasData==null) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-              ),
-            );
-          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                            ),
+                          );
+                        }
                       if (snapshot.hasError) {
                           return Text("Something went wrong");
                         }
@@ -164,7 +190,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         String formattedTime= DateFormat.Hm().format(dateTime);
                         return HomePageComponents().timeline(consultationtype: doc.data()["consultation-type"] , isPrestataire: false,age: "$differenceInDays ans" ,consultationDetails: '${doc.data()["title"]}',consultationType: "${doc.data()["appointment-type"]}",time:"${formattedTime}",userImage: '${data["imageUrl"]}',userName: '${data["prenom"]} ${data["nomFamille"]} ');
                       }
-                      return Text("loading");
+                      return Text(" ");
                     },
                   );
 
@@ -207,7 +233,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                       _selectedDay = selectedDay;
                       startDays = selectedDay;
                       endDay=todayDate;
-                      _focusedDay = focusedDay; // update `_focusedDay` here as well
+                      _focusedDay = focusedDay;
+                      isSelected= 'Days'; // update `_focusedDay` here as well
                     });
                     
                   },
@@ -268,34 +295,65 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               children: [
                 GestureDetector(
                     onTap: (){
-                      setState(() {
+                    
                         triggerGetPatient();
-                        print('l;kdufjdlksfjdlks');
-                      });
+                  
                     },
-                    child: Container(
+                    child:Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                       color:  isSelected=='Days' ? kDeepTeal.withOpacity(0.4)  : kDeepTeal.withOpacity(0.0)  ,
+                      borderRadius:  BorderRadius.all(Radius.circular(5)) 
+                    ),
                     margin: EdgeInsets.only(
-                        left: wv * 4, right: wv * 1.5, top: hv * 0),
+                        left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
                       "Aujourd'hui",
                       style: TextStyle(
-                         color: isPrestataire? kBlueForce :whiteColor,
-                          fontWeight: FontWeight.w700,
+                          color: isPrestataire? kBlueForce :whiteColor,
+                          fontWeight:  isSelected=='Days' ? FontWeight.w600 :FontWeight.w500,
                           fontSize: fontSize(size: wv * 4)),
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(
-                      left: wv * 1.5, right: wv * 1.5, top: hv * 0),
-                  child: Text(
-                    "Semaine",
-                    style: TextStyle(
-                        color: isPrestataire? kBlueForce :whiteColor,
-                        fontWeight: FontWeight.w500,
-                        fontSize: fontSize(size: wv * 4)),
+                GestureDetector(
+                  onTap: (){
+                      triggerGetPatientForWeek();
+                  },
+                                  child: Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                       color:  isSelected=='week' ? kDeepTeal.withOpacity(0.4)  : kDeepTeal.withOpacity(0.0)  ,
+                      borderRadius:  BorderRadius.all(Radius.circular(5)) 
+                    ),
+                    margin: EdgeInsets.only(
+                        left: wv * 1.5, right: wv * 1.5, top: hv * 1),
+                    child: Text(
+                      "Semaine",
+                      style: TextStyle(
+                          color: isPrestataire? kBlueForce :whiteColor,
+                          fontWeight:  isSelected=='week' ? FontWeight.w600 :FontWeight.w500,
+                          fontSize: fontSize(size: wv * 4)),
+                    ),
                   ),
-                )
+                ),
+                Spacer(),
+                Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                       color:  kBlueForce.withOpacity(0.6)  ,
+                      borderRadius:  BorderRadius.all(Radius.circular(5)) 
+                    ),
+                    margin: EdgeInsets.only(
+                        left: wv * 1.5, right: wv * 1.5, top: hv * 1),
+                    child: Text(
+                      isSelected=='week' ?  DateFormat('dd-MM-yyyy').format(startDays).toString()+' / '+ DateFormat('dd-MM-yyyy').format(endDay).toString():  DateFormat('dd-MM-yyyy').format(_selectedDay),
+                      style: TextStyle(
+                          color: isPrestataire? kBlueForce :whiteColor,
+                          fontWeight:FontWeight.w600,
+                          fontSize: fontSize(size: wv * 4)),
+                    ),
+                  )
               ],
             )
           ],
@@ -321,8 +379,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             Expanded(
               child: Container(
                  padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                alignment: Alignment.center,
-                child: userProvider.getProfileType==doctor && doctorProvider.getDoctor.id!=null && startDays!=null && endDay!=null ? getListOfUser( startDays, endDay,_selectedDay, doctorProvider.getDoctor.id):Text("loading"))
+                alignment: Alignment.topCenter,
+                child:userProvider.getProfileType==doctor && doctorProvider.getDoctor.id!=null && startDays!=null && endDay!=null ? getListOfUser( startDays, endDay,_selectedDay, doctorProvider.getDoctor.id):Text("loading"))
             ),
             
             Container(
