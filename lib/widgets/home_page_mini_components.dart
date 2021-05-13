@@ -717,12 +717,12 @@ class HomePageComponents {
       int commentCount,
       int sendcountNumber}) {
     return Container(
-      height: hv * 24,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             margin: EdgeInsets.only(
-                left: inch * 1.5, right: inch * 1.5, top: inch * 1),
+                left: inch * 1, right: inch * 1, top: inch * 1),
             child: Column(
               children: [
                 Row(
