@@ -1018,7 +1018,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                     "authId": FirebaseAuth.instance.currentUser.uid,
                                     'emailAdress': email,
                                     'fullName': cniName,
-                                    "regionDorigione": _region
+                                    "regionDorigione": _region,
+                                    "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor.id),
+                                    "nameKeywords": Algorithms.getKeyWords(fname.toLowerCase() + " "+ sname.toLowerCase())
                                   }, SetOptions(merge: true))
                                   .then((value) async {
                                     print(gpsCoords["latitude"].toString()+ "Laaaaaaat");
@@ -1044,10 +1046,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                         "localisation": location,
                                         "addresse": address,
                                         "availability": availability,
-                                        "serviceList": serviceList
+                                        "serviceList": serviceList,
+                                        "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor.id),
+                                        "nameKeywords": Algorithms.getKeyWords(fname.toLowerCase() + " "+ sname.toLowerCase())
                                       }, SetOptions(merge: true))
                                       .then((value) async {
-
                                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
                                         Navigator.pop(context, (value) {
                                           setState(() {});

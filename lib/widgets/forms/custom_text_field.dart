@@ -9,13 +9,16 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Function validator;
+  final Color fillColor;
   final Widget prefixIcon, suffixIcon;
   final bool enabled;
   final bool multiLine;
+  final int minLines, maxLines;
   final Function editAction;
+  final Function onChanged;
   final List<TextInputFormatter> inputFormatters;
 
-  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon}) : super(key: key);
+  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class CustomTextField extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: wv * 4, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
           SizedBox(
             height: 5,
@@ -36,21 +39,21 @@ class CustomTextField extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             children: [
               TextFormField(
-                minLines: 1,
-                maxLines: multiLine ? 3 : 1,
+                minLines: multiLine ? minLines : 1,
+                maxLines: multiLine ? maxLines : 1,
                 enabled: enabled,
                 keyboardType: keyboardType,
                 controller: controller,
                 validator: this.validator,
                 inputFormatters: inputFormatters,
-                style: TextStyle(
-                    color: kPrimaryColor, fontWeight: FontWeight.bold),
+                onChanged: onChanged,
+                style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                   prefixIcon: prefixIcon,
                   errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 1, color: Colors.red[300]),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
-                  fillColor: Colors.grey[100],
+                  fillColor: fillColor == null ? Colors.grey[100] : fillColor,
                   //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
                   contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   enabledBorder: OutlineInputBorder(

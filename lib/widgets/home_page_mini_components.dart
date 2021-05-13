@@ -1199,6 +1199,31 @@ class HomePageComponents {
       ),
     );
   }
+  
+  static publicationType({IconData icon, String title, bool selected = false, Function action}){
+    return  GestureDetector(
+      onTap: action,
+      child: Container(
+        height: 120,
+        width: wv*28,
+        padding: EdgeInsets.symmetric(vertical: hv*1.5, horizontal: wv*2),
+        margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(color: selected ? kDeepTeal.withOpacity(0.8) : Colors.transparent, width: 1.5),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.2), blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1))]
+        ),
+        child: Column(mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(title, style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,),
+            Spacer(),
+            Icon(icon, size: 50, color: Colors.grey[400],),
+          ],
+        ),
+      ),
+    );
+  }
 
   static accountParameters({String title, String subtitle, String svgIcon, Function action}){
     return Padding(
@@ -1214,6 +1239,83 @@ class HomePageComponents {
         ],),
         trailing: TextButton(onPressed: action, child: Text("Modifier..", style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
       ),
+    );
+  }
+
+  static termsAndConditionsTile({Function(bool) onChanged, bool value, Function action, Color activeColor}){
+    return CheckboxListTile(
+      tristate: false,
+      dense: true,
+      title: ExcludeSemantics(
+        excluding: true,
+        child: Container(
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(fontSize: 16),
+              children: [
+                TextSpan(
+                  text: "Lu et accepté les ",
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+                TextSpan(
+                  text: "termes des services",
+                  style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
+                  recognizer: TapGestureRecognizer()..onTap = action,
+                )
+              ]
+            ),
+            overflow: TextOverflow.fade,
+          ),
+        ),
+      ),
+      value: value,
+      activeColor: activeColor ?? primaryColor,
+      onChanged: onChanged,
+      controlAffinity: ListTileControlAffinity.leading,
+    );
+  }
+
+  static confirmTermsTile({Function(bool) onChanged, bool value, Function action, Color activeColor}){
+    return CheckboxListTile(
+      tristate: false,
+      dense: true,
+      title: ExcludeSemantics(
+        excluding: true,
+        child: Container(
+          child: Column(
+            children: [
+              Text("Je reconnais par la présente qu’en cas de défaut de paiment je m’expose à:", style:  TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600),),
+              SizedBox(height: hv*0.5),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                    style:  TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400,),
+                    children: [
+                      TextSpan(
+                        text: "\u2022 " + "Des poursuite judiciaires\n",
+                      ),
+                      TextSpan(
+                        text: "\u2022 " + "incription au fichier public des mauvais payeurs ",
+                      ),
+                      TextSpan(
+                        text: "Credit Risk Cameroun",
+                        style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
+                        //recognizer: TapGestureRecognizer()..onTap = action,
+                      ),
+                    ]
+                  ),
+                  overflow: TextOverflow.fade,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      value: value,
+      activeColor: activeColor ?? primaryColor,
+      onChanged: onChanged,
+      controlAffinity: ListTileControlAffinity.leading,
     );
   }
 }

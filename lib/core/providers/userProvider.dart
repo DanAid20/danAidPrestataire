@@ -8,7 +8,7 @@ class UserProvider with ChangeNotifier {
   bool _enabled;
   List<Map> _phoneList;
 
-  UserProvider(this._authId, this._userId, this._matricule, this._fullName, this._imgUrl, this._email, this._profileType, this._regionOfOrigin, this._cniUrl, this._countryCode, this._countryName, this._enabled, this._phoneList);
+  UserProvider(this._user, this._authId, this._userId, this._matricule, this._fullName, this._imgUrl, this._email, this._profileType, this._regionOfOrigin, this._cniUrl, this._countryCode, this._countryName, this._enabled, this._phoneList);
 
   UserModel get getUserModel => _user;
   String get getAuthId => _authId;

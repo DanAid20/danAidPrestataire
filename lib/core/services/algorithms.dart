@@ -30,6 +30,7 @@ class Algorithms {
 
     return dateUnit+'-'+regionLetter+threeDigit+oneDigit;
   }
+  
   static double calculateDistance(lat1, lon1, lat2, lon2){
     var p = 0.017453292519943295;
     var c = cos;
@@ -87,7 +88,7 @@ class Algorithms {
 
   static List getKeyWords(String input) {
     List getKeys(String input) {
-      var keyWords = [];
+      var keyWords = new List.filled(input.length, "", growable: true);
       for (int i = 0; i < input.length; i++) {
         keyWords[i] = input.substring(0, i + 1).toLowerCase();
       }
@@ -95,7 +96,7 @@ class Algorithms {
     }
 
     List getKeysReversed(String input) {
-      var keyWords = [];
+      var keyWords = new List.filled(input.length, "", growable: true);
       for (int i = 0; i < input.length; i++) {
         keyWords[i] =
             input.substring(0, i + 1).toLowerCase().split('').reversed.join('');
@@ -117,6 +118,8 @@ class Algorithms {
 
     results = results + getKeys(input);
     results = results.toSet().toList();
+
+    print(results.toString());
 
     return results;
   }
@@ -150,5 +153,31 @@ class Algorithms {
     }
 
     return time;
+  }
+
+  static String getTimeElapsed({DateTime date}){
+    DateTime now = DateTime.now();
+    int secondDiff = now.difference(date).inSeconds;
+    int minuteDiff = now.difference(date).inMinutes;
+    int hourDiff = now.difference(date).inHours;
+    int dayDiff = now.difference(date).inDays;
+    if (secondDiff < 60){
+      return secondDiff.toString()+" secondes";
+    }
+    else if (minuteDiff < 60){
+      return minuteDiff.toString()+" minutes";
+    }
+    else if (hourDiff >= 1 && hourDiff < 24){
+      return hourDiff.toString()+" heures";
+    }
+    else if (dayDiff >= 1 && dayDiff < 30){
+      return dayDiff.toString()+" jours";
+    }
+    else if (dayDiff >= 30 && dayDiff < 365){
+      return (dayDiff ~/ 30).toString()+" mois";
+    }
+    else if (dayDiff >= 365){
+      return (dayDiff ~/ 365).toString()+" ans";
+    }
   }
 }

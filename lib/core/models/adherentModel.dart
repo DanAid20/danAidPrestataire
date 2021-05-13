@@ -9,11 +9,11 @@ class AdherentModel {
   bool paymentIsMobile, profileEnabled, isMarried, enable;
   var phoneList;
   List<AdherentBillModel> adherentNewBill;
-  List visits, keywords;
+  List visits, keywords, phoneKeywords, nameKeywords;
   Map location;
   DoctorModel familyDoctor;
 
-  AdherentModel({this.adherentId, this.authId, this.keywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
+  AdherentModel({this.adherentId, this.authId, this.keywords, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
 
   factory AdherentModel.fromDocument(DocumentSnapshot doc) {
     return AdherentModel(
@@ -52,7 +52,10 @@ class AdherentModel {
         phoneList: doc.data()["phoneList"],
         adherentNewBill: doc.data()["NEW_FACTURATIONS_ADHERENT"],
         address: doc.data()["adresse"],
-        location: doc.data()["localisation"]);
+        location: doc.data()["localisation"],
+        phoneKeywords: doc.data()["phoneKeywords"],
+        nameKeywords: doc.data()["nameKeywords"]
+      );
   }
 
   String get getAdherentId => adherentId;

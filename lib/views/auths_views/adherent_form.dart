@@ -366,7 +366,9 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                             "points": 500,
                             "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                             "profil": "ADHERENT",
-                            "regionDorigione": adherentProvider.getRegionOfOrigin
+                            "regionDorigione": adherentProvider.getRegionOfOrigin,
+                            "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                            "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                           }, SetOptions(merge: true))
                           .then((value) async {
                             await FirebaseFirestore.instance.collection("ADHERENTS")
@@ -392,6 +394,8 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "regionDorigione": adherentProvider.getRegionOfOrigin,
                                 "statuMatrimonialMarie": false,
                                 "ville": adherentProvider.getTown,
+                                "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                                "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                               }, SetOptions(merge: true))
                               .then((value) async {
                                 await HiveDatabase.setRegisterState(true);

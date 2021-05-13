@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/doctorTileModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +24,11 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
 
   getDoctorsList() {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+      : FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -41,9 +48,9 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                     DocumentSnapshot doc = snapshot.data.docs[index];
                     DoctorModel doctor = DoctorModel.fromDocument(doc);
                     print("name: ");
+
                     return Padding(
-                      padding: EdgeInsets.only(
-                          bottom: lastIndex == index ? hv * 5 : 0),
+                      padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 10 : 0),
                       child: DoctorInfoCard(
                         avatarUrl: doctor.avatarUrl,
                         name: doctor.cniName,
@@ -54,10 +61,15 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         chat: doctor.serviceList != null ? doctor.serviceList["chat"] : false,
                         rdv: doctor.serviceList != null ? doctor.serviceList["rdv"] : false,
                         visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
-                        distance: adherentProvider.getAdherent.location != null && doctor.location != null
-                          ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
+                        distance: 
+                          userProvider.getProfileType == adherent ?  
+                            adherentProvider.getAdherent.location != null && doctor.location != null
+                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
+                          :
+                          doctorProvider.getDoctor.location != null && doctor.location != null
+                              ? (Algorithms.calculateDistance(doctorProvider.getDoctor.location["latitude"], doctorProvider.getDoctor.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
                         onTap: () {
-                          doctorProvider.setDoctorModel(doctor);
+                          doctorTileProvider.setDoctorModel(doctor);
                           Navigator.pushNamed(context, "/doctor-profile");
                         },
                       ),
