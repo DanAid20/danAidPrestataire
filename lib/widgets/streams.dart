@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 
 class BeneficiaryStream extends StatefulWidget {
   //static getBeneficiary({BuildContext context, bool standardUse}){
-    final bool standardUse;
+    final bool standardUse, noLabel;
 
-  BeneficiaryStream({Key key, this.standardUse = true}) : super(key: key);
+  BeneficiaryStream({Key key, this.standardUse = true, this.noLabel = false}) : super(key: key);
 
   @override
   _BeneficiaryStreamState createState() => _BeneficiaryStreamState();
@@ -33,16 +33,20 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
           }
           return Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              !widget.noLabel ? Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: RichText(text: TextSpan(
-                  text: widget.standardUse ? "Bénéficiaires\n" : "Qui est malade?\n",
+                child: Column(
                   children: [
-                    TextSpan(text: widget.standardUse ? (snapshot.data.docs.length++).toString()+" personnes" : "Sélectionner le patient", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
-                  ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
+                    RichText(text: TextSpan(
+                      text: widget.standardUse ? "Bénéficiaires\n" : "Qui est malade?\n",
+                      children: [
+                        TextSpan(text: widget.standardUse ? (snapshot.data.docs.length+1).toString()+" personnes" : "Sélectionner le patient", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
+                      ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
+                    ),
+                    SizedBox(height: hv*2,),
+                  ],
                 ),
-              ),
-              SizedBox(height: hv*2,),
+              ) : Container(),
               Container(
                 height: hv*25,
                 child: Row(
@@ -65,7 +69,8 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                             surname: adherentProvider.getAdherent.surname,
                             familyName: adherentProvider.getAdherent.familyName,
                             avatarUrl: adherentProvider.getAdherent.imgUrl,
-                            birthDate: adherentProvider.getAdherent.birthDate
+                            birthDate: adherentProvider.getAdherent.birthDate,
+                            phoneList: adherentProvider.getAdherent.phoneList
                           )
                         );
                         setState(() { });

@@ -9,6 +9,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -279,7 +280,6 @@ class SearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
     ConversationChatModel conversationData = ConversationChatModel(lastMessageFrom: userId);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
@@ -291,7 +291,8 @@ class SearchResult extends StatelessWidget {
           backgroundColor: Colors.grey,
           backgroundImage: target.imgUrl != null
               ? CachedNetworkImageProvider(target.imgUrl)
-              : AssetImage("assets/images/avatar.png"),
+              : null,
+          child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
         title: Text(target.fullName),
         subtitle: Text(target.phoneList[0]["number"].toString()),

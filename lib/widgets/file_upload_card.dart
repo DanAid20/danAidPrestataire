@@ -15,6 +15,7 @@ class FileUploadCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.symmetric(horizontal: wv*0.5),
       padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1),
       decoration: BoxDecoration(
         color: Colors.white,

@@ -9,27 +9,27 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Function validator;
-  final Color fillColor;
+  final Color fillColor, labelColor;
   final Widget prefixIcon, suffixIcon;
   final bool enabled;
-  final bool multiLine;
+  final bool multiLine, noPadding;
   final int minLines, maxLines;
   final Function editAction;
   final Function onChanged;
   final List<TextInputFormatter> inputFormatters;
 
-  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines}) : super(key: key);
+  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: wv * 3),
+      margin: !noPadding ? EdgeInsets.symmetric(horizontal: wv * 3) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: labelColor ?? Colors.grey[600]),
           ),
           SizedBox(
             height: 5,

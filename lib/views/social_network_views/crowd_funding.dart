@@ -18,7 +18,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("POSTS").where('post-type', isEqualTo: 2).snapshots(),
+      stream: FirebaseFirestore.instance.collection("POSTS").where('post-type', isEqualTo: 2).orderBy("dateCreated", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());

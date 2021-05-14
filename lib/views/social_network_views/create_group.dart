@@ -10,6 +10,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -250,7 +251,8 @@ class SearchResult extends StatelessWidget {
           backgroundColor: Colors.grey,
           backgroundImage: target.imgUrl != null
               ? CachedNetworkImageProvider(target.imgUrl)
-              : AssetImage("assets/images/avatar.png"),
+              : null,
+          child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
         title: Text(target.fullName),
         subtitle: Text(target.profileType == doctor ? "Médecin" : target.profileType == serviceProvider ? "Prestataire" : "Adhérent", style: TextStyle(color: kTextBlue),),

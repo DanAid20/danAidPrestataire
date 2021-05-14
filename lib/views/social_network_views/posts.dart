@@ -18,7 +18,7 @@ class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("POSTS").snapshots(),
+      stream: FirebaseFirestore.instance.collection("POSTS").orderBy("dateCreated", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());

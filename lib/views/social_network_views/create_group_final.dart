@@ -878,7 +878,8 @@ class SearchResult extends StatelessWidget {
           backgroundColor: Colors.grey,
           backgroundImage: target.imgUrl != null
               ? CachedNetworkImageProvider(target.imgUrl)
-              : AssetImage("assets/images/avatar.png"),
+              : null,
+          child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
         title: Text(target.fullName),
         subtitle: Text(target.profileType == doctor ? "Médecin" : target.profileType == serviceProvider ? "Prestataire" : "Adhérent", style: TextStyle(color: kTextBlue),),

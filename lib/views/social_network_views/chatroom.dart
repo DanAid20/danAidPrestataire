@@ -119,7 +119,8 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                       backgroundColor: Colors.grey,
                       backgroundImage: chatBuddy.imgUrl != null
                           ? CachedNetworkImageProvider(chatBuddy.imgUrl)
-                          : AssetImage("assets/images/avatar.png"),
+                          : null,
+                      child: chatBuddy.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
                     ),
                   ),
                   title: Text(chatBuddy.fullName != null ? chatBuddy.fullName : "wait"),

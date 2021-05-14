@@ -5,6 +5,7 @@ import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
@@ -32,6 +33,7 @@ class Danaid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     statusBar.setColor(context: context);
+    Intl.defaultLocale = "fr_FR";
     return MultiProvider(
             providers: [
               ChangeNotifierProvider<DevEnvironmentProvider>(

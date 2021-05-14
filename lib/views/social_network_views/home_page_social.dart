@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/userModel.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/actuality.dart';
 import 'package:danaid/views/social_network_views/groups.dart';
+import 'package:danaid/widgets/function_widgets.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +19,7 @@ class SocialMediaHomePage extends StatefulWidget {
 }
 
 class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _socialHomeScaffoldKey = GlobalKey<ScaffoldState>();
   TabController controller;
 
   loadUserProfile() async {
@@ -43,8 +47,10 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
   }
   @override
   Widget build(BuildContext context) {
+    BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      key: _socialHomeScaffoldKey,
       body: userProvider.getUserModel != null ? CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -78,7 +84,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                         children: [
                           Row(children: [
                             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
-                            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: (){})
+                            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState.openDrawer(),)
                           ],),
                           SizedBox(height: hv*1,),
                           IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/Chat.svg', width: wv*10,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/chatroom')),
@@ -150,6 +156,103 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
           ),
         ],
       ) : Center(child: Loaders().buttonLoader(kPrimaryColor)),
+      drawer: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.transparent,
+        ),
+        child: Drawer(
+          elevation: 0,
+          child: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: CustomPaint(
+              painter: DrawerPainter(color: kDeepTeal.withOpacity(0.85)),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ListTile(
+                        leading: SvgPicture.asset("assets/icons/Two-tone/Category.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                        title: Text("Entraide", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                        onTap: ()=>Navigator.pop(context),
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset("assets/icons/Two-tone/Home.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                        title: Text("Accueil", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                        onTap: (){
+                          navController.setIndex(1);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset("assets/icons/Two-tone/Paper.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                        title: Text("Carnet", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                        onTap: (){
+                          navController.setIndex(2);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset("assets/icons/Two-tone/Location.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                        title: Text("Partenaires", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                        onTap: (){
+                          navController.setIndex(3);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset(userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                        title: Text(userProvider.getProfileType == adherent ? "famille" : "Profile", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                        onTap: (){
+                          navController.setIndex(4);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      ),
+                      ListTile(
+                        leading: SvgPicture.asset("assets/icons/Two-tone/InfoSquare.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                        title: Text("Conditions\nd'utilisation", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                        onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
+  }
+}
+
+class DrawerPainter extends CustomPainter {
+  final Color color;
+  DrawerPainter({this.color = Colors.black});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = color
+      ..strokeWidth = 3
+      ..style = PaintingStyle.fill;
+    canvas.drawPath(getShapePath(size.width, size.height), paint);
+  }
+
+  Path getShapePath(double x, double y) {
+    return Path()
+      ..moveTo(0, 0)
+      ..lineTo(x/1.3, 0)
+      ..quadraticBezierTo(x/1.7, y/4, x/1.3, y/1.9)
+      ..quadraticBezierTo(x/1.15, y / 1.3, x/1.3, y)
+      ..lineTo(0, y);
+  }
+
+  @override
+  bool shouldRepaint(DrawerPainter oldDelegate) {
+    return oldDelegate.color != color;
   }
 }
