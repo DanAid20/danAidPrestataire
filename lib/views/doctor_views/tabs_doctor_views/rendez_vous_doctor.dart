@@ -23,8 +23,8 @@ class RendezVousDoctorView extends StatefulWidget {
 
 class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
    var calendarTextValue = 20.sp;
-   var _selectedDay=null;
-   var _focusedDay=null;
+   var _selectedDay;
+   var _focusedDay;
    var startDays;
    var endDay;
    var now = new DateTime.now();
@@ -380,7 +380,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               child: Container(
                  padding: EdgeInsets.only(left: 20.h, right: 20.h),
                 alignment: Alignment.topCenter,
-                child:userProvider.getProfileType==doctor && doctorProvider.getDoctor.id!=null && startDays!=null && endDay!=null ? getListOfUser( startDays, endDay,_selectedDay, doctorProvider.getDoctor.id):Text("loading"))
+                child:userProvider.getProfileType==doctor && doctorProvider.getDoctor.id!=null && startDays!=null && endDay!=null ? getListOfUser( startDays, endDay,_selectedDay, doctorProvider.getDoctor.id):Center(child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Aucun rendez-vous en vue pour l'instant"),
+                )))
             ),
             
             Container(
@@ -414,7 +417,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                          ),
                         Container(
                           height: 90.h,
-                          child:userProvider.getProfileType==doctor && doctorProvider.getDoctor.id!=null && startDays!=null && endDay!=null ? waitingRoomFuture( startDays, endDay,_selectedDay, doctorProvider.getDoctor.id):Text("xlkcvdlkfjsdl;fkdsfks")),
+                          child:userProvider.getProfileType==doctor && doctorProvider.getDoctor.id!=null && startDays!=null && endDay!=null ? waitingRoomFuture( startDays, endDay,_selectedDay, doctorProvider.getDoctor.id):Center(child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("Aucune activite n'as été enregistrer pour l'instant... "),
+                          ))),
                      ],
                     ),
                   )

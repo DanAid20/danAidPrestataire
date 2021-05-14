@@ -133,7 +133,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/doctor-add-patient');
+                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) : Navigator.pushNamed(context, '/doctor-add-patient');
                   },
                   child: displsOtherServices(
                       iconesUrl: isPrestataire? 'assets/icons/Bulk/Discount.svg' :'assets/icons/Bulk/Add User.svg',
@@ -143,7 +143,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 ),
                GestureDetector(
                  onTap: (){
-                     Navigator.pushNamed(context, '/history-prestation-doctor');
+                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) :  Navigator.pushNamed(context, '/history-prestation-doctor');
                  },
                  child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
@@ -309,7 +309,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       decoration: BoxDecoration(
         color: Colors.white,
       ),
-      child: Column(children: [
+      child: Column( mainAxisSize: MainAxisSize.min, children: [
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -339,7 +339,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           startDays != null &&
                           endDay != null
                       ? getListOfUser(startDays, endDay, null,
-                          doctorProvider.getDoctor.id): Text("loading")
+                          doctorProvider.getDoctor.id): Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Center(child: Text(" aucun rendez-vous pour l'instant ... ")),
+                          )
           ],)
         )
       ]),
