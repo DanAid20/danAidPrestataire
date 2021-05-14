@@ -1,23 +1,30 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
-import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math' as math;
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/providers/doctorModelProvider.dart';
+import '../../../helpers/constants.dart';
+import '../../../widgets/home_page_mini_components.dart';
+import '../../../helpers/utils.dart';
 
 class InactiveAccount extends StatefulWidget {
   final AdherentModel data;
   final bool isAccountIsExists;
   final String phoneNumber;
+  final String consultationType;
   InactiveAccount(
-      {Key key, this.data, this.isAccountIsExists, this.phoneNumber})
+      {Key key, this.data, this.isAccountIsExists, this.phoneNumber, this.consultationType})
       : super(key: key);
 
   @override
@@ -27,6 +34,9 @@ class InactiveAccount extends StatefulWidget {
 class _InactiveAccountState extends State<InactiveAccount> {
   bool isActive;
   AdherentModelProvider adherentModelProvider;
+  int userSelected=-1;
+  AdherentModel adherentUserSelected;
+  bool isloading=false;
   @override
   void initState() {
     super.initState();
@@ -41,6 +51,141 @@ class _InactiveAccountState extends State<InactiveAccount> {
     });
   }
 
+  createConsultationCode() async {
+     DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance.collection('MEDECINS').doc(doctorProvider.getDoctor.id)
+    .collection('CONSULATION_CODE').doc(adherentUserSelected.adherentId).set({
+      'id': getRandomString(4),
+      'idAdherent': adherentUserSelected.adherentId,
+      'idBeneficiairy':adherentUserSelected.adherentId,
+      'createdAt':  DateTime.now(),
+      'enable': false,
+    }, SetOptions(merge: true)).then((value) {
+        setState(() {
+          isloading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Code ce consultation creer avec succes comme médecin de famille..")));
+        
+      }).catchError((e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        setState(() {
+          isloading = false;
+        });
+      });
+  }
+  facturationCode() async {
+     DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance.collection('MEDECINS').doc(doctorProvider.getDoctor.id)
+    .collection('FACTURATIONS').doc(adherentUserSelected.adherentId).set({
+      'id':Utils.createCryptoRandomString(8),
+      'idAdherent': adherentUserSelected.adherentId,
+      'idBeneficiairy':adherentUserSelected.adherentId,
+      'idMedecin':doctorProvider.getDoctor.id,
+      'amountToPay':'2000',
+      'isSolve':false,
+      'Type': widget.consultationType ,
+      'createdAt':  DateTime.now(),
+    }, SetOptions(merge: true)).then((value) {
+        setState(() {
+          isloading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La facture a bien ete generer avec succes ")));
+        
+      }).catchError((e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        setState(() {
+          isloading = false;
+        });
+      });
+  }
+  getUserSelected(int index, AdherentModel adherent ){
+    setState(() {
+      userSelected=index;
+      adherentUserSelected= adherent;
+    });
+    print(userSelected);
+    print(adherentUserSelected);
+  }
+  // void writeData() async{
+  //   final FirebaseUser user = await _auth.currentUser();
+  //   final uid = user.uid;
+  //   DBRef.child(uid).set({
+  //     'id':'ID1',
+  //     'Name':'Mehul Jain',
+  //     'Phone':'8856061841'
+  //   });
+  // }
+  getListOfUser() {
+    Stream<QuerySnapshot> query = FirebaseFirestore.instance
+        .collection("ADHERENTS")
+        .doc('${widget.phoneNumber}')
+        .collection('BENEFICIAIRES')
+        .snapshots();
+    return StreamBuilder(
+        stream: query,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+              ),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text("un instant svp "),
+                    SizedBox(
+                      height: 50.0,
+                    ),
+                    CircularProgressIndicator()
+                  ],
+                ),
+              );
+          }else{
+            return snapshot.data.docs.length >= 1
+              ? ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  //shrinkWrap: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    AdherentModel doctor = AdherentModel.fromDocument(doc);
+                    print("name: ");
+                    return index==0 ?Container(
+                      child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: HomePageComponents().getAdherentsList(
+                              adherent: widget.data, isAccountIsExists: true, index: index, onclick: getUserSelected, iSelected:userSelected )),
+                    )  : Container(
+                      child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: HomePageComponents().getAdherentsList(
+                              adherent: doctor, isAccountIsExists: true, index: index, onclick:getUserSelected, iSelected:userSelected )),
+                    );
+                  })
+              : Center(
+                  child: Text("Aucun Adherent  disponible pour le moment.."),
+                );
+          }
+          
+        });
+  }
+   
+
+  String getRandomString(int length){
+  const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    var result= String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)))); 
+    return 'YM'+result;
+  } 
+  
   Widget _buildAboutDialog(BuildContext context, bool isIninitState) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
@@ -240,248 +385,95 @@ class _InactiveAccountState extends State<InactiveAccount> {
               ],
             ),
             body: Container(
+              alignment: Alignment.center,
                 child: SingleChildScrollView(
                     physics: NeverScrollableScrollPhysics(),
-                    child: Column(children: [
-                      SizedBox(
-                        height: hv * 2,
-                      ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
                       Container(
-                        width: wv * 100,
-                        height: hv * 67,
-                        decoration: BoxDecoration(
-                          color: kBlueForce,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        margin: EdgeInsets.only(left: wv * 2, right: hv * 2),
-                        child: Column(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: wv * 3, right: wv * 2, top: hv * 2),
-                              child: Row(
-                                children: [
-                                  Container(
-                                      width: wv * 15,
-                                      child: Text('Valide jusqu\'au ',
-                                          style: TextStyle(
-                                              color: textWhiteColor,
-                                              fontSize: fontSize(size: 15),
-                                              fontWeight: FontWeight.w500))),
-                                  Container(
-                                      width: wv * 20,
-                                      child: Text('10/2021',
-                                          style: TextStyle(
-                                              color: whiteColor,
-                                              fontSize: wv * 4.5,
-                                              fontWeight: FontWeight.w700))),
-                                  Spacer(),
-                                  SvgPicture.asset(
-                                    'assets/icons/Bulk/Male.svg',
-                                    color: whiteColor,
-                                  ),
-                                  SvgPicture.asset(
-                                    'assets/icons/Bulk/Shield Done.svg',
-                                    height: hv * 8,
-                                    width: wv * 8,
-                                  )
-                                ],
+                        width:double.infinity,
+                        padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
+                        child: widget.isAccountIsExists==true ?  Container(
+                          margin: EdgeInsets.only(left:15.w),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                height: hv * 60,
+                              margin: EdgeInsets.only(left:3.w),
+                              child: getListOfUser(),),
+                              SvgPicture.asset(
+                                'assets/icons/Bulk/Dots.svg',
+                                color: kSouthSeas,
+                                height: hv * 5,
+                                width: wv * 5,
                               ),
-                            ),
-                            Container(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        colorFilter:
-                                            widget.isAccountIsExists == true &&
-                                                    adherent.enable == true
-                                                ? new ColorFilter.mode(
-                                                    Colors.red.withOpacity(1),
-                                                    BlendMode.dstATop)
-                                                : new ColorFilter.mode(
-                                                    Colors.red.withOpacity(0.5),
-                                                    BlendMode.dstATop),
-                                        image: adherent.imgUrl == null
-                                            ? AssetImage(
-                                                "assets/images/image 9.png")
-                                            : CachedNetworkImageProvider(
-                                                "${adherent.imgUrl}"),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      color: Colors.red,
-                                      shape: BoxShape.circle),
-                                  width: wv * 40,
-                                  height: hv * 20,
-                                  child: Stack(children: <Widget>[
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Transform.rotate(
-                                        angle: -math.pi / 4,
-                                        child: Text(
-                                          widget.isAccountIsExists == true &&
-                                                  adherent.enable == true
-                                              ? ''
-                                              : 'Compte Inactif',
-                                          overflow: TextOverflow.clip,
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              letterSpacing: 0.5,
-                                              fontSize: wv * 6.5,
-                                              fontWeight: FontWeight.w500),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 5,
-                                      bottom: -hv * 2,
-                                      child: Container(
-                                        height: hv * 10,
-                                        width: wv * 10,
-                                        decoration: BoxDecoration(
-                                            color: widget.isAccountIsExists ==
-                                                        true &&
-                                                    adherent.enable == true
-                                                ? Colors.green
-                                                : Colors.red,
-                                            shape: BoxShape.circle),
-                                        child:
-                                            widget.isAccountIsExists == true &&
-                                                    adherent.enable == true
-                                                ? SizedBox.shrink()
-                                                : Icon(
-                                                    Icons.priority_high,
-                                                    color: Colors.white,
-                                                    size: hv * 4,
-                                                  ),
-                                      ),
-                                    ),
-                                  ]),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: wv * 10, right: wv * 2, top: hv * 2),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text('Non du beneficiaire',
-                                      style: TextStyle(
-                                          color: textWhiteColor,
-                                          fontSize: fontSize(size: 15),
-                                          fontWeight: FontWeight.w500)),
-                                  Text(adherent.cniName,
-                                      style: TextStyle(
-                                          color: textWhiteColor,
-                                          fontSize: fontSize(size: 15),
-                                          fontWeight: FontWeight.w700))
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: wv * 10, right: wv * 2, top: hv * 2),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text('Numero Matricule',
-                                      style: TextStyle(
-                                          color: textWhiteColor,
-                                          fontSize: fontSize(size: 15),
-                                          fontWeight: FontWeight.w500)),
-                                  Text(adherent.matricule,
-                                      style: TextStyle(
-                                          color: textWhiteColor,
-                                          fontSize: fontSize(size: 15),
-                                          fontWeight: FontWeight.w700))
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: wv * 10, right: wv * 2, top: hv * 2),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text('Medecin de Famille ',
-                                      style: TextStyle(
-                                          color: textWhiteColor,
-                                          fontSize: fontSize(size: 15),
-                                          fontWeight: FontWeight.w500)),
-                                  Text(
-                                      adherent.familyDoctor != null
-                                          ? adherent.familyDoctor.cniName
-                                          : 'Pas definie ',
-                                      style: TextStyle(
-                                          color: textWhiteColor,
-                                          fontSize: fontSize(size: 15),
-                                          fontWeight: FontWeight.w700))
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: hv * 4),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child:
-                                    Image.asset('assets/icons/DanaidLogo.png'),
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          )   
+                        ) : Container(
+                      child: Padding(
+                          padding: EdgeInsets.all(2),
+                          child: HomePageComponents().getAdherentsList( isAccountIsExists: false)),
+                    ) ,
                       ),
                       widget.isAccountIsExists == false
                           ? SizedBox.shrink()
-                          : Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                width: wv * 80,
-                                margin: EdgeInsets.only(top: hv * 8),
-                                child: TextButton(
-                                  onPressed: () {
-                                    if (adherent.enable == false) {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) =>
-                                              _buildAboutDialog(
-                                                  context, false));
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                OwnerUserListView(
-                                                  idOfAdherent:
-                                                      widget.phoneNumber,
-                                                )),
-                                      );
-                                    }
-                                  },
-                                  child: Text(
-                                    'Acceder au carnet de Sante',
-                                    style: TextStyle(
-                                        color: textColor,
-                                        fontSize: wv * 4.5,
-                                        fontWeight: FontWeight.w600),
+                          : Container(
+                            alignment: Alignment.bottomCenter,
+                            child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  width: wv * 80,
+                                  margin: EdgeInsets.only(top: hv * 2),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      // if (adherent.enable == false) {
+                                      //   showDialog(
+                                      //       context: context,
+                                      //       builder: (BuildContext context) =>
+                                      //           _buildAboutDialog(
+                                      //               context, false));
+                                      // } else {
+                                      //   Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //         builder: (context) =>
+                                      //             OwnerUserListView(
+                                      //               idOfAdherent:
+                                      //                   widget.phoneNumber,
+                                      //             )),
+                                      //   );
+                                      // }
+                                      if(userSelected!=-1){
+                                      await createConsultationCode();
+                                      await facturationCode();
+                                      }else{
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Selectioner un beneficiaire avant de valider")));
+                                      }
+                                    },
+                                    child: Text(
+                                      'Acceder au carnet de Sante',
+                                      style: TextStyle(
+                                          color: textColor,
+                                          fontSize: wv * 4.5,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    style: ButtonStyle(
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.symmetric(vertical: 10)),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                kFirstIntroColor),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(25))))),
                                   ),
-                                  style: ButtonStyle(
-                                      padding: MaterialStateProperty.all(
-                                          EdgeInsets.symmetric(vertical: 15)),
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              kFirstIntroColor),
-                                      shape: MaterialStateProperty.all(
-                                          RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(25))))),
                                 ),
                               ),
-                            ),
+                          ),
+                            
                     ])))));
   }
 }

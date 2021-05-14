@@ -30,21 +30,16 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     super.initState();
     triggerGetPatient();
   }
-  triggerGetPatient() {
-    DateTime dateTimeNow = DateTime.now();
-    String startDay = dateTimeNow.toString().substring(0, 11);
-    String firebaseFormatedDay = startDay + "00:00:00.000Z";
-    String sendHours = startDay + "23:59:59.000Z";
-    DateTime todayDate = DateTime.parse(sendHours);
-    print(firebaseFormatedDay);
-    print(todayDate);
-    print(sendHours);
-    print(startDay);
-    setState(() {
-      startDays = firebaseFormatedDay;
-      endDay = todayDate;
-      
-    });
+  triggerGetPatient(){
+      var dates =  DateTime.now();
+      var start= new DateTime(dates.year, dates.month, dates.day, 00, 00);
+      var end= new DateTime(dates.year, dates.month, dates.day, 23, 59); 
+      print(start);
+      print(end);
+                    setState(() {
+                      startDays = start;
+                      endDay=end;
+                    });
   }
   Widget servicesList() {
   UserProvider userProvider = Provider.of<UserProvider>(context);
@@ -138,7 +133,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushNamed(context, '/doctor-add-patient');
+                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) : Navigator.pushNamed(context, '/doctor-add-patient');
                   },
                   child: displsOtherServices(
                       iconesUrl: isPrestataire? 'assets/icons/Bulk/Discount.svg' :'assets/icons/Bulk/Add User.svg',
@@ -148,7 +143,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 ),
                GestureDetector(
                  onTap: (){
-                     Navigator.pushNamed(context, '/history-prestation-doctor');
+                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) :  Navigator.pushNamed(context, '/history-prestation-doctor');
                  },
                  child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
@@ -297,7 +292,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               : Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
-                    child: Text(" Vous n'avez aucun pour le moment.."),
+                    child: Text(" Vous n'avez aucun rendez-vous pour le moment.."),
                   ),
               );
         });
@@ -314,7 +309,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       decoration: BoxDecoration(
         color: Colors.white,
       ),
-      child: Column(children: [
+      child: Column( mainAxisSize: MainAxisSize.min, children: [
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -344,7 +339,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           startDays != null &&
                           endDay != null
                       ? getListOfUser(startDays, endDay, null,
-                          doctorProvider.getDoctor.id): Text("loading")
+                          doctorProvider.getDoctor.id): Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Center(child: Text(" aucun rendez-vous pour l'instant ... ")),
+                          )
           ],)
         )
       ]),

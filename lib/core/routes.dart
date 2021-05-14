@@ -27,6 +27,7 @@ import 'package:danaid/views/adhrent_views/profile_edit.dart';
 import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:danaid/views/adhrent_views/adherent_card.dart';
 import 'package:danaid/views/adhrent_views/refund_form.dart';
+import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
 import 'package:danaid/views/social_network_views/conversation.dart';
@@ -75,6 +76,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
 
   // Service provider routes (prestataire)
   "/serviceprovider-profile-edit": (context) => ServiceProviderProfileEdit(),
+  "/serviceprovider-profile": (context) => PrestataireProfilePage(),
 
   // Social network screens
   "/social-home": (context) => SocialMediaHomePage(),
