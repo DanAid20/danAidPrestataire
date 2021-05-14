@@ -4,6 +4,7 @@ import 'package:danaid/widgets/advantage_card.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyWelcomeScreen extends StatefulWidget {
   @override
@@ -11,6 +12,10 @@ class MyWelcomeScreen extends StatefulWidget {
 }
 
 class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
+  callDanAid() {
+    String url = "tel:+237233419203";
+    launch(url);
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -44,7 +49,10 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             state: "DISPONIBLE",
                             price: "#350.000Xaf",
                             color: Colors.teal[500],
-                            onTap: (){},
+                            onTap: () {
+                              String url = "tel:+237233419203";
+                              launch(url);
+                            },
                           ),
                           AdvantageCard(
                             label: "Prêt de santé",
@@ -52,7 +60,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             state: "DISPONIBLE",
                             price: "#100.000Xaf",
                             color: Colors.brown.withOpacity(0.7),
-                            onTap: (){},
+                            onTap: callDanAid,
                           ),
                           AdvantageCard(
                             label: "Fond de Soins",
@@ -60,7 +68,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             state: "DISPONIBLE",
                             price: "#350.000Xaf",
                             color: Colors.grey,
-                            onTap: (){},
+                            onTap: callDanAid,
                           ),
                         ],),
                         ),

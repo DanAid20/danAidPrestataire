@@ -67,7 +67,7 @@ class AdvantageCard extends StatelessWidget {
                                   SizedBox(width: wv*1.5,),
                                   Icon(Icons.arrow_forward_ios, color: color, size: inch*2.3,),
                                 ], mainAxisSize: MainAxisSize.min,),
-                                onPressed: (){},
+                                onPressed: onTap,
                                 ),
                             )
                           ],

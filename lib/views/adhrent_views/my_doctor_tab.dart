@@ -499,7 +499,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                       child: Column(
                         children: [
                           StreamBuilder(
-                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").snapshots(),
+                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").orderBy('start-time', descending: true).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Center(
@@ -519,12 +519,15 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         DocumentSnapshot rdv = snapshot.data.docs[index];
                                         Map r = rdv.data();
                                         print("name: ");
+                                        if(r['appointment-type'] == "emergency"){
+                                          return Container();
+                                        }
                                         return Padding(
                                           padding: EdgeInsets.only(
                                               bottom: lastIndex == index ? hv * 5 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
                                             doctorName: "Dr. ${r['doctorName']}, Médécin de Famille",
-                                            date: r['start-time'].toDate(),
+                                            date: r['appointment-type'] == "emergency" ? r['createdDate'].toDate() : r['start-time'].toDate(),
                                             state: r['status'],
                                             type: Algorithms.getConsultationTypeLabel(r['consultation-type']),
                                             label: Algorithms.getAppointmentReasonLabel(r['title'])

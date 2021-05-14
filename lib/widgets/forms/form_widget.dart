@@ -1,3 +1,4 @@
+import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
@@ -154,6 +155,39 @@ class ChoiceTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomDropDownButton extends StatelessWidget {
+  final String label, value, initialText;
+  final Function(String val) onChanged;
+  final List<DropdownMenuItem<String>> items;
+
+  const CustomDropDownButton({Key key, this.label, this.value, this.initialText = "Choisir..", this.onChanged, this.items}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyle(fontSize: 16, color: kTextBlue),),
+          SizedBox(height: hv*1,),
+          Container(
+            constraints: BoxConstraints(minWidth: wv*45),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.all(Radius.circular(20))
+            ),
+            child: ButtonTheme(alignedDropdown: true,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(isExpanded: true, hint: Text(initialText), value: value,
+                  items: items,
+                  onChanged: onChanged)
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

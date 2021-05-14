@@ -173,10 +173,10 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                                   SizedBox(
                                     width: wv * 2,
                                   ),
-                                  SvgPicture.asset(
+                                  adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset(
                                     "assets/icons/Bulk/Shield Done.svg",
                                     width: 18,
-                                  ),
+                                  ): Container(): Container(),
                                   SvgPicture.asset(
                                     "assets/icons/Bulk/Ticket Star.svg",
                                     width: 18,

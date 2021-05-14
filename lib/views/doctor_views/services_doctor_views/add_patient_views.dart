@@ -4,24 +4,21 @@ import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
-import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
-import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
-import 'package:danaid/widgets/buttons/custom_text_button.dart';
-import 'package:danaid/widgets/buttons/default_btn.dart';
-import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'dart:io' show Platform;
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../helpers/constants.dart';
+import '../../../helpers/constants.dart';
 class AddPatientView extends StatefulWidget {
   @override
   _AddPatientViewState createState() => _AddPatientViewState();
@@ -53,14 +50,21 @@ class AddPatientView extends StatefulWidget {
 
 class _AddPatientViewState extends State<AddPatientView> {
   bool confirmSpinner = false;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  String textForQrCode=null;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
   TextEditingController adherentNumber = new TextEditingController();
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   TextEditingController _outputController;
   Country _selectedDialogCountry = CountryPickerUtils.getCountryByPhoneCode('237');
   String phoneCode = "237";
-    String phone;
+  //only for choose type of consultaion
+  int currentItemSelect=0;
+  String consultationTypeData;
+  String encabinet= "EnCabinet";
+  String videos= "Video";
+  String message= "Message";
+  String phone;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -75,10 +79,21 @@ class _AddPatientViewState extends State<AddPatientView> {
     String barcode = await scanner.scan();
     if (barcode == null) {
       print('nothing return.');
+       setState(() {
+        textForQrCode=barcode==null ? 'codeBarVide': barcode;
+      });
     } else {
-      this._outputController.text = barcode;
+      setState(() {
+        textForQrCode=barcode;
+      });
+      print("------ffffffffffffffffffffffffffffffff-----------------");
+      print("---------------------------------------------------");
       print("---------------------------------------------------");
       print(barcode);
+      print("---------------------------------------------------");
+      print("---------------------------------------------------");
+      print("---------------------------------------------------");
+      print("---------------------------------------------------");
     }
   }
 
@@ -89,76 +104,94 @@ class _AddPatientViewState extends State<AddPatientView> {
     adherentNumber.dispose();
     super.dispose();
   }
-
+  
+  setconsultationType(consultation, index){
+     setState(() {
+        consultationTypeData= consultation;
+        currentItemSelect=index;
+    });
+    print(consultationTypeData);
+    print(currentItemSelect);
+  }
   Widget offerPart(
-      {String consultation, String consultationType, String price}) {
-    return Column(
-      children: [
-        Container(
-            margin: EdgeInsets.only(
-                left: wv * 6, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-            width: wv * 40,
-            height: hv * 12,
-            decoration: BoxDecoration(
-              color: cardColor,
-              boxShadow: [
-                BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
-              ],
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
+      {int index, String consultation, String consultationType, String price, String typedeConsultation}) {
+    return GestureDetector(
+          onTap: (){
+              setconsultationType(typedeConsultation, index);
+           
+          },
+          child: Column(
+         mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              margin: EdgeInsets.only(
+                  left: wv * 6, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
+               width:130.w,
+              decoration: BoxDecoration(
+                color: cardColor,
+                boxShadow: [
+                  BoxShadow(color: currentItemSelect==index? kDeepTeal: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+                ],
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10),
+                ), 
               ),
-            ),
-            padding: EdgeInsets.only(top: hv * 0.3),
-            child: Row(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    margin: EdgeInsets.only(left: wv * 1.5, top: hv * 0.5),
-                    child: SvgPicture.asset(
-                      'assets/icons/Bulk/Profile-color.svg',
-                      width: wv * 10,
+              padding: EdgeInsets.only(top: hv * 0.3),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      child: SvgPicture.asset(
+                        'assets/icons/Bulk/Profile-color.svg',
+                        width: wv * 10,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: wv * 1.9, top: hv * 1),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        consultation,
-                        style: TextStyle(
-                            color: kCardTextColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: fontSize(size: wv * 4)),
-                      ),
-                      Text(
-                        consultationType,
-                        style: TextStyle(
-                            color: kCardTextColor,
-                            fontWeight: FontWeight.w800,
-                            fontSize: fontSize(size: wv * 4)),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          margin: EdgeInsets.only(top: hv * 2),
-                          child: Text(
-                            price,
-                            style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: fontSize(size: wv * 4)),
+                  
+                  Container(
+                    margin: EdgeInsets.only(left: wv * 1.9, top: hv * 1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          consultation,
+                          style: TextStyle(
+                              color: kCardTextColor,
+                              fontWeight: FontWeight.w500,
+                              fontSize: fontSize(size: wv * 4)),
+                        ),
+                        Text(
+                          consultationType,
+                          style: TextStyle(
+                              color: kCardTextColor,
+                              fontWeight: FontWeight.w800,
+                              fontSize: fontSize(size: wv * 4)),
+                        ),
+                        SizedBox(
+                                  height: hv * 1.3,
+                                ),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            margin: EdgeInsets.only(top: hv * 0.5, bottom: 8.h),
+                            child: Text(
+                              price,
+                              style: TextStyle(
+                                  color: kCardTextColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: fontSize(size: wv * 4)),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-      ],
+                      ],
+                    ),)
+                ],
+              )),
+        ],
+      ),
     );
   }
   
@@ -262,7 +295,7 @@ class _AddPatientViewState extends State<AddPatientView> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 2.0),
+                    margin: EdgeInsets.symmetric(vertical:3.0),
                     color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +303,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            margin: EdgeInsets.only(left: wv * 5, top: hv * 2),
+                            margin: EdgeInsets.only(left: wv * 5, top: hv * 1),
                             child: Text('Choisir le type de consultation ',
                                 style: TextStyle(
                                     fontSize: fontSize(size: wv * 4),
@@ -286,17 +319,23 @@ class _AddPatientViewState extends State<AddPatientView> {
                             scrollDirection: Axis.horizontal,
                             children: <Widget>[
                               offerPart(
+                                  index: 1,
                                   consultation: 'consultation',
                                   consultationType: 'En cabinet',
-                                  price: '2000 FCFA'),
+                                  price: '2000 FCFA',
+                                  typedeConsultation: encabinet),
                               offerPart(
+                                  index:2,
                                   consultation: 'consultation',
                                   consultationType: 'Vidéos',
-                                  price: '2000 FCFA'),
+                                  price: '2000 FCFA', 
+                                  typedeConsultation: videos),
                               offerPart(
+                                  index:3,
                                   consultation: 'consultation',
                                   consultationType: 'Message',
-                                  price: '2000 FCFA'),
+                                  price: '2000 FCFA',
+                                  typedeConsultation: message),
                             ],
                           ),
                         ),
@@ -308,13 +347,12 @@ class _AddPatientViewState extends State<AddPatientView> {
                   ),
                   Container(
                     width: wv * 100,
-                    height: hv * 42,
                     color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: wv * 70,
+                          width: wv * 68,
                           decoration: BoxDecoration(
                             color: kDeepTealClair,
                             borderRadius: BorderRadius.only(
@@ -323,7 +361,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                             ),
                           ),
                           padding: EdgeInsets.only(
-                              left: wv * 1.9, right: wv * 1.5, top: hv * 1),
+                              left: wv * 1.9, right: wv * 1.5, top: hv * 1, bottom: 5.h,),
                           child: Row(
                             children: [
                               Container(
@@ -350,7 +388,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                         ),
                         Container(
                           margin: EdgeInsets.only(
-                              left: inch * 2, right: inch * 2, top: inch * 1),
+                              left: inch * 2, right: inch * 2, top: inch *3),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -360,7 +398,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                 padding: EdgeInsets.symmetric(horizontal: wv*2),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Numéro mobile", style: TextStyle(fontSize: wv*4),),
+                    Text("Rechercher par numero de téléphone ", style: TextStyle(fontSize: wv*4, color: kBlueForce ),),
                     SizedBox(height: hv*1,),
                     InternationalPhoneNumberInput(
                       validator: (String phone) {
@@ -374,6 +412,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                       onInputValidated: (bool value) {
                         print(value);
                       },
+                      hintText: ' numero de telephone',
                       spaceBetweenSelectorAndTextField: 0,
                       selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
                       ignoreBlank: false,
@@ -442,7 +481,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
+                               Center(
+                                 child: Text( textForQrCode ==null ? '': textForQrCode  ,
+                                    style: TextStyle(
+                                        fontSize: fontSize(size: wv * 4),
+                                        fontWeight: FontWeight.w500,
+                                        color: kFirstIntroColor)),
+                               ),
                             ],
                           ),
                         ),
@@ -468,7 +514,8 @@ class _AddPatientViewState extends State<AddPatientView> {
                             .get()
                             .then((doc) {
                           print(doc.exists);
-
+                          if(consultationTypeData!=null){
+                            
                           setState(() {
                             confirmSpinner = false;
                           });
@@ -489,6 +536,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                   data: adherent,
                                   phoneNumber: phone,
                                   isAccountIsExists: true,
+                                  consultationType: consultationTypeData,
                                 ),
                               ),
                             );
@@ -504,11 +552,21 @@ class _AddPatientViewState extends State<AddPatientView> {
                               MaterialPageRoute(
                                 builder: (context) => InactiveAccount(
                                   isAccountIsExists: false,
-                                  phoneNumber: adherentNumber.text,
+                                  data: null,
+                                  phoneNumber: phone,
+                                  consultationType: null,
                                 ),
                               ),
                             );
                           }
+                          }else{
+                            setState(() {
+                              confirmSpinner = false;
+                            });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Veuillez preciser le type de consultation")));
+                          }
+
                         });
                       },
                       child: Text(

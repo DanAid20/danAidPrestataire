@@ -17,6 +17,7 @@ import 'package:danaid/views/adhrent_views/hello_screen.dart';
 import 'package:danaid/views/adhrent_views/myfamily_screen.dart';
 import 'package:danaid/views/adhrent_views/partners_screen.dart';
 import 'package:danaid/views/doctor_views/tabs_doctor_views/profil_doctor_view.dart';
+import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/widgets/clippers.dart';
 import 'package:flutter/material.dart';
@@ -383,7 +384,7 @@ class _HomePageViewState extends State<HomePageView> {
     }
     else if(controller.getIndex == 4){
       userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor) : print("waouu");
-      return userProvider.getProfileType == adherent ?  MyFamilyScreen() : DoctorProfilePage();
+      return userProvider.getProfileType == adherent ?  MyFamilyScreen() : userProvider.getProfileType == serviceProvider  ? PrestataireProfilePage(): DoctorProfilePage();
     }
   }
 

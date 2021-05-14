@@ -195,6 +195,7 @@ Widget questionDuDocteur() {
         ),
       ),
       Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           HomePageComponents().getDoctorQuestion(imgUrl: "assets/images/avatar-profile.jpg",likeCount: 1,sendcountNumber: 13,userName: 'Fabrice Mbanga',timeAgo: "il y 5 min", text:'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',commentCount: 3),
           HomePageComponents().getDoctorQuestion(imgUrl: "assets/images/avatar-profile.jpg",likeCount: 1,sendcountNumber: 13,userName: 'Fabrice Mbanga', timeAgo: "il y 5 min",text:'Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant?',commentCount: 3),

@@ -59,27 +59,30 @@ class MyCoverageTabView extends StatelessWidget {
               ),
               SizedBox(height: hv*2,),
 
-              Container(
-                padding: EdgeInsets.symmetric(vertical: hv*2),
-                color: whiteColor,
+              GestureDetector(
+                onTap: ()=>Navigator.pushNamed(context, '/rdv'),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
-                  margin: EdgeInsets.symmetric(horizontal: wv*3),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
-                    boxShadow: [
-                      BoxShadow(blurRadius: 5.0, color: Colors.grey[400], spreadRadius: 1.0, offset: Offset(0, 5))
-                    ],
-                    image: DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
+                  padding: EdgeInsets.symmetric(vertical: hv*2),
+                  color: whiteColor,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
+                    margin: EdgeInsets.symmetric(horizontal: wv*3),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
+                      boxShadow: [
+                        BoxShadow(blurRadius: 5.0, color: Colors.grey[400], spreadRadius: 1.0, offset: Offset(0, 5))
+                      ],
+                      image: DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
+                    ),
+                    child: Column(children: [
+                      Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
+                      SizedBox(height: hv*5,),
+                      Text("Démarrer une prise en charge", style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
+                      SizedBox(height: hv*1,),
+                      Text("Vous êtes malades ? Commencez ici\npour obtenir la couverture de vos frais", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
+                      SizedBox(height: hv*2,),
+                    ],crossAxisAlignment: CrossAxisAlignment.start, ),
                   ),
-                  child: Column(children: [
-                    Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
-                    SizedBox(height: hv*5,),
-                    Text("Démarrer une prise en charge", style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
-                    SizedBox(height: hv*1,),
-                    Text("Vous êtes malades ? Commencez ici\npour obtenir la couverture de vos frais", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
-                    SizedBox(height: hv*2,),
-                  ],crossAxisAlignment: CrossAxisAlignment.start, ),
                 ),
               ),
               SizedBox(height: wv*3,),
@@ -88,20 +91,26 @@ class MyCoverageTabView extends StatelessWidget {
                   SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                   child: Row(children: [
                     SizedBox(width: wv*1.5,),
-                    HomePageComponents().getMyCoverageOptionsCard(
-                      imgUrl: "assets/images/presentCard.png",
-                      label: "Présenter ma carte d'adhérant",
-                      labelColor: kPrimaryColor
+                    GestureDetector(
+                      onTap: ()=>Navigator.pushNamed(context, '/adherent-card'),
+                      child: HomePageComponents().getMyCoverageOptionsCard(
+                        imgUrl: "assets/images/presentCard.png",
+                        label: "Présenter ma carte d'adhérant",
+                        labelColor: kPrimaryColor
+                      ),
                     ),
                     HomePageComponents().getMyCoverageOptionsCard(
                       imgUrl: "assets/images/TrackSavings.png",
                       label: "Suivre mes côtisations",
                       labelColor: Colors.white
                     ),
-                    HomePageComponents().getMyCoverageOptionsCard(
-                      imgUrl: "assets/images/TrackSavings.png",
-                      label: "Demander un remboursement",
-                      labelColor: Colors.white
+                    GestureDetector(
+                      onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
+                      child: HomePageComponents().getMyCoverageOptionsCard(
+                        imgUrl: "assets/images/TrackSavings.png",
+                        label: "Demander un remboursement",
+                        labelColor: Colors.white
+                      ),
                     ),
                   ],),
                   ),
