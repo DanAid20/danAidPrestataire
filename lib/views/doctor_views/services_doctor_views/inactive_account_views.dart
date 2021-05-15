@@ -55,12 +55,12 @@ class _InactiveAccountState extends State<InactiveAccount> {
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     await FirebaseFirestore.instance.collection('MEDECINS').doc(doctorProvider.getDoctor.id)
-    .collection('CONSULATION_CODE').doc(adherentUserSelected.adherentId).set({
+    .collection('CONSULATION_CODE').doc(getRandomString(4)).set({
       'id': getRandomString(4),
       'idAdherent': adherentUserSelected.adherentId,
       'idBeneficiairy':adherentUserSelected.adherentId,
       'createdAt':  DateTime.now(),
-      'enable': false,
+      'enable': true,
     }, SetOptions(merge: true)).then((value) {
         setState(() {
           isloading = false;
@@ -78,8 +78,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     await FirebaseFirestore.instance.collection('MEDECINS').doc(doctorProvider.getDoctor.id)
-    .collection('FACTURATIONS').doc(adherentUserSelected.adherentId).set({
-      'id':Utils.createCryptoRandomString(8),
+    .collection('FACTURATIONS').doc().set({
+      'id':'',
       'idAdherent': adherentUserSelected.adherentId,
       'idBeneficiairy':adherentUserSelected.adherentId,
       'idMedecin':doctorProvider.getDoctor.id,
@@ -179,7 +179,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
    
 
   String getRandomString(int length){
-  const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     Random _rnd = Random();
     var result= String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)))); 
