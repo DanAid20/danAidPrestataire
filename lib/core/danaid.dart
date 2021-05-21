@@ -22,6 +22,7 @@ import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/conversationChatModelProvider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
+import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
@@ -88,6 +89,9 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<AppointmentModelProvider>(
                 create: (_) => AppointmentModelProvider(null),
+              ),
+              ChangeNotifierProvider<UseCaseModelProvider>(
+                create: (_) => UseCaseModelProvider(null),
               ),
             ],
             child: ScreenUtilInit(
