@@ -7,6 +7,7 @@ import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
@@ -938,8 +939,9 @@ class HomePageComponents {
   }
 
   getMyCoverageHospitalsTiles(
-      {String initial, String name, String date, String price, int state}) {
+      {String initial, String name, DateTime date, String price, int state, Function action}) {
     return ListTile(
+      onTap: action,
       leading: Container(
         width: wv * 13,
         padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
@@ -961,7 +963,7 @@ class HomePageComponents {
             fontSize: inch * 1.6),
       ),
       subtitle: Text(
-        date,
+        DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(),
         style: TextStyle(color: kPrimaryColor),
       ),
       trailing: Column(
@@ -973,9 +975,9 @@ class HomePageComponents {
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.5),
           ),
           Text(
-            state == 0 ? "En cours" : "Clôture",
+            getUseCaseStateText(state),
             style: TextStyle(
-                color: state == 0 ? primaryColor : Colors.teal[400],
+                color: getUseCaseStateColor(state),
                 fontSize: inch * 1.5),
           ),
         ],
@@ -1049,6 +1051,28 @@ class HomePageComponents {
       ),
       onTap: action,
     );
+  }
+
+  String getUseCaseStateText(int val) {
+    if (val == 0)
+      return "En attente";
+    else if (val == 1)
+      return "En cours";
+    else if (val == 2)
+      return "Rejetté";
+    else
+      return "Clôturé";
+  }
+
+  Color getUseCaseStateColor(int val) {
+    if (val == 0)
+      return kBrownCanyon;
+    else if (val == 1)
+      return primaryColor;
+    else if (val == 2)
+      return Colors.red;
+    else
+      return kDeepTeal;
   }
 
   String getAppointmentStateText(int val) {

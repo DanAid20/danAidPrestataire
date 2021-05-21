@@ -42,6 +42,7 @@ const kTextLightColor = Color.fromRGBO(237, 237, 237, 1);
 
 const kSouthSeas = Color(0xFF57CECA);
 const kGold = Color(0xFFECCA33);
+const kGoldDeep = Color(0xFFD4B62B);
 const kArgent = Color(0xFFB79708);
 const kGoldForIconesBg = Color(0xFFECCA33);
 const kGoldlight = Color(0xFFFBDA47);

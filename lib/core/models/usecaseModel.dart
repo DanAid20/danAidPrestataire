@@ -15,6 +15,7 @@ class UseCaseModel {
       beneficiaryId: doc.data()["beneficiaryId"],
       beneficiaryName: doc.data()["beneficiaryName"],
       consultationCode: doc.data()["consultationCode"],
+      status: doc.data()["status"],
       doctorId: doc.data()["doctorId"],
       title: doc.data()["title"],
       amount: doc.data()["amount"],

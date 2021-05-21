@@ -524,7 +524,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
                                         print("name: ");
                                         return Padding(
-                                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 2 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
                                             doctorName: "Dr. ${appointment.doctorName}, Médécin de Famille",
                                             date: appointment.startTime.toDate(),
@@ -544,7 +544,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       child: Container(child: Text("Aucun rendez-vous enrégistré pour le moment..", textAlign: TextAlign.center)),
                                     );
                             }),
-                            SizedBox(height: hv*7,),
+                            SizedBox(height: hv*2,),
                         ],
                       ),
                     ),

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/usecaseModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -136,36 +138,83 @@ class MyCoverageTabView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                   child: Row(children: [
                     Text("Utilisation", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                    Text("Voir plus..")
+                    //Text("Voir plus..")
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                 ),
               ),
               Container(
                 color: whiteColor,
-                child: Column(
-                  children: [
-                    HomePageComponents().getMyCoverageHospitalsTiles(
-                      initial: "HLD",
-                      name: "Hopital Laquintinie de Douala",
-                      date: "Mercredi, 23 Janvier 2021",
-                      price: "127.000 f.",
-                      state: 0,
-                    ),
-                    HomePageComponents().getMyCoverageHospitalsTiles(
-                      initial: "CNM",
-                      name: "Cabinet Dr. Manaouda Malachie",
-                      date: "Mercredi, 23 Janvier 2021",
-                      price: "6.000 f.",
-                      state: 1,
-                    ),
-                    HomePageComponents().getMyCoverageHospitalsTiles(
-                      initial: "HLD",
-                      name: "Hopital Laquintinie de Douala",
-                      date: "Mercredi, 23 Janvier 2021",
-                      price: "127.000 f.",
-                      state: 0,
-                    ),
-                  ],
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('createdDate', descending: true).snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                        ),
+                      );
+                    }
+
+                    return snapshot.data.docs.length >= 1
+                      ? ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, index) {
+                            int lastIndex = snapshot.data.docs.length - 1;
+                            DocumentSnapshot useCaseDoc = snapshot.data.docs[index];
+                            UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc);
+                            print("name: ");
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                              child: HomePageComponents().getMyCoverageHospitalsTiles(
+                                initial: useCase.establishment.toUpperCase().substring(0,3),
+                                name: useCase.establishment,
+                                date: useCase.dateCreated.toDate(),
+                                state: useCase.status,
+                                price: "",
+                                action: (){
+                                  /*AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
+                                  appointmentProvider.setAppointmentModel(appointment);
+                                  _doc != null ? doctorProvider.setDoctorModel(_doc) : print("nope");
+                                  Navigator.pushNamed(context, '/appointment');*/
+                                }
+                              ),
+                            );
+                          })
+                      : Center(
+                        child: Container(child: Text("Aucun cas d'utilisation enrégistré pour le moment..", textAlign: TextAlign.center)),
+                      );
+                    /*return Container(
+                      color: whiteColor,
+                      child: Column(
+                        children: [
+                          HomePageComponents().getMyCoverageHospitalsTiles(
+                            initial: "HLD",
+                            name: "Hopital Laquintinie de Douala",
+                            date: "Mercredi, 23 Janvier 2021",
+                            price: "127.000 f.",
+                            state: 0,
+                          ),
+                          HomePageComponents().getMyCoverageHospitalsTiles(
+                            initial: "CNM",
+                            name: "Cabinet Dr. Manaouda Malachie",
+                            date: "Mercredi, 23 Janvier 2021",
+                            price: "6.000 f.",
+                            state: 1,
+                          ),
+                          HomePageComponents().getMyCoverageHospitalsTiles(
+                            initial: "HLD",
+                            name: "Hopital Laquintinie de Douala",
+                            date: "Mercredi, 23 Janvier 2021",
+                            price: "127.000 f.",
+                            state: 0,
+                          ),
+                        ],
+                      ),
+                    );*/
+                  }
                 ),
               ),
               SizedBox(height: hv*3,),

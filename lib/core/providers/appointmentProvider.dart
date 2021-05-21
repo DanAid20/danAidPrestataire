@@ -17,5 +17,9 @@ class AppointmentModelProvider with ChangeNotifier {
     _appointment.adherentId = val;
     notifyListeners();
   }
+  void setAnnouncement(bool val){
+    _appointment.announced = val;
+    notifyListeners();
+  }
   
 }
