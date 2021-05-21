@@ -318,6 +318,8 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                           'fullName': "$companyName",
                           "imageUrl" : avatarUrl,
                           "profil": "PRESTATAIRE",
+                          "points": 500,
+                          "visitPoints": 0,
                           "regionDorigione": adherentProvider.getRegionOfOrigin,
                           "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
                           "nameKeywords": Algorithms.getKeyWords(companyName)

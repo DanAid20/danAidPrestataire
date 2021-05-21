@@ -21,7 +21,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
   BuildContext sheetContext;
   double minSheetHeight = 0.4;
   double maxSheetHeight = 1.0;
-  double initialSheetHeight = 0.4;
+  double initialSheetHeight = 0.8;
   ScrollController _scrollController = new ScrollController();
   GoogleMapController mapController;
 
@@ -33,11 +33,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
     return WillPopScope(
       onWillPop: () async {
         if(contentIndex == 0){
-          controller.setIndex(1);
+          controller.toPreviousIndex();
         }
         else{
           setState(() {
@@ -57,7 +57,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 child: IconButton(icon: Icon(Icons.arrow_back_ios), 
                 onPressed: (){
                   if(contentIndex == 0){
-                    controller.setIndex(1);
+                    controller.toPreviousIndex();
                   }
                   else{
                     setState(() {
@@ -71,7 +71,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             ],
           ),
           actions: [
-            Align(child: Text("Ndogbong", style: TextStyle(color: primaryColor),), alignment: Alignment.center,),
+            Align(child: Text("", style: TextStyle(color: primaryColor),), alignment: Alignment.center,),
             Icon(MdiIcons.mapMarkerOutline, color: primaryColor,)
           ],
         ),

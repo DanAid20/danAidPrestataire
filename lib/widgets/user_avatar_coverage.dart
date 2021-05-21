@@ -24,22 +24,23 @@ class UserAvatarAndCoverage extends StatelessWidget {
         SizedBox(width: 0,),
         Stack(clipBehavior: Clip.none,
           children: [
-            userProvider.getProfileType == adherent ?
-              CircleAvatar(
+            /**  
+             * Correct Circle Avatar
+             * 
+             CircleAvatar(
               radius: wv*8,
               backgroundColor: Colors.blueGrey[100],
-              //backgroundImage: ((doctorProvider.getDoctor.avatarUrl == "") & (doctorProvider.getDoctor.avatarUrl == null))  ? null : CachedNetworkImageProvider(doctorProvider.getDoctor.avatarUrl),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  height: wv*16,
-                  width: wv*16,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
-                    padding: EdgeInsets.all(20.0),
-                  ),
-                  imageUrl: adherentProvider.getAdherent != null ? adherentProvider.getAdherent.imgUrl : null),
-              ),
+              backgroundImage: userProvider.getUserModel.imgUrl ?? CachedNetworkImageProvider(userProvider.getUserModel.imgUrl),
+              child: userProvider.getUserModel.imgUrl == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(),
+            ),
+             */
+            userProvider.getProfileType == adherent ?
+              CircleAvatar(
+                radius: wv*8,
+                backgroundColor: Colors.blueGrey[100],
+                backgroundImage: adherentProvider.getAdherent.imgUrl != null ? CachedNetworkImageProvider(adherentProvider.getAdherent.imgUrl) : null,
+                child: adherentProvider.getAdherent.imgUrl == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)) : Container(),
+                //backgroundImage: ((doctorProvider.getDoctor.avatarUrl == "") & (doctorProvider.getDoctor.avatarUrl == null))  ? null : CachedNetworkImageProvider(doctorProvider.getDoctor.avatarUrl),
             ) :
             userProvider.getProfileType == doctor ?
               CircleAvatar(
@@ -52,7 +53,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                   width: wv*16,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
-                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                     padding: EdgeInsets.all(20.0),
                   ),
                   imageUrl: doctorProvider.getDoctor.avatarUrl),
@@ -69,7 +70,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                   width: wv*16,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => Container(
-                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                     padding: EdgeInsets.all(20.0),
                   ),
                   imageUrl: serviceProviderMP.getServiceProvider != null ? serviceProviderMP.getServiceProvider.avatarUrl : null),

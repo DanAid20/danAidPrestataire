@@ -1,19 +1,23 @@
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class MyCoverageTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     return Column(
       children: [
         Expanded(
           child: ListView(
             children: [
               SizedBox(height: hv*2,),
-              Container(
+              adherentProvider.getAdherent != null ? Container(
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
@@ -35,8 +39,14 @@ class MyCoverageTabView extends StatelessWidget {
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(height: hv*1,),
-                            Text("Vous êtes au Niveau 0: Découverte", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7, fontWeight: FontWeight.bold)),
-                            Text("Votre garantie expire dans 365 jours", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.5)),
+                            Text(
+                              adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
+                               : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
+                               : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
+                               : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "..."
+                              , style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7, fontWeight: FontWeight.bold)
+                            ),
+                            //Text("Votre garantie expire dans 365 jours", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.5)),
                             SizedBox(height: hv*1,),
                           ],
                         ),
@@ -45,7 +55,7 @@ class MyCoverageTabView extends StatelessWidget {
                         flex: 3,
                         child: Container(
                           margin: EdgeInsets.only(left: 10),
-                          padding: EdgeInsets.all(3),
+                          padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
                             color: kPrimaryColor,
@@ -56,7 +66,10 @@ class MyCoverageTabView extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
+              )
+              : 
+              Center(child: Loaders().buttonLoader(kPrimaryColor)),
+
               SizedBox(height: hv*2,),
 
               GestureDetector(

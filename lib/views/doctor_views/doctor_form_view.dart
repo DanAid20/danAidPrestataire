@@ -552,6 +552,8 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         "userCountryName": userProvider.getCountryName,
         'fullName': cni,
         "profil": "MEDECIN",
+        "points": 500,
+        "visitPoints": 0,
         "regionDorigione": region,
         "imageUrl": avatarUrl,
         "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),

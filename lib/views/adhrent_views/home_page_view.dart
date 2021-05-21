@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
+import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
@@ -51,7 +52,7 @@ class _HomePageViewState extends State<HomePageView> {
     
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
       if(adherentModelProvider.getAdherent != null){
-          String lastDateVisited = await HiveDatabase.getVisit();
+          /*String lastDateVisited = await HiveDatabase.getVisit();
           if(lastDateVisited != null){
             if(date.toString() != lastDateVisited.toString()){
               FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
@@ -73,13 +74,13 @@ class _HomePageViewState extends State<HomePageView> {
               HiveDatabase.setVisit(date);
               adherentModelProvider.addVisit(date);
             }
-          }
+          }*/
         }
         else {
           FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
-            String lastDateVisited = await HiveDatabase.getVisit();
+            /*String lastDateVisited = await HiveDatabase.getVisit();
             if(lastDateVisited != null){
               if(date.toString() != lastDateVisited.toString()){
                 FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
@@ -102,7 +103,7 @@ class _HomePageViewState extends State<HomePageView> {
                 HiveDatabase.setVisit(date);
                 adherentModelProvider.addVisit(date);
               }
-            }
+            }*/
           });
         }
     } else {
@@ -189,6 +190,48 @@ class _HomePageViewState extends State<HomePageView> {
       print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
   }
 
+  loadCommonUserProfile() async {
+
+    DateTime fullDate = DateTime.now();
+    DateTime date = DateTime(fullDate.year, fullDate.month, fullDate.day);
+
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    if (userProvider.getUserModel == null) {
+      await FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).get().then((docSnapshot) {
+        UserModel user = UserModel.fromDocument(docSnapshot);
+        userProvider.setUserModel(user);
+      });
+    }
+    if(userProvider.getProfileType == adherent){
+      String lastDateVisited = await HiveDatabase.getVisit();
+      if(lastDateVisited != null){
+        if(date.toString() != lastDateVisited.toString()){
+          FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).set({
+            "visitPoints": FieldValue.increment(25),
+            "points": FieldValue.increment(25),
+            "visits": FieldValue.arrayUnion([date]),
+            "lastDateVisited": date,
+          }, SetOptions(merge: true));
+          HiveDatabase.setVisit(date);
+          userProvider.addPoints(25);
+        }
+      } else {
+        Timestamp serverLastDate = userProvider.getUserModel.lastDateVisited;
+        lastDateVisited = userProvider.getUserModel.lastDateVisited != null ? DateTime(serverLastDate.toDate().year, serverLastDate.toDate().month, serverLastDate.toDate().day).toString() : DateTime(2000).toString();
+        if(date.toString() != lastDateVisited){
+          FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).set({
+            "visitPoints": FieldValue.increment(25),
+            "points": FieldValue.increment(25),
+            "visits": FieldValue.arrayUnion([date]),
+            "lastDateVisited": date,
+          }, SetOptions(merge: true));
+          HiveDatabase.setVisit(date);
+          userProvider.addPoints(25);
+        }
+      }
+    }
+  }
+
   loadUserProfile() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     if(userProvider.getProfileType != null || userProvider.getProfileType != ""){
@@ -223,6 +266,7 @@ class _HomePageViewState extends State<HomePageView> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     initializeDateFormatting();
+    loadCommonUserProfile();
     loadUserProfile();
     super.initState();
   }

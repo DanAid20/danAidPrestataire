@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -104,122 +105,131 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.grey[100],
-          body: NestedScrollView(
-              floatHeaderSlivers: true,
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  SliverAppBar(
-                    elevation: 1.0,
-                    toolbarHeight: hv * 12,
-                    automaticallyImplyLeading: false,
-                    backgroundColor: Colors.white,
-                    title: Column(
-                      children: [
-                        UserAvatarAndCoverage(),
-                      ],
-                    ),
-                    actions: [
-                      Stack(
+    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
+
+    return WillPopScope(
+      onWillPop: () async {
+        controller.toPreviousIndex();
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.grey[100],
+            body: NestedScrollView(
+                floatHeaderSlivers: true,
+                headerSliverBuilder:
+                    (BuildContext context, bool innerBoxIsScrolled) {
+                  return <Widget>[
+                    SliverAppBar(
+                      elevation: 1.0,
+                      toolbarHeight: hv * 12,
+                      automaticallyImplyLeading: false,
+                      backgroundColor: Colors.white,
+                      title: Column(
                         children: [
-                          SizedBox(width: wv * 30),
-                          Positioned(
-                            right: 0,
-                            child: InkWell(
-                              onTap: () {},
-                              child: Container(
-                                  padding: EdgeInsets.all(wv * 3),
-                                  child: SvgPicture.asset(
-                                    "assets/icons/Two-tone/Notification.svg",
-                                    width: wv * 7,
-                                  )),
-                            ),
-                          ),
-                          Positioned(
-                            right: wv * 1,
-                            top: hv * 1,
-                            child: Container(
-                              padding: EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Text(
-                                "9+",
-                                style: TextStyle(
-                                    fontSize: wv * 2.2,
-                                    color: Colors.teal,
-                                    fontWeight: FontWeight.w900),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: wv * 1,
-                            top: hv * 8,
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  userProvider.getProfileType == adherent ? Text(
-                                    adherentProvider.getAdherent != null ? adherentProvider.getAdherent.visitPoints.toString()+" pts" ?? "0 pts" : "0 pts",
-                                    style: TextStyle(
-                                        fontSize: inch * 1.3,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.teal[400]),
-                                  ) : Container(),
-                                  SizedBox(
-                                    width: wv * 2,
-                                  ),
-                                  adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset(
-                                    "assets/icons/Bulk/Shield Done.svg",
-                                    width: 18,
-                                  ): Container(): Container(),
-                                  SvgPicture.asset(
-                                    "assets/icons/Bulk/Ticket Star.svg",
-                                    width: 18,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          UserAvatarAndCoverage(),
                         ],
                       ),
-                    ],
-                    pinned: true,
-                    floating: true,
-                    bottom: TabBar(
-                        indicatorWeight: 3,
-                        indicatorColor: kPrimaryColor,
-                        isScrollable: true,
-                        controller: _tabController,
-                        labelColor: kPrimaryColor,
-                        labelStyle: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: inch * 1.7),
-                        unselectedLabelStyle:
-                            TextStyle(fontWeight: FontWeight.w400),
-                        tabs: userProvider.getProfileType == adherent
-                            ? tabs
-                            : tabsDoctor),
-                  )
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: <Widget>[
-                  userProvider.getProfileType == adherent
-                      ? MyWelcomeScreen()
-                      :  HomeDoctorView(),
-                  userProvider.getProfileType == adherent
-                      ? MyCoverageTabView()
-                      : DoctorPatientView(),
-                  userProvider.getProfileType == adherent
-                      ? MyDoctorTabView()
-                      : RendezVousDoctorView()
-                ],
-              ))),
+                      actions: [
+                        Stack(
+                          children: [
+                            SizedBox(width: wv * 30),
+                            Positioned(
+                              right: 0,
+                              child: InkWell(
+                                onTap: () {},
+                                child: Container(
+                                    padding: EdgeInsets.all(wv * 3),
+                                    child: SvgPicture.asset(
+                                      "assets/icons/Two-tone/Notification.svg",
+                                      width: wv * 7,
+                                    )),
+                              ),
+                            ),
+                            Positioned(
+                              right: wv * 1,
+                              top: hv * 1,
+                              child: Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(100)),
+                                child: Text(
+                                  "9+",
+                                  style: TextStyle(
+                                      fontSize: wv * 2.2,
+                                      color: Colors.teal,
+                                      fontWeight: FontWeight.w900),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: wv * 1,
+                              top: hv * 8,
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    userProvider.getProfileType == adherent ? Text(
+                                      userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
+                                      style: TextStyle(
+                                          fontSize: inch * 1.3,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.teal[400]),
+                                    ) : Container(),
+                                    SizedBox(
+                                      width: wv * 2,
+                                    ),
+                                    adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset(
+                                      "assets/icons/Bulk/Shield Done.svg",
+                                      width: 18,
+                                    ): Container(): Container(),
+                                    SvgPicture.asset(
+                                      "assets/icons/Bulk/Ticket Star.svg",
+                                      width: 18,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                      pinned: true,
+                      floating: true,
+                      bottom: TabBar(
+                          indicatorWeight: 3,
+                          indicatorColor: kPrimaryColor,
+                          isScrollable: true,
+                          controller: _tabController,
+                          labelColor: kPrimaryColor,
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: inch * 1.7),
+                          unselectedLabelStyle:
+                              TextStyle(fontWeight: FontWeight.w400),
+                          tabs: userProvider.getProfileType == adherent
+                              ? tabs
+                              : tabsDoctor),
+                    )
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    userProvider.getProfileType == adherent
+                        ? MyWelcomeScreen()
+                        :  HomeDoctorView(),
+                    userProvider.getProfileType == adherent
+                        ? MyCoverageTabView()
+                        : DoctorPatientView(),
+                    userProvider.getProfileType == adherent
+                        ? MyDoctorTabView()
+                        : RendezVousDoctorView()
+                  ],
+                ))),
+      ),
     );
   }
 }

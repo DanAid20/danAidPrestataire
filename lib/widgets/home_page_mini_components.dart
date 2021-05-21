@@ -984,7 +984,7 @@ class HomePageComponents {
   }
 
   getMyDoctorAppointmentTile(
-      {String label, String doctorName, DateTime date, String type, int state}) {
+      {String label, String doctorName, DateTime date, String type, int state, Function action}) {
     return ListTile(
       leading: Container(
         width: wv * 12,
@@ -1047,6 +1047,7 @@ class HomePageComponents {
           ),
         ],
       ),
+      onTap: action,
     );
   }
 

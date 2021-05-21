@@ -6,6 +6,8 @@ import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/models/conversationModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/models/appointmentModel.dart';
+import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -27,6 +29,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
   String text = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\n\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.";
   GoogleMapController mapCardController;
+  DoctorModel _doc;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
 
@@ -146,6 +149,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                     return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
                   }
                   DoctorModel doctor = DoctorModel.fromDocument(snapshot.data);
+                  _doc = doctor;
                   Map availability = doctor.availability;
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*3),
@@ -499,7 +503,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                       child: Column(
                         children: [
                           StreamBuilder(
-                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").orderBy('start-time', descending: true).snapshots(),
+                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").where('adherentId', isEqualTo: adherent.getAdherent.adherentId).orderBy('start-time', descending: true).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Center(
@@ -517,20 +521,22 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       itemCount: snapshot.data.docs.length,
                                       itemBuilder: (context, index) {
                                         DocumentSnapshot rdv = snapshot.data.docs[index];
-                                        Map r = rdv.data();
+                                        AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
                                         print("name: ");
-                                        if(r['appointment-type'] == "emergency"){
-                                          return Container();
-                                        }
                                         return Padding(
-                                          padding: EdgeInsets.only(
-                                              bottom: lastIndex == index ? hv * 5 : 0),
+                                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
-                                            doctorName: "Dr. ${r['doctorName']}, Médécin de Famille",
-                                            date: r['appointment-type'] == "emergency" ? r['createdDate'].toDate() : r['start-time'].toDate(),
-                                            state: r['status'],
-                                            type: Algorithms.getConsultationTypeLabel(r['consultation-type']),
-                                            label: Algorithms.getAppointmentReasonLabel(r['title'])
+                                            doctorName: "Dr. ${appointment.doctorName}, Médécin de Famille",
+                                            date: appointment.startTime.toDate(),
+                                            state: appointment.status,
+                                            type: Algorithms.getConsultationTypeLabel(appointment.consultationType),
+                                            label: Algorithms.getAppointmentReasonLabel(appointment.title),
+                                            action: (){
+                                              AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
+                                              appointmentProvider.setAppointmentModel(appointment);
+                                              _doc != null ? doctorProvider.setDoctorModel(_doc) : print("nope");
+                                              Navigator.pushNamed(context, '/appointment');
+                                            }
                                           ),
                                         );
                                       })

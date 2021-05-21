@@ -353,6 +353,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         await FirebaseFirestore.instance.collection("USERS")
                           .doc(userProvider.getUserId)
                           .set({
+                            "authId": FirebaseAuth.instance.currentUser.uid,
                             'createdDate': DateTime.now(),
                             'emailAdress': userProvider.getEmail,
                             'enabled': userProvider.isEnabled,
@@ -360,10 +361,10 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                             "urlCNI": "",
                             "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                             "userCountryName": userProvider.getCountryName,
-                            "authId": FirebaseAuth.instance.currentUser.uid,
                             'fullName': "$fname $sname",
                             "imageUrl" : avatarUrl,
                             "points": 500,
+                            "visitPoints": 0,
                             "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                             "profil": "ADHERENT",
                             "regionDorigione": adherentProvider.getRegionOfOrigin,
@@ -381,7 +382,6 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "authId": FirebaseAuth.instance.currentUser.uid,
                                 "genre": _gender,
                                 "imageUrl" : avatarUrl,
-                                "points": 500,
                                 "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
                                 "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                                 "nbBeneficiare": 0,

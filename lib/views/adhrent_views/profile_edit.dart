@@ -669,6 +669,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         buttonLoading = true;
                       });
                       AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+                      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
                       print("$fname, $sname, $avatarUrl");
                       adherentProvider.setFamilyName(fname);
                       adherentProvider.setSurname(sname);
@@ -676,12 +677,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                       adherentProvider.setProfession(profession);
                       adherentProvider.setAddress(address);
                       adherentProvider.setCniName(cniName);
+                      userProvider.enable(true);
                       await FirebaseFirestore.instance.collection("USERS")
                         .doc(adherentProvider.getAdherent.getAdherentId)
                         .set({
                           "authId": FirebaseAuth.instance.currentUser.uid,
                           'emailAdress': email,
                           'fullName': cniName,
+                          "enable": true,
                           "regionDorigione": _region,
                           "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
                           "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)

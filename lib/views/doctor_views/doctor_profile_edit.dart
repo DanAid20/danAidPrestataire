@@ -993,6 +993,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                   buttonLoading = true;
                                 });
                                 DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+                                UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
                                 print("$fname, $sname, $avatarUrl");
                                 doctorProvider.setFamilyName(fname);
                                 doctorProvider.setSurname(sname);
@@ -1010,6 +1011,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 doctorProvider.setOfficeTown(_officeCity);
                                 doctorProvider.setAvailability(availabilityStamp);
                                 doctorProvider.setAbout(about);
+                                userProvider.enable(true);
                                 (gpsCoords["latitude"] == null) || (gpsCoords["longitude"] == null) ? doctorProvider.setLocation(location) : print("No data");
                                 doctorProvider.setAvailability(availability);
                                 await FirebaseFirestore.instance.collection("USERS")
@@ -1019,6 +1021,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                     'emailAdress': email,
                                     'fullName': cniName,
                                     "regionDorigione": _region,
+                                    "enable": true,
                                     "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor.id),
                                     "nameKeywords": Algorithms.getKeyWords(fname.toLowerCase() + " "+ sname.toLowerCase())
                                   }, SetOptions(merge: true))

@@ -83,7 +83,12 @@ class UserProvider with ChangeNotifier {
   }
 
   void enable(bool val) {
-    _enabled = val;
+    _user.enabled = val;
+    notifyListeners();
+  }
+
+  void addPoints(int val) {
+    _user.points = _user.points + 25;
     notifyListeners();
   }
 
