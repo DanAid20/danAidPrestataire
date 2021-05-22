@@ -233,7 +233,11 @@ String getRandomString(int length){
     },
   );
   Widget continueButton = FlatButton(
-    child: Text("Approuver"),
+    child: Text("oui j'approuve", style: TextStyle(
+                              color: kBlueForce,
+                              fontWeight: FontWeight.w600,
+                              fontSize: fontSize(size: 19),
+                            )),
     onPressed:  () async {
         var data=await FirebaseFirestore.instance.collection("APPOINTMENTS")
          .where("doctorId", isEqualTo: "+237694160832")
@@ -262,8 +266,16 @@ String getRandomString(int length){
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("AlertDialog"),
-    content: Text("Would you like to continue learning how to use Flutter alerts?"),
+    title: Text("Infos",  style: TextStyle(
+                              color: kBlueForce,
+                              fontWeight: FontWeight.w700,
+                              fontSize: fontSize(size: 21),
+                            ) ),
+    content: Text("vous êtes sur le point d'approuver ce rendez-vous , êtes-vous sûr de cette operation ?", style: TextStyle(
+                              color: kBlueForce,
+                              fontWeight: FontWeight.w400,
+                              fontSize: fontSize(size: 18),
+                            )),
     actions: [
       cancelButton,
       continueButton,
