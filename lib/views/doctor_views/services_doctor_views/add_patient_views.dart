@@ -9,6 +9,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
@@ -86,15 +87,80 @@ class _AddPatientViewState extends State<AddPatientView> {
       setState(() {
         textForQrCode=barcode;
       });
-      print("------ffffffffffffffffffffffffffffffff-----------------");
-      print("---------------------------------------------------");
-      print("---------------------------------------------------");
-      print(barcode);
-      print("---------------------------------------------------");
-      print("---------------------------------------------------");
-      print("---------------------------------------------------");
-      print("---------------------------------------------------");
+      if(validateMobile(textForQrCode)==true){
+       setState(() {
+                          confirmSpinner = true;
+                        });
+                        await FirebaseFirestore.instance
+                            .collection('ADHERENTS')
+                            .doc('${textForQrCode}')
+                            .get()
+                            .then((doc) {
+                          print(doc.exists);
+                          if(consultationTypeData!=null){
+                            
+                          setState(() {
+                            confirmSpinner = false;
+                          });
+                          if (doc.exists) {
+                            AdherentModelProvider adherentModelProvider =
+                                Provider.of<AdherentModelProvider>(context,
+                                    listen: false);
+                            AdherentModel adherent =
+                                AdherentModel.fromDocument(doc);
+                            adherentModelProvider.setAdherentModel(adherent);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("${adherent.dateCreated} ")));
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InactiveAccount(
+                                  data: adherent,
+                                  phoneNumber: phone,
+                                  isAccountIsExists: true,
+                                  consultationType: consultationTypeData,
+                                ),
+                              ),
+                            );
+                          } else {
+                            setState(() {
+                              confirmSpinner = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("existe pas ")));
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InactiveAccount(
+                                  isAccountIsExists: false,
+                                  data: null,
+                                  phoneNumber: phone,
+                                  consultationType: null,
+                                ),
+                              ),
+                            );
+                          }
+                          }else{
+                            setState(() {
+                              confirmSpinner = false;
+                            });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Veuillez preciser le type de consultation")));
+                          }
+
+                        });
+      }else{
+         ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("veuillez scanner unnumero de téléphone valide svp")));
+      }
+
     }
+  }
+
+  checking() async {
+     
   }
 
  
@@ -194,7 +260,12 @@ class _AddPatientViewState extends State<AddPatientView> {
       ),
     );
   }
-  
+  bool validateMobile(String value) {
+   String pattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
+    RegExp regExp = new RegExp(pattern);
+
+   return regExp.hasMatch(value);
+  }   
   void _openCountryPickerDialog() => showDialog(
       context: context,
       builder: (context) {
@@ -498,7 +569,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                   SizedBox(
                     height: hv * 2,
                   ),
-                  Container(
+                   confirmSpinner ? Loaders().buttonLoader(kPrimaryColor) :  Container(
                     width: wv * 50,
                     padding: EdgeInsets.symmetric(
                         horizontal: wv * 3.2, vertical: hv * 2),
@@ -570,7 +641,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                         });
                       },
                       child: Text(
-                        confirmSpinner ? "..." : 'Envoyer',
+                      'Rechercher',
                         style: TextStyle(
                             color: textColor,
                             fontSize: wv * 4.5,
