@@ -1,11 +1,16 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/helpers/utils.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +32,97 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
    var _focusedDay;
    var startDays;
    var endDay;
+   
+   
+   var code;
    var now = new DateTime.now();
    final df = new DateFormat('dd-MMM-yyyy');
   var isSelected='Days';
+   AdherentModelProvider adherentModelProvider;
+  ScrollController scrollController;
+  int userSelected=-1;
+  BeneficiaryModel adherentUserSelected;
+  bool isloading=false;
+  bool isRequestLaunch=false;
+  UseCaseModelProvider userCaprovider;
   @override
   void initState() { 
     super.initState();
     triggerGetPatient();
+     code= getRandomString(4);
+  }
+String getRandomString(int length){
+  const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    var result= String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)))); 
+    return 'YM'+result;
+  }
+
+  Future<String> createConsultationCode(QueryDocumentSnapshot adherent) async {
+     DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    
+    
+    var date= DateTime.now();
+    var newUseCase =FirebaseFirestore.instance.collection('USECASES').doc();
+     newUseCase.set({
+      'id': newUseCase.id,
+      'adherentId':  adherent['adherentId'],
+      'beneficiaryId':  adherent['beneficiaryId'],
+      'beneficiaryName': adherent['username'],
+      'otherInfo':'',
+      'establishment':doctorProvider.getDoctor.officeName,
+      'consultationCode': code,
+      'type': adherent['appointment-type'],
+      'amountToPay': 2000,
+      'status' : 0  ,
+      'createdDate':  DateTime.now(),
+      'enable': false,
+    }, SetOptions(merge: true)).then((value) {
+        setState(() {
+          isloading = false;
+        });
+    userCaprovider.getUseCase.consultationCode=code;
+    userCaprovider.getUseCase.dateCreated= Timestamp.fromDate(date);
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Code ce consultation creer avec succes comme médecin de famille..")));
+        
+      }).catchError((e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        setState(() {
+          isloading = false;
+        });
+      });
+    
+    return newUseCase.id;
+  }
+
+  facturationCode(id, adherent) async {
+    DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance.collection('USECASES').doc(id)
+    .collection('FACTURATIONS').doc(adherent['adherentId']).set({
+      'id':Utils.createCryptoRandomString(8),
+      'idAdherent':  adherent['adherentId'],
+      'idBeneficiairy':adherent['beneficiaryId'],
+      'idMedecin':doctorProvider.getDoctor.id,
+      'amountToPay': 2000,
+      'isSolve':false,
+      'Type': adherent['appointment-type'] ,
+      'createdAt':  DateTime.now(),
+    }, SetOptions(merge: true)).then((value) {
+        setState(() {
+          isloading = false;
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La facture a bien ete generer avec succes ")));
+        
+      }).catchError((e){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        setState(() {
+          isloading = false;
+        });
+      });
   }
   //******* cette function get la date d'aujourd'hui en parametre et get la listes rendez-vous pour ce jour */
   triggerGetPatient(){
@@ -158,6 +247,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         .doc(docSnapshot.docs[0].id)
         .update({
           "status": 1,
+        }).then((value) async {
+               await createConsultationCode(docSnapshot.docs[0]).then((value) async {
+                    await facturationCode(value,docSnapshot.docs[0]);
+                });
         }).then((value) {
             Navigator.pop(context);
            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("rende-vous approuver ")));
