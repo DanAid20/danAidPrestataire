@@ -911,6 +911,11 @@ class _ProfileEditState extends State<ProfileEdit> {
       avatarUrl = url;
       HiveDatabase.setImgUrl(url);
       adherentModelProvider.setImgUrl(url);
+      userProvider.setImgUrl(url);
+      FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.getAdherentId)
+        .set({
+          "imageUrl": url,
+      }, SetOptions(merge: true));
       FirebaseFirestore.instance.collection("ADHERENTS")
         .doc(adherentModelProvider.getAdherent.adherentId)
         .update({

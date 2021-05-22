@@ -1143,8 +1143,7 @@ class HomePageComponents {
     );
   }
 
-  getMyCoverageHospitalsTiles(
-      {String initial, String name, DateTime date, String price, int state, Function action}) {
+  getMyCoverageHospitalsTiles({String initial, String name, DateTime date, String price, int state, Function action}) {
     return ListTile(
       onTap: action,
       leading: Container(
@@ -1190,8 +1189,7 @@ class HomePageComponents {
     );
   }
 
-  getMyDoctorAppointmentTile(
-      {String label, String doctorName, DateTime date, String type, int state, Function action}) {
+  getMyDoctorAppointmentTile({String label, String doctorName, DateTime date, String type, int state, Function action}) {
     return ListTile(
       leading: Container(
         width: wv * 12,

@@ -48,7 +48,7 @@ class UserProvider with ChangeNotifier {
   }
 
   void setImgUrl(String val) {
-    _imgUrl = val;
+    _user.imgUrl = val;
     notifyListeners();
   }
 
