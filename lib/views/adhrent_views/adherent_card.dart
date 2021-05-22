@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 
@@ -49,18 +50,12 @@ class _AdherentCardState extends State<AdherentCard> {
           matricule: adherentProvider.getAdherent.matricule,
           gender: adherentProvider.getAdherent.gender
         );
-        Uint8List adherentBytes = await _generateQRCode(adherentProvider.getAdherent.surname+" "+adherentProvider.getAdherent.familyName);
-        Widget adherentBeneficiaryCard = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent, beneficiary: adherentBeneficiary, qr: adherentBytes);
+        Widget adherentBeneficiaryCard = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent, beneficiary: adherentBeneficiary, state: adherentProvider.getAdherent.adherentPlan);
         beneficiaries.add(adherentBeneficiaryCard);
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-          Uint8List beneficiaryBytes = await _generateQRCode(beneficiary.surname+" "+beneficiary.familyName);
-          Widget content = getBeneficiaryCard(
-            adherentModel: adherentProvider.getAdherent,
-            beneficiary: beneficiary,
-            qr: beneficiaryBytes
-          );
+          Widget content = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent, beneficiary: beneficiary, state: adherentProvider.getAdherent.adherentPlan);
           beneficiaries.add(content);
         }
         setState(() {
@@ -78,18 +73,17 @@ class _AdherentCardState extends State<AdherentCard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*appBar: AppBar(
-        backgroundColor: kPrimaryColor,
+      backgroundColor: kPrimaryColor,
+      appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: whiteColor,), 
             onPressed: ()=>Navigator.pop(context),
           ),
         title: Image.asset('assets/icons/DanaidLogo.png'),
-      ),*/
+      ),
       body: Column(
         children: [
-          DanAidDefaultHeader(showDanAidLogo: true,),
           beneficiaries != null ? Align(
             alignment: Alignment.center,
             child: Padding(
@@ -116,31 +110,34 @@ class _AdherentCardState extends State<AdherentCard> {
       ),
     );
   }
-  Widget getBeneficiaryCard({BeneficiaryModel beneficiary, AdherentModel adherentModel, Uint8List qr}){
+  Widget getBeneficiaryCard({BeneficiaryModel beneficiary, AdherentModel adherentModel, int state}){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
       decoration: BoxDecoration(
         color: kPrimaryColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: whiteColor.withOpacity(0.1)),
         gradient: LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          colors: [kPrimaryColor, kPrimaryColor, kPrimaryColor, kPrimaryColor.withOpacity(0.9), kPrimaryColor.withOpacity(0.8)])
+          colors: [kPrimaryColor, kPrimaryColor, kPrimaryColor, whiteColor.withOpacity(0.05)])
       ),
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              /*Row(
                 children: [
                   Text("Valide\njusqu'au", style: textStyle,),
                   Text(" 10/2021", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: whiteColor))
                 ],
-              ),
+              ),*/
+              Spacer(),
               Row(
                 children: [
                   SvgPicture.asset(beneficiary.gender == "H" ? 'assets/icons/Two-tone/Male.svg' : 'assets/icons/Two-tone/Female.svg', width: wv*8),
-                  SvgPicture.asset('assets/icons/Bulk/Shield Done.svg', width: wv*8,)
+                  adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset('assets/icons/Bulk/Shield Done.svg', width: wv*8,) : Container()
                 ],
               )
             ],
@@ -156,28 +153,28 @@ class _AdherentCardState extends State<AdherentCard> {
                   backgroundImage: beneficiary.avatarUrl != null ? CachedNetworkImageProvider(beneficiary.avatarUrl) : null,
                   child: beneficiary.avatarUrl == null ? Icon(LineIcons.user, color: kPrimaryColor, size: wv*18,) : Container(),
                 ),
-                CircleAvatar(
+                state == 0 ? CircleAvatar(
                   radius: wv*15,
                   backgroundColor: Colors.red.withOpacity(0.3),
-                ),
+                ) : Container(),
                 Positioned(
-                  right: 0,
+                  right: state == 0 ? 0 : wv*19,
                   bottom: 0,
                   child: Container(
                     width: 30,
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: state == 0 ? Colors.red : Colors.lightGreen[700],
                       shape: BoxShape.circle,
                       boxShadow: [BoxShadow(color: Colors.grey[700], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1.5))]
                     ),
-                    child: Icon(MdiIcons.exclamation, color: whiteColor,),
+                    child: Icon(MdiIcons.exclamation, color: state == 0 ? whiteColor : Colors.transparent,),
                   ),
                 ),
-                RotationTransition(
+                state == 0 ? RotationTransition(
                   turns: new AlwaysStoppedAnimation(330 / 360),
                   child: new Text("Compte\nInactif", style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                )
+                ) : Container()
               ],
             ),
           ),
@@ -217,15 +214,17 @@ class _AdherentCardState extends State<AdherentCard> {
               ),
             ),
           ),
-          qr.isEmpty
-            ? Center(
-                child: Text('Empty code ... ',
-                    style: TextStyle(color: Colors.black38)),
-              )
-          : Container(
-            width: hv*10,
-            child: Image.memory(qr)
-            ),
+          Container(
+            color: whiteColor,
+            padding: EdgeInsets.all(2.5),
+            child: PrettyQr(
+                  typeNumber: 3,
+                  size: 75,
+                  elementColor: kPrimaryColor,
+                  data: adherentModel.adherentId,
+                  errorCorrectLevel: QrErrorCorrectLevel.L,
+                  ),
+          ),
             SizedBox(height: hv*2.5,)
         ],
       ),
