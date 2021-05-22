@@ -4,6 +4,7 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 class PrestationHistory extends StatefulWidget {
   PrestationHistory({Key key}) : super(key: key);
 
@@ -12,8 +13,12 @@ class PrestationHistory extends StatefulWidget {
 }
 
 class _PrestationHistoryState extends State<PrestationHistory> {
+ 
   @override
   Widget build(BuildContext context) {
+     String data= DateFormat("yyyy").format(DateTime.now());
+    print(data);
+    int dataTIme= int.parse(data);
     return SafeArea(
         top: false,
         bottom: false,
@@ -64,7 +69,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                 children: [
                                   Column(
                                     children: [
-                                      Text('2022', style: TextStyle(
+                                      Text('${dataTIme+1}', style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w700,
                                           
@@ -74,7 +79,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                   ),
                                   Column(
                                     children: [
-                                      Text('2021', style: TextStyle(
+                                      Text('${dataTIme}', style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w700,
                                           
@@ -84,7 +89,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                   ),
                                   Column(
                                     children: [
-                                      Text('2020', style: TextStyle(
+                                      Text('${dataTIme-1}', style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w700,
                                           
@@ -94,7 +99,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                   ),
                                   Column(
                                     children: [
-                                      Text('2019', style: TextStyle(
+                                      Text('${dataTIme-2}', style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w700,
                                           

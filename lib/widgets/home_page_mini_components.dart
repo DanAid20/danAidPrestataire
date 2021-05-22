@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -242,7 +243,9 @@ class HomePageComponents {
     String videChatLink,
     String detailsCOnsultationLink,
     bool isPrestataire,
-    String consultationtype
+    String consultationtype,
+    Function approuveAppointement,String adhrentId, String doctorId,
+    bool isanounced=false
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -313,7 +316,22 @@ class HomePageComponents {
                          'assets/icons/Bulk/Shield Done.svg',
                           width: wv * 4,
                           
-                        ))
+                        )),
+                   isanounced!=null && isanounced!=true? SizedBox.shrink() : Positioned(
+                        top: hv * 0.5,
+                        left: wv * 1,
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: kDeepTealCAdress, spreadRadius: 0.5, blurRadius: 4
+                            ),
+                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),child: Text(''),)
+                    )
                   ],
                 ),
                 Container(
@@ -403,7 +421,7 @@ class HomePageComponents {
                     ),
                     InkWell(
                       onTap: () {
-                        // lien vers les detailes des la consultation
+                        approuveAppointement(adhrentId, doctorId);
                       },
                       child: Container(
                         padding: EdgeInsets.all(3),
@@ -518,8 +536,8 @@ class HomePageComponents {
       ),
     );
   }
-  getAdherentsList({int iSelected, AdherentModel adherent, bool isAccountIsExists, int index, Function onclick}) {
-    return GestureDetector(
+  getAdherentsList({int iSelected, BeneficiaryModel adherent, AdherentModel adherentPersone, bool isAccountIsExists, int index, Function onclick}) {
+    return index==0? GestureDetector(
       onTap: ()=>{
           onclick(index, adherent)
       },
@@ -576,14 +594,14 @@ class HomePageComponents {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                         colorFilter: isAccountIsExists == true &&
-                               adherent!=null && adherent.enable == true
+                               adherentPersone!=null && adherentPersone.enable == true
                             ? new ColorFilter.mode(
                                 Colors.red.withOpacity(1), BlendMode.dstATop)
                             : new ColorFilter.mode(
                                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
-                        image: adherent==null
+                        image: adherentPersone==null
                             ? AssetImage("assets/images/image 25.png")
-                            : adherent.imgUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.imgUrl}"),
+                            : adherentPersone.imgUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
                         fit: BoxFit.cover,
                       ),
                       color: Colors.red,
@@ -596,7 +614,7 @@ class HomePageComponents {
                       child: Transform.rotate(
                         angle: -math.pi / 4,
                         child: Text(
-                          isAccountIsExists == true && (adherent!=null && adherent.enable) == true
+                          isAccountIsExists == true && (adherentPersone!=null && adherentPersone.enable) == true
                               ? ''
                               : 'Compte Inactif',
                           overflow: TextOverflow.clip,
@@ -617,12 +635,199 @@ class HomePageComponents {
                         width: wv * 10,
                         decoration: BoxDecoration(
                             color: isAccountIsExists == true &&
-                                    (adherent!=null && adherent.enable) == true
+                                    (adherentPersone!=null && adherentPersone.enable) == true
                                 ? Colors.green
                                 : Colors.red,
                             shape: BoxShape.circle),
                         child:
-                            isAccountIsExists == true && (adherent!=null && adherent.enable) == true
+                            isAccountIsExists == true && (adherentPersone!=null && adherentPersone.enable) == true
+                                ? SizedBox.shrink()
+                                : Icon(
+                                    Icons.priority_high,
+                                    color: Colors.white,
+                                    size: hv * 4,
+                                  ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Non du beneficiaire',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text((adherentPersone!=null && adherentPersone.cniName!=null) ? adherentPersone.cniName : ''  ,
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Numero Matricule',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                    (adherent!=null &&  adherentPersone.matricule!=null)
+                          ?  adherentPersone.matricule
+                          : 'Pas defini',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Medecin de Famille ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                       (adherentPersone!=null && adherentPersone.familyDoctor!=null)
+                          ? adherentPersone.cniName
+                          : 'Pas definie ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: hv * 4),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset('assets/icons/DanaidLogo.png'),
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    ):GestureDetector(
+      onTap: ()=>{
+          onclick(index, adherent)
+      },
+      child: Container(
+        width: wv * 78,
+        decoration: BoxDecoration(
+          color: kBlueForce,
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
+           boxShadow: [
+                  BoxShadow(color: iSelected==index? kBlueForce: Colors.transparent, spreadRadius: 2, blurRadius: 4),
+                ],
+        ),
+        margin: EdgeInsets.only(left: wv * 2, right:2.5.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 1),
+              child: Row(
+                children: [
+                  Container(
+                      width: wv * 15,
+                      child: Text('Valide jusqu\'au ',
+                          style: TextStyle(
+                              color: textWhiteColor,
+                              fontSize: fontSize(size: 15),
+                              fontWeight: FontWeight.w500))),
+                  Container(
+                      width: wv * 20,
+                      child: Text('10/2021',
+                          style: TextStyle(
+                              color: whiteColor,
+                              fontSize: wv * 4.5,
+                              fontWeight: FontWeight.w700))),
+                  Spacer(),
+                  SvgPicture.asset(
+                 (adherent!=null && adherent.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                    color: whiteColor,
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/Bulk/Shield Done.svg',
+                    height: hv * 8,
+                    width: wv * 8,
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        colorFilter: isAccountIsExists == true &&
+                               adherent!=null && adherent.enabled == true
+                            ? new ColorFilter.mode(
+                                Colors.red.withOpacity(1), BlendMode.dstATop)
+                            : new ColorFilter.mode(
+                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                        image: adherent==null
+                            ? AssetImage("assets/images/image 25.png")
+                            : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
+                        fit: BoxFit.cover,
+                      ),
+                      color: Colors.red,
+                      shape: BoxShape.circle),
+                  width: wv * 40,
+                  height: hv * 20,
+                  child: Stack(children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: Transform.rotate(
+                        angle: -math.pi / 4,
+                        child: Text(
+                          isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
+                              ? ''
+                              : 'Compte Inactif',
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                              color: Colors.red,
+                              letterSpacing: 0.5,
+                              fontSize: wv * 6.5,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 5,
+                      bottom: -hv * 2,
+                      child: Container(
+                        height: hv * 10,
+                        width: wv * 10,
+                        decoration: BoxDecoration(
+                            color: isAccountIsExists == true &&
+                                    (adherent!=null && adherent.enabled) == true
+                                ? Colors.green
+                                : Colors.red,
+                            shape: BoxShape.circle),
+                        child:
+                            isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
                                 ? SizedBox.shrink()
                                 : Icon(
                                     Icons.priority_high,
@@ -685,8 +890,8 @@ class HomePageComponents {
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
-                       (adherent!=null && adherent.familyDoctor!=null)
-                          ? adherent.familyDoctor.cniName
+                       (adherentPersone!=null && adherentPersone.familyDoctor!=null)
+                          ? adherentPersone.cniName
                           : 'Pas definie ',
                       style: TextStyle(
                           color: textWhiteColor,

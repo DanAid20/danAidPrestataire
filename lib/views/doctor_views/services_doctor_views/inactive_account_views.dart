@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -34,11 +37,17 @@ class InactiveAccount extends StatefulWidget {
 class _InactiveAccountState extends State<InactiveAccount> {
   bool isActive;
   AdherentModelProvider adherentModelProvider;
+  ScrollController scrollController;
   int userSelected=-1;
-  AdherentModel adherentUserSelected;
+  BeneficiaryModel adherentUserSelected;
   bool isloading=false;
+  bool isRequestLaunch=false;
+  UseCaseModelProvider userCaprovider;
+  var code;
   @override
   void initState() {
+    scrollController= ScrollController();
+     code= getRandomString(4);
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.isAccountIsExists == false) {
@@ -48,24 +57,36 @@ class _InactiveAccountState extends State<InactiveAccount> {
             builder: (BuildContext context) =>
                 _buildAboutDialog(context, true));
       }
-    });
-  }
 
-  createConsultationCode() async {
+    });
+  userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
+  }
+ Future<String> createConsultationCode() async {
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
-    await FirebaseFirestore.instance.collection('MEDECINS').doc(doctorProvider.getDoctor.id)
-    .collection('CONSULATION_CODE').doc(adherentUserSelected.adherentId).set({
-      'id': getRandomString(4),
-      'idAdherent': adherentUserSelected.adherentId,
-      'idBeneficiairy':adherentUserSelected.adherentId,
-      'createdAt':  DateTime.now(),
+    
+    
+    var date= DateTime.now();
+    var newUseCase =FirebaseFirestore.instance.collection('USECASES').doc();
+     newUseCase.set({
+      'id': code,
+      'adherentId': adherentUserSelected.adherentId,
+      'beneficiaryId': adherentUserSelected.matricule,
+      'beneficiaryName':adherentUserSelected.familyName,
+      'otherInfo':'',
+      'consultationCode': code,
+      'type': 'CONSULTATION',
+      'amountToPay': 2000,
+      'status' : 0  ,
+      'createdDate':  DateTime.now(),
       'enable': false,
     }, SetOptions(merge: true)).then((value) {
         setState(() {
           isloading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Code ce consultation creer avec succes comme médecin de famille..")));
+    userCaprovider.getUseCase.consultationCode=code;
+    userCaprovider.getUseCase.dateCreated= Timestamp.fromDate(date);
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Code ce consultation creer avec succes comme médecin de famille..")));
         
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -73,17 +94,20 @@ class _InactiveAccountState extends State<InactiveAccount> {
           isloading = false;
         });
       });
+    
+    return newUseCase.id;
   }
-  facturationCode() async {
-     DoctorModelProvider doctorProvider =
+
+  facturationCode(id) async {
+    DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
-    await FirebaseFirestore.instance.collection('MEDECINS').doc(doctorProvider.getDoctor.id)
+    await FirebaseFirestore.instance.collection('USECASES').doc(id)
     .collection('FACTURATIONS').doc(adherentUserSelected.adherentId).set({
       'id':Utils.createCryptoRandomString(8),
       'idAdherent': adherentUserSelected.adherentId,
-      'idBeneficiairy':adherentUserSelected.adherentId,
+      'idBeneficiairy':adherentUserSelected.matricule,
       'idMedecin':doctorProvider.getDoctor.id,
-      'amountToPay':'2000',
+      'amountToPay': 2000,
       'isSolve':false,
       'Type': widget.consultationType ,
       'createdAt':  DateTime.now(),
@@ -91,6 +115,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
         setState(() {
           isloading = false;
         });
+        
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La facture a bien ete generer avec succes ")));
         
       }).catchError((e){
@@ -100,7 +125,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
         });
       });
   }
-  getUserSelected(int index, AdherentModel adherent ){
+  
+  getUserSelected(int index, BeneficiaryModel adherent ){
     setState(() {
       userSelected=index;
       adherentUserSelected= adherent;
@@ -150,23 +176,33 @@ class _InactiveAccountState extends State<InactiveAccount> {
           }else{
             return snapshot.data.docs.length >= 1
               ? ListView.builder(
+                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   //shrinkWrap: true,
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data.docs[index];
-                    AdherentModel doctor = AdherentModel.fromDocument(doc);
+                    BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
                     print("name: ");
-                    return index==0 ?Container(
-                      child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: HomePageComponents().getAdherentsList(
-                              adherent: widget.data, isAccountIsExists: true, index: index, onclick: getUserSelected, iSelected:userSelected )),
-                    )  : Container(
-                      child: Padding(
-                          padding: EdgeInsets.all(5),
-                          child: HomePageComponents().getAdherentsList(
-                              adherent: doctor, isAccountIsExists: true, index: index, onclick:getUserSelected, iSelected:userSelected )),
+                    return index==0 ?InkWell(
+                         onTap: ()=>{
+                           scrollController.animateTo(index.toDouble(), duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                         }, child: Container(
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: HomePageComponents().getAdherentsList(
+                                adherent: beneficiary, adherentPersone: widget.data , isAccountIsExists: true, index: index, onclick: getUserSelected, iSelected:userSelected )),
+                      ),
+                    )  : InkWell(
+                         onTap: ()=>{
+                           scrollController.animateTo(index.toDouble(), duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                         } ,
+                        child: Container(
+                        child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: HomePageComponents().getAdherentsList(
+                                adherent: beneficiary, adherentPersone: widget.data, isAccountIsExists: true, index: index, onclick:getUserSelected, iSelected:userSelected )),
+                      ),
                     );
                   })
               : Center(
@@ -352,7 +388,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   Widget build(BuildContext context) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
-
+    
     return SafeArea(
         top: false,
         bottom: false,
@@ -400,8 +436,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                height: hv * 60,
+                              height: hv * 65,
                               margin: EdgeInsets.only(left:3.w),
+                              padding: EdgeInsets.all(3.w),
                               child: getListOfUser(),),
                               SvgPicture.asset(
                                 'assets/icons/Bulk/Dots.svg',
@@ -417,9 +454,17 @@ class _InactiveAccountState extends State<InactiveAccount> {
                           child: HomePageComponents().getAdherentsList( isAccountIsExists: false)),
                     ) ,
                       ),
+                  //   Container(decoration:  BoxDecoration(
+                  //   color: whiteColor,
+                  //   borderRadius: BorderRadius.all(Radius.circular(10) ),
+                  // ) ,width: wv * 80,height: hv*5,child: Center(child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(adherentUserSelected.),
+                  //   ],
+                  // ))),
                       widget.isAccountIsExists == false
                           ? SizedBox.shrink()
-                          : Container(
+                          : isRequestLaunch ? Loaders().buttonLoader(kPrimaryColor) :Container(
                             alignment: Alignment.bottomCenter,
                             child: Align(
                                 alignment: Alignment.bottomCenter,
@@ -435,19 +480,40 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                       //           _buildAboutDialog(
                                       //               context, false));
                                       // } else {
-                                      //   Navigator.push(
-                                      //     context,
-                                      //     MaterialPageRoute(
-                                      //         builder: (context) =>
-                                      //             OwnerUserListView(
-                                      //               idOfAdherent:
-                                      //                   widget.phoneNumber,
-                                      //             )),
-                                      //   );
-                                      // }
-                                      if(userSelected!=-1){
-                                      await createConsultationCode();
-                                      await facturationCode();
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //       builder: (context) =>
+                                        //           OwnerUserListView(
+                                        //             idOfAdherent:
+                                        //                 widget.phoneNumber,
+                                        //           )),
+                                        // );
+                                      //}
+                                       if(userSelected!=-1){
+                                         setState(() {
+                                           isRequestLaunch=true;
+                                         });
+                                       await createConsultationCode().then((value) async {
+                                           await facturationCode(value);
+                                           setState(() {
+                                           isRequestLaunch=false;
+                                         });
+                                        
+                                      }).then((value){
+                                         Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OwnerUserListView(
+                                                    idOfAdherent:
+                                                        widget.phoneNumber,
+                                                    beneficiare: adherentUserSelected,
+                                                    consultationCode:  code,
+                                                    createdAt:  DateTime.now(),
+                                                  )),
+                                        ); 
+                                      });
                                       }else{
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Selectioner un beneficiaire avant de valider")));
                                       }

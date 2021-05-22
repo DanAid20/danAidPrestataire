@@ -74,7 +74,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   waitingRoomFuture( startDays, endDay,date, doctor){
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
-        .where("status",  isEqualTo: 1)
+        .where("appointment-type",  isEqualTo: 'consult-today')
         .where("doctorId", isEqualTo: doctor)
         .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
         .orderBy("start-time")
@@ -103,12 +103,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     builder:
                         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                           if (snapshot.hasData==null) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-              ),
-            );
-          }
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                            ),
+                          );
+                        }
                       if (snapshot.hasError) {
                           return Text("Something went wrong");
                         }
@@ -134,16 +134,67 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         });
 
   }
+  showAlertDialog(adherentId, doctorId) {
 
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("Sortir"),
+    onPressed:  () {
+      Navigator.pop(context);
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: Text("Approuver"),
+    onPressed:  () async {
+        var data=await FirebaseFirestore.instance.collection("APPOINTMENTS")
+         .where("doctorId", isEqualTo: "+237694160832")
+         .where("adherentId", isEqualTo: adherentId); 
+       data.get()
+  .then((docSnapshot) => {
+    if (docSnapshot.docs.isEmpty) {
+     print('fdfjsfjdsf')
+    } else {
+       FirebaseFirestore.instance.collection("APPOINTMENTS")
+        .doc(docSnapshot.docs[0].id)
+        .update({
+          "status": 1,
+        }).then((value) {
+            Navigator.pop(context);
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("rende-vous approuver ")));
+        })
+       
+    },
+  });
+    });
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("AlertDialog"),
+    content: Text("Would you like to continue learning how to use Flutter alerts?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
   getListOfUser( startDays, endDay,date, doctorId) {
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
          .where("doctorId", isEqualTo: doctorId)
-        .where("status",  isEqualTo: 0)
+        .where("appointment-type",  isEqualTo: 'appointment')
         .where("start-time", isGreaterThanOrEqualTo: startDays, isLessThanOrEqualTo: endDay)
         .orderBy("start-time")
         .snapshots();
-       
+  DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
+  
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -188,7 +239,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         Timestamp day =doc.data()["start-time"];
                         DateTime dateTime = day.toDate();
                         String formattedTime= DateFormat.Hm().format(dateTime);
-                        return HomePageComponents().timeline(consultationtype: doc.data()["consultation-type"] , isPrestataire: false,age: "$differenceInDays ans" ,consultationDetails: '${doc.data()["title"]}',consultationType: "${doc.data()["appointment-type"]}",time:"${formattedTime}",userImage: '${data["imageUrl"]}',userName: '${data["prenom"]} ${data["nomFamille"]} ');
+                        return  HomePageComponents().timeline(isanounced: doc.data()["announced"], adhrentId: doc.data()["adherentId"], doctorId:doctor.getDoctor.id, approuveAppointement: showAlertDialog, consultationtype: doc.data()["consultation-type"] , isPrestataire: false,age: "$differenceInDays ans" ,consultationDetails: '${doc.data()["title"]}',consultationType: "${doc.data()["appointment-type"]}",time:"$formattedTime",userImage: '${data["imageUrl"]}',userName: '${data["prenom"]} ${data["nomFamille"]} ');
                       }
                       return Text(" ");
                     },
