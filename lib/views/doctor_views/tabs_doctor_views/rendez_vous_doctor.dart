@@ -148,8 +148,9 @@ String getRandomString(int length){
   //******* cette function get la d'aujourd'hui en parametre et get la listes rendez-vous pour la semaines  */
   triggerGetPatientForWeek(){
       var dates =  DateTime.now();
-      var start= findFirstDateOfTheWeek(dates);
-      var end= findLastDateOfTheWeek(dates); 
+     
+      var start=new DateTime(dates.year, dates.month, dates.day.toInt()) ;
+      var end= new DateTime(dates.year, dates.month, dates.day.toInt()+6); 
       print(start);
       print(end);
                     setState(() {
@@ -217,14 +218,14 @@ String getRandomString(int length){
               : Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Center(
-                    child: Text(" Aucun patient en sale d'attente.."),
+                    child: Text(" Aucun patient en salle d'attente.."),
                   ),
               );
         });
 
   }
   showAlertDialog(adherentId, doctorId) {
-
+  
   // set up the buttons
   Widget cancelButton = FlatButton(
     child: Text("Sortir"),
@@ -503,7 +504,7 @@ String getRandomString(int length){
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      isSelected=='week' ?  DateFormat('dd-MM-yyyy').format(startDays).toString()+' / '+ DateFormat('dd-MM-yyyy').format(endDay).toString():  DateFormat('dd-MM-yyyy').format(_selectedDay),
+                      isSelected=='week' ?  DateFormat('dd MMM yyyy').format(startDays).toString()+' / '+ DateFormat('dd MMM yyyy').format(endDay).toString():  DateFormat('dd-MMM-yyyy').format(_selectedDay),
                       style: TextStyle(
                           color: isPrestataire? kBlueForce :whiteColor,
                           fontWeight:FontWeight.w600,
