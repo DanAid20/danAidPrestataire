@@ -87,7 +87,7 @@ class _AdherentCardState extends State<AdherentCard> {
           beneficiaries != null ? Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: EdgeInsets.only(top: hv*3),
+              padding: EdgeInsets.only(top: hv*7),
               child: CarouselSlider(
                 carouselController: beneficiaryCarouselController,
                 options: CarouselOptions(

@@ -1143,7 +1143,7 @@ class HomePageComponents {
     );
   }
 
-  getMyCoverageHospitalsTiles({String initial, String name, DateTime date, String price, int state, Function action}) {
+  getMyCoverageHospitalsTiles({String initial, String name, DateTime date, double price, int state, Function action}) {
     return ListTile(
       onTap: action,
       leading: Container(
@@ -1175,7 +1175,7 @@ class HomePageComponents {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            price,
+            price.toString()+ "f.",
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.5),
           ),
           Text(

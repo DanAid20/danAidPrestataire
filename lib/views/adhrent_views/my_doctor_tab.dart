@@ -524,7 +524,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
                                         print("name: ");
                                         return Padding(
-                                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 2 : 0),
+                                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
                                             doctorName: "Dr. ${appointment.doctorName}, Médécin de Famille",
                                             date: appointment.startTime.toDate(),

@@ -29,6 +29,8 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
 
+    bool enable = userProvider.getUserModel.enable == null ? false : userProvider.getUserModel.enable;
+
     return userProvider.getUserModel != null && adherentProvider.getAdherent != null ? Column(
       children: [
         Expanded(
@@ -95,7 +97,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                     ),
                   ),
 
-                  !userProvider.getUserModel.enable || adherentProvider.getAdherent.familyDoctorId == null ? Container(
+                  !enable || adherentProvider.getAdherent.familyDoctorId == null ? Container(
                     margin: EdgeInsets.only(top: hv*2),
                     //padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
@@ -121,7 +123,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           children: [
                             SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                             child: Row(children: [
-                              !userProvider.getUserModel.enable ? GestureDetector(
+                              !enable ? GestureDetector(
                                 onTap: ()=>Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : userProvider.getProfileType == adherent ? '/adherent-profile-edit' : '/serviceprovider-profile-edit'),
                                 child: NotificationCard(
                                   isprestataire: false,
@@ -130,7 +132,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 ),
                               ) : Container(),
 
-                              !userProvider.getUserModel.enable ? GestureDetector(
+                              !enable ? GestureDetector(
                                 onTap: ()=>navController.setIndex(4),
                                 child: NotificationCard(
                                   isprestataire: false,

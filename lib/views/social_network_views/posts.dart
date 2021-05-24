@@ -109,7 +109,7 @@ class _PostsState extends State<Posts> {
 
                     SizedBox(height: hv*2,),
 
-                    Row(
+                    /*Row(
                       children: [
                         Expanded(
                           child: Row(children: [
@@ -136,7 +136,7 @@ class _PostsState extends State<Posts> {
                           child: Container(),
                         )
                       ],
-                    ),
+                    ),*/
                     //
                   ],
                 ),

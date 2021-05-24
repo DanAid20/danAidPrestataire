@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/usecaseModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -173,18 +174,17 @@ class MyCoverageTabView extends StatelessWidget {
                                 name: useCase.establishment,
                                 date: useCase.dateCreated.toDate(),
                                 state: useCase.status,
-                                price: "",
+                                price: useCase.amount != null ? useCase.amount : 0,
                                 action: (){
-                                  /*AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
-                                  appointmentProvider.setAppointmentModel(appointment);
-                                  _doc != null ? doctorProvider.setDoctorModel(_doc) : print("nope");
-                                  Navigator.pushNamed(context, '/appointment');*/
+                                  UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
+                                  usecaseProvider.setUseCaseModel(useCase);
+                                  Navigator.pushNamed(context, '/use-case');
                                 }
                               ),
                             );
                           })
                       : Center(
-                        child: Container(child: Text("Aucun cas d'utilisation enrégistré pour le moment..", textAlign: TextAlign.center)),
+                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text("Aucun cas d'utilisation enrégistré pour le moment..", textAlign: TextAlign.center)),
                       );
                     /*return Container(
                       color: whiteColor,

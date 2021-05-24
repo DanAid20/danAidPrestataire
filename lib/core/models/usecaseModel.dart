@@ -18,7 +18,7 @@ class UseCaseModel {
       status: doc.data()["status"],
       doctorId: doc.data()["doctorId"],
       title: doc.data()["title"],
-      amount: doc.data()["amount"],
+      amount: doc.data()["amountToPay"] != null ? double.parse(doc.data()["amountToPay"].toString()) : null,
       establishment: doc.data()["establishment"],
       otherInfo: doc.data()["otherInfo"],
       type: doc.data()["type"],

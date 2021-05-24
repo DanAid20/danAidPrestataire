@@ -28,6 +28,7 @@ import 'package:danaid/views/adhrent_views/profile_edit.dart';
 import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:danaid/views/adhrent_views/adherent_card.dart';
 import 'package:danaid/views/adhrent_views/refund_form.dart';
+import 'package:danaid/views/adhrent_views/use_case_details.dart';
 import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
@@ -59,6 +60,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/adherent-card": (context) => AdherentCard(),
   "/refund-form": (context) => RefundForm(),
   "/appointment": (context) => Appointment(),
+  "/use-case": (context) => UseCaseDetails(),
 
   /**
    * Start section routes that concern the doctor activities in the

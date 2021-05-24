@@ -402,7 +402,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       title: Text("Numéro mobile", style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
                       subtitle: Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text(phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                        child: Text(phone == null ? "AUCUN FOURNI" : phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                       ),
                       trailing: IconButton(
                         enableFeedback: false,

@@ -14,6 +14,7 @@ import 'package:danaid/widgets/user_avatar_coverage.dart';
 import 'package:danaid/widgets/streams.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyFamilyScreen extends StatefulWidget {
   @override
@@ -21,6 +22,11 @@ class MyFamilyScreen extends StatefulWidget {
 }
 
 class _MyFamilyScreenState extends State<MyFamilyScreen> {
+  
+  callDanAid() {
+    String url = "tel:+237233419203";
+    launch(url);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +77,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Aperçu de votre couverture"),
-                    TextButton(onPressed: (){}, child: Text("Améliorer...", style: TextStyle(color: Colors.brown),)),
+                    TextButton(onPressed: (){}, child: Text(/*"Améliorer..."*/"", style: TextStyle(color: Colors.brown),)),
                   ],
                 ),
               ),
@@ -84,7 +90,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 ),
                 child: Column(
                   children: [
-                    Container(
+                    adherentProvider.getAdherent.adherentPlan == 0 ? Container(
                       padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -101,7 +107,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                             child: Text("Obtenez une couverture complète à 70% !", style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
                         ],
                       ),
-                    ),
+                    ) : Container(),
                     Stack(
                       children: [
                         Container(
@@ -116,10 +122,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                           right: wv*0, bottom: hv*8,
                           child: IconButton(
                             onPressed: (){ Navigator.pushNamed(context, '/add-beneficiary'); },
+                            iconSize: 35,
                             icon: CircleAvatar(
                               backgroundColor: kPrimaryColor,
-                              radius: wv*4,
-                              child: Icon(Icons.add, color: Colors.white,),
+                              child: Center(child: Icon(Icons.add, size: 35, color: Colors.white,)),
                             ),
                           ),
                         )
@@ -139,13 +145,13 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                   children: [
                     Text("Paramètres du compte", style: TextStyle(color: kBlueDeep, fontSize: wv*4)),
                     SizedBox(height: hv*2,),
-                    HomePageComponents.accountParameters(
+                    adherentProvider.getAdherent != null ? HomePageComponents.accountParameters(
                       title: "Domicile Principale", 
-                      subtitle: "Ndog-bong, Douala ou Hôpital à choisir.", 
+                      subtitle: adherentProvider.getAdherent.address != null ? adherentProvider.getAdherent.address : "Non configurée", 
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
-                      action: (){}
-                    ),
-                    HomePageComponents.accountParameters(
+                      action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
+                    ) : Container(),
+                    /*HomePageComponents.accountParameters(
                       title: "Points et badges", 
                       subtitle: "Ndog-bong, Douala ou Hôpital à choisir.", 
                       svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
@@ -156,12 +162,12 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       subtitle: "Contacts, documents, bénéfices.", 
                       svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
                       action: (){}
-                    ),
+                    ),*/
                     HomePageComponents.accountParameters(
                       title: "Changez de medecin de famille", 
-                      subtitle: "Moyens et fréquence des paiements", 
+                      subtitle: "Vous pouvez démander un changement de médecin", 
                       svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
-                      action: (){}
+                      action: callDanAid
                     ),
 
                     SizedBox(height: hv*10,)
