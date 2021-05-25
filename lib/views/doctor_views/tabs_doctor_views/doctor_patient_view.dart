@@ -7,6 +7,7 @@ import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,78 +54,90 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       ),
       child: Column(
         children: [
-          Container(
-              margin:
-                  EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: 20.h),
-              width: 330.w,
-              height: 140.h, 
-              decoration: BoxDecoration(
-                color:  isPrestataire ? kGold :kThirdIntroColor,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey, spreadRadius: 0.5, blurRadius: 4),
-                ],
-                borderRadius: BorderRadius.all(
-                  Radius.circular(17),
+          GestureDetector(
+             onTap:(){
+                Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddPatientView(
+                                                    isLaunchConsultation: true,
+                                                  )),
+                                        );
+             },
+                      child: Container(
+                margin:
+                    EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: 20.h),
+                width: 330.w,
+                height: 140.h, 
+                decoration: BoxDecoration(
+                  color:  isPrestataire ? kGold :kThirdIntroColor,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey, spreadRadius: 0.5, blurRadius: 4),
+                  ],
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(17),
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.only(top: hv * 1),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      margin: EdgeInsets.only(right: wv * 3.5, top: hv * 0.5),
-                      child: SvgPicture.asset(
-                        'assets/icons/Bulk/Bookmark.svg',
-                        width: wv * 8,
-                        color:isPrestataire ==true ?kBlueForce:kDeepTeal
+                padding: EdgeInsets.only(top: hv * 1),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        margin: EdgeInsets.only(right: wv * 3.5, top: hv * 0.5),
+                        child: SvgPicture.asset(
+                          'assets/icons/Bulk/Bookmark.svg',
+                          width: wv * 8,
+                          color:isPrestataire ==true ?kBlueForce:kDeepTeal
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20.w, right: hv * 1.5, top: 8.h),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            isPrestataire ? 'Compléter une prise en charge' :'Démarrer une consultation',
-                            textScaleFactor: 1.0,
-                            style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 20.sp),
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 20.w, right: hv * 1.5, top: 8.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              isPrestataire ? 'Compléter une prise en charge' :'Démarrer une consultation',
+                              textScaleFactor: 1.0,
+                              style: TextStyle(
+                                  color: kCardTextColor,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 20.sp),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        left: 20.w, right: 60.w, top: 8.h),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                           isPrestataire ? 'Vérifier le statut des paiements avant de réaliser les services à un adhérent':  'Accédez au Carnet de Santé digital de vos patients et déclenchez leur prise en charge',
-                            textScaleFactor: 0.8,
-                            style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15.5.sp),
-                            overflow: TextOverflow.clip,
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 20.w, right: 60.w, top: 8.h),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                             isPrestataire ? 'Vérifier le statut des paiements avant de réaliser les services à un adhérent':  'Accédez au Carnet de Santé digital de vos patients et déclenchez leur prise en charge',
+                              textScaleFactor: 0.8,
+                              style: TextStyle(
+                                  color: kCardTextColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15.5.sp),
+                              overflow: TextOverflow.clip,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              )),
+                  ],
+                )),
+          ),
           Container(
             margin: EdgeInsets.symmetric(vertical: 2.0),
             height: 110.r,
@@ -133,7 +146,15 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               children: <Widget>[
                 GestureDetector(
                   onTap: () {
-                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) : Navigator.pushNamed(context, '/doctor-add-patient');
+                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) :
+                    Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AddPatientView(
+                                                    isLaunchConsultation: false,
+                                                  )),
+                                        );
                   },
                   child: displsOtherServices(
                       iconesUrl: isPrestataire? 'assets/icons/Bulk/Discount.svg' :'assets/icons/Bulk/Add User.svg',
@@ -150,11 +171,16 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     title: 'Suivre mes paiements', 
                     isPrestataire: isPrestataire,),
                ),
-               
-                displsOtherServices(
+               GestureDetector(
+                 onTap: (){
+                    isPrestataire?   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peu de patience cette partie sera bientôt disponible"))) :  Navigator.pushNamed(context, '/chatroom');
+                 },
+                 child:displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
                     title: 'Mes Messages', 
                     isPrestataire: isPrestataire,),
+               ),
+               
               ],
             ),
           ),
@@ -226,9 +252,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
         .where("doctorId", isEqualTo: doctorId)
-        .where("appointment-type",  isEqualTo: 'consult-today')
+        .where("status",  isEqualTo: 0)
         .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
-        .orderBy("start-time")
+        .orderBy("start-time", descending: true)
         .snapshots();
 
     return StreamBuilder(
@@ -318,7 +344,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           child: Row(
             children: [
               Text(
-                "Aujourd'hui ",
+                "Demandes de RDV",
                 style: TextStyle(
                     color: kFirstIntroColor, fontSize:  15.sp ,fontWeight: FontWeight.w500),
               ),

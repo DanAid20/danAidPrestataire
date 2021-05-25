@@ -296,6 +296,7 @@ String getRandomString(int length){
         .collection("APPOINTMENTS")
          .where("doctorId", isEqualTo: doctorId)
         .where("appointment-type",  isEqualTo: 'appointment')
+        .where("status",  isEqualTo: 0)
         .where("start-time", isGreaterThanOrEqualTo: startDays, isLessThanOrEqualTo: endDay)
         .orderBy("start-time")
         .snapshots();

@@ -6,10 +6,11 @@ class BeneficiaryModel{
   bool enabled, livesInSameHouse;
   Timestamp dateCreated, validityEndDate, birthDate;
   List phoneList;
+  int protectionLevel;
   List allergies;
   var height, weight;
 
-  BeneficiaryModel({this.matricule, this.otherDocName, this.marriageCertificateName, this.adherentId, this.surname, this.familyName, this.cniName, this.gender, this.otherInfo, this.relationShip, this.cniUrl, this.marriageCertificateUrl, this.otherDocUrl, this.birthCertificateUrl, this.avatarUrl, this.bloodGroup, this.enabled, this.livesInSameHouse, this.dateCreated, this.validityEndDate, this.birthDate, this.phoneList, this.allergies, this.height, this.weight});
+  BeneficiaryModel({this.matricule, this.protectionLevel, this.otherDocName, this.marriageCertificateName, this.adherentId, this.surname, this.familyName, this.cniName, this.gender, this.otherInfo, this.relationShip, this.cniUrl, this.marriageCertificateUrl, this.otherDocUrl, this.birthCertificateUrl, this.avatarUrl, this.bloodGroup, this.enabled, this.livesInSameHouse, this.dateCreated, this.validityEndDate, this.birthDate, this.phoneList, this.allergies, this.height, this.weight});
   
   factory BeneficiaryModel.fromDocument(DocumentSnapshot doc){
     return BeneficiaryModel(
@@ -38,6 +39,7 @@ class BeneficiaryModel{
       relationShip: doc.data()["relation"],
       otherInfo: doc.data()["infoSupplementaire"],
       birthCertificateUrl: doc.data()["urlActeNaissance"],
+      protectionLevel: doc.data()["protectionLevel"],
     );
   }
 }

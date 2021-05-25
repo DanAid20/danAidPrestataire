@@ -251,7 +251,7 @@ class HomePageComponents {
       decoration: BoxDecoration(
        
       ),
-      width: wv * 98,
+      width: wv * 100,
       padding: EdgeInsets.only(left: wv * 3, right: wv * 3.3),
       child: Column(
         children: [
@@ -277,8 +277,8 @@ class HomePageComponents {
             ),
           ),
           Container(
-            width: wv * 80,
-            height: hv * 12,
+            width: wv * 70,
+            height: hv * 9,
             margin: EdgeInsets.only(bottom: wv * 2),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -292,7 +292,7 @@ class HomePageComponents {
                 Stack(
                   children: [
                     Container(
-                      width: wv * 30,
+                      width: wv * 20,
                       height: hv * 12,
                       decoration: BoxDecoration(
                           image: DecorationImage(
@@ -363,13 +363,13 @@ class HomePageComponents {
                                   style: TextStyle(
                                       color: kCardTextColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp)),
+                                      fontSize: 15.sp)),
                             ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: hv * 1.3,
+                        height: hv * 0.7,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -381,17 +381,17 @@ class HomePageComponents {
                                 style: TextStyle(
                                     color: kCardTextColor,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 14.sp)),
+                                    fontSize: 15.sp)),
                           ),
                           SizedBox(
-                            height: 5.h,
+                            height: 2.h,
                           ),
                           Text(consultationType,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: kDeepTeal,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp)),
+                                  fontSize: 16.sp)),
                         ],
                       ),
                     ],
@@ -406,7 +406,7 @@ class HomePageComponents {
                       child: Container(
                         padding: EdgeInsets.all(6),
                         width: 36.w,
-                        height: hv * 6,
+                        height: hv * 4,
                         decoration: BoxDecoration(
                             color: isPrestataire ? kGoldForIconesBg:kSouthSeas,
                             borderRadius: BorderRadius.only(
@@ -425,7 +425,7 @@ class HomePageComponents {
                       },
                       child: Container(
                         padding: EdgeInsets.all(3),
-                        height: hv * 6,
+                        height: hv * 5,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -536,10 +536,15 @@ class HomePageComponents {
       ),
     );
   }
-  getAdherentsList({int iSelected, BeneficiaryModel adherent, AdherentModel adherentPersone, bool isAccountIsExists, int index, Function onclick}) {
+  getAdherentsList({int iSelected, String doctorName, BeneficiaryModel adherent, AdherentModel adherentPersone, bool isAccountIsExists, int index, Function onclick}) {
     return index==0? GestureDetector(
       onTap: ()=>{
-          onclick(index, adherent)
+         if(iSelected==index){
+            onclick(index, adherent, 'remove')
+         }else{
+            onclick(index, adherent, 'add')
+         }
+          
       },
       child: Container(
         width: wv * 78,
@@ -552,7 +557,6 @@ class HomePageComponents {
                   BoxShadow(color: iSelected==index? kBlueForce: Colors.transparent, spreadRadius: 2, blurRadius: 4),
                 ],
         ),
-        margin: EdgeInsets.only(left: wv * 2, right:2.5.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -576,11 +580,11 @@ class HomePageComponents {
                               fontWeight: FontWeight.w700))),
                   Spacer(),
                   SvgPicture.asset(
-                 (adherent!=null && adherent.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                 (adherentPersone!=null && adherentPersone.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
                     color: whiteColor,
                   ),
                   SvgPicture.asset(
-                    'assets/icons/Bulk/Shield Done.svg',
+                  adherentPersone.adherentPlan==0? '' : 'assets/icons/Bulk/Shield Done.svg',
                     height: hv * 8,
                     width: wv * 8,
                   )
@@ -658,7 +662,7 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Non du beneficiaire',
+                  Text('Nom de l\'adherent courant ',
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -703,9 +707,7 @@ class HomePageComponents {
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
-                       (adherentPersone!=null && adherentPersone.familyDoctor!=null)
-                          ? adherentPersone.cniName
-                          : 'Pas definie ',
+                       doctorName!=null ? doctorName :  'Pas definie ',
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -726,7 +728,12 @@ class HomePageComponents {
       ),
     ):GestureDetector(
       onTap: ()=>{
-          onclick(index, adherent)
+         
+           if(iSelected==index){
+            onclick(index, adherent, 'remove')
+         }else{
+            onclick(index, adherent, 'add')
+         }
       },
       child: Container(
         width: wv * 78,
@@ -767,7 +774,7 @@ class HomePageComponents {
                     color: whiteColor,
                   ),
                   SvgPicture.asset(
-                    'assets/icons/Bulk/Shield Done.svg',
+                  adherent.protectionLevel==0 ? '': 'assets/icons/Bulk/Shield Done.svg',
                     height: hv * 8,
                     width: wv * 8,
                   )
@@ -890,9 +897,7 @@ class HomePageComponents {
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
-                       (adherentPersone!=null && adherentPersone.familyDoctor!=null)
-                          ? adherentPersone.cniName
-                          : 'Pas definie ',
+                       doctorName!=null ? 'Dr '+doctorName :  'Pas definie ',
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
