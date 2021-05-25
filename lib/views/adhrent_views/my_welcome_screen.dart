@@ -58,7 +58,6 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                         child: Row(children: [
                           AdvantageCard(
                             label: "Remboursement",
-                            description: "Demander un remboursement",
                             state: "DISPONIBLE",
                             price: "",
                             color: Colors.teal[500],
@@ -66,7 +65,6 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           ),
                           /*AdvantageCard(
                             label: "Fond de Soins",
-                            description: "Demander une prise en charge maladie",
                             state: "DISPONIBLE",
                             price: "#350.000Xaf",
                             color: Colors.teal[500],
@@ -75,17 +73,18 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                               launch(url);
                             },
                           ),*/
-                          AdvantageCard(
-                            label: "Prêt de santé",
-                            description: "Demander un prêt santé",
-                            state: "DISPONIBLE",
-                            price: "#100.000Xaf",
-                            color: Colors.brown.withOpacity(0.7),
-                            onTap: callDanAid,
+                          Hero(
+                            tag: "loanCard",
+                            child: AdvantageCard(
+                              label: "Prêt de santé",
+                              state: "DISPONIBLE",
+                              price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "200.000",
+                              color: Colors.brown.withOpacity(0.7),
+                              onTap: ()=>Navigator.pushNamed(context, '/loans'),
+                            ),
                           ),
                           /*AdvantageCard(
                             label: "Fond de Soins",
-                            description: "Demander une prise en charge maladie",
                             state: "DISPONIBLE",
                             price: "#350.000Xaf",
                             color: Colors.grey,

@@ -1,6 +1,7 @@
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
   Widget build(BuildContext context) {
     UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context);
     DateTime startTime = usecaseProvider.getUseCase.dateCreated.toDate();
+    int status = 2;
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -37,7 +39,95 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
           ],
         ),
       body: Column(
-        children: [],
+        children: [
+          SizedBox(height: hv*2,),
+          Container(
+            padding: EdgeInsets.only(bottom: hv*1),
+            decoration: BoxDecoration(
+              color: kSouthSeas.withOpacity(0.3),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase.beneficiaryName, fname: "")),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(height: hv*5,),
+                    Text("Statut de la demande",  style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w300)),
+                    SizedBox(height: hv*1,),
+                    Container(
+                      width: wv*50,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            flex: status == 1 ? 45 : 10,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: kDeepTeal,
+                                border: Border.all(color: whiteColor, width: 2),
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))
+                              ),
+                              child: Text(status == 1 ?  "1. En attente" : "1", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),)),
+                          Expanded(
+                            flex: status == 2 ? 45 : 10,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: kDeepTeal.withOpacity(0.7),
+                                border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
+                              ),
+                              child: Text(status == 2 ?  "2. En cours" : "2", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                          Expanded(
+                            flex: status == 3 ? 45 : 10,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: kDeepTeal.withOpacity(0.3),
+                                border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
+                              ),
+                              child: Text(status == 3 ?  "3. Approuvé" : "3", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                          Expanded(
+                            flex: status == 4 ? 45 : 10,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: primaryColor,
+                                border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2)),
+                              ),
+                              child: Text(status == 4 ?  "4. Réjété" : "4", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                          Expanded(
+                            flex: status == 5 ? 45 : 10,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                border: Border.all(color: whiteColor, width: 2),
+                                borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10))
+                              ),
+                              child: Text(status == 5 ?  "5. Clôturé" : "5", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(width: wv*3,)
+              ],
+            ),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: kSouthSeas.withOpacity(0.3)
+                    ),
+                    child: Container()
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

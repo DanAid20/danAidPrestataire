@@ -1,3 +1,4 @@
+import 'package:danaid/core/models/loanModel.dart';
 import 'package:danaid/core/routes.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/status_bar.dart';
@@ -24,6 +25,7 @@ import 'package:danaid/core/providers/conversationChatModelProvider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
+import 'package:danaid/core/providers/loanModelProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
 
@@ -92,6 +94,9 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<UseCaseModelProvider>(
                 create: (_) => UseCaseModelProvider(null),
+              ),
+              ChangeNotifierProvider<LoanModelProvider>(
+                create: (_) => LoanModelProvider(LoanModel()),
               ),
             ],
             child: ScreenUtilInit(

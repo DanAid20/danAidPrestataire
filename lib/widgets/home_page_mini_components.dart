@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
@@ -1565,4 +1566,131 @@ class HomePageComponents {
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
+
+  static Widget head({String surname, String fname, String avatarUrl, Timestamp birthDate}){
+    return Container(
+      padding: EdgeInsets.only(left: wv*4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: hv*1),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Pour le patient", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+            SizedBox(height: hv*1,),
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
+                  backgroundColor: whiteColor,
+                  radius: wv*5,
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
+                ),
+                SizedBox(width: wv*3,),
+                Expanded(
+                  child: RichText(text: TextSpan(
+                    text: surname + " " +  fname + "\n",
+                    children: birthDate != null ? [
+                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                    ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget header({String title, String subtitle, String avatarUrl, String label}){
+    return Container(
+      padding: EdgeInsets.only(left: wv*4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: hv*1),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            label != null ? Container(child: Text(label, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)), margin: EdgeInsets.only(bottom: hv*1),) : Container(),
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
+                  backgroundColor: whiteColor,
+                  radius: wv*5,
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
+                ),
+                SizedBox(width: wv*3,),
+                Expanded(
+                  child: RichText(text: TextSpan(
+                    text: title + "\n",
+                    children: [
+                      TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
+                    ], style: TextStyle(color: kPrimaryColor, fontSize: 16.5)),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget getInfoActionCard({Widget icon, String title, String subtitle, String actionLabel, Function action}){
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
+      ),
+      margin: EdgeInsets.symmetric(horizontal: wv*3),
+      child: IntrinsicHeight(
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: icon == null ? Icon(Icons.message, size: 35, color: Colors.teal[300],) : icon,
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: hv*1,),
+                  Text(title, style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.bold)
+                  ),
+                  Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 12)),
+                  SizedBox(height: hv*1,),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: GestureDetector(
+                onTap: action,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
+                    color: kPrimaryColor,
+                  ),
+                  child: Center(child: Text(actionLabel, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 }
+
