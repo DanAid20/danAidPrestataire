@@ -23,6 +23,7 @@ class _HomeDoctorViewState extends State<HomeDoctorView> {
 Widget notificationWidget(BuildContext context){
    UserProvider userProvider = Provider.of<UserProvider>(context);
    bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
+   DoctorModelProvider doctor= Provider.of<DoctorModelProvider>(context);
   return Column(
     children: [
       SizedBox(
@@ -44,6 +45,7 @@ Widget notificationWidget(BuildContext context){
         ),
       ),
       Container(
+        alignment: Alignment.centerLeft,
         decoration: BoxDecoration(boxShadow: [
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),
@@ -53,16 +55,30 @@ Widget notificationWidget(BuildContext context){
         ]),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               physics: BouncingScrollPhysics(),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  NotificationCard(instruction: "consulter",description:"Vous avez 3 nouveaux devis pour vos examens médicaux",isprestataire: isPrestataire),
-                  NotificationCard(instruction: "consulter",description:"Vous avez 3 nouveaux devis pour vos examens médicaux",isprestataire: isPrestataire,),
-                  NotificationCard(instruction: "consulter",description:"Vous avez 3 nouveaux devis pour vos examens médicaux",isprestataire: isPrestataire,),
-                ],
+                  doctor.getDoctor.about==null ||doctor.getDoctor.address==null||doctor.getDoctor.availability==null ||doctor.getDoctor.avatarUrl==null || doctor.getDoctor.cniName==null ||doctor.getDoctor.gender==null ||doctor.getDoctor.speciality==null || doctor.getDoctor.hospitalRegion==null ||
+                  doctor.getDoctor.hospitalTown==null ||doctor.getDoctor.keywords==null ||doctor.getDoctor.location==null ||
+                  doctor.getDoctor.medicalService==null ||
+                  doctor.getDoctor.officeCategory==null ||
+                  doctor.getDoctor.officeName==null ||
+                  doctor.getDoctor.orderRegistrationCertificate==null ||
+                  doctor.getDoctor.personContactName==null ||
+                  doctor.getDoctor.personContactPhone==null ||
+                  doctor.getDoctor.phoneKeywords==null ||
+                  doctor.getDoctor.profileEnabled==null 
+                  ? 
+                  NotificationCard(instruction: "completer",islinkEnable: true, description:"veuillez completer les informations relaif a votre profil pour nous aider a mieux vous faire connaître  ",isprestataire: isPrestataire)
+                 :Center(child: Text('Aucune Notification '),),
+                  
+
+                 ],
               ),
             ),
           ],

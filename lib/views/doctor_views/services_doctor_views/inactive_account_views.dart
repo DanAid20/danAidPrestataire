@@ -43,6 +43,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   bool isloading=false;
   bool isRequestLaunch=false;
   UseCaseModelProvider userCaprovider;
+  String famillyDoctorNAme;
   var code;
   @override
   void initState() {
@@ -60,6 +61,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
 
     });
   userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
+  getFamillyDoctorName(widget.data.familyDoctorId);
   }
  Future<String> createConsultationCode() async {
      DoctorModelProvider doctorProvider =
@@ -126,13 +128,23 @@ class _InactiveAccountState extends State<InactiveAccount> {
       });
   }
   
-  getUserSelected(int index, BeneficiaryModel adherent ){
+  getUserSelected(int index, BeneficiaryModel adherent, action ){
+    if(action=="add"){
     setState(() {
       userSelected=index;
       adherentUserSelected= adherent;
     });
     print(userSelected);
     print(adherentUserSelected);
+
+    }else if( action=="remove"){
+       setState(() {
+      userSelected=-1;
+      adherentUserSelected= null;
+    });
+    print(userSelected);
+    print(adherentUserSelected);
+    }
   }
   // void writeData() async{
   //   final FirebaseUser user = await _auth.currentUser();
@@ -143,7 +155,23 @@ class _InactiveAccountState extends State<InactiveAccount> {
   //     'Phone':'8856061841'
   //   });
   // }
+ getFamillyDoctorName(id)  {
+    var newUseCase = FirebaseFirestore.instance.collection('MEDECINS').doc(id);
+    newUseCase.get().then((value){
+      print(value.data()['cniName']);
+      if(value.exists){
+        setState(() {
+          famillyDoctorNAme=value.data()['cniName']!=null ? value.data()['cniName']: '';
+        });
+        
+      }
+    });
+     
+   
+  }
   getListOfUser() {
+    
+    
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("ADHERENTS")
         .doc('${widget.phoneNumber}')
@@ -184,6 +212,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                     DocumentSnapshot doc = snapshot.data.docs[index];
                     BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
                     print("name: ");
+                    
                     return index==0 ?InkWell(
                          onTap: ()=>{
                            scrollController.animateTo(index.toDouble(), duration: Duration(milliseconds: 500), curve: Curves.easeIn)
@@ -191,7 +220,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: HomePageComponents().getAdherentsList(
-                                adherent: beneficiary, adherentPersone: widget.data , isAccountIsExists: true, index: index, onclick: getUserSelected, iSelected:userSelected )),
+                                adherent: beneficiary, doctorName: famillyDoctorNAme, adherentPersone: widget.data , isAccountIsExists: true, index: index, onclick: getUserSelected, iSelected:userSelected )),
                       ),
                     )  : InkWell(
                          onTap: ()=>{
@@ -201,7 +230,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: HomePageComponents().getAdherentsList(
-                                adherent: beneficiary, adherentPersone: widget.data, isAccountIsExists: true, index: index, onclick:getUserSelected, iSelected:userSelected )),
+                                adherent: beneficiary, doctorName: famillyDoctorNAme, adherentPersone: widget.data, isAccountIsExists: true, index: index, onclick:getUserSelected, iSelected:userSelected )),
                       ),
                     );
                   })
@@ -470,7 +499,6 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                 alignment: Alignment.bottomCenter,
                                 child: Container(
                                   width: wv * 80,
-                                  margin: EdgeInsets.only(top: hv * 2),
                                   child: TextButton(
                                     onPressed: () async {
                                       // if (adherent.enable == false) {
@@ -518,13 +546,39 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Selectioner un beneficiaire avant de valider")));
                                       }
                                     },
-                                    child: Text(
-                                      'Acceder au carnet de Sante',
-                                      style: TextStyle(
-                                          color: textColor,
-                                          fontSize: wv * 4.5,
-                                          fontWeight: FontWeight.w600),
-                                    ),
+                                    child:adherentUserSelected!=null ? Row(
+                                      children: [
+                                      Padding(padding: EdgeInsets.only(left: 10.w),
+                                      child: HomePageComponents().getAvatar(
+                                          imgUrl: adherentUserSelected.avatarUrl==null? 'assets/images/avatar-profile.jpg' : adherentUserSelected.avatarUrl ,
+                                          size: 15.0,
+                                          renoveIsConnectedButton: false
+                                        ),),
+                                        Spacer(),
+                                        Text(
+                                            'carnet de : ${adherentUserSelected.cniName}',
+                                            style: TextStyle(
+                                                color: textColor,
+                                                fontSize: wv * 4.5,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        Spacer(),
+                                        Padding(
+                                          padding: EdgeInsets.only(right:10.h),
+                                          child: SvgPicture.asset(
+                                            'assets/icons/Bulk/Left.svg',
+                                            width: wv * 6,
+                                          color: whiteColor
+                                          ),
+                                        ),
+                                      ],
+                                    ): Text(
+                                          'Acceder au carnet de Sante',
+                                          style: TextStyle(
+                                              color: textColor,
+                                              fontSize: wv * 4.5,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                     style: ButtonStyle(
                                         padding: MaterialStateProperty.all(
                                             EdgeInsets.symmetric(vertical: 10)),

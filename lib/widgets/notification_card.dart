@@ -5,8 +5,8 @@ class NotificationCard extends StatelessWidget {
 
   final String instruction, description;
   final Function onTap;
-  final bool  isprestataire;
-  const NotificationCard({Key key,this.instruction, this.description, this.onTap, this.isprestataire}) : super(key: key);
+  final bool  isprestataire, islinkEnable;
+  const NotificationCard({Key key,this.instruction, this.islinkEnable, this.description, this.onTap, this.isprestataire}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class NotificationCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1.5),
-        constraints: BoxConstraints(maxWidth: wv*60, minHeight: hv*22),
+        constraints: BoxConstraints(maxWidth: wv*60, minHeight: hv*18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(inch*2), 
@@ -36,7 +36,15 @@ class NotificationCard extends StatelessWidget {
               child: Column(children: [
                 Container(child: Text(description, style: TextStyle(fontSize: inch*1.7), maxLines: 4, overflow: TextOverflow.ellipsis,)),
                 SizedBox(height: hv*3,),
-                Text(instruction, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.bold, color: Colors.teal[200])),
+                islinkEnable==null || islinkEnable==false ? Text(instruction, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.bold, color: Colors.teal[200])) :
+                GestureDetector(
+                  onTap: (){
+                    if(islinkEnable==true){
+                     Navigator.pushNamed(context, '/doctor-profile-edit');
+
+                    }
+                  },
+                  child: Text(instruction, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.bold, color: Colors.teal[200]))),
               ], crossAxisAlignment: CrossAxisAlignment.start,)
             )
           ],

@@ -27,6 +27,7 @@ class OwnerUserListView extends StatefulWidget {
 
 class _OwnerUserListViewState extends State<OwnerUserListView> {
 UseCaseModelProvider userCaprovider;
+
  DateTime date;
   @override
   void initState() {
@@ -47,6 +48,7 @@ UseCaseModelProvider userCaprovider;
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
+     var weight= int.parse(widget.beneficiare.weight) /  int.parse(widget.beneficiare.height)*int.parse(widget.beneficiare.height);
     return SafeArea(
         top: false,
         bottom: false,
@@ -65,7 +67,7 @@ UseCaseModelProvider userCaprovider;
                 child: Column(
                   children: [
                     Text('Carnet de santé  '),
-                    Text('${DateFormat('dd MMMM yyyy, h:mm').format(date)}')
+                    Text('${DateFormat('dd MMMM yyyy, h:mm').format(widget.beneficiare.dateCreated.toDate())}')
                   ],
                 ),
               ),
@@ -124,7 +126,7 @@ UseCaseModelProvider userCaprovider;
                                           MySize.getScaledSizeHeight(19.0))),
                               Row(
                                 children: [
-                                  Text(widget.beneficiare.gender=="H"? 'Masculin': 'Feminin ',
+                                  Text(widget.beneficiare.gender=="H"? 'Homme':'Femme',
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
@@ -137,7 +139,7 @@ UseCaseModelProvider userCaprovider;
                                           fontWeight: FontWeight.w800,
                                           fontSize:
                                               MySize.getScaledSizeHeight(17))),
-                                  Text(' ans',
+                                  Text('ans',
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
@@ -204,7 +206,7 @@ UseCaseModelProvider userCaprovider;
                                         Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text('${widget.beneficiare.weight/ widget.beneficiare.height*widget.beneficiare.height}',
+                                            Text('$weight',
                                                 textScaleFactor: 1.0,
                                                 style: TextStyle(
                                                     color: kBlueForce,
@@ -212,7 +214,7 @@ UseCaseModelProvider userCaprovider;
                                                         .getScaledSizeHeight(
                                                             14),
                                                     fontWeight:
-                                                        FontWeight.w600)),
+                                                        FontWeight.w700)),
                                             Container(
                                                 decoration: BoxDecoration(
                                                   color: kDeepTealCAdress,

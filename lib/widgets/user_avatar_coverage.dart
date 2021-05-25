@@ -95,7 +95,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userProvider.getProfileType == adherent ? "Bonjour ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? "Salut Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(userProvider.getProfileType == adherent ? "Bonjour ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? "Bonjour Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
                 userProvider.getProfileType == adherent ? 
                 adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? "Couverture niveau 0: Découverte" :

@@ -4,6 +4,7 @@ import 'package:country_pickers/country_picker_dialog.dart';
 import 'package:country_pickers/utils/utils.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -12,6 +13,7 @@ import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +23,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../helpers/constants.dart';
 import '../../../helpers/constants.dart';
 class AddPatientView extends StatefulWidget {
+  bool isLaunchConsultation;
+  AddPatientView({Key key, this.isLaunchConsultation}): super(key: key);
   @override
   _AddPatientViewState createState() => _AddPatientViewState();
 }
@@ -210,7 +214,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                     alignment: Alignment.topLeft,
                     child: Container(
                       child: SvgPicture.asset(
-                        'assets/icons/Bulk/Profile-color.svg',
+                      consultationType=='Vidéos'? 'assets/icons/Bulk/VideoTeal.svg' : consultationType=='Message'? 'assets/icons/Bulk/Message.svg' : 'assets/icons/Bulk/Profile-color.svg',
                         width: wv * 10,
                       ),
                     ),
@@ -321,6 +325,10 @@ class _AddPatientViewState extends State<AddPatientView> {
 
   @override
   Widget build(BuildContext context) {
+    DoctorModelProvider doctor=  Provider.of<DoctorModelProvider>(context,
+                                    listen: false);
+    DateTime date;
+   // print( doctor.getDoctor.cniName);
     return SafeArea(
         top: false,
         bottom: false,
@@ -337,7 +345,7 @@ class _AddPatientViewState extends State<AddPatientView> {
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text('Demarer'), Text('15 Janvier 2021, 1:30')],
+                  children: [Text('Démarrer'),  Text('${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}')],
                 ),
               ),
             ),
@@ -365,7 +373,7 @@ class _AddPatientViewState extends State<AddPatientView> {
               physics: NeverScrollableScrollPhysics(),
               child: Column(
                 children: [
-                  Container(
+                  widget.isLaunchConsultation==true ? Container(
                     margin: EdgeInsets.symmetric(vertical:3.0),
                     color: Colors.white,
                     child: Column(
@@ -393,7 +401,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                   index: 1,
                                   consultation: 'consultation',
                                   consultationType: 'En cabinet',
-                                  price: '2000 FCFA',
+                                  price: doctor.getDoctor.rate['public'].toString()+' FCFA',
                                   typedeConsultation: encabinet),
                               offerPart(
                                   index:2,
@@ -412,7 +420,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                         ),
                       ],
                     ),
-                  ),
+                  ):SizedBox.shrink(),
                   SizedBox(
                     height: hv * 5,
                   ),
@@ -459,7 +467,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                         ),
                         Container(
                           margin: EdgeInsets.only(
-                              left: inch * 2, right: inch * 2, top: inch *3),
+                              left: inch * 2, right: inch * 2, top:  inch *3),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -528,12 +536,13 @@ class _AddPatientViewState extends State<AddPatientView> {
                               SizedBox(
                                 height: hv * 2,
                               ),
-                              Text("Ou scanner une carte d'adherent",
+                            
+                            widget.isLaunchConsultation==true ?   Text("Ou scanner une carte d'adherent",
                                   style: TextStyle(
                                       fontSize: fontSize(size: wv * 4),
                                       fontWeight: FontWeight.w500,
-                                      color: kFirstIntroColor)),
-                              Container(
+                                      color: kFirstIntroColor)):SizedBox.shrink(),
+                            widget.isLaunchConsultation==true ?   Container(
                                 margin: EdgeInsets.only(
                                     left: inch * 2,
                                     right: inch * 2,
@@ -552,14 +561,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                                     ),
                                   ),
                                 ),
-                              ),
-                               Center(
+                              ):SizedBox.shrink(),
+                              widget.isLaunchConsultation==true ?  Center(
                                  child: Text( textForQrCode ==null ? '': textForQrCode  ,
                                     style: TextStyle(
                                         fontSize: fontSize(size: wv * 4),
                                         fontWeight: FontWeight.w500,
                                         color: kFirstIntroColor)),
-                               ),
+                               ):SizedBox.shrink()
                             ],
                           ),
                         ),
@@ -585,7 +594,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                             .get()
                             .then((doc) {
                           print(doc.exists);
-                          if(consultationTypeData!=null){
+                          if(consultationTypeData!=null && widget.isLaunchConsultation==true){
                             
                           setState(() {
                             confirmSpinner = false;
@@ -608,6 +617,51 @@ class _AddPatientViewState extends State<AddPatientView> {
                                   phoneNumber: phone,
                                   isAccountIsExists: true,
                                   consultationType: consultationTypeData,
+                                ),
+                              ),
+                            );
+                          } else {
+                            setState(() {
+                              confirmSpinner = false;
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("existe pas ")));
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InactiveAccount(
+                                  isAccountIsExists: false,
+                                  data: null,
+                                  phoneNumber: phone,
+                                  consultationType: null,
+                                ),
+                              ),
+                            );
+                          }
+                          }else if(consultationTypeData==null && widget.isLaunchConsultation==false){
+                            
+                          setState(() {
+                            confirmSpinner = false;
+                          });
+                          if (doc.exists) {
+                            AdherentModelProvider adherentModelProvider =
+                                Provider.of<AdherentModelProvider>(context,
+                                    listen: false);
+                            AdherentModel adherent =
+                                AdherentModel.fromDocument(doc);
+                            adherentModelProvider.setAdherentModel(adherent);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("${adherent.dateCreated} ")));
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InactiveAccount(
+                                  data: adherent,
+                                  phoneNumber: phone,
+                                  isAccountIsExists: true,
+                                  consultationType: 'null',
                                 ),
                               ),
                             );
