@@ -252,7 +252,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
         .where("doctorId", isEqualTo: doctorId)
-        .where("status",  isEqualTo: 0)
         .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
         .orderBy("start-time", descending: true)
         .snapshots();

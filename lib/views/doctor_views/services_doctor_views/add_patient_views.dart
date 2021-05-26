@@ -92,12 +92,13 @@ class _AddPatientViewState extends State<AddPatientView> {
         textForQrCode=barcode;
       });
       if(validateMobile(textForQrCode)==true){
+         print(textForQrCode);
        setState(() {
                           confirmSpinner = true;
                         });
                         await FirebaseFirestore.instance
                             .collection('ADHERENTS')
-                            .doc('${textForQrCode}')
+                            .doc('${barcode}')
                             .get()
                             .then((doc) {
                           print(doc.exists);
@@ -115,13 +116,13 @@ class _AddPatientViewState extends State<AddPatientView> {
                             adherentModelProvider.setAdherentModel(adherent);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("${adherent.dateCreated} ")));
-
+                           print(adherent.toString());
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => InactiveAccount(
                                   data: adherent,
-                                  phoneNumber: phone,
+                                  phoneNumber: barcode,
                                   isAccountIsExists: true,
                                   consultationType: consultationTypeData,
                                 ),
@@ -132,7 +133,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               confirmSpinner = false;
                             });
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("existe pas ")));
+                                SnackBar(content: Text("cet adherent n'existe pas ")));
 
                             Navigator.push(
                               context,
@@ -145,7 +146,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                 ),
                               ),
                             );
-                          }
+                           }
                           }else{
                             setState(() {
                               confirmSpinner = false;
@@ -159,7 +160,9 @@ class _AddPatientViewState extends State<AddPatientView> {
          ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text("veuillez scanner unnumero de téléphone valide svp")));
       }
-
+      setState(() {
+                          confirmSpinner = false;
+                        });
     }
   }
 

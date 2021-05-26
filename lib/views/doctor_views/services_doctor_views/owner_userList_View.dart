@@ -27,14 +27,19 @@ class OwnerUserListView extends StatefulWidget {
 
 class _OwnerUserListViewState extends State<OwnerUserListView> {
 UseCaseModelProvider userCaprovider;
-
+double underWeight;
+double normaleWeight;
+double overWeight;
+double svarWeight;
+double weight=0;
  DateTime date;
   @override
   void initState() {
     super.initState();
      userCaprovider= Provider.of<UseCaseModelProvider>(context, listen: false);
     date= widget.createdAt;
-   
+    
+    calculWeight();
   }
  String getAge(date){
     Timestamp t =date;
@@ -44,11 +49,18 @@ UseCaseModelProvider userCaprovider;
  
   return differenceInDays.toString();
  }
+ calculWeight(){
+     weight= double.parse(widget.beneficiare.weight) /  double.parse(widget.beneficiare.height)*double.parse(widget.beneficiare.height);
+   
+    if(weight<=18.5){setState(() {underWeight=weight;});}
+    else if(weight>=18.5 && weight<=25){setState(() {normaleWeight=weight;});}
+    else if(weight>=25 && weight<=30){setState(() {overWeight=weight;});}
+    else if(weight>30){setState(() {svarWeight=weight;});}
+ }
 
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
-     var weight= int.parse(widget.beneficiare.weight) /  int.parse(widget.beneficiare.height)*int.parse(widget.beneficiare.height);
     return SafeArea(
         top: false,
         bottom: false,
@@ -113,7 +125,7 @@ UseCaseModelProvider userCaprovider;
                         children: [
                           HomePageComponents().getAvatar(
                               imgUrl: widget.beneficiare !=null?  widget.beneficiare.avatarUrl:  'assets/images/avatar-profile.jpg',
-                              size: MySize.size42,
+                              size: MySize.size36,
                               renoveIsConnectedButton: false),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +138,7 @@ UseCaseModelProvider userCaprovider;
                                           MySize.getScaledSizeHeight(19.0))),
                               Row(
                                 children: [
-                                  Text(widget.beneficiare.gender=="H"? 'Homme':'Femme',
+                                  Text(widget.beneficiare.gender=="H"? 'Masculin':'Feminin',
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
@@ -162,7 +174,7 @@ UseCaseModelProvider userCaprovider;
                                 Padding(
                                   padding: Spacing.all(8.0),
                                   child: Container(
-                                      child: Text('BMI',
+                                      child: Text('IMC',
                                           style: TextStyle(
                                               color: kBlueForce,
                                               fontSize:
@@ -179,34 +191,46 @@ UseCaseModelProvider userCaprovider;
                                       children: [
                                         Column(
                                           children: [
-                                            Text(''),
+                                            Text(underWeight==null ? '' : underWeight.toString(), textScaleFactor: 1.0,
+                                                style: TextStyle(
+                                                    color: kBlueForce,
+                                                    fontSize: MySize
+                                                        .getScaledSizeHeight(
+                                                            14),
+                                                    fontWeight:
+                                                        FontWeight.w700)),
                                             Container(
                                                 alignment:
                                                     Alignment.bottomCenter,
                                                 decoration: BoxDecoration(
                                                   color: kBlueForceLight,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft:
+                                                  borderRadius: underWeight==null ? BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(3),
+                                                          topRight:
                                                               Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
+                                                                  0)) :BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(3),
+                                                          topRight:
                                                               Radius.circular(
-                                                                  10)),
+                                                                  3)),
                                                 ),
-                                                height:
-                                                    MySize.getScaledSizeHeight(
-                                                        5),
-                                                width:
+                                                height: underWeight==null ?
+                                                     MySize.getScaledSizeWidth(
+                                                        5) : MySize.getScaledSizeWidth(
+                                                        12),
+                                                width: underWeight==null ? MySize.getScaledSizeWidth(
+                                                        25):
                                                     MySize.getScaledSizeWidth(
-                                                        20),
+                                                        35),
                                                 child: Text('')),
                                           ],
                                         ),
                                         Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Text('$weight',
+                                            Text(normaleWeight==null ? '' : normaleWeight.toString(),
                                                 textScaleFactor: 1.0,
                                                 style: TextStyle(
                                                     color: kBlueForce,
@@ -218,18 +242,25 @@ UseCaseModelProvider userCaprovider;
                                             Container(
                                                 decoration: BoxDecoration(
                                                   color: kDeepTealCAdress,
-                                                  borderRadius:
-                                                      BorderRadius.only(
+                                                  borderRadius: normaleWeight==null ? BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  0)) :BorderRadius.only(
                                                           topLeft: Radius
                                                               .circular(3),
                                                           topRight:
                                                               Radius.circular(
-                                                                  3)),
+                                                                  3))
+                                                      ,
                                                 ),
-                                                height:
-                                                    MySize.getScaledSizeWidth(
+                                                height: normaleWeight==null ?
+                                                     MySize.getScaledSizeWidth(
+                                                        5) : MySize.getScaledSizeWidth(
                                                         12),
-                                                width:
+                                                width: normaleWeight==null ? MySize.getScaledSizeWidth(
+                                                        25):
                                                     MySize.getScaledSizeWidth(
                                                         35),
                                                 child: Text('')),
@@ -237,42 +268,74 @@ UseCaseModelProvider userCaprovider;
                                         ),
                                         Column(
                                           children: [
-                                            Text(''),
+                                            Text(overWeight==null ? '' : overWeight.toString(), textScaleFactor: 1.0,
+                                                style: TextStyle(
+                                                    color: kBlueForce,
+                                                    fontSize: MySize
+                                                        .getScaledSizeHeight(
+                                                            14),
+                                                    fontWeight:
+                                                        FontWeight.w700)),
                                             Container(
                                                 alignment:
                                                     Alignment.bottomCenter,
                                                 decoration: BoxDecoration(
-                                                    color: kGoldlightYellow),
-                                                height:
+                                                    color: kGoldlightYellow, 
+                                                     borderRadius: overWeight==null ? BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  0)) :BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(3),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  3))),
+                                                height: overWeight==null ?
+                                                     MySize.getScaledSizeWidth(
+                                                        5) : MySize.getScaledSizeWidth(
+                                                        12),
+                                                width: overWeight==null ? MySize.getScaledSizeWidth(
+                                                        25):
                                                     MySize.getScaledSizeWidth(
-                                                        5),
-                                                width:
-                                                    MySize.getScaledSizeWidth(
-                                                        25),
+                                                        35),
                                                 child: Text('')),
                                           ],
                                         ),
                                         Column(
                                           children: [
-                                            Text(''),
+                                            Text(svarWeight==null ? '' : svarWeight.toString(), textScaleFactor: 1.0,
+                                                style: TextStyle(
+                                                    color: kBlueForce,
+                                                    fontSize: MySize
+                                                        .getScaledSizeHeight(
+                                                            14),
+                                                    fontWeight:
+                                                        FontWeight.w700)),
                                             Container(
                                                 decoration: BoxDecoration(
                                                   color: Colors.red,
-                                                  borderRadius:
-                                                      BorderRadius.only(
+                                                   borderRadius: svarWeight==null ? BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(0),
                                                           topRight:
                                                               Radius.circular(
-                                                                  10),
-                                                          bottomRight:
+                                                                  3)) :BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(3),
+                                                          topRight:
                                                               Radius.circular(
-                                                                  10)),
+                                                                  3)),
                                                 ),
-                                                height:
+                                                height: svarWeight==null ?
+                                                     MySize.getScaledSizeWidth(
+                                                        5) : MySize.getScaledSizeWidth(
+                                                        12),
+                                                width: svarWeight==null ? MySize.getScaledSizeWidth(
+                                                        25):
                                                     MySize.getScaledSizeWidth(
-                                                        5),
-                                                width:
-                                                    MySize.getScaledSizeWidth(
-                                                        25),
+                                                        35),
                                                 child: Text('')),
                                           ],
                                         ),

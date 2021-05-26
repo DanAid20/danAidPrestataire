@@ -23,7 +23,7 @@ class _HomeDoctorViewState extends State<HomeDoctorView> {
 Widget notificationWidget(BuildContext context){
    UserProvider userProvider = Provider.of<UserProvider>(context);
    bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
-   DoctorModelProvider doctor= Provider.of<DoctorModelProvider>(context);
+   
   return Column(
     children: [
       SizedBox(
@@ -63,16 +63,7 @@ Widget notificationWidget(BuildContext context){
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  doctor.getDoctor.about==null ||doctor.getDoctor.address==null||doctor.getDoctor.availability==null ||doctor.getDoctor.avatarUrl==null || doctor.getDoctor.cniName==null ||doctor.getDoctor.gender==null ||doctor.getDoctor.speciality==null || doctor.getDoctor.hospitalRegion==null ||
-                  doctor.getDoctor.hospitalTown==null ||doctor.getDoctor.keywords==null ||doctor.getDoctor.location==null ||
-                  doctor.getDoctor.medicalService==null ||
-                  doctor.getDoctor.officeCategory==null ||
-                  doctor.getDoctor.officeName==null ||
-                  doctor.getDoctor.orderRegistrationCertificate==null ||
-                  doctor.getDoctor.personContactName==null ||
-                  doctor.getDoctor.personContactPhone==null ||
-                  doctor.getDoctor.phoneKeywords==null ||
-                  doctor.getDoctor.profileEnabled==null 
+                 userProvider.isEnabled==false 
                   ? 
                   NotificationCard(instruction: "completer",islinkEnable: true, description:"veuillez completer les informations relaif a votre profil pour nous aider a mieux vous faire connaître  ",isprestataire: isPrestataire)
                  :Center(child: Text('Aucune Notification '),),

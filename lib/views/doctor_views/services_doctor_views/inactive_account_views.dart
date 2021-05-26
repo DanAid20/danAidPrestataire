@@ -104,7 +104,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     await FirebaseFirestore.instance.collection('USECASES').doc(id)
-    .collection('FACTURATIONS').doc(adherentUserSelected.adherentId).set({
+    .collection('FACTURATIONS').doc().set({
       'id':Utils.createCryptoRandomString(8),
       'idAdherent': adherentUserSelected.adherentId,
       'idBeneficiairy':adherentUserSelected.matricule,
@@ -375,11 +375,11 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         ),
                         child: TextButton(
                           onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildAboutDialog(context, false),
-                            );
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (BuildContext context) =>
+                            //       _buildAboutDialog(context, false),
+                            // );
                           },
                           child: Text(
                             widget.isAccountIsExists == true
