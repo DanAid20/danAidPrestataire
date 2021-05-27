@@ -49,7 +49,6 @@ class _InactiveAccountState extends State<InactiveAccount> {
   void initState() {
     scrollController= ScrollController();
      code= getRandomString(4);
-    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.isAccountIsExists == false) {
         await showDialog<String>(
@@ -60,10 +59,13 @@ class _InactiveAccountState extends State<InactiveAccount> {
       }
 
     });
+    super.initState();
   userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
-  getFamillyDoctorName(widget.data.familyDoctorId);
+   if(widget.data!=null){
+    getFamillyDoctorName(widget.data.familyDoctorId);
+   }
   }
- Future<String> createConsultationCode() async {
+ Future<String> createConsultationCode({bool exists=false}) async {
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     
@@ -71,16 +73,16 @@ class _InactiveAccountState extends State<InactiveAccount> {
     var date= DateTime.now();
     var newUseCase =FirebaseFirestore.instance.collection('USECASES').doc();
      newUseCase.set({
-      'id': code,
-      'adherentId': adherentUserSelected.adherentId,
-      'beneficiaryId': adherentUserSelected.matricule,
-      'beneficiaryName':adherentUserSelected.familyName,
+      'id': exists==false?newUseCase.id:code,
+      'adherentId':exists==false?null: adherentUserSelected.adherentId,
+      'beneficiaryId':exists==false?null: adherentUserSelected.matricule,
+      'beneficiaryName':exists==false?null:adherentUserSelected.familyName,
       'otherInfo':'',
-      'consultationCode': code,
+      'consultationCode': exists==false?null: code,
       'type': 'CONSULTATION',
       'amountToPay': 2000,
       'status' : 0  ,
-      'createdDate':  DateTime.now(),
+      'createdDate':  DateTime.now(), 
       'enable': false,
     }, SetOptions(merge: true)).then((value) {
         setState(() {
@@ -106,11 +108,13 @@ class _InactiveAccountState extends State<InactiveAccount> {
     await FirebaseFirestore.instance.collection('USECASES').doc(id)
     .collection('FACTURATIONS').doc().set({
       'id':Utils.createCryptoRandomString(8),
-      'idAdherent': adherentUserSelected.adherentId,
-      'idBeneficiairy':adherentUserSelected.matricule,
+      'idAdherent': widget.isAccountIsExists==false?null: adherentUserSelected.adherentId,
+      'idFammillyMember': widget.isAccountIsExists==false ? widget.phoneNumber : null,
+      'idBeneficiairy': widget.isAccountIsExists==false ? null: adherentUserSelected.matricule,
       'idMedecin':doctorProvider.getDoctor.id,
       'amountToPay': 2000,
       'isSolve':false,
+      'canPay': true,
       'Type': widget.consultationType ,
       'createdAt':  DateTime.now(),
     }, SetOptions(merge: true)).then((value) {
@@ -251,10 +255,46 @@ class _InactiveAccountState extends State<InactiveAccount> {
     return 'YM'+result;
   } 
   
+  saveSucces(BuildContext context) {
+
+  // set up the button
+  Widget okButton = FlatButton(
+    child: Text("OK"),
+    onPressed: () {
+        Navigator.pop(context);
+     },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("infos"),
+    content: Text("Cet adherent a bien été créer ."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
   Widget _buildAboutDialog(BuildContext context, bool isIninitState) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
-
+     bool issaveInknowUserLoading=false;
+      saveDataForUnknow() async { 
+        setState(() {issaveInknowUserLoading=true;});
+        print(issaveInknowUserLoading);
+        await createConsultationCode(exists: widget.isAccountIsExists).then((value) async {
+            await facturationCode(value);
+          setState(() {issaveInknowUserLoading=false;});
+        });
+        print(issaveInknowUserLoading);
+      }
     return Container(
       color: backgroundOverlayColor.withOpacity(0.8),
       child: WillPopScope(
@@ -306,7 +346,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                               fontSize: fontSize(size: 21),
                             )),
                       ),
-                      Align(
+                     issaveInknowUserLoading==true ?  Text('gfmjgdfgj'): Align(
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           "assets/icons/Bulk/Danger.svg",
@@ -336,7 +376,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Text(
                           widget.isAccountIsExists == false &&
                                   widget.phoneNumber != null
-                              ? 'Vous recevrez la compensation DanAid(2.000 Cfa) si la famille adh7re a la mutuelle'
+                              ? 'Vous recevrez la compensation DanAid(2.000 Cfa) si la famille adherent a la mutuelle'
                               : 'Poursuivez la consultation hors parcours de soin DanAid',
                           style: TextStyle(
                               color: kBlueForce,
@@ -354,14 +394,14 @@ class _InactiveAccountState extends State<InactiveAccount> {
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.white,
                   ),
-                  child: new Container(
+                  child:   new Container(
                     width: wv * 100,
                     margin:
                         EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 15),
                     child: Align(
                       alignment: Alignment.bottomCenter,
-                      child: Container(
-                        width: wv * 100,
+                      child: issaveInknowUserLoading==true ? Loaders().buttonLoader(kPrimaryColor) :  Container(
+                        width: wv * 100, 
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -373,16 +413,20 @@ class _InactiveAccountState extends State<InactiveAccount> {
                             Radius.circular(25),
                           ),
                         ),
-                        child: TextButton(
-                          onPressed: () {
+                        child:   TextButton(
+                          onPressed: () async {
                             // showDialog(
                             //   context: context,
                             //   builder: (BuildContext context) =>
                             //       _buildAboutDialog(context, false),
                             // );
+                            
+                            if(widget.isAccountIsExists == false){
+                                saveDataForUnknow().then((value) => saveSucces(context));
+                            }
                           },
-                          child: Text(
-                            widget.isAccountIsExists == true
+                          child:  Text( 
+                            widget.isAccountIsExists == false
                                 ? 'Ajouter une famille'
                                 : 'Poursuivre hors parcours',
                             style: TextStyle(

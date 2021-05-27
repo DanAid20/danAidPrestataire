@@ -301,11 +301,11 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           Timestamp day = doc.data()["start-time"];
                           DateTime dateTime = day.toDate();
                           String formattedTime =
-                              DateFormat.Hm().format(dateTime);
+                          DateFormat.Hm().format(dateTime);
                          
                           return  HomePageComponents().patientsItem(
                           apointementDate: "$formattedTime",
-                          apointementType: '${doc.data()["consultation-type"]}',
+                          apointementType: HomePageComponents().getAppointmentStateText(doc.data()["status"]),
                           imgUrl: '${data["imageUrl"]}',
                           nom: '${data["prenom"]} ${data["nomFamille"]}',
                           subtitle: '${doc.data()["title"]}');

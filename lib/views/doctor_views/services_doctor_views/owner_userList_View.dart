@@ -51,7 +51,6 @@ double weight=0;
  }
  calculWeight(){
      weight= double.parse(widget.beneficiare.weight) /  double.parse(widget.beneficiare.height)*double.parse(widget.beneficiare.height);
-   
     if(weight<=18.5){setState(() {underWeight=weight;});}
     else if(weight>=18.5 && weight<=25){setState(() {normaleWeight=weight;});}
     else if(weight>=25 && weight<=30){setState(() {overWeight=weight;});}
@@ -521,229 +520,234 @@ double weight=0;
                       ],
                     ),
                     SizedBox(height: MySize.getScaledSizeHeight(5),),
-                    Container(
-                      height: MySize.getScaledSizeHeight(100),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: kTealsLinearColors),
-                      child: Stack(
-                        alignment: AlignmentDirectional.centerEnd,
-                        children: [
+                    GestureDetector(
+                        onTap: ()=>{
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peut de patience cette partie est en cour de develloppement. Merci de votre comprehension"))) 
+                        },
+                        child: Container(
+                        height: MySize.getScaledSizeHeight(100),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: kTealsLinearColors),
+                        child: Stack(
+                          alignment: AlignmentDirectional.centerEnd,
+                          children: [
+                            Positioned(
+                                right: 0,
+                                top:-2,
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: kDeepDarkTeal,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(20))),
+                                    height: MySize.getScaledSizeHeight(85),
+                                    width: MySize.getScaledSizeWidth(85),
+                                    child: Padding(
+                                      padding: Spacing.only(left: 15.0, top: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        
+                                        children: [
+                                          Column(
+                                           crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Profil', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text('Détaillé', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                            ],
+                                          ),
+                                           
+                                            SizedBox(
+                                              height: MySize.getScaledSizeWidth(3),
+                                            ),
+                                         SvgPicture.asset(
+                                          'assets/icons/Bulk/ArrowDown.svg',
+                                              width:MySize.getScaledSizeWidth(35),
+                                              height:MySize.getScaledSizeHeight(25),
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
                           Positioned(
-                              right: 0,
-                              top:-2,
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: kDeepDarkTeal,
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(20))),
-                                  height: MySize.getScaledSizeHeight(85),
-                                  width: MySize.getScaledSizeWidth(85),
-                                  child: Padding(
-                                    padding: Spacing.only(left: 15.0, top: 8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      
-                                      children: [
-                                        Column(
-                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Profil', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                            Text('Détaillé', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                         
-                                          SizedBox(
-                                            height: MySize.getScaledSizeWidth(3),
+                                right: MySize.getScaledSizeWidth(70),
+                                 top:MySize.getScaledSizeWidth(-2),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color:  Color(0xFF7CA9A9),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20))),
+                                    height: MySize.getScaledSizeHeight(85),
+                                    width: MySize.getScaledSizeWidth(110),
+                                    child: Padding(
+                                      padding: Spacing.only(left:10.0, top: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        
+                                        children: [
+                                          Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text('Prochains', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text('Rendez-vous', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                            ],
                                           ),
-                                       SvgPicture.asset(
-                                        'assets/icons/Bulk/ArrowDown.svg',
-                                            width:MySize.getScaledSizeWidth(35),
-                                            height:MySize.getScaledSizeHeight(25),
-                                        ),
-                                      ],
-                                    ),
-                                  ))),
-                        Positioned(
-                              right: MySize.getScaledSizeWidth(70),
-                               top:MySize.getScaledSizeWidth(-2),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color:  Color(0xFF7CA9A9),
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20))),
-                                  height: MySize.getScaledSizeHeight(85),
-                                  width: MySize.getScaledSizeWidth(110),
-                                  child: Padding(
-                                    padding: Spacing.only(left:10.0, top: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      
-                                      children: [
-                                        Column(
-                                         crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text('Prochains', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                            Text('Rendez-vous', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                         
-                                          SizedBox(
-                                            height: MySize.getScaledSizeWidth(3),
+                                           
+                                            SizedBox(
+                                              height: MySize.getScaledSizeWidth(3),
+                                            ),
+                                         SvgPicture.asset(
+                                          'assets/icons/Bulk/Calendar.svg',
+                                              width:MySize.getScaledSizeWidth(40),
+                                              height:MySize.getScaledSizeHeight(30),
                                           ),
-                                       SvgPicture.asset(
-                                        'assets/icons/Bulk/Calendar.svg',
-                                            width:MySize.getScaledSizeWidth(40),
-                                            height:MySize.getScaledSizeHeight(30),
-                                        ),
-                                      ],
-                                    ),
-                                  ))),
-                        Positioned(
-                              right: MySize.getScaledSizeWidth(170),
-                               top:MySize.getScaledSizeWidth(-2),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF82AEAC),
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20))),
-                                  height: MySize.getScaledSizeHeight(85),
-                                  width: MySize.getScaledSizeWidth(80),
-                                  child: Padding(
-                                    padding: Spacing.only(left: 2.0, top: 10.0, right: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,                                     
-                                      children: [
-                                        Column(
-                                         crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text('Suive des',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                            Text('Soins', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                         
-                                          SizedBox(
-                                            height: MySize.getScaledSizeWidth(3),
+                                        ],
+                                      ),
+                                    ))),
+                          Positioned(
+                                right: MySize.getScaledSizeWidth(170),
+                                 top:MySize.getScaledSizeWidth(-2),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF82AEAC),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20))),
+                                    height: MySize.getScaledSizeHeight(85),
+                                    width: MySize.getScaledSizeWidth(80),
+                                    child: Padding(
+                                      padding: Spacing.only(left: 2.0, top: 10.0, right: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,                                     
+                                        children: [
+                                          Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text('Suive des',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text('Soins', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                            ],
                                           ),
-                                       SvgPicture.asset(
-                                        'assets/icons/Bulk/More Square.svg',
-                                            width:MySize.getScaledSizeWidth(35),
-                                            height:MySize.getScaledSizeHeight(15),
-                                        ),
-                                      ],
-                                    ),
-                                  ))),
-                        Positioned(
-                              right: MySize.getScaledSizeWidth(170),
-                               top:MySize.getScaledSizeWidth(-2),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Color(0xFF82AEAC),
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20))),
-                                  height: MySize.getScaledSizeHeight(85),
-                                  width: MySize.getScaledSizeWidth(80),
-                                  child: Padding(
-                                    padding: Spacing.only(left: 15.0, top: 10.0, right: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,                                     
-                                      children: [
-                                        Column(
-                                         crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text('Suivi des ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                            Text('Soins', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                         
-                                          SizedBox(
-                                            height: MySize.getScaledSizeWidth(3),
+                                           
+                                            SizedBox(
+                                              height: MySize.getScaledSizeWidth(3),
+                                            ),
+                                         SvgPicture.asset(
+                                          'assets/icons/Bulk/More Square.svg',
+                                              width:MySize.getScaledSizeWidth(35),
+                                              height:MySize.getScaledSizeHeight(15),
                                           ),
-                                       SvgPicture.asset(
-                                        'assets/icons/Bulk/More Square.svg',
-                                            width:MySize.getScaledSizeWidth(35),
-                                            height:MySize.getScaledSizeHeight(25),
-                                        ),
-                                      ],
-                                    ),
-                                  ))),
-                        Positioned(
-                              right: MySize.getScaledSizeWidth(240),
-                               top:MySize.getScaledSizeWidth(-2),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: kTabs2,
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20))),
-                                  height: MySize.getScaledSizeHeight(85),
-                                  width: MySize.getScaledSizeWidth(80),
-                                  child: Padding(
-                                    padding: Spacing.only(left: 15.0, top: 10.0, right: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,                                     
-                                      children: [
-                                        Column(
-                                         crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text('Données ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                            Text('Vitales', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                         
-                                          SizedBox(
-                                            height: MySize.getScaledSizeWidth(3),
+                                        ],
+                                      ),
+                                    ))),
+                          Positioned(
+                                right: MySize.getScaledSizeWidth(170),
+                                 top:MySize.getScaledSizeWidth(-2),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF82AEAC),
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20))),
+                                    height: MySize.getScaledSizeHeight(85),
+                                    width: MySize.getScaledSizeWidth(80),
+                                    child: Padding(
+                                      padding: Spacing.only(left: 15.0, top: 10.0, right: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,                                     
+                                        children: [
+                                          Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text('Suivi des ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text('Soins', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                            ],
                                           ),
-                                       SvgPicture.asset(
-                                        'assets/icons/Bulk/Activity.svg',
-                                            width:MySize.getScaledSizeWidth(35),
-                                            height:MySize.getScaledSizeHeight(25),
-                                        ),
-                                      ],
-                                    ),
-                                  ))),
-                        Positioned(
-                              right: MySize.getScaledSizeWidth(310),
-                               top:MySize.getScaledSizeWidth(-2),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: kDeepDarkTeal,
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20))),
-                                  height: MySize.getScaledSizeHeight(85),
-                                  width: MySize.getScaledSizeWidth(100),
-                                  child: Padding(
-                                    padding: Spacing.only(left:30.0, top: 10.0, right: 10.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,                                     
-                                      children: [
-                                        Column(
-                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text('Notes du  ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                            Text('Médecin', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          ],
-                                        ),
-                                         
-                                          SizedBox(
-                                            height: MySize.getScaledSizeWidth(3),
+                                           
+                                            SizedBox(
+                                              height: MySize.getScaledSizeWidth(3),
+                                            ),
+                                         SvgPicture.asset(
+                                          'assets/icons/Bulk/More Square.svg',
+                                              width:MySize.getScaledSizeWidth(35),
+                                              height:MySize.getScaledSizeHeight(25),
                                           ),
-                                       SvgPicture.asset(
-                                        'assets/icons/Bulk/Edit Square.svg',
-                                            width:MySize.getScaledSizeWidth(35),
-                                            height:MySize.getScaledSizeHeight(25),
-                                            color: whiteColor,
-                                        ),
-                                      ],
-                                    ),
-                                  ))),
-                          
-                        ],
+                                        ],
+                                      ),
+                                    ))),
+                          Positioned(
+                                right: MySize.getScaledSizeWidth(240),
+                                 top:MySize.getScaledSizeWidth(-2),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: kTabs2,
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20))),
+                                    height: MySize.getScaledSizeHeight(85),
+                                    width: MySize.getScaledSizeWidth(80),
+                                    child: Padding(
+                                      padding: Spacing.only(left: 15.0, top: 10.0, right: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,                                     
+                                        children: [
+                                          Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Text('Données ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text('Vitales', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                            ],
+                                          ),
+                                           
+                                            SizedBox(
+                                              height: MySize.getScaledSizeWidth(3),
+                                            ),
+                                         SvgPicture.asset(
+                                          'assets/icons/Bulk/Activity.svg',
+                                              width:MySize.getScaledSizeWidth(35),
+                                              height:MySize.getScaledSizeHeight(25),
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
+                          Positioned(
+                                right: MySize.getScaledSizeWidth(310),
+                                 top:MySize.getScaledSizeWidth(-2),
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                        color: kDeepDarkTeal,
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(20))),
+                                    height: MySize.getScaledSizeHeight(85),
+                                    width: MySize.getScaledSizeWidth(100),
+                                    child: Padding(
+                                      padding: Spacing.only(left:30.0, top: 10.0, right: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,                                     
+                                        children: [
+                                          Column(
+                                           crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text('Notes du  ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text('Médecin', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                            ],
+                                          ),
+                                           
+                                            SizedBox(
+                                              height: MySize.getScaledSizeWidth(3),
+                                            ),
+                                         SvgPicture.asset(
+                                          'assets/icons/Bulk/Edit Square.svg',
+                                              width:MySize.getScaledSizeWidth(35),
+                                              height:MySize.getScaledSizeHeight(25),
+                                              color: whiteColor,
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
+                            
+                          ],
+                        ),
                       ),
                     )
                   ]),

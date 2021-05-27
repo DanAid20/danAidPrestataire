@@ -774,7 +774,7 @@ class HomePageComponents {
                     color: whiteColor,
                   ),
                   SvgPicture.asset(
-                  adherent.protectionLevel==0 ? '': 'assets/icons/Bulk/Shield Done.svg',
+                  adherent!=null && adherent.protectionLevel==0 ? '': 'assets/icons/Bulk/Shield Done.svg',
                     height: hv * 8,
                     width: wv * 8,
                   )
