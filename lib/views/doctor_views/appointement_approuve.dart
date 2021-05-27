@@ -1,0 +1,379 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/appointmentModel.dart';
+import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
+import 'package:danaid/widgets/doctor_info_cards.dart';
+import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
+import 'package:danaid/widgets/loaders.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:danaid/core/providers/appointmentProvider.dart';
+import 'package:simple_tags/simple_tags.dart';
+
+class AppointmentDetails extends StatefulWidget {
+  final AppointmentModel appointement;
+  AppointmentDetails({Key key, this.appointement}):super(key:key);
+  @override
+  _AppointmentDetailsState createState() => _AppointmentDetailsState();
+}
+
+class _AppointmentDetailsState extends State<AppointmentDetails> {
+
+  TextEditingController _symptomController = new TextEditingController();
+  GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
+
+  DoctorModel doc;
+  String reason = "";
+  List<String> symptoms = [];
+
+  String currentSymptomText = "";
+  List<String> suggestions = [
+    "Migraines",
+    "Fatigue",
+    "Diarrhée",
+    "Fièvre",
+    "Maux de tête",
+    "Courbatures",
+    "Maux de ventre"
+  ];
+
+  bool saveLoading = false;
+  bool announceLoading = false;
+  bool cancelLoading = false;
+
+  bool edit = false;
+
+  initialization(){
+
+    AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context, listen: false);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    if(doctorProvider.getDoctor != null){
+      setState((){
+        doc = doctorProvider.getDoctor;
+      });
+    }
+
+    setState(() {
+      for(int i = 0; i < appointment.getAppointment.symptoms.length; i++){
+        symptoms.add(appointment.getAppointment.symptoms[i]);
+      }
+
+      reason = appointment.getAppointment.title;
+    });
+    
+  }
+
+  @override
+  void initState() {
+    initialization();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
+    DateTime startTime = appointment.getAppointment.startTime.toDate();
+    DateTime endTime = appointment.getAppointment.endTime.toDate();
+    return Scaffold(
+        backgroundColor: Colors.grey[100],
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
+            onPressed: ()=>Navigator.pop(context)
+          ),
+          title: Column(crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text("Démande de prise en charge", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text("Rendez-vous", 
+                style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
+              ),
+            ],
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+          ],
+        ),
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
+        padding: EdgeInsets.symmetric(vertical: hv*2.5),
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+        ),
+        child: Column(
+          children: [
+            Row(children: [
+              SizedBox(width: wv*4,),
+              Text(DateFormat('EEEE', 'fr_FR').format(startTime)+", "+ startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: TextStyle(color: kBlueDeep, fontSize: 16.5, fontWeight: FontWeight.w600)),
+              Spacer(),
+              Text(startTime.hour.toString().padLeft(2, '0')+ "H:"+startTime.minute.toString().padLeft(2, '0')+ " à "+ endTime.hour.toString().padLeft(2, '0') + "H:"+endTime.minute.toString().padLeft(2, '0'), style: TextStyle(color: kBlueDeep, fontSize: 14, fontWeight: FontWeight.w400)),
+              SizedBox(width: wv*4,)
+            ],),
+            SizedBox(height: hv*2,),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: kSouthSeas.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.only(left: wv*4),
+                                  decoration: BoxDecoration(
+                                    //color: kSouthSeas.withOpacity(0.3),
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: hv*1),
+                                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Pour le patient", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                                        SizedBox(height: hv*1,),
+                                        Row(children: [
+                                          CircleAvatar(
+                                            backgroundImage: appointment.getAppointment.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment.avatarUrl) : null,
+                                            backgroundColor: whiteColor,
+                                            radius: wv*6,
+                                            child: appointment.getAppointment.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
+                                          ),
+                                          SizedBox(width: wv*3,),
+                                          Expanded(
+                                            child: RichText(text: TextSpan(
+                                              text: appointment.getAppointment.username + "\n",
+                                              children: [
+                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment.birthDate.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                                              ], style: TextStyle(color: kBlueDeep, fontSize: wv*4.2)),
+                                              maxLines: 4,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],),
+                                        SizedBox(height: hv*0.5,)
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              
+                              GestureDetector(
+                                onTap: ()=>setState((){edit = !edit;}),
+                                child: Container(
+                                  padding: EdgeInsets.all(wv*1.5),
+                                  decoration: BoxDecoration(
+                                    color: kGoldDeep.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', color: kGoldDeep, width: 20,),
+                                ),
+                              ),
+
+                              SizedBox(width: wv*5),
+                            ],
+                          ),
+                          SizedBox(height: hv*2.5,),
+                          Text("    Rendez-vous chez", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                          SizedBox(height: hv*1.2,),
+                          doc != null ? DoctorInfoCard(
+                            noPadding: true,
+                            avatarUrl: doc.avatarUrl,
+                            name: doc.cniName,
+                            title: "Medecin de Famille, " + doc.field,
+                            speciality: doc.speciality,
+                            teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
+                            consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
+                            chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
+                            rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
+                            visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
+                            field: doc.speciality,
+                            officeName: doc.officeName,
+                            isInRdvDetail: true,
+                            appointmentState: appointment.getAppointment.status,
+                            includeHospital: true,
+                            onTap: () {
+                            },
+                          ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                        ],
+                      ),
+                    ),
+                          
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2.5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Quel en est la raison ? ", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(vertical: hv*0.5),
+                            padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1.5),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Text(reason, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: hv*2),
+                            child: Text("Symptômes", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                          ),
+
+                          
+                          symptoms.isNotEmpty ? SimpleTags(
+                            content: symptoms,
+                            wrapSpacing: 4,
+                            wrapRunSpacing: 4,
+                            onTagPress: (tag) {
+                              setState(() {
+                                symptoms.remove(tag);
+                              });
+                            },
+                            tagContainerPadding: EdgeInsets.all(6),
+                            tagTextStyle: TextStyle(color: kPrimaryColor),
+                            tagIcon: Icon(Icons.clear, size: wv*3, color: kDeepTeal,),
+                            tagContainerDecoration: BoxDecoration(
+                              color: kPrimaryColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ) :
+                          Text("Aucun symptômes mentionés")
+                        ],
+                      ),
+                    ),
+                  ],
+                ),),
+            ),
+            SizedBox(height: hv*1.5,),
+            !edit ? Row(
+              children: [
+                SizedBox(width: wv*4,),
+                Expanded(
+                  flex: 7,
+                  child: CustomTextButton(
+                    noPadding: true,
+                    isLoading: announceLoading,
+                    enable: appointment.getAppointment.announced == true,
+                    text: "Approuver",
+                    action: (){
+                      setState(() {
+                        announceLoading = true;
+                      });
+                      try {
+                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                          "status": 1
+                        },  SetOptions(merge: true)).then((value) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été approuver..'),));
+                          appointment.setAnnouncement(true);
+                           setState(() {
+                            announceLoading = false;
+                            edit=false;
+                            appointment.getAppointment.status=1;
+                          });
+                        });
+                      }
+                      catch(e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
+                        setState(() {
+                          announceLoading = false;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: wv*2,),
+                Expanded(
+                  flex: 3,
+                  child: CustomTextButton(
+                    noPadding: true,
+                    text: "Rejeter",
+                    isLoading: cancelLoading,
+                    enable: edit ? true : appointment.getAppointment.announced == true,
+                    color: kSouthSeas,
+                    action: (){
+                      setState(() {
+                        cancelLoading = true;
+                      });
+                      try {
+                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                          "status": 2
+                        },  SetOptions(merge: true)).then((value) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('L\'annonce a été rejeter..'),));
+                          appointment.setAnnouncement(false);
+                           setState(() {
+                            announceLoading = false;
+                            edit=false;
+                            appointment.getAppointment.status=2;
+                          });
+                        });
+                      }
+                      catch(e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
+                        setState(() {
+                          cancelLoading = false;
+                        });
+                      }
+                    },
+                  ),
+                ),
+                SizedBox(width: wv*4,),
+              ],
+            ) :
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: wv*4),
+              child: CustomTextButton(
+                text: "Mettre en attente",
+                isLoading: saveLoading,
+                
+                noPadding: true,
+                action: (){
+                  setState(() {
+                    saveLoading = true;
+                  });
+                  try {
+                    FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                      "status": 0
+                    },  SetOptions(merge: true)).then((value) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ce rendez-vous a été mis en attente..'),));
+                      setState(() {
+                            announceLoading = false;
+                            edit=false;
+                            appointment.getAppointment.status=0;
+                          });
+                    });
+                  }
+                  catch(e) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
+                    setState(() {
+                      saveLoading = false;
+                      edit = false;
+                    });
+                  }
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

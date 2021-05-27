@@ -28,47 +28,16 @@ class MyCoverageTabView extends StatelessWidget {
                 ),
                 margin: EdgeInsets.symmetric(horizontal: wv*3),
                 child: IntrinsicHeight(
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Icon(Icons.message, size: 35, color: Colors.teal[300],),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 7,
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height: hv*1,),
-                            Text(
-                              adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
-                               : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
-                               : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
-                               : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "..."
-                              , style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7, fontWeight: FontWeight.bold)
-                            ),
-                            //Text("Votre garantie expire dans 365 jours", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.5)),
-                            SizedBox(height: hv*1,),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10),
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
-                            color: kPrimaryColor,
-                          ),
-                          child: Center(child: Text("Comparer Les Services", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
-                        ),
-                      )
-                    ],
+                  child: HomePageComponents.getInfoActionCard(
+                    title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
+                      : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
+                        : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
+                          : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
+                    actionLabel: "Comparer Les Services",
+                    subtitle: "...",
+                    //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
                   ),
-                ),
+                )
               )
               : 
               Center(child: Loaders().buttonLoader(kPrimaryColor)),

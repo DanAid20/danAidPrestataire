@@ -77,7 +77,7 @@ dependencies:
   url_launcher: ^6.0.3
   flutter_google_places: ^0.3.0
   pretty_qr_code: ^2.0.1
-  hover_ussd: ^1.0.0-nullsaffety
+  hover_ussd: ^0.0.2+1
 
 dev_dependencies:
   flutter_test:
