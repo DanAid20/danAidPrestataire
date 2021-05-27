@@ -316,6 +316,8 @@ class _AppointmentState extends State<Appointment> {
                         },  SetOptions(merge: true)).then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été annoncé..'),));
                           appointment.setAnnouncement(true);
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, '/adherent-card');
                           setState(() {
                             announceLoading = false;
                           });

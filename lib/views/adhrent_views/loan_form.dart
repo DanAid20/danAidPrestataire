@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/loanModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/loanModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
@@ -14,6 +17,9 @@ import 'package:danaid/views/adhrent_views/health_book_screen.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
+import 'package:danaid/widgets/forms/form_widget.dart';
+import 'package:danaid/widgets/function_widgets.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -22,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
@@ -35,22 +42,21 @@ class LoanForm extends StatefulWidget {
 }
 
 class _LoanFormState extends State<LoanForm> {
-  final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
-  GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
-  TextEditingController _familynameController = new TextEditingController();
-  TextEditingController _surnameController = new TextEditingController();
+  TextEditingController _purposeController = new TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _heightController = TextEditingController();
-  final TextEditingController _weightController = TextEditingController();
-  final TextEditingController _allergyController = TextEditingController();
+  final TextEditingController _avalistPhoneController = TextEditingController();
+  final TextEditingController _salaryController = TextEditingController();
+  final TextEditingController _employerController = TextEditingController();
+  final TextEditingController _avalistNameController = TextEditingController();
 
   String matricule;
-  String _relation;
-  DateTime selectedDate;
-  DateTime initialDate;
-  List<String> allergies = [];
-  String currentAllergyText = "";
+  int _duration = 6;
+  bool _isSalaryMan;
+  bool _avalist = false;
+  bool _trustConditionAccepted = false;
+  bool _serviceTermsAccepted = false;
   String phone;
+  String avalistPhone;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
 
@@ -64,33 +70,13 @@ class _LoanFormState extends State<LoanForm> {
   int currentPageValue = 0;
   List<Widget> pageList;
 
-  String _gender;
-  String _bloodGroup;
-  bool male = false;
-  bool female = false;
-
-  bool _confirmFamily = false;
-  bool marriageCertificateUploaded = false;
-  bool birthCertificateUploaded = false;
-  bool cniUploaded = false;
+  bool carnetUploaded = false;
   bool otherFileUploaded = false;
-  bool marriageCertificateSpinner = false;
-  bool birthCertificateSpinner = false;
-  bool cniSpinner = false;
+  bool carnetSpinner = false;
   bool otherFileSpinner = false;
-
-  initTextfields(){
-    AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
-    if (adherentModel.getAdherent.familyName != null){
-      setState(() {
-        _familynameController.text = adherentModel.getAdherent.familyName;
-      });
-    }
-  }
   
   @override
   void initState() {
-    initTextfields();
     super.initState();
   }
 
@@ -178,21 +164,86 @@ class _LoanFormState extends State<LoanForm> {
   }
 
   Widget getForm1(){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
+    AdherentModel adh = adherentProvider.getAdherent;
     return Column(
       children: [
         Expanded(
-          child: ListView(children: [
-
-            SizedBox(height: hv*2,),
+          child: ListView(
+            physics: BouncingScrollPhysics(), children: [
+            Container(
+              padding: EdgeInsets.only(bottom: hv*1.5),
+              decoration: BoxDecoration(
+                color: kBrownCanyon.withOpacity(0.2),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(bottom: hv*1.5),
+                    decoration: BoxDecoration(
+                      color: kBrownCanyon.withOpacity(0.3),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                    ),
+                    child: Column(
+                      children: [
+                        HomePageComponents.header(label: "Demandeur", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        SizedBox(height: hv*2),
+                        Row(
+                          children: [
+                            SizedBox(width: wv*4,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text("Montant du crédit", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Text(loanProvider.getLoan.amount.toInt().toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
+                              ],
+                            ),
+                            Spacer(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text("Vos mensualités", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Container(
+                                  margin: EdgeInsets.only(top: hv*0.2),
+                                  padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*0.25),
+                                  decoration: BoxDecoration(
+                                    color: kBrownCanyon.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan.amount, rate: adherentProvider.getAdherent.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: wv*4,),
+                          ],
+                        )
+                      ],
+                  )),
+                  SizedBox(height: hv*1.5,),
+                  Row(
+                    children: [
+                      SizedBox(width: wv*5),
+                      SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
+                      SizedBox(width: wv*2),
+                      Expanded(child: Text("Rembourser à temps augmente votre niveau de crédit.", style: TextStyle(fontSize: 15, color: kTextBlue))),
+                      SizedBox(width: wv*5)
+                    ],
+                  )
+                ],
+              ),
+            ),
+            SizedBox(height: hv*3,),
 
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: wv*2),
+              padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
                   Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Relation avec l'adhérent *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                      Text("Durée *", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
                       SizedBox(height: 5,),
                       Container(
                         constraints: BoxConstraints(minWidth: wv*45),
@@ -207,28 +258,20 @@ class _LoanFormState extends State<LoanForm> {
                             child: DropdownButton(
                               isExpanded: true,
                               hint: Text("Choisir.."),
-                              value: _relation,
+                              value: _duration,
                               items: [
                                 DropdownMenuItem(
-                                  child: Text("Enfant", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                  value: "CHILD",
+                                  child: Text("6 mois (6 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 6,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("Conjoint(e)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                  value: "SPOUSE",
-                                ),
-                                DropdownMenuItem(
-                                  child: Text("Frère/Soeur", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                  value: "SIBLING",
-                                ),
-                                DropdownMenuItem(
-                                  child: Text("Parent", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                  value: "PARENT",
+                                  child: Text("12 mois (12 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                  value: 12,
                                 ),
                               ],
                               onChanged: (value) {
                                 setState(() {
-                                  _relation = value;
+                                  _duration = value;
                                 });
                               }),
                           ),
@@ -242,24 +285,28 @@ class _LoanFormState extends State<LoanForm> {
 
             SizedBox(height: hv*2,),
 
-            CustomTextField(
-              prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
-              label: "Prénom *",
-              hintText: "Entrez votre prénom",
-              controller: _surnameController,
-              validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: wv*1),
+              child: CustomTextField(
+                label: "Quelle en est la raison ?",
+                labelColor: kTextBlue,
+                hintText: "Raison du prêt..",
+                controller: _purposeController,
+                onChanged: (val)=>setState((){}),
+                validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null
+              ),
             ),
 
             SizedBox(height: hv*2,),
 
             Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*3),
+              padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*3,),
-                  Text("Télécharger les pièces justificatives", style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
-                  SizedBox(height: hv*1,),
-                  Text("Scanner les documents justificatifs (CNI, Actes de naissances, etc..)", style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                  Text("Scanner des justificatifs", style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  SizedBox(height: hv*0.5,),
+                  Text("Un devis, une ordonnance ou tout autre pièce en appui..)", style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                   Center(
                     child: InkWell(
                       onTap: (){getDocument(context);},
@@ -271,16 +318,18 @@ class _LoanFormState extends State<LoanForm> {
                   ),
                   FileUploadCard(
                     title: "Carnet",
-                    state: cniUploaded,
-                    loading: cniSpinner,
-                    action: () async {await getDocFromGallery('CNI');}
+                    state: carnetUploaded,
+                    loading: carnetSpinner,
+                    action: () async {await getDocFromGallery('Carnet');}
+                  ),
+                  SizedBox(height: hv*1,),
+                  FileUploadCard(
+                    title: "Autre pièce justificative",
+                    state: otherFileUploaded,
+                    loading: otherFileSpinner,
+                    action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
                   SizedBox(height: hv*2,),
-
-                  Text("Déclaration", style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold),),
-                  SizedBox(height: hv*0.5,),
-                  Text("Pour les bénéficiaires sans filiation directe", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.w400)),
-                  SizedBox(height: hv*2,)
                 ],
               ),
             ),
@@ -288,132 +337,413 @@ class _LoanFormState extends State<LoanForm> {
             
           ],),
         ),
-        CustomTextButton(
-          text: "Suivant",
-          action: (){
-              controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
-          },
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextButton(
+                text: "Suivant",
+                enable: _purposeController.text.isNotEmpty,
+                action: (){
+                    controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+                },
+              ),
+            ),
+            Expanded(
+              child: CustomTextButton(
+                text: "Annuler",
+                color: kSouthSeas,
+                action: (){
+                    Navigator.pop(context);
+                },
+              ),
+            ),
+          ],
         )
       ],
     );
   }
   
   Widget getForm2(){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
+    AdherentModel adh = adherentProvider.getAdherent;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: wv*2),
       child: Column(
         children: [
-
-
+          Container(
+            padding: EdgeInsets.only(bottom: hv*1.5),
+            decoration: BoxDecoration(
+              color: kBrownCanyon.withOpacity(0.3),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+            ),
+            child: Column(
+              children: [
+                HomePageComponents.header(label: "Demandeur", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+              ],
+          )),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+              physics: BouncingScrollPhysics(),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Source de revenues", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+                    SizedBox(height: hv*2,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: CustomTextField(
+                            label: "Revenue mensuel",
+                            labelColor: kTextBlue,
+                            noPadding: true,
+                            controller: _salaryController,
+                            keyboardType: TextInputType.number,
+                            suffixIcon: Text("f."),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+                            ],
+                            onChanged: (val)=>setState((){}),
+                          ),
+                        ),
+                        SizedBox(width: wv*3,),
+                        Expanded(
+                          child: CustomDropDownButton(
+                            label: "Etes vous salarié ?",
+                            value: _isSalaryMan,
+                            items: [
+                                  DropdownMenuItem(
+                                    child: Text("Oui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                    value: true,
+                                  ),
+                                  DropdownMenuItem(
+                                    child: Text("Non", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: false,
+                                  ),
+                            ],
+                            onChanged: (val)=>setState((){_isSalaryMan = val;}),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: hv*2,),
+                    CustomTextField(
+                      label: "Employeur",
+                      labelColor: kTextBlue,
+                      noPadding: true,
+                      controller: _employerController,
+                      onChanged: (val)=>setState((){}),
+                    ),
+                    SizedBox(height: hv*2,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Téléphone", style: TextStyle(fontSize: 16, color: kTextBlue)),
+                        SizedBox(height: 5,),
+                        InternationalPhoneNumberInput(
+                          validator: (String phone) {
+                            return null;
+                          },
+                          onInputChanged: (PhoneNumber number) {
+                            phone = number.phoneNumber;
+                            setState((){});
+                            print(number.phoneNumber);
+                          },
+                          onInputValidated: (bool value) {
+                            print(value);
+                          },
+                          spaceBetweenSelectorAndTextField: 0,
+                          selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
+                          ignoreBlank: false,
+                          textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                          autoValidateMode: AutovalidateMode.disabled,
+                          selectorTextStyle: TextStyle(color: Colors.black),
+                          initialValue: number,
+                          textFieldController: _phoneController,
+                          formatInput: true,
+                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          inputDecoration: defaultInputDecoration(),
+                          onSaved: (PhoneNumber number) {
+                            print('On Saved: $number');
+                          }, 
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: hv*2,),
+                    CheckboxListTile(
+                      title: Text("Souhaitez vous avoir un avaliste ?", style: TextStyle(fontSize: 16, color: kBlueDeep)),
+                      subtitle: Text("Votre époux(se) est de facto solidaire de votre crédit, vous pouvez avoir un avaliste supplémentaitre.", style: TextStyle(fontSize: 13, color: kTextBlue)),
+                      activeColor: kSouthSeas,
+                      value: _avalist, 
+                      onChanged: (val)=>setState((){_avalist = val;})
+                    ),
 
-                  
-                ],
+                    _avalist ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: hv*2,),
+                        CustomTextField(
+                          labelColor: kTextBlue,
+                          label: "Nom de l'avaliste",
+                          noPadding: true,
+                          controller: _avalistNameController,
+                          onChanged: (val)=>setState((){}),
+                        ),
+
+                        SizedBox(height: hv*2,),
+
+                        Text("Téléphone", style: TextStyle(fontSize: 16, color: kTextBlue),),
+                        SizedBox(height: hv*1,),
+                        InternationalPhoneNumberInput(
+                          validator: (String phone) {
+                            return null;
+                          },
+                          onInputChanged: (PhoneNumber number) {
+                            avalistPhone = number.phoneNumber;
+                            setState((){});
+                            print(number.phoneNumber);
+                          },
+                          onInputValidated: (bool value) {
+                            print(value);
+                          },
+                          spaceBetweenSelectorAndTextField: 0,
+                          selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
+                          ignoreBlank: false,
+                          textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                          autoValidateMode: AutovalidateMode.disabled,
+                          selectorTextStyle: TextStyle(color: Colors.black),
+                          initialValue: number,
+                          textFieldController: _avalistPhoneController,
+                          formatInput: true,
+                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          inputDecoration: defaultInputDecoration(),
+                        ),
+                      ],
+                    ) : Container()
+                  ],
+                ),
               ),
             ),
           ),
-          Container(
-            child: CustomTextButton(action: (){
-                AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-                controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
-                }, text: "Suivant",),
-          )
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextButton(
+                text: "Suivant",
+                enable: !_avalist ? _salaryController.text.isNotEmpty && _isSalaryMan != null && _employerController.text.isNotEmpty && _phoneController.text.isNotEmpty : _salaryController.text.isNotEmpty && _isSalaryMan != null && _employerController.text.isNotEmpty && _phoneController.text.isNotEmpty && _avalistNameController.text.isNotEmpty && _avalistPhoneController.text.isNotEmpty,
+                action: (){
+                    controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+                },
+              ),
+            ),
+            Expanded(
+              child: CustomTextButton(
+                text: "Annuler",
+                color: kSouthSeas,
+                action: (){
+                    controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+                },
+              ),
+            ),
+          ],
+        )
         ],
       ),
     );
   }
 
   getForm3(){
+    DateTime now = DateTime.now();
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
+    LoanModel loan = loanProvider.getLoan;
+    AdherentModel adh = adherentProvider.getAdherent;
+    int mensuality = Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan.amount, rate: adherentProvider.getAdherent.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt();
+    num totalToPay = mensuality * _duration;
+    DateTime firstPaymentDate = DateTime(now.year, now.month + 1, now.day);
+    DateTime lastPaymentDate = DateTime(now.year, now.month + _duration, now.day);
     return Column(
       children: [
         Expanded(
-          child: SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*3),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
+            physics: BouncingScrollPhysics(), children: [
+            Container(
+              padding: EdgeInsets.only(bottom: hv*1.5),
+              decoration: BoxDecoration(
+                color: kBrownCanyon.withOpacity(0.2),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+              ),
+              child: Column(
                 children: [
-                  SizedBox(height: hv*3,),
-                  Text("Télécharger les pièces justificatives", style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
-                  SizedBox(height: hv*1,),
-                  Text("Scanner les documents justificatifs (CNI, Actes de naissances, etc..)", style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
-                  
-                  CheckboxListTile(
-                    value: _confirmFamily,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    activeColor: kDeepTeal,
-                    tristate: false,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    onChanged: (val)=> setState((){_confirmFamily = val;}),
-                    title: Text("Je confirme par la présente que la personne sus-citée est bien à ma charge et réside dans mon domicile", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
-                  ),
-                  SizedBox(height: hv*3,),
+                  Container(
+                    padding: EdgeInsets.only(bottom: hv*1.5),
+                    decoration: BoxDecoration(
+                      color: kBrownCanyon.withOpacity(0.3),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                    ),
+                    child: Column(
+                      children: [
+                        HomePageComponents.header(label: "Demandeur", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        SizedBox(height: hv*2),
+                        Row(
+                          children: [
+                            SizedBox(width: wv*4,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text("Montant du crédit", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Text(loan.amount.toInt().toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
+                              ],
+                            ),
+                            Spacer(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text("Vos mensualités", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Container(
+                                  margin: EdgeInsets.only(top: hv*0.2),
+                                  padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*0.25),
+                                  decoration: BoxDecoration(
+                                    color: kBrownCanyon.withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(20)
+                                  ),
+                                  child: Text(mensuality.toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
+                                ),
+                              ],
+                            ),
+                            SizedBox(width: wv*4,),
+                          ],
+                        )
+                      ],
+                  )),
+                  SizedBox(height: hv*1.5,),
+                  Row(
+                    children: [
+                      SizedBox(width: wv*5),
+                      SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
+                      SizedBox(width: wv*2),
+                      Expanded(child: Text("Rembourser à temps augmente votre niveau de crédit.", style: TextStyle(fontSize: 15, color: kTextBlue))),
+                      SizedBox(width: wv*5)
+                    ],
+                  )
                 ],
               ),
             ),
-          ),
-        ),
-        ((_confirmFamily == true) & (birthCertificateUploaded == true))
-          ? !buttonLoading ? CustomTextButton(
-            text: "Suivant", 
-            action: (){
-              setState(() {
-                buttonLoading = true;
-              });
-              AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
-              BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-              FirebaseFirestore.instance.collection("ADHERENTS")
-                .doc(adherentModel.getAdherent.getAdherentId)
-                .collection("BENEFICIAIRES").doc(matricule)
-                .set({
-                  "adherentId": adherentModel.getAdherent.getAdherentId,
-                  "nomDFamille" : _familynameController.text,
-                  "prenom": _surnameController.text,
-                  "cniName": "${_familynameController.text} ${_surnameController.text}",
-                  "bloodGroup": _bloodGroup,
-                  "autrePieceName": "${_familynameController.text} ${_surnameController.text}",
-                  "acteMariageName": "${_familynameController.text} ${_surnameController.text}",
-                  "urlImage": avatarUrl,
-                  "genre": _gender,
-                  "urlActeMariage": beneficiary.getBeneficiary.marriageCertificateUrl,
-                  "urlAutrPiece": beneficiary.getBeneficiary.otherDocUrl,
-                  "urlCNI": beneficiary.getBeneficiary.cniUrl,
-                  "urlActeNaissance": beneficiary.getBeneficiary.birthCertificateUrl,
-                  "createdDate": DateTime.now(),
-                  "datFinvalidite": beneficiary.getBeneficiary.validityEndDate,
-                  "dateNaissance": selectedDate,
-                  "enabled": false,
-                  "ifVivreMemeDemeure": _confirmFamily,
-                  "phoneList": [{"number": phone}],
-                  "height": _heightController.text,
-                  "weight": _weightController.text,
-                  "allergies": allergies,
-                  "relation": _relation,
-                }, SetOptions(merge: true)).then((value) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${_surnameController.text} ajouté comme bénéficiaire'),));
-                  setState(() {
-                    buttonLoading = false;
-                  });
-                  Navigator.pop(context);
+            SizedBox(height: hv*2,),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: wv*4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Informations sur le remboursement", style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.w600),),
+                  SizedBox(height: hv*2,),
+                  getTableRow(input: "Fréquence :", output: "$_duration Mensualités"),
+                  getTableRow(input: "taux d'intérêt effectif :", output: adh.adherentPlan == 0 ? "16%" : "5%"),
+                  getTableRow(input: "Montant total à rembourser :", output: "$totalToPay f."),
+                  getTableRow(input: "Premier versement :", output: firstPaymentDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(firstPaymentDate)+" "+ firstPaymentDate.year.toString()),
+                  getTableRow(input: "Dernier versement :", output: lastPaymentDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastPaymentDate)+" "+ lastPaymentDate.year.toString()),
+                ],
+              ),
+            ),
+            SizedBox(height: hv*3.5),
+
+            HomePageComponents.confirmTermsTile(
+              textColor: kTextBlue,
+              action: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
+              value: _trustConditionAccepted,
+              activeColor: primaryColor,
+              onChanged: (newValue) {
+                setState(() {
+                  _trustConditionAccepted = newValue;
                 });
-            },
-          ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
-          : CustomDisabledTextButton(text: "Suivant",)
+              },
+            ),
+            
+            SizedBox(height: hv*1),
+
+            HomePageComponents.termsAndConditionsTile(
+              textColor: kTextBlue,
+              action: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
+              value: _serviceTermsAccepted,
+              activeColor: primaryColor,
+              onChanged: (newValue) {
+                setState(() {
+                  _serviceTermsAccepted = newValue;
+                });
+              },
+            ),
+
+            
+          ],),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextButton(
+                  text: "Suivant", 
+                  enable: _serviceTermsAccepted && _trustConditionAccepted,
+                  isLoading: buttonLoading,
+                  action: (){
+                    try {
+                      setState(() {
+                        buttonLoading = true;
+                      });
+                      FirebaseFirestore.instance.collection("CREDITS").add({
+                        "adherentId": adh.getAdherentId,
+                        "amount": loan.amount,
+                        "mensuality": mensuality,
+                        "totalToPay": totalToPay,
+                        "firstPaymentDate": firstPaymentDate,
+                        "lastPaymentDate": lastPaymentDate,
+                        "createdDate": now,
+                        "mostRecentPaymentDate": null,
+                        "paymentDates": [],
+                        "avalistAdded": _avalist,
+                        "avalistName": _avalistNameController.text,
+                        "avalistPhone": avalistPhone,
+                        "monthlySalary": double.parse(_salaryController.text),
+                        "isSalaryMan": _isSalaryMan,
+                        "employerName": _employerController.text,
+                        "employerPhone": phone,
+                        "frequency": _duration,
+                        "purpose": _purposeController.text,
+                        "docUrl": loan.carnetUrl,
+                        "otherDocUrl": loan.otherDocUrl,
+                        "status": 0
+                      }).then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Votre demande de crédit a été enrégistrée'),));
+                        setState(() {
+                          buttonLoading = false;
+                        });
+                        Navigator.pop(context);
+                      });
+                    }
+                    catch(e) {
+                      setState(() {
+                        buttonLoading = false;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()),));
+                    }
+                    
+                  },
+                ),
+            ),
+            Expanded(
+              child: CustomTextButton(
+                text: "Annuler",
+                color: kSouthSeas,
+                action: (){
+                    controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+                },
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
-
-  List<String> suggestions = [
-    "Lactose",
-    "Pénicilline",
-    "Pollen",
-    "Abeille",
-    "Feu",
-    "Herbes",
-    "Plastique"
-  ];
 
   void getChangedPageAndMoveBar(int page) {
     currentPageValue = page;
@@ -422,7 +752,6 @@ class _LoanFormState extends State<LoanForm> {
 
   Widget formLayout(Widget content){
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: wv*2),
       margin: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
       decoration: BoxDecoration(
         color: whiteColor,
@@ -433,116 +762,12 @@ class _LoanFormState extends State<LoanForm> {
     );
   }
 
-  Future uploadImageToFirebase(PickedFile file) async {
-
-    if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
-      return null;
-    }
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-    setState(() {
-      imageLoading = true;
-    });
-    String folder = userProvider.getUserId;
-    String date = DateTime.now().toString();
-
-    Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_beneficiaires/$folder/Beneficiaire-$date'); //.child('photos/profils_adherents/$fileName');
-    final metadata = SettableMetadata(
-      contentType: 'image/jpeg',
-      customMetadata: {'picked-file-path': file.path}
-    );
-
-    UploadTask storageUploadTask;
-    if (kIsWeb) {
-      storageUploadTask = storageReference.putData(await file.readAsBytes(), metadata);
-    } else {
-      storageUploadTask = storageReference.putFile(File(file.path), metadata);
-    }
-    
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
-
-    storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
-    });
-    storageUploadTask.whenComplete(() async {
-      String url = await storageReference.getDownloadURL();
-      beneficiary.setAvatarUrl(url);
-      avatarUrl = url;
-      print("download url: $url");
-      //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));
-    });
-    setState(() {
-      imageLoading = false;
-    });
-  }
-
-  Future getImageFromGallery() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
-    setState(() {
-      if (pickedFile != null) {
-        imageFileAvatar = File(pickedFile.path);
-        //imageLoading = true;
-      } else {
-        print('No image selected.');
-      }
-    });
-    uploadImageToFirebase(pickedFile);
-  }
-
-  Future getImageFromCamera() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera, imageQuality: 50);
-    setState(() {
-      if (pickedFile != null) {
-        imageFileAvatar = File(pickedFile.path);
-        //imageLoading = true;
-      } else {
-        print('No image selected.');
-      }
-    });
-    uploadImageToFirebase(pickedFile);
-  }
-
-  getImage(BuildContext context){
-    showModalBottomSheet(
-      context: context, 
-      builder: (BuildContext bc){
-        return SafeArea(
-          child: Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text('Gallerie'),
-                    onTap: () {
-                      getImageFromGallery();
-                      Navigator.of(context).pop();
-                    }),
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text('Camera'),
-                  onTap: () {
-                    getImageFromCamera();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-    );
-  }
 
   Future getDocFromPhone(String name) async {
 
     setState(() {
-      if (name == "Acte_De_Marriage") {
-        marriageCertificateSpinner = true;
-      } else if (name == "CNI"){
-        cniSpinner = true;
-      } else if (name == "Acte_De_Naissance"){
-        birthCertificateSpinner = true;
+      if (name == "Carnet"){
+        carnetSpinner = true;
       } else {
         otherFileSpinner = true;
       }
@@ -556,12 +781,8 @@ class _LoanFormState extends State<LoanForm> {
       } else {
         print('No image selected.');
         setState(() {
-          if (name == "Acte_De_Marriage") {
-          marriageCertificateSpinner = false;
-          } else if (name == "CNI"){
-            cniSpinner = false;
-          } else if (name == "Acte_De_Naissance"){
-            birthCertificateSpinner = false;
+          if (name == "Carnet"){
+            carnetSpinner = false;
           } else {
             otherFileSpinner = false;
           }
@@ -572,14 +793,14 @@ class _LoanFormState extends State<LoanForm> {
 
   Future uploadDocumentToFirebase(File file, String name) async {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
+    LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
     if (file == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
       return null;
     }
     
     String adherentId = adherentModelProvider.getAdherent.adherentId;
-    Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_beneficiaires/$adherentId/$matricule/$name'); //.child('photos/profils_adherents/$fileName');
+    Reference storageReference = FirebaseStorage.instance.ref().child('demandes_de_credit/$adherentId/$name-'+DateTime.now().millisecondsSinceEpoch.toString()); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
       customMetadata: {'picked-file-path': file.path}
@@ -600,29 +821,15 @@ class _LoanFormState extends State<LoanForm> {
     storageUploadTask.whenComplete(() async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name ajoutée")));
       String url = await storageReference.getDownloadURL();
-      if(name == "Acte_De_Marriage"){
-        beneficiary.setMarriageCertificateUrl(url);
+      if (name == "Carnet"){
+        loanProvider.setCarnetUrl(url);
         setState(() {
-            marriageCertificateUploaded = true;
-            marriageCertificateSpinner = false;
-          });
-      }
-      else if(name == "Acte_De_Naissance"){
-        beneficiary.setBirthCertificateUrl(url);
-        setState(() {
-          birthCertificateUploaded = true;
-          birthCertificateSpinner = false;
-        });
-      }
-      else if (name == "CNI"){
-        beneficiary.setcniUrl(url);
-        setState(() {
-          cniUploaded = true;
-          cniSpinner = false;
+          carnetUploaded = true;
+          carnetSpinner = false;
         });
       }
       else {
-        beneficiary.setOtherDocUrl(url);
+        loanProvider.setotherDocUrl(url);
         setState(() {
           otherFileUploaded = true;
           otherFileSpinner = false;
@@ -638,12 +845,8 @@ class _LoanFormState extends State<LoanForm> {
   Future getDocFromGallery(String name) async {
 
     setState(() {
-      if (name == "Acte_De_Marriage") {
-        marriageCertificateSpinner = true;
-      } else if (name == "CNI"){
-        cniSpinner = true;
-      } else if (name == "Acte_De_Naissance"){
-        birthCertificateSpinner = true;
+      if (name == "Carnet"){
+        carnetSpinner = true;
       } else {
         otherFileSpinner = true;
       }
@@ -655,12 +858,8 @@ class _LoanFormState extends State<LoanForm> {
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
-        if (name == "Acte_De_Marriage") {
-        marriageCertificateSpinner = false;
-        } else if (name == "CNI"){
-          cniSpinner = false;
-        } else if (name == "Acte_De_Naissance"){
-          birthCertificateSpinner = false;
+        if (name == "Carnet"){
+          carnetSpinner = false;
         } else {
           otherFileSpinner = false;
         }
@@ -678,27 +877,11 @@ class _LoanFormState extends State<LoanForm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(LineIcons.identificationCard),
-                    title: new Text('CNI (ou passeport)', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    title: new Text('Carnet', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                     onTap: () {
-                      getDocFromPhone("CNI");
+                      getDocFromPhone("Carnet");
                       Navigator.of(context).pop();
                     }),
-                new ListTile(
-                  leading: new Icon(MdiIcons.babyFaceOutline),
-                  title: new Text('Acte de naissance', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
-                  onTap: () {
-                    getDocFromPhone("Acte_De_Naissance");
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(LineIcons.ring),
-                  title: new Text('Acte de marriage', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
-                  onTap: () {
-                    getDocFromPhone("Acte_De_Marriage");
-                    Navigator.of(context).pop();
-                  },
-                ),
                 new ListTile(
                   leading: new Icon(LineIcons.certificate),
                   title: new Text('Autre pièce justificative', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
@@ -712,6 +895,19 @@ class _LoanFormState extends State<LoanForm> {
           ),
         );
       }
+    );
+  }
+
+  Widget getTableRow({String input, String output}){
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: hv*0.5),
+      child: Row(
+        children: [
+          Text(input, style: TextStyle(color: kTextBlue, fontSize: 15)),
+          Spacer(),
+          Text(output, style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 
@@ -734,18 +930,5 @@ class _LoanFormState extends State<LoanForm> {
     setState(() {
       this.number = number;
     });
-  }
-
-  _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(1990),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-      });
   }
 }

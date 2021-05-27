@@ -16,7 +16,8 @@ class AdvantageCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1.5),
-        constraints: BoxConstraints(maxWidth: wv*50),
+        width: wv*50,
+        height: wv*50/1.5,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(inch*2), boxShadow: [
@@ -26,6 +27,8 @@ class AdvantageCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              width: wv*50,
+              height: wv*50/1.5,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(inch*2)),
                 image: DecorationImage(image: AssetImage("assets/images/Plant.png"), fit: BoxFit.cover, colorFilter: ColorFilter.mode(Colors.grey.withOpacity(0.2), BlendMode.dstATop)),
@@ -49,7 +52,8 @@ class AdvantageCard extends StatelessWidget {
                         Expanded(child: Container()),
                         Text("DanAid", style: TextStyle(fontSize: inch*1.5, fontWeight: FontWeight.bold, color: Colors.white)),
                       ],),
-                      Align(child: Text(description == null ? state : description, style: TextStyle(fontSize: description == null ? 17 : 12, fontWeight: FontWeight.w400, color: Colors.white70)), alignment: Alignment.topLeft,),
+                      Align(child: Text(description == null ? state : description, style: TextStyle(fontSize: description == null ? 17 : 12, fontWeight: FontWeight.w400, color: Colors.white.withOpacity(0.8))), alignment: Alignment.topLeft,),
+                      Spacer(),
                       Align(
                         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -69,7 +73,7 @@ class AdvantageCard extends StatelessWidget {
                                   Icon(Icons.arrow_forward_ios, color: color, size: inch*2.3,),
                                 ], mainAxisSize: MainAxisSize.min,),
                                 onPressed: onTap,
-                                ) : Image.asset('assets/icons/DanaidLogo.png', width: wv*20,),
+                                ) : Align(child: Image.asset('assets/icons/DanaidLogo.png', width: wv*20,), alignment: Alignment.bottomRight,),
                             )
                           ],
                         ), alignment: Alignment.bottomRight,),

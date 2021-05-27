@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/loanModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
@@ -77,7 +78,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                     children: [
                       Container(
                         margin: EdgeInsets.only(bottom: hv*11),
-                        padding: EdgeInsets.only(bottom: hv*5.5),
+                        padding: EdgeInsets.only(bottom: hv*9),
                         decoration: BoxDecoration(
                           color: kBrownCanyon.withOpacity(0.3),
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
@@ -173,7 +174,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                               //loanProvider.setAmount(double.parse(_amountController.text));
                               loanProvider.setLoanModel(LoanModel(amount: double.parse(_amountController.text), maxAmount: maxAmount));
                               //loanProvider.setMaxAmount(maxAmount);
-                              //Navigator.pushNamed(context, '/loan-form');
+                              Navigator.pushNamed(context, '/loan-form');
                             }
                           },
                         ),
@@ -202,13 +203,15 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                 action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
               ),
             ) : Container(),
-            SizedBox(height: hv*2,),
-            HomePageComponents.getInfoActionCard(
-              title: "Vous êtes au niveau 0 : Découverte",
-              subtitle: "Vous devez réferer 3 amis & connaissances pour pouvoir emprunter",
-              actionLabel: "Inviter des amis",
-              action: (){}
-            ),
+            adherentProvider.getAdherent.adherentPlan == 0 ? Container(
+              padding: EdgeInsets.symmetric(vertical: hv*1),
+              child: HomePageComponents.getInfoActionCard(
+                title: "Vous êtes au niveau 0 : Découverte",
+                subtitle: "Vous devez réferer 3 amis & connaissances pour pouvoir emprunter",
+                actionLabel: "Inviter des amis",
+                action: (){}
+              ),
+            ) : Container(),
             SizedBox(height: hv*2.5,),
             Container(
               decoration: BoxDecoration(
@@ -246,7 +249,54 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                         child: TabBarView(
                           controller: _loanTabController,
                           children: [
-                            Container(),
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: hv*2),
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance.collection("CREDITS").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).where('status', isEqualTo: 0).orderBy('createdDate', descending: true).snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                      ),
+                                    );
+                                  }
+                                  return snapshot.data.docs.length >= 1
+                                    ? ListView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: snapshot.data.docs.length,
+                                        itemBuilder: (context, index) {
+                                          int lastIndex = snapshot.data.docs.length - 1;
+                                          DocumentSnapshot loanDoc = snapshot.data.docs[index];
+                                          LoanModel loan = LoanModel.fromDocument(loanDoc);
+                                          print("name: ");
+                                          return Padding(
+                                            padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                            child: HomePageComponents.getLoanTile(
+                                              label: "hhgfhfghfh",
+                                              doctorName: "gfgdgdfg",
+                                              date: loan.dateCreated.toDate(),
+                                              firstDate: loan.firstPaymentDate.toDate(),
+                                              lastDate: loan.lastPaymentDate.toDate(),
+                                              mensuality: loan.mensuality,
+                                              type: "gfg",
+                                              state: loan.status,
+                                              action: (){
+                                                /*LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
+                                                loanProvider.setLoanModel(loan);
+                                                Navigator.pushNamed(context, '/loan-details');*/
+                                              }
+                                            ),
+                                          );
+                                        })
+                                    : Center(
+                                      child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text("Aucune demande de crédit enrégistrée\npour le moment..", textAlign: TextAlign.center)),
+                                    );
+                                }
+                              ),
+                            ),
                             Container(),
                           ],
                         ),

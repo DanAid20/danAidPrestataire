@@ -169,7 +169,7 @@ class MyCoverageTabView extends StatelessWidget {
                             print("name: ");
                             return Padding(
                               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                              child: HomePageComponents().getMyCoverageHospitalsTiles(
+                              child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
                                 initial: useCase.establishment.toUpperCase().substring(0,3),
                                 name: useCase.establishment,
                                 date: useCase.dateCreated.toDate(),
@@ -178,9 +178,9 @@ class MyCoverageTabView extends StatelessWidget {
                                 action: (){
                                   UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
                                   usecaseProvider.setUseCaseModel(useCase);
-                                  Navigator.pushNamed(context, '/use-case');
+                                  Navigator.pushNamed(context, '/appointment');
                                 }
-                              ),
+                              ) : Container(),
                             );
                           })
                       : Center(

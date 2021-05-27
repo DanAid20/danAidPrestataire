@@ -180,4 +180,8 @@ class Algorithms {
       return (dayDiff ~/ 365).toString()+" ans";
     }
   }
+
+  static double getFixedMonthlyMortgageRate({num amount, num rate, int months}){
+    return amount*rate*(pow(1 + rate, months)/(pow(1 + rate, months) - 1));
+  }
 }

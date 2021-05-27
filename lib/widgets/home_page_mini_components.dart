@@ -1149,7 +1149,7 @@ class HomePageComponents {
     );
   }
 
-  getMyCoverageHospitalsTiles({String initial, String name, DateTime date, double price, int state, Function action}) {
+  Widget getMyCoverageHospitalsTiles({String initial, String name, DateTime date, double price, int state, Function action}) {
     return ListTile(
       onTap: action,
       leading: Container(
@@ -1257,6 +1257,80 @@ class HomePageComponents {
                 color: getAppointmentStateColor(state), fontSize: inch * 1.7),
           ),
         ],
+      ),
+      onTap: action,
+    );
+  }
+
+  static Widget getLoanTile({String label, String doctorName, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
+    String firstDateString = firstDate.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
+    String lastDateString = lastDate.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
+    return ListTile(
+      leading: Container(
+        width: wv * 12,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1),
+        decoration: BoxDecoration(
+            color: kBrownCanyon,
+            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(date.day.toString().padLeft(2, '0'),
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: inch * 1.7,
+                    fontWeight: FontWeight.w700)),
+            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: inch * 1.5,
+                    fontWeight: FontWeight.w400)),
+          ],
+        ),
+      ),
+      title: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text(
+          "$firstDateString au $lastDateString",
+          style: TextStyle(
+              color: kPrimaryColor,
+              fontSize: 14),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+      subtitle: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("")
+            ],
+          ),
+        ],
+      ),
+      trailing: Container(
+        width: wv*30,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(mensuality.toString()+" .f", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                Text("", style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),),
+              ],
+            ),
+            SizedBox(width: wv*2,),
+            Column(
+              children: [
+                SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: wv*8,),
+                Text("Payer", style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+              ],
+            )
+          ],
+        ),
       ),
       onTap: action,
     );
@@ -1495,7 +1569,7 @@ class HomePageComponents {
     );
   }
 
-  static termsAndConditionsTile({Function(bool) onChanged, bool value, Function action, Color activeColor}){
+  static termsAndConditionsTile({Function(bool) onChanged, bool value, Function action, Color activeColor, Color textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1508,7 +1582,7 @@ class HomePageComponents {
               children: [
                 TextSpan(
                   text: "Lu et accepté les ",
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(color: textColor == null ? Colors.grey[600] : textColor),
                 ),
                 TextSpan(
                   text: "termes des services",
@@ -1528,7 +1602,7 @@ class HomePageComponents {
     );
   }
 
-  static confirmTermsTile({Function(bool) onChanged, bool value, Function action, Color activeColor}){
+  static confirmTermsTile({Function(bool) onChanged, bool value, Function action, Color activeColor, Color textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1537,13 +1611,13 @@ class HomePageComponents {
         child: Container(
           child: Column(
             children: [
-              Text("Je reconnais par la présente qu’en cas de défaut de paiment je m’expose à:", style:  TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600),),
+              Text("Je reconnais par la présente qu’en cas de défaut de paiment je m’expose à:", style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
               SizedBox(height: hv*0.5),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    style:  TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400,),
+                    style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w400,),
                     children: [
                       TextSpan(
                         text: "\u2022 " + "Des poursuite judiciaires\n",
@@ -1610,7 +1684,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget header({String title, String subtitle, String avatarUrl, String label}){
+  static Widget header({String title, String subtitle, String avatarUrl, String label, Color titleColor = kPrimaryColor}){
     return Container(
       padding: EdgeInsets.only(left: wv*4),
       decoration: BoxDecoration(
@@ -1635,7 +1709,7 @@ class HomePageComponents {
                     text: title + "\n",
                     children: [
                       TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
-                    ], style: TextStyle(color: kPrimaryColor, fontSize: 16.5)),
+                    ], style: TextStyle(color: titleColor, fontSize: 16.5)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                   ),

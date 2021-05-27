@@ -22,4 +22,14 @@ class LoanModelProvider with ChangeNotifier {
     _loan.maxAmount = val;
     notifyListeners();
   }
+
+  setCarnetUrl(String val){
+    _loan.carnetUrl = val;
+    notifyListeners();
+  }
+
+  setotherDocUrl(String val){
+    _loan.otherDocUrl = val;
+    notifyListeners();
+  }
 }
