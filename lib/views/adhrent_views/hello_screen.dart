@@ -109,7 +109,9 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
-
+       final birthday = userProvider.getUserModel.dateCreated.toDate();
+    final date2 = DateTime.now();
+    final yearsForBadget= date2.difference(birthday).inDays;
     return WillPopScope(
       onWillPop: () async {
         controller.toPreviousIndex();
@@ -186,10 +188,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                                       "assets/icons/Bulk/Shield Done.svg",
                                       width: 18,
                                     ): Container(): Container(),
-                                    SvgPicture.asset(
-                                      "assets/icons/Bulk/Ticket Star.svg",
-                                      width: 18,
-                                    ),
+                                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink()
                                   ],
                                 ),
                               ),

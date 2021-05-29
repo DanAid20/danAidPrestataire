@@ -79,7 +79,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'beneficiaryName':exists==false?null:adherentUserSelected.familyName,
       'otherInfo':'',
       'consultationCode': exists==false?null: code,
-      'type': 'CONSULTATION',
+      'type': widget.consultationType,
       'amountToPay': 2000,
       'status' : 0  ,
       'createdDate':  DateTime.now(), 
@@ -114,8 +114,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'idMedecin':doctorProvider.getDoctor.id,
       'amountToPay': 2000,
       'isSolve':false,
-      'canPay': true,
-      'Type': widget.consultationType ,
+      'canPay': 0,
+      'Type':widget.consultationType ,
       'createdAt':  DateTime.now(),
     }, SetOptions(merge: true)).then((value) {
         setState(() {
