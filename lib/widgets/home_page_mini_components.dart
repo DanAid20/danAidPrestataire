@@ -21,7 +21,7 @@ class HomePageComponents {
     String nom, 
     String date,
     String montant, 
-    String etat,
+    int etat,
     String iconesConsultationTypes
   }){
     return Container(
@@ -77,8 +77,8 @@ class HomePageComponents {
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
-                                        Text(etat, style: TextStyle(
-                                          color: kblueSky,
+                                        Text(etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : ''  , style: TextStyle(
+                                          color: etat==0?  Colors.red: etat==1?  Colors.green: etat==2? kblueSky : '' ,
                                           fontWeight: FontWeight.w400,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
                                       ],
@@ -89,7 +89,13 @@ class HomePageComponents {
                             ),
     );
   }
-  Widget paiementItem(){
+  Widget paiementItem({
+    String month, 
+    String prix,
+    String lastDatePaiement,
+    bool paidOrNot,
+    String paidAllReady,
+  }){
     return Container(
         margin: EdgeInsets.all( wv * 3),
                  decoration: BoxDecoration(
@@ -111,7 +117,7 @@ class HomePageComponents {
                              mainAxisSize: MainAxisSize.min,
                              crossAxisAlignment: CrossAxisAlignment.start,
                              children: [
-                                   Container(alignment: Alignment.centerLeft, child: Text('Avril', style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Text(month, style: TextStyle(
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
@@ -121,7 +127,7 @@ class HomePageComponents {
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('10500 f', style: TextStyle(
+                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w700,
                                       
@@ -135,7 +141,7 @@ class HomePageComponents {
                              mainAxisSize: MainAxisSize.min,
                              crossAxisAlignment: CrossAxisAlignment.end,
                              children: [
-                                   Container(alignment: Alignment.centerRight, child: Text('En attente', style: TextStyle(
+                                   Container(alignment: Alignment.centerRight, child: Text(paidOrNot==false ? 'En attente ($paidAllReady)' : 'payé', style: TextStyle(
                                       color: kArgent,
                                       fontWeight: FontWeight.w700,
                                       
@@ -146,7 +152,7 @@ class HomePageComponents {
                                       fontWeight: FontWeight.w500,
                                       fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
                                         alignment: Alignment.centerRight,
-                                        child: Text('31 Mars 2021', style: TextStyle(
+                                        child: Text(lastDatePaiement, style: TextStyle(
                                         color: kBlueForce,
                                         fontWeight: FontWeight.w600,
                                         fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -182,7 +188,7 @@ class HomePageComponents {
       String nom,
       String subtitle,
       String apointementDate,
-      String apointementType,
+      int etat,
       bool isSpontane = false}) {
     return ListTile(
       leading: HomePageComponents().getAvatar(
@@ -222,11 +228,11 @@ class HomePageComponents {
                         fontSize:  14.sp, color: kPrimaryColor),
                   ),
                   Text(
-                    apointementType != null ? apointementType : 'RDV',
+                    etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : '' ,
                     style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color: primaryColor),
+                        color:  etat==0?  Colors.red: etat==1?  Colors.green: etat==2? kblueSky : ''),
                   ),
                 ],
               ),

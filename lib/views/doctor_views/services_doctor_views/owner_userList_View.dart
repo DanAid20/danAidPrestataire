@@ -31,7 +31,7 @@ double underWeight;
 double normaleWeight;
 double overWeight;
 double svarWeight;
-double weight=0;
+double imc=0;
  DateTime date;
   @override
   void initState() {
@@ -49,12 +49,24 @@ double weight=0;
  
   return differenceInDays.toString();
  }
+ double convertToMeter(value){
+   return value.runtimeType ==String && value!=null && value!='' ? double.parse(value)/100  : value!=null && value!='' ? value/100 : 0;
+ }
+ double toInt(value){
+   print( value.runtimeType);
+   print( value);
+   return  value.runtimeType ==String && value!=null && value!='' ? double.parse(value)  : value!=null && value!='' ? value : 0;
+ }
+ double getNumber(double input, {int precision = 2}) => 
+double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1));
  calculWeight(){
-     weight= double.parse(widget.beneficiare.weight) /  double.parse(widget.beneficiare.height)*double.parse(widget.beneficiare.height);
-    if(weight<=18.5){setState(() {underWeight=weight;});}
-    else if(weight>=18.5 && weight<=25){setState(() {normaleWeight=weight;});}
-    else if(weight>=25 && weight<=30){setState(() {overWeight=weight;});}
-    else if(weight>30){setState(() {svarWeight=weight;});}
+   print(widget.beneficiare.weight.runtimeType);
+   print(widget.beneficiare.weight);
+     imc=getNumber(toInt(widget.beneficiare.weight) / (convertToMeter(widget.beneficiare.height) * convertToMeter(widget.beneficiare.height)), precision: 1);
+    if(imc<=18.5){setState(() {underWeight=imc;});}
+    else if(imc>=18.5 && imc<=25){setState(() {normaleWeight=imc;});}
+    else if(imc>=25 && imc<=30){setState(() {overWeight=imc;});}
+    else if(imc>30){setState(() {svarWeight=imc;});}
  }
 
   @override
@@ -123,7 +135,7 @@ double weight=0;
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           HomePageComponents().getAvatar(
-                              imgUrl: widget.beneficiare !=null?  widget.beneficiare.avatarUrl:  'assets/images/avatar-profile.jpg',
+                              imgUrl: widget.beneficiare !=null && widget.beneficiare.avatarUrl!=null ?  widget.beneficiare.avatarUrl:  'assets/images/avatar-profile.jpg',
                               size: MySize.size36,
                               renoveIsConnectedButton: false),
                           Column(
@@ -158,6 +170,9 @@ double weight=0;
                                               MySize.getScaledSizeHeight(17))),
                                 ],
                               ),
+                            
+                             
+                             
                             ],
                           ),
                         ],

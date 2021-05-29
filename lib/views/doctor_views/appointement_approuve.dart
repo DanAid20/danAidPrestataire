@@ -243,16 +243,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             content: symptoms,
                             wrapSpacing: 4,
                             wrapRunSpacing: 4,
-                            onTagPress: (tag) {
-                              setState(() {
-                                symptoms.remove(tag);
-                              });
-                            },
                             tagContainerPadding: EdgeInsets.all(6),
-                            tagTextStyle: TextStyle(color: kPrimaryColor),
-                            tagIcon: Icon(Icons.clear, size: wv*3, color: kDeepTeal,),
+                            tagTextStyle: TextStyle(color: textWhiteColor, fontWeight: FontWeight.bold),
                             tagContainerDecoration: BoxDecoration(
-                              color: kPrimaryColor.withOpacity(0.2),
+                              color: lightGreyColor.withOpacity(0.6),
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ) :
@@ -272,7 +266,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     isLoading: announceLoading,
-                    enable: appointment.getAppointment.announced == true,
+                    enable: true,
                     text: "Approuver",
                     action: (){
                       setState(() {
@@ -307,7 +301,6 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     noPadding: true,
                     text: "Rejeter",
                     isLoading: cancelLoading,
-                    enable: edit ? true : appointment.getAppointment.announced == true,
                     color: kSouthSeas,
                     action: (){
                       setState(() {
@@ -320,11 +313,12 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('L\'annonce a été rejeter..'),));
                           appointment.setAnnouncement(false);
                            setState(() {
-                            announceLoading = false;
+                            cancelLoading = false;
                             edit=false;
                             appointment.getAppointment.status=2;
                           });
                         });
+                        
                       }
                       catch(e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
