@@ -65,5 +65,9 @@ navigateReplaceTo({BuildContext context, String routeName, Object args}) => Navi
 String adherent = "ADHERENT";
 String doctor = "MEDECIN";
 String serviceProvider = "PRESTATAIRE";
+
 // consultation Types 
 enum ConsultationTypes { Encabinet, Videos, Message }
+
+//Hover action Ids
+String transferOrangeMoney = "d68d2e79";

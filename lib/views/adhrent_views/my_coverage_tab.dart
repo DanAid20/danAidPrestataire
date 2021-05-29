@@ -35,6 +35,34 @@ class MyCoverageTabView extends StatelessWidget {
                           : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
                     actionLabel: "Comparer Les Services",
                     subtitle: "...",
+                    action: (){
+                      Navigator.pushNamed(context, '/compare-plans');
+                      /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
+                        .doc("0")
+                        .set({
+                          "cotisationMensuelleFondDSoint": 0,
+                          "couverture": 5,
+                          "descriptionText": {
+                            "textCotisation" : "0 fcfa/mois/famille",
+                            "textPeriodeTypePaiement" : "Jamais",
+                            "textSuivi" : "Medecin de famille",
+                            "titreNiveau" : "Niveau 0: Découverte"
+                          },
+                          "fraisIncription": 0,
+                          "modeDePaiement": "Jamais",
+                          "montantMaxPretSante": 50000,
+                          "montantPaiementSupplement": 1250,
+                          "nomNiveau": "Découverte",
+                          "numeroNiveau": 0,
+                          "plafondAnnuelle": 25000,
+                          "userSelectedIt": false,
+                          "rate": 0.165,
+                          "familyDoctorIsFree": false,
+                          "canWinPoints": true,
+                          "familyCoverage": true,
+                          "socialNetworkEnable": true
+                        });*/
+                    }
                     //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
                   ),
                 )

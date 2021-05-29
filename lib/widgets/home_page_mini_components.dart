@@ -1281,10 +1281,10 @@ class HomePageComponents {
                     fontSize: inch * 1.7,
                     fontWeight: FontWeight.w700)),
             Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: inch * 1.5,
-                    fontWeight: FontWeight.w400)),
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: inch * 1.5,
+                fontWeight: FontWeight.w400)),
           ],
         ),
       ),
@@ -1294,8 +1294,9 @@ class HomePageComponents {
           "$firstDateString au $lastDateString",
           style: TextStyle(
               color: kPrimaryColor,
-              fontSize: 14),
-          overflow: TextOverflow.ellipsis,
+              fontSize: wv*3.5),
+          overflow: TextOverflow.fade,
+          maxLines: 1,
         ),
       ),
       subtitle: Row(
@@ -1309,7 +1310,7 @@ class HomePageComponents {
         ],
       ),
       trailing: Container(
-        width: wv*30,
+        width: wv*25,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -1721,7 +1722,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInfoActionCard({Widget icon, String title, String subtitle, String actionLabel, Function action}){
+  static Widget getInfoActionCard({Widget icon, String title, String subtitle, String actionLabel, bool noAction = false, Function action}){
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
@@ -1751,7 +1752,7 @@ class HomePageComponents {
                 ],
               ),
             ),
-            Expanded(
+            !noAction ? Expanded(
               flex: 3,
               child: GestureDetector(
                 onTap: action,
@@ -1765,7 +1766,7 @@ class HomePageComponents {
                   child: Center(child: Text(actionLabel, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
                 ),
               ),
-            )
+            ): Container()
           ],
         ),
       ),

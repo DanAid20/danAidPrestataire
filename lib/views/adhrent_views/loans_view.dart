@@ -156,7 +156,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                       ),
                       SizedBox(width: wv*3,),
                       Expanded(
-                        flex: 4,
+                        flex: 5,
                         child: CustomTextButton(
                           noPadding: true,
                           expand: false,

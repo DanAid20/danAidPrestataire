@@ -26,6 +26,7 @@ import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
 import 'package:danaid/core/providers/loanModelProvider.dart';
+import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
 
@@ -97,6 +98,9 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<LoanModelProvider>(
                 create: (_) => LoanModelProvider(LoanModel()),
+              ),
+              ChangeNotifierProvider<PlanModelProvider>(
+                create: (_) => PlanModelProvider(null),
               ),
             ],
             child: ScreenUtilInit(
