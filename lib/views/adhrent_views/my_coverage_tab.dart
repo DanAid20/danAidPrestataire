@@ -20,52 +20,42 @@ class MyCoverageTabView extends StatelessWidget {
           child: ListView(
             children: [
               SizedBox(height: hv*2,),
-              adherentProvider.getAdherent != null ? Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
-                ),
-                margin: EdgeInsets.symmetric(horizontal: wv*3),
-                child: IntrinsicHeight(
-                  child: HomePageComponents.getInfoActionCard(
-                    title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
-                      : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
-                        : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
-                          : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
-                    actionLabel: "Comparer Les Services",
-                    subtitle: "...",
-                    action: (){
-                      Navigator.pushNamed(context, '/compare-plans');
-                      /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
-                        .doc("0")
-                        .set({
-                          "cotisationMensuelleFondDSoint": 0,
-                          "couverture": 5,
-                          "descriptionText": {
-                            "textCotisation" : "0 fcfa/mois/famille",
-                            "textPeriodeTypePaiement" : "Jamais",
-                            "textSuivi" : "Medecin de famille",
-                            "titreNiveau" : "Niveau 0: Découverte"
-                          },
-                          "fraisIncription": 0,
-                          "modeDePaiement": "Jamais",
-                          "montantMaxPretSante": 50000,
-                          "montantPaiementSupplement": 1250,
-                          "nomNiveau": "Découverte",
-                          "numeroNiveau": 0,
-                          "plafondAnnuelle": 25000,
-                          "userSelectedIt": false,
-                          "rate": 0.165,
-                          "familyDoctorIsFree": false,
-                          "canWinPoints": true,
-                          "familyCoverage": true,
-                          "socialNetworkEnable": true
-                        });*/
-                    }
-                    //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
-                  ),
-                )
+              adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
+                title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
+                  : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
+                    : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
+                      : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
+                actionLabel: "Comparer Les Services",
+                subtitle: "...",
+                action: (){
+                  Navigator.pushNamed(context, '/compare-plans');
+                  /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
+                    .doc("0")
+                    .set({
+                      "cotisationMensuelleFondDSoint": 0,
+                      "couverture": 5,
+                      "descriptionText": {
+                        "textCotisation" : "0 fcfa/mois/famille",
+                        "textPeriodeTypePaiement" : "Jamais",
+                        "textSuivi" : "Medecin de famille",
+                        "titreNiveau" : "Niveau 0: Découverte"
+                      },
+                      "fraisIncription": 0,
+                      "modeDePaiement": "Jamais",
+                      "montantMaxPretSante": 50000,
+                      "montantPaiementSupplement": 1250,
+                      "nomNiveau": "Découverte",
+                      "numeroNiveau": 0,
+                      "plafondAnnuelle": 25000,
+                      "userSelectedIt": false,
+                      "rate": 0.165,
+                      "familyDoctorIsFree": false,
+                      "canWinPoints": true,
+                      "familyCoverage": true,
+                      "socialNetworkEnable": true
+                    });*/
+                }
+                //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
               )
               : 
               Center(child: Loaders().buttonLoader(kPrimaryColor)),
@@ -175,7 +165,7 @@ class MyCoverageTabView extends StatelessWidget {
                                 action: (){
                                   UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
                                   usecaseProvider.setUseCaseModel(useCase);
-                                  Navigator.pushNamed(context, '/appointment');
+                                 // Navigator.pushNamed(context, '/use-case');
                                 }
                               ) : Container(),
                             );

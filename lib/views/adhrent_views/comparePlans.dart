@@ -99,22 +99,35 @@ class _ComparePlansState extends State<ComparePlans> {
                 noAction: true
               ),
             ),
-            SizedBox(height: hv*2.5,),
+            SizedBox(height: hv*1,),
 
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
+              //physics: BouncingScrollPhysics(),
               child: currentPlan != null && state != null ? Table(
                 defaultColumnWidth: FixedColumnWidth(wv*30),
-                columnWidths: <int, TableColumnWidth>{0 : FixedColumnWidth(wv*50)},
+                columnWidths: <int, TableColumnWidth>{0 : FixedColumnWidth(wv*45)},
                 children: [
                   TableRow(
                     children: [
-                      headerCell(content: Container()),
+                      Container(
+                        padding: EdgeInsets.only(left: wv*2),
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(color: kDeepTeal, fontSize: wv*4),
+                            children: [
+                              TextSpan(text: plans[state].label+'\n', style: TextStyle(fontSize: wv*6)),
+                              TextSpan(text: plans[state].monthlyAmount.toString(), style: TextStyle(fontSize: wv*8)),
+                              TextSpan(text: " Cfa\n"),
+                              TextSpan(text: "par famille / Mois"),
+                            ]
+                          )
+                        ),
+                      ),
                       headerCell(text: "Niveau 0", icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
-                      headerCell(text: "Niveau I", icon: 'assets/icons/Bulk/ShieldLine.svg', isActive: state == isAcces),
-                      headerCell(text: "Niveau II", icon: 'assets/icons/Bulk/ShieldLine.svg', isActive: state == isAssist),
-                      headerCell(text: "Niveau III", icon: 'assets/icons/Bulk/ShieldLine.svg', isActive: state == isSerenity),
+                      headerCell(text: "Niveau I", icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
+                      headerCell(text: "Niveau II", icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
+                      headerCell(text: "Niveau III", icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
                     ]
                   ),
                   TableRow(
@@ -129,28 +142,28 @@ class _ComparePlansState extends State<ComparePlans> {
                   TableRow(
                     children: [
                       defaultCell(text: "Plafond Annuel", center: false),
-                      defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isDecouverte),
-                      defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isAcces),
-                      defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isAssist),
-                      defaultCell(text: plans[3].annualLimit.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isSerenity)
+                      defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isDecouverte),
+                      defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAcces),
+                      defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAssist),
+                      defaultCell(text: plans[3].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isSerenity)
                     ]
                   ),
                   TableRow(
                     children: [
                       defaultCell(text: "Prêt santé", center: false),
-                      defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isDecouverte),
-                      defaultCell(text: plans[1].maxCreditAmount.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isAcces),
-                      defaultCell(text: plans[2].maxCreditAmount.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isAssist),
-                      defaultCell(text: plans[3].maxCreditAmount.toString()+"Cfa", fontSize: wv*4.5, isActive: state == isSerenity)
+                      defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isDecouverte),
+                      defaultCell(text: plans[1].maxCreditAmount.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAcces),
+                      defaultCell(text: plans[2].maxCreditAmount.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAssist),
+                      defaultCell(text: plans[3].maxCreditAmount.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isSerenity)
                     ]
                   ),
                   TableRow(
                     children: [
                       defaultCell(text: "taux d'intérêt", center: false),
-                      defaultCell(text: (plans[0].creditRate*100).toString()+"%", fontSize: wv*4.5, isActive: state == isDecouverte),
-                      defaultCell(text: (plans[1].creditRate*100).toString()+"%", fontSize: wv*4.5, isActive: state == isAcces),
-                      defaultCell(text: (plans[2].creditRate*100).toString()+"%", fontSize: wv*4.5, isActive: state == isAssist),
-                      defaultCell(text: (plans[3].creditRate*100).toString()+"%", fontSize: wv*4.5, isActive: state == isSerenity)
+                      defaultCell(text: (plans[0].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isDecouverte),
+                      defaultCell(text: (plans[1].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isAcces),
+                      defaultCell(text: (plans[2].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isAssist),
+                      defaultCell(text: (plans[3].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isSerenity)
                     ]
                   ),
                   TableRow(
@@ -199,7 +212,7 @@ class _ComparePlansState extends State<ComparePlans> {
                 text: "Changer de niveau",
                 enable: currentPlan != null && state != null,
                 action: (){
-                  showModalBottomSheet(
+                  adherentProvider.getAdherent.adherentPlan == 0 ? showModalBottomSheet(
                     context: context, 
                     builder: (BuildContext bc){
                       return SafeArea(
@@ -213,7 +226,7 @@ class _ComparePlansState extends State<ComparePlans> {
                                     Navigator.of(context).pop();
                                   }) : Container(),
                               state != isAcces ? ListTile(
-                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldLine.svg', height: 30, color: kSouthSeas),
+                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldAcces.svg', height: 30, color: kSouthSeas),
                                 title: new Text('Niveau I : Accès', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   planProvider.setPlanModel(plans[1]);
@@ -221,7 +234,7 @@ class _ComparePlansState extends State<ComparePlans> {
                                 },
                               ) : Container(),
                               state != isAssist ? ListTile(
-                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldLine.svg', height: 30, color: kSouthSeas),
+                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldAssist.svg', height: 30, color: kSouthSeas),
                                 title: new Text('Niveau II : Assist', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   planProvider.setPlanModel(plans[2]);
@@ -229,7 +242,7 @@ class _ComparePlansState extends State<ComparePlans> {
                                 },
                               ) : Container(),
                               state != isSerenity ? ListTile(
-                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldLine.svg', height: 30, color: kSouthSeas),
+                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldSerenity.svg', height: 30, color: kSouthSeas),
                                 title: new Text('Niveau III : Sérénité', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   planProvider.setPlanModel(plans[3]);
@@ -241,7 +254,8 @@ class _ComparePlansState extends State<ComparePlans> {
                         ),
                       );
                     }
-                  );
+                  ) :
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Opération annulée : vous avez déjà un plan en cours",)));
                 },
               ),
             )
@@ -253,9 +267,9 @@ class _ComparePlansState extends State<ComparePlans> {
 
   Widget defaultCell({String text, Widget content, String subtitle, double fontSize = 16, bool isActive = false, bool center = true, Color textColor = kPrimaryColor}){
     return Container(
-      constraints: BoxConstraints(minHeight: 60),
+      constraints: BoxConstraints(minHeight: hv*7),
       padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: 5),
-      color: isActive ? kSouthSeas.withOpacity(0.5) : whiteColor,
+      color: isActive ? kSouthSeas.withOpacity(0.7) : whiteColor,
       child: content == null ? Column(
         crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -268,10 +282,10 @@ class _ComparePlansState extends State<ComparePlans> {
 
   Widget headerCell({Widget content, String text, String icon, double fontSize = 20, bool isActive = false}){
     return Container(
-      constraints: BoxConstraints(minHeight: 100),
+      constraints: BoxConstraints(minHeight: hv*12),
       padding: EdgeInsets.only(top: 15, bottom: 5),
       decoration: BoxDecoration(
-        color: isActive ? kSouthSeas.withOpacity(0.5) : Colors.transparent,
+        color: isActive ? kSouthSeas.withOpacity(0.7) : Colors.transparent,
         borderRadius: isActive ? BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)) : null
       ),
       child: content != null ? content : Column(
@@ -290,7 +304,7 @@ class _ComparePlansState extends State<ComparePlans> {
       constraints: BoxConstraints(minHeight: isActive ? 80 : 60),
       padding: EdgeInsets.only(top: 15, bottom: 5),
       decoration: BoxDecoration(
-        color: isActive ? kSouthSeas.withOpacity(0.5) : whiteColor,
+        color: isActive ? kSouthSeas.withOpacity(0.7) : whiteColor,
         borderRadius: isActive ? BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)) : null
       ),
       child: Align(child: content, alignment: Alignment.topCenter,),
