@@ -71,3 +71,4 @@ enum ConsultationTypes { Encabinet, Videos, Message }
 
 //Hover action Ids
 String transferOrangeMoney = "d68d2e79";
+String transferMTNMobileMoney = "e33f1918";

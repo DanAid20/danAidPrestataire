@@ -101,7 +101,6 @@ class _ContributionsState extends State<Contributions> {
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
                                   }
                                   else {
-                                    invoiceProvider.setInvoiceModel(invoice);
                                     PlanModel plan = PlanModel(
                                       id: inscriptionId,
                                       monthlyAmount: invoice.amount,
@@ -110,6 +109,7 @@ class _ContributionsState extends State<Contributions> {
                                       text: {"titreNiveau": invoice.label}
                                     );
                                     planProvider.setPlanModel(plan);
+                                    invoiceProvider.setInvoiceModel(invoice);
                                     Navigator.pushNamed(context, '/coverage-payment');
                                   }
                                 }

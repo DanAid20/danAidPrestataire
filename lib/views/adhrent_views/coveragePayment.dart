@@ -32,7 +32,13 @@ class _CoveragePaymentState extends State<CoveragePayment> {
 
   void orangeMoneyTransfer({String amount, String pin}) async {
     var res = _hoverUssd.sendUssd(actionId: transferOrangeMoney, extras: {"1": "658112605", "2": amount, "pin": ""});
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Afterrrrrr",)));
+    print("Afterrereer");
+    print(res.toString()+": vaall");
+    print("Doonnneee");
+  }
+
+  void mobileMoneyTransfer({String amount, String pin}) async {
+    var res = _hoverUssd.sendUssd(actionId: transferMTNMobileMoney, extras: {"phoneNumber": "673662062", "montantTransfert": amount, "raison": "DanAid Payment", "pin": ""});
     print("Afterrereer");
     print(res.toString()+": vaall");
     print("Doonnneee");
@@ -47,7 +53,6 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     InvoiceModelProvider invoiceProvider = Provider.of<InvoiceModelProvider>(context);
-    invoiceProvider.setInvoiceModel(InvoiceModel());
     InvoiceModel invoice = invoiceProvider.getInvoice;
     PlanModel plan = planProvider.getPlan;
 
@@ -283,7 +288,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                   ],
                 ),
               ),
-              /*SizedBox(width: wv*5,),
+              SizedBox(width: wv*5,),
               GestureDetector(
                 onTap: ()=>setState((){choice = momo;}),
                 child: Stack(
@@ -310,7 +315,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     ) : Container()
                   ],
                 ),
-              ),*/
+              ),
             ],
           ),
           Spacer(),
@@ -380,7 +385,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
             child: CustomTextButton(
               isLoading: spinner2,
               text: "Payer maintenant",
-              //enable: choice != null && false,
+              enable: choice != null,
               action: (){
                 Random random = new Random();
                 if(invoice.paid == false){
@@ -388,7 +393,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                   spinner2 = true;
                 });
                 
-                orangeMoneyTransfer(amount: "50");
+                choice == 1 ? orangeMoneyTransfer(amount: invoice.amount.toInt().toString()) :  mobileMoneyTransfer(amount: invoice.amount.toInt().toString());
                 FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
                   "paymentDate": DateTime.now(),
                 }).then((doc) {
@@ -400,7 +405,6 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     spinner2 = false;
                   });
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous serez recontactés pour confirmation..",)));
-                  Navigator.pop(context);
                   Navigator.pop(context);
                 }).catchError((e){
                   setState(() {
@@ -439,9 +443,11 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                       "dateDelai": start.add(Duration(days: 15)),
                       "numeroNiveau": plan.planNumber,
                       "paymentDate": null,
+                      "havePaidBefore": true,
                       "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
                       "paid": false
                     }) : print("Il a payé");
+                    choice == 1 ? orangeMoneyTransfer(amount: (registrationFee + total).toInt().toString()) :  mobileMoneyTransfer(amount: (registrationFee + total).toInt().toString());
 
                     FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
                       "protectionLevel": plan.planNumber,
@@ -449,13 +455,12 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                       "datFinvalidite": end,
                       "paid": false,
                     }, SetOptions(merge: true));
-                    adherentProvider.setAdherentPlan(plan.planNumber);
-                    adherentProvider.setValidityEndDate(end);
                     setState(() {
                       spinner2 = false;
                     });
+                    adherentProvider.setAdherentPlan(plan.planNumber);
+                    adherentProvider.setValidityEndDate(end);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
-                    orangeMoneyTransfer(amount: "55");
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -464,15 +469,15 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     setState(() {
                       spinner2 = false;
                     });
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
+                    //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
                   });
                 }
               
-              } //orangeMoneyTransfer,
+              }
             ),
           ),
 
-          (invoice.paid == null) ? CustomTextButton(
+          (invoice.amount == null) ? CustomTextButton(
             color: kSouthSeas,
             isLoading: spinner2,
             text: "Activer et Payer plus tard",
@@ -536,7 +541,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
             },
           ) : Container(),
 
-          invoice.paid == null ? Container(
+          invoice.amount == null ? Container(
             padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
             child: Text("En choisissant de payer plus tard, vous aurez un délai de 15 jours pour compléter le paiement")
           ) : Container(),

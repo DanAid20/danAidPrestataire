@@ -1,3 +1,4 @@
+import 'package:danaid/core/models/invoiceModel.dart';
 import 'package:danaid/core/models/loanModel.dart';
 import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/routes.dart';
@@ -104,7 +105,7 @@ class Danaid extends StatelessWidget {
                 create: (_) => PlanModelProvider(null),
               ),
               ChangeNotifierProvider<InvoiceModelProvider>(
-                create: (_) => InvoiceModelProvider(null),
+                create: (_) => InvoiceModelProvider(InvoiceModel()),
               ),
             ],
             child: ScreenUtilInit(

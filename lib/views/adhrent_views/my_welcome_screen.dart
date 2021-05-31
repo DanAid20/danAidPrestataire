@@ -28,7 +28,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
 
-    bool enable = adherentProvider.getAdherent.enable;
+    bool enable = adherentProvider.getAdherent.enable != null ? adherentProvider.getAdherent.enable : false;
 
     return userProvider.getUserModel != null && adherentProvider.getAdherent != null ? Column(
       children: [

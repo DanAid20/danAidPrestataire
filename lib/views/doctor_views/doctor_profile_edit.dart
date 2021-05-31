@@ -704,16 +704,16 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                   hint: Text("Choisir"),
                                   items: [
                                     DropdownMenuItem(
-                                      child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                      value: "Hôpital",
+                                      child: Text("Publique", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      value: "PUBLIC",
                                     ),
                                     DropdownMenuItem(
-                                      child: Text("Pharmacie", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: "Pharmacie",
+                                      child: Text("Confessionel", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      value: "CONFESSIONEL",
                                     ),
                                     DropdownMenuItem(
-                                      child: Text("Laboratoire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: "Laboratoire",
+                                      child: Text("Privé", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      value: "PRIVATE",
                                     ),
                                   ],
                                   onChanged: (value) {
