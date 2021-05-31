@@ -8,12 +8,15 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class MyCoverageTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    DateTime limit = adherentProvider.getAdherent.validityEndDate != null ? adherentProvider.getAdherent.validityEndDate.toDate() : null;
+    String limitString = limit != null ? limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString() : null;
     return Column(
       children: [
         Expanded(
@@ -26,7 +29,7 @@ class MyCoverageTabView extends StatelessWidget {
                     : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
                       : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
                 actionLabel: "Comparer Les Services",
-                subtitle: "...",
+                subtitle: limitString != null ? "Vous êtes couverts jusqu'au $limitString" : "...",
                 action: (){
                   Navigator.pushNamed(context, '/compare-plans');
                   /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
@@ -102,10 +105,13 @@ class MyCoverageTabView extends StatelessWidget {
                         labelColor: kPrimaryColor
                       ),
                     ),
-                    HomePageComponents().getMyCoverageOptionsCard(
-                      imgUrl: "assets/images/TrackSavings.png",
-                      label: "Suivre mes côtisations",
-                      labelColor: Colors.white
+                    GestureDetector(
+                      onTap: ()=>Navigator.pushNamed(context, '/contributions'),
+                      child: HomePageComponents().getMyCoverageOptionsCard(
+                        imgUrl: "assets/images/TrackSavings.png",
+                        label: "Suivre mes côtisations",
+                        labelColor: Colors.white
+                      ),
                     ),
                     GestureDetector(
                       onTap: ()=>Navigator.pushNamed(context, '/refund-form'),

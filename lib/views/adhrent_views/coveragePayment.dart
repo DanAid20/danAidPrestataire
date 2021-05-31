@@ -1,13 +1,17 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/invoiceModel.dart';
 import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
-//import 'package:hover_ussd/hover_ussd.dart';
+import 'package:hover_ussd/hover_ussd.dart';
 import 'package:provider/provider.dart';
 
 class CoveragePayment extends StatefulWidget {
@@ -16,7 +20,7 @@ class CoveragePayment extends StatefulWidget {
 }
 
 class _CoveragePaymentState extends State<CoveragePayment> {
-  //final HoverUssd _hoverUssd = HoverUssd();
+  final HoverUssd _hoverUssd = HoverUssd();
 
   int om = 1;
   int momo = 2;
@@ -26,47 +30,27 @@ class _CoveragePaymentState extends State<CoveragePayment> {
 
   var reqi;
 
-  /*void orangeMoneyTransfer({String amount, String pin}) async {
-    var req = await _hoverUssd.sendUssd(actionId: transferOrangeMoney, extras: {"1": "658112605", "2": "55", "pin": ""});
-
-    print(req.toString());
+  void orangeMoneyTransfer({String amount, String pin}) async {
+    var res = _hoverUssd.sendUssd(actionId: transferOrangeMoney, extras: {"1": "658112605", "2": amount, "pin": ""});
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Afterrrrrr",)));
+    print("Afterrereer");
+    print(res.toString()+": vaall");
     print("Doonnneee");
-
-    /*await FirebaseFirestore.instance.collection(adherent).doc(adherentProvider.getAdherent.adherentId).collection('FACTURATION_ADHERENT').doc(DateTime.now().microsecondsSinceEpoch.toString()).set({
-          "Amount": total,
-          "createdDate": DateTime.now(),
-          "expiryDate": DateTime.now().add(Duration(days: 90))
-        }).then((doc) async {
-          await FirebaseFirestore.instance.collection(adherent).doc(adherentProvider.getAdherent.adherentId).update({"protectionLevel": plan.planNumber});
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Completed",)));
-          Navigator.pop(context);
-        });*/
-        
-    /*.then((res) {
-      print("sussss");
-      print(res.toString());
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Completed",)));
-    });*/
-  //}*/
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    int test = 1;
+    Random random = new Random();
+
+    PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    InvoiceModelProvider invoiceProvider = Provider.of<InvoiceModelProvider>(context);
+    InvoiceModel invoice = invoiceProvider.getInvoice;
     PlanModel plan = planProvider.getPlan;
-    
-    /*_hoverUssd.onTransactiontateChanged.listen((event) async {
-      if (event == TransactionState.succesfull) {
-        print("Successsss");
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Completed",)));
-      } else if (event == TransactionState.waiting) {
-        print("waiit");
-        
-      } else if (event == TransactionState.failed) {
-        print("Faiiilll");
-      }
-    });*/
+
+    if(invoiceProvider.getInvoice.paid != null){}
 
     DateTime now = DateTime.now();
 
@@ -74,6 +58,9 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     String trimester;
     DateTime start;
     DateTime end;
+
+    //updatePaymentDate({String invoiceId, String regId}){}
+    
     if(now.month >= 1 && now.month < 4){
       trimester = "Janvier à Mars " + DateTime.now().year.toString();
       if (now.month != 3){
@@ -150,12 +137,116 @@ class _CoveragePaymentState extends State<CoveragePayment> {
       }
     }
 
-    num total = plan.registrationFee + plan.monthlyAmount*months;
+    num total = plan.monthlyAmount*months;
+    num registrationFee = plan.registrationFee;
+
+    _hoverUssd.onTransactiontateChanged.listen((event) async {
+      if (event == TransactionState.succesfull) {
+        print("Successsss");
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Completed",)));
+
+      } else if (event == TransactionState.waiting) {
+
+        print("waiit");
+        /**
+        if(invoice.paid == false){
+          if(test == 1){
+            setState(() {
+              spinner2 = true;
+            });
+            
+            FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
+              "paymentDate": DateTime.now(),
+            }).then((doc) {
+
+              !adherentProvider.getAdherent.havePaid ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(plan.id).update({
+                "paymentDate": DateTime.now(),
+              }) : print("Il a payé");
+              setState(() {
+                spinner2 = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous serez recontactés pour confirmation..",)));
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }).catchError((e){
+              setState(() {
+                spinner2 = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
+            });
+            test = 2;
+          }
+        } else {
+          if(test == 1){
+            Random random = new Random();
+            setState(() {
+              spinner2 = true;
+            });
+            
+            FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(DateTime.now().microsecondsSinceEpoch.toString()).set({
+              "montant": total,
+              "createdDate": DateTime.now(),
+              "trimester": trimester,
+              "intitule": "COSTISATION Q-"+start.year.toString(),
+              "dateDebutCouvertureAdherent" : start,
+              "dateFinCouvertureAdherent": end,
+              "categoriePaiement" : "COTISATION_TRIMESTRIELLE",
+              "dateDelai": start.add(Duration(days: 15)),
+              "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+              "numeroNiveau": plan.planNumber,
+              "paymentDate": DateTime.now(),
+              "paid": false
+
+            }).then((doc) {
+
+              adherentProvider.getAdherent.havePaid != true ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc((DateTime.now().microsecondsSinceEpoch+1).toString()).set({
+                "montant": registrationFee,
+                "createdDate": DateTime.now(),
+                "trimester": trimester,
+                "categoriePaiement": "INSCRIPTION",
+                "intitule": "COSTISATION Q-"+start.year.toString(),
+                "dateDelai": start.add(Duration(days: 15)),
+                "numeroNiveau": plan.planNumber,
+                "paymentDate": DateTime.now(),
+                "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                "paid": false
+              }) : print("Il a payé");
+
+              FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+                "protectionLevel": plan.planNumber,
+                "datDebutvalidite" : start,
+                "datFinvalidite": end,
+                "paid": false,
+              }, SetOptions(merge: true));
+              adherentProvider.setAdherentPlan(plan.planNumber);
+              adherentProvider.setValidityEndDate(end);
+              setState(() {
+                spinner2 = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/compare-plans');
+            }).catchError((e){
+              setState(() {
+                spinner2 = false;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
+            });
+            test = 2;
+          }
+        }
+        */
+      } else if (event == TransactionState.failed) {
+        print("Faiiilll");
+      }
+    });
     
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded), color: kPrimaryColor, onPressed: ()=>Navigator.pop(context),),
-        title: Text(plan.text["titreNiveau"], style: TextStyle(color: kPrimaryColor, fontSize: 20),),
+        title: Text(invoice.paid == false ? invoice.label : plan.text["titreNiveau"].toString(), style: TextStyle(color: kPrimaryColor, fontSize: 20),),
         centerTitle: true,
       ),
       body: Column(
@@ -191,7 +282,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                   ],
                 ),
               ),
-              SizedBox(width: wv*5,),
+              /*SizedBox(width: wv*5,),
               GestureDetector(
                 onTap: ()=>setState((){choice = momo;}),
                 child: Stack(
@@ -218,7 +309,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     ) : Container()
                   ],
                 ),
-              ),
+              ),*/
             ],
           ),
           Spacer(),
@@ -277,7 +368,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                   )),
                   TableCell(child: Container(
                     padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                    child: Text(total.toString() + " Cfa", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,)
+                    child: Text((total+registrationFee).toString() + " Cfa", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,)
                   )),
                 ]
               ),
@@ -286,37 +377,147 @@ class _CoveragePaymentState extends State<CoveragePayment> {
 
           Container(
             child: CustomTextButton(
+              isLoading: spinner2,
               text: "Payer maintenant",
-              enable: choice != null && false,
-              action: (){} //orangeMoneyTransfer,
+              //enable: choice != null && false,
+              action: (){
+                Random random = new Random();
+                if(invoice.paid == false){
+                  setState(() {
+                  spinner2 = true;
+                });
+                
+                orangeMoneyTransfer(amount: "50");
+                FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
+                  "paymentDate": DateTime.now(),
+                }).then((doc) {
+
+                  /*!adherentProvider.getAdherent.havePaid ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(plan.id).update({
+                    "paymentDate": DateTime.now(),
+                  }) : print("Il a payé");*/
+                  setState(() {
+                    spinner2 = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous serez recontactés pour confirmation..",)));
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }).catchError((e){
+                  setState(() {
+                    spinner2 = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
+                });
+                }
+                else {
+                  setState(() {
+                    spinner2 = true;
+                  });
+                  
+                  FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(DateTime.now().microsecondsSinceEpoch.toString()).set({
+                    "montant": total,
+                    "createdDate": DateTime.now(),
+                    "trimester": trimester,
+                    "intitule": "COSTISATION Q-"+start.year.toString(),
+                    "dateDebutCouvertureAdherent" : start,
+                    "dateFinCouvertureAdherent": end,
+                    "categoriePaiement" : "COTISATION_TRIMESTRIELLE",
+                    "dateDelai": start.add(Duration(days: 15)),
+                    "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                    "numeroNiveau": plan.planNumber,
+                    "paymentDate": null,
+                    "paid": false
+
+                  }).then((doc) {
+
+                    adherentProvider.getAdherent.havePaid != true ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc((DateTime.now().microsecondsSinceEpoch+1).toString()).set({
+                      "montant": registrationFee,
+                      "createdDate": DateTime.now(),
+                      "trimester": trimester,
+                      "categoriePaiement": "INSCRIPTION",
+                      "intitule": "COSTISATION Q-"+start.year.toString(),
+                      "dateDelai": start.add(Duration(days: 15)),
+                      "numeroNiveau": plan.planNumber,
+                      "paymentDate": null,
+                      "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                      "paid": false
+                    }) : print("Il a payé");
+
+                    FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+                      "protectionLevel": plan.planNumber,
+                      "datDebutvalidite" : start,
+                      "datFinvalidite": end,
+                      "paid": false,
+                    }, SetOptions(merge: true));
+                    adherentProvider.setAdherentPlan(plan.planNumber);
+                    adherentProvider.setValidityEndDate(end);
+                    setState(() {
+                      spinner2 = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
+                    orangeMoneyTransfer(amount: "55");
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, '/compare-plans');
+                  }).catchError((e){
+                    setState(() {
+                      spinner2 = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
+                  });
+                }
+              
+              } //orangeMoneyTransfer,
             ),
           ),
 
-          CustomTextButton(
+          (invoice.paid == null) ? CustomTextButton(
             color: kSouthSeas,
             isLoading: spinner2,
             text: "Activer et Payer plus tard",
             action: (){
+              Random random = new Random();
               setState(() {
                 spinner2 = true;
               });
               
-              FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('FACTURATION_ADHERENT').doc(DateTime.now().microsecondsSinceEpoch.toString()).set({
-                "Amount": total,
+              FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(DateTime.now().microsecondsSinceEpoch.toString()).set({
+                "montant": total,
                 "createdDate": DateTime.now(),
                 "trimester": trimester,
-                "startDate" : start,
-                "expiryDate": end,
-                "protectionLevel": plan.planNumber,
+                "intitule": "COSTISATION Q-"+start.year.toString(),
+                "dateDebutCouvertureAdherent" : start,
+                "dateFinCouvertureAdherent": end,
+                "categoriePaiement" : "COTISATION_TRIMESTRIELLE",
+                "dateDelai": start.add(Duration(days: 15)),
+                "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                "numeroNiveau": plan.planNumber,
+                "paymentDate": null,
                 "paid": false
+
               }).then((doc) {
+
+                adherentProvider.getAdherent.havePaid != true ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc((DateTime.now().microsecondsSinceEpoch+1).toString()).set({
+                  "montant": registrationFee,
+                  "createdDate": DateTime.now(),
+                  "trimester": trimester,
+                  "categoriePaiement": "INSCRIPTION",
+                  "intitule": "COSTISATION Q-"+start.year.toString(),
+                  "dateDelai": start.add(Duration(days: 15)),
+                  "numeroNiveau": plan.planNumber,
+                  "paymentDate": null,
+                  "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                  "paid": false
+                }) : print("Il a payé");
+
                 FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
                   "protectionLevel": plan.planNumber,
-                  "startDate" : start,
-                  "expiryDate": end,
+                  "datDebutvalidite" : start,
+                  "datFinvalidite": end,
                   "paid": false,
                 }, SetOptions(merge: true));
                 adherentProvider.setAdherentPlan(plan.planNumber);
+                adherentProvider.setValidityEndDate(end);
                 setState(() {
                   spinner2 = false;
                 });
@@ -332,16 +533,17 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
               });
             },
-          ),
+          ) : Container(),
 
-          Container(
+          invoice.paid == null ? Container(
             padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
             child: Text("En choisissant de payer plus tard, vous aurez un délai de 15 jours pour compléter le paiement")
-          ),
+          ) : Container(),
 
           SizedBox(height: hv*2)
         ],
       ),
     );
   }
+  uploadInvoice(){}
 }

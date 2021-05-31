@@ -1,4 +1,5 @@
 import 'package:danaid/core/models/loanModel.dart';
+import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/routes.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/status_bar.dart';
@@ -101,6 +102,9 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<PlanModelProvider>(
                 create: (_) => PlanModelProvider(null),
+              ),
+              ChangeNotifierProvider<InvoiceModelProvider>(
+                create: (_) => InvoiceModelProvider(null),
               ),
             ],
             child: ScreenUtilInit(

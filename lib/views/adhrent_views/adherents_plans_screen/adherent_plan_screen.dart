@@ -1,8 +1,12 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/planModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
-import 'package:danaid/core/services/navigation_service.dart';
+import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
@@ -11,20 +15,47 @@ import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+class AdherentPlanScreen extends StatefulWidget {
+  @override
+  _AdherentPlanScreenState createState() => _AdherentPlanScreenState();
+}
 
-import '../../../locator.dart';
-
-class AdherentPlanScreen extends StatelessWidget {
+class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
+  
   final String _mPackage = 'Découverte';
   final String _mPackageAmount = '00';
   final String _mPackageContent = 'Réseau de santé';
   final String _mPackageContent1 = 'Changer de plan';
   final String _mPackageContent2 = 'Ajout d\'un bénéficiaire';
+
   final _mSize = SizeConfig.defaultSize;
-  final NavigationService _navigationService = locator<NavigationService>();
+  
+  /*getPlans() async {
+
+    await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").get().then((snap) {
+      var docs = snap.docs;
+      for(int i = 0; i < docs.length; i++){
+        PlanModel docModel = PlanModel.fromDocument(docs[i]);
+        plans[docModel.planNumber] = docModel;
+      }
+      setState(() {
+        currentPlan = plans[adherentProvider.getAdherent.adherentPlan];
+        state = adherentProvider.getAdherent.adherentPlan;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getPlans();
+    super.initState();
+  }*/
   @override
   Widget build(BuildContext context) {
-    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context);
+
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
+    
     return SafeArea(
       top: false,
       bottom: false,
@@ -40,79 +71,45 @@ class AdherentPlanScreen extends StatelessWidget {
                 Expanded(
                   child: Container(
                       decoration: BoxDecoration(),
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          height: hv*65,
-                          enlargeCenterPage: true,
-                          viewportFraction: .7,
-                        ),
-                        items: [
-                          PackageCard(
-                              mPackage: _mPackage,
-                              mPackageAmount: _mPackageAmount,
-                              mPackageContent: _mPackageContent,
-                              mPackageContent1: _mPackageContent1,
-                              mPackageContent2: _mPackageContent2,
-                              titleColor: kSouthSeas,
-                              content: "Accédez au réseau DanAid et gagnez des points que vous pourrez utiliser pour vous soigner",
-                              level: "0",
-                              iconUrl: 'assets/icons/Bulk/Heart.svg',
-                              mSize: _mSize,
-                              action: (){
-                                adherentProvider.setAdherentPlan(0);
-                                adherentProvider.setProfileEnableState(false);
-                                Navigator.pushNamed(context, '/adherent-reg-form');
-                              }
-                              ),
-                          PackageCard(
-                              mPackage: 'Accès',
-                              mPackageAmount: "3,500",
-                              mPackageContent: "Couverture santé à 70%",
+                      child: StreamBuilder(
+                        stream: FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          List<Widget> plans = [];
+                          for (int i = 0; i < snapshot.data.docs.length; i++){
+                            DocumentSnapshot doc = snapshot.data.docs[i];
+                            PlanModel plan = PlanModel.fromDocument(doc);
+                            Widget content = PackageCard(
+                              mPackage: plan.label,
+                              mPackageAmount: plan.monthlyAmount.toString(),
+                              mPackageContent: "Couverture santé à ${plan.coveragePercentage}%",
                               mPackageContent1: "Médécin de famille",
-                              mPackageContent2: "Plafond de 350.000 XAF",
+                              mPackageContent2: "Plafond de ${plan.annualLimit} XAF",
                               mSize: _mSize,
-                              titleColor: kGold,
-                              content: "Niveau Découverte\n+ couverture à 70% des frais\n+ Plafond de soins à 350.000 Cfa/an",
-                              level: "I",
-                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
+                              titleColor: plan.planNumber == 0 ? kGold : kSouthSeas,
+                              content: "Niveau ${plan.label}\n+ couverture à ${plan.coveragePercentage}% des frais\n+ Plafond de soins à ${plan.annualLimit}Cfa/an",
+                              level: plan.planNumber.toString(),
+                              iconUrl: plan.planNumber == 0 ? 'assets/icons/Bulk/HeartOutline.svg' : plan.planNumber == 1 ? 'assets/icons/Bulk/ShieldAcces.svg' : plan.planNumber == 2 ? 'assets/icons/Bulk/ShieldAssist.svg' :plan.planNumber == 3 ? 'assets/icons/Bulk/ShieldSerenity.svg' : 'assets/icons/Bulk/Shield Done.svg',
                               action: (){
-                                adherentProvider.setAdherentPlan(1);
+                                adherentProvider.setAdherentModel(AdherentModel());
+                                adherentProvider.setAdherentPlan(plan.planNumber);
+                                planProvider.setPlanModel(plan);
                                 adherentProvider.setProfileEnableState(false);
                                 Navigator.pushNamed(context, '/adherent-reg-form');
-                              }),
-                          PackageCard(
-                              mPackage: "Assist",
-                              mPackageAmount: "6,500",
-                              mPackageContent: "Couverture santé à 70%",
-                              mPackageContent1: "Médécin de famille",
-                              mPackageContent2: "Plafond de 650.000 XAF",
-                              mSize: _mSize,
-                              titleColor: kGold,
-                              content: "Niveau Découverte\n+ couverture à 70% des frais\n+ Plafond de soins à 650.000 Cfa/an",
-                              level: "II",
-                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
-                              action: (){
-                                adherentProvider.setAdherentPlan(2);
-                                adherentProvider.setProfileEnableState(false);
-                                Navigator.pushNamed(context, '/adherent-reg-form');
-                              }),
-                          PackageCard(
-                              mPackage: 'Sérénité',
-                              mPackageAmount: "9,500",
-                              mPackageContent: "Couverture santé à 70%",
-                              mPackageContent1: "Médécin de famille",
-                              mPackageContent2: "Plafond de 1.000.000 XAF",
-                              mSize: _mSize,
-                              titleColor: kGold,
-                              content: "Niveau Découverte\n+ couverture à 70% des frais\n+ Plafond de soins à 1.000.000 Cfa/an",
-                              level: "III",
-                              iconUrl: 'assets/icons/Bulk/Shield Done.svg',
-                              action: (){
-                                adherentProvider.setAdherentPlan(3);
-                                adherentProvider.setProfileEnableState(false);
-                                Navigator.pushNamed(context, '/adherent-reg-form');
-                              }),
-                        ],
+                              });
+                            plans.add(content);
+                          }
+                          return CarouselSlider(
+                            options: CarouselOptions(
+                              height: hv*65,
+                              enlargeCenterPage: true,
+                              viewportFraction: .7,
+                            ),
+                            items: plans,
+                          );
+                        }
                       )),
                 )
               ],
@@ -183,7 +180,7 @@ class PackageCard extends StatelessWidget {
           Align(child: Text("  Niveau "+level, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
           
           SizedBox(height: hv*2,),
-          RichText(text: TextSpan(text: _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: wv*15))),
+          RichText(text: TextSpan(text: level == "0" ? "00" : _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: wv*15))),
           SizedBox(height: hv*0.25),
           Text("par famille / Mois", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: wv*4),),
           Expanded(

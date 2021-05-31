@@ -12,23 +12,23 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 
-class FamilyDoctorList extends StatefulWidget {
+class SpecialistList extends StatefulWidget {
   @override
-  _FamilyDoctorListState createState() => _FamilyDoctorListState();
+  _SpecialistListState createState() => _SpecialistListState();
 }
 
-class _FamilyDoctorListState extends State<FamilyDoctorList> {
+class _SpecialistListState extends State<SpecialistList> {
   String filter;
 
-  Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
+  Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
 
   getDoctorsList() {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
-      : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
+    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+      : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Spécialiste").where("profilEnabled", isEqualTo: true).snapshots();
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {

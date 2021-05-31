@@ -31,9 +31,9 @@ class CustomTextButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(color),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius))))),
       ),
-    ) : Center(child: Loaders().buttonLoader(loaderColor))
+    ) : Center(child: Loaders().buttonLoader(color))
      : 
-    CustomDisabledTextButton(text: text, noPadding: noPadding, borderRadius: borderRadius, fontSize: fontSize,);
+    CustomDisabledTextButton(text: text, noPadding: noPadding, borderRadius: borderRadius, fontSize: fontSize);
   }
 }
 

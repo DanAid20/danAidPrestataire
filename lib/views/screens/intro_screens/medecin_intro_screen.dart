@@ -35,7 +35,7 @@ class MedecinIntroScreen extends StatelessWidget {
                 sizeTop: defSize * 12,
                 feeBgColor: kPrimaryColor,
               ),
-              IntroText(title: 'Un médecin de Famille me suit ')
+              IntroText(title: 'Un médecin de Famille me suit ', rank: 3,)
             ],
           ),
         ),

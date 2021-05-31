@@ -35,6 +35,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
 
+    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel.dateCreated.toDate() : DateTime.now();
+    final date2 = DateTime.now();
+    final yearsForBadget= date2.difference(birthday).inDays;
+
     return WillPopScope(
       onWillPop: () async {
         controller.toPreviousIndex();
@@ -60,7 +64,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       ),
                       SizedBox(width: wv*2,),
                       adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
-                      SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,),
+                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink()
                     ],
                   ),
                 )
@@ -102,7 +106,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                             ]
                           , style: TextStyle(color: kBlueDeep, fontSize: wv*3.5)),
                           ),
-                          TextButton(onPressed: (){},
+                          TextButton(onPressed: ()=>Navigator.pushNamed(context, '/compare-plans'),
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50].withOpacity(0.5))),
                             child: Text("Obtenez une couverture complète à 70% !", style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
                         ],

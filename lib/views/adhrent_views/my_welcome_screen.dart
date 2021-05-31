@@ -57,9 +57,9 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                         SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                         child: Row(children: [
                           AdvantageCard(
-                            label: "Remboursement",
+                            label: "Fond de soin",
                             state: "DISPONIBLE",
-                            price: "",
+                            price: adherentProvider.getAdherent.adherentPlan == 0 ? "#25.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#350.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#650.000 f." : "#1000.000 f.",
                             color: Colors.teal[500],
                             onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
                           ),
@@ -78,7 +78,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             child: AdvantageCard(
                               label: "Prêt de santé",
                               state: "DISPONIBLE",
-                              price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "200.000",
+                              price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "#200.000 f.",
                               color: Colors.brown.withOpacity(0.7),
                               onTap: ()=>Navigator.pushNamed(context, '/loans'),
                             ),
@@ -96,7 +96,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                     ),
                   ),
 
-                  !enable || adherentProvider.getAdherent.familyDoctorId == null ? Container(
+                  Container(
                     margin: EdgeInsets.only(top: hv*2),
                     //padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
@@ -148,13 +148,28 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                   description: "Choisissez votre médecin de famille DanAid",
                                 ),
                               ) : Container(),
+
+                              adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0 ? GestureDetector(
+                                onTap: ()=>Navigator.pushNamed(context, '/contributions'),
+                                child: NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "Ouvrir la Page...",
+                                  description: "Vous n'avez pas encore payé votre souscription",
+                                ),
+                              ) : Container(),
+
+                              enable && adherentProvider.getAdherent.familyDoctorId != null && !(adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0) ?  NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "",
+                                  description: "Aucune notifications pour le moment",
+                                ) : Container()
                             ],),
                             ),
                           ],
                         ),
                       )
                     ],),
-                  ) : Container()
+                  )
                   
                   
                 ],
@@ -162,7 +177,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
             ],
           ),
         ),
-        Container(
+        /*Container(
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
@@ -211,7 +226,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
               ],
             ),
           ),
-        ),
+        ),*/
         SizedBox(height: hv*4)
       ],
     ) :

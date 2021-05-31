@@ -57,8 +57,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
           ),
           centerTitle: true,
           actions: [
-            IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+            //IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
+            //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
           ],
         ),
       body: SingleChildScrollView(
@@ -93,7 +93,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             label: "Prêt de santé",
                             description: "MAXIMUM DISPONIBLE",
                             state: "DISPONIBLE",
-                            price: "#100.000 f.",
+                            price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "#200.000 f.",
                             showLogo: true,
                             color: Colors.brown.withOpacity(0.7),
                           ),

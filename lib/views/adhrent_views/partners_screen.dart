@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/adhrent_views/family_doctors_list_screen.dart';
+import 'package:danaid/views/adhrent_views/specialist_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -115,7 +116,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ]
                             ),
                             child: Row(children: [
-                              SizedBox(width: 10,),
+                              /*SizedBox(width: 10,),
                               Expanded(
                                 child: TextField(
                                   decoration: InputDecoration(
@@ -139,7 +140,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               TextButton(onPressed: (){},
                                 child: Text("Annuler", style: TextStyle(color: kBrownCanyon),)
                               ),
-                              IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})
+                              IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})*/
 
                             ],),
                           ),
@@ -226,16 +227,16 @@ class _PartnersScreenState extends State<PartnersScreen> {
       return FamilyDoctorList();
     }
     else if (contentIndex == 2){
-      return Text("Autres specialistes");
+      return SpecialistList();
     }
     else if (contentIndex == 3){
-      return Text("Hôpital ou clinique");
+      return Text("");
     }
     else if (contentIndex == 4){
-      return Text("Laboratoire");
+      return Text("");
     }
     else if (contentIndex == 5){
-      return Text("Pharmacie");
+      return Text("");
     }
   }
 

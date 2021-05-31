@@ -109,7 +109,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
-       final birthday = userProvider.getUserModel.dateCreated.toDate();
+    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel.dateCreated.toDate() : DateTime.now();
     final date2 = DateTime.now();
     final yearsForBadget= date2.difference(birthday).inDays;
     return WillPopScope(
@@ -142,16 +142,16 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                             Positioned(
                               right: 0,
                               child: InkWell(
-                                onTap: () {},
+                                onTap: () => Navigator.pushNamed(context, "/chatroom"),
                                 child: Container(
                                     padding: EdgeInsets.all(wv * 3),
                                     child: SvgPicture.asset(
-                                      "assets/icons/Two-tone/Notification.svg",
+                                      "assets/icons/Two-tone/Notification2.svg",
                                       width: wv * 7,
                                     )),
                               ),
                             ),
-                            Positioned(
+                            /*Positioned(
                               right: wv * 1,
                               top: hv * 1,
                               child: Container(
@@ -167,7 +167,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                                       fontWeight: FontWeight.w900),
                                 ),
                               ),
-                            ),
+                            ),*/
                             Positioned(
                               right: wv * 1,
                               top: hv * 8,

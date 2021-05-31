@@ -16,6 +16,8 @@ import 'package:danaid/views/adhrent_views/appointment_detail.dart';
 import 'package:danaid/views/adhrent_views/loans_view.dart';
 import 'package:danaid/views/adhrent_views/loan_form.dart';
 import 'package:danaid/views/adhrent_views/comparePlans.dart';
+import 'package:danaid/views/adhrent_views/contributions.dart';
+import 'package:danaid/views/adhrent_views/payment.dart';
 import 'package:danaid/views/doctor_views/appointement_approuve.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
@@ -70,6 +72,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/loan-form": (context) => LoanForm(),
   "/coverage-payment": (context) => CoveragePayment(),
   "/compare-plans": (context) => ComparePlans(),
+  "/contributions": (context) => Contributions(),
+  //"/payment": (context) => Payment(),
 
   /**
    * Start section routes that concern the doctor activities in the

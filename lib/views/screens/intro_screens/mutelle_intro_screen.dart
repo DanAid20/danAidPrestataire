@@ -29,7 +29,7 @@ class MutuelleIntroScreen extends StatelessWidget {
               ),
               CoverContainer(),
               FeeContainer(),
-              IntroText(title: 'La Mutuelle Santé 100% Mobile !')
+              IntroText(title: 'La Mutuelle Santé 100% Mobile !', rank: 1,)
             ],
           ),
         ),

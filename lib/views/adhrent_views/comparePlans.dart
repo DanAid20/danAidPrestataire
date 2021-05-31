@@ -53,8 +53,7 @@ class _ComparePlansState extends State<ComparePlans> {
 
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    DateTime date = adherentProvider.getAdherent.dateCreated.toDate();
-    DateTime limit = DateTime(date.year+1, date.month, date.day);
+    DateTime limit = adherentProvider.getAdherent.validityEndDate.toDate();
     String limitString = limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString();
 
     String yes = 'assets/icons/Bulk/TickSquare.svg';
@@ -80,8 +79,8 @@ class _ComparePlansState extends State<ComparePlans> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+          //IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
+          //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
         ],
       ),
       body: SingleChildScrollView(

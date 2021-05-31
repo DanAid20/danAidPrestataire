@@ -57,7 +57,7 @@ class AdvantageCard extends StatelessWidget {
                       Align(
                         child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(price, style: TextStyle(fontSize: inch*2.2, fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.8)),),
+                            Text(price, style: TextStyle(fontSize: wv*5.5, fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.8)),),
                             SizedBox(height: hv*1,),
                             SizedBox(
                               height: 30,
