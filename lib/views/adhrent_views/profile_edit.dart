@@ -702,6 +702,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               "acteMariageName": cniName,
                               "nomFamille": fname,
                               "prenom": sname,
+                              "enabled": true,
                               "regionDorigione": _region,
                               "statuMatrimonialMarie": isMarried,
                               "ville": _city == null ? adherentProvider.getAdherent.town : _city,
@@ -717,6 +718,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                             }, SetOptions(merge: true))
                             .then((value) async {
+                              adherentProvider.setEnableState(true);
                               textFieldsControl();
                               await HiveDatabase.setRegisterState(true);
                               HiveDatabase.setFamilyName(fname);

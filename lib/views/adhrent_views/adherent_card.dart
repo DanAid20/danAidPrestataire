@@ -112,6 +112,7 @@ class _AdherentCardState extends State<AdherentCard> {
   }
   Widget getBeneficiaryCard({BeneficiaryModel beneficiary, AdherentModel adherentModel, int state}){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    AdherentModel adh = adherentProvider.getAdherent;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
       decoration: BoxDecoration(
@@ -171,7 +172,7 @@ class _AdherentCardState extends State<AdherentCard> {
                     child: Icon(MdiIcons.exclamation, color: state == 0 ? whiteColor : Colors.transparent,),
                   ),
                 ),
-                state == 0 ? RotationTransition(
+                state == 0 || adh.validityEndDate.compareTo(Timestamp.now()) > 0 ? RotationTransition(
                   turns: new AlwaysStoppedAnimation(330 / 360),
                   child: new Text("Compte\nInactif", style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                 ) : Container()

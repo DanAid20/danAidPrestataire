@@ -5,7 +5,6 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/advantage_card.dart';
-import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
 
-    bool enable = userProvider.getUserModel.enable == null ? false : userProvider.getUserModel.enable;
+    bool enable = adherentProvider.getAdherent.enable;
 
     return userProvider.getUserModel != null && adherentProvider.getAdherent != null ? Column(
       children: [

@@ -47,6 +47,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     InvoiceModelProvider invoiceProvider = Provider.of<InvoiceModelProvider>(context);
+    invoiceProvider.setInvoiceModel(InvoiceModel());
     InvoiceModel invoice = invoiceProvider.getInvoice;
     PlanModel plan = planProvider.getPlan;
 

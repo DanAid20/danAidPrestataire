@@ -140,6 +140,11 @@ class AdherentModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setEnableState(bool val){
+    _adherent.enable = val;
+    notifyListeners();
+  }
+
   void setMatrimonialStatus(bool val){
     _adherent.isMarried = val;
     notifyListeners();
