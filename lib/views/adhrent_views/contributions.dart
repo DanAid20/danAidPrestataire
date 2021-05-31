@@ -88,13 +88,13 @@ class _ContributionsState extends State<Contributions> {
                               }
                               print("name: ");
                               return getContributionTile(
-                                label : invoice.trimester, 
+                                label : invoice.trimester == null ? invoice.label : invoice.trimester, 
                                 doctorName : "bdbd", 
                                 date : DateTime.now(), 
                                 amount: invoice.amount, 
                                 firstDate : invoice.type == "INSCRIPTION" ? invoice.dateCreated.toDate() : invoice.coverageStartDate.toDate(), 
-                                lastDate : invoice.paymentDelayDate.toDate(),
-                                paid: invoice.paid == true ? 1 : invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0,
+                                lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate() : invoice.coverageEndDate.toDate(),
+                                paid: invoice.paymentDelayDate != null ? invoice.paid == true ? 1 : invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
                                 type : invoice.type, state : 0, 
                                 action : (){
                                   if(invoice.type == "INSCRIPTION"){

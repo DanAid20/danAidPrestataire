@@ -137,14 +137,16 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   initRegionDropdown(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    setState(() {
-      _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent.regionOfOrigin);
-      _region = adherentProvider.getAdherent.regionOfOrigin;
-      regionChosen = true;
-    cityChosen = true;
-    
-    _city = adherentProvider.getAdherent.town;
-    });
+    if(adherentProvider.getAdherent.havePaid != null){
+      setState(() {
+        _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent.regionOfOrigin);
+        _region = adherentProvider.getAdherent.regionOfOrigin;
+        regionChosen = true;
+      cityChosen = true;
+      
+      _city = adherentProvider.getAdherent.town;
+      });
+    }
     
   }
 

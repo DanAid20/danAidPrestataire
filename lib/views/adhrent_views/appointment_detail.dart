@@ -79,6 +79,7 @@ class _AppointmentState extends State<Appointment> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
     DateTime startTime = appointment.getAppointment.startTime.toDate();
     DateTime endTime = appointment.getAppointment.endTime.toDate();
+    DateTime now = DateTime.now();
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -296,78 +297,79 @@ class _AppointmentState extends State<Appointment> {
                 ),),
             ),
             SizedBox(height: hv*1.5,),
-            !edit ? Row(
-              children: [
-                SizedBox(width: wv*4,),
-                Expanded(
-                  flex: 7,
-                  child: CustomTextButton(
-                    noPadding: true,
-                    isLoading: announceLoading,
-                    enable: appointment.getAppointment.announced == false,
-                    text: "Annoncer  ma venue",
-                    action: (){
-                      setState(() {
-                        announceLoading = true;
-                      });
-                      try {
-                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
-                          "announced": true
-                        },  SetOptions(merge: true)).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été annoncé..'),));
-                          appointment.setAnnouncement(true);
-                          Navigator.pop(context);
-                          Navigator.pushNamed(context, '/adherent-card');
+            !edit ?  DateTime(now.year, now.month, now.day, 0).isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? Row(
+                children: [
+                  SizedBox(width: wv*4,),
+                  Expanded(
+                    flex: 7,
+                    child: CustomTextButton(
+                      noPadding: true,
+                      isLoading: announceLoading,
+                      enable: appointment.getAppointment.announced == false,
+                      text: "Annoncer  ma venue",
+                      action: (){
+                        setState(() {
+                          announceLoading = true;
+                        });
+                        try {
+                          FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                            "announced": true
+                          },  SetOptions(merge: true)).then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été annoncé..'),));
+                            appointment.setAnnouncement(true);
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/adherent-card');
+                            setState(() {
+                              announceLoading = false;
+                            });
+                          });
+                        }
+                        catch(e) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
                           setState(() {
                             announceLoading = false;
                           });
-                        });
-                      }
-                      catch(e) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
-                        setState(() {
-                          announceLoading = false;
-                        });
-                      }
-                    },
+                        }
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: wv*2,),
-                Expanded(
-                  flex: 3,
-                  child: CustomTextButton(
-                    noPadding: true,
-                    text: "Annuler",
-                    isLoading: cancelLoading,
-                    enable: appointment.getAppointment.announced == true,
-                    color: kSouthSeas,
-                    action: (){
-                      setState(() {
-                        cancelLoading = true;
-                      });
-                      try {
-                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
-                          "announced": false
-                        },  SetOptions(merge: true)).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('L\'annonce a été annulée..'),));
-                          appointment.setAnnouncement(false);
+                  SizedBox(width: wv*2,),
+                  Expanded(
+                    flex: 3,
+                    child: CustomTextButton(
+                      noPadding: true,
+                      text: "Annuler",
+                      isLoading: cancelLoading,
+                      enable: appointment.getAppointment.announced == true,
+                      color: kSouthSeas,
+                      action: (){
+                        setState(() {
+                          cancelLoading = true;
+                        });
+                        try {
+                          FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                            "announced": false
+                          },  SetOptions(merge: true)).then((value) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('L\'annonce a été annulée..'),));
+                            appointment.setAnnouncement(false);
+                            setState(() {
+                              cancelLoading = false;
+                            });
+                          });
+                        }
+                        catch(e) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
                           setState(() {
                             cancelLoading = false;
                           });
-                        });
-                      }
-                      catch(e) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
-                        setState(() {
-                          cancelLoading = false;
-                        });
-                      }
-                    },
+                        }
+                      },
+                    ),
                   ),
-                ),
-                SizedBox(width: wv*4,),
-              ],
-            ) :
+                  SizedBox(width: wv*4,),
+                ],
+              ) : Container(child: Text("N'oubliez pas de revenir içi annoncer votre venue le jour du rendez-vous", textAlign: TextAlign.center, style: TextStyle(color: kSouthSeas, fontSize: wv*4.2, fontWeight: FontWeight.bold)), padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),)
+            :
             Container(
               padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: CustomTextButton(

@@ -33,30 +33,30 @@ class MyCoverageTabView extends StatelessWidget {
                 action: (){
                   Navigator.pushNamed(context, '/compare-plans');
                   /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
-                    .doc("0")
+                    .doc("3")
                     .set({
-                      "cotisationMensuelleFondDSoint": 0,
-                      "couverture": 5,
+                      "cotisationMensuelleFondDSoint": 9500,
+                      "couverture": 70,
                       "descriptionText": {
-                        "textCotisation" : "0 fcfa/mois/famille",
-                        "textPeriodeTypePaiement" : "Jamais",
+                        "textCotisation" : "9500 fcfa/mois/famille",
+                        "textPeriodeTypePaiement" : "Tous les 3 mois par virement mobile",
                         "textSuivi" : "Medecin de famille",
-                        "titreNiveau" : "Niveau 0: Découverte"
+                        "titreNiveau" : "Niveau III: Sérénité"
                       },
-                      "fraisIncription": 0,
-                      "modeDePaiement": "Jamais",
-                      "montantMaxPretSante": 50000,
-                      "montantPaiementSupplement": 1250,
-                      "nomNiveau": "Découverte",
-                      "numeroNiveau": 0,
-                      "plafondAnnuelle": 25000,
+                      "fraisIncription": 10000,
+                      "modeDePaiement": "Tous les 3 mois par virement mobile",
+                      "montantMaxPretSante": 200000,
+                      "montantPaiementSupplement": 2450,
+                      "nomNiveau": "Sérénité",
+                      "numeroNiveau": 3,
+                      "plafondAnnuelle": 1000000,
                       "userSelectedIt": false,
-                      "rate": 0.165,
-                      "familyDoctorIsFree": false,
+                      "rate": 0.05,
+                      "familyDoctorIsFree": true,
                       "canWinPoints": true,
                       "familyCoverage": true,
                       "socialNetworkEnable": true
-                    });*/
+                    }, SetOptions(merge: true));*/
                 }
                 //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
               )
