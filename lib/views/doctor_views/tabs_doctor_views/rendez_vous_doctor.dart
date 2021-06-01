@@ -376,8 +376,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                               dateTimeNow.difference(d).inDays ~/ 365;
                           Timestamp day = doc.data()["start-time"];
                           DateTime dateTime = day.toDate();
-                          String formattedTime =
-                              DateFormat.Hm().format(dateTime);
+                          String formattedTime =DateFormat.Hm().format(dateTime);
                           return doc.data()["status"]==2? SizedBox.shrink() : GestureDetector(
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
