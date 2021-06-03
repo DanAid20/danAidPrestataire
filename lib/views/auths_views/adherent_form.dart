@@ -435,6 +435,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         adherentProvider.setSurname(sname);
                         adherentProvider.setBirthDate(selectedDate);
                         adherentProvider.setImgUrl(avatarUrl);
+                        adherentProvider.setHavePaidBefore(false);
                         await FirebaseFirestore.instance.collection("USERS")
                           .doc(userProvider.getUserId)
                           .set({

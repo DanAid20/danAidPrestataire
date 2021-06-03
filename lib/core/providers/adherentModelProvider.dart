@@ -153,5 +153,9 @@ class AdherentModelProvider with ChangeNotifier {
     _adherent.location = loc;
     notifyListeners();
   }
+  void setHavePaidBefore(bool val){
+    _adherent.havePaid = val;
+    notifyListeners();
+  }
 
 }
