@@ -1,9 +1,12 @@
 import 'dart:math';
 
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -40,15 +43,19 @@ class _InactiveAccountState extends State<InactiveAccount> {
   ScrollController scrollController;
   int userSelected=-1;
   BeneficiaryModel adherentUserSelected;
+  BeneficiaryModel beneficiary;
   bool isloading=false;
   bool isRequestLaunch=false;
   UseCaseModelProvider userCaprovider;
   String famillyDoctorNAme;
+  CarouselController beneficiaryCarouselController = CarouselController();
+
+  List<Widget> beneficiaries;
   var code;
   @override
   void initState() {
-    scrollController= ScrollController();
      code= getRandomString(4);
+    getListOfUser();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.isAccountIsExists == false) {
         await showDialog<String>(
@@ -62,7 +69,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
     super.initState();
   userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
    if(widget.data!=null){
+    
     getFamillyDoctorName(widget.data.familyDoctorId);
+    
    }
   }
  Future<String> createConsultationCode({bool exists=false}) async {
@@ -80,7 +89,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'otherInfo':'',
       'consultationCode': exists==false?null: code,
       'type': widget.consultationType,
-      'amountToPay': 2000,
+      'amountToPay': 2000 ,
       'status' : 0  ,
       'createdDate':  DateTime.now(), 
       'enable': false,
@@ -139,7 +148,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
       adherentUserSelected= adherent;
     });
     print(userSelected);
-    print(adherentUserSelected);
+    print(adherentUserSelected.avatarUrl);
 
     }else if( action=="remove"){
        setState(() {
@@ -162,7 +171,6 @@ class _InactiveAccountState extends State<InactiveAccount> {
  getFamillyDoctorName(id)  {
     var newUseCase = FirebaseFirestore.instance.collection('MEDECINS').doc(id);
     newUseCase.get().then((value){
-      print(value.data()['cniName']);
       if(value.exists){
         setState(() {
           famillyDoctorNAme=value.data()['cniName']!=null ? value.data()['cniName']: '';
@@ -171,79 +179,75 @@ class _InactiveAccountState extends State<InactiveAccount> {
       }
     });
      
-   
+   print(famillyDoctorNAme);
   }
   getListOfUser() {
-    
-    
-    Stream<QuerySnapshot> query = FirebaseFirestore.instance
-        .collection("ADHERENTS")
-        .doc('${widget.phoneNumber}')
-        .collection('BENEFICIAIRES')
-        .snapshots();
-    return StreamBuilder(
-        stream: query,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-              ),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text("un instant svp "),
-                    SizedBox(
-                      height: 50.0,
-                    ),
-                    CircularProgressIndicator()
-                  ],
-                ),
-              );
-          }else{
-            return snapshot.data.docs.length >= 1
-              ? ListView.builder(
-                  controller: scrollController,
-                  scrollDirection: Axis.horizontal,
-                  //shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
-                    BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-                    print("name: ");
-                    
-                    return index==0 ?InkWell(
+     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+      BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
+      String medecin;
+      
+      if(adherentProvider.getAdherent.familyDoctorId != null){
+        FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent.familyDoctorId).get().then((doc){
+          String name = doc.data()["nomDefamille"];
+            if(name != null){
+              medecin = "Dr $name";
+            }
+        });
+      }
+
+      FirebaseFirestore.instance.collection("ADHERENTS").doc('${widget.phoneNumber}').collection("BENEFICIAIRES").get().then((snapshot) async {
+        print(snapshot.docs.length.toString());
+        beneficiaries = [];
+        BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
+          avatarUrl: widget.data.imgUrl,
+                        surname: widget.data.surname,
+                        familyName: widget.data.familyName,
+                        matricule: widget.data.matricule,
+                        gender: widget.data.gender,
+                        adherentId: widget.data.adherentId,
+                        birthDate  : widget.data.birthDate,
+                        dateCreated: widget.data.dateCreated,
+                        enabled: widget.data.enable,
+                        height: null,
+                        weight: null,
+                        bloodGroup: null,
+                        protectionLevel: widget.data.adherentPlan,
+                        cniName: widget.data.cniName,
+                        marriageCertificateName: widget.data.marriageCertificateName,
+                        marriageCertificateUrl:  widget.data.marriageCertificateUrl,
+                        validityEndDate: widget.data.validityEndDate,
+                        phoneList: widget.data.phoneList,
+         );
+     
+        Widget adherentBeneficiaryCard = InkWell(
                          onTap: ()=>{
-                           scrollController.animateTo(index.toDouble(), duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                           beneficiaryCarouselController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn)
                          }, child: Container(
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: HomePageComponents().getAdherentsList(
-                                adherent: beneficiary, doctorName: famillyDoctorNAme, adherentPersone: widget.data , isAccountIsExists: true, index: index, onclick: getUserSelected, iSelected:userSelected )),
-                      ),
-                    )  : InkWell(
+                                adherent: adherentBeneficiary, doctorName: famillyDoctorNAme, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected )),
+                      ));
+        beneficiaries.add(adherentBeneficiaryCard);
+        for (int i = 0; i < snapshot.docs.length; i++){
+          DocumentSnapshot doc = snapshot.docs[i];
+          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+          Widget content = InkWell(
                          onTap: ()=>{
-                           scrollController.animateTo(index.toDouble(), duration: Duration(milliseconds: 500), curve: Curves.easeIn)
-                         } ,
-                        child: Container(
+                           beneficiaryCarouselController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                         }, child: Container(
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: HomePageComponents().getAdherentsList(
-                                adherent: beneficiary, doctorName: famillyDoctorNAme, adherentPersone: widget.data, isAccountIsExists: true, index: index, onclick:getUserSelected, iSelected:userSelected )),
-                      ),
-                    );
-                  })
-              : Center(
-                  child: Text("Aucun Adherent  disponible pour le moment.."),
-                );
-          }
+                                adherent: beneficiary, doctorName: famillyDoctorNAme, isAccountIsExists: true, index: i, onclick: getUserSelected, iSelected:userSelected )),
+                      ));
+          beneficiaries.add(content);
+        }
+        setState(() {
           
         });
+      });
+
   }
    
 
@@ -504,20 +508,43 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         width:double.infinity,
                         padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
                         child: widget.isAccountIsExists==true ?  Container(
-                          margin: EdgeInsets.only(left:15.w),
+                          margin: EdgeInsets.only(left:2.w),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                              height: hv * 65,
-                              margin: EdgeInsets.only(left:3.w),
-                              padding: EdgeInsets.all(3.w),
-                              child: getListOfUser(),),
-                              SvgPicture.asset(
-                                'assets/icons/Bulk/Dots.svg',
-                                color: kSouthSeas,
-                                height: hv * 5,
-                                width: wv * 5,
+                              beneficiaries != null ? Align(
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: hv*2),
+                                    child: Container(
+                                     
+                                      child: CarouselSlider(
+                                        carouselController: beneficiaryCarouselController,
+                                        options: CarouselOptions(
+                                          scrollPhysics: BouncingScrollPhysics(),
+                                          height: hv * 60,
+                                          aspectRatio: 16 / 9,
+                                          viewportFraction: 1,
+                                          initialPage: 0,
+                                          enableInfiniteScroll: false,
+                                          reverse: false,
+                                          autoPlay: false,
+                                          enlargeCenterPage: true,
+                                          scrollDirection: Axis.horizontal,
+                                        ),
+                                        items: beneficiaries
+                                      ),
+                                    ),
+                                  ),
+                                ) : Center(child: Loaders().buttonLoader(kCardTextColor)),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                  'assets/icons/Bulk/Dots.svg',
+                                  color: kSouthSeas,
+                                  height: hv * 1,
+                                  width: wv *1,
+                                ),
                               ),
                             ],
                           )   

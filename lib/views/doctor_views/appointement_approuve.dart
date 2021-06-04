@@ -1,11 +1,15 @@
+import 'dart:math';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/utils.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
@@ -19,8 +23,8 @@ import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
 class AppointmentDetails extends StatefulWidget {
-  final AppointmentModel appointement;
-  AppointmentDetails({Key key, this.appointement}):super(key:key);
+  final AdherentModel adherent;
+  AppointmentDetails({Key key, this.adherent}):super(key:key);
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
@@ -48,7 +52,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   bool saveLoading = false;
   bool announceLoading = false;
   bool cancelLoading = false;
-
+  var code;
   bool edit = false;
 
   initialization(){
@@ -75,6 +79,86 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   void initState() {
     initialization();
     super.initState();
+  code = getRandomString(4);
+  }
+
+  String getRandomString(int length) {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    var result = String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    return 'YM' + result;
+  }
+
+  Future<String> createConsultationCode(QueryDocumentSnapshot adherent) async {
+    DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+
+    var date = DateTime.now();
+    var newUseCase = FirebaseFirestore.instance.collection('USECASES').doc();
+    newUseCase.set({
+      'id': newUseCase.id,
+      'adherentId': adherent['adherentId'],
+      'beneficiaryId': adherent['beneficiaryId'],
+      'beneficiaryName': adherent['username'],
+      'otherInfo': '',
+      'establishment': doctorProvider.getDoctor.officeName,
+      'consultationCode': code,
+      'type': adherent['appointment-type'],
+      'amountToPay': 2000,
+      'status': 0,
+      'createdDate': DateTime.now(),
+      'enable': false,
+    }, SetOptions(merge: true)).then((value) {
+      setState(() {
+        saveLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "Le Code ce consultation creer avec succes comme médecin de famille..")));
+    }).catchError((e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+      setState(() {
+        saveLoading = false;
+      });
+    });
+
+    return newUseCase.id;
+  }
+
+  facturationCode(id, adherent) async {
+    DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance
+        .collection('USECASES')
+        .doc(id)
+        .collection('FACTURATIONS')
+        .doc(adherent['adherentId'])
+        .set({
+      'id': Utils.createCryptoRandomString(8),
+      'idAdherent': adherent['adherentId'],
+      'idBeneficiairy': adherent['beneficiaryId'],
+      'idMedecin': doctorProvider.getDoctor.id,
+      'amountToPay':2000,
+      'isSolve': false,
+      'Type': adherent['appointment-type'],
+      'createdAt': DateTime.now(),
+    }, SetOptions(merge: true)).then((value) {
+      setState(() {
+        saveLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("La facture a bien ete generer avec succes ")));
+    }).catchError((e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+      setState(() {
+        saveLoading = false;
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -273,17 +357,54 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         announceLoading = true;
                       });
                       try {
-                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
-                          "status": 1
-                        },  SetOptions(merge: true)).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été approuver..'),));
-                          appointment.setAnnouncement(true);
-                           setState(() {
-                            announceLoading = false;
-                            edit=false;
-                            appointment.getAppointment.status=1;
-                          });
+                        
+                         var data =  FirebaseFirestore.instance
+                        .collection("APPOINTMENTS")
+                        .where("doctorId", isEqualTo: doctorProvider.getDoctor.id)
+                        .where("adherentId", isEqualTo:appointment.getAppointment.adherentId);
+                    data.get().then((docSnapshot) => {
+                          if (docSnapshot.docs.isEmpty)
+                            {print('fdfjsfjdsf')}
+                          else
+                            {
+                              FirebaseFirestore.instance
+                                  .collection("APPOINTMENTS")
+                                  .doc(docSnapshot.docs[0].id)
+                                  .update({
+                                "status": 1,
+                              }).then((value) async {
+                                await createConsultationCode(docSnapshot.docs[0])
+                                    .then((value) async {
+                                  await facturationCode(value, docSnapshot.docs[0]);
+                                });
+                                 appointment.setAnnouncement(true);
+                              setState(() {
+                                announceLoading = false;
+                                edit=false;
+                                appointment.getAppointment.status=1;
+                              });
+                              }).then((value) {
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("rende-vous approuver ")));
+                              })
+                            },
                         });
+                        // FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                        //   "status": 1
+                        // },  SetOptions(merge: true)).then((value) async {
+                        //    await createConsultationCode(widget.adherent)
+                        //   .then((value) async {
+                        //     await facturationCode(value, widget.adherent);
+                        //   });
+                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été approuver..'),));
+                        //   appointment.setAnnouncement(true);
+                        //    setState(() {
+                        //     announceLoading = false;
+                        //     edit=false;
+                        //     appointment.getAppointment.status=1;
+                        //   });
+                        // });
                       }
                       catch(e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));

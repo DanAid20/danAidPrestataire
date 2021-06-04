@@ -543,197 +543,8 @@ class HomePageComponents {
       ),
     );
   }
-  getAdherentsList({int iSelected, String doctorName, BeneficiaryModel adherent, AdherentModel adherentPersone, bool isAccountIsExists, int index, Function onclick}) {
-    return index==0? GestureDetector(
-      onTap: ()=>{
-         if(iSelected==index){
-            onclick(index, adherent, 'remove')
-         }else{
-            onclick(index, adherent, 'add')
-         }
-          
-      },
-      child: Container(
-        width: wv * 78,
-        decoration: BoxDecoration(
-          color: kBlueForce,
-          borderRadius: BorderRadius.all(
-            Radius.circular(30),
-          ),
-           boxShadow: [
-                  BoxShadow(color: iSelected==index? kBlueForce: Colors.transparent, spreadRadius: 2, blurRadius: 4),
-                ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 1),
-              child: Row(
-                children: [
-                  Container(
-                      width: wv * 15,
-                      child: Text('Valide jusqu\'au ',
-                          style: TextStyle(
-                              color: textWhiteColor,
-                              fontSize: fontSize(size: 15),
-                              fontWeight: FontWeight.w500))),
-                  Container(
-                      width: wv * 20,
-                      child: Text('10/2021',
-                          style: TextStyle(
-                              color: whiteColor,
-                              fontSize: wv * 4.5,
-                              fontWeight: FontWeight.w700))),
-                  Spacer(),
-                  SvgPicture.asset(
-                 (adherentPersone!=null && adherentPersone.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
-                    color: whiteColor,
-                  ),
-                  SvgPicture.asset(
-                  adherentPersone.adherentPlan==0? '' : 'assets/icons/Bulk/Shield Done.svg',
-                    height: hv * 8,
-                    width: wv * 8,
-                  )
-                ],
-              ),
-            ),
-            Container(
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        colorFilter: isAccountIsExists == true &&
-                               adherentPersone!=null && adherentPersone.enable == true
-                            ? new ColorFilter.mode(
-                                Colors.red.withOpacity(1), BlendMode.dstATop)
-                            : new ColorFilter.mode(
-                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
-                        image: adherentPersone==null
-                            ? AssetImage("assets/images/image 25.png")
-                            : adherentPersone.imgUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
-                        fit: BoxFit.cover,
-                      ),
-                      color: Colors.red,
-                      shape: BoxShape.circle),
-                  width: wv * 40,
-                  height: hv * 20,
-                  child: Stack(children: <Widget>[
-                    Align(
-                      alignment: Alignment.center,
-                      child: Transform.rotate(
-                        angle: -math.pi / 4,
-                        child: Text(
-                          isAccountIsExists == true && (adherentPersone!=null && adherentPersone.enable) == true
-                              ? ''
-                              : 'Compte Inactif',
-                          overflow: TextOverflow.clip,
-                          style: TextStyle(
-                              color: Colors.red,
-                              letterSpacing: 0.5,
-                              fontSize: wv * 6.5,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      right: 5,
-                      bottom: -hv * 2,
-                      child: Container(
-                        height: hv * 10,
-                        width: wv * 10,
-                        decoration: BoxDecoration(
-                            color: isAccountIsExists == true &&
-                                    (adherentPersone!=null && adherentPersone.enable) == true
-                                ? Colors.green
-                                : Colors.red,
-                            shape: BoxShape.circle),
-                        child:
-                            isAccountIsExists == true && (adherentPersone!=null && adherentPersone.enable) == true
-                                ? SizedBox.shrink()
-                                : Icon(
-                                    Icons.priority_high,
-                                    color: Colors.white,
-                                    size: hv * 4,
-                                  ),
-                      ),
-                    ),
-                  ]),
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Nom de l\'adherent courant ',
-                      style: TextStyle(
-                          color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
-                          fontWeight: FontWeight.w500)),
-                  Text((adherentPersone!=null && adherentPersone.cniName!=null) ? adherentPersone.cniName : ''  ,
-                      style: TextStyle(
-                          color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
-                          fontWeight: FontWeight.w700))
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Numero Matricule',
-                      style: TextStyle(
-                          color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
-                          fontWeight: FontWeight.w500)),
-                  Text(
-                    (adherent!=null &&  adherentPersone.matricule!=null)
-                          ?  adherentPersone.matricule
-                          : 'Pas defini',
-                      style: TextStyle(
-                          color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
-                          fontWeight: FontWeight.w700))
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text('Medecin de Famille ',
-                      style: TextStyle(
-                          color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
-                          fontWeight: FontWeight.w500)),
-                  Text(
-                       doctorName!=null ? doctorName :  'Pas definie ',
-                      style: TextStyle(
-                          color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
-                          fontWeight: FontWeight.w700))
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: hv * 4),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Image.asset('assets/icons/DanaidLogo.png'),
-              ),
-            ),
-
-          ],
-        ),
-      ),
-    ):GestureDetector(
+  getAdherentsList({int iSelected, String doctorName, BeneficiaryModel adherent, bool isAccountIsExists, int index, Function onclick}) {
+    return GestureDetector(
       onTap: ()=>{
          
            if(iSelected==index){
@@ -770,7 +581,7 @@ class HomePageComponents {
                               fontWeight: FontWeight.w500))),
                   Container(
                       width: wv * 20,
-                      child: Text('10/2021',
+                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate.toDate()) : 'Pas defini' ,
                           style: TextStyle(
                               color: whiteColor,
                               fontSize: wv * 4.5,
@@ -782,8 +593,8 @@ class HomePageComponents {
                   ),
                   SvgPicture.asset(
                   adherent!=null && adherent.protectionLevel==0 ? '': 'assets/icons/Bulk/Shield Done.svg',
-                    height: hv * 8,
-                    width: wv * 8,
+                    height: hv * 5,
+                    width: wv * 5,
                   )
                 ],
               ),
@@ -1084,13 +895,14 @@ class HomePageComponents {
   }
 
   getAvatar({String imgUrl, double size, bool renoveIsConnectedButton = true}) {
-      var stringToCompare="https://firebasestorage.googleapis.com/v0/b/danaid-dev";
+      var stringToComparedev="https://firebasestorage.googleapis.com/v0/b/danaid-dev";
+      var stringToCompareprod="https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com";
 
     return Padding(
       padding: EdgeInsets.only(right: wv * 1),
       child: Stack(
         children: [
-          imgUrl.contains(stringToCompare) ? CircleAvatar(
+          imgUrl.contains(stringToComparedev) || imgUrl.contains(stringToCompareprod)  ? CircleAvatar(
                 radius:  size != null ? size : wv * 5.5,
                 backgroundImage: NetworkImage(imgUrl),
                 backgroundColor: Colors.transparent,

@@ -37,8 +37,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
 
   triggerGetPatient() {
     var dates = DateTime.now();
-    var start = new DateTime(dates.year, dates.month, 24, 00, 00);
-    var end = new DateTime(dates.year, dates.month, 24, 23, 59);
+    var start = new DateTime(dates.year, dates.month, dates.day, 00, 00);
+    var end = new DateTime(dates.year, dates.month, dates.day, 23, 59);
     print(start);
     print(end);
     setState(() {
@@ -335,6 +335,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
                                 rendezVous.setAppointmentModel(appointmentModel),
+                                rendezVous.getAppointment.adherentId=snapshot.data.id,
                                 rendezVous.getAppointment.avatarUrl=data["imageUrl"],
                                 rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
                                 rendezVous.getAppointment.birthDate=data["dateNaissance"],
