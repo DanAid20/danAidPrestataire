@@ -297,7 +297,7 @@ class _AppointmentState extends State<Appointment> {
                 ),),
             ),
             SizedBox(height: hv*1.5,),
-            !edit ?  DateTime(now.year, now.month, now.day, 0).isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? Row(
+            !edit ?  DateTime(now.year, now.month, now.day, 24).isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? Row(
                 children: [
                   SizedBox(width: wv*4,),
                   Expanded(
