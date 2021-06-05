@@ -359,8 +359,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: "Nom tel que sur la CNI",
-                        hintText: "Nom CNI",
+                        label: "Nom sur le réseau social",
+                        hintText: "ex: Eric_87",
                         enabled: cniNameEnabled,
                         controller: _cniNameController,
                         validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
@@ -611,14 +611,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ),
                       ),
                       
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*3.5,),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Pièces justificatives", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
-                            SizedBox(height: hv*1,),
+                            SizedBox(height: hv*2,),
                             Column(
                               children: [
                                 isMarried ? FileUploadCard(

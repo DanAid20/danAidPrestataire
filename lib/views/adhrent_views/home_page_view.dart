@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
@@ -46,70 +48,30 @@ class _HomePageViewState extends State<HomePageView> {
 
     DateTime fullDate = DateTime.now();
     DateTime date = DateTime(fullDate.year, fullDate.month, fullDate.day);
+    AdherentModel adherentModel;
 
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
       if(adherentModelProvider.getAdherent != null){
-          /*String lastDateVisited = await HiveDatabase.getVisit();
-          if(lastDateVisited != null){
-            if(date.toString() != lastDateVisited.toString()){
-              FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                "visitPoints": FieldValue.increment(25),
-                "visits": FieldValue.arrayUnion([date]),
-                "lastDateVisited": date,
-              }, SetOptions(merge: true));
-              HiveDatabase.setVisit(date);
-              adherentModelProvider.addVisit(date);
-            }
-          } else {
-            lastDateVisited = adherentModelProvider.getAdherent.lastDateVisited != null ? adherentModelProvider.getAdherent.lastDateVisited.toDate().toString() : DateTime(2000).toString();
-            if(date.toString() != lastDateVisited.toString()){
-              FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                "visitPoints": FieldValue.increment(25),
-                "visits": FieldValue.arrayUnion([date]),
-                "lastDateVisited": date,
-              }, SetOptions(merge: true));
-              HiveDatabase.setVisit(date);
-              adherentModelProvider.addVisit(date);
-            }
-          }*/
+        adherentModel = adherentModelProvider.getAdherent;
+        generateInvoice(adherentModel);
         }
         else {
           FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
-            /*String lastDateVisited = await HiveDatabase.getVisit();
-            if(lastDateVisited != null){
-              if(date.toString() != lastDateVisited.toString()){
-                FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                  "visitPoints": FieldValue.increment(25),
-                  "visits": FieldValue.arrayUnion([date]),
-                  "lastDateVisited": date,
-                }, SetOptions(merge: true));
-                HiveDatabase.setVisit(date);
-                adherentModelProvider.addVisit(date);
-              }
-            } else {
-              DateTime dateOnline =adherentModelProvider.getAdherent.lastDateVisited != null ? DateTime(adherentModelProvider.getAdherent.lastDateVisited.toDate().year, adherentModelProvider.getAdherent.lastDateVisited.toDate().month, adherentModelProvider.getAdherent.lastDateVisited.toDate().day) : DateTime(2000);
-              lastDateVisited = dateOnline.toString();
-              if(date.toString() != lastDateVisited.toString()){
-                FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).set({
-                  "visitPoints": FieldValue.increment(25),
-                  "visits": FieldValue.arrayUnion([date]),
-                  "lastDateVisited": date,
-                }, SetOptions(merge: true));
-                HiveDatabase.setVisit(date);
-                adherentModelProvider.addVisit(date);
-              }
-            }*/
+            adherentModel = adherent;
+            generateInvoice(adherentModel);
           });
         }
     } else {
       String phone = await HiveDatabase.getAuthPhone();
       userProvider.setUserId(phone);
       if(adherentModelProvider.getAdherent != null){
+        adherentModel = adherentModelProvider.getAdherent;
+        generateInvoice(adherentModel);
           //
         }
         else {
@@ -117,9 +79,52 @@ class _HomePageViewState extends State<HomePageView> {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
             userProvider.setUserId(adherent.adherentId);
+            adherentModel = adherent;
+            generateInvoice(adherentModel);
           });
         }
     }
+  }
+
+  generateInvoice(AdherentModel adhr){
+    DateTime now = DateTime.now();
+    Random random = new Random();
+    if(now.isAfter(adhr.validityEndDate.toDate()) && adhr.adherentPlan != 0){
+      FirebaseFirestore.instance.collection('FACTURATION_TRIMESTRIELLE').doc('facturation_en_cour').get().then((doc) {
+        int trimesterUnit = doc.data()["trimestre"];
+        int year = doc.data()["date"].toDate().year;
+        Map data = Algorithms.getAutomaticCoveragePeriod(trimesterUnit: trimesterUnit, year: year);
+
+        FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adhr.adherentPlan.toString()).get().then((serviceDoc){
+          PlanModel plan = PlanModel.fromDocument(serviceDoc);
+          FirebaseFirestore.instance.collection("ADHERENTS").doc(adhr.adherentId).collection('NEW_FACTURATIONS_ADHERENT').add({
+            "montant": plan.monthlyAmount,
+            "createdDate": DateTime.now(),
+            "trimester": data["trimester"],
+            "etatValider": false,
+            "intitule": "COSTISATION Q-$trimesterUnit",
+            "dateDebutCouvertureAdherent" : data["start"],
+            "dateFinCouvertureAdherent": data["end"],
+            "categoriePaiement" : "COTISATION_TRIMESTRIELLE",
+            "dateDelai": data["start"].add(Duration(days: 15)),
+            "numeroRecu": data["start"].year.toString()+"-"+random.nextInt(99999).toString(),
+            "numeroNiveau": plan.planNumber,
+            "paymentDate": null,
+            "paid": false
+          }).then((value) {
+            FirebaseFirestore.instance.collection("ADHERENTS").doc(adhr.adherentId).set({
+              "datDebutvalidite" : data["start"],
+              "havePaidBefore": true,
+              "datFinvalidite": data["end"],
+              "paid": false,
+            }, SetOptions(merge: true));
+            });
+          });
+
+        
+      });
+    }
+    
   }
 
   loadDoctorProfile() async {

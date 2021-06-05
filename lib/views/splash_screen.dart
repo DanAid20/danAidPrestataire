@@ -83,11 +83,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 SizedBox(height: hv*2,),
                 Text('DanAid', style: TextStyle(color: Colors.grey[600], fontSize: 25, fontWeight: FontWeight.bold),),
-                Spacer(),
+                SizedBox(height: hv*5,),
                 CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                  valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ),
-                SizedBox(height: hv*5,)
               ],
             )
           ,),

@@ -463,7 +463,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               .doc(userProvider.getUserId)
                               .set({
                                 "createdDate": DateTime.now(),
-                                "havePaidBefore": false,
+                                "havePaidBefore": adherentProvider.getAdherent.adherentPlan == 0 ? false : true,
                                 "authPhoneNumber": userProvider.getUserId,
                                 "enabled": false,
                                 "dateNaissance": selectedDate,
@@ -492,8 +492,26 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 adherentProvider.setValidityEndDate(end);
                                 adherentProvider.setDateCreated(DateTime.now());
 
-                                plan.planNumber != 0 ? await FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').doc(DateTime.now().microsecondsSinceEpoch.toString()).set({
+                                DocumentReference contributionRef = FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc();
+                                String inscriptionId = contributionRef.id;
+
+                                adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0 ? FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').doc(inscriptionId).set({
+                                  "montant": registrationFee,
+                                  "createdDate": DateTime.now(),
+                                  "trimester": trimester,
+                                  "etatValider": false,
+                                  "categoriePaiement": "INSCRIPTION",
+                                  "intitule": "COSTISATION Q-"+start.year.toString(),
+                                  "dateDelai": start.add(Duration(days: 15)),
+                                  "numeroNiveau": plan.planNumber,
+                                  "paymentDate": null,
+                                  "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                                  "paid": false
+                                }) : print("Il a payé");
+
+                                plan.planNumber != 0 ? await FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').add({
                                   "montant": total,
+                                  "inscriptionId": inscriptionId,
                                   "createdDate": DateTime.now(),
                                   "trimester": trimester,
                                   "intitule": "COSTISATION Q-"+start.year.toString(),
@@ -504,22 +522,10 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                   "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
                                   "numeroNiveau": plan.planNumber,
                                   "paymentDate": null,
+                                  "etatValider": false,
                                   "paid": false
 
                                 }).then((doc) {
-
-                                  adherentProvider.getAdherent.havePaid != true ? FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').doc((DateTime.now().microsecondsSinceEpoch+1).toString()).set({
-                                    "montant": registrationFee,
-                                    "createdDate": DateTime.now(),
-                                    "trimester": trimester,
-                                    "categoriePaiement": "INSCRIPTION",
-                                    "intitule": "COSTISATION Q-"+start.year.toString(),
-                                    "dateDelai": start.add(Duration(days: 15)),
-                                    "numeroNiveau": plan.planNumber,
-                                    "paymentDate": null,
-                                    "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
-                                    "paid": false
-                                  }) : print("Il a payé");
 
                                   adherentProvider.setAdherentPlan(plan.planNumber);
                                   adherentProvider.setValidityEndDate(end);
