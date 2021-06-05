@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
@@ -13,6 +15,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/utils.dart';
+import 'package:danaid/views/doctor_views/appointement_approuve.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -331,6 +334,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     AppointmentModelProvider rendezVous = Provider.of<AppointmentModelProvider>(context);
     AppointmentModel appointmentModel;
+     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
+    AdherentModel adherent = adherentModelProvider.getAdherent;
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -381,13 +386,19 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
                                 rendezVous.setAppointmentModel(appointmentModel),
+                                 rendezVous.getAppointment.adherentId=snapshot.data.id,
                                 rendezVous.getAppointment.avatarUrl=data["imageUrl"],
                                 rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
                                 rendezVous.getAppointment.birthDate=data["dateNaissance"],
                                 
-                                   Navigator.of(context).pushNamed('/appointment-apointement')
+                                Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AppointmentDetails(adherent: adherent),
+                                      ),)
                                   
                                 },
+                                
                                 child: HomePageComponents().timeline(
                                 isanounced: doc.data()["announced"],
                                 adhrentId: doc.data()["adherentId"],

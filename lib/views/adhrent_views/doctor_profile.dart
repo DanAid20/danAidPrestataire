@@ -573,22 +573,23 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               ),
                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text("Tarif publique", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text("Tarif publique ", style: TextStyle(fontWeight: FontWeight.w800)),
                                   Text("${doctor.getDoctor.rate["public"]} f."),
                                   SizedBox(height: 10,),
                                   Text("Tarif DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Adhérents"),
+                                      Text("Adhérents : "),
                                       SizedBox(width: 5,),
-                                      Text("${doctor.getDoctor.rate["adherent"]} f."),
+                                      Text("70%",style: TextStyle(fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text("Autres"),
+                                      Text("Découverte : "),
                                       SizedBox(width: 5,),
-                                      Text("${doctor.getDoctor.rate["other"]} f."),
+                                      Text("5%", style: TextStyle(fontWeight: FontWeight.bold),),
                                     ],
                                   ),
                                   SizedBox(height: 20,)

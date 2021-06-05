@@ -288,7 +288,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                             fontWeight: FontWeight.w700,
                                             
                                             fontSize: wv*3.5), textScaleFactor: 1.0),
-                                       currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
+                                       currentYears==dataTIme-2? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
                                   ),

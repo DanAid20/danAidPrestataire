@@ -38,7 +38,7 @@ double imc=0;
     super.initState();
      userCaprovider= Provider.of<UseCaseModelProvider>(context, listen: false);
     date= widget.createdAt;
-    
+  
     calculWeight();
   }
  String getAge(date){
@@ -50,23 +50,27 @@ double imc=0;
   return differenceInDays.toString();
  }
  double convertToMeter(value){
-   return value.runtimeType ==String && value!=null && value!='' ? double.parse(value)/100  : value!=null && value!='' ? value/100 : 0;
+   return value.runtimeType ==String || value.runtimeType ==int && value!=null && value!='' ? double.parse(value)/100  : value!=null && value!='' ? value/100 : 0;
  }
  double toInt(value){
    print( value.runtimeType);
    print( value);
-   return  value.runtimeType ==String && value!=null && value!='' ? double.parse(value)  : value!=null && value!='' ? value : 0;
+   return  value.runtimeType ==String || value.runtimeType ==int && value!=null && value!='' ? double.parse(value)  : value!=null && value!='' ? value : 0;
  }
- double getNumber(double input, {int precision = 2}) => 
-double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1));
+ double getNumber( input, {int precision = 2}) {
+   return input!=null ? double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1)):0.0 ;
+ }
  calculWeight(){
-   print(widget.beneficiare.weight.runtimeType);
+   if(widget.beneficiare.weight!=null && widget.beneficiare.height!=null){
+   print(widget.beneficiare.weight.runtimeType); 
    print(widget.beneficiare.weight);
+   print(widget.beneficiare.weight.runtimeType);
      imc=getNumber(toInt(widget.beneficiare.weight) / (convertToMeter(widget.beneficiare.height) * convertToMeter(widget.beneficiare.height)), precision: 1);
     if(imc<=18.5){setState(() {underWeight=imc;});}
     else if(imc>=18.5 && imc<=25){setState(() {normaleWeight=imc;});}
     else if(imc>=25 && imc<=30){setState(() {overWeight=imc;});}
     else if(imc>30){setState(() {svarWeight=imc;});}
+   }
  }
 
   @override
@@ -178,7 +182,8 @@ double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1));
                         ],
                       ),
                     ),
-                    Row(
+
+                    widget.beneficiare.weight!=null && widget.beneficiare.height!=null ? Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Column(
@@ -533,6 +538,9 @@ double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1));
                           ),
                         ),
                       ],
+                    ):Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(child: Container(child: Text('les données comme le poids et la taille sont manquantes pour afficher cette section veuillez completer ce profil ' , textAlign: TextAlign.center))),
                     ),
                     SizedBox(height: MySize.getScaledSizeHeight(5),),
                     GestureDetector(
