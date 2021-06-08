@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 
 class IntroText extends StatelessWidget {
   const IntroText({
-    Key key, this.title,
+    Key key, this.title, this.rank
   }) : super(key: key);
   final String title;
+  final int rank;
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -16,7 +17,7 @@ class IntroText extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
-            horizontal: horizontal(size: defSize * 5)
+            horizontal: horizontal(size: wv*4)
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -25,33 +26,54 @@ class IntroText extends StatelessWidget {
               title,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: fontSize(size: defSize * 2.32),
-                  fontWeight: FontWeight.w600
+                  fontSize: fontSize(size: 23),
+                  fontWeight: FontWeight.bold
               ),
             ),
             VerticalSpacing(of: inch * 1.18),
             Text.rich(
-              TextSpan(
-                  text: 'Avec votre famille, bénéficiez d’une couverture de ',
-                  children: [
-                    TextSpan(
-                        text: '70% ',
-                        style: TextStyle(fontWeight: FontWeight.w700)
-                    ),
-                    TextSpan(text: 'en '),
-                    TextSpan(
-                        text: '1 heures, ',
-                        style: TextStyle(fontWeight: FontWeight.w700)
-                    ),
-                    TextSpan(text: 'partout au Cameroun. '),
-                  ]
-              ),
+              rank == 1 ?
+                TextSpan(
+                    text: 'Avec votre famille, bénéficiez d’une couverture de ',
+                    children: [
+                      TextSpan(
+                          text: '70% ',
+                          style: TextStyle(fontWeight: FontWeight.w700)
+                      ),
+                      TextSpan(text: 'en '),
+                      TextSpan(
+                          text: '1 heures, ',
+                          style: TextStyle(fontWeight: FontWeight.w700)
+                      ),
+                      TextSpan(text: 'partout au Cameroun. '),
+                    ]
+                )
+              :
+              rank == 2 ?
+                TextSpan(
+                    text: 'En cas de besoin, obtenez l’aide des membres du réseau ou un ',
+                    children: [
+                      TextSpan(
+                          text: 'prêt santé ',
+                          style: TextStyle(fontWeight: FontWeight.w700)
+                      ),
+                      TextSpan(text: 'en quelques minutes'),
+                    ]
+                )
+              :
+                TextSpan(
+                    text: 'Traitement VIP chez mon médecin\n',
+                    children: [
+                      TextSpan(text: 'Mon médecin de famille personnel : reçu rapidement, orienté, suivi à long terme... '),
+                    ]
+                )
+              ,
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.white,
                   height: 1.5,
                   letterSpacing: .72,
-                  fontSize: fontSize(size: defSize * 1.8)),
+                  fontSize: fontSize(size: 22)),
             ),
           ],
         ),

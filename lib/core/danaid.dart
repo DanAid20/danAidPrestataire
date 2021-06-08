@@ -1,3 +1,6 @@
+import 'package:danaid/core/models/invoiceModel.dart';
+import 'package:danaid/core/models/loanModel.dart';
+import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/routes.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/status_bar.dart';
@@ -21,7 +24,11 @@ import 'package:danaid/core/providers/serviceProviderTileModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/conversationChatModelProvider.dart';
+import 'package:danaid/core/providers/appointmentProvider.dart';
+import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
+import 'package:danaid/core/providers/loanModelProvider.dart';
+import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
 
@@ -59,7 +66,7 @@ class Danaid extends StatelessWidget {
                 create: (_) => AdherentModelProvider(null),
               ),
               ChangeNotifierProvider<BottomAppBarControllerProvider>(
-                create: (_) => BottomAppBarControllerProvider(1),
+                create: (_) => BottomAppBarControllerProvider(1,1),
               ),
               ChangeNotifierProvider<DoctorModelProvider>(
                 create: (_) => DoctorModelProvider(null),
@@ -84,6 +91,21 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<UsersListProvider>(
                 create: (_) => UsersListProvider([]),
+              ),
+              ChangeNotifierProvider<AppointmentModelProvider>(
+                create: (_) => AppointmentModelProvider(null),
+              ),
+              ChangeNotifierProvider<UseCaseModelProvider>(
+                create: (_) => UseCaseModelProvider(null),
+              ),
+              ChangeNotifierProvider<LoanModelProvider>(
+                create: (_) => LoanModelProvider(LoanModel()),
+              ),
+              ChangeNotifierProvider<PlanModelProvider>(
+                create: (_) => PlanModelProvider(null),
+              ),
+              ChangeNotifierProvider<InvoiceModelProvider>(
+                create: (_) => InvoiceModelProvider(InvoiceModel()),
               ),
             ],
             child: ScreenUtilInit(

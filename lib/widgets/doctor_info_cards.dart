@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,12 +12,14 @@ class DoctorInfoCard extends StatelessWidget {
   final String title;
   final String speciality;
   final String distance;
+  final bool isInRdvDetail;
+  final int appointmentState;
   final bool chat, consultation, teleConsultation, rdv, visiteDomicile;
   final bool noPadding, includeHospital;
   final String field, officeName;
   final Function onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.distance, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
+  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.appointmentState, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +102,7 @@ class DoctorInfoCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text("Services Offerts", style: TextStyle(color: whiteColor, fontSize: 15),),
+                    child: Text(!isInRdvDetail ? "Services Offerts" : "Service demandé", style: TextStyle(color: whiteColor, fontSize: 15),),
                   ),
                   Row(
                     children: [
@@ -129,7 +132,7 @@ class DoctorInfoCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              !isInRdvDetail ? Row(
                 children: [
                   SizedBox(width: 10,),
                   SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: teleConsultation ? whiteColor : kSouthSeas),
@@ -147,8 +150,15 @@ class DoctorInfoCard extends StatelessWidget {
                   SizedBox(width: 10,),
                   SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: visiteDomicile ? whiteColor : kSouthSeas),
                 ],
+              ) :
+              Row(
+                children: [
+                  SizedBox(width: wv*2,),
+                  SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 35, color: whiteColor),
+                  SizedBox(width: wv*2,),
+                  Text("Consultation", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
+                ],
               ),
-
               SizedBox(height: 5,),
             ],),
           ),
@@ -162,11 +172,24 @@ class DoctorInfoCard extends StatelessWidget {
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),
-              child: Row(children: [
+              child: !isInRdvDetail ? Row(children: [
                 Text(includeHospital ? "Autre médecin..." : "Plus de détails", style: TextStyle(color: Colors.white),),
                 SizedBox(width: 10,),
                 Icon(Icons.arrow_forward_ios, color: Colors.white),
-              ],mainAxisAlignment: MainAxisAlignment.end)
+              ],mainAxisAlignment: MainAxisAlignment.end) :
+              Align(
+                alignment: Alignment.centerLeft,
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: TextStyle(color: whiteColor),
+                    children: [
+                      TextSpan(text: "      Votre demande de RDV est "),
+                      TextSpan(text: HomePageComponents().getAppointmentStateText(appointmentState), style: TextStyle(fontWeight: FontWeight.bold))
+                    ]
+                  ),
+                ),
+              )
             ),
           )
         ],

@@ -111,7 +111,7 @@ class _OtpViewState extends State<OtpView> {
                         buildTimer(),
                         otpForm(),
                         //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
-                        false //!(pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty)
+                        !(pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty)
                           ? CustomDisabledTextButton(text: "Validez le code",)
                           : load ? Center(child: Loaders().buttonLoader(kPrimaryColor))
                             : CustomTextButton(
@@ -157,7 +157,7 @@ class _OtpViewState extends State<OtpView> {
           Text("Le code expire dans: ", style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
           TweenAnimationBuilder(
             tween: Tween(begin: 40.0, end: 0.0),
-            duration: Duration(seconds: 30),
+            duration: Duration(seconds: 120),
             builder: (_, value, child) => Text(
               "00:${value.toInt()}",
               style: TextStyle(
@@ -193,7 +193,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) => nextField(value, pin2FocusNode),
+                    onChanged: (value) {nextField(value, pin2FocusNode); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -206,7 +206,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) => nextField(value, pin3FocusNode),
+                    onChanged: (value) {nextField(value, pin3FocusNode); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -219,7 +219,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) => nextField(value, pin4FocusNode),
+                    onChanged: (value) {nextField(value, pin4FocusNode); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -232,7 +232,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) => nextField(value, pin5FocusNode),
+                    onChanged: (value) {nextField(value, pin5FocusNode); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -245,7 +245,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) => nextField(value, pin6FocusNode),
+                    onChanged: (value) {nextField(value, pin6FocusNode); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -259,6 +259,7 @@ class _OtpViewState extends State<OtpView> {
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
                     onChanged: (value) {
+                      setState((){});
                       if (value.length == 1) {
                         pin6FocusNode.unfocus();
                         // Then you need to check is the code is correct or not

@@ -160,9 +160,10 @@ class ChoiceTile extends StatelessWidget {
 }
 
 class CustomDropDownButton extends StatelessWidget {
-  final String label, value, initialText;
-  final Function(String val) onChanged;
-  final List<DropdownMenuItem<String>> items;
+  final String label, initialText;
+  final dynamic value;
+  final Function(dynamic val) onChanged;
+  final List<DropdownMenuItem<dynamic>> items;
 
   const CustomDropDownButton({Key key, this.label, this.value, this.initialText = "Choisir..", this.onChanged, this.items}) : super(key: key);
   @override
@@ -171,7 +172,7 @@ class CustomDropDownButton extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(fontSize: 16, color: kTextBlue),),
-          SizedBox(height: hv*1,),
+          SizedBox(height: 5,),
           Container(
             constraints: BoxConstraints(minWidth: wv*45),
             padding: EdgeInsets.symmetric(horizontal: 15),
@@ -181,7 +182,10 @@ class CustomDropDownButton extends StatelessWidget {
             ),
             child: ButtonTheme(alignedDropdown: true,
               child: DropdownButtonHideUnderline(
-                child: DropdownButton(isExpanded: true, hint: Text(initialText), value: value,
+                child: DropdownButton(
+                  isExpanded: true, 
+                  hint: Text(initialText), 
+                  value: value,
                   items: items,
                   onChanged: onChanged)
               ),

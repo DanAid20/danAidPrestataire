@@ -87,7 +87,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:907608334806:android:050e25bd5bc21002458477",
         "android_client_info": {
-          "package_name": "com.master.danaid"
+          "package_name": "com.danaid.danaidmobile"
         }
       },
       "oauth_client": [
@@ -95,7 +95,7 @@
           "client_id": "907608334806-c6o5sfshvstklgcpqiv14d4j9tq4jf18.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.master.danaid",
+            "package_name": "com.danaid.danaidmobile",
             "certificate_hash": "9cf6a76b37254bc78777a0f042ee723fb5d8a8c1"
           }
         },

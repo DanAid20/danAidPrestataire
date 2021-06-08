@@ -230,8 +230,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     SizedBox(height: hv*1,),
                     InternationalPhoneNumberInput(
                       validator: (String phone) {
-                        return (phone.isEmpty)
-                            ?  "Entrer un numero de téléphone valide" : null;
+                        return null;
                       },
                       onInputChanged: (PhoneNumber number) {
                         phone = number.phoneNumber;
@@ -576,28 +575,28 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     title: "Scan de la CNI",
                     state: cniUploaded,
                     loading: cniSpinner,
-                    action: () async {await getDocFromPhone('CNI');}
+                    action: () async {await getDocFromGallery('CNI');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
                     title: "Acte de Naissance *",
                     state: birthCertificateUploaded,
                     loading: birthCertificateSpinner,
-                    action: () async {await getDocFromPhone('Acte_De_Naissance');}
+                    action: () async {await getDocFromGallery('Acte_De_Naissance');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
                     title: "Acte de Marriage",
                     state: marriageCertificateUploaded,
                     loading: marriageCertificateSpinner,
-                    action: () async {await getDocFromPhone('Acte_De_Marriage');}
+                    action: () async {await getDocFromGallery('Acte_De_Marriage');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
                     title: "Autre pièce justificative",
                     state: otherFileUploaded,
                     loading: otherFileSpinner,
-                    action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
+                    action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
                   SizedBox(height: hv*2,),
 

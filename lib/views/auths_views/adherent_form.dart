@@ -1,11 +1,17 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/planModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
+import 'package:danaid/widgets/function_widgets.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -51,7 +57,96 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   String avatarUrl;
   @override
   Widget build(BuildContext context) {
-    AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
+
+    DateTime now = DateTime.now();
+
+    int months = 0;
+    String trimester;
+    DateTime start;
+    DateTime end;
+    PlanModel plan = planProvider.getPlan;
+    
+    if(now.month >= 1 && now.month < 4){
+      trimester = "Janvier à Mars " + DateTime.now().year.toString();
+      if (now.month != 3){
+        months = (now.day < 25) ? 4 - now.month : 4 - now.month - 1;
+      }
+      else{
+        if(now.day < 25){
+          months = 1;
+          trimester = "Janvier à Mars " + DateTime.now().year.toString();
+        }
+        else {
+          months = 3;
+          trimester = "Avril à Juin " + DateTime.now().year.toString();
+        }
+        trimester = (now.day < 25) ? "Janvier à Mars " + DateTime.now().year.toString() : "Avril à Juin " + DateTime.now().year.toString(); 
+        months = (now.day < 25) ? 1 : 3;
+      }
+      if(now.month == 3 && now.day > 25){
+        start = DateTime(now.year, 04, 01);
+        end = DateTime(now.year, 07, 01);
+      } else {
+        start = DateTime(now.year, 01, 01);
+        end = DateTime(now.year, 04, 01);
+      }
+    }
+
+    else if(now.month >= 4 && now.month < 7){
+      trimester = "Avril à Juin " + DateTime.now().year.toString();
+      if (now.month != 6){months = (now.day < 25) ? 7 - now.month : 7 - now.month - 1;}
+      else{
+        trimester = (now.day < 25) ? "Avril à Juin " + DateTime.now().year.toString() : "Juillet à Septembre " + DateTime.now().year.toString(); 
+        months = (now.day < 25) ? 1 : 3;
+      }
+      if(now.month == 6 && now.day > 25){
+        start = DateTime(now.year, 07, 01);
+        end = DateTime(now.year, 10, 01);
+      } else {
+        start = DateTime(now.year, 04, 01);
+        end = DateTime(now.year, 07, 01);
+      }
+    }
+
+    else if(now.month >= 7 && now.month < 10){
+      trimester = "Juillet à Septembre " + DateTime.now().year.toString();
+      if (now.month != 9){months = (now.day < 25) ? 10 - now.month : 10 - now.month - 1;}
+      else{
+        trimester = (now.day < 25) ? "Juillet à Septembre " + DateTime.now().year.toString() : "Octobre à Décembre " + DateTime.now().year.toString(); 
+        months = (now.day < 25) ? 1 : 3;}
+
+      if(now.month == 9 && now.day > 25){
+        start = DateTime(now.year, 10, 01);
+        end = DateTime(now.year, 12, 31);
+      } else {
+        start = DateTime(now.year, 07, 01);
+        end = DateTime(now.year, 10, 01);
+      }
+    }
+
+    else if(now.month >= 10 && now.month <= 12){
+      trimester = "Octobre à Décembre " + DateTime.now().year.toString();
+      
+      if (now.month != 9){months = (now.day < 25) ? 12 - now.month : 12 - now.month - 1;}
+      else{
+        trimester = (now.day < 25) ? "Octobre à Décembre " + DateTime.now().year.toString() : "Janvier à Mars " + (DateTime.now().year+1).toString(); 
+        months = (now.day < 25) ? 1 : 3;
+      }
+
+      if(now.month == 12 && now.day > 25){
+        start = DateTime(now.year+1, 01, 01);
+        end = DateTime(now.year+1, 04, 01);
+      } else {
+        start = DateTime(now.year, 10, 01);
+        end = DateTime(now.year, 12, 31);
+      }
+    }
+
+    num total = plan.monthlyAmount*months;
+    num registrationFee = plan.registrationFee;
+
     return SafeArea(
       top: false,
       bottom: false,
@@ -304,19 +399,8 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                   ),*/
 
                   SizedBox(height: hv*1,),
-                  CheckboxListTile(
-                    tristate: false,
-                    title: Row(children: [
-                      Text("Lu et accepté les "),
-                      InkWell(child: Text("termes des services", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline,)), 
-                        onTap: (){
-                          showDialog(context: context, 
-                          builder: (BuildContext context){
-                            return termsAndConditionsDialog();
-                          }
-                          );
-                        },)
-                    ],),
+                  HomePageComponents.termsAndConditionsTile(
+                    action: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
                     value: _serviceTermsAccepted,
                     activeColor: primaryColor,
                     onChanged: (newValue) {
@@ -324,7 +408,6 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         _serviceTermsAccepted = newValue;
                       });
                     },
-                    controlAffinity: ListTileControlAffinity.leading,
                   ),
                   imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
                   (_serviceTermsAccepted & cityChosen & (selectedDate != null)) ?  
@@ -332,7 +415,9 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                     text: "Envoyer",
                     color: kPrimaryColor,
                     action: () async {
+                      Random random = new Random();
                       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                      adherentProvider.setAdherentId(userProvider.getUserId);
                       setState(() {
                         autovalidate = true;
                       });
@@ -342,7 +427,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         setState(() {
                           buttonLoading = true;
                         });
-                        AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
+                        AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
                         print("$fname, $sname, $selectedDate, $_gender, $avatarUrl");
                         print("${Algorithms().getMatricule(selectedDate, "Centre", _gender)}");
                         adherentProvider.setAdherentId(userProvider.getUserId);
@@ -350,23 +435,26 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         adherentProvider.setSurname(sname);
                         adherentProvider.setBirthDate(selectedDate);
                         adherentProvider.setImgUrl(avatarUrl);
+                        adherentProvider.setHavePaidBefore(false);
                         await FirebaseFirestore.instance.collection("USERS")
                           .doc(userProvider.getUserId)
                           .set({
+                            "authId": FirebaseAuth.instance.currentUser.uid,
                             'createdDate': DateTime.now(),
                             'emailAdress': userProvider.getEmail,
-                            'enabled': userProvider.isEnabled,
+                            'enabled': false,
                             "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                             "urlCNI": "",
+                            "profilEnabled": false,
                             "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                             "userCountryName": userProvider.getCountryName,
-                            "authId": FirebaseAuth.instance.currentUser.uid,
                             'fullName': "$fname $sname",
                             "imageUrl" : avatarUrl,
                             "points": 500,
-                            "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
+                            "visitPoints": 0,
+                            "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getAdherent.regionOfOrigin, _gender),
                             "profil": "ADHERENT",
-                            "regionDorigione": adherentProvider.getRegionOfOrigin,
+                            "regionDorigione": adherentProvider.getAdherent.regionOfOrigin,
                             "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
                             "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                           }, SetOptions(merge: true))
@@ -375,14 +463,14 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               .doc(userProvider.getUserId)
                               .set({
                                 "createdDate": DateTime.now(),
+                                "havePaidBefore": adherentProvider.getAdherent.adherentPlan == 0 ? false : true,
                                 "authPhoneNumber": userProvider.getUserId,
-                                "enabled": userProvider.isEnabled,
+                                "enabled": false,
                                 "dateNaissance": selectedDate,
                                 "authId": FirebaseAuth.instance.currentUser.uid,
                                 "genre": _gender,
                                 "imageUrl" : avatarUrl,
-                                "points": 500,
-                                "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getRegionOfOrigin, _gender),
+                                "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getAdherent.regionOfOrigin, _gender),
                                 "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                                 "nbBeneficiare": 0,
                                 "nombreEnfant": 0,
@@ -390,20 +478,74 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "prenom": sname,
                                 "profil": "ADHERENT",
                                 "profilEnabled": false,
-                                "protectionLevel": adherentProvider.getAdherentPlan,
-                                "regionDorigione": adherentProvider.getRegionOfOrigin,
+                                "protectionLevel": adherentProvider.getAdherent.adherentPlan,
+                                "regionDorigione": adherentProvider.getAdherent.regionOfOrigin,
                                 "statuMatrimonialMarie": false,
-                                "ville": adherentProvider.getTown,
+                                "ville": adherentProvider.getAdherent.town,
+                                "datDebutvalidite" : adherentProvider.getAdherent.adherentPlan == 0 ? DateTime.now() : start,
+                                "datFinvalidite": adherentProvider.getAdherent.adherentPlan == 0 ? DateTime.now().add(Duration(days: 365)) : end,
+                                "paid": false,
                                 "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                               }, SetOptions(merge: true))
                               .then((value) async {
+                                adherentProvider.setValidityEndDate(end);
+                                adherentProvider.setDateCreated(DateTime.now());
+
+                                DocumentReference contributionRef = FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc();
+                                String inscriptionId = contributionRef.id;
+
+                                adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0 ? FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').doc(inscriptionId).set({
+                                  "montant": registrationFee,
+                                  "createdDate": DateTime.now(),
+                                  "trimester": trimester,
+                                  "etatValider": false,
+                                  "categoriePaiement": "INSCRIPTION",
+                                  "intitule": "COSTISATION Q-"+start.year.toString(),
+                                  "dateDelai": start.add(Duration(days: 15)),
+                                  "numeroNiveau": plan.planNumber,
+                                  "paymentDate": null,
+                                  "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                                  "paid": false
+                                }) : print("Il a payé");
+
+                                plan.planNumber != 0 ? await FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').add({
+                                  "montant": total,
+                                  "inscriptionId": inscriptionId,
+                                  "createdDate": DateTime.now(),
+                                  "trimester": trimester,
+                                  "intitule": "COSTISATION Q-"+start.year.toString(),
+                                  "dateDebutCouvertureAdherent" : start,
+                                  "dateFinCouvertureAdherent": end,
+                                  "categoriePaiement" : "COTISATION_TRIMESTRIELLE",
+                                  "dateDelai": start.add(Duration(days: 15)),
+                                  "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
+                                  "numeroNiveau": plan.planNumber,
+                                  "paymentDate": null,
+                                  "etatValider": false,
+                                  "paid": false
+
+                                }).then((doc) {
+
+                                  adherentProvider.setAdherentPlan(plan.planNumber);
+                                  adherentProvider.setValidityEndDate(end);
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Factures enrégistrées",)));
+                                }).catchError((e){
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
+                                }) 
+                                : print("pas besoin");
+
                                 await HiveDatabase.setRegisterState(true);
                                 HiveDatabase.setAuthPhone(userProvider.getUserId);
                                 HiveDatabase.setFamilyName(fname);
                                 HiveDatabase.setSurname(sname);
                                 HiveDatabase.setGender(_gender);
                                 HiveDatabase.setImgUrl(avatarUrl);
+
+                                setState(() {
+                                  buttonLoading = false;
+                                });
+
                                 Navigator.pushNamed(context, '/home');
                               })
                               .catchError((e) {

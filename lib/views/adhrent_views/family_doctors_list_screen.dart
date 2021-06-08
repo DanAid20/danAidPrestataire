@@ -7,6 +7,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,16 +21,16 @@ class FamilyDoctorList extends StatefulWidget {
 class _FamilyDoctorListState extends State<FamilyDoctorList> {
   String filter;
 
-  Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
+  Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
 
   getDoctorsList() {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
-      : FirebaseFirestore.instance.collection("MEDECINS").where("profilEnabled", isEqualTo: true).snapshots();
-    return StreamBuilder(
+    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+      : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
+    return adherentProvider.getAdherent.location != null ? StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -63,7 +64,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
                         distance: 
                           userProvider.getProfileType == adherent ?  
-                            adherentProvider.getAdherent.location != null && doctor.location != null
+                            adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
                               ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
                           :
                           doctorProvider.getDoctor.location != null && doctor.location != null
@@ -78,7 +79,12 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
               : Center(
                   child: Text("Aucun medecin disponible pour le moment.."),
                 );
-        });
+        }) : Center(
+          child: CustomTextButton(
+            text: "Mettez à jour votre profil ainsi que votre location GPS",
+            action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit'),
+            ),
+        );
   }
 
   @override

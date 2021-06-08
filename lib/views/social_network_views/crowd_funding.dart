@@ -124,7 +124,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
 
                     SizedBox(height: hv*2,),
 
-                    Row(
+                    /*Row(
                       children: [
                         Expanded(
                           child: Row(children: [
@@ -151,7 +151,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
                           child: Container(),
                         )
                       ],
-                    ),
+                    ),*/
                     //
                   ],
                 ),

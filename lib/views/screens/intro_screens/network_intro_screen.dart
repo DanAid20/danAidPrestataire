@@ -26,7 +26,7 @@ class NetworkIntroScreen extends StatelessWidget {
               IconContainer(),
               CoverContainer(sizePosition: defSize),
               FeeContainer(sizeLeft: defSize * 29, sizeTop: defSize * 40,),
-              IntroText(title: 'Un réseau d’entraide santé')
+              IntroText(title: 'Un réseau d’entraide santé', rank: 2,)
             ],
           ),
         ),

@@ -11,18 +11,14 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
-import 'package:danaid/widgets/buttons/default_btn.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
-import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:danaid/widgets/loaders.dart';
-import 'package:danaid/widgets/texts/welcome_text_header.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
@@ -472,16 +468,16 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                           hint: Text("Choisir"),
                           items: [
                             DropdownMenuItem(
-                              child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                              value: "Hôpital",
+                              child: Text("Publique", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                              value: "PUBLIC",
                             ),
                             DropdownMenuItem(
-                              child: Text("Pharmacie", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              value: "Pharmacie",
+                              child: Text("Confessionel", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              value: "CONFESSIONEL",
                             ),
                             DropdownMenuItem(
-                              child: Text("Laboratoire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              value: "Laboratoire",
+                              child: Text("Privé", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              value: "PRIVATE",
                             ),
                           ],
                           onChanged: (value) {
@@ -552,6 +548,8 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         "userCountryName": userProvider.getCountryName,
         'fullName': cni,
         "profil": "MEDECIN",
+        "points": 500,
+        "visitPoints": 0,
         "regionDorigione": region,
         "imageUrl": avatarUrl,
         "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),

@@ -137,14 +137,16 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   initRegionDropdown(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    setState(() {
-      _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent.regionOfOrigin);
-      _region = adherentProvider.getAdherent.regionOfOrigin;
-      regionChosen = true;
-    cityChosen = true;
-    
-    _city = adherentProvider.getAdherent.town;
-    });
+    if(adherentProvider.getAdherent.havePaid != null){
+      setState(() {
+        _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent.regionOfOrigin);
+        _region = adherentProvider.getAdherent.regionOfOrigin;
+        regionChosen = true;
+      cityChosen = true;
+      
+      _city = adherentProvider.getAdherent.town;
+      });
+    }
     
   }
 
@@ -357,8 +359,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: "Nom tel que sur la CNI",
-                        hintText: "Nom CNI",
+                        label: "Nom sur le réseau social",
+                        hintText: "ex: Eric_87",
                         enabled: cniNameEnabled,
                         controller: _cniNameController,
                         validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
@@ -609,14 +611,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ),
                       ),
                       
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*3.5,),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Pièces justificatives", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
-                            SizedBox(height: hv*1,),
+                            SizedBox(height: hv*2,),
                             Column(
                               children: [
                                 isMarried ? FileUploadCard(
@@ -669,6 +671,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         buttonLoading = true;
                       });
                       AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+                      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
                       print("$fname, $sname, $avatarUrl");
                       adherentProvider.setFamilyName(fname);
                       adherentProvider.setSurname(sname);
@@ -676,12 +679,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                       adherentProvider.setProfession(profession);
                       adherentProvider.setAddress(address);
                       adherentProvider.setCniName(cniName);
+                      userProvider.enable(true);
                       await FirebaseFirestore.instance.collection("USERS")
                         .doc(adherentProvider.getAdherent.getAdherentId)
                         .set({
                           "authId": FirebaseAuth.instance.currentUser.uid,
                           'emailAdress': email,
                           'fullName': cniName,
+                          "enable": true,
                           "regionDorigione": _region,
                           "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
                           "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
@@ -699,6 +704,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               "acteMariageName": cniName,
                               "nomFamille": fname,
                               "prenom": sname,
+                              "enabled": true,
                               "regionDorigione": _region,
                               "statuMatrimonialMarie": isMarried,
                               "ville": _city == null ? adherentProvider.getAdherent.town : _city,
@@ -714,6 +720,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                             }, SetOptions(merge: true))
                             .then((value) async {
+                              adherentProvider.setEnableState(true);
                               textFieldsControl();
                               await HiveDatabase.setRegisterState(true);
                               HiveDatabase.setFamilyName(fname);
@@ -908,6 +915,11 @@ class _ProfileEditState extends State<ProfileEdit> {
       avatarUrl = url;
       HiveDatabase.setImgUrl(url);
       adherentModelProvider.setImgUrl(url);
+      userProvider.setImgUrl(url);
+      FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.getAdherentId)
+        .set({
+          "imageUrl": url,
+      }, SetOptions(merge: true));
       FirebaseFirestore.instance.collection("ADHERENTS")
         .doc(adherentModelProvider.getAdherent.adherentId)
         .update({

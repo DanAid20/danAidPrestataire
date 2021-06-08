@@ -330,9 +330,9 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                                   children: [
                                     CircleAvatar(
                                       radius: wv*5,
-                                      backgroundColor: Colors.grey[400],
-                                      backgroundImage: CachedNetworkImageProvider(user.imgUrl),
-                                      child: user.imgUrl == null ? LineIcons.user : Container(),
+                                      backgroundColor: kSouthSeas.withOpacity(0.4),
+                                      backgroundImage: user.imgUrl != null ? CachedNetworkImageProvider(user.imgUrl) : null,
+                                      child: user.imgUrl == null ? Icon(LineIcons.user, color: whiteColor,) : Container(),
                                     ),
                                     SizedBox(child: Text(user.fullName, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,), width: wv*16,)
                                   ],

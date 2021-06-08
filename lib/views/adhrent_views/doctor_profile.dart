@@ -51,7 +51,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
   };
 
   initAvailability(){
-    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    DoctorTileModelProvider doctorProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     if(doctorProvider.getDoctor.availability != null){
       Map avail = doctorProvider.getDoctor.availability;
       if(avail["monday to friday"]["start"] is Timestamp){
@@ -605,7 +605,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   Stack(
                     children: [
                       Container(
-                        height: hv*25,
+                        height: hv*35,
                         child: GoogleMap(
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
@@ -701,7 +701,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     setState(() {
       confirmSpinner = true;
     });
-    DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
+    DoctorTileModelProvider doctor = Provider.of<DoctorTileModelProvider>(context, listen: false);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     FirebaseFirestore.instance.collection("ADHERENTS")
@@ -713,10 +713,12 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
           confirmSpinner = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Dr "+doctor.getDoctor.cniName+" a été ajouté(e) comme médecin de famille..")));
-        controller.setIndex(1);
         adherentModelProvider.setFamilyDoctorId(doctor.getDoctor.id);
         adherentModelProvider.setFamilyDoctor(doctor.getDoctor);
-        Navigator.pushReplacementNamed(context, '/home');
+        setState(() {});
+        controller.toPreviousIndex();
+        Navigator.pop(context);
+        Navigator.pop(context);
         
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));

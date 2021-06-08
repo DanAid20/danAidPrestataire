@@ -20,7 +20,7 @@ class ProfileTypeView extends StatefulWidget {
 class _ProfileTypeViewState extends State<ProfileTypeView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final List<String> descList = [Strings.USER_DESC, Strings.DOC_DESC, Strings.OTHER_DESC];
-  final List<String> titleList = ['Utilisateur', 'Médécin', 'Prestataire santé'];
+  final List<String> titleList = ['Utilisateur', 'Médécin', 'Prestataire Santé'];
   final List<String> imageList = ['assets/images/User.svg', 'assets/images/Doctor.svg', 'assets/images/Health.svg'];
   final List<String> routeList = ['/profile-type-adherent', '/profile-type-doctor', ''];
   //final List<Function> actionList = [adherentAction(), doctorAction(), serviceProviderAction()];
@@ -124,39 +124,41 @@ class ProfileTypeCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: width(size: defSize * 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      softWrap: true,
-                      style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: fontSize(size: 22),
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    VerticalSpacing(of: 5),
-                    Flexible(
-                      child: Text(
-                        description,
+              Expanded(
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
                         softWrap: true,
                         style: TextStyle(
-                            color: kTextColor.withOpacity(0.7),
-                            fontSize: fontSize(size: 16),
-                            letterSpacing: .7,
-                            height: 1.4,
-                            fontWeight: FontWeight.w300
+                            color: kPrimaryColor,
+                            fontSize: fontSize(size: 24),
+                            fontWeight: FontWeight.bold
                         ),
                       ),
-                    ),
-                  ],
+                      VerticalSpacing(of: 5),
+                      Flexible(
+                        child: Text(
+                          description,
+                          softWrap: true,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                              color: kTextColor.withOpacity(0.7),
+                              fontSize: fontSize(size: 18),
+                              letterSpacing: .7,
+                              height: 1.4,
+                              fontWeight: FontWeight.w300
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SvgPicture.asset(image)
+              SvgPicture.asset(image, width: wv*30,)
             ],
           ),
         ),

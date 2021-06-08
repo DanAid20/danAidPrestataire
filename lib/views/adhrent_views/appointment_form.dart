@@ -46,6 +46,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
   String purpose;
   List<Widget> pageList;
 
+  double tarif = 2000.0;
+
   String consultationType;
   String reason;
   bool consultationCabinetSelected = false;
@@ -134,10 +136,16 @@ class _AppointmentFormState extends State<AppointmentForm> {
     ];
     return WillPopScope(
       onWillPop: () async {
-        if (currentPageValue == 0)
-          Navigator.pop(context);
-        else
-          controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
+        if (purpose != "consult-today"){
+          if (currentPageValue == 0)
+            Navigator.pop(context);
+          else
+            controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
+        }
+        else if((purpose == "consult-today") && controller.page == 3) {
+          controller.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+        }
+        else {Navigator.pop(context);}
         return null;
       },
       child: Scaffold(
@@ -146,10 +154,16 @@ class _AppointmentFormState extends State<AppointmentForm> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
             onPressed: (){
-              if (currentPageValue == 0)
-                Navigator.pop(context);
-              else
-                controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
+              if (purpose != "consult-today"){
+                if (currentPageValue == 0)
+                  Navigator.pop(context);
+                else
+                  controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
+              }
+              else if((purpose == "consult-today") && controller.page == 3) {
+                controller.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+              }
+              else {Navigator.pop(context);}
             }
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,11 +212,19 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         circleBar(false),
                   ],
                 ) :
-                Row(
+                purpose != "consult-today" ? Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     for (int i = 0; i < (pageList.length - 1); i++)
+                      if (i == currentPageValue) ...[circleBar(true)] else
+                        circleBar(false),
+                  ],
+                ) : Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    for (int i = 0; i < (pageList.length - 2); i++)
                       if (i == currentPageValue) ...[circleBar(true)] else
                         circleBar(false),
                   ],
@@ -211,7 +233,10 @@ class _AppointmentFormState extends State<AppointmentForm> {
             ],),
           ),
         ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
-        : CustomTextButton(text: "Choisissez un medecin de famille", action: (){bottomController.setIndex(3);Navigator.pop(context);},),
+        : Center(child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: CustomTextButton(text: "Choisissez un medecin de famille", action: (){bottomController.setIndex(3);Navigator.pop(context);},),
+        )),
       ),
     );
   }
@@ -255,7 +280,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
                       iconPath: 'assets/icons/Two-tone/Home.svg',
                       action: (){
                         purpose = "consult-today";
-                        controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+                        DateTime now = DateTime.now();
+                        setState(() {
+                          focusedDay = DateTime(now.year, now.month, now.day);
+                          timeSelected = DateTime(now.year, now.month, now.day, 8, 0);
+                        });
+                        controller.animateToPage(3, duration: Duration(milliseconds: 500), curve: Curves.decelerate);
+                        //controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
                       }
                     ),
                     SizedBox(height: hv*2,),
@@ -522,24 +553,18 @@ class _AppointmentFormState extends State<AppointmentForm> {
             DoctorModel doc = doctorProvider.getDoctor;
             AdherentModel adherentModel = adherentProvider.getAdherent;
             BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-            FirebaseFirestore.instance.collection("APPOINTMENTS")
-              .doc(adherentModel.getAdherentId+"-"+DateTime.now().millisecondsSinceEpoch.toString())
-              .set({
+            FirebaseFirestore.instance.collection("USECASES")
+              .add({
                 "adherentId": adherentModel.getAdherentId,
-                "doctorId": adherentModel.familyDoctorId,
                 "beneficiaryId": beneficiary.getBeneficiary.matricule,
-                "doctorName": doc.surname + " " + doc.familyName,
-                "emergencyInfo": _otherInfoController.text,
-                "emergencyHospital": _hospitalController.text,
+                "otherInfo": _otherInfoController.text,
+                "establishment": _hospitalController.text,
                 "createdDate": DateTime.now(),
-                "appointment-type": purpose,
-                "enabled": false,
                 "title": _emergencyPurpose,
-                "avatarUrl": beneficiary.getBeneficiary.avatarUrl,
-                "birthDate": beneficiary.getBeneficiary.birthDate,
-                "username":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,
+                "type": purpose,
+                "beneficiaryName":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,
                 "status" : 0 //En attente
-              }, SetOptions(merge: true)).then((value) {
+              }).then((value) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('L\'urgence a bien été enrégistrée'),));
                 setState(() {
                   buttonLoading = false;
@@ -596,7 +621,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     field: doc.speciality,
                     officeName: doc.officeName,
                     includeHospital: true,
-                    distance: adherentProvider.getAdherent.location != null && doc.location != null
+                    distance: adherentProvider.getAdherent.location["latitude"] != null && doc.location["latitude"] != null
                       ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doc.location["latitude"], doc.location["longitude"]).toStringAsFixed(2)).toString() : null,
                     onTap: () {
                     },
@@ -621,35 +646,37 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             iconPath: 'assets/icons/Bulk/Profile.svg',
                             title: "Consultation",
                             type: "en cabinet",
-                            price: "2.000",
+                            price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
                             selected: consultationType == "Cabinet",
                             action: (){
                               setState(() {
                                 consultationType = "Cabinet";
+                                tarif = doc.rate != null ? doc.rate["public"] : 2000.0;
                               });
                             }
                           ),
-                          HomePageComponents.consultationType(
+                          /*HomePageComponents.consultationType(
                             iconPath: 'assets/icons/Bulk/Video.svg',
                             title: "Consultation",
                             type: "Vidéo",
-                            price: "2.000",
+                            price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
                             selected: consultationType == "Video",
                             action: (){
                               setState(() {
                                 consultationType = "Video";
                               });
                             }
-                          ),
+                          ),*/
                           HomePageComponents.consultationType(
                             iconPath: 'assets/icons/Bulk/Home.svg',
                             title: "Consultation",
                             type: "à domicile",
-                            price: "2.000",
+                            price: "7500.0",
                             selected: consultationType == "Domicile",
                             action: (){
                               setState(() {
                                 consultationType = "Domicile";
+                                tarif = 7500.0;
                               });
                             }
                           ),
@@ -869,7 +896,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         child: RichText(text: TextSpan(
                           text: DateFormat('EEEE', 'fr_FR').format(focusedDay)+", "+ focusedDay.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(focusedDay)+" "+ focusedDay.year.toString() +"\n",
                           children: [
-                            TextSpan(text: timeSelected.hour.toString().padLeft(2, '0')+ "H:"+timeSelected.minute.toString().padLeft(2, '0')+ " à "+ (timeSelected.hour + 1).toString().padLeft(2, '0') + "H:"+timeSelected.minute.toString().padLeft(2, '0'), style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
+                            TextSpan(text: timeSelected.hour.toString().padLeft(2, '0')+ "H:"+timeSelected.minute.toString().padLeft(2, '0')+ " à "+ (timeSelected.hour + ((purpose != "consult-today") ? 1 : 8)).toString().padLeft(2, '0') + "H:"+timeSelected.minute.toString().padLeft(2, '0'), style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
                           ], style: TextStyle(color: kPrimaryColor, fontSize: wv*3.6, fontWeight: FontWeight.w600)),
                           textAlign: TextAlign.right,
                         ),
@@ -1003,11 +1030,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
               text: "Terminer",
               action: (){
                 DateTime consultationStartDate = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, timeSelected.hour, timeSelected.minute);
-                DateTime consultationEndDate = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, timeSelected.hour + 1, timeSelected.minute);
+                DateTime consultationEndDate = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, timeSelected.hour + ((purpose != "consult-today") ? 1 : 8), timeSelected.minute);
                 BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-                FirebaseFirestore.instance.collection("APPOINTMENTS")
-                  .doc(adherentModel.getAdherentId+"-"+DateTime.now().millisecondsSinceEpoch.toString())
-                  .set({
+                FirebaseFirestore.instance.collection("APPOINTMENTS").add({
                     "adherentId": adherentModel.getAdherentId,
                     "doctorId": doc.id,
                     "beneficiaryId": beneficiary.getBeneficiary.matricule,
@@ -1017,15 +1042,16 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     "symptoms": symptoms,
                     "title": reason,
                     "appointment-type": purpose,
-                    "consultation-type": consultationType,
+                    "consultation-type": purpose == "consult-today" ? "Cabinet" : consultationType,
                     "start-time": consultationStartDate,
                     "end-time": consultationEndDate,
-                    "price": 2000,
+                    "price": tarif,
+                    "announced": false,
                     "avatarUrl": beneficiary.getBeneficiary.avatarUrl,
                     "birthDate": beneficiary.getBeneficiary.birthDate,
                     "username":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,
                     "status" : 0 //En attente
-                  }, SetOptions(merge: true)).then((value) {
+                  }).then((value) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez-vous a bien été enrégistrée'),));
                     setState(() {
                       buttonLoading = false;
@@ -1093,7 +1119,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
 
     if (doc.availability != null) {
       String day = DateFormat('EEEE').format(focusedDay);
-      List<String> weekDays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
+      List<String> weekDays = ["lundi","mardi","mercredi","jeudi","vendredi"];
+      List<String> weekDaysEnglish = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
       if(weekDays.contains(day)){
         TimeOfDay start = TimeOfDay(hour: doc.availability["monday to friday"]["start"].toDate().hour, minute: doc.availability["monday to friday"]["start"].toDate().minute);
         TimeOfDay end = TimeOfDay(hour: doc.availability["monday to friday"]["end"].toDate().hour, minute: doc.availability["monday to friday"]["end"].toDate().minute);
@@ -1111,7 +1138,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             timeSelected = null;
           });
         }
-      } else if (day == "Saturday"){
+      } else if (day == "samedi"){
         TimeOfDay start = TimeOfDay(hour: doc.availability["saturday"]["start"].toDate().hour, minute: doc.availability["saturday"]["start"].toDate().minute);
         TimeOfDay end = TimeOfDay(hour: doc.availability["saturday"]["end"].toDate().hour, minute: doc.availability["saturday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
@@ -1127,7 +1154,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             timeSelected = null;
           });
         }
-      } else if (day == "Sunday") {
+      } else if (day == "dimanche") {
         TimeOfDay start = TimeOfDay(hour: doc.availability["sunday"]["start"].toDate().hour, minute: doc.availability["sunday"]["start"].toDate().minute);
         TimeOfDay end = TimeOfDay(hour: doc.availability["sunday"]["end"].toDate().hour, minute: doc.availability["sunday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;

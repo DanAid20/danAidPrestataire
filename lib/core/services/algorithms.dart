@@ -180,4 +180,140 @@ class Algorithms {
       return (dayDiff ~/ 365).toString()+" ans";
     }
   }
+
+  static double getFixedMonthlyMortgageRate({num amount, num rate, int months}){
+    return amount*rate*(pow(1 + rate, months)/(pow(1 + rate, months) - 1));
+  }
+
+  static Map<String, dynamic> getCoverageTime(){
+
+    String trimester;
+    DateTime now = DateTime.now();
+    int months;
+    DateTime start;
+    DateTime end;
+
+    if(now.month >= 1 && now.month < 4){
+      trimester = "Janvier à Mars " + DateTime.now().year.toString();
+      if (now.month != 3){
+        months = (now.day < 25) ? 4 - now.month : 4 - now.month - 1;
+      }
+      else{
+        if(now.day < 25){
+          months = 1;
+          trimester = "Janvier à Mars " + DateTime.now().year.toString();
+        }
+        else {
+          months = 3;
+          trimester = "Avril à Juin " + DateTime.now().year.toString();
+        }
+        trimester = (now.day < 25) ? "Janvier à Mars " + DateTime.now().year.toString() : "Avril à Juin " + DateTime.now().year.toString(); 
+        months = (now.day < 25) ? 1 : 3;
+      }
+      if(now.month == 3 && now.day > 25){
+        start = DateTime(now.year, 04, 01);
+        end = DateTime(now.year, 06, 30);
+      } else {
+        start = DateTime(now.year, 01, 01);
+        end = DateTime(now.year, 03, 30);
+      }
+    }
+
+    else if(now.month >= 4 && now.month < 7){
+      trimester = "Avril à Juin " + DateTime.now().year.toString();
+      if (now.month != 6){months = (now.day < 25) ? 7 - now.month : 7 - now.month - 1;}
+      else{
+        trimester = (now.day < 25) ? "Avril à Juin " + DateTime.now().year.toString() : "Juillet à Septembre " + DateTime.now().year.toString(); 
+        months = (now.day < 25) ? 1 : 3;
+      }
+      if(now.month == 6 && now.day > 25){
+        start = DateTime(now.year, 07, 01);
+        end = DateTime(now.year, 09, 30);
+      } else {
+        start = DateTime(now.year, 04, 01);
+        end = DateTime(now.year, 06, 30);
+      }
+    }
+
+    else if(now.month >= 7 && now.month < 10){
+      trimester = "Juillet à Septembre " + DateTime.now().year.toString();
+      if (now.month != 9){months = (now.day < 25) ? 10 - now.month : 10 - now.month - 1;}
+      else{
+        trimester = (now.day < 25) ? "Juillet à Septembre " + DateTime.now().year.toString() : "Octobre à Décembre " + DateTime.now().year.toString(); 
+        months = (now.day < 25) ? 1 : 3;}
+
+      if(now.month == 9 && now.day > 25){
+        start = DateTime(now.year, 10, 01);
+        end = DateTime(now.year, 12, 31);
+      } else {
+        start = DateTime(now.year, 07, 01);
+        end = DateTime(now.year, 09, 30);
+      }
+    }
+
+    else if(now.month >= 10 && now.month <= 12){
+      trimester = "Octobre à Décembre " + DateTime.now().year.toString();
+      
+      if (now.month != 9){months = (now.day < 25) ? 12 - now.month : 12 - now.month - 1;}
+      else{
+        trimester = (now.day < 25) ? "Octobre à Décembre " + DateTime.now().year.toString() : "Janvier à Mars " + (DateTime.now().year+1).toString(); 
+        months = (now.day < 25) ? 1 : 3;
+      }
+
+      if(now.month == 12 && now.day > 25){
+        start = DateTime(now.year+1, 01, 01);
+        end = DateTime(now.year+1, 03, 30);
+      } else {
+        start = DateTime(now.year, 10, 01);
+        end = DateTime(now.year, 12, 31);
+      }
+    }
+
+    return {
+      "trimester" : trimester,
+      "monthsUnit" : months,
+      "start": start,
+      "end": end
+    };
+  }
+
+  static Map<String, dynamic> getAutomaticCoveragePeriod({int trimesterUnit, int year}){
+
+    String trimester;
+    String year_s = year.toString();
+    int months = 3;
+    DateTime start;
+    DateTime end;
+
+    if(trimesterUnit == 1){
+      trimester = "Janvier à Mars $year_s";
+      start = DateTime(year, 01, 01);
+      end = DateTime(year, 03, 31);
+    }
+
+    else if(trimesterUnit == 2){
+      trimester = "Avril à Juin $year_s";
+      start = DateTime(year, 04, 01);
+      end = DateTime(year, 06, 30);
+    }
+
+    else if(trimesterUnit == 3){
+      trimester = "Juillet à Septembre $year_s";
+      start = DateTime(year, 07, 01);
+      end = DateTime(year, 09, 30);
+    }
+
+    else if(trimesterUnit == 4){
+      trimester = "Octobre à Décembre $year_s";
+      start = DateTime(year, 10, 01);
+      end = DateTime(year, 12, 31);
+    }
+
+    return {
+      "trimester" : trimester,
+      "monthsUnit" : months,
+      "start": start,
+      "end": end
+    };
+  }
 }

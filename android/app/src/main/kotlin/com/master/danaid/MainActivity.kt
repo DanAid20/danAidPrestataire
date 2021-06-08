@@ -1,4 +1,4 @@
-package com.master.danaid
+package com.danaid.danaidmobile
 
 import io.flutter.embedding.android.FlutterActivity
 

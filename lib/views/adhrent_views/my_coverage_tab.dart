@@ -1,62 +1,68 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/usecaseModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class MyCoverageTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    DateTime limit = adherentProvider.getAdherent.validityEndDate != null ? adherentProvider.getAdherent.validityEndDate.toDate() : null;
+    String limitString = limit != null ? limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString() : null;
     return Column(
       children: [
         Expanded(
           child: ListView(
             children: [
               SizedBox(height: hv*2,),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
-                ),
-                margin: EdgeInsets.symmetric(horizontal: wv*3),
-                child: IntrinsicHeight(
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Icon(Icons.message, size: 35, color: Colors.teal[300],),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 7,
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(height: hv*1,),
-                            Text("Vous êtes au Niveau 0: Découverte", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.7, fontWeight: FontWeight.bold)),
-                            Text("Votre garantie expire dans 365 jours", style: TextStyle(color: kPrimaryColor, fontSize: inch*1.5)),
-                            SizedBox(height: hv*1,),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10),
-                          padding: EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
-                            color: kPrimaryColor,
-                          ),
-                          child: Center(child: Text("Comparer Les Services", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
+                title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
+                  : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
+                    : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
+                      : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
+                actionLabel: "Comparer Les Services",
+                subtitle: limitString != null ? "Vous êtes couverts jusqu'au $limitString" : "...",
+                action: (){
+                  Navigator.pushNamed(context, '/compare-plans');
+                  /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
+                    .doc("3")
+                    .set({
+                      "cotisationMensuelleFondDSoint": 9500,
+                      "couverture": 70,
+                      "descriptionText": {
+                        "textCotisation" : "9500 fcfa/mois/famille",
+                        "textPeriodeTypePaiement" : "Tous les 3 mois par virement mobile",
+                        "textSuivi" : "Medecin de famille",
+                        "titreNiveau" : "Niveau III: Sérénité"
+                      },
+                      "fraisIncription": 10000,
+                      "modeDePaiement": "Tous les 3 mois par virement mobile",
+                      "montantMaxPretSante": 200000,
+                      "montantPaiementSupplement": 2450,
+                      "nomNiveau": "Sérénité",
+                      "numeroNiveau": 3,
+                      "plafondAnnuelle": 1000000,
+                      "userSelectedIt": false,
+                      "rate": 0.05,
+                      "familyDoctorIsFree": true,
+                      "canWinPoints": true,
+                      "familyCoverage": true,
+                      "socialNetworkEnable": true
+                    }, SetOptions(merge: true));*/
+                }
+                //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
+              )
+              : 
+              Center(child: Loaders().buttonLoader(kPrimaryColor)),
+
               SizedBox(height: hv*2,),
 
               GestureDetector(
@@ -99,10 +105,13 @@ class MyCoverageTabView extends StatelessWidget {
                         labelColor: kPrimaryColor
                       ),
                     ),
-                    HomePageComponents().getMyCoverageOptionsCard(
-                      imgUrl: "assets/images/TrackSavings.png",
-                      label: "Suivre mes côtisations",
-                      labelColor: Colors.white
+                    GestureDetector(
+                      onTap: ()=>Navigator.pushNamed(context, '/contributions'),
+                      child: HomePageComponents().getMyCoverageOptionsCard(
+                        imgUrl: "assets/images/TrackSavings.png",
+                        label: "Suivre mes côtisations",
+                        labelColor: Colors.white
+                      ),
                     ),
                     GestureDetector(
                       onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
@@ -123,36 +132,82 @@ class MyCoverageTabView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                   child: Row(children: [
                     Text("Utilisation", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                    Text("Voir plus..")
+                    //Text("Voir plus..")
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                 ),
               ),
               Container(
                 color: whiteColor,
-                child: Column(
-                  children: [
-                    HomePageComponents().getMyCoverageHospitalsTiles(
-                      initial: "HLD",
-                      name: "Hopital Laquintinie de Douala",
-                      date: "Mercredi, 23 Janvier 2021",
-                      price: "127.000 f.",
-                      state: 0,
-                    ),
-                    HomePageComponents().getMyCoverageHospitalsTiles(
-                      initial: "CNM",
-                      name: "Cabinet Dr. Manaouda Malachie",
-                      date: "Mercredi, 23 Janvier 2021",
-                      price: "6.000 f.",
-                      state: 1,
-                    ),
-                    HomePageComponents().getMyCoverageHospitalsTiles(
-                      initial: "HLD",
-                      name: "Hopital Laquintinie de Douala",
-                      date: "Mercredi, 23 Janvier 2021",
-                      price: "127.000 f.",
-                      state: 0,
-                    ),
-                  ],
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('createdDate', descending: true).snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                        ),
+                      );
+                    }
+
+                    return snapshot.data.docs.length >= 1
+                      ? ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, index) {
+                            int lastIndex = snapshot.data.docs.length - 1;
+                            DocumentSnapshot useCaseDoc = snapshot.data.docs[index];
+                            UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc);
+                            print("name: ");
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                              child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
+                                initial: useCase.establishment.toUpperCase().substring(0,3),
+                                name: useCase.establishment,
+                                date: useCase.dateCreated.toDate(),
+                                state: useCase.status,
+                                price: useCase.amount != null ? useCase.amount : 0,
+                                action: (){
+                                  UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
+                                  usecaseProvider.setUseCaseModel(useCase);
+                                 // Navigator.pushNamed(context, '/use-case');
+                                }
+                              ) : Container(),
+                            );
+                          })
+                      : Center(
+                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text("Aucun cas d'utilisation enrégistré pour le moment..", textAlign: TextAlign.center)),
+                      );
+                    /*return Container(
+                      color: whiteColor,
+                      child: Column(
+                        children: [
+                          HomePageComponents().getMyCoverageHospitalsTiles(
+                            initial: "HLD",
+                            name: "Hopital Laquintinie de Douala",
+                            date: "Mercredi, 23 Janvier 2021",
+                            price: "127.000 f.",
+                            state: 0,
+                          ),
+                          HomePageComponents().getMyCoverageHospitalsTiles(
+                            initial: "CNM",
+                            name: "Cabinet Dr. Manaouda Malachie",
+                            date: "Mercredi, 23 Janvier 2021",
+                            price: "6.000 f.",
+                            state: 1,
+                          ),
+                          HomePageComponents().getMyCoverageHospitalsTiles(
+                            initial: "HLD",
+                            name: "Hopital Laquintinie de Douala",
+                            date: "Mercredi, 23 Janvier 2021",
+                            price: "127.000 f.",
+                            state: 0,
+                          ),
+                        ],
+                      ),
+                    );*/
+                  }
                 ),
               ),
               SizedBox(height: hv*3,),

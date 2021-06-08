@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -7,6 +9,7 @@ import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
@@ -19,7 +22,7 @@ class HomePageComponents {
     String nom, 
     String date,
     String montant, 
-    String etat,
+    int etat,
     String iconesConsultationTypes
   }){
     return Container(
@@ -75,8 +78,8 @@ class HomePageComponents {
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
-                                        Text(etat, style: TextStyle(
-                                          color: kblueSky,
+                                        Text(etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : ''  , style: TextStyle(
+                                          color: etat==0?  Colors.red: etat==1?  Colors.green: etat==2? kblueSky : '' ,
                                           fontWeight: FontWeight.w400,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
                                       ],
@@ -87,7 +90,13 @@ class HomePageComponents {
                             ),
     );
   }
-  Widget paiementItem(){
+  Widget paiementItem({
+    String month, 
+    String prix,
+    String lastDatePaiement,
+    bool paidOrNot,
+    String paidAllReady,
+  }){
     return Container(
         margin: EdgeInsets.all( wv * 3),
                  decoration: BoxDecoration(
@@ -109,7 +118,7 @@ class HomePageComponents {
                              mainAxisSize: MainAxisSize.min,
                              crossAxisAlignment: CrossAxisAlignment.start,
                              children: [
-                                   Container(alignment: Alignment.centerLeft, child: Text('Avril', style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Text(month, style: TextStyle(
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
@@ -119,7 +128,7 @@ class HomePageComponents {
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('10500 f', style: TextStyle(
+                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w700,
                                       
@@ -133,7 +142,7 @@ class HomePageComponents {
                              mainAxisSize: MainAxisSize.min,
                              crossAxisAlignment: CrossAxisAlignment.end,
                              children: [
-                                   Container(alignment: Alignment.centerRight, child: Text('En attente', style: TextStyle(
+                                   Container(alignment: Alignment.centerRight, child: Text(paidOrNot==false ? 'En attente ($paidAllReady)' : 'payé', style: TextStyle(
                                       color: kArgent,
                                       fontWeight: FontWeight.w700,
                                       
@@ -144,7 +153,7 @@ class HomePageComponents {
                                       fontWeight: FontWeight.w500,
                                       fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
                                         alignment: Alignment.centerRight,
-                                        child: Text('31 Mars 2021', style: TextStyle(
+                                        child: Text(lastDatePaiement, style: TextStyle(
                                         color: kBlueForce,
                                         fontWeight: FontWeight.w600,
                                         fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -180,7 +189,7 @@ class HomePageComponents {
       String nom,
       String subtitle,
       String apointementDate,
-      String apointementType,
+      int etat,
       bool isSpontane = false}) {
     return ListTile(
       leading: HomePageComponents().getAvatar(
@@ -220,11 +229,11 @@ class HomePageComponents {
                         fontSize:  14.sp, color: kPrimaryColor),
                   ),
                   Text(
-                    apointementType != null ? apointementType : 'RDV',
+                    etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : '' ,
                     style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color: primaryColor),
+                        color:  etat==0?  Colors.red: etat==1?  Colors.green: etat==2? kblueSky : ''),
                   ),
                 ],
               ),
@@ -241,13 +250,15 @@ class HomePageComponents {
     String videChatLink,
     String detailsCOnsultationLink,
     bool isPrestataire,
-    String consultationtype
+    String consultationtype,
+    Function approuveAppointement,String adhrentId, String doctorId,
+    bool isanounced=false
   }) {
     return Container(
       decoration: BoxDecoration(
        
       ),
-      width: wv * 98,
+      width: wv * 100,
       padding: EdgeInsets.only(left: wv * 3, right: wv * 3.3),
       child: Column(
         children: [
@@ -273,8 +284,8 @@ class HomePageComponents {
             ),
           ),
           Container(
-            width: wv * 80,
-            height: hv * 12,
+            width: wv * 70,
+            height: hv * 9,
             margin: EdgeInsets.only(bottom: wv * 2),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -288,7 +299,7 @@ class HomePageComponents {
                 Stack(
                   children: [
                     Container(
-                      width: wv * 30,
+                      width: wv * 20,
                       height: hv * 12,
                       decoration: BoxDecoration(
                           image: DecorationImage(
@@ -312,7 +323,22 @@ class HomePageComponents {
                          'assets/icons/Bulk/Shield Done.svg',
                           width: wv * 4,
                           
-                        ))
+                        )),
+                   isanounced!=null && isanounced!=true? SizedBox.shrink() : Positioned(
+                        top: hv * 0.5,
+                        left: wv * 1,
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: kDeepTealCAdress, spreadRadius: 0.5, blurRadius: 4
+                            ),
+                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),child: Text(''),)
+                    )
                   ],
                 ),
                 Container(
@@ -344,13 +370,13 @@ class HomePageComponents {
                                   style: TextStyle(
                                       color: kCardTextColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 14.sp)),
+                                      fontSize: 15.sp)),
                             ),
                           ],
                         ),
                       ),
                       SizedBox(
-                        height: hv * 1.3,
+                        height: hv * 0.7,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -362,17 +388,17 @@ class HomePageComponents {
                                 style: TextStyle(
                                     color: kCardTextColor,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 14.sp)),
+                                    fontSize: 15.sp)),
                           ),
                           SizedBox(
-                            height: 5.h,
+                            height: 2.h,
                           ),
                           Text(consultationType,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: kDeepTeal,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 14.sp)),
+                                  fontSize: 16.sp)),
                         ],
                       ),
                     ],
@@ -387,7 +413,7 @@ class HomePageComponents {
                       child: Container(
                         padding: EdgeInsets.all(6),
                         width: 36.w,
-                        height: hv * 6,
+                        height: hv * 4,
                         decoration: BoxDecoration(
                             color: isPrestataire ? kGoldForIconesBg:kSouthSeas,
                             borderRadius: BorderRadius.only(
@@ -402,11 +428,11 @@ class HomePageComponents {
                     ),
                     InkWell(
                       onTap: () {
-                        // lien vers les detailes des la consultation
+                        approuveAppointement(adhrentId, doctorId);
                       },
                       child: Container(
                         padding: EdgeInsets.all(3),
-                        height: hv * 6,
+                        height: hv * 5,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -517,10 +543,204 @@ class HomePageComponents {
       ),
     );
   }
-  getAdherentsList({int iSelected, AdherentModel adherent, bool isAccountIsExists, int index, Function onclick}) {
-    return GestureDetector(
+  getAdherentsList({int iSelected, String doctorName, BeneficiaryModel adherent, AdherentModel adherentPersone, bool isAccountIsExists, int index, Function onclick}) {
+    return index==0? GestureDetector(
       onTap: ()=>{
-          onclick(index, adherent)
+         if(iSelected==index){
+            onclick(index, adherent, 'remove')
+         }else{
+            onclick(index, adherent, 'add')
+         }
+          
+      },
+      child: Container(
+        width: wv * 78,
+        decoration: BoxDecoration(
+          color: kBlueForce,
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
+           boxShadow: [
+                  BoxShadow(color: iSelected==index? kBlueForce: Colors.transparent, spreadRadius: 2, blurRadius: 4),
+                ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 1),
+              child: Row(
+                children: [
+                  Container(
+                      width: wv * 15,
+                      child: Text('Valide jusqu\'au ',
+                          style: TextStyle(
+                              color: textWhiteColor,
+                              fontSize: fontSize(size: 15),
+                              fontWeight: FontWeight.w500))),
+                  Container(
+                      width: wv * 20,
+                      child: Text('10/2021',
+                          style: TextStyle(
+                              color: whiteColor,
+                              fontSize: wv * 4.5,
+                              fontWeight: FontWeight.w700))),
+                  Spacer(),
+                  SvgPicture.asset(
+                 (adherentPersone!=null && adherentPersone.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                    color: whiteColor,
+                  ),
+                  SvgPicture.asset(
+                  adherentPersone.adherentPlan==0? '' : 'assets/icons/Bulk/Shield Done.svg',
+                    height: hv * 8,
+                    width: wv * 8,
+                  )
+                ],
+              ),
+            ),
+            Container(
+              child: Align(
+                alignment: Alignment.center,
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        colorFilter: isAccountIsExists == true &&
+                               adherentPersone!=null && adherentPersone.enable == true
+                            ? new ColorFilter.mode(
+                                Colors.red.withOpacity(1), BlendMode.dstATop)
+                            : new ColorFilter.mode(
+                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                        image: adherentPersone==null
+                            ? AssetImage("assets/images/image 25.png")
+                            : adherentPersone.imgUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
+                        fit: BoxFit.cover,
+                      ),
+                      color: Colors.red,
+                      shape: BoxShape.circle),
+                  width: wv * 40,
+                  height: hv * 20,
+                  child: Stack(children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: Transform.rotate(
+                        angle: -math.pi / 4,
+                        child: Text(
+                          isAccountIsExists == true && (adherentPersone!=null && adherentPersone.enable) == true
+                              ? ''
+                              : 'Compte Inactif',
+                          overflow: TextOverflow.clip,
+                          style: TextStyle(
+                              color: Colors.red,
+                              letterSpacing: 0.5,
+                              fontSize: wv * 6.5,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 5,
+                      bottom: -hv * 2,
+                      child: Container(
+                        height: hv * 10,
+                        width: wv * 10,
+                        decoration: BoxDecoration(
+                            color: isAccountIsExists == true &&
+                                    (adherentPersone!=null && adherentPersone.enable) == true
+                                ? Colors.green
+                                : Colors.red,
+                            shape: BoxShape.circle),
+                        child:
+                            isAccountIsExists == true && (adherentPersone!=null && adherentPersone.enable) == true
+                                ? SizedBox.shrink()
+                                : Icon(
+                                    Icons.priority_high,
+                                    color: Colors.white,
+                                    size: hv * 4,
+                                  ),
+                      ),
+                    ),
+                  ]),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Nom de l\'adherent courant ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text((adherentPersone!=null && adherentPersone.cniName!=null) ? adherentPersone.cniName : ''  ,
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Numero Matricule',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                    (adherent!=null &&  adherentPersone.matricule!=null)
+                          ?  adherentPersone.matricule
+                          : 'Pas defini',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text('Medecin de Famille ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w500)),
+                  Text(
+                       doctorName!=null ? doctorName :  'Pas definie ',
+                      style: TextStyle(
+                          color: textWhiteColor,
+                          fontSize: fontSize(size: 15),
+                          fontWeight: FontWeight.w700))
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: hv * 4),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset('assets/icons/DanaidLogo.png'),
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    ):GestureDetector(
+      onTap: ()=>{
+         
+           if(iSelected==index){
+            onclick(index, adherent, 'remove')
+         }else{
+            onclick(index, adherent, 'add')
+         }
       },
       child: Container(
         width: wv * 78,
@@ -561,7 +781,7 @@ class HomePageComponents {
                     color: whiteColor,
                   ),
                   SvgPicture.asset(
-                    'assets/icons/Bulk/Shield Done.svg',
+                  adherent!=null && adherent.protectionLevel==0 ? '': 'assets/icons/Bulk/Shield Done.svg',
                     height: hv * 8,
                     width: wv * 8,
                   )
@@ -575,14 +795,14 @@ class HomePageComponents {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                         colorFilter: isAccountIsExists == true &&
-                               adherent!=null && adherent.enable == true
+                               adherent!=null && adherent.enabled == true
                             ? new ColorFilter.mode(
                                 Colors.red.withOpacity(1), BlendMode.dstATop)
                             : new ColorFilter.mode(
                                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
                         image: adherent==null
                             ? AssetImage("assets/images/image 25.png")
-                            : adherent.imgUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.imgUrl}"),
+                            : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
                         fit: BoxFit.cover,
                       ),
                       color: Colors.red,
@@ -595,7 +815,7 @@ class HomePageComponents {
                       child: Transform.rotate(
                         angle: -math.pi / 4,
                         child: Text(
-                          isAccountIsExists == true && (adherent!=null && adherent.enable) == true
+                          isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
                               ? ''
                               : 'Compte Inactif',
                           overflow: TextOverflow.clip,
@@ -616,12 +836,12 @@ class HomePageComponents {
                         width: wv * 10,
                         decoration: BoxDecoration(
                             color: isAccountIsExists == true &&
-                                    (adherent!=null && adherent.enable) == true
+                                    (adherent!=null && adherent.enabled) == true
                                 ? Colors.green
                                 : Colors.red,
                             shape: BoxShape.circle),
                         child:
-                            isAccountIsExists == true && (adherent!=null && adherent.enable) == true
+                            isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
                                 ? SizedBox.shrink()
                                 : Icon(
                                     Icons.priority_high,
@@ -684,9 +904,7 @@ class HomePageComponents {
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
-                       (adherent!=null && adherent.familyDoctor!=null)
-                          ? adherent.familyDoctor.cniName
-                          : 'Pas definie ',
+                       doctorName!=null ? 'Dr '+doctorName :  'Pas definie ',
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -937,9 +1155,9 @@ class HomePageComponents {
     );
   }
 
-  getMyCoverageHospitalsTiles(
-      {String initial, String name, String date, String price, int state}) {
+  Widget getMyCoverageHospitalsTiles({String initial, String name, DateTime date, double price, int state, Function action}) {
     return ListTile(
+      onTap: action,
       leading: Container(
         width: wv * 13,
         padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
@@ -961,7 +1179,7 @@ class HomePageComponents {
             fontSize: inch * 1.6),
       ),
       subtitle: Text(
-        date,
+        DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(),
         style: TextStyle(color: kPrimaryColor),
       ),
       trailing: Column(
@@ -969,13 +1187,13 @@ class HomePageComponents {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            price,
+            price.toString()+ "f.",
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.5),
           ),
           Text(
-            state == 0 ? "En cours" : "Clôture",
+            getUseCaseStateText(state),
             style: TextStyle(
-                color: state == 0 ? primaryColor : Colors.teal[400],
+                color: getUseCaseStateColor(state),
                 fontSize: inch * 1.5),
           ),
         ],
@@ -983,8 +1201,7 @@ class HomePageComponents {
     );
   }
 
-  getMyDoctorAppointmentTile(
-      {String label, String doctorName, DateTime date, String type, int state}) {
+  getMyDoctorAppointmentTile({String label, String doctorName, DateTime date, String type, int state, Function action}) {
     return ListTile(
       leading: Container(
         width: wv * 12,
@@ -1047,7 +1264,105 @@ class HomePageComponents {
           ),
         ],
       ),
+      onTap: action,
     );
+  }
+
+  static Widget getLoanTile({String label, String doctorName, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
+    String firstDateString = firstDate.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
+    String lastDateString = lastDate.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
+    return ListTile(
+      leading: Container(
+        width: wv * 12,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1),
+        decoration: BoxDecoration(
+            color: kBrownCanyon,
+            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(date.day.toString().padLeft(2, '0'),
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: inch * 1.7,
+                    fontWeight: FontWeight.w700)),
+            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: inch * 1.5,
+                fontWeight: FontWeight.w400)),
+          ],
+        ),
+      ),
+      title: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Text(
+          "$firstDateString au $lastDateString",
+          style: TextStyle(
+              color: kPrimaryColor,
+              fontSize: wv*3.5),
+          overflow: TextOverflow.fade,
+          maxLines: 1,
+        ),
+      ),
+      subtitle: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("")
+            ],
+          ),
+        ],
+      ),
+      trailing: Container(
+        width: wv*25,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(mensuality.toString()+" .f", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
+                Text("", style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),),
+              ],
+            ),
+            SizedBox(width: wv*2,),
+            Column(
+              children: [
+                SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: wv*8,),
+                Text("Payer", style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+              ],
+            )
+          ],
+        ),
+      ),
+      onTap: action,
+    );
+  }
+
+  String getUseCaseStateText(int val) {
+    if (val == 0)
+      return "En attente";
+    else if (val == 1)
+      return "En cours";
+    else if (val == 2)
+      return "Rejetté";
+    else
+      return "Clôturé";
+  }
+
+  Color getUseCaseStateColor(int val) {
+    if (val == 0)
+      return kBrownCanyon;
+    else if (val == 1)
+      return primaryColor;
+    else if (val == 2)
+      return Colors.red;
+    else
+      return kDeepTeal;
   }
 
   String getAppointmentStateText(int val) {
@@ -1261,7 +1576,7 @@ class HomePageComponents {
     );
   }
 
-  static termsAndConditionsTile({Function(bool) onChanged, bool value, Function action, Color activeColor}){
+  static termsAndConditionsTile({Function(bool) onChanged, bool value, Function action, Color activeColor, Color textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1274,7 +1589,7 @@ class HomePageComponents {
               children: [
                 TextSpan(
                   text: "Lu et accepté les ",
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(color: textColor == null ? Colors.grey[600] : textColor),
                 ),
                 TextSpan(
                   text: "termes des services",
@@ -1294,7 +1609,7 @@ class HomePageComponents {
     );
   }
 
-  static confirmTermsTile({Function(bool) onChanged, bool value, Function action, Color activeColor}){
+  static confirmTermsTile({Function(bool) onChanged, bool value, Function action, Color activeColor, Color textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1303,13 +1618,13 @@ class HomePageComponents {
         child: Container(
           child: Column(
             children: [
-              Text("Je reconnais par la présente qu’en cas de défaut de paiment je m’expose à:", style:  TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w600),),
+              Text("Je reconnais par la présente qu’en cas de défaut de paiment je m’expose à:", style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
               SizedBox(height: hv*0.5),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    style:  TextStyle(color: Colors.grey[600], fontWeight: FontWeight.w400,),
+                    style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w400,),
                     children: [
                       TextSpan(
                         text: "\u2022 " + "Des poursuite judiciaires\n",
@@ -1337,4 +1652,131 @@ class HomePageComponents {
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
+
+  static Widget head({String surname, String fname, String avatarUrl, Timestamp birthDate}){
+    return Container(
+      padding: EdgeInsets.only(left: wv*4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: hv*1),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Pour le patient", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+            SizedBox(height: hv*1,),
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
+                  backgroundColor: whiteColor,
+                  radius: wv*5,
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
+                ),
+                SizedBox(width: wv*3,),
+                Expanded(
+                  child: RichText(text: TextSpan(
+                    text: surname + " " +  fname + "\n",
+                    children: birthDate != null ? [
+                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                    ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget header({String title, String subtitle, String avatarUrl, String label, Color titleColor = kPrimaryColor}){
+    return Container(
+      padding: EdgeInsets.only(left: wv*4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: hv*1),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            label != null ? Container(child: Text(label, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)), margin: EdgeInsets.only(bottom: hv*1),) : Container(),
+            Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
+                  backgroundColor: whiteColor,
+                  radius: wv*5,
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
+                ),
+                SizedBox(width: wv*3,),
+                Expanded(
+                  child: RichText(text: TextSpan(
+                    text: title + "\n",
+                    children: [
+                      TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
+                    ], style: TextStyle(color: titleColor, fontSize: 16.5)),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+            ],),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static Widget getInfoActionCard({Widget icon, String title, String subtitle, String actionLabel, bool noAction = false, Function action}){
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
+      ),
+      margin: EdgeInsets.symmetric(horizontal: wv*3),
+      child: IntrinsicHeight(
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: icon == null ? Icon(Icons.message, size: 35, color: Colors.teal[300],) : icon,
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: hv*1,),
+                  Text(title, style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.bold)
+                  ),
+                  Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 12)),
+                  SizedBox(height: hv*1,),
+                ],
+              ),
+            ),
+            !noAction ? Expanded(
+              flex: 3,
+              child: GestureDetector(
+                onTap: action,
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
+                    color: kPrimaryColor,
+                  ),
+                  child: Center(child: Text(actionLabel, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                ),
+              ),
+            ): Container()
+          ],
+        ),
+      ),
+    );
+  }
 }
+

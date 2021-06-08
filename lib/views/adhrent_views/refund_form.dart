@@ -16,6 +16,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,7 @@ class _RefundFormState extends State<RefundForm> {
   @override
   Widget build(BuildContext context) {
     BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context);
+    DateTime date = DateTime.now();
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -60,7 +62,7 @@ class _RefundFormState extends State<RefundForm> {
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text("Démande de remboursement", style: TextStyle(color: kTextBlue, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text("18 janvier 2018" ,style: TextStyle(color: kTextBlue.withOpacity(0.75), fontSize: wv*3.8, fontWeight: FontWeight.w300),
+              Text(DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString() ,style: TextStyle(color: kTextBlue.withOpacity(0.75), fontSize: wv*3.8, fontWeight: FontWeight.w300),
               ),
             ],
           ),

@@ -1,9 +1,14 @@
+import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/advantage_card.dart';
-import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyWelcomeScreen extends StatefulWidget {
@@ -18,7 +23,14 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Column(
+
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
+
+    bool enable = adherentProvider.getAdherent.enable != null ? adherentProvider.getAdherent.enable : false;
+
+    return userProvider.getUserModel != null && adherentProvider.getAdherent != null ? Column(
       children: [
         Expanded(
           child: ListView(
@@ -30,7 +42,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                     padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
+                      //boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
                     ),
                     child: Column(
                       children: [
@@ -38,14 +50,20 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           margin: EdgeInsets.only(left:inch*2, right:inch*2),
                           child: Row(children: [
                             Text("Mes Avantages", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                            Text("Voir plus..")
+                            //Text("Voir plus..")
                           ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                         ),
                         SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                         child: Row(children: [
                           AdvantageCard(
+                            label: "Fond de soin",
+                            state: "DISPONIBLE",
+                            price: adherentProvider.getAdherent.adherentPlan == 0 ? "#25.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#350.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#650.000 f." : "#1000.000 f.",
+                            color: Colors.teal[500],
+                            onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
+                          ),
+                          /*AdvantageCard(
                             label: "Fond de Soins",
-                            description: "Demander une prise en charge maladie",
                             state: "DISPONIBLE",
                             price: "#350.000Xaf",
                             color: Colors.teal[500],
@@ -53,23 +71,25 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                               String url = "tel:+237233419203";
                               launch(url);
                             },
+                          ),*/
+                          Hero(
+                            tag: "loanCard",
+                            flightShuttleBuilder: flightShuttleBuilder,
+                            child: AdvantageCard(
+                              label: "Prêt de santé",
+                              state: "DISPONIBLE",
+                              price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "#200.000 f.",
+                              color: Colors.brown.withOpacity(0.7),
+                              onTap: ()=>Navigator.pushNamed(context, '/loans'),
+                            ),
                           ),
-                          AdvantageCard(
-                            label: "Prêt de santé",
-                            description: "Demander un prêt santé",
-                            state: "DISPONIBLE",
-                            price: "#100.000Xaf",
-                            color: Colors.brown.withOpacity(0.7),
-                            onTap: callDanAid,
-                          ),
-                          AdvantageCard(
+                          /*AdvantageCard(
                             label: "Fond de Soins",
-                            description: "Demander une prise en charge maladie",
                             state: "DISPONIBLE",
                             price: "#350.000Xaf",
                             color: Colors.grey,
                             onTap: callDanAid,
-                          ),
+                          ),*/
                         ],),
                         ),
                       ],
@@ -78,17 +98,13 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
 
                   Container(
                     margin: EdgeInsets.only(top: hv*2),
-                    padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
-                    ),
-                    child: Column(children: [
+                    //padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
                       Container(
                         margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0.5),
                         child: Row(children: [
                           Text("Notifications", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                          Text("Voir plus..")
+                          //Text("Voir plus..")
                         ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                       ),
                       Container(
@@ -106,21 +122,47 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           children: [
                             SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                             child: Row(children: [
-                              NotificationCard(
-                                isprestataire: false,
-                                instruction: "Aller au Labo",
-                                description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
-                              ),
-                              NotificationCard(
-                                isprestataire: false,
-                                instruction: "Aller au Labo",
-                                description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
-                              ),
-                              NotificationCard(
-                                isprestataire: false,
-                                instruction: "Aller au Labo",
-                                description: "Vous avez 3 nouveaux devis pour vos examens médicaux",
-                              ),
+                              !enable ? GestureDetector(
+                                onTap: ()=>Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : userProvider.getProfileType == adherent ? '/adherent-profile-edit' : '/serviceprovider-profile-edit'),
+                                child: NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "Ouvrir la Page...",
+                                  description: "Mettez à jour votre profil pour pouvoir pleinement profiter de vos avantages DanAid",
+                                ),
+                              ) : Container(),
+
+                              !enable ? GestureDetector(
+                                onTap: ()=>navController.setIndex(4),
+                                child: NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "Ouvrir la Page...",
+                                  description: "Ajouter les membres de votre famille à votre liste de bénéficiaires",
+                                ),
+                              ) : Container(),
+
+                              adherentProvider.getAdherent.familyDoctorId == null ? GestureDetector(
+                                onTap: ()=>navController.setIndex(3),
+                                child: NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "Ouvrir la Page...",
+                                  description: "Choisissez votre médecin de famille DanAid",
+                                ),
+                              ) : Container(),
+
+                              adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0 ? GestureDetector(
+                                onTap: ()=>Navigator.pushNamed(context, '/contributions'),
+                                child: NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "Ouvrir la Page...",
+                                  description: "Vous n'avez pas encore payé votre souscription",
+                                ),
+                              ) : Container(),
+
+                              enable && adherentProvider.getAdherent.familyDoctorId != null && !(adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0) ?  NotificationCard(
+                                  isprestataire: false,
+                                  instruction: "",
+                                  description: "Aucune notifications pour le moment",
+                                ) : Container()
                             ],),
                             ),
                           ],
@@ -135,7 +177,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
             ],
           ),
         ),
-        Container(
+        /*Container(
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
@@ -184,9 +226,23 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
               ],
             ),
           ),
-        ),
+        ),*/
         SizedBox(height: hv*4)
       ],
-    );
+    ) :
+    Center(child: Loaders().buttonLoader(kPrimaryColor));
   }
+
+  Widget flightShuttleBuilder(
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+    ) {
+  return DefaultTextStyle(
+    style: DefaultTextStyle.of(toHeroContext).style,
+    child: toHeroContext.widget,
+  );
+}
 }
