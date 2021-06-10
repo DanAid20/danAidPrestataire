@@ -91,7 +91,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     return 'YM' + result;
   }
 
-  Future<String> createConsultationCode(QueryDocumentSnapshot adherent) async {
+  Future<String> createConsultationCode(QueryDocumentSnapshot adherent, id) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
 
@@ -99,6 +99,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     var newUseCase = FirebaseFirestore.instance.collection('USECASES').doc();
     newUseCase.set({
       'id': newUseCase.id,
+      'idAppointement': id,
       'adherentId': adherent['adherentId'],
       'beneficiaryId': adherent['beneficiaryId'],
       'beneficiaryName': adherent['username'],
@@ -108,6 +109,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'type': adherent['appointment-type'],
       'amountToPay': 2000,
       'status': 0,
+      'canPay': 0,
       'createdDate': DateTime.now(),
       'enable': false,
     }, SetOptions(merge: true)).then((value) {
@@ -128,7 +130,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     return newUseCase.id;
   }
 
-  facturationCode(id, adherent) async {
+  facturationCode(id, adherent, idAppointement) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     await FirebaseFirestore.instance
@@ -138,6 +140,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         .doc(adherent['adherentId'])
         .set({
       'id': Utils.createCryptoRandomString(8),
+      'idAppointement':idAppointement,
       'idAdherent': adherent['adherentId'],
       'idBeneficiairy': adherent['beneficiaryId'],
       'idMedecin': doctorProvider.getDoctor.id,
@@ -350,7 +353,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     isLoading: announceLoading,
-                    enable: true,
+                    enable:  appointment.getAppointment.status==1 ? false: true,
                     text: "Approuver",
                     action: (){
                       setState(() {
@@ -362,31 +365,44 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         .collection("APPOINTMENTS")
                         .where("doctorId", isEqualTo: doctorProvider.getDoctor.id)
                         .where("adherentId", isEqualTo:appointment.getAppointment.adherentId);
-                    data.get().then((docSnapshot) => {
+                    data.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
-                            {print('fdfjsfjdsf')}
+                            { // il  existe pas mais
+                                 print("jhdsfjkhdsjkfd")
+                            }
                           else
                             {
+                              print("55555555555555555555555555"),
                               FirebaseFirestore.instance
                                   .collection("APPOINTMENTS")
-                                  .doc(docSnapshot.docs[0].id)
-                                  .update({
+                                  .doc(appointment.getAppointment.id)
+                                  .set({
                                 "status": 1,
-                              }).then((value) async {
-                                await createConsultationCode(docSnapshot.docs[0])
-                                    .then((value) async {
-                                  await facturationCode(value, docSnapshot.docs[0]);
+                              },  SetOptions(merge: true)).then((value) async {
+                                 print('ok33333333333333333333333333333');
+                                  var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                .where("idAppointement", isEqualTo: appointment.getAppointment.id).get(); 
+                                usecase.then((value) async {
+                                      if(value.docs.isEmpty){       
+                                       await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                         await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                        });
+                                         appointment.setAnnouncement(true);
+                                      }else{
+                                         ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Une facture a deja été génerer pour cette constultation")));
+                                      }
                                 });
-                                 appointment.setAnnouncement(true);
+                            
+                             
                               setState(() {
                                 announceLoading = false;
                                 edit=false;
-                                appointment.getAppointment.status=1;
+                                 appointment.getAppointment.status=1;
                               });
                               }).then((value) {
-                                Navigator.pop(context);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text("rende-vous approuver ")));
+                                // Navigator.pop(context);
+                              
                               })
                             },
                         });
@@ -421,6 +437,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     text: "Rejeter",
+                    enable:  appointment.getAppointment.status==2 ? false: true,
                     isLoading: cancelLoading,
                     color: kSouthSeas,
                     action: (){
