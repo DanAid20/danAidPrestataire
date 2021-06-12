@@ -261,8 +261,40 @@ class _LoanFormState extends State<LoanForm> {
                               value: _duration,
                               items: [
                                 DropdownMenuItem(
+                                  child: Text("3 mois (3 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 3,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("4 mois (4 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 4,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("5 mois (5 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 5,
+                                ),
+                                DropdownMenuItem(
                                   child: Text("6 mois (6 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 6,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("7 mois (7 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 7,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("8 mois (8 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 8,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("9 mois (9 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 9,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("10 mois (10 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 10,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("11 mois (11 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 11,
                                 ),
                                 DropdownMenuItem(
                                   child: Text("12 mois (12 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),

@@ -217,14 +217,18 @@ class _AdherentCardState extends State<AdherentCard> {
                             ]
                           )),
                           SizedBox(height: hv*1.5,),
-                          RichText(text: TextSpan(
+                          RichText(
+                            text: TextSpan(
+                            style: textStyle,
                             children: [
                               TextSpan(text: "Numéro matricule\n"),
                               TextSpan(text: beneficiary.matricule, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
                           )),
                           SizedBox(height: hv*1.5,),
-                          RichText(text: TextSpan(
+                          RichText(text: 
+                          TextSpan(
+                            style: textStyle,
                             children: [
                               TextSpan(text: "Médecin de Famille\n"),
                               TextSpan(text: doctor != null ? doctor : "Aucun", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))

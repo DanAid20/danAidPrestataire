@@ -276,11 +276,11 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                             padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                                             child: HomePageComponents.getLoanTile(
                                               label: "hhgfhfghfh",
-                                              doctorName: "gfgdgdfg",
+                                              subtitle: loan.purpose,
                                               date: loan.dateCreated.toDate(),
                                               firstDate: loan.firstPaymentDate.toDate(),
                                               lastDate: loan.lastPaymentDate.toDate(),
-                                              mensuality: loan.mensuality,
+                                              mensuality: loan.amount,
                                               type: "gfg",
                                               state: loan.status,
                                               action: (){

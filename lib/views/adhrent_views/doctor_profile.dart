@@ -576,7 +576,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                   Text("Tarif publique ", style: TextStyle(fontWeight: FontWeight.w800)),
                                   Text("${doctor.getDoctor.rate["public"]} f."),
                                   SizedBox(height: 10,),
-                                  Text("Tarif DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                  Text("Couverture DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [

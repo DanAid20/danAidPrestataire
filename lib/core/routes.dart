@@ -17,7 +17,12 @@ import 'package:danaid/views/adhrent_views/loans_view.dart';
 import 'package:danaid/views/adhrent_views/loan_form.dart';
 import 'package:danaid/views/adhrent_views/comparePlans.dart';
 import 'package:danaid/views/adhrent_views/contributions.dart';
+import 'package:danaid/views/intro_slides.dart';
 import 'package:danaid/views/adhrent_views/payment.dart';
+import 'package:danaid/views/adhrent_views/family_points_page.dart';
+import 'package:danaid/views/adhrent_views/family_badge_page.dart';
+import 'package:danaid/views/adhrent_views/family_documents_page.dart';
+import 'package:danaid/views/adhrent_views/family_stats_page.dart';
 import 'package:danaid/views/doctor_views/appointement_approuve.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
@@ -73,6 +78,11 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/coverage-payment": (context) => CoveragePayment(),
   "/compare-plans": (context) => ComparePlans(),
   "/contributions": (context) => Contributions(),
+  "/intro-slides": (context) => IntroSlides(),
+  "/family-points-page": (context) => FamilyPointsPage(),
+  "/family-badge-page": (context) => FamilyBadgePage(),
+  "/family-documents-page": (context) => FamilyDocumentsPage(),
+  "/family-stats-page": (context) => FamilyStatsPage(),
   //"/payment": (context) => Payment(),
 
   /**

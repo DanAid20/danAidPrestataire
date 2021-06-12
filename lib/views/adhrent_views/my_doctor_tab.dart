@@ -440,19 +440,19 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                   Text("Tarif publique", style: TextStyle(fontWeight: FontWeight.w800)),
                                                   Text("${doctor.rate["public"]} f."),
                                                   SizedBox(height: 10,),
-                                                  Text("Tarif DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                                  Text("Couverture DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                                   Row(
                                                     children: [
                                                       Text("Adhérents"),
                                                       SizedBox(width: 5,),
-                                                      Text("${doctor.rate["adherent"]} f."),
+                                                      Text("70%"),//Text("${doctor.rate["adherent"]} f."),
                                                     ],
                                                   ),
                                                   Row(
                                                     children: [
                                                       Text("Autres"),
                                                       SizedBox(width: 5,),
-                                                      Text("${doctor.rate["other"]} f."),
+                                                      Text("5%"),//Text("${doctor.rate["other"]} f."),
                                                     ],
                                                   ),
                                                   SizedBox(height: 20,)
