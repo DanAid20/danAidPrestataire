@@ -25,6 +25,7 @@ class HomePageComponents {
     int etat,
     String iconesConsultationTypes
   }){
+    print(etat.runtimeType);
     return Container(
         margin: EdgeInsets.only( top: hv*2) ,
       child: Row(
@@ -79,7 +80,7 @@ class HomePageComponents {
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
                                         Text(etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : ''  , style: TextStyle(
-                                          color: etat==0?  Colors.red: etat==1?  Colors.green: etat==2? kblueSky : '' ,
+                                          color:  getCOlor(etat) ,
                                           fontWeight: FontWeight.w400,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
                                       ],
@@ -89,6 +90,11 @@ class HomePageComponents {
                               ],
                             ),
     );
+  }
+  Color getCOlor(etat){
+    if(etat==0)return Colors.red;
+    else if( etat==1) return Colors.green;
+    else if(etat==2) return kblueSky;
   }
   Widget paiementItem({
     String month, 
@@ -455,7 +461,8 @@ class HomePageComponents {
   Widget waitingRoomListOfUser({
     String userImage,
     String nom,
-    String syntomes
+    String syntomes,
+    bool isanounced=false
   }) {
     return Container(
       width: wv * 50,
@@ -479,24 +486,43 @@ class HomePageComponents {
         children: [
           Expanded(
             flex: 1,
-             child: Container(
-              width: wv * 15,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image:  NetworkImage(userImage),
-                    fit: BoxFit.cover,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: kThirdColor,
+             child: Stack(
+               children: [
+                Container(
+                width: wv * 15,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image:userImage !=null ?  NetworkImage(userImage): AssetImage("assets/images/avatar-profile.jpg"),
+                      fit: BoxFit.cover,
                     ),
-                  ],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                  )),
+                    boxShadow: [
+                      BoxShadow(
+                        color: kThirdColor,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    )),
             ),
+            isanounced!=null && isanounced!=true? SizedBox.shrink() : Positioned(
+                        top: hv * 0.5,
+                        left: wv * 1,
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: kDeepTealCAdress, spreadRadius: 0.5, blurRadius: 4
+                            ),
+                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),child: Text(''),)
+                    )
+            ]
+             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

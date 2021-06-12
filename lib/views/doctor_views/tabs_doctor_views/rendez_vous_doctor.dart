@@ -59,14 +59,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
   String getRandomString(int length) {
     const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     Random _rnd = Random();
     var result = String.fromCharCodes(Iterable.generate(
         length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
     return 'YM' + result;
   }
 
-  Future<String> createConsultationCode(QueryDocumentSnapshot adherent) async {
+  Future<String> createConsultationCode(QueryDocumentSnapshot adherent, String idAppointemnt) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
 
@@ -78,6 +78,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'beneficiaryId': adherent['beneficiaryId'],
       'beneficiaryName': adherent['username'],
       'otherInfo': '',
+      'idAppointement': idAppointemnt,
       'establishment': doctorProvider.getDoctor.officeName,
       'consultationCode': code,
       'type': adherent['appointment-type'],
@@ -105,7 +106,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return newUseCase.id;
   }
 
-  facturationCode(id, adherent) async {
+  facturationCode(id, adherent, idAppointemnt) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     await FirebaseFirestore.instance
@@ -120,6 +121,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'idMedecin': doctorProvider.getDoctor.id,
       'amountToPay': doctorProvider.getDoctor.rate['public'],
       'isSolve': false,
+      'canPay': 0,
+      'idAppointement': idAppointemnt,
       'Type': adherent['appointment-type'],
       'createdAt': DateTime.now(),
     }, SetOptions(merge: true)).then((value) {
@@ -228,7 +231,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           return HomePageComponents().waitingRoomListOfUser(
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
-                              syntomes: '${doc.data()["title"]}');
+                              syntomes: '${doc.data()["title"]}', 
+                              isanounced: doc.data()["announced"]);
+                              
                         }
                         return Center(
                           child: CircularProgressIndicator(
@@ -279,9 +284,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         .update({
                       "status": 1,
                     }).then((value) async {
-                      await createConsultationCode(docSnapshot.docs[0])
+                      await createConsultationCode(docSnapshot.docs[0], docSnapshot.docs[0].id)
                           .then((value) async {
-                        await facturationCode(value, docSnapshot.docs[0]);
+                        await facturationCode(value, docSnapshot.docs[0], docSnapshot.docs[0].id);
                       });
                     }).then((value) {
                       Navigator.pop(context);
@@ -386,7 +391,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
                                 rendezVous.setAppointmentModel(appointmentModel),
-                                 rendezVous.getAppointment.adherentId=snapshot.data.id,
+                                rendezVous.getAppointment.adherentId=snapshot.data.id,
                                 rendezVous.getAppointment.avatarUrl=data["imageUrl"],
                                 rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
                                 rendezVous.getAppointment.birthDate=data["dateNaissance"],

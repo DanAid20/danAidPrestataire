@@ -74,7 +74,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
     
    }
   }
- Future<String> createConsultationCode({bool exists=false}) async {
+ Future<String> createConsultationCode({bool exists=false, String id}) async {
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     
@@ -87,7 +87,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'beneficiaryId':exists==false?null: adherentUserSelected.matricule,
       'beneficiaryName':exists==false?null:adherentUserSelected.familyName,
       'otherInfo':'',
-      'consultationCode': exists==false?null: code,
+      'consultationCode': code,
+      'idMedecin' : doctorProvider.getDoctor.id,
+      'idAppointement': id,
       'type': widget.consultationType,
       'amountToPay': 2000 ,
       'status' : 0  ,
@@ -123,6 +125,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'idMedecin':doctorProvider.getDoctor.id,
       'amountToPay': 2000,
       'isSolve':false,
+      'idAppointement': id,
       'canPay': 0,
       'Type':widget.consultationType ,
       'createdAt':  DateTime.now(),
@@ -252,7 +255,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
    
 
   String getRandomString(int length){
-  const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  const _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     Random _rnd = Random();
     var result= String.fromCharCodes(Iterable.generate(
       length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)))); 
@@ -465,7 +468,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
   Widget build(BuildContext context) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
-    
+     DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
     return SafeArea(
         top: false,
         bottom: false,
@@ -590,29 +594,110 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         // );
                                       //}
                                        if(userSelected!=-1){
-                                         setState(() {
-                                           isRequestLaunch=true;
-                                         });
-                                       await createConsultationCode().then((value) async {
-                                           await facturationCode(value);
-                                           setState(() {
-                                           isRequestLaunch=false;
-                                         });
+                                          var appointment= FirebaseFirestore.instance.collection('APPOINTEMENTS').where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('doctorId',isEqualTo:doctorProvider.getDoctor.id).get();
+                                        appointment.then((data) async {
                                         
-                                      }).then((value){
-                                         Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  OwnerUserListView(
-                                                    idOfAdherent:
-                                                        widget.phoneNumber,
-                                                    beneficiare: adherentUserSelected,
-                                                    consultationCode:  code,
-                                                    createdAt:  DateTime.now(),
-                                                  )),
-                                        ); 
-                                      });
+                                          if(data.docs.isEmpty){
+                                             var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                              .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:doctorProvider.getDoctor.id).get(); 
+                                              usecase.then((value) async {
+                                                    if(value.docs.isEmpty){    
+                                                      // cette consultation existe pas encore    
+                                                          setState(() {
+                                                              isRequestLaunch=true;
+                                                            });
+                                                          await createConsultationCode(exists: widget.isAccountIsExists, id: data.docs[0].id).then((value) async {
+                                                              await facturationCode(value);
+                                                              setState(() {
+                                                              isRequestLaunch=false;
+                                                            });
+                                                            
+                                                          }).then((value){
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      OwnerUserListView(
+                                                                        idOfAdherent:
+                                                                            widget.phoneNumber,
+                                                                        beneficiare: adherentUserSelected,
+                                                                        consultationCode:  code,
+                                                                        createdAt:  DateTime.now(),
+                                                                      )),
+                                                            ); 
+                                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(content: Text("Une facture vient d'être créer pour cette ...")));
+                                                          });
+                                                    }else if(value.docs.isNotEmpty){
+                                                      Timestamp t = value.docs[0].data()['createdDate'];
+                                                    DateTime d = t.toDate();
+                                                  final date2 = DateTime.now();
+                                                  final difference = date2.difference(d).inDays;
+                                                        if( difference>14){
+                                                                  setState(() {
+                                                                    isRequestLaunch=true;
+                                                                  });
+                                                                await createConsultationCode(exists: widget.isAccountIsExists, id: data.docs[0].id).then((value) async {
+                                                                    await facturationCode(value);
+                                                                    setState(() {
+                                                                    isRequestLaunch=false;
+                                                                  });
+                                                                  
+                                                                }).then((value){
+                                                                  Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            OwnerUserListView(
+                                                                              idOfAdherent:
+                                                                                  widget.phoneNumber,
+                                                                              beneficiare: adherentUserSelected,
+                                                                              consultationCode:  code,
+                                                                              createdAt:  DateTime.now(),
+                                                                            )),
+                                                                  ); 
+                                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(content: Text("Une facture vient d'être créer pour cette !!! ...")));
+                                                                });
+                                                        }else{
+                                                          Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            OwnerUserListView(
+                                                                              idOfAdherent:
+                                                                                  widget.phoneNumber,
+                                                                              beneficiare: adherentUserSelected,
+                                                                              consultationCode:  code,
+                                                                              createdAt:  DateTime.now(),
+                                                                            )),
+                                                                  ); 
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(content: Text("Redirtection vers le carnet !! ...")));
+                                                        }
+                                                          
+                                                    }
+                                                    else{
+                                                        Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      OwnerUserListView(
+                                                                        idOfAdherent:
+                                                                            widget.phoneNumber,
+                                                                        beneficiare: adherentUserSelected,
+                                                                        consultationCode:  code,
+                                                                        createdAt:  DateTime.now(),
+                                                                      )),
+                                                            ); 
+                                                            ScaffoldMessenger.of(context).showSnackBar(
+                                                        SnackBar(content: Text("redirection vers le carnet ...")));
+                                                          }
+                                                    });
+                                          }    
+                                        });
+                                         
+                                        
                                       }else{
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Selectioner un beneficiaire avant de valider")));
                                       }

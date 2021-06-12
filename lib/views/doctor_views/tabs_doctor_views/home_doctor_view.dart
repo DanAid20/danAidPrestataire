@@ -218,7 +218,7 @@ getDetailDocotor(){
             ],
           ),
         );
-      }
+      } 
     );
 }
  getDiscussionContainers({PostModel post}){
