@@ -776,18 +776,20 @@ double imc=0;
                   ]),
                 ),
                 Center(child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Text('Code De consultation ',style: TextStyle(
-                              color: kCardTextColor,
-                              fontWeight: FontWeight.w500,
-                              fontSize: MySize.getScaledSizeHeight(20) )),
-                      Text('${widget.consultationCode}',style: TextStyle(
-                              color: kCardTextColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: MySize.getScaledSizeHeight(20) )),
-                    ],
+                  padding: Spacing.top(20),
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Text('Code De consultation ',style: TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: MySize.getScaledSizeHeight(25) )),
+                        Text('${widget.consultationCode}',style: TextStyle(
+                                color: kCardTextColor,
+                                fontWeight: FontWeight.w600,
+                                fontSize: MySize.getScaledSizeHeight(25))),
+                      ],
+                    ),
                   ),
                 ))
               ],
