@@ -1,3 +1,5 @@
+import 'dart:io' show Directory, Platform;
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -5,6 +7,9 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FamilyDocumentsPage extends StatefulWidget {
   const FamilyDocumentsPage({ Key key }) : super(key: key);
@@ -17,6 +22,8 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
   CarouselController carouselController = CarouselController();
   String description = "";
   String title = "";
+  String _localPath;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +136,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
         Container(
           width: wv*40,
           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-          margin: EdgeInsets.only(bottom: 5),
+          margin: EdgeInsets.only(bottom: 5, left: 20),
           decoration: BoxDecoration(
             color: switchColor ? kDeepTeal : kSouthSeas,
             borderRadius: BorderRadius.circular(10),
@@ -157,18 +164,73 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
           ),
         ),
         Positioned(
-          left: -20,
           top: 20,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-            decoration: BoxDecoration(
-              color: kCardTextColor.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(10)
+          child: GestureDetector(
+            onTap: () async {
+              launch(url);
+              /*print("yo");
+              bool granted = await _checkPermission();
+              if(granted){
+                await _prepareSaveDir();
+                print(_localPath.toString());
+                if(_localPath != null){
+                  FlutterDownloader.enqueue(
+                    url: url,
+                    savedDir: _localPath,
+                    showNotification: true,
+                    openFileFromNotification: true,
+                  ).then((task){
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Document téléchargé"), duration: Duration(seconds: 2),));
+                  });
+                }
+              }*/
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+              decoration: BoxDecoration(
+                color: kCardTextColor.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(10)
+              ),
+              child: Icon(Icons.arrow_downward_rounded, size: 25, color: kCardTextColor,),
             ),
-            child: Icon(Icons.arrow_downward_rounded, size: 25, color: kCardTextColor,),
           ),
         )
       ],
     );
   }
+
+  Future<void> _prepareSaveDir() async {
+    _localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download';
+
+    final savedDir = Directory(_localPath);
+    bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+  }
+
+  Future<String> _findLocalPath() async {
+    final directory = Platform.isAndroid
+        ? await getExternalStorageDirectory()
+        : await getApplicationDocumentsDirectory();
+    return directory?.path;
+  }
+
+  Future<bool> _checkPermission() async {
+    if (Platform.isAndroid) {
+      final status = await Permission.storage.status;
+      if (status != PermissionStatus.granted) {
+        final result = await Permission.storage.request();
+        if (result == PermissionStatus.granted) {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+    return false;
+  }
+  
 }

@@ -1,15 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:danaid/core/models/adherentModel.dart';
-import 'package:danaid/core/models/doctorModel.dart';
-import 'package:danaid/core/providers/adherentModelProvider.dart';
-import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/locator.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
-import 'package:danaid/widgets/buttons/default_btn.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

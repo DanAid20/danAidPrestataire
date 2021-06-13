@@ -58,6 +58,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
             toolbarHeight: hv*18,
             stretch: true,
             backgroundColor: kDeepTeal,
+            actions: [Container()],
             title: Column(mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
@@ -84,7 +85,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                         children: [
                           Row(children: [
                             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
-                            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState.openDrawer(),)
+                            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState.openEndDrawer(),)
                           ],),
                           SizedBox(height: hv*1,),
                           IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/Chat.svg', width: wv*10,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/chatroom')),
@@ -156,68 +157,75 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
           ),
         ],
       ) : Center(child: Loaders().buttonLoader(kPrimaryColor)),
-      drawer: Theme(
+      endDrawer: Theme(
         data: Theme.of(context).copyWith(
           canvasColor: Colors.transparent,
         ),
         child: Drawer(
           elevation: 0,
-          child: Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-            child: CustomPaint(
-              painter: DrawerPainter(color: kDeepTeal.withOpacity(0.85)),
+          child: ClipPath(
+            clipper: DrawerClipper(),
+            child: Container(
+              color: kDeepTeal.withOpacity(0.7),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Center(
                 child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ListTile(
-                        leading: SvgPicture.asset("assets/icons/Two-tone/Category.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                        title: Text("Entraide", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
-                        onTap: ()=>Navigator.pop(context),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: wv*55,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ListTile(
+                            leading: SvgPicture.asset("assets/icons/Two-tone/Category.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                            title: Text("Entraide", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                            onTap: ()=>Navigator.pop(context),
+                          ),
+                          ListTile(
+                            leading: SvgPicture.asset("assets/icons/Two-tone/Home.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                            title: Text("Accueil", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                            onTap: (){
+                              navController.setIndex(1);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: SvgPicture.asset("assets/icons/Two-tone/Paper.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                            title: Text("Carnet", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                            onTap: (){
+                              navController.setIndex(2);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: SvgPicture.asset("assets/icons/Two-tone/Location.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                            title: Text("Partenaires", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                            onTap: (){
+                              navController.setIndex(3);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: SvgPicture.asset(userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                            title: Text(userProvider.getProfileType == adherent ? "famille" : "Profile", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                            onTap: (){
+                              navController.setIndex(4);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: SvgPicture.asset("assets/icons/Two-tone/InfoSquare.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                            title: Text("Conditions\nd'utilisation", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                            onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
+                          ),
+                        ],
                       ),
-                      ListTile(
-                        leading: SvgPicture.asset("assets/icons/Two-tone/Home.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                        title: Text("Accueil", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
-                        onTap: (){
-                          navController.setIndex(1);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: SvgPicture.asset("assets/icons/Two-tone/Paper.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                        title: Text("Carnet", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
-                        onTap: (){
-                          navController.setIndex(2);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: SvgPicture.asset("assets/icons/Two-tone/Location.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                        title: Text("Partenaires", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
-                        onTap: (){
-                          navController.setIndex(3);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: SvgPicture.asset(userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                        title: Text(userProvider.getProfileType == adherent ? "famille" : "Profile", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
-                        onTap: (){
-                          navController.setIndex(4);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ListTile(
-                        leading: SvgPicture.asset("assets/icons/Two-tone/InfoSquare.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                        title: Text("Conditions\nd'utilisation", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
-                        onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -254,5 +262,28 @@ class DrawerPainter extends CustomPainter {
   @override
   bool shouldRepaint(DrawerPainter oldDelegate) {
     return oldDelegate.color != color;
+  }
+}
+
+class DrawerClipper extends CustomClipper<Path> {
+
+  @override
+  getClip(Size size) {
+    double x = size.width;
+    double y = size.height;
+    return Path()
+      ..moveTo(x/10, 0)
+      ..quadraticBezierTo(x/3, y/3, x/7, y/2)
+      //..quadraticBezierTo(x/3.5, y/3, x/3.5, y/2)
+      //..quadraticBezierTo(x/3.5, y-y/1.7, x/6, y/1.3)
+      ..quadraticBezierTo(x/20, y/1.7, x/8, y/1.2)
+      ..lineTo(x/5, y)
+      ..lineTo(x, y)
+      ..lineTo(x, 0);
+  }
+
+  @override
+  bool shouldReclip(DrawerClipper oldDelegate) {
+    return true;
   }
 }
