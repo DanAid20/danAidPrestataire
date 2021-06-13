@@ -14,8 +14,9 @@ class AdherentModel {
   Map location;
   DoctorModel familyDoctor;
   var height, weight;
+  Map codeConsult;
 
-  AdherentModel({this.adherentId, this.authId, this.keywords, this.insuranceLimit, this.firstInvoice, this.stateValidate, this.paid, this.havePaid, this.allergies, this.height, this.weight, this.validityStartDate, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
+  AdherentModel({this.adherentId, this.codeConsult, this.authId, this.keywords, this.insuranceLimit, this.firstInvoice, this.stateValidate, this.paid, this.havePaid, this.allergies, this.height, this.weight, this.validityStartDate, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
 
   factory AdherentModel.fromDocument(DocumentSnapshot doc) {
     return AdherentModel(
@@ -65,6 +66,7 @@ class AdherentModel {
         height: doc.data()["height"],
         weight: doc.data()["weight"],
         allergies: doc.data()["allergies"],
+        codeConsult: doc.data()["CurrentcodeConsultation"],
         nameKeywords: doc.data()["nameKeywords"]
       );
   }

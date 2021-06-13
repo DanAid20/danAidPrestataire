@@ -113,6 +113,17 @@ class _InactiveAccountState extends State<InactiveAccount> {
     return newUseCase.id;
   }
 
+  addCodeToAdherent(code) async {
+    await FirebaseFirestore.instance.collection('ADHERENTS').doc(adherentUserSelected.adherentId).set({
+      'CurrentcodeConsultation' : code
+    },SetOptions(merge: true)).then((value) {
+        setState(() {
+          isloading = false;
+        });
+
+    });
+  
+  }
   facturationCode(id) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
@@ -593,21 +604,33 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         //           )),
                                         // );
                                       //}
+                                       final Map<String, dynamic> userData = {
+                                            'codeConsultation': code,
+                                            'createdDate': DateTime.now()
+                                          };
                                        if(userSelected!=-1){
-                                          var appointment= FirebaseFirestore.instance.collection('APPOINTEMENTS').where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('doctorId',isEqualTo:doctorProvider.getDoctor.id).get();
-                                        appointment.then((data) async {
-                                        
-                                          if(data.docs.isEmpty){
+                                         print(adherentModelProvider.getAdherent.adherentId);
+                                         print(doctorProvider.getDoctor.id);
                                              var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                              .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:doctorProvider.getDoctor.id).get(); 
+                                              .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:doctorProvider.getDoctor.id).orderBy('createdDate').get(); 
                                               usecase.then((value) async {
+                                                print(value.docs);
                                                     if(value.docs.isEmpty){    
                                                       // cette consultation existe pas encore    
-                                                          setState(() {
+                                                      //  Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'];
+                                                      //   DateTime d = t.toDate();
+                                                      //   final date2 = DateTime.now();
+                                                      //   final difference = date2.difference(d).inDays;
+                                                      //    adherentModelProvider.getAdherent.codeConsult['createdDate']
+                                                      if(adherentModelProvider.getAdherent.codeConsult==null){
+                                                        print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
+                                                        setState(() {
                                                               isRequestLaunch=true;
                                                             });
-                                                          await createConsultationCode(exists: widget.isAccountIsExists, id: data.docs[0].id).then((value) async {
+                                                          await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
                                                               await facturationCode(value);
+                                                              await addCodeToAdherent(userData);
+                                                              adherentModelProvider.getAdherent.codeConsult=userData;
                                                               setState(() {
                                                               isRequestLaunch=false;
                                                             });
@@ -621,24 +644,32 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                         idOfAdherent:
                                                                             widget.phoneNumber,
                                                                         beneficiare: adherentUserSelected,
-                                                                        consultationCode:  code,
+                                                                        consultationCode:  adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
                                                                         createdAt:  DateTime.now(),
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(content: Text("Une facture vient d'être créer pour cette ...")));
                                                           });
+                                                      }
+                                                          
                                                     }else if(value.docs.isNotEmpty){
-                                                      Timestamp t = value.docs[0].data()['createdDate'];
+                                                     Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider.getAdherent.codeConsult['createdDate']):adherentModelProvider.getAdherent.codeConsult['createdDate'];
                                                     DateTime d = t.toDate();
-                                                  final date2 = DateTime.now();
+                                                   print(t);
+                                                   print(d);
+                                                  final date2 = DateTime.now(); 
                                                   final difference = date2.difference(d).inDays;
-                                                        if( difference>14){
+                                                  print(difference);
+                                                        if( difference>14 && adherentModelProvider.getAdherent.codeConsult!=null ){
+                                                                  print('jfhsdkfhdjksf');
                                                                   setState(() {
                                                                     isRequestLaunch=true;
                                                                   });
-                                                                await createConsultationCode(exists: widget.isAccountIsExists, id: data.docs[0].id).then((value) async {
+                                                                await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
                                                                     await facturationCode(value);
+                                                                    await addCodeToAdherent(userData);
+                                                                    adherentModelProvider.getAdherent.codeConsult=userData;
                                                                     setState(() {
                                                                     isRequestLaunch=false;
                                                                   });
@@ -652,7 +683,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                               idOfAdherent:
                                                                                   widget.phoneNumber,
                                                                               beneficiare: adherentUserSelected,
-                                                                              consultationCode:  code,
+                                                                              consultationCode: adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 
@@ -668,7 +699,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                               idOfAdherent:
                                                                                   widget.phoneNumber,
                                                                               beneficiare: adherentUserSelected,
-                                                                              consultationCode:  code,
+                                                                              consultationCode:  adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 
@@ -694,8 +725,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                         SnackBar(content: Text("redirection vers le carnet ...")));
                                                           }
                                                     });
-                                          }    
-                                        });
+                                         
                                          
                                         
                                       }else{
