@@ -129,7 +129,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
     return newUseCase.id;
   }
+  
+   addCodeToAdherent(code,id) async {
+    await FirebaseFirestore.instance.collection('ADHERENTS').doc(id).set({
+      'CurrentcodeConsultation' : code
+    },SetOptions(merge: true)).then((value) {
+    });
 
+  }
   facturationCode(id, adherent, idAppointement) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
@@ -360,12 +367,15 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         announceLoading = true;
                       });
                       try {
-                        
+                         final Map<String, dynamic> codes = {
+                          'codeConsultation': code,
+                          'createdDate': DateTime.now()
+                         };
                          var data =  FirebaseFirestore.instance
                         .collection("APPOINTMENTS")
                         .where("doctorId", isEqualTo: doctorProvider.getDoctor.id)
                         .where("adherentId", isEqualTo:appointment.getAppointment.adherentId);
-                    data.get().then((docSnapshot) async => {
+                        data.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
                             { // il  existe pas mais
                                  print("jhdsfjkhdsjkfd")
@@ -383,11 +393,33 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                   var usecase= FirebaseFirestore.instance.collection('USECASES')
                                 .where("idAppointement", isEqualTo: appointment.getAppointment.id).get(); 
                                 usecase.then((value) async {
-                                      if(value.docs.isEmpty){       
-                                       await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
-                                         await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                      if(value.docs.isEmpty){   
+                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
+                                        adherent.then((value) async {
+                                          if(value.data()['CurrentcodeConsultation']!=null){
+                                              
+                                                Timestamp t = value.data()['CurrentcodeConsultation']['createdDate'];
+                                                    DateTime d = t.toDate();
+                                                   print(t);
+                                                   print(d);
+                                                  final date2 = DateTime.now(); 
+                                                  final difference = date2.difference(d).inDays;
+                                                  print(difference);
+                                                  if( difference>14){
+                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await addCodeToAdherent(codes, docSnapshot.docs[0].id);
+                                                    });
+                                                  }
+                                          }else{
+                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await addCodeToAdherent(codes, docSnapshot.docs[0].id);
+                                              });
+                                          }
+
                                         });
-                                         appointment.setAnnouncement(true);
+                                       appointment.setAnnouncement(true);
                                       }else{
                                          ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(content: Text("Une facture a deja été génerer pour cette constultation")));
