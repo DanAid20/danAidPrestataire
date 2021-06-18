@@ -188,7 +188,7 @@ class _HomePageViewState extends State<HomePageView> {
       }
     }
     
-      print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
+     // print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
   }
 
   loadCommonUserProfile() async {

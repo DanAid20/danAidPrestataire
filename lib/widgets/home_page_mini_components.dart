@@ -92,9 +92,11 @@ class HomePageComponents {
     );
   }
   Color getCOlor(etat){
-    if(etat==0)return Colors.red;
-    else if( etat==1) return Colors.green;
-    else if(etat==2) return kblueSky;
+    Color couleurs; 
+    if(etat==0) couleurs=Colors.red;
+    else if( etat==1)  couleurs=Colors.green;
+    else if(etat==2)  couleurs=kblueSky;
+    return couleurs;
   }
   Widget paiementItem({
     String month, 
@@ -928,7 +930,7 @@ class HomePageComponents {
       padding: EdgeInsets.only(right: wv * 1),
       child: Stack(
         children: [
-          imgUrl.contains(stringToComparedev) || imgUrl.contains(stringToCompareprod)  ? CircleAvatar(
+         imgUrl!=null &&  imgUrl.contains(stringToComparedev) || imgUrl!=null && imgUrl.contains(stringToCompareprod)  ? CircleAvatar(
                 radius:  size != null ? size : wv * 5.5,
                 backgroundImage: NetworkImage(imgUrl),
                 backgroundColor: Colors.transparent,

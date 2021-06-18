@@ -1,82 +1,82 @@
+
+
+
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:danaid/core/providers/adherentModelProvider.dart';
-import 'package:danaid/core/providers/adherentProvider.dart';
+import 'package:danaid/core/models/serviceProviderModel.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getCities.dart';
+import 'package:danaid/core/services/algorithms.dart';
+import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
+import 'package:danaid/widgets/clippers.dart';
+import 'package:danaid/widgets/file_upload_card.dart';
+import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:danaid/widgets/clippers.dart';
-import 'package:danaid/widgets/forms/custom_text_field.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:line_icons/line_icons.dart';
-import 'package:danaid/core/services/algorithms.dart';
 import 'package:location/location.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:danaid/core/services/hiveDatabase.dart';
-import 'package:danaid/core/services/getCities.dart';
-import 'package:danaid/widgets/file_upload_card.dart';
+class EditPrestataire extends StatefulWidget {
+  EditPrestataire({Key key}) : super(key: key);
 
-class ProfileEdit extends StatefulWidget {
   @override
-  _ProfileEditState createState() => _ProfileEditState();
+  _EditPrestataireState createState() => _EditPrestataireState();
 }
 
-class _ProfileEditState extends State<ProfileEdit> {
-
-  final GlobalKey<FormState> _adherentEditFormKey = GlobalKey<FormState>();
-  TextEditingController _familynameController = new TextEditingController();
+class _EditPrestataireState extends State<EditPrestataire> {
+  final GlobalKey<FormState> _presptataireEditFormKey = GlobalKey<FormState>();
+  TextEditingController _nameController = new TextEditingController();
   TextEditingController _surnameController = new TextEditingController();
-  TextEditingController _emailController = new TextEditingController();
   TextEditingController _cniNameController = new TextEditingController();
-  TextEditingController _professionController = new TextEditingController();
-  TextEditingController _addressController = new TextEditingController();
-  bool autovalidate = false;
+  TextEditingController _companyController = new TextEditingController();
+  TextEditingController _contactNameController = new TextEditingController();
+  TextEditingController _contactEmailController = new TextEditingController();
+  ////////////////////////////
   String _region;
-  List<String> myCities = [];
   String _city;
   String _stateCode;
+  String _category;
+  String avatarUrl;
+  String cniUpload;
+  ////////////////////////////////
+  bool nameEnabled = true;
+  bool contactEnabled= true;
+  bool contactEmail= true;
+  bool autovalidate = false;
+  
   bool regionChosen = false;
   bool cityChosen = false;
-  DateTime selectedDate = DateTime(1990);
   File imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
   bool surnameEnabled = true;
-  bool nameEnabled = true;
   bool emailEnabled = true;
   bool cniNameEnabled = true;
-  bool professionEnabled = true;
-  bool addressEnabled = true;
-  Map<String, dynamic> gpsCoords;
-  bool isMarried = false;
-  bool askMarriageCertificate = false;
-  bool marriageCertificateUploaded = false;
   bool cniUploaded = false;
   bool otherFileUploaded = false;
-  bool marriageCertificateSpinner = false;
   bool cniSpinner = false;
+  bool ortherScanSpinner = false;
   bool otherFileSpinner = false;
   bool imageSpinner = false;
   bool positionSpinner = false;
-
   LatLng _initialcameraposition = LatLng(4.044656688777058, 9.695724531228858);
   GoogleMapController _controller;
   Location _location = Location();
-  
+  Map<String, dynamic> gpsCoords;
   void _initializeMap(){
     _location.getLocation().then((loc) {
       setState(() {
@@ -86,7 +86,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   void _saveLocation(){
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    ServiceProviderModelProvider servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     setState(() {
       positionSpinner = true;
     });
@@ -104,7 +104,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           "longitude": loc.longitude
         };
       });
-      adherentProvider.setLocation(gpsCoords);
+      servicetProvider.setLocalisation(gpsCoords);
     });
   }
 
@@ -136,95 +136,61 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   initRegionDropdown(){
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    if(adherentProvider.getAdherent.havePaid != null){
+    ServiceProviderModelProvider servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+   
       setState(() {
-        _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent.regionOfOrigin);
-        _region = adherentProvider.getAdherent.regionOfOrigin;
+        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider.region);
+        _region = servicetProvider.getServiceProvider.region;
         regionChosen = true;
       cityChosen = true;
       
-      _city = adherentProvider.getAdherent.town;
+      _city = servicetProvider.getServiceProvider.town;
       });
-    }
+   
     
   }
 
   textFieldsControl (){
 
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-
-    if((adherentProvider.getAdherent.surname != null) & (adherentProvider.getAdherent.surname != "")){
+    ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+   
+    if((serviceProvider.getServiceProvider.name != null) & (serviceProvider.getServiceProvider.name != "")){
       setState(() {
-        _surnameController.text = adherentProvider.getAdherent.surname;
-        surnameEnabled = false; 
+        _nameController.text = serviceProvider.getServiceProvider.name;
+        nameEnabled = false; 
       });
     }
-    if((adherentProvider.getAdherent.familyName != null) & (adherentProvider.getAdherent.familyName != "")){
+    if((serviceProvider.getServiceProvider.contactName != null) & (serviceProvider.getServiceProvider.contactName  != "")){
       setState(() {
-        _familynameController.text = adherentProvider.getAdherent.familyName;
-        nameEnabled = false;
+        _contactNameController.text = serviceProvider.getServiceProvider.contactName;
+        contactEnabled = false;
       });
     }
-    if((adherentProvider.getAdherent.cniName != null) & (adherentProvider.getAdherent.cniName != "")){
+    if((serviceProvider.getServiceProvider.contactEmail  != null) & (serviceProvider.getServiceProvider.contactEmail  != "")){
       setState(() {
-        _cniNameController.text = adherentProvider.getAdherent.cniName;
-        cniNameEnabled = false;
+        _contactEmailController.text = serviceProvider.getServiceProvider.contactEmail ;
+        contactEmail = false;
       });
     }
-    if((adherentProvider.getAdherent.email != null) & (adherentProvider.getAdherent.email != "")){
+    if((serviceProvider.getServiceProvider.category  != null) & (serviceProvider.getServiceProvider.category  != "")){
       setState(() {
-        _emailController.text = adherentProvider.getAdherent.email;
-        emailEnabled = false;
+       _category=serviceProvider.getServiceProvider.category;
       });
     }
-    if((adherentProvider.getAdherent.profession != null) & (adherentProvider.getAdherent.profession != "")){
-      setState(() {
-        _professionController.text = adherentProvider.getAdherent.profession;
-        professionEnabled = false;
-      });
-    }
-    if((adherentProvider.getAdherent.address != null) & (adherentProvider.getAdherent.address != "")){
-      setState(() {
-        _addressController.text = adherentProvider.getAdherent.address;
-        addressEnabled = false;
-      });
-    }
-    
     print("inside");
-    if (adherentProvider.getAdherent.location != null){
-      print(adherentProvider.getAdherent.location.toString() +"inside+");
-      if ((adherentProvider.getAdherent.location["latitude"] != null) | (adherentProvider.getAdherent.location["longitude"] != null) | true){
+    if (serviceProvider.getServiceProvider.localisation != null){
+      //print(serviceProvider.getServiceProvider.localisation"inside+");
+      if ((serviceProvider.getServiceProvider.localisation["latitude"] != null) | (serviceProvider.getServiceProvider.localisation["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
-          "latitude": adherentProvider.getAdherent.location["latitude"],
-          "longitude": adherentProvider.getAdherent.location["longitude"]
+          "latitude": serviceProvider.getServiceProvider.localisation["latitude"],
+          "longitude": serviceProvider.getServiceProvider.localisation["longitude"]
         };
         print(gpsCoords.toString());
         });
       }
     }
-    if(adherentProvider.getAdherent.isMarried != null){
-      setState(() {
-        isMarried = adherentProvider.getAdherent.isMarried;
-      });
-    }
 
-    if((adherentProvider.getAdherent.marriageCertificateUrl != "") & (adherentProvider.getAdherent.marriageCertificateUrl != null)){
-      setState(() {
-        marriageCertificateUploaded = true;
-      });
-    }
-    if((adherentProvider.getAdherent.officialDocUrl != "") & (adherentProvider.getAdherent.officialDocUrl != null)){
-      setState(() {
-        cniUploaded = true;
-      });
-    }
-    if((adherentProvider.getAdherent.otherJustificativeDocsUrl != "") & (adherentProvider.getAdherent.otherJustificativeDocsUrl != null)){
-      setState(() {
-        otherFileUploaded = true;
-      });
-    }
   }
 
   @override
@@ -236,20 +202,18 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
   @override
   Widget build(BuildContext context) {
-    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context);
+    ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+    ServiceProviderModel prestataire= serviceProvider.getServiceProvider;
     return SafeArea(
       top: false,
       child: Scaffold(
         appBar: AppBar(toolbarHeight: hv*1, automaticallyImplyLeading: false, backgroundColor: kPrimaryColor.withOpacity(0.99)),
-        body: Column(
+        body:Column(
           children: [
             Expanded(
               child: ListView(
-                children: [
-                  Container(
-                    child: Column(
-                      children: [
-                        Stack(clipBehavior: Clip.none, children: [
+                 children: [
+                    Stack(clipBehavior: Clip.none, children: [
                           ClipPath(
                             clipper: WaveClipperTop2(),
                             child: Container(
@@ -264,7 +228,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                             child: Container(
                               height: wv*42,
                               decoration: BoxDecoration(
-                                color: kPrimaryColor.withOpacity(0.6)
+                                color: kGold.withOpacity(0.6)
                               ),
                             ),
                           ),
@@ -283,7 +247,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                                       padding: EdgeInsets.all(20.0),
                                     ),
-                                    imageUrl: adherentModelProvider.getAdherent.imgUrl,),
+                                    imageUrl:prestataire.avatarUrl,),
                                 ),
                                   //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                               ),
@@ -320,93 +284,84 @@ class _ProfileEditState extends State<ProfileEdit> {
                               ),
                             ),
                           )
-                        ], alignment: AlignmentDirectional.topCenter,)
-                      ],
-                    ),
-                  ),
-                  Form(
-                    key: _adherentEditFormKey,
-                    //autovalidateMode:  AutovalidateMode.always, //autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                    child: Column(children: [
-                      SizedBox(height: hv*6,),
+                        ], alignment: AlignmentDirectional.topCenter,),
+                          Form(
+                    key: _presptataireEditFormKey,
+                                        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
 
+                    child: Column(children: [
+                       SizedBox(height: hv*6,),
+                     
                       CustomTextField(
-                        prefixIcon: Icon(LineIcons.users, color: kPrimaryColor),
-                        label: "Nom de Famille *",
-                        hintText: "Entrez votre nom de famille",
-                        controller: _familynameController,
+                        prefixIcon: Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
+                        label: "Nom de l'établissement *",
+                        hintText: "ex: Hôpial Centrale",
+                        controller: _companyController,
                         validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        enabled: nameEnabled,
-                        editAction: (){
-                          setState(() {
-                            nameEnabled = true;
-                          });}
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
-                        prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
-                        label: "Prénom (s)",
-                        hintText: "Entrez votre prénom",
-                        enabled: surnameEnabled,
-                        controller: _surnameController,
+                        prefixIcon: Icon(Icons.account_circle_outlined, color: kDeepTeal,),
+                        label: "Nom complet du contact *",
+                        hintText: "Entrez votre nom",
+                        controller: _contactNameController,
                         validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        editAction: (){
-                          setState(() {
-                            surnameEnabled = true;
-                          });
-                        },
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
-                        prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: "Nom tel que sur la CNI",
-                        hintText: "Nom CNI",
-                        enabled: cniNameEnabled,
-                        controller: _cniNameController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        editAction: (){
-                          setState(() {
-                            cniNameEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.emailOutline, color: kPrimaryColor),
-                        label: "Email",
-                        hintText: "Entrez votre addresse email",
-                        enabled: emailEnabled,
-                        controller: _emailController,
+                        prefixIcon: Icon(Icons.email_outlined, color: kDeepTeal,),
                         keyboardType: TextInputType.emailAddress,
-                        validator:  (String mail) {
-                          return (mail.isEmpty)
-                              ? kEmailNullErrorFr
-                              : (!emailValidatorRegExp.hasMatch(mail))
-                              ? kInvalidEmailError : null;
-                        },
-                        editAction: (){
-                          setState(() {
-                            emailEnabled = true;
-                          });
-                        },
+                        label: "Email du contact",
+                        hintText: "Entrez votre addresse email",
+                        controller: _contactEmailController,
+                        validator: _emailFieldValidator,
                       ),
                       SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
-                        label: "Profession",
-                        hintText: "ex: Méchanicien",
-                        enabled: professionEnabled,
-                        controller: _professionController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        editAction: (){
-                          setState(() {
-                            professionEnabled = true;
-                          });
-                        },
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: wv*3),
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Type d'établissement *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                            SizedBox(height: 5,),
+                            Container(
+                              constraints: BoxConstraints(minWidth: wv*45),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: ButtonTheme(
+                                  alignedDropdown: true,
+                                  child: DropdownButton(
+                                    isExpanded: true,
+                                    value: _category,
+                                    items: [
+                                      DropdownMenuItem(
+                                        child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        value: "Hôpital",
+                                      ),
+                                      DropdownMenuItem(
+                                        child: Text("Pharmacie", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: "Pharmacie",
+                                      ),
+                                      DropdownMenuItem(
+                                        child: Text("Laboratoire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: "Laboratoire",
+                                      ),
+                                    ],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _category = value;
+                                      });
+                                    }),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: hv*2,),
-                      Divider(),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       Row(
                         children: [
                           SizedBox(width: wv*3,),
@@ -437,7 +392,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                         }).toList(),
                                         onChanged: (value) async {
                                           //List<String> reg = getTownNamesFromRegion(cities, value);
-                                          adherentModelProvider.setRegionOfOrigin(getRegionFromStateCode(regions, value));
+                                          serviceProvider.setRegion(getRegionFromStateCode(regions, value));
                                           setState(() {
                                             _stateCode = value;
                                             _region = getRegionFromStateCode(regions, value);
@@ -451,13 +406,13 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   ),
                                 ),
                               ],
-                            ), 
+                            ),
                           ),
                           SizedBox(width: wv*3,),
                           regionChosen ? Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text("Choix de la ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -472,15 +427,16 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text( (adherentModelProvider.getAdherent.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent.town : "Ville", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        hint: Text("Ville"),
                                         items: getTownNamesFromRegion(cities, _stateCode).map((city){
+                                          print("city: "+city);
                                           return DropdownMenuItem(
                                             child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                             value: city,
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          adherentModelProvider.setTown(value);
+                                          serviceProvider.setTown(value);
                                           setState(() {
                                             _city = value;
                                             cityChosen = true;
@@ -496,37 +452,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ],
                       ),
                       SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.homeCityOutline, color: kPrimaryColor),
-                        label: "Addresse",
-                        hintText: "ex: carrefour Obili",
-                        enabled: addressEnabled,
-                        controller: _addressController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
-                        editAction: (){
-                          setState(() {
-                            addressEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*4,),
-                      (gpsCoords != null) | (adherentModelProvider.getAdherent.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("GPS:", style: TextStyle(fontWeight: FontWeight.w900),),
-                            RichText(text: TextSpan(
-                              text: "Lat: ",
-                              children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords["latitude"].toString() : adherentModelProvider.getAdherent.location["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
-                                TextSpan(text: "     Lng: "),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords["longitude"].toString() : adherentModelProvider.getAdherent.location["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
-                              ]
-                            , style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
-                            )
-                          ],
-                        ),
-                      )
-                      : Container(),
                       Stack(
                         children: [
                           Container(
@@ -540,15 +465,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent.location["latitude"] != null ? adherentModelProvider.getAdherent.location["latitude"] : _initialcameraposition.latitude, adherentModelProvider.getAdherent.location["longitude"] != null ? adherentModelProvider.getAdherent.location["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: serviceProvider.getServiceProvider.localisation == null ? _initialcameraposition : LatLng(serviceProvider.getServiceProvider.localisation["latitude"] != null ? serviceProvider.getServiceProvider.localisation["latitude"] : _initialcameraposition.latitude, serviceProvider.getServiceProvider.localisation["longitude"] != null ? serviceProvider.getServiceProvider.localisation["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                 myLocationEnabled: true,
                               ),
                             ),
                           ),
-
-                          Positioned(
+                            Positioned(
                             bottom: hv*2,
                             right: wv*7,
                             child: !positionSpinner ? TextButton(
@@ -560,58 +484,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                               ),
                             ) :  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor), strokeWidth: 2.0,),
                           ),
-                        ],
-                      ),
-                      Divider(),
-                      SizedBox(height: hv*2),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: wv*3),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Statut Matrimoniale", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w500),),
-                            SizedBox(height: 5,),
-                            Container(
-                              constraints: BoxConstraints(minWidth: wv*45),
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  child: DropdownButton(
-                                    isExpanded: true,
-                                    hint: Text("Choisir"),
-                                    value: isMarried,
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text("Célibataire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        value: false,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text("Marrié (e)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: true,
-                                      ),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        isMarried = value;
-                                      });
-                                      if(value == true){
-                                        setState(() {
-                                          askMarriageCertificate = true;
-                                        });
-                                      }
-                                    }),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      SizedBox(height: hv*1.5,),
+                        ]),
+                        SizedBox(height: hv*1.5,),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -621,17 +495,17 @@ class _ProfileEditState extends State<ProfileEdit> {
                             SizedBox(height: hv*1,),
                             Column(
                               children: [
-                                isMarried ? FileUploadCard(
-                                  title: "Acte de Marriage",
-                                  state: marriageCertificateUploaded,
-                                  loading: marriageCertificateSpinner,
-                                  action: () async {await getDocFromPhone('Acte_De_Marriage');}
-                                ) : Container(),
                                 FileUploadCard(
                                   title: "Scan de la CNI",
                                   state: cniUploaded,
                                   loading: cniSpinner,
                                   action: () async {await getDocFromPhone('CNI');}
+                                ),
+                                FileUploadCard(
+                                  title: "Scan du certificat d'enregistrement a l'ordre",
+                                  state: cniUploaded,
+                                  loading: cniSpinner,
+                                  action: () async {await getDocFromPhone('CertificatEnregDor');}
                                 ),
                                 FileUploadCard(
                                   title: "Autre pièce justificative",
@@ -644,94 +518,71 @@ class _ProfileEditState extends State<ProfileEdit> {
                           ],
                         ),
                       ),
-                      SizedBox(height: hv*3,)
-                    ],)
-                  ),
-                  imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
-                ],
-              ),
-            ),
-            Container(
-              child: (cityChosen) ?  
+                      SizedBox(height: hv*3),
+                       Container(
+              child: 
                 !buttonLoading ? CustomTextButton(
-                  text: "Mettre à jour",
+                  text: "Envoyer",
                   color: kPrimaryColor,
                   action: () async {
+                    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
                     setState(() {
                       autovalidate = true;
                     });
-                    String fname = _familynameController.text;
-                    String sname = _surnameController.text;
-                    String cniName = _cniNameController.text;
-                    String email = _emailController.text;
-                    String address = _addressController.text;
-                    String profession =_professionController.text;
-                    if (_adherentEditFormKey.currentState.validate()){
+                   
+                    String contactName = _contactNameController.text;
+                    String email = _contactEmailController.text;
+                    if (_presptataireEditFormKey.currentState.validate()){
                       setState(() {
                         buttonLoading = true;
                       });
-                      AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-                      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                      print("$fname, $sname, $avatarUrl");
-                      adherentProvider.setFamilyName(fname);
-                      adherentProvider.setSurname(sname);
-                      adherentProvider.setEmail(email);
-                      adherentProvider.setProfession(profession);
-                      adherentProvider.setAddress(address);
-                      adherentProvider.setCniName(cniName);
-                      userProvider.enable(true);
+                      ServiceProviderModelProvider adherentProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+                      print("$_contactNameController, $_category, $avatarUrl");
+                      adherentProvider.setAvatarUrl(avatarUrl);
+                      //adherentProvider.setFamilyName(fname);
+                      adherentProvider.setName(contactName);
                       await FirebaseFirestore.instance.collection("USERS")
-                        .doc(adherentProvider.getAdherent.getAdherentId)
+                        .doc(userProvider.getUserId)
                         .set({
+                          'createdDate': DateTime.now(),
                           "authId": FirebaseAuth.instance.currentUser.uid,
                           'emailAdress': email,
-                          'fullName': cniName,
+                          'fullName': contactName,
                           "enable": true,
                           "regionDorigione": _region,
-                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
-                          "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
+                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getServiceProvider.id),
+                          "nameKeywords": Algorithms.getKeyWords(contactName)
                         }, SetOptions(merge: true))
                         .then((value) async {
-                          await FirebaseFirestore.instance.collection("ADHERENTS")
-                            .doc(adherentProvider.getAdherent.getAdherentId)
+                          await FirebaseFirestore.instance.collection("PRESTATAIRE")
+                            .doc(userProvider.getUserId)
                             .set({
+                              "createdDate": DateTime.now(),
                               "authId": FirebaseAuth.instance.currentUser.uid,
-                              "dateCreated": DateTime.now(),
-                              "cniName": cniName,
-                              "emailAdress": email,
-                              "adresse": address,
-                              "profession": profession,
-                              "acteMariageName": cniName,
-                              "nomFamille": fname,
-                              "prenom": sname,
-                              "enabled": true,
-                              "regionDorigione": _region,
-                              "statuMatrimonialMarie": isMarried,
-                              "ville": _city == null ? adherentProvider.getAdherent.town : _city,
-                              "localisation": gpsCoords != null ? {
-                                "addresse": address,
-                                "latitude": gpsCoords["latitude"],
-                                "longitude": gpsCoords["longitude"],
-                                "altitude": 0
-                              } : {
-                                "addresse": address,
-                              },
-                                "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
-                                "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
+                              "nomEtablissement": _companyController.text.toString(),
+                              "nomCompletPContact": contactName,
+                              "emailPContact": email,
+                              "authPhoneNumber": userProvider.getUserId,
+                              "categorieEtablissement": _category,
+                              "imageUrl" : avatarUrl,
+                              "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
+                              "profil": "PRESTATAIRE",
+                              "region": adherentProvider.getServiceProvider.region,
+                              "villeEtab": adherentProvider.getServiceProvider.town,
+                              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                              "userCountryName": userProvider.getCountryName,
+                              "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                              "nameKeywords": Algorithms.getKeyWords( _companyController.text.toString())
                             }, SetOptions(merge: true))
                             .then((value) async {
-                              adherentProvider.setEnableState(true);
-                              textFieldsControl();
-                              await HiveDatabase.setRegisterState(true);
-                              HiveDatabase.setFamilyName(fname);
-                              HiveDatabase.setSurname(sname);
+                              HiveDatabase.setRegisterState(true);
+                              HiveDatabase.setAuthPhone(userProvider.getUserId);
+                              HiveDatabase.setSurname( _companyController.text.toString());
                               HiveDatabase.setImgUrl(avatarUrl);
-
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
-                              Navigator.pop(context);
                               setState(() {
                                 buttonLoading = false;
                               });
+                              
                             })
                             .catchError((e) {
                               print(e.toString());
@@ -748,28 +599,30 @@ class _ProfileEditState extends State<ProfileEdit> {
                           setState(() {
                             buttonLoading = false;
                           });
-                        })
-                        ;
+                        });
                     }
-                  },
-                ) : Loaders().buttonLoader(kPrimaryColor) :
-                CustomDisabledTextButton(
-                  text: "Mettre à Jour",
-                )
-            ,)
-          ],
-        ),
-      ),
-    );
-  }
 
-  Future getDocFromPhone(String name) async {
+                  },
+                ) : Loaders().buttonLoader(kPrimaryColor)
+            ),
+                    ]),
+                   ),
+                      ],
+                    ),
+
+                  ),
+                 ]
+              ))
+          );
+     
+  }
+   Future getDocFromPhone(String name) async {
 
     setState(() {
-      if (name == "Acte_De_Marriage") {
-        marriageCertificateSpinner = true;
-      } else if (name == "CNI"){
+      if (name == "CNI"){
         cniSpinner = true;
+      }else if (name == "CertificatEnregDor"){
+          ortherScanSpinner = false;
       } else {
         otherFileSpinner = true;
       }
@@ -783,22 +636,23 @@ class _ProfileEditState extends State<ProfileEdit> {
       setState(() {
         if (name == "CNI"){
           cniSpinner = false;
+        } else if (name == "CertificatEnregDor"){
+          ortherScanSpinner = false;
         } else {
           otherFileSpinner = false;
         }
       });
     }
   }
-
-  Future uploadDocumentToFirebase(File file, String name) async {
-    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+   Future uploadDocumentToFirebase(File file, String name) async {
+    ServiceProviderModelProvider PrestatireModelProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     if (file == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
-    Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_adherents/$adherentId/$name'); //.child('photos/profils_adherents/$fileName');
+    String adherentId = PrestatireModelProvider.getServiceProvider.id;
+    Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_prestatires/$adherentId/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
       customMetadata: {'picked-file-path': file.path}
@@ -820,30 +674,35 @@ class _ProfileEditState extends State<ProfileEdit> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name ajoutée")));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
-      if(name == "Acte_De_Marriage"){
-        adherentModelProvider.setMarriageCertificateUrl(url);
-        FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
-        .set({
-          "urlActeMariage": url,
-          "statuMatrimonialMarie": true,
-        }, SetOptions(merge: true)).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Document Sauvegardé")));
-          setState(() {
-            marriageCertificateUploaded = true;
-            marriageCertificateSpinner = false;
-          });
-        });
-      }
-      else if (name == "CNI"){
-        adherentModelProvider.setOfficialDocUrl(url);
-        FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+     
+       if (name == "CNI"){
+        PrestatireModelProvider.setCniUrl(url);
+        FirebaseFirestore.instance.collection("PRESTATAIRE")
+        .doc(PrestatireModelProvider.getServiceProvider.id)
         .set({
           "urlDocOficiel": url,
         }, SetOptions(merge: true)).then((value) {
           FirebaseFirestore.instance.collection("USERS")
-            .doc(adherentModelProvider.getAdherent.adherentId)
+            .doc(PrestatireModelProvider.getServiceProvider.id)
+            .update({
+              "urlCNI": url,
+            });
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Document Sauvegardé")));
+          setState(() {
+            cniUploaded = true;
+            cniSpinner = false;
+          });
+        });
+      }
+       else if (name == "CertificatEnregDor"){
+        PrestatireModelProvider.setOrderRegistrationCertificateUrl(url);
+        FirebaseFirestore.instance.collection("PRESTATAIRE")
+        .doc(PrestatireModelProvider.getServiceProvider.id)
+        .set({
+          "urlDocOficiel": url,
+        }, SetOptions(merge: true)).then((value) {
+          FirebaseFirestore.instance.collection("USERS")
+            .doc(PrestatireModelProvider.getServiceProvider.id)
             .update({
               "urlCNI": url,
             });
@@ -855,9 +714,9 @@ class _ProfileEditState extends State<ProfileEdit> {
         });
       }
       else {
-        adherentModelProvider.setOtherJustificativeDocsUrl(url);
-        FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+         PrestatireModelProvider.setOtherDocUrl(url);
+        FirebaseFirestore.instance.collection("PRESTATAIRE")
+        .doc(PrestatireModelProvider.getServiceProvider.id)
         .set({
           "urlAutrePiecesJustificatif": url,
         }, SetOptions(merge: true)).then((value) {
@@ -876,10 +735,74 @@ class _ProfileEditState extends State<ProfileEdit> {
     });
   }
 
-
-  Future uploadImageToFirebase(PickedFile file) async {
-
-    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+   List<String> getTownNamesFromRegion(List origin, String region){
+    List<String> target = [];
+    for(int i=0; i<origin.length; i++){
+      if (origin[i]["state_code"] == region){
+       target.add(origin[i]["value"].toString());
+      }
+    }
+    //print(target);
+    return target;
+  }
+   getImage(BuildContext context){
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext bc){
+        return SafeArea(
+          child: Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.photo_library),
+                    title: new Text('Gallerie'),
+                    onTap: () {
+                      getImageFromGallery();
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(Icons.photo_camera),
+                  title: new Text('Camera'),
+                  onTap: () {
+                    getImageFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+  Future getImageFromCamera() async {
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        imageSpinner = true;
+        imageFileAvatar = File(pickedFile.path);
+        //imageLoading = true;
+      } else {
+        print('No image selected.');
+      }
+    });
+    uploadImageToFirebase(pickedFile);
+  }
+   Future getImageFromGallery() async {
+    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
+    setState(() {
+      if (pickedFile != null) {
+        imageSpinner = true;
+        imageFileAvatar = File(pickedFile.path);
+        //imageLoading = true;
+      } else {
+        print('No image selected.');
+      }
+    });
+    uploadImageToFirebase(pickedFile);
+  }
+   Future uploadImageToFirebase(PickedFile file) async {
+     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
 
     if (file == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
@@ -914,14 +837,14 @@ class _ProfileEditState extends State<ProfileEdit> {
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       HiveDatabase.setImgUrl(url);
-      adherentModelProvider.setImgUrl(url);
+      serviceProvider.setAvatarUrl(url);
       userProvider.setImgUrl(url);
-      FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.getAdherentId)
+      FirebaseFirestore.instance.collection("USERS").doc(serviceProvider.getServiceProvider.id)
         .set({
           "imageUrl": url,
       }, SetOptions(merge: true));
-      FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+      FirebaseFirestore.instance.collection("PRESTATAIRE")
+        .doc(serviceProvider.getServiceProvider.id)
         .update({
           "imageUrl": url,
         }).then((value) {
@@ -937,77 +860,6 @@ class _ProfileEditState extends State<ProfileEdit> {
       imageLoading = false;
     });
   }
-
-  Future getImageFromGallery() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
-    setState(() {
-      if (pickedFile != null) {
-        imageSpinner = true;
-        imageFileAvatar = File(pickedFile.path);
-        //imageLoading = true;
-      } else {
-        print('No image selected.');
-      }
-    });
-    uploadImageToFirebase(pickedFile);
-  }
-
-  Future getImageFromCamera() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
-    setState(() {
-      if (pickedFile != null) {
-        imageSpinner = true;
-        imageFileAvatar = File(pickedFile.path);
-        //imageLoading = true;
-      } else {
-        print('No image selected.');
-      }
-    });
-    uploadImageToFirebase(pickedFile);
-  }
-
-  getImage(BuildContext context){
-    showModalBottomSheet(
-      context: context, 
-      builder: (BuildContext bc){
-        return SafeArea(
-          child: Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text('Gallerie'),
-                    onTap: () {
-                      getImageFromGallery();
-                      Navigator.of(context).pop();
-                    }),
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text('Camera'),
-                  onTap: () {
-                    getImageFromCamera();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-    );
-  }
-
-  List<String> getTownNamesFromRegion(List origin, String region){
-    List<String> target = [];
-    for(int i=0; i<origin.length; i++){
-      if (origin[i]["state_code"] == region){
-       target.add(origin[i]["value"].toString());
-      }
-    }
-    //print(target);
-    return target;
-  }
-
   String getRegionFromStateCode(List origin, String code){
     String region;
     for(int i=0; i<origin.length; i++){
@@ -1025,5 +877,12 @@ class _ProfileEditState extends State<ProfileEdit> {
       }
     }
     return code;
+  }
+  String _emailFieldValidator(String value) {
+    if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value)) {
+      return "Entrer une addresse email valide";
+    }
   }
 }

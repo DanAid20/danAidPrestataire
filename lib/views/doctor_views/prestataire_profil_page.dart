@@ -1,8 +1,6 @@
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
@@ -119,7 +117,9 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                   child:Container(
                     width: 105.h,
                     child: TextButton(
-                                  onPressed: ()=>{}, 
+                                  onPressed: ()=>{
+                                     Navigator.pushNamed(context, '/serviceprovider-profile-edit')
+                                  }, 
                                   child: Row(
                                     children: [
                                       SvgPicture.asset('assets/icons/Bulk/Edit Square.svg', width: 20, color: kPrimaryColor,),
@@ -286,7 +286,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                    HomePageComponents().getAvatar(
-                            imgUrl: prestatiaireObject !=null ?  prestatiaireObject.avatarUrl : '',
+                            imgUrl: prestatiaireObject.avatarUrl ,
                             size: wv * 8.3,
                             renoveIsConnectedButton: false),
                                 ],
