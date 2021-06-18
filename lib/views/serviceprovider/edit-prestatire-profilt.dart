@@ -255,7 +255,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
     return SafeArea(
       top: false,
       child: Scaffold(
-        appBar: AppBar(toolbarHeight: hv*1, automaticallyImplyLeading: false, backgroundColor: kPrimaryColor.withOpacity(0.99)),
+        appBar: AppBar(toolbarHeight: hv*1, automaticallyImplyLeading: false, backgroundColor: kGold.withOpacity(0.99)),
         body:Column(
           children: [
             Expanded(
