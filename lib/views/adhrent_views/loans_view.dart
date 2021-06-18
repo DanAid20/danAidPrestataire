@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/loanModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:danaid/widgets/advantage_card.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
@@ -21,7 +22,8 @@ class Loans extends StatefulWidget {
 }
 
 class _LoansState extends State<Loans> with TickerProviderStateMixin {
-
+  
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TabController _loanTabController;
   TextEditingController _amountController = new TextEditingController();
 
@@ -41,26 +43,34 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
     bool enable = userProvider.getUserModel.enable == null ? false : userProvider.getUserModel.enable;
 
     return Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,),
-            onPressed: ()=>Navigator.pop(context)
-          ),
-          title: Column(crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Aperçu de mon Prêt Santé", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text("Ajouter, modifier ou envoyer les pièces", 
-                style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
-              ),
-            ],
-          ),
-          centerTitle: true,
-          actions: [
-            //IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-            //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+      key: _scaffoldKey,
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,),
+          onPressed: ()=>Navigator.pop(context)
+        ),
+        title: Column(crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Aperçu de mon Prêt Santé", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text("Ajouter, modifier ou envoyer les pièces", 
+              style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
+            ),
           ],
         ),
+        centerTitle: true,
+        actions: [
+          //IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+        ],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context);},
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -263,7 +273,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                   }
                                   return snapshot.data.docs.length >= 1
                                     ? ListView.builder(
-                                        physics: NeverScrollableScrollPhysics(),
+                                        physics: BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
                                         itemCount: snapshot.data.docs.length,
@@ -280,13 +290,13 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                               date: loan.dateCreated.toDate(),
                                               firstDate: loan.firstPaymentDate.toDate(),
                                               lastDate: loan.lastPaymentDate.toDate(),
-                                              mensuality: loan.amount,
+                                              mensuality: loan.amount.toInt(),
                                               type: "gfg",
                                               state: loan.status,
                                               action: (){
-                                                /*LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
+                                                LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
                                                 loanProvider.setLoanModel(loan);
-                                                Navigator.pushNamed(context, '/loan-details');*/
+                                                Navigator.pushNamed(context, '/loan-details');
                                               }
                                             ),
                                           );

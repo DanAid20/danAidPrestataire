@@ -9,6 +9,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -20,6 +21,7 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   chatRoomList() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     var chatRoomStream = FirebaseFirestore.instance.collection("CONVERSATIONS").where("users", arrayContains: userProvider.getUserModel.authId).orderBy("lastMessageTime", descending: true).snapshots();
@@ -58,6 +60,7 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       //backgroundColor: Color(0xFF008778),
       appBar: AppBar(
         elevation: 2,
@@ -66,7 +69,14 @@ class _ChatRoomState extends State<ChatRoom> {
         title: Text("Créer un groupe", style: TextStyle(color: whiteColor),),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: (){})],
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context); Navigator.pop(context);},
       ),
       body: Column(
         children: <Widget>[

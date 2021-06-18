@@ -92,6 +92,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void modifyPoints(num val) {
+    _user.points = _user.points + val;
+    notifyListeners();
+  }
+
   void addPhone(String number, String mobileOperator, bool receivePayment) {
     
     Map newPhone = {

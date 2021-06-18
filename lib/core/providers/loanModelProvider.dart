@@ -28,6 +28,11 @@ class LoanModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  addDocUrl(String val){
+    _loan.docsUrls.add(val);
+    notifyListeners();
+  }
+
   setotherDocUrl(String val){
     _loan.otherDocUrl = val;
     notifyListeners();

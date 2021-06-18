@@ -15,6 +15,7 @@ import 'package:danaid/views/adhrent_views/adherents_plans_screen/adherent_plan_
 import 'package:danaid/views/adhrent_views/appointment_detail.dart';
 import 'package:danaid/views/adhrent_views/loans_view.dart';
 import 'package:danaid/views/adhrent_views/loan_form.dart';
+import 'package:danaid/views/adhrent_views/loan_details.dart';
 import 'package:danaid/views/adhrent_views/comparePlans.dart';
 import 'package:danaid/views/adhrent_views/contributions.dart';
 import 'package:danaid/views/intro_slides.dart';
@@ -41,6 +42,8 @@ import 'package:danaid/views/adhrent_views/adherent_card.dart';
 import 'package:danaid/views/adhrent_views/refund_form.dart';
 import 'package:danaid/views/adhrent_views/use_case_details.dart';
 import 'package:danaid/views/adhrent_views/coveragePayment.dart';
+import 'package:danaid/views/adhrent_views/productDetails.dart';
+import 'package:danaid/views/adhrent_views/partners_search_screen.dart';
 import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
@@ -75,6 +78,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/use-case": (context) => UseCaseDetails(),
   "/loans": (context) => Loans(),
   "/loan-form": (context) => LoanForm(),
+  "/loan-details": (context) => LoanDetails(),
   "/coverage-payment": (context) => CoveragePayment(),
   "/compare-plans": (context) => ComparePlans(),
   "/contributions": (context) => Contributions(),
@@ -83,6 +87,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/family-badge-page": (context) => FamilyBadgePage(),
   "/family-documents-page": (context) => FamilyDocumentsPage(),
   "/family-stats-page": (context) => FamilyStatsPage(),
+  "/product-details": (context) => ProductDetails(),
+  "/partners-search": (context) => PartnersSearchScreen(),
   //"/payment": (context) => Payment(),
 
   /**

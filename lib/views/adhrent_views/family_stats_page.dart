@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
 
   final Color barBackgroundColor = Colors.transparent;
   final Duration animDuration = const Duration(milliseconds: 250);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   int touchedIndex = -1;
 
@@ -39,6 +41,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
     AdherentModel adhr = adherentProvider.getAdherent;
     
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: kSouthSeas.withOpacity(0.3),
         leading: IconButton(
@@ -47,8 +50,15 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
         ),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kCardTextColor,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
         ],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

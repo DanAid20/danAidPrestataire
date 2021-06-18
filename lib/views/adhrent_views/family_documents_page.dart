@@ -7,6 +7,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,6 +21,7 @@ class FamilyDocumentsPage extends StatefulWidget {
 
 class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
   CarouselController carouselController = CarouselController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String description = "";
   String title = "";
   String _localPath;
@@ -27,6 +29,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: kSouthSeas.withOpacity(0.3),
         leading: IconButton(
@@ -35,8 +38,15 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
         ),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kCardTextColor,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
         ],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection("DOCUMENTS").snapshots(),

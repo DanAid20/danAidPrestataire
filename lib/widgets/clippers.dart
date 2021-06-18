@@ -104,3 +104,26 @@ class BottomNavBarBackgroundClipper extends CustomClipper<Path> {
     return true;
   } 
 }
+
+class DrawerClipper extends CustomClipper<Path> {
+
+  @override
+  getClip(Size size) {
+    double x = size.width;
+    double y = size.height;
+    return Path()
+      ..moveTo(x/10, 0)
+      ..quadraticBezierTo(x/3, y/3, x/7, y/2)
+      //..quadraticBezierTo(x/3.5, y/3, x/3.5, y/2)
+      //..quadraticBezierTo(x/3.5, y-y/1.7, x/6, y/1.3)
+      ..quadraticBezierTo(x/20, y/1.7, x/8, y/1.2)
+      ..lineTo(x/5, y)
+      ..lineTo(x, y)
+      ..lineTo(x, 0);
+  }
+
+  @override
+  bool shouldReclip(DrawerClipper oldDelegate) {
+    return true;
+  }
+}
