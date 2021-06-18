@@ -37,7 +37,10 @@ class ServiceProviderTileModelProvider with ChangeNotifier {
     _serviceProvider.category = val;
     notifyListeners();
   }
-
+   void setAbout(String val){
+    _serviceProvider.about = val;
+    notifyListeners();
+  }
   void setAvatarUrl(String val){
     _serviceProvider.avatarUrl = val;
     notifyListeners();
@@ -47,7 +50,11 @@ class ServiceProviderTileModelProvider with ChangeNotifier {
     _serviceProvider.otherDocUrl = val;
     notifyListeners();
   }
-
+  
+   void setServiceList(Map val){
+    _serviceProvider.serviceList = val;
+    notifyListeners();
+  }
   void setCniUrl(String val){
     _serviceProvider.cniUrl = val;
     notifyListeners();
@@ -78,8 +85,12 @@ class ServiceProviderTileModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setLocalisation(Map val){
+  void setLocalisation(String val){
     _serviceProvider.localisation = val;
+    notifyListeners();
+  }
+  void setcoordGps(Map val){
+    _serviceProvider.coordGps = val;
     notifyListeners();
   }
 

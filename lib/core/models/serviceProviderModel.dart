@@ -1,17 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ServiceProviderModel {
-  String id, profileType, category, name, region, town, contactName, contactEmail, authPhone, countryName, isoCountryCode, contactFunction, avatarUrl, cniUrl, orderRegistrationCertificateUrl, otherDocUrl;
+  String id, about, localisation,specialite, profileType, category, name, region, town, contactName, contactEmail, authPhone, countryName, isoCountryCode, contactFunction, avatarUrl, cniUrl, orderRegistrationCertificateUrl, otherDocUrl;
   bool profileEnabled;
   List phoneList = [], phoneKeywords, nameKeywords;
-  Map localisation;
+  var serviceList;
+  Map coordGps;
   Timestamp dateCreated;
 
-  ServiceProviderModel({this.id, this.profileType, this.category, this.phoneKeywords, this.nameKeywords, this.name, this.region, this.town, this.contactName, this.contactEmail, this.authPhone, this.countryName, this.isoCountryCode, this.contactFunction, this.localisation, this.avatarUrl, this.cniUrl, this.orderRegistrationCertificateUrl, this.otherDocUrl, this.profileEnabled, this.phoneList, this.dateCreated});
+  ServiceProviderModel({this.id, this.about,  this.specialite, this.serviceList, this.coordGps, this.profileType, this.category, this.phoneKeywords, this.nameKeywords, this.name, this.region, this.town, this.contactName, this.contactEmail, this.authPhone, this.countryName, this.isoCountryCode, this.contactFunction, this.localisation, this.avatarUrl, this.cniUrl, this.orderRegistrationCertificateUrl, this.otherDocUrl, this.profileEnabled, this.phoneList, this.dateCreated});
 
   factory ServiceProviderModel.fromDocument(DocumentSnapshot doc){
     return ServiceProviderModel(
       id: doc.id, 
+      about: doc.data()["about"],
       dateCreated: doc.data()["createdDate"],
       name: doc.data()["nomEtablissement"],
       contactName: doc.data()["nomCompletPContact"],
@@ -21,6 +23,8 @@ class ServiceProviderModel {
       avatarUrl: doc.data()["imageUrl"],
       cniUrl: doc.data()["urlScaneCNI"],
       localisation: doc.data()["localisation"],
+      specialite: doc.data()["contactFunction"],
+      coordGps: doc.data()["CoordoneeGps"],
       otherDocUrl: doc.data()["urlDautreJustificatif"],
       orderRegistrationCertificateUrl: doc.data()["urlScaneCertificatEnregDordr"],
       phoneList: doc.data()["phoneList"],
@@ -31,7 +35,8 @@ class ServiceProviderModel {
       isoCountryCode: doc.data()["userCountryCodeIso"],
       countryName: doc.data()["userCountryName"],
       phoneKeywords: doc.data()["phoneKeywords"],
-      nameKeywords: doc.data()["nameKeywords"]
+      nameKeywords: doc.data()["nameKeywords"], 
+      serviceList: doc.data()["serviceList"],
     );
   }
 }

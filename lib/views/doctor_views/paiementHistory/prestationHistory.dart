@@ -99,9 +99,11 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                 Facture lastObject= fac.last;
                 var isSolve= fac.every((element) => element.isSolve==true);
                 var ispaidalready= fac.where((element) => element.isSolve==true);
-                var notReadyispaidalready= fac.where((element) => element.isSolve==false);
-                var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null );
-                var personesReftForMonth= fac.where((element) => element.types.contains('REFERENCEMENT')==true);
+                var notReadyispaidalready= fac.where((element) => element.isSolve==false && element.canPay==1);
+                var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null && element.canPay==1 );
+                var personesConsultForMonthAll= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null  );
+                var personesReftForMonth= fac.where((element) => element.types.contains('REFERENCEMENT')==true && element.canPay==1);
+                var personesReftForMonthAll= fac.where((element) => element.types.contains('REFERENCEMENT')==true );
                 int sum=0;
                 fac.forEach((e) => sum += e.amountToPay);
                 int readyPaid=0;
@@ -124,7 +126,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                   'month': monthName[key],
                   'data': fac,
                   'patientLenght': fac.length,
-                  'paidAllReady': '${ispaidalready.length}/${personesConsultForMonth.length+personesReftForMonth.length}',
+                  'paidAllReady': '${ispaidalready.length}/${personesConsultForMonthAll.length+personesReftForMonthAll.length}',
                   'patientConsult': personesConsultForMonth.length,
                   'patientRef': personesReftForMonth.length,
                   'totlaOfMonths': readyPaidYet,

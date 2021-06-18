@@ -32,6 +32,7 @@ import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
+import 'package:danaid/views/serviceprovider/edit-prestatire-profilt.dart';
 import 'package:danaid/views/social_network_views/chatroom.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/views/social_network_views/search.dart';
@@ -109,7 +110,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
    */
 
   // Service provider routes (prestataire)
-  "/serviceprovider-profile-edit": (context) => ServiceProviderProfileEdit(),
+  "/serviceprovider-profile-edit": (context) => EditPrestataire(),
   "/serviceprovider-profile": (context) => PrestataireProfilePage(),
 
   // Social network screens
