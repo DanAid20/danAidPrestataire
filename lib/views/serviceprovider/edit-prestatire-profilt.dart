@@ -16,6 +16,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/clippers.dart';
+import 'package:danaid/widgets/doctor_service_choice_card.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -41,24 +42,39 @@ class _EditPrestataireState extends State<EditPrestataire> {
   final GlobalKey<FormState> _presptataireEditFormKey = GlobalKey<FormState>();
   TextEditingController _nameController = new TextEditingController();
   TextEditingController _surnameController = new TextEditingController();
+  TextEditingController _specialityController = new TextEditingController();
   TextEditingController _cniNameController = new TextEditingController();
+  TextEditingController _localisationController = new TextEditingController();
   TextEditingController _companyController = new TextEditingController();
   TextEditingController _contactNameController = new TextEditingController();
   TextEditingController _contactEmailController = new TextEditingController();
+   TextEditingController _aboutController = new TextEditingController();
   ////////////////////////////
   String _region;
   String _city;
   String _stateCode;
   String _category;
+  String _localisation;
   String avatarUrl;
   String cniUpload;
+  String _type;
   ////////////////////////////////
   bool nameEnabled = true;
   bool contactEnabled= true;
   bool contactEmail= true;
   bool autovalidate = false;
-  
+  bool localisation=false;
+  //////////////////
+   /** services  */
+   bool consultationChosen = false;
+  bool soinsAmbulances = false;
+  bool pharmacie = false;
+  bool labo = false;
+  bool hospitalisation = false;
+  //////////////////
+  bool aboutEnabled = true;
   bool regionChosen = false;
+  bool specialityEnabled = false;
   bool cityChosen = false;
   File imageFileAvatar;
   bool imageLoading = false;
@@ -104,7 +120,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
           "longitude": loc.longitude
         };
       });
-      servicetProvider.setLocalisation(gpsCoords);
+      servicetProvider.setcoordGps(gpsCoords);
     });
   }
 
@@ -153,11 +169,22 @@ class _EditPrestataireState extends State<EditPrestataire> {
   textFieldsControl (){
 
     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-   
+    if((serviceProvider.getServiceProvider.about != null) & (serviceProvider.getServiceProvider.about != "")){
+      setState(() {
+        _aboutController.text = serviceProvider.getServiceProvider.about;
+        aboutEnabled = false;
+      });
+    }
     if((serviceProvider.getServiceProvider.name != null) & (serviceProvider.getServiceProvider.name != "")){
       setState(() {
         _nameController.text = serviceProvider.getServiceProvider.name;
         nameEnabled = false; 
+      });
+    }
+    if((serviceProvider.getServiceProvider.avatarUrl != null) & (serviceProvider.getServiceProvider.avatarUrl != "")){
+      setState(() {
+        avatarUrl= serviceProvider.getServiceProvider.avatarUrl;
+       
       });
     }
     if((serviceProvider.getServiceProvider.contactName != null) & (serviceProvider.getServiceProvider.contactName  != "")){
@@ -177,14 +204,35 @@ class _EditPrestataireState extends State<EditPrestataire> {
        _category=serviceProvider.getServiceProvider.category;
       });
     }
+    if((serviceProvider.getServiceProvider.localisation  != null) & (serviceProvider.getServiceProvider.localisation != "")){
+      setState(() {
+        _localisationController.text=serviceProvider.getServiceProvider.localisation;
+        localisation=false;
+      });
+    }
+    if((serviceProvider.getServiceProvider.specialite  != null) & (serviceProvider.getServiceProvider.specialite != "")){
+      setState(() {
+       _specialityController.text =serviceProvider.getServiceProvider.specialite;
+      });
+    }
+    if(( serviceProvider.getServiceProvider.serviceList != "") & ( serviceProvider.getServiceProvider.serviceList != null)){
+     
+      setState(() {
+          consultationChosen = serviceProvider.getServiceProvider.serviceList["Consultation"];
+          soinsAmbulances = serviceProvider.getServiceProvider.serviceList["SoinsAmbulances"];
+          pharmacie  = serviceProvider.getServiceProvider.serviceList["Pharmacie"];
+          labo = serviceProvider.getServiceProvider.serviceList["laboratoire"];
+          hospitalisation = serviceProvider.getServiceProvider.serviceList["Hospitalisation"];
+      });
+    }
     print("inside");
-    if (serviceProvider.getServiceProvider.localisation != null){
-      //print(serviceProvider.getServiceProvider.localisation"inside+");
-      if ((serviceProvider.getServiceProvider.localisation["latitude"] != null) | (serviceProvider.getServiceProvider.localisation["longitude"] != null) | true){
+    if (serviceProvider.getServiceProvider.coordGps != null){
+      //print(serviceProvider.getServiceProvider.coordGps"inside+");
+      if ((serviceProvider.getServiceProvider.coordGps["latitude"] != null) | (serviceProvider.getServiceProvider.coordGps["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
-          "latitude": serviceProvider.getServiceProvider.localisation["latitude"],
-          "longitude": serviceProvider.getServiceProvider.localisation["longitude"]
+          "latitude": serviceProvider.getServiceProvider.coordGps["latitude"],
+          "longitude": serviceProvider.getServiceProvider.coordGps["longitude"]
         };
         print(gpsCoords.toString());
         });
@@ -296,7 +344,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         prefixIcon: Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
                         label: "Nom de l'établissement *",
                         hintText: "ex: Hôpial Centrale",
-                        controller: _companyController,
+                        controller: _nameController,
                         validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
                       ),
                       SizedBox(height: hv*2.5,),
@@ -316,6 +364,40 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         controller: _contactEmailController,
                         validator: _emailFieldValidator,
                       ),
+                      SizedBox(height: hv*2,),
+                      CustomTextField(
+                        prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
+                        label: "A propos",
+                        hintText: "Parlez brièvement de vous..",
+                        enabled: aboutEnabled,
+                        multiLine: true,
+                        controller: _aboutController,
+                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        editAction: (){
+                          setState(() {
+                            aboutEnabled = true;
+                          });
+                        },
+                      ),
+                       Column(
+                        children: [
+                          SizedBox(height: hv*2,),
+                          CustomTextField(
+                            prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
+                            label: "votre function  ",
+                            hintText: 'Pharmacien(e)',
+                            enabled: specialityEnabled,
+                            controller: _specialityController,
+                            validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                            editAction: (){
+                              setState(() {
+                                specialityEnabled = true;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: hv*2,),
                       SizedBox(height: hv*2.5,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -448,9 +530,36 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               ],
                             ),
                           ) : Container(),
-                          SizedBox(width: wv*3,),
+                          SizedBox(width: wv*3,), 
                         ],
                       ),
+                      SizedBox(height: hv*2.5,),
+                      CustomTextField(
+                        prefixIcon: Icon(Icons.location_pin, color: kDeepTeal,),
+                        keyboardType: TextInputType.emailAddress,
+                        label: "Preciser l'emplacement de l'organisation",
+                        hintText: "ex: a coté de la mobile omnisport face",
+                        controller: _localisationController,
+                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null
+                      ),
+                      SizedBox(height: hv*4,),
+                      (gpsCoords != null) | (serviceProvider.getServiceProvider.coordGps != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("GPS:", style: TextStyle(fontWeight: FontWeight.w900),),
+                            RichText(text: TextSpan(
+                              text: "Lat: ",
+                              children: [
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords["latitude"].toString() : serviceProvider.getServiceProvider.coordGps["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                TextSpan(text: "     Lng: "),
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords["longitude"].toString() : serviceProvider.getServiceProvider.coordGps["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                              ]
+                            , style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
+                            )
+                          ],
+                        ),
+                      )
+                      : Container(),
                       SizedBox(height: hv*2.5,),
                       Stack(
                         children: [
@@ -465,10 +574,10 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: serviceProvider.getServiceProvider.localisation == null ? _initialcameraposition : LatLng(serviceProvider.getServiceProvider.localisation["latitude"] != null ? serviceProvider.getServiceProvider.localisation["latitude"] : _initialcameraposition.latitude, serviceProvider.getServiceProvider.localisation["longitude"] != null ? serviceProvider.getServiceProvider.localisation["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: serviceProvider.getServiceProvider.coordGps == null ? _initialcameraposition : LatLng(serviceProvider.getServiceProvider.coordGps["latitude"] != null ? serviceProvider.getServiceProvider.coordGps["latitude"] : _initialcameraposition.latitude, serviceProvider.getServiceProvider.coordGps["longitude"] != null ? serviceProvider.getServiceProvider.coordGps["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
-                                myLocationEnabled: true,
+                               
                               ),
                             ),
                           ),
@@ -477,7 +586,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             right: wv*7,
                             child: !positionSpinner ? TextButton(
                               onPressed: _saveLocation,
-                              child: Text("Ajouter ma location", style: TextStyle(color: whiteColor),),
+                              child: Text("Ajouter ma localisation", style: TextStyle(color: whiteColor),),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))
@@ -486,7 +595,61 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           ),
                         ]),
                         SizedBox(height: hv*1.5,),
+                      
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3),
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Sélectionnez vos services", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                              SizedBox(height: hv*2,),
+                              
+                              Row(
+                                children: [
+                                  DoctorServiceChoiceCard(
+                                    service: "Consultation",
+                                    icon: "assets/icons/Bulk/Stethoscope.svg",
+                                    chosen: consultationChosen,
+                                    action: ()=> setState(() {consultationChosen = !consultationChosen;})
+                                  ),
+                                  DoctorServiceChoiceCard(
+                                    service: "Ambulances",
+                                    icon: "assets/icons/Bulk/Danger.svg",
+                                    chosen: soinsAmbulances,
+                                    action: ()=> setState(() {soinsAmbulances = !soinsAmbulances;})
+                                  ),
+                                  DoctorServiceChoiceCard(
+                                    service: "Phamarmacie",
+                                    icon: "assets/icons/Bulk/Soins.svg",
+                                    chosen: pharmacie,
+                                    action: ()=> setState(() {pharmacie = !pharmacie;})
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: hv*1,),
+                              Row(
+                                children: [
+                                  DoctorServiceChoiceCard(
+                                    service: "Laboratoire",
+                                    icon: "assets/icons/Bulk/Ordonance.svg",
+                                    chosen: labo,
+                                    action: ()=> setState(() {labo = !labo;})
+                                  ),
+                                  DoctorServiceChoiceCard(
+                                    service: "Hospitalisation",
+                                    icon: "assets/icons/Bulk/Hospitalisation.svg",
+                                    chosen: hospitalisation,
+                                    action: ()=> setState(() {hospitalisation = !hospitalisation;})
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ), 
 
+                      SizedBox(height: hv*1.5,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -501,12 +664,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                   loading: cniSpinner,
                                   action: () async {await getDocFromPhone('CNI');}
                                 ),
-                                FileUploadCard(
-                                  title: "Scan du certificat d'enregistrement a l'ordre",
-                                  state: cniUploaded,
-                                  loading: cniSpinner,
-                                  action: () async {await getDocFromPhone('CertificatEnregDor');}
-                                ),
+                               
                                 FileUploadCard(
                                   title: "Autre pièce justificative",
                                   state: otherFileUploaded,
@@ -532,15 +690,32 @@ class _EditPrestataireState extends State<EditPrestataire> {
                    
                     String contactName = _contactNameController.text;
                     String email = _contactEmailController.text;
+                    String nomEtab=_nameController.text.toString();
+                     String speciality =_specialityController.text;
+                     String localisation =_localisationController.text;
+                       String about = _aboutController.text;
                     if (_presptataireEditFormKey.currentState.validate()){
                       setState(() {
                         buttonLoading = true;
                       });
+                    
+                       Map serviceList = {
+                                "Consultation" : consultationChosen,
+                                "Pharmacie" : pharmacie,
+                                "laboratoire" : labo,
+                                "SoinsAmbulances" : soinsAmbulances,
+                                "Hospitalisation" : hospitalisation,
+                              };
                       ServiceProviderModelProvider adherentProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
                       print("$_contactNameController, $_category, $avatarUrl");
                       adherentProvider.setAvatarUrl(avatarUrl);
                       //adherentProvider.setFamilyName(fname);
+                      adherentProvider.setServiceList(serviceList);
+                      adherentProvider.setSpecialite(speciality);
                       adherentProvider.setName(contactName);
+                      adherentProvider.setcoordGps(gpsCoords);
+                      adherentProvider.setLocalisation(localisation);
+                      adherentProvider.setAbout(about);
                       await FirebaseFirestore.instance.collection("USERS")
                         .doc(userProvider.getUserId)
                         .set({
@@ -559,14 +734,26 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             .set({
                               "createdDate": DateTime.now(),
                               "authId": FirebaseAuth.instance.currentUser.uid,
-                              "nomEtablissement": _companyController.text.toString(),
+                              "nomEtablissement": nomEtab,
                               "nomCompletPContact": contactName,
                               "emailPContact": email,
+                              "about": about,
                               "authPhoneNumber": userProvider.getUserId,
                               "categorieEtablissement": _category,
                               "imageUrl" : avatarUrl,
+                              "contactFunction": speciality,
                               "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                               "profil": "PRESTATAIRE",
+                              "localisation": localisation,
+                              "CoordoneeGps": gpsCoords != null ? {
+                                "addresse": _localisationController.text,
+                                "latitude": gpsCoords["latitude"],
+                                "longitude": gpsCoords["longitude"],
+                                "altitude": 0
+                              } : {
+                                "addresse": _localisationController.text,
+                              },
+                              "serviceList": serviceList,
                               "region": adherentProvider.getServiceProvider.region,
                               "villeEtab": adherentProvider.getServiceProvider.town,
                               "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),

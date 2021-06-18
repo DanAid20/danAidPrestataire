@@ -28,17 +28,52 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
   GoogleMapController mapCardController;
   final LatLng _center = const LatLng(45.521563, -122.677433);
   bool isExpanded = false;
+  BitmapDescriptor customIcon1;
+  Set<Marker> markers;
   void _onMapCreated(GoogleMapController controller) {
     mapCardController = controller;
   }
   @override
   void initState() {
-  
+    
     // TODO: implement initState
     super.initState();
+    markers = Set.from([]);
   }
   
+  createMarker(context) {
 
+  if (customIcon1 == null) {
+
+    ImageConfiguration configuration = createLocalImageConfiguration(context);
+
+    BitmapDescriptor.fromAssetImage(configuration, 'assets/images/Location.png')
+
+        .then((icon) {
+
+      setState(() {
+
+        customIcon1 = icon;
+
+      });
+
+    });
+
+  }
+}
+  getMarkets(){
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
+     Marker f =
+
+        Marker(markerId: MarkerId('1'),
+        
+        icon: customIcon1, position: LatLng(prestataire.getServiceProvider.coordGps['latitude'], prestataire.getServiceProvider.coordGps['longitude']));
+    setState(() {
+
+          markers.add(f);
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
@@ -46,7 +81,9 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
     bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
-
+    print(prestatiaireObject.toString());
+    createMarker(context);
+    getMarkets();
    
     return WillPopScope(
       onWillPop: () async {
@@ -152,24 +189,28 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 children: [
                                   
                                   SizedBox(height: hv*1),
-                                  Row(
+                                  prestataire.getServiceProvider.serviceList==null ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(child: Container(margin: EdgeInsets.only(top:10),child:Text('Aucun Services selectioner', textScaleFactor: 1.0, style: TextStyle(color:whiteColor, fontWeight: FontWeight.w500, fontSize: 15.sp)))),
+                                  ): Container(),
+                                 prestataire.getServiceProvider.serviceList !=null? Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       getFeatureCard(title: "Services Offerts", isActifService: true),
-                                      getFeatureCard(title: "Consultations"),
-                                      getFeatureCard(title: "Soins Ambulances"),
+                                       prestataire.getServiceProvider.serviceList['Consultation'] ? getFeatureCard(title: "Consultations") : Container(),
+                                       prestataire.getServiceProvider.serviceList['SoinsAmbulances'] ? getFeatureCard(title: "Soins Ambulances") : Container(),
                                     ],
-                                  ), 
-                                  Row(
+                                  ): Container(),
+                                   prestataire.getServiceProvider.serviceList !=null? Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      getFeatureCard(title: "Pharmacie"),
-                                      getFeatureCard(title: "Labo") ,
-                                      getFeatureCard(title: "Hospitalisation") ,
+                                       prestataire.getServiceProvider.serviceList['Pharmacie'] ? getFeatureCard(title: "Pharmacie") : Container(),
+                                       prestataire.getServiceProvider.serviceList['laboratoire'] ? getFeatureCard(title: "Labo") : Container() ,
+                                       prestataire.getServiceProvider.serviceList['Hospitalisation'] ? getFeatureCard(title: "Hospitalisation") : Container() ,
                                     ],
-                                  ),
+                                    ): Container(),
                                 
                                 ],
                               ),
@@ -195,7 +236,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                         SizedBox(height: 3,),
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Text('Informed member of a project team using the PMAss method. The aim here is to understand the principles of the method, to master terminology and concept.', textScaleFactor: 1.0,
+                          child: Text(prestatiaireObject.about==null? 'RAS': prestatiaireObject.about , textScaleFactor: 1.0,
                            style: TextStyle(fontSize:14.sp ),),
                         ),
                         SizedBox(height: 2.h,),
@@ -304,11 +345,11 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                     fontWeight: FontWeight.w500,
                                   ),),
                                   SizedBox(height: 4.h,),
-                                  Text( prestatiaireObject!=null  &&  prestatiaireObject.contactFunction!=null  ? prestatiaireObject.contactFunction: 'non defini' ,
+                                  Text( prestatiaireObject!=null  &&  prestatiaireObject.specialite!=null  ? prestatiaireObject.specialite : 'non defini' ,
                                     textScaleFactor: 1.0,
                                    style: TextStyle(
                                     fontSize: 14.sp,
-                                    color: prestatiaireObject==null  &&  prestatiaireObject.contactFunction==null  ? kShadowColor : kBlueDeep,
+                                    color: prestatiaireObject==null  &&  prestatiaireObject.specialite==null  ? kShadowColor : kBlueDeep,
                                     fontWeight: FontWeight.w500,
                                   ),),
                                   SizedBox(height: 2.h,),  
@@ -347,43 +388,72 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                     ),
                   ),
                   SizedBox(height: hv*1),
+                 
                   Stack(
                     children: [
-                      Container(
-                        height: hv*25,
-                        child: GoogleMap(
+                        Container(
+                            height: hv*30,
+                            margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                            decoration: BoxDecoration(
+                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400])],
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: GoogleMap(
+                           buildingsEnabled: true,
+                           mapType: MapType.normal,
+                           mapToolbarEnabled: true,
+                           minMaxZoomPreference:MinMaxZoomPreference.unbounded ,
+                           scrollGesturesEnabled: true,
+                           zoomGesturesEnabled: true,
+                           markers: markers,  
+                         
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
-                            target: prestatiaireObject.localisation == null ? _center : LatLng(prestatiaireObject.localisation["latitude"], prestatiaireObject.localisation["longitude"]),
+                            target: prestatiaireObject.coordGps == null ? _center : LatLng(prestatiaireObject.coordGps["latitude"], prestatiaireObject.coordGps["longitude"]),
                             zoom: 11.0,
                           ),
                         ),
-                      ),
+                            ),
+                          ),
                       Positioned(
                         right: wv*3,
-                        top: hv*2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [BoxShadow(
-                              color: Colors.grey[400],
-                              spreadRadius: 1,
-                              blurRadius: 1.5,
-                              offset: Offset(0, 2)
-                            )]
-                          ),
-                          child: CircleAvatar(
-                            radius: wv*8,
-                            backgroundColor: Colors.white,
-                            child: Padding(
-                              padding: EdgeInsets.only(top: inch*1),
-                              child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
+                        bottom: hv*2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [BoxShadow(
+                                color: Colors.grey[400],
+                                spreadRadius: 1,
+                                blurRadius: 1.5,
+                                offset: Offset(0, 2)
+                              )]
+                            ),
+                            child: InkWell(
+                              onTap: ()=>{
+                                CameraPosition(
+                            target: prestatiaireObject.coordGps == null ? _center : LatLng(prestatiaireObject.coordGps["latitude"], prestatiaireObject.coordGps["longitude"]),
+                            zoom: 11.0,
+                          )
+                              },
+                              child: CircleAvatar(
+                                radius: wv*6,
+                                backgroundColor: Colors.white,
+                                child: Padding(
+                                  padding: EdgeInsets.only(top: inch*1),
+                                  child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
-                  )
+                  ),
+                   SizedBox(height: hv*10),
                 ],
               )
             ],

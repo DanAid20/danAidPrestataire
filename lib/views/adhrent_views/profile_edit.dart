@@ -766,9 +766,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   Future getDocFromPhone(String name) async {
 
     setState(() {
-      if (name == "Acte_De_Marriage") {
-        marriageCertificateSpinner = true;
-      } else if (name == "CNI"){
+       if (name == "CNI"){
         cniSpinner = true;
       } else {
         otherFileSpinner = true;
