@@ -52,6 +52,7 @@ import 'package:danaid/views/social_network_views/conversation.dart';
 import 'package:danaid/views/social_network_views/create_publication.dart';
 import 'package:danaid/views/social_network_views/create_group.dart';
 import 'package:danaid/views/social_network_views/create_group_final.dart';
+import 'package:danaid/views/social_network_views/friend_requests.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -90,6 +91,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/family-stats-page": (context) => FamilyStatsPage(),
   "/product-details": (context) => ProductDetails(),
   "/partners-search": (context) => PartnersSearchScreen(),
+  "/friend-requests": (context) => FriendRequests(),
   //"/payment": (context) => Payment(),
 
   /**

@@ -12,6 +12,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class CoveragePayment extends StatefulWidget {
@@ -20,6 +21,7 @@ class CoveragePayment extends StatefulWidget {
 }
 
 class _CoveragePaymentState extends State<CoveragePayment> {
+  static const _hoverChannel = const MethodChannel('danaid.mobile.cm/hover');
   //final HoverUssd _hoverUssd = HoverUssd();
 
   int om = 1;
@@ -43,6 +45,22 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     print(res.toString()+": vaall");
     print("Doonnneee");
   }*/
+
+  Future<dynamic> sendMoney(String phoneNumber, amount) async {
+      var sendMap = <String, dynamic>{
+        'phoneNumber': "658112605",
+        'amount': amount,
+      };
+  // vide en attendant le code JAVA
+  String response = "";
+    try {
+      final String result = await  _hoverChannel.invokeMethod('sendMoney',sendMap);
+      response = result;
+    } on PlatformException catch (e) {
+      response = "Failed to Invoke: '${e.message}'.";
+    }
+  return response;
+  }
 
   @override
   Widget build(BuildContext context) {

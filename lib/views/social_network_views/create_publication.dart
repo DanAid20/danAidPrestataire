@@ -24,6 +24,10 @@ import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
 class CreatePublication extends StatefulWidget {
+  final String groupId;
+
+  const CreatePublication({Key key, this.groupId}) : super(key: key);
+
   @override
   _CreatePublicationState createState() => _CreatePublicationState();
 }
@@ -31,6 +35,7 @@ class CreatePublication extends StatefulWidget {
 class _CreatePublicationState extends State<CreatePublication> {
   GlobalKey<AutoCompleteTextFieldState<String>> pubAutoCompleteKey = new GlobalKey();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  TextEditingController titleController = new TextEditingController();
   TextEditingController textController = new TextEditingController();
   TextEditingController tagController = new TextEditingController();
   TextEditingController amountController = new TextEditingController();
@@ -42,7 +47,6 @@ class _CreatePublicationState extends State<CreatePublication> {
   File imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
   bool imageSpinner = false;
 
   String currentSymptomText = "";
@@ -206,6 +210,16 @@ class _CreatePublicationState extends State<CreatePublication> {
                         ),
                       ),
                     ),
+
+                    CustomTextField(
+                      label: " Titre",
+                      fillColor: Colors.grey[200],
+                      labelColor: kDeepTeal,
+                      noPadding: true,
+                      controller: titleController
+                    ),
+
+                    SizedBox(height: hv*2.5,),
                     
                     TextField(
                       minLines: 5,
@@ -368,6 +382,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                               "dateline-date": pubType == 2 ? selectedDate : null,
                               "amount-collected": pubType == 2 ? 0.0 : null,
                               "imgUrl": url,
+                              "title": titleController.text,
                               "imgList": []
                             };
                             if (imageFileAvatar != null) {
@@ -446,10 +461,11 @@ class _CreatePublicationState extends State<CreatePublication> {
   }
 
   publish({String id, Map input}) async {
+    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(id + "-" + DateTime.now().toString());
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS").doc(id + "-" + DateTime.now().toString());
+    DocumentReference docRef = widget.groupId == null ? normalRef : groupRef;
     try {
-      await FirebaseFirestore.instance.collection("POSTS")
-        .doc(id + "-" + DateTime.now().toString())
-        .set(input, SetOptions(merge: true))
+      await docRef.set(input, SetOptions(merge: true))
         .catchError((e){
           print(e.toString());
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));

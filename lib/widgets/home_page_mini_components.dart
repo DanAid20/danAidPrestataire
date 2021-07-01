@@ -957,13 +957,14 @@ class HomePageComponents {
     );
   }
 
-  getProfileStat({String imgUrl, String title, int occurence}) {
+  getProfileStat({String imgUrl, String title, int occurence, Color color = primaryColor}) {
     return Row(children: [
       Container(
         margin: EdgeInsets.only(right: wv * 1),
         child: SvgPicture.asset(
           imgUrl,
           width: wv * 7,
+          color: color,
         ),
       ),
       Column(

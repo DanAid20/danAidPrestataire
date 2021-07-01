@@ -702,6 +702,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     setState(() {
       confirmSpinner = true;
     });
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     DoctorTileModelProvider doctor = Provider.of<DoctorTileModelProvider>(context, listen: false);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
@@ -710,6 +711,9 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       .set({
         "familyDoctorId": doctor.getDoctor.id,
       }, SetOptions(merge: true)).then((value) {
+        FirebaseFirestore.instance.collection("USERS").doc(doctor.getDoctor.id).set({'friends': FieldValue.arrayUnion([adherentModelProvider.getAdherent.adherentId])}, SetOptions(merge: true));
+        FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.adherentId).set({'friends': FieldValue.arrayUnion([doctor.getDoctor.id])}, SetOptions(merge: true));
+        userProvider.addFriend(doctor.getDoctor.id);
         setState(() {
           confirmSpinner = false;
         });

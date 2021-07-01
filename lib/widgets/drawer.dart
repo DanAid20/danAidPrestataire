@@ -80,10 +80,15 @@ class DefaultDrawer extends StatelessWidget {
                           },
                         ),
                         ListTile(
+                          leading: SvgPicture.asset("assets/icons/Bulk/HeartOutline.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
+                          title: Text("Demandes d'amitiés", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          onTap: ()=>Navigator.pushNamed(context, '/friend-requests'),
+                        ),
+                        ListTile(
                           leading: SvgPicture.asset("assets/icons/Two-tone/InfoSquare.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
                           title: Text("Conditions\nd'utilisation", style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
-                        ),
+                        )
                       ],
                     ),
                   ),

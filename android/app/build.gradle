@@ -67,7 +67,7 @@ android {
         prod {
             dimension "my-flavor"
             applicationId "com.danaid.danaidmobile"
-            versionCode 210020005
+            versionCode 210020010
             versionName "2.0.1-alpha"
         }
     }
@@ -102,4 +102,5 @@ dependencies {
     //iplementation 'com.google.firebase: firebase-messaging-ktx'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.browser:browser:1.3.0'
+    //implementation ('com.hover:android-sdk:1.7.2') { transitive = true; }
 }
