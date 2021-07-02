@@ -42,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacementNamed(context, '/home');
     }
     else {
-      Navigator.pushReplacementNamed(context, '/intro-view');
+      Navigator.pushReplacementNamed(context, '/intro-slides');
     }
     //return true;
     /*{

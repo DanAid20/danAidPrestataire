@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
+import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
@@ -13,6 +15,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/utils.dart';
+import 'package:danaid/views/doctor_views/appointement_approuve.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -56,14 +59,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
   String getRandomString(int length) {
     const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     Random _rnd = Random();
     var result = String.fromCharCodes(Iterable.generate(
         length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
     return 'YM' + result;
   }
 
-  Future<String> createConsultationCode(QueryDocumentSnapshot adherent) async {
+  Future<String> createConsultationCode(QueryDocumentSnapshot adherent, String idAppointemnt) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
 
@@ -75,6 +78,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'beneficiaryId': adherent['beneficiaryId'],
       'beneficiaryName': adherent['username'],
       'otherInfo': '',
+      'idAppointement': idAppointemnt,
       'establishment': doctorProvider.getDoctor.officeName,
       'consultationCode': code,
       'type': adherent['appointment-type'],
@@ -102,7 +106,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return newUseCase.id;
   }
 
-  facturationCode(id, adherent) async {
+  facturationCode(id, adherent, idAppointemnt) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
     await FirebaseFirestore.instance
@@ -117,6 +121,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'idMedecin': doctorProvider.getDoctor.id,
       'amountToPay': doctorProvider.getDoctor.rate['public'],
       'isSolve': false,
+      'canPay': 0,
+      'idAppointement': idAppointemnt,
       'Type': adherent['appointment-type'],
       'createdAt': DateTime.now(),
     }, SetOptions(merge: true)).then((value) {
@@ -225,7 +231,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           return HomePageComponents().waitingRoomListOfUser(
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
-                              syntomes: '${doc.data()["title"]}');
+                              syntomes: '${doc.data()["title"]}', 
+                              isanounced: doc.data()["announced"]);
+                              
                         }
                         return Center(
                           child: CircularProgressIndicator(
@@ -276,9 +284,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         .update({
                       "status": 1,
                     }).then((value) async {
-                      await createConsultationCode(docSnapshot.docs[0])
+                      await createConsultationCode(docSnapshot.docs[0], docSnapshot.docs[0].id)
                           .then((value) async {
-                        await facturationCode(value, docSnapshot.docs[0]);
+                        await facturationCode(value, docSnapshot.docs[0], docSnapshot.docs[0].id);
                       });
                     }).then((value) {
                       Navigator.pop(context);
@@ -331,6 +339,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     AppointmentModelProvider rendezVous = Provider.of<AppointmentModelProvider>(context);
     AppointmentModel appointmentModel;
+     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
+    AdherentModel adherent = adherentModelProvider.getAdherent;
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -381,13 +391,19 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
                                 rendezVous.setAppointmentModel(appointmentModel),
+                                rendezVous.getAppointment.adherentId=snapshot.data.id,
                                 rendezVous.getAppointment.avatarUrl=data["imageUrl"],
                                 rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
                                 rendezVous.getAppointment.birthDate=data["dateNaissance"],
                                 
-                                   Navigator.of(context).pushNamed('/appointment-apointement')
+                                Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AppointmentDetails(adherent: adherent),
+                                      ),)
                                   
                                 },
+                                
                                 child: HomePageComponents().timeline(
                                 isanounced: doc.data()["announced"],
                                 adhrentId: doc.data()["adherentId"],

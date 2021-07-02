@@ -13,6 +13,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -489,19 +490,8 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                     ),
                   ),
                   SizedBox(height: hv*1,),
-                  CheckboxListTile(
-                    tristate: false,
-                    title: Row(children: [
-                      Text("Lu et accepté les "),
-                      InkWell(child: Text("termes des services", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline,)), 
-                        onTap: (){
-                          showDialog(context: context, 
-                          builder: (BuildContext context){
-                            return termsAndConditionsDialog();
-                          }
-                          );
-                        },)
-                    ],),
+                  HomePageComponents.termsAndConditionsTile(
+                    action: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
                     value: _serviceTermsAccepted,
                     activeColor: primaryColor,
                     onChanged: (newValue) {
@@ -509,7 +499,6 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                         _serviceTermsAccepted = newValue;
                       });
                     },
-                    controlAffinity: ListTileControlAffinity.leading,
                   ),
                 ],
               ),

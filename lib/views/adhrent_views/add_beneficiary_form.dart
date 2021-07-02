@@ -12,6 +12,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/health_book_screen.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -36,6 +37,7 @@ class AddBeneficiaryForm extends StatefulWidget {
 
 class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
   TextEditingController _familynameController = new TextEditingController();
   TextEditingController _surnameController = new TextEditingController();
@@ -110,6 +112,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         return null;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           leading: IconButton(
@@ -124,9 +127,16 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           title: Text("Ajouter un bénéficiaire  ", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w500),),
           centerTitle: true,
           actions: [
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: (){})
+            //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), onPressed: (){}),
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
           ],
+        ),
+        endDrawer: DefaultDrawer(
+          entraide: (){Navigator.pop(context); Navigator.pop(context);},
+          accueil: (){Navigator.pop(context); Navigator.pop(context);},
+          carnet: (){Navigator.pop(context); Navigator.pop(context);},
+          partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+          famille: (){Navigator.pop(context); Navigator.pop(context);},
         ),
         body: SafeArea(
           child: Container(

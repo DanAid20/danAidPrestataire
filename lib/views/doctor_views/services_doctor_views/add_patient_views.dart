@@ -67,6 +67,7 @@ class _AddPatientViewState extends State<AddPatientView> {
   String phoneCode = "237";
   //only for choose type of consultaion
   int currentItemSelect = 0;
+  int price = 0;
   String consultationTypeData;
   String encabinet = "EnCabinet";
   String videos = "Video";
@@ -131,7 +132,6 @@ class _AddPatientViewState extends State<AddPatientView> {
               });
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("cet adherent n'existe pas ")));
-
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -188,7 +188,7 @@ class _AddPatientViewState extends State<AddPatientView> {
       String typedeConsultation}) {
     return GestureDetector(
       onTap: () {
-        setconsultationType(typedeConsultation, index);
+        setconsultationType(typedeConsultation,  index);
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -420,9 +420,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                         index: 1,
                                         consultation: 'consultation',
                                         consultationType: 'En cabinet',
-                                        price: doctor.getDoctor.rate['public']
-                                                .toString() +
-                                            ' FCFA',
+                                        price: '2000 FCFA',
                                         typedeConsultation: encabinet),
                                     offerPart(
                                         index: 2,

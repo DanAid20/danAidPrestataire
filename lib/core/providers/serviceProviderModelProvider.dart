@@ -37,12 +37,24 @@ class ServiceProviderModelProvider with ChangeNotifier {
     _serviceProvider.category = val;
     notifyListeners();
   }
+  void setAbout(String val){
+    _serviceProvider.about = val;
+    notifyListeners();
+  }
 
   void setAvatarUrl(String val){
     _serviceProvider.avatarUrl = val;
     notifyListeners();
   }
-
+ 
+  void setServiceList(Map val){
+    _serviceProvider.serviceList = val;
+    notifyListeners();
+  }
+   void setSpecialite(String val){
+    _serviceProvider.specialite = val;
+    notifyListeners();
+  }
   void setOtherDocUrl(String val){
     _serviceProvider.otherDocUrl = val;
     notifyListeners();
@@ -78,8 +90,12 @@ class ServiceProviderModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setLocalisation(Map val){
+  void setLocalisation(String val){
     _serviceProvider.localisation = val;
+    notifyListeners();
+  }
+  void setcoordGps(Map val){
+    _serviceProvider.coordGps = val;
     notifyListeners();
   }
 

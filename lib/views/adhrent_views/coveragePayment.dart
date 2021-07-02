@@ -12,6 +12,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class CoveragePayment extends StatefulWidget {
@@ -20,6 +21,7 @@ class CoveragePayment extends StatefulWidget {
 }
 
 class _CoveragePaymentState extends State<CoveragePayment> {
+  static const _hoverChannel = const MethodChannel('danaid.mobile.cm/hover');
   //final HoverUssd _hoverUssd = HoverUssd();
 
   int om = 1;
@@ -43,6 +45,22 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     print(res.toString()+": vaall");
     print("Doonnneee");
   }*/
+
+  Future<dynamic> sendMoney(String phoneNumber, amount) async {
+      var sendMap = <String, dynamic>{
+        'phoneNumber': "658112605",
+        'amount': amount,
+      };
+  // vide en attendant le code JAVA
+  String response = "";
+    try {
+      final String result = await  _hoverChannel.invokeMethod('sendMoney',sendMap);
+      response = result;
+    } on PlatformException catch (e) {
+      response = "Failed to Invoke: '${e.message}'.";
+    }
+  return response;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +492,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
               text: "Confirmer",
               //enable: choice != null,
               action: (){
-                _confirm();
+                _confirm(context);
                 /*
                 Random random = new Random();
                 if(invoice.paid == false){
@@ -643,7 +661,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     );
   }
 
-  _confirm (){
+  _confirm (BuildContext context){
     showDialog(context: context,
       builder: (BuildContext context){
         return Dialog(
@@ -676,7 +694,6 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                           setState(() {
                             spinner2 = true;
                           });
-                          Navigator.pop(context);
 
                           PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
                           AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
@@ -787,6 +804,11 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                             "paymentDate": DateTime.now(),
                             "paid": true
                           }).then((doc) {
+
+                            
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous serez recontactés pour confirmation..",)));
+                            Navigator.pop(context);
+                            
                             if(invoice.inscriptionId != null){
                               FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).update({
                                 "paymentDate": DateTime.now(),
@@ -797,10 +819,6 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                             /*!adherentProvider.getAdherent.havePaid ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(plan.id).update({
                               "paymentDate": DateTime.now(),
                             }) : print("Il a payé");*/
-
-                            
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous serez recontactés pour confirmation..",)));
-                            Navigator.pop(context);
 
                             if(adherentProvider.getAdherent.havePaid == false){
                               FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({

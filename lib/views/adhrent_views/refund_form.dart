@@ -9,6 +9,7 @@ import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/streams.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -29,6 +30,7 @@ class RefundForm extends StatefulWidget {
 class _RefundFormState extends State<RefundForm> {
   final TextEditingController _consultationCodeController = TextEditingController();
   final TextEditingController _establishmentController = TextEditingController();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool healthBookUploaded = false;
   bool receiptUploaded = false;
@@ -53,25 +55,33 @@ class _RefundFormState extends State<RefundForm> {
     BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context);
     DateTime date = DateTime.now();
     return Scaffold(
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
-            onPressed: ()=>Navigator.pop(context)
-          ),
-          title: Column(crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("Démande de remboursement", style: TextStyle(color: kTextBlue, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text(DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString() ,style: TextStyle(color: kTextBlue.withOpacity(0.75), fontSize: wv*3.8, fontWeight: FontWeight.w300),
-              ),
-            ],
-          ),
-          centerTitle: true,
-          actions: [
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+      key: _scaffoldKey,
+      backgroundColor: Colors.grey[100],
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
+          onPressed: ()=>Navigator.pop(context)
+        ),
+        title: Column(crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text("Démande de remboursement", style: TextStyle(color: kTextBlue, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString() ,style: TextStyle(color: kTextBlue.withOpacity(0.75), fontSize: wv*3.8, fontWeight: FontWeight.w300),
+            ),
           ],
         ),
+        centerTitle: true,
+        actions: [
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+        ],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context);},
+      ),
       body: Container(
         margin: EdgeInsets.only(top: hv*2),
         child: Column(
@@ -90,6 +100,7 @@ class _RefundFormState extends State<RefundForm> {
                 padding: EdgeInsets.symmetric(horizontal: wv*4),
                 color: whiteColor,
                 child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -224,24 +235,25 @@ class _RefundFormState extends State<RefundForm> {
               child: CustomTextButton(
                 text: "Envoyer",
                 isLoading: buttonLoading,
-                enable: _consultationCodeController.text.isNotEmpty && _establishmentController.text.isNotEmpty && _circumstance != null && receiptUrl != null && selectedDate != null && beneficiary.getBeneficiary.matricule != null,
+                enable: _establishmentController.text.isNotEmpty && _circumstance != null && receiptUrl != null && selectedDate != null && beneficiary.getBeneficiary.matricule != null,
                 action: (){
                   setState(() {
                     buttonLoading = true;
                   });
                   AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
-                  FirebaseFirestore.instance.collection("REMBOURSEMENTS")
-                    .doc(FirebaseAuth.instance.currentUser.uid+"-"+DateTime.now().toString())
-                    .set({
+                  FirebaseFirestore.instance.collection("USECASES")
+                    .add({
                       "adherentId": adherentModel.getAdherent.getAdherentId,
-                      "matricule": beneficiary.getBeneficiary.matricule,
-                      "nomDFamille" : beneficiary.getBeneficiary.familyName,
-                      "prenom": beneficiary.getBeneficiary.surname,
+                      "beneficiaryId": beneficiary.getBeneficiary.matricule,
+                      "idAppointement": null,
+                      //"nomDFamille" : beneficiary.getBeneficiary.familyName,
+                      "beneficiaryName": beneficiary.getBeneficiary.surname + " " + beneficiary.getBeneficiary.familyName,
                       "phoneNumber": beneficiary.getBeneficiary.phoneList[0]["number"],
                       "urlImage": beneficiary.getBeneficiary.avatarUrl,
-                      "statut": 0,
-                      "codeDeConsultation": _consultationCodeController.text,
-                      "etablissement": _establishmentController.text,
+                      "status": 0,
+                      "enable": false,
+                      "consultationCode": _consultationCodeController.text,
+                      "establishment": _establishmentController.text,
                       "dateDeDebut": selectedDate,
                       "circonstance": _circumstance,
                       "urlCarnet": healthBookUrl,
@@ -249,7 +261,7 @@ class _RefundFormState extends State<RefundForm> {
                       "urlResultatExamen": examResultUrl,
                       "urlAutrePiece": otherFileUrl,
                       "createdDate": DateTime.now()
-                    }, SetOptions(merge: true)).then((value) {
+                    }).then((value) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Démande de remboursement enrégistrée'),));
                       setState(() {
                         buttonLoading = false;

@@ -8,9 +8,10 @@ class FileUploadCard extends StatelessWidget {
   final String title;
   final bool state;
   final bool loading;
+  final bool isMultiple;
   final Function action;
 
-  const FileUploadCard({Key key, this.title, this.state, this.action, this.loading}) : super(key: key);
+  const FileUploadCard({Key key, this.title, this.state, this.action, this.loading, this.isMultiple = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class FileUploadCard extends StatelessWidget {
               CircleAvatar(
                 backgroundColor: state ? kDeepTeal : Colors.red[400],
                 child: Icon(
-                  state ? LineIcons.file : LineIcons.times, 
+                  state ? isMultiple ? LineIcons.medicalFile : LineIcons.file : LineIcons.times, 
                   color: Colors.white,
               )),
               SizedBox(width: wv*3,),
@@ -44,7 +45,7 @@ class FileUploadCard extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(kPrimaryColor),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
             ),
-            child: Text(state ? "Remplacer" : "Ajouter", style: TextStyle(color: Colors.white),)) : 
+            child: Text(state && !isMultiple ? "Remplacer" : "Ajouter", style: TextStyle(color: Colors.white),)) : 
             Padding(
               padding: EdgeInsets.all(4.0),
               child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),

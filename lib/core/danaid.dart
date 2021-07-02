@@ -4,6 +4,7 @@ import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/routes.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/status_bar.dart';
+import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/theme.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class Danaid extends StatelessWidget {
    
   @override
   Widget build(BuildContext context) {
+    
     statusBar.setColor(context: context);
     Intl.defaultLocale = "fr_FR";
     return MultiProvider(
@@ -109,7 +111,7 @@ class Danaid extends StatelessWidget {
               ),
             ],
             child: ScreenUtilInit(
-                 builder: () => MaterialApp(
+                builder: () => MaterialApp(
                 title: Strings.APP_NAME,
                 theme: theme(),
                 debugShowCheckedModeBanner: false,

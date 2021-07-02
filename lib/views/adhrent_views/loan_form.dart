@@ -74,6 +74,10 @@ class _LoanFormState extends State<LoanForm> {
   bool otherFileUploaded = false;
   bool carnetSpinner = false;
   bool otherFileSpinner = false;
+
+  int docsUploaded = 0;
+  bool docUploaded = false;
+  bool docSpinner = false;
   
   @override
   void initState() {
@@ -261,8 +265,40 @@ class _LoanFormState extends State<LoanForm> {
                               value: _duration,
                               items: [
                                 DropdownMenuItem(
+                                  child: Text("3 mois (3 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 3,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("4 mois (4 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 4,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("5 mois (5 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 5,
+                                ),
+                                DropdownMenuItem(
                                   child: Text("6 mois (6 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 6,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("7 mois (7 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 7,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("8 mois (8 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 8,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("9 mois (9 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 9,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("10 mois (10 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 10,
+                                ),
+                                DropdownMenuItem(
+                                  child: Text("11 mois (11 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  value: 11,
                                 ),
                                 DropdownMenuItem(
                                   child: Text("12 mois (12 paiements)", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
@@ -329,7 +365,17 @@ class _LoanFormState extends State<LoanForm> {
                     loading: otherFileSpinner,
                     action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
-                  SizedBox(height: hv*2,),
+                  SizedBox(height: hv*4,),
+                  Text("Pièces supplémentaires multiples", style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  SizedBox(height: hv*1.5,),
+                  FileUploadCard(
+                    title: "Documents multiples ($docsUploaded)",
+                    state: docUploaded,
+                    isMultiple: true,
+                    loading: docSpinner,
+                    action: () async {await getDocFromGallery('doc');}
+                  ),
+                  SizedBox(height: hv*3,),
                 ],
               ),
             ),
@@ -370,159 +416,167 @@ class _LoanFormState extends State<LoanForm> {
     return Container(
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.only(bottom: hv*1.5),
-            decoration: BoxDecoration(
-              color: kBrownCanyon.withOpacity(0.3),
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-            ),
-            child: Column(
-              children: [
-                HomePageComponents.header(label: "Demandeur", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
-              ],
-          )),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Source de revenues", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
-                    SizedBox(height: hv*2,),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+              //physics: BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(bottom: hv*1.5),
+                    decoration: BoxDecoration(
+                      color: kBrownCanyon.withOpacity(0.3),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                    ),
+                    child: Column(
                       children: [
-                        Expanded(
-                          child: CustomTextField(
-                            label: "Revenue mensuel",
-                            labelColor: kTextBlue,
-                            noPadding: true,
-                            controller: _salaryController,
-                            keyboardType: TextInputType.number,
-                            suffixIcon: Text("f."),
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
-                            ],
-                            onChanged: (val)=>setState((){}),
-                          ),
-                        ),
-                        SizedBox(width: wv*3,),
-                        Expanded(
-                          child: CustomDropDownButton(
-                            label: "Etes vous salarié ?",
-                            value: _isSalaryMan,
-                            items: [
-                                  DropdownMenuItem(
-                                    child: Text("Oui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                    value: true,
+                        HomePageComponents.header(label: "Demandeur", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                      ],
+                  )),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+                    child: Column(
+                      children: [
+                        Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Source de revenues", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+                            SizedBox(height: hv*2,),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Expanded(
+                                  child: CustomTextField(
+                                    label: "Revenue mensuel",
+                                    labelColor: kTextBlue,
+                                    noPadding: true,
+                                    controller: _salaryController,
+                                    keyboardType: TextInputType.number,
+                                    suffixIcon: Text("f."),
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+                                    ],
+                                    onChanged: (val)=>setState((){}),
                                   ),
-                                  DropdownMenuItem(
-                                    child: Text("Non", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: false,
+                                ),
+                                SizedBox(width: wv*3,),
+                                Expanded(
+                                  child: CustomDropDownButton(
+                                    label: "Etes vous salarié ?",
+                                    value: _isSalaryMan,
+                                    items: [
+                                          DropdownMenuItem(
+                                            child: Text("Oui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                            value: true,
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text("Non", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                            value: false,
+                                          ),
+                                    ],
+                                    onChanged: (val)=>setState((){_isSalaryMan = val;}),
                                   ),
-                            ],
-                            onChanged: (val)=>setState((){_isSalaryMan = val;}),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(height: hv*2,),
-                    CustomTextField(
-                      label: "Employeur",
-                      labelColor: kTextBlue,
-                      noPadding: true,
-                      controller: _employerController,
-                      onChanged: (val)=>setState((){}),
-                    ),
-                    SizedBox(height: hv*2,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("Téléphone", style: TextStyle(fontSize: 16, color: kTextBlue)),
-                        SizedBox(height: 5,),
-                        InternationalPhoneNumberInput(
-                          validator: (String phone) {
-                            return null;
-                          },
-                          onInputChanged: (PhoneNumber number) {
-                            phone = number.phoneNumber;
-                            setState((){});
-                            print(number.phoneNumber);
-                          },
-                          onInputValidated: (bool value) {
-                            print(value);
-                          },
-                          spaceBetweenSelectorAndTextField: 0,
-                          selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
-                          ignoreBlank: false,
-                          textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
-                          autoValidateMode: AutovalidateMode.disabled,
-                          selectorTextStyle: TextStyle(color: Colors.black),
-                          initialValue: number,
-                          textFieldController: _phoneController,
-                          formatInput: true,
-                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                          inputDecoration: defaultInputDecoration(),
-                          onSaved: (PhoneNumber number) {
-                            print('On Saved: $number');
-                          }, 
+                                )
+                              ],
+                            ),
+                            SizedBox(height: hv*2,),
+                            CustomTextField(
+                              label: "Employeur",
+                              labelColor: kTextBlue,
+                              noPadding: true,
+                              controller: _employerController,
+                              onChanged: (val)=>setState((){}),
+                            ),
+                            SizedBox(height: hv*2,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Téléphone", style: TextStyle(fontSize: 16, color: kTextBlue)),
+                                SizedBox(height: 5,),
+                                InternationalPhoneNumberInput(
+                                  validator: (String phone) {
+                                    return null;
+                                  },
+                                  onInputChanged: (PhoneNumber number) {
+                                    phone = number.phoneNumber;
+                                    setState((){});
+                                    print(number.phoneNumber);
+                                  },
+                                  onInputValidated: (bool value) {
+                                    print(value);
+                                  },
+                                  spaceBetweenSelectorAndTextField: 0,
+                                  selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
+                                  ignoreBlank: false,
+                                  textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                                  autoValidateMode: AutovalidateMode.disabled,
+                                  selectorTextStyle: TextStyle(color: Colors.black),
+                                  initialValue: number,
+                                  textFieldController: _phoneController,
+                                  formatInput: true,
+                                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                                  inputDecoration: defaultInputDecoration(),
+                                  onSaved: (PhoneNumber number) {
+                                    print('On Saved: $number');
+                                  }, 
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: hv*2,),
+                            CheckboxListTile(
+                              title: Text("Souhaitez vous avoir un avaliste ?", style: TextStyle(fontSize: 16, color: kBlueDeep)),
+                              subtitle: Text("Votre époux(se) est de facto solidaire de votre crédit, vous pouvez avoir un avaliste supplémentaitre.", style: TextStyle(fontSize: 13, color: kTextBlue)),
+                              activeColor: kSouthSeas,
+                              value: _avalist, 
+                              onChanged: (val)=>setState((){_avalist = val;})
+                            ),
+
+                            _avalist ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: hv*2,),
+                                CustomTextField(
+                                  labelColor: kTextBlue,
+                                  label: "Nom de l'avaliste",
+                                  noPadding: true,
+                                  controller: _avalistNameController,
+                                  onChanged: (val)=>setState((){}),
+                                ),
+
+                                SizedBox(height: hv*2,),
+
+                                Text("Téléphone", style: TextStyle(fontSize: 16, color: kTextBlue),),
+                                SizedBox(height: hv*1,),
+                                InternationalPhoneNumberInput(
+                                  validator: (String phone) {
+                                    return null;
+                                  },
+                                  onInputChanged: (PhoneNumber number) {
+                                    avalistPhone = number.phoneNumber;
+                                    setState((){});
+                                    print(number.phoneNumber);
+                                  },
+                                  onInputValidated: (bool value) {
+                                    print(value);
+                                  },
+                                  spaceBetweenSelectorAndTextField: 0,
+                                  selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
+                                  ignoreBlank: false,
+                                  textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                                  autoValidateMode: AutovalidateMode.disabled,
+                                  selectorTextStyle: TextStyle(color: Colors.black),
+                                  initialValue: number,
+                                  textFieldController: _avalistPhoneController,
+                                  formatInput: true,
+                                  keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                                  inputDecoration: defaultInputDecoration(),
+                                ),
+                              ],
+                            ) : Container()
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: hv*2,),
-                    CheckboxListTile(
-                      title: Text("Souhaitez vous avoir un avaliste ?", style: TextStyle(fontSize: 16, color: kBlueDeep)),
-                      subtitle: Text("Votre époux(se) est de facto solidaire de votre crédit, vous pouvez avoir un avaliste supplémentaitre.", style: TextStyle(fontSize: 13, color: kTextBlue)),
-                      activeColor: kSouthSeas,
-                      value: _avalist, 
-                      onChanged: (val)=>setState((){_avalist = val;})
-                    ),
-
-                    _avalist ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: hv*2,),
-                        CustomTextField(
-                          labelColor: kTextBlue,
-                          label: "Nom de l'avaliste",
-                          noPadding: true,
-                          controller: _avalistNameController,
-                          onChanged: (val)=>setState((){}),
-                        ),
-
-                        SizedBox(height: hv*2,),
-
-                        Text("Téléphone", style: TextStyle(fontSize: 16, color: kTextBlue),),
-                        SizedBox(height: hv*1,),
-                        InternationalPhoneNumberInput(
-                          validator: (String phone) {
-                            return null;
-                          },
-                          onInputChanged: (PhoneNumber number) {
-                            avalistPhone = number.phoneNumber;
-                            setState((){});
-                            print(number.phoneNumber);
-                          },
-                          onInputValidated: (bool value) {
-                            print(value);
-                          },
-                          spaceBetweenSelectorAndTextField: 0,
-                          selectorConfig: SelectorConfig(selectorType: PhoneInputSelectorType.BOTTOM_SHEET,),
-                          ignoreBlank: false,
-                          textStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
-                          autoValidateMode: AutovalidateMode.disabled,
-                          selectorTextStyle: TextStyle(color: Colors.black),
-                          initialValue: number,
-                          textFieldController: _avalistPhoneController,
-                          formatInput: true,
-                          keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                          inputDecoration: defaultInputDecoration(),
-                        ),
-                      ],
-                    ) : Container()
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -555,14 +609,15 @@ class _LoanFormState extends State<LoanForm> {
 
   getForm3(){
     DateTime now = DateTime.now();
+    DateTime nextMonth = DateTime(DateTime.now().year, DateTime.now().month+1, 1);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
     LoanModel loan = loanProvider.getLoan;
     AdherentModel adh = adherentProvider.getAdherent;
     int mensuality = Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan.amount, rate: adherentProvider.getAdherent.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt();
     num totalToPay = mensuality * _duration;
-    DateTime firstPaymentDate = DateTime(now.year, now.month + 1, now.day);
-    DateTime lastPaymentDate = DateTime(now.year, now.month + _duration, now.day);
+    DateTime firstPaymentDate = DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
+    DateTime lastPaymentDate = DateTime(nextMonth.year, nextMonth.month + _duration, nextMonth.day);
     return Column(
       children: [
         Expanded(
@@ -711,8 +766,23 @@ class _LoanFormState extends State<LoanForm> {
                         "purpose": _purposeController.text,
                         "docUrl": loan.carnetUrl,
                         "otherDocUrl": loan.otherDocUrl,
+                        "docsUrls": loan.docsUrls,
                         "status": 0
-                      }).then((value) {
+                      })
+                      .then((loanDoc) {
+
+                        for (int i = 0; i < _duration; i++){
+                          FirebaseFirestore.instance.collection("CREDITS").doc(loanDoc.id).collection("MENSUALITES").doc((i+1).toString()).set({
+                            "loanId": loanDoc.id,
+                            "number": i+1,
+                            "amount": mensuality,
+                            "startDate" : DateTime(nextMonth.year, nextMonth.month + i, nextMonth.day),
+                            "endDate": DateTime(nextMonth.year, nextMonth.month + i + 1, nextMonth.day),
+                            "paymentDate": null,
+                            "status": 0
+                          });
+                        }
+
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Votre demande de crédit a été enrégistrée'),));
                         setState(() {
                           buttonLoading = false;
@@ -768,6 +838,8 @@ class _LoanFormState extends State<LoanForm> {
     setState(() {
       if (name == "Carnet"){
         carnetSpinner = true;
+      } else if(name == "doc"){
+        docSpinner = true;
       } else {
         otherFileSpinner = true;
       }
@@ -783,6 +855,8 @@ class _LoanFormState extends State<LoanForm> {
         setState(() {
           if (name == "Carnet"){
             carnetSpinner = false;
+          } else if(name == "doc"){
+            docSpinner = false;
           } else {
             otherFileSpinner = false;
           }
@@ -827,8 +901,21 @@ class _LoanFormState extends State<LoanForm> {
           carnetUploaded = true;
           carnetSpinner = false;
         });
-      }
-      else {
+      } else if(name == "doc"){
+
+        if(loanProvider.getLoan.docsUrls != null){
+          loanProvider.addDocUrl(url);
+        }
+        else {
+          loanProvider.getLoan.docsUrls = [];
+          loanProvider.addDocUrl(url);
+        }
+
+        docsUploaded = docsUploaded + 1;
+        docUploaded = true;
+        docSpinner = false;
+        setState((){});
+      } else {
         loanProvider.setotherDocUrl(url);
         setState(() {
           otherFileUploaded = true;
@@ -847,6 +934,8 @@ class _LoanFormState extends State<LoanForm> {
     setState(() {
       if (name == "Carnet"){
         carnetSpinner = true;
+      } else if(name == "doc"){
+        docSpinner = true;
       } else {
         otherFileSpinner = true;
       }
@@ -860,6 +949,8 @@ class _LoanFormState extends State<LoanForm> {
       setState(() {
         if (name == "Carnet"){
           carnetSpinner = false;
+        } else if(name == "doc"){
+          docSpinner = false;
         } else {
           otherFileSpinner = false;
         }
@@ -887,6 +978,14 @@ class _LoanFormState extends State<LoanForm> {
                   title: new Text('Autre pièce justificative', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Pièce_Justificative_Supplémentaire");
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(LineIcons.certificate),
+                  title: new Text('Documents Multiples ($docsUploaded)', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    getDocFromPhone("doc");
                     Navigator.of(context).pop();
                   },
                 ),

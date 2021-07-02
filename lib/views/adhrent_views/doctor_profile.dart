@@ -573,22 +573,23 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               ),
                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text("Tarif publique", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text("Tarif publique ", style: TextStyle(fontWeight: FontWeight.w800)),
                                   Text("${doctor.getDoctor.rate["public"]} f."),
                                   SizedBox(height: 10,),
-                                  Text("Tarif DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                  Text("Couverture DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                   Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Adhérents"),
+                                      Text("Adhérents : "),
                                       SizedBox(width: 5,),
-                                      Text("${doctor.getDoctor.rate["adherent"]} f."),
+                                      Text("70%",style: TextStyle(fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text("Autres"),
+                                      Text("Découverte : "),
                                       SizedBox(width: 5,),
-                                      Text("${doctor.getDoctor.rate["other"]} f."),
+                                      Text("5%", style: TextStyle(fontWeight: FontWeight.bold),),
                                     ],
                                   ),
                                   SizedBox(height: 20,)
@@ -701,6 +702,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     setState(() {
       confirmSpinner = true;
     });
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     DoctorTileModelProvider doctor = Provider.of<DoctorTileModelProvider>(context, listen: false);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
@@ -709,6 +711,9 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       .set({
         "familyDoctorId": doctor.getDoctor.id,
       }, SetOptions(merge: true)).then((value) {
+        FirebaseFirestore.instance.collection("USERS").doc(doctor.getDoctor.id).set({'friends': FieldValue.arrayUnion([adherentModelProvider.getAdherent.adherentId])}, SetOptions(merge: true));
+        FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.adherentId).set({'friends': FieldValue.arrayUnion([doctor.getDoctor.id])}, SetOptions(merge: true));
+        userProvider.addFriend(doctor.getDoctor.id);
         setState(() {
           confirmSpinner = false;
         });

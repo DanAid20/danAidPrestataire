@@ -63,8 +63,8 @@ class _SpecialistListState extends State<SpecialistList> {
                         visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
                         distance: 
                           userProvider.getProfileType == adherent ?  
-                            adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
-                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
+                            adherentProvider.getAdherent.location["latitude"] != null && doctor.location != null
+                              ? doctor.location["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
                           doctorProvider.getDoctor.location != null && doctor.location != null
                               ? (Algorithms.calculateDistance(doctorProvider.getDoctor.location["latitude"], doctorProvider.getDoctor.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null,

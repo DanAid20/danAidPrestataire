@@ -55,7 +55,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
             Column(crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Setting.svg', width: wv*10), onPressed: (){}),
-                SizedBox(height: hv*2,),
+                Spacer(),
                 Container(
                   child: Row(
                     children: [
@@ -64,10 +64,12 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       ),
                       SizedBox(width: wv*2,),
                       adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
-                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink()
+                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink(),
+                     SizedBox(width: wv*1),
                     ],
                   ),
-                )
+                ),
+                SizedBox(height: hv*0.5,),
               ],
             )
           ],
@@ -147,7 +149,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Paramètres du compte", style: TextStyle(color: kBlueDeep, fontSize: wv*4)),
+                    Text("Paramètres du compte", style: TextStyle(color: kBlueDeep, fontSize: 18)),
                     SizedBox(height: hv*2,),
                     adherentProvider.getAdherent != null ? HomePageComponents.accountParameters(
                       title: "Domicile Principale", 
@@ -155,23 +157,35 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
                       action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
                     ) : Container(),
-                    /*HomePageComponents.accountParameters(
-                      title: "Points et badges", 
-                      subtitle: "Ndog-bong, Douala ou Hôpital à choisir.", 
-                      svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
-                      action: (){}
+                    HomePageComponents.accountParameters(
+                      title: "Mes statistiques", 
+                      subtitle: "Consulter..", 
+                      svgIcon: "assets/icons/Bulk/Graph.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/family-stats-page')
                     ),
                     HomePageComponents.accountParameters(
-                      title: "Votre niveau de service", 
-                      subtitle: "Contacts, documents, bénéfices.", 
+                      title: "Points et badges", 
+                      subtitle: "Consulter et utiliser ses bénéfices.", 
+                      svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/family-points-page')
+                    ),
+                    HomePageComponents.accountParameters(
+                      title: "Changez de niveau de service", 
+                      subtitle: "Comparer les niveaux et choisir", 
                       svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
-                      action: (){}
-                    ),*/
+                      action: ()=>Navigator.pushNamed(context, '/compare-plans')
+                    ),
                     HomePageComponents.accountParameters(
                       title: "Changez de medecin de famille", 
-                      subtitle: "Vous pouvez démander un changement de médecin", 
+                      subtitle: "Faites une demande", 
                       svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
                       action: callDanAid
+                    ),
+                    HomePageComponents.accountParameters(
+                      title: "Documents DanAid", 
+                      subtitle: "contrats, documents, guides", 
+                      svgIcon: "assets/icons/Two-tone/Paper.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/family-documents-page')
                     ),
 
                     SizedBox(height: hv*10,)

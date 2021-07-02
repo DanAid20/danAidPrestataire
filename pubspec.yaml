@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.0.0-alpha+210020002
+version: 2.0.0-alpha+210020010
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -29,9 +29,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  dio: ^4.0.0-beta7
   flutter_screenutil: ^5.0.0
-  http: ^0.13.0
   google_fonts: ^2.0.0
   shared_preferences: ^2.0.4
   provider: ^4.3.3
@@ -42,14 +40,12 @@ dependencies:
   cached_network_image: ^3.0.0
   intl:
   flutter_spinkit: ^4.1.2+1
-  flat_icons_flutter: ^1.0.2
   font_awesome_flutter: ^8.11.0
   flutter_vector_icons: ^0.3.0
   freezed: ^0.12.7
   simple_moment:
   percent_indicator:
   simple_animations:
-  getwidget: ^1.2.4
   data_connection_checker: ^0.3.4
   flutter_share: ^1.0.5
   flutter_svg: ^0.21.0-nullsafety.0
@@ -57,7 +53,7 @@ dependencies:
   material_design_icons_flutter: ^4.0.5955
   carousel_slider:
   firebase_core: ^1.0.1
-  cloud_firestore: ^1.0.3
+  cloud_firestore: ^1.0.7
   firebase_auth: ^1.0.1
   firebase_storage: ^8.0.0
   country_pickers: ^2.0.0
@@ -77,6 +73,10 @@ dependencies:
   url_launcher: ^6.0.3
   flutter_google_places: ^0.3.0
   pretty_qr_code: ^2.0.1
+  coast: ^2.0.1
+  fl_chart: ^0.36.1
+  firebase_in_app_messaging: ^0.5.0+6
+  firebase_messaging: ^10.0.0
 
 dev_dependencies:
   flutter_test:

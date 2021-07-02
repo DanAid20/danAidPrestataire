@@ -11,6 +11,7 @@ import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
+import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
@@ -192,7 +193,7 @@ class _HomePageViewState extends State<HomePageView> {
       }
     }
     
-      print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
+     // print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
   }
 
   loadCommonUserProfile() async {
@@ -278,6 +279,7 @@ class _HomePageViewState extends State<HomePageView> {
   
   @override
   Widget build(BuildContext context) {
+    MySize().init(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
     BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context);
     int index = bottomAppBarController.getIndex;

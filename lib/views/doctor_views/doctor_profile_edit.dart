@@ -414,7 +414,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             nameEnabled = true;
                           });}
                       ),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
                         label: "Prénom (s)",
@@ -428,7 +428,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
                         label: "Nom tel que sur la CNI",
@@ -442,7 +442,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
                         label: "A propos",
@@ -457,7 +457,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.emailOutline, color: kPrimaryColor),
                         label: "Email",
@@ -477,7 +477,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: LocationDropdown(
@@ -502,7 +502,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         },
                         ),
                       ),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(LineIcons.mapMarker, color: kPrimaryColor),
                         label: "Votre addresse",
@@ -569,7 +569,10 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           ),
                         ],
                       ),
-                      SizedBox(height: hv*2,),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+                        child: Text("NB: L'ajout de la location est réquise pour la validation du formulaire")
+                      ),
                       Divider(),
                       SizedBox(height: hv*2,),
 
@@ -614,7 +617,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       
                       _type == "Spécialiste" ? Column(
                         children: [
-                          SizedBox(height: hv*2,),
+                          SizedBox(height: hv*2.5,),
                           CustomTextField(
                             prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
                             label: "Spécialité",
@@ -630,7 +633,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           ),
                         ],
                       ) : Container(),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
 
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.barcode, color: kPrimaryColor),
@@ -646,7 +649,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         },
                       ),
 
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
 
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
@@ -665,7 +668,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           });
                         },
                       ),
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
 
                       CustomTextField(
                         prefixIcon: Icon(LineIcons.hospital, color: kPrimaryColor),
@@ -681,7 +684,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         },
                       ),
 
-                      SizedBox(height: hv*2,),
+                      SizedBox(height: hv*2.5,),
                       
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -725,7 +728,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             ),
                           ),
 
-                          SizedBox(height: hv*2,),
+                          SizedBox(height: hv*2.5,),
 
                           LocationDropdown(
                             city: _officeCity,
@@ -752,14 +755,14 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         ),
                       ),
 
-                      SizedBox(height: hv*1.5,),
+                      SizedBox(height: hv*2.5,),
                       Divider(),
                       SizedBox(height: hv*0.5,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Text("Sélectionnez vos horaires", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
                       ),
-                      SizedBox(height: hv*1,),
+                      SizedBox(height: hv*1.5,),
                       Table(
                         columnWidths: {2: FlexColumnWidth(1.3),3: FlexColumnWidth(1.3),},
                         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -936,7 +939,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       ),
                       SizedBox(height: hv*2,),
                       Container(
-                        child: cityChosen & _officeCityChosen & _rateController.text.isNotEmpty ?  
+                        child: cityChosen && _officeCityChosen && _rateController.text.isNotEmpty && (gpsCoords != null || doctorProvider.getDoctor.location != null) ?  
                           !buttonLoading ? CustomTextButton(
                             text: "Mettre à jour",
                             color: kPrimaryColor,
@@ -1087,7 +1090,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           )
                       ,),
                       SizedBox(height: hv*3,),
-                      Center(
+                      /*Center(
                         child: TextButton(
                           child: Text("Se Déconnecter"),
                           onPressed: () async {
@@ -1101,7 +1104,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             Navigator.pushReplacementNamed(context, '/login');
                           },
                         ),
-                      ),
+                      ),*/
                 ], crossAxisAlignment: CrossAxisAlignment.start, ),
               )
             ],

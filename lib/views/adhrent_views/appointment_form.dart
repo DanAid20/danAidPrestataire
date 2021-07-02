@@ -14,6 +14,7 @@ import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:danaid/widgets/forms/form_widget.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -35,7 +36,8 @@ class AppointmentForm extends StatefulWidget {
 }
 
 class _AppointmentFormState extends State<AppointmentForm> {
-
+  
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _symptomController = new TextEditingController();
   TextEditingController _hospitalController = new TextEditingController();
   TextEditingController _otherInfoController = new TextEditingController();
@@ -149,6 +151,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
         return null;
       },
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           leading: IconButton(
@@ -177,8 +180,15 @@ class _AppointmentFormState extends State<AppointmentForm> {
           centerTitle: true,
           actions: [
             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
           ],
+        ),
+        endDrawer: DefaultDrawer(
+          entraide: (){Navigator.pop(context); Navigator.pop(context);},
+          accueil: (){Navigator.pop(context); Navigator.pop(context);},
+          carnet: (){Navigator.pop(context); Navigator.pop(context);},
+          partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+          famille: (){Navigator.pop(context); Navigator.pop(context);},
         ),
         body: !noFamilyDoctor ? doctorProvider.getDoctor != null ? SafeArea(
           child: Container(
@@ -589,103 +599,108 @@ class _AppointmentFormState extends State<AppointmentForm> {
       padding: EdgeInsets.only(bottom: hv*2),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: kSouthSeas.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                head(),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-                  child: RichText(text: TextSpan(
-                    text: "Demander un Rendez-vous chez\n",
-                    children: [
-                      TextSpan(text: "Sélectionner le médecin", style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
-                    ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
-                  ),
-                ),
-                Container(
-                  child: DoctorInfoCard(
-                    noPadding: true,
-                    avatarUrl: doc.avatarUrl,
-                    name: doc.cniName,
-                    title: "Medecin de Famille, " + doc.field,
-                    speciality: doc.speciality,
-                    teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
-                    consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
-                    chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
-                    rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
-                    visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
-                    field: doc.speciality,
-                    officeName: doc.officeName,
-                    includeHospital: true,
-                    distance: adherentProvider.getAdherent.location["latitude"] != null && doc.location["latitude"] != null
-                      ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doc.location["latitude"], doc.location["longitude"]).toStringAsFixed(2)).toString() : null,
-                    onTap: () {
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
+          
           Expanded(
             child: SingleChildScrollView(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2.5),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Choisir le type de consultation", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16),),
-                    Container(
-                      child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(children: [
-                          HomePageComponents.consultationType(
-                            iconPath: 'assets/icons/Bulk/Profile.svg',
-                            title: "Consultation",
-                            type: "en cabinet",
-                            price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
-                            selected: consultationType == "Cabinet",
-                            action: (){
-                              setState(() {
-                                consultationType = "Cabinet";
-                                tarif = doc.rate != null ? doc.rate["public"] : 2000.0;
-                              });
-                            }
-                          ),
-                          /*HomePageComponents.consultationType(
-                            iconPath: 'assets/icons/Bulk/Video.svg',
-                            title: "Consultation",
-                            type: "Vidéo",
-                            price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
-                            selected: consultationType == "Video",
-                            action: (){
-                              setState(() {
-                                consultationType = "Video";
-                              });
-                            }
-                          ),*/
-                          HomePageComponents.consultationType(
-                            iconPath: 'assets/icons/Bulk/Home.svg',
-                            title: "Consultation",
-                            type: "à domicile",
-                            price: "7500.0",
-                            selected: consultationType == "Domicile",
-                            action: (){
-                              setState(() {
-                                consultationType = "Domicile";
-                                tarif = 7500.0;
-                              });
-                            }
-                          ),
-                        ],),
-                      ),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: kSouthSeas.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    
-                  ],
-                ),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        head(),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                          child: RichText(text: TextSpan(
+                            text: "Demander un Rendez-vous chez\n",
+                            children: [
+                              TextSpan(text: "Sélectionner le médecin", style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
+                            ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
+                          ),
+                        ),
+                        Container(
+                          child: DoctorInfoCard(
+                            noPadding: true,
+                            avatarUrl: doc.avatarUrl,
+                            name: doc.cniName,
+                            title: "Medecin de Famille, " + doc.field,
+                            speciality: doc.speciality,
+                            teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
+                            consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
+                            chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
+                            rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
+                            visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
+                            field: doc.speciality,
+                            officeName: doc.officeName,
+                            includeHospital: true,
+                            distance: adherentProvider.getAdherent.location["latitude"] != null && doc.location["latitude"] != null
+                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doc.location["latitude"], doc.location["longitude"]).toStringAsFixed(2)).toString() : null,
+                            onTap: () {
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2.5),
+                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Choisir le type de consultation", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16),),
+                        Container(
+                          child: SingleChildScrollView(
+                            physics: BouncingScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            child: Row(children: [
+                              HomePageComponents.consultationType(
+                                iconPath: 'assets/icons/Bulk/Profile.svg',
+                                title: "Consultation",
+                                type: "en cabinet",
+                                price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
+                                selected: consultationType == "Cabinet",
+                                action: (){
+                                  setState(() {
+                                    consultationType = "Cabinet";
+                                    tarif = doc.rate != null ? doc.rate["public"] : 2000.0;
+                                  });
+                                }
+                              ),
+                              /*HomePageComponents.consultationType(
+                                iconPath: 'assets/icons/Bulk/Video.svg',
+                                title: "Consultation",
+                                type: "Vidéo",
+                                price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
+                                selected: consultationType == "Video",
+                                action: (){
+                                  setState(() {
+                                    consultationType = "Video";
+                                  });
+                                }
+                              ),*/
+                              HomePageComponents.consultationType(
+                                iconPath: 'assets/icons/Bulk/Home.svg',
+                                title: "Consultation",
+                                type: "à domicile",
+                                price: "7500.0",
+                                selected: consultationType == "Domicile",
+                                action: (){
+                                  setState(() {
+                                    consultationType = "Domicile";
+                                    tarif = 7500.0;
+                                  });
+                                }
+                              ),
+                            ],),
+                          ),
+                        ),
+                        
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

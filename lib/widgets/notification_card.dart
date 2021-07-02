@@ -39,8 +39,10 @@ class NotificationCard extends StatelessWidget {
                 islinkEnable==null || islinkEnable==false ? Text(instruction, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.bold, color: Colors.teal[200])) :
                 GestureDetector(
                   onTap: (){
-                    if(islinkEnable==true){
+                    if(islinkEnable==true && isprestataire==false){
                      Navigator.pushNamed(context, '/doctor-profile-edit');
+                    }else if(islinkEnable==true && isprestataire==true){
+                     Navigator.pushNamed(context, '/serviceprovider-profile-edit');
 
                     }
                   },

@@ -15,9 +15,15 @@ import 'package:danaid/views/adhrent_views/adherents_plans_screen/adherent_plan_
 import 'package:danaid/views/adhrent_views/appointment_detail.dart';
 import 'package:danaid/views/adhrent_views/loans_view.dart';
 import 'package:danaid/views/adhrent_views/loan_form.dart';
+import 'package:danaid/views/adhrent_views/loan_details.dart';
 import 'package:danaid/views/adhrent_views/comparePlans.dart';
 import 'package:danaid/views/adhrent_views/contributions.dart';
+import 'package:danaid/views/intro_slides.dart';
 import 'package:danaid/views/adhrent_views/payment.dart';
+import 'package:danaid/views/adhrent_views/family_points_page.dart';
+import 'package:danaid/views/adhrent_views/family_badge_page.dart';
+import 'package:danaid/views/adhrent_views/family_documents_page.dart';
+import 'package:danaid/views/adhrent_views/family_stats_page.dart';
 import 'package:danaid/views/doctor_views/appointement_approuve.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
@@ -26,6 +32,7 @@ import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
+import 'package:danaid/views/serviceprovider/edit-prestatire-profilt.dart';
 import 'package:danaid/views/social_network_views/chatroom.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/views/social_network_views/search.dart';
@@ -36,6 +43,8 @@ import 'package:danaid/views/adhrent_views/adherent_card.dart';
 import 'package:danaid/views/adhrent_views/refund_form.dart';
 import 'package:danaid/views/adhrent_views/use_case_details.dart';
 import 'package:danaid/views/adhrent_views/coveragePayment.dart';
+import 'package:danaid/views/adhrent_views/productDetails.dart';
+import 'package:danaid/views/adhrent_views/partners_search_screen.dart';
 import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
@@ -43,6 +52,7 @@ import 'package:danaid/views/social_network_views/conversation.dart';
 import 'package:danaid/views/social_network_views/create_publication.dart';
 import 'package:danaid/views/social_network_views/create_group.dart';
 import 'package:danaid/views/social_network_views/create_group_final.dart';
+import 'package:danaid/views/social_network_views/friend_requests.dart';
 import 'package:flutter/material.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
@@ -70,9 +80,18 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/use-case": (context) => UseCaseDetails(),
   "/loans": (context) => Loans(),
   "/loan-form": (context) => LoanForm(),
+  "/loan-details": (context) => LoanDetails(),
   "/coverage-payment": (context) => CoveragePayment(),
   "/compare-plans": (context) => ComparePlans(),
   "/contributions": (context) => Contributions(),
+  "/intro-slides": (context) => IntroSlides(),
+  "/family-points-page": (context) => FamilyPointsPage(),
+  "/family-badge-page": (context) => FamilyBadgePage(),
+  "/family-documents-page": (context) => FamilyDocumentsPage(),
+  "/family-stats-page": (context) => FamilyStatsPage(),
+  "/product-details": (context) => ProductDetails(),
+  "/partners-search": (context) => PartnersSearchScreen(),
+  "/friend-requests": (context) => FriendRequests(),
   //"/payment": (context) => Payment(),
 
   /**
@@ -93,7 +112,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
    */
 
   // Service provider routes (prestataire)
-  "/serviceprovider-profile-edit": (context) => ServiceProviderProfileEdit(),
+  "/serviceprovider-profile-edit": (context) => EditPrestataire(),
   "/serviceprovider-profile": (context) => PrestataireProfilePage(),
 
   // Social network screens

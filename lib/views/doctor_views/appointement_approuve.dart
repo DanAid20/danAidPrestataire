@@ -1,11 +1,15 @@
+import 'dart:math';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/utils.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
@@ -19,8 +23,8 @@ import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
 class AppointmentDetails extends StatefulWidget {
-  final AppointmentModel appointement;
-  AppointmentDetails({Key key, this.appointement}):super(key:key);
+  final AdherentModel adherent;
+  AppointmentDetails({Key key, this.adherent}):super(key:key);
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
@@ -48,7 +52,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   bool saveLoading = false;
   bool announceLoading = false;
   bool cancelLoading = false;
-
+  var code;
   bool edit = false;
 
   initialization(){
@@ -75,6 +79,96 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   void initState() {
     initialization();
     super.initState();
+  code = getRandomString(4);
+  }
+
+  String getRandomString(int length) {
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+    var result = String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    return 'YM' + result;
+  }
+
+  Future<String> createConsultationCode(QueryDocumentSnapshot adherent, id) async {
+    DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+
+    var date = DateTime.now();
+    var newUseCase = FirebaseFirestore.instance.collection('USECASES').doc();
+    newUseCase.set({
+      'id': newUseCase.id,
+      'idAppointement': id,
+      'adherentId': adherent['adherentId'],
+      'beneficiaryId': adherent['beneficiaryId'],
+      'beneficiaryName': adherent['username'],
+      'otherInfo': '',
+      'establishment': doctorProvider.getDoctor.officeName,
+      'consultationCode': code,
+      'type': adherent['appointment-type'],
+      'amountToPay': 2000,
+      'status': 0,
+      'canPay': 0,
+      'createdDate': DateTime.now(),
+      'enable': false,
+    }, SetOptions(merge: true)).then((value) {
+      setState(() {
+        saveLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "Le Code ce consultation creer avec succes comme médecin de famille..")));
+    }).catchError((e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+      setState(() {
+        saveLoading = false;
+      });
+    });
+
+    return newUseCase.id;
+  }
+  
+   addCodeToAdherent(code,id) async {
+    await FirebaseFirestore.instance.collection('ADHERENTS').doc(id).set({
+      'CurrentcodeConsultation' : code
+    },SetOptions(merge: true)).then((value) {
+    });
+
+  }
+  facturationCode(id, adherent, idAppointement) async {
+    DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance
+        .collection('USECASES')
+        .doc(id)
+        .collection('FACTURATIONS')
+        .doc(adherent['adherentId'])
+        .set({
+      'id': Utils.createCryptoRandomString(8),
+      'idAppointement':idAppointement,
+      'idAdherent': adherent['adherentId'],
+      'idBeneficiairy': adherent['beneficiaryId'],
+      'idMedecin': doctorProvider.getDoctor.id,
+      'amountToPay':2000,
+      'isSolve': false,
+      'Type': adherent['appointment-type'],
+      'createdAt': DateTime.now(),
+    }, SetOptions(merge: true)).then((value) {
+      setState(() {
+        saveLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("La facture a bien ete generer avec succes ")));
+    }).catchError((e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+      setState(() {
+        saveLoading = false;
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -266,24 +360,99 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     isLoading: announceLoading,
-                    enable: true,
+                    enable:  appointment.getAppointment.status==1 ? false: true,
                     text: "Approuver",
                     action: (){
                       setState(() {
                         announceLoading = true;
                       });
                       try {
-                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
-                          "status": 1
-                        },  SetOptions(merge: true)).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été approuver..'),));
-                          appointment.setAnnouncement(true);
-                           setState(() {
-                            announceLoading = false;
-                            edit=false;
-                            appointment.getAppointment.status=1;
-                          });
+                         final Map<String, dynamic> codes = {
+                          'codeConsultation': code,
+                          'createdDate': DateTime.now()
+                         };
+                         var data =  FirebaseFirestore.instance
+                        .collection("APPOINTMENTS")
+                        .where("doctorId", isEqualTo: doctorProvider.getDoctor.id)
+                        .where("adherentId", isEqualTo:appointment.getAppointment.adherentId);
+                        data.get().then((docSnapshot) async => {
+                          if (docSnapshot.docs.isEmpty)
+                            { // il  existe pas mais
+                                 print("jhdsfjkhdsjkfd")
+                            }
+                          else
+                            {
+                              print("55555555555555555555555555"),
+                              FirebaseFirestore.instance
+                                  .collection("APPOINTMENTS")
+                                  .doc(appointment.getAppointment.id)
+                                  .set({
+                                "status": 1,
+                              },  SetOptions(merge: true)).then((value) async {
+                                 print('ok33333333333333333333333333333');
+                                  var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                .where("idAppointement", isEqualTo: appointment.getAppointment.id).get(); 
+                                usecase.then((value) async {
+                                      if(value.docs.isEmpty){   
+                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
+                                        adherent.then((value) async {
+                                          if(value.data()['CurrentcodeConsultation']!=null){
+                                              
+                                                Timestamp t = value.data()['CurrentcodeConsultation']['createdDate'];
+                                                    DateTime d = t.toDate();
+                                                   print(t);
+                                                   print(d);
+                                                  final date2 = DateTime.now(); 
+                                                  final difference = date2.difference(d).inDays;
+                                                  print(difference);
+                                                  if( difference>14){
+                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await addCodeToAdherent(codes, docSnapshot.docs[0].id);
+                                                    });
+                                                  }
+                                          }else{
+                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await addCodeToAdherent(codes, docSnapshot.docs[0].id);
+                                              });
+                                          }
+
+                                        });
+                                       appointment.setAnnouncement(true);
+                                      }else{
+                                         ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Une facture a deja été génerer pour cette constultation")));
+                                      }
+                                });
+                            
+                             
+                              setState(() {
+                                announceLoading = false;
+                                edit=false;
+                                 appointment.getAppointment.status=1;
+                              });
+                              }).then((value) {
+                                // Navigator.pop(context);
+                              
+                              })
+                            },
                         });
+                        // FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                        //   "status": 1
+                        // },  SetOptions(merge: true)).then((value) async {
+                        //    await createConsultationCode(widget.adherent)
+                        //   .then((value) async {
+                        //     await facturationCode(value, widget.adherent);
+                        //   });
+                        //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été approuver..'),));
+                        //   appointment.setAnnouncement(true);
+                        //    setState(() {
+                        //     announceLoading = false;
+                        //     edit=false;
+                        //     appointment.getAppointment.status=1;
+                        //   });
+                        // });
                       }
                       catch(e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString(),)));
@@ -300,6 +469,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     text: "Rejeter",
+                    enable:  appointment.getAppointment.status==2 ? false: true,
                     isLoading: cancelLoading,
                     color: kSouthSeas,
                     action: (){

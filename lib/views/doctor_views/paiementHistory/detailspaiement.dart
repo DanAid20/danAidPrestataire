@@ -148,8 +148,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
 
                                       String userNamem = 'a';
                                      
-                                      print(widget
-                                          .facture[index].canPay);
+                                    
                                       if (widget.facture[index].types!='REFERENCEMENT') {
                                        return FutureBuilder<DocumentSnapshot>(
                                       future:  FirebaseFirestore.instance.collection('ADHERENTS').doc(widget

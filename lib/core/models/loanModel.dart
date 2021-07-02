@@ -5,10 +5,10 @@ class LoanModel {
   num amount, maxAmount, mensuality, totalToPay, monthlySalary;
   int duration, status;
   Timestamp firstPaymentDate, lastPaymentDate, dateCreated, mostRecentPaymentDate;
-  List paymentDates;
+  List paymentDates, docsUrls;
   bool isSalaryMan, avalistAdded; 
 
-  LoanModel({this.avalistName, this.avalistPhone, this.employerName, this.monthlySalary, this.employerPhone, this.purpose, this.docUrl, this.mensuality, this.totalToPay, this.duration, this.status, this.firstPaymentDate, this.lastPaymentDate, this.dateCreated, this.mostRecentPaymentDate, this.paymentDates, this.isSalaryMan, this.avalistAdded, this.id, this.amount, this.maxAmount, this.adherentId, this.carnetUrl, this.otherDocUrl});
+  LoanModel({this.avalistName, this.avalistPhone, this.docsUrls, this.employerName, this.monthlySalary, this.employerPhone, this.purpose, this.docUrl, this.mensuality, this.totalToPay, this.duration, this.status, this.firstPaymentDate, this.lastPaymentDate, this.dateCreated, this.mostRecentPaymentDate, this.paymentDates, this.isSalaryMan, this.avalistAdded, this.id, this.amount, this.maxAmount, this.adherentId, this.carnetUrl, this.otherDocUrl});
 
   factory LoanModel.fromDocument(DocumentSnapshot doc){
     return LoanModel(
@@ -33,6 +33,7 @@ class LoanModel {
       purpose: doc.data()["purpose"],
       docUrl: doc.data()["docUrl"],
       otherDocUrl: doc.data()["otherDocUrl"],
+      docsUrls: doc.data()["docsUrls"],
       status: doc.data()["status"]
     );
   }

@@ -9,6 +9,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class Contributions extends StatefulWidget {
 }
 
 class _ContributionsState extends State<Contributions> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
@@ -29,6 +31,7 @@ class _ContributionsState extends State<Contributions> {
     String inscriptionId;
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         leading: IconButton(
@@ -39,8 +42,15 @@ class _ContributionsState extends State<Contributions> {
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
         ],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
       body: Column(
         children: [
