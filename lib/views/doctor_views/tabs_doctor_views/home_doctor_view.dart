@@ -4,6 +4,7 @@ import 'package:danaid/core/models/postModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -42,11 +43,11 @@ Widget notificationWidget(BuildContext context){
         child: Row(
           children: [
             Text(
-              "Notifications",
+              S.of(context).notifications,
               style:
                   TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
             ),
-            Text("Voir plus..")
+            Text(S.of(context).voirPlus)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
@@ -72,8 +73,8 @@ Widget notificationWidget(BuildContext context){
                 children: [
                  userProvider.isEnabled==false 
                   ? 
-                  NotificationCard(instruction: "completer",islinkEnable: true, description:"veuillez completer les informations relaif a votre profil pour nous aider a mieux vous faire connaître  ",isprestataire: isPrestataire)
-                 :Center(child: Text('Aucune Notification '),),
+                  NotificationCard(instruction: S.of(context).completer,islinkEnable: true, description:S.of(context).veuillezCompleterLesInformationsRelaifAVotreProfilPourNous,isprestataire: isPrestataire)
+                 :Center(child: Text(S.of(context).aucuneNotification),),
                   
 
                  ],
@@ -328,11 +329,11 @@ Widget questionDuDocteur() {
         child: Row(
           children: [
             Text(
-              "Question au Docteur",
+              S.of(context).questionAuDocteur,
               style:
                   TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
             ),
-            Text("Voir plus..")
+            Text(S.of(context).voirPlus)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),

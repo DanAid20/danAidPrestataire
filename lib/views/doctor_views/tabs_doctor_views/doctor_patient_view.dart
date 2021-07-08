@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
@@ -110,8 +111,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             flex: 1,
                             child: Text(
                               isPrestataire
-                                  ? 'Compléter une prise en charge'
-                                  : 'Démarrer une consultation',
+                                  ? S.of(context).complterUnePriseEnCharge
+                                  : S.of(context).dmarrerUneConsultation,
                               textScaleFactor: 1.0,
                               style: TextStyle(
                                   color: kCardTextColor,
@@ -132,8 +133,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             flex: 1,
                             child: Text(
                               isPrestataire
-                                  ? 'Vérifier le statut des paiements avant de réaliser les services à un adhérent'
-                                  : 'Accédez au Carnet de Santé digital de vos patients et déclenchez leur prise en charge',
+                                  ? S.of(context).vrifierLeStatutDesPaiementsAvantDeRaliserLesServices
+                                  : S.of(context).accdezAuCarnetDeSantDigitalDeVosPatientsEt,
                               textScaleFactor: 0.8,
                               style: TextStyle(
                                   color: kCardTextColor,
@@ -159,7 +160,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     isPrestataire
                         ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                                "un peu de patience cette partie sera bientôt disponible")))
+                                S.of(context).unPeuDePatienceCettePartieSeraBienttDisponible)))
                         : Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -173,8 +174,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         ? 'assets/icons/Bulk/Discount.svg'
                         : 'assets/icons/Bulk/Add User.svg',
                     title: isPrestataire
-                        ? 'Emettre un devis'
-                        : 'Ajouter un Patient',
+                        ? S.of(context).emettreUnDevis
+                        : S.of(context).ajouterUnPatient,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -183,13 +184,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     isPrestataire
                         ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                                "un peu de patience cette partie sera bientôt disponible")))
+                                S.of(context).unPeuDePatienceCettePartieSeraBienttDisponible)))
                         : Navigator.pushNamed(
                             context, '/history-prestation-doctor');
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
-                    title: 'Suivre mes paiements',
+                    title: S.of(context).suivreMesPaiements,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -203,7 +204,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
-                    title: 'Mes Messages',
+                    title: S.of(context).mesMessages,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -256,7 +257,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                       Container(
                         width: 90.r,
                         child: Text(
-                          title != null ? title : 'Ajouter un Patient',
+                          title != null ? title : S.of(context).ajouterUnPatient,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
@@ -318,7 +319,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text("Something went wrong");
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data.data();
@@ -350,7 +351,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               nom: '${data["prenom"]} ${data["nomFamille"]}',
                               subtitle: '${doc.data()["title"]}'));
                         }
-                        return Text("loading");
+                        return Text(S.of(context).loading);
                       },
                     );
                   })
@@ -358,7 +359,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
                     child:
-                        Text(" Vous n'avez aucun rendez-vous pour le moment.."),
+                        Text(S.of(context).vousNavezAucunRendezvousPourLeMoment),
                   ),
                 );
         });
@@ -384,13 +385,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           child: Row(
             children: [
               Text(
-                "Demandes de RDV",
+                S.of(context).demandesDeRdv,
                 style: TextStyle(
                     color: kFirstIntroColor,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w500),
               ),
-              Text("Voir plus..",
+              Text(S.of(context).voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
                       fontSize: 15.sp,
@@ -415,7 +416,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         padding: const EdgeInsets.all(10),
                         child: Center(
                             child:
-                                Text(" aucun rendez-vous pour l'instant ... ")),
+                                Text(S.of(context).aucunRendezvousPourLinstant)),
                       )
               ],
             ))

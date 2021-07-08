@@ -10,6 +10,8 @@ import 'package:danaid/helpers/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
@@ -118,6 +120,13 @@ class Danaid extends StatelessWidget {
                 routes: routes,
                 initialRoute: '/splash',
                 navigatorKey: locator<NavigationService>().navigatorKey,
+                localizationsDelegates: [
+                S.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
               ),
             ),
           );
