@@ -85,40 +85,40 @@ class S {
     );
   }
 
-  /// `Suivre mes paiements`
+  /// `Follow my payments`
   String get suivreMesPaiements {
     return Intl.message(
-      'Suivre mes paiements',
+      'Follow my payments',
       name: 'suivreMesPaiements',
       desc: '',
       args: [],
     );
   }
 
-  /// `un peu de patience cette partie sera bientôt disponible`
+  /// `a little patience this part will be available soon`
   String get unPeuDePatienceCettePartieSeraBienttDisponible {
     return Intl.message(
-      'un peu de patience cette partie sera bientôt disponible',
+      'a little patience this part will be available soon',
       name: 'unPeuDePatienceCettePartieSeraBienttDisponible',
       desc: '',
       args: [],
     );
   }
 
-  /// `Emettre un devis`
+  /// `issue a quote`
   String get emettreUnDevis {
     return Intl.message(
-      'Emettre un devis',
+      'issue a quote',
       name: 'emettreUnDevis',
       desc: '',
       args: [],
     );
   }
 
-  /// `Accédez au Carnet de Santé digital de vos patients et déclenchez leur prise en charge`
+  /// `access the digital health record of your patients and initiate their care`
   String get accdezAuCarnetDeSantDigitalDeVosPatientsEt {
     return Intl.message(
-      'Accédez au Carnet de Santé digital de vos patients et déclenchez leur prise en charge',
+      'access the digital health record of your patients and initiate their care',
       name: 'accdezAuCarnetDeSantDigitalDeVosPatientsEt',
       desc: '',
       args: [],
@@ -135,50 +135,50 @@ class S {
     );
   }
 
-  /// `Démarrer une consultation`
+  /// `Start a consultation`
   String get dmarrerUneConsultation {
     return Intl.message(
-      'Démarrer une consultation',
+      'Start a consultation',
       name: 'dmarrerUneConsultation',
       desc: '',
       args: [],
     );
   }
 
-  /// `Compléter une prise en charge`
+  /// `complete a support`
   String get complterUnePriseEnCharge {
     return Intl.message(
-      'Compléter une prise en charge',
+      'complete a support',
       name: 'complterUnePriseEnCharge',
       desc: '',
       args: [],
     );
   }
 
-  /// `Demandes de RDV`
+  /// `Appointment requests`
   String get demandesDeRdv {
     return Intl.message(
-      'Demandes de RDV',
+      'Appointment requests',
       name: 'demandesDeRdv',
       desc: '',
       args: [],
     );
   }
 
-  /// `Voir plus..`
+  /// `See more ..`
   String get voirPlus {
     return Intl.message(
-      'Voir plus..',
+      'See more ..',
       name: 'voirPlus',
       desc: '',
       args: [],
     );
   }
 
-  /// ` aucun rendez-vous pour l'instant ... `
+  /// `no appointment for the moment ...`
   String get aucunRendezvousPourLinstant {
     return Intl.message(
-      ' aucun rendez-vous pour l\'instant ... ',
+      'no appointment for the moment ...',
       name: 'aucunRendezvousPourLinstant',
       desc: '',
       args: [],
@@ -195,60 +195,60 @@ class S {
     );
   }
 
-  /// `completer`
+  /// `complete`
   String get completer {
     return Intl.message(
-      'completer',
+      'complete',
       name: 'completer',
       desc: '',
       args: [],
     );
   }
 
-  /// `veuillez completer les informations relaif a votre profil pour nous aider a mieux vous faire connaître  `
+  /// `please complete your profile information to help us get to know you better`
   String get veuillezCompleterLesInformationsRelaifAVotreProfilPourNous {
     return Intl.message(
-      'veuillez completer les informations relaif a votre profil pour nous aider a mieux vous faire connaître  ',
+      'please complete your profile information to help us get to know you better',
       name: 'veuillezCompleterLesInformationsRelaifAVotreProfilPourNous',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aucune Notification `
+  /// `No Notification`
   String get aucuneNotification {
     return Intl.message(
-      'Aucune Notification ',
+      'No Notification',
       name: 'aucuneNotification',
       desc: '',
       args: [],
     );
   }
 
-  /// `Question au Docteur`
+  /// `Question to the Doctor`
   String get questionAuDocteur {
     return Intl.message(
-      'Question au Docteur',
+      'Question to the Doctor',
       name: 'questionAuDocteur',
       desc: '',
       args: [],
     );
   }
 
-  /// `oui j'approuve`
+  /// `yes I approve`
   String get ouiJapprouve {
     return Intl.message(
-      'oui j\'approuve',
+      'yes I approve',
       name: 'ouiJapprouve',
       desc: '',
       args: [],
     );
   }
 
-  /// `rende-vous approuver `
+  /// `make you approve`
   String get rendevousApprouver {
     return Intl.message(
-      'rende-vous approuver ',
+      'make you approve',
       name: 'rendevousApprouver',
       desc: '',
       args: [],
@@ -265,270 +265,270 @@ class S {
     );
   }
 
-  /// `vous êtes sur le point d'approuver ce rendez-vous , êtes-vous sûr de cette operation ?`
+  /// `you are about to approve this appointment, are you sure of this operation?`
   String get vousTesSurLePointDapprouverCeRendezvousTesvousSr {
     return Intl.message(
-      'vous êtes sur le point d\'approuver ce rendez-vous , êtes-vous sûr de cette operation ?',
+      'you are about to approve this appointment, are you sure of this operation?',
       name: 'vousTesSurLePointDapprouverCeRendezvousTesvousSr',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aucun Adherent  disponible pour le moment..`
+  /// `No Member available for the moment ..`
   String get aucunAdherentDisponiblePourLeMoment {
     return Intl.message(
-      'Aucun Adherent  disponible pour le moment..',
+      'No Member available for the moment ..',
       name: 'aucunAdherentDisponiblePourLeMoment',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aujourd'hui`
+  /// `Today`
   String get aujourdhui {
     return Intl.message(
-      'Aujourd\'hui',
+      'Today',
       name: 'aujourdhui',
       desc: '',
       args: [],
     );
   }
 
-  /// `Semaine`
+  /// `Week`
   String get semaine {
     return Intl.message(
-      'Semaine',
+      'Week',
       name: 'semaine',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aucun rendez-vous en vue pour l'instant`
+  /// `No appointment in sight for the moment`
   String get aucunRendezvousEnVuePourLinstant {
     return Intl.message(
-      'Aucun rendez-vous en vue pour l\'instant',
+      'No appointment in sight for the moment',
       name: 'aucunRendezvousEnVuePourLinstant',
       desc: '',
       args: [],
     );
   }
 
-  /// `Salle d\'attente`
+  /// `waiting room`
   String get salleDattente {
     return Intl.message(
-      'Salle d\\'attente',
+      'waiting room',
       name: 'salleDattente',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aucune activité n'as été enregistrer pour l'instant... `
+  /// `No activity has been recorded for the moment ...`
   String get aucuneActivitNasTEnregistrerPourLinstant {
     return Intl.message(
-      'Aucune activité n\'as été enregistrer pour l\'instant... ',
+      'No activity has been recorded for the moment ...',
       name: 'aucuneActivitNasTEnregistrerPourLinstant',
       desc: '',
       args: [],
     );
   }
 
-  /// `Le Code ce consultation creer avec succes comme médecin de famille..`
+  /// `The Code this consultation successfully created as a family doctor ..`
   String get leCodeCeConsultationCreerAvecSuccesCommeMdecinDe {
     return Intl.message(
-      'Le Code ce consultation creer avec succes comme médecin de famille..',
+      'The Code this consultation successfully created as a family doctor ..',
       name: 'leCodeCeConsultationCreerAvecSuccesCommeMdecinDe',
       desc: '',
       args: [],
     );
   }
 
-  /// `La facture a bien ete generer avec succes `
+  /// `The invoice was successfully generated`
   String get laFactureABienEteGenererAvecSucces {
     return Intl.message(
-      'La facture a bien ete generer avec succes ',
+      'The invoice was successfully generated',
       name: 'laFactureABienEteGenererAvecSucces',
       desc: '',
       args: [],
     );
   }
 
-  /// `Démande de prise en charge`
+  /// `support request`
   String get dmandeDePriseEnCharge {
     return Intl.message(
-      'Démande de prise en charge',
+      'support request',
       name: 'dmandeDePriseEnCharge',
       desc: '',
       args: [],
     );
   }
 
-  /// `Rendez-vous`
+  /// `Rendezvous`
   String get rendezvous {
     return Intl.message(
-      'Rendez-vous',
+      'Rendezvous',
       name: 'rendezvous',
       desc: '',
       args: [],
     );
   }
 
-  /// `Pour le patient`
+  /// `For the patient`
   String get pourLePatient {
     return Intl.message(
-      'Pour le patient',
+      'For the patient',
       name: 'pourLePatient',
       desc: '',
       args: [],
     );
   }
 
-  /// `    Rendez-vous chez`
+  /// `    Rendezvous at`
   String get rendezvousChez {
     return Intl.message(
-      '    Rendez-vous chez',
+      '    Rendezvous at',
       name: 'rendezvousChez',
       desc: '',
       args: [],
     );
   }
 
-  /// `Medecin de Famille, `
+  /// `Family doctor, `
   String get medecinDeFamille {
     return Intl.message(
-      'Medecin de Famille, ',
+      'Family doctor, ',
       name: 'medecinDeFamille',
       desc: '',
       args: [],
     );
   }
 
-  /// `Quel en est la raison ? `
+  /// `what is the reason? `
   String get quelEnEstLaRaison {
     return Intl.message(
-      'Quel en est la raison ? ',
+      'what is the reason? ',
       name: 'quelEnEstLaRaison',
       desc: '',
       args: [],
     );
   }
 
-  /// `Symptômes`
+  /// `Symptoms`
   String get symptmes {
     return Intl.message(
-      'Symptômes',
+      'Symptoms',
       name: 'symptmes',
       desc: '',
       args: [],
     );
   }
 
-  /// `Aucun symptômes mentionés`
+  /// `No symptoms mentioned`
   String get aucunSymptmesMentions {
     return Intl.message(
-      'Aucun symptômes mentionés',
+      'No symptoms mentioned',
       name: 'aucunSymptmesMentions',
       desc: '',
       args: [],
     );
   }
 
-  /// `Approuver`
+  /// `Approve`
   String get approuver {
     return Intl.message(
-      'Approuver',
+      'Approve',
       name: 'approuver',
       desc: '',
       args: [],
     );
   }
 
-  /// `Une facture a deja été génerer pour cette constultation`
+  /// `An invoice has already been generated for this constultation`
   String get uneFactureADejaTGnererPourCetteConstultation {
     return Intl.message(
-      'Une facture a deja été génerer pour cette constultation',
+      'An invoice has already been generated for this constultation',
       name: 'uneFactureADejaTGnererPourCetteConstultation',
       desc: '',
       args: [],
     );
   }
 
-  /// `Rejeter`
+  /// `Reject `
   String get rejeter {
     return Intl.message(
-      'Rejeter',
+      'Reject ',
       name: 'rejeter',
       desc: '',
       args: [],
     );
   }
 
-  /// `L\'annonce a été rejeter..`
+  /// `The advertisement has been rejected ..`
   String get lannonceATRejeter {
     return Intl.message(
-      'L\\'annonce a été rejeter..',
+      'The advertisement has been rejected ..',
       name: 'lannonceATRejeter',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mettre en attente`
+  /// `put on hold`
   String get mettreEnAttente {
     return Intl.message(
-      'Mettre en attente',
+      'put on hold',
       name: 'mettreEnAttente',
       desc: '',
       args: [],
     );
   }
 
-  /// `ce rendez-vous a été mis en attente..`
+  /// `this appointment has been put on hold ..`
   String get ceRendezvousATMisEnAttente {
     return Intl.message(
-      'ce rendez-vous a été mis en attente..',
+      'this appointment has been put on hold ..',
       name: 'ceRendezvousATMisEnAttente',
       desc: '',
       args: [],
     );
   }
 
-  /// `Entraide`
+  /// `mutual aid`
   String get entraide {
     return Intl.message(
-      'Entraide',
+      'mutual aid',
       name: 'entraide',
       desc: '',
       args: [],
     );
   }
 
-  /// `Accueil`
+  /// `Home`
   String get accueil {
     return Intl.message(
-      'Accueil',
+      'Home',
       name: 'accueil',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mes Patients`
+  /// `My Patients`
   String get mesPatients {
     return Intl.message(
-      'Mes Patients',
+      'My Patients',
       name: 'mesPatients',
       desc: '',
       args: [],
     );
   }
 
-  /// `Partenaires`
+  /// `Partners`
   String get partenaires {
     return Intl.message(
-      'Partenaires',
+      'Partners',
       name: 'partenaires',
       desc: '',
       args: [],
@@ -540,6 +540,746 @@ class S {
     return Intl.message(
       'Profile',
       name: 'profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The DanAid family doctor ensures the long-term follow-up of your family's health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the first point of contact for your family. your family with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family's health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the Your family's first point of contact with health services. \ n \ nThe DanAid family doctor provides long-term monitoring of your family's health, and its action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be your family's first point of contact with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family's health. quality to co is under control. \ nThe family doctor will be your family's first point of contact with health services. \ nThe DanAid family doctor provides long-term follow-up of the s `
+  String get leMdecinDeFamilleDanaidAssureLeSuiviLongTerme {
+    return Intl.message(
+      'The DanAid family doctor ensures the long-term follow-up of your family\'s health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the first point of contact for your family. your family with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family\'s health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the Your family\'s first point of contact with health services. \ n \ nThe DanAid family doctor provides long-term monitoring of your family\'s health, and its action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be your family\'s first point of contact with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family\'s health. quality to co is under control. \ nThe family doctor will be your family\'s first point of contact with health services. \ nThe DanAid family doctor provides long-term follow-up of the s ',
+      name: 'leMdecinDeFamilleDanaidAssureLeSuiviLongTerme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue`
+  String get continuer {
+    return Intl.message(
+      'Continue',
+      name: 'continuer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Return`
+  String get retour {
+    return Intl.message(
+      'Return',
+      name: 'retour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send`
+  String get envoyer {
+    return Intl.message(
+      'Send',
+      name: 'envoyer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last Name *`
+  String get nomDeFamille {
+    return Intl.message(
+      'Last Name *',
+      name: 'nomDeFamille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your last name`
+  String get entrezVotreNomDeFamille {
+    return Intl.message(
+      'Enter your last name',
+      name: 'entrezVotreNomDeFamille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This field is require`
+  String get ceChampEstObligatoire {
+    return Intl.message(
+      'This field is require',
+      name: 'ceChampEstObligatoire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Firstname (s)`
+  String get prnomS {
+    return Intl.message(
+      'Firstname (s)',
+      name: 'prnomS',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your first name`
+  String get entrezVotrePrnom {
+    return Intl.message(
+      'Enter your first name',
+      name: 'entrezVotrePrnom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get email {
+    return Intl.message(
+      'Email',
+      name: 'email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email address`
+  String get entrezVotreAddresseEmail {
+    return Intl.message(
+      'Enter your email address',
+      name: 'entrezVotreAddresseEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Genre *`
+  String get genre {
+    return Intl.message(
+      'Genre *',
+      name: 'genre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `male`
+  String get masculin {
+    return Intl.message(
+      'male',
+      name: 'masculin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `female`
+  String get fminin {
+    return Intl.message(
+      'female',
+      name: 'fminin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date of birth *`
+  String get dateDeNaissance {
+    return Intl.message(
+      'Date of birth *',
+      name: 'dateDeNaissance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose`
+  String get choisir {
+    return Intl.message(
+      'Choose',
+      name: 'choisir',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you a generalist or specialist?`
+  String get tesVousGnralisteOuSpcialiste {
+    return Intl.message(
+      'Are you a generalist or specialist?',
+      name: 'tesVousGnralisteOuSpcialiste',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generalist`
+  String get gnraliste {
+    return Intl.message(
+      'Generalist',
+      name: 'gnraliste',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Specialist`
+  String get spcialiste {
+    return Intl.message(
+      'Specialist',
+      name: 'spcialiste',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Specialty`
+  String get spcialit {
+    return Intl.message(
+      'Specialty',
+      name: 'spcialit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `eg: Pediatrician`
+  String get exPdiatre {
+    return Intl.message(
+      'eg: Pediatrician',
+      name: 'exPdiatre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hospital name`
+  String get nomDeLhpital {
+    return Intl.message(
+      'Hospital name',
+      name: 'nomDeLhpital',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `eg: Hôpitale Générale`
+  String get exHpitaleGnrale {
+    return Intl.message(
+      'eg: Hôpitale Générale',
+      name: 'exHpitaleGnrale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type of establishment`
+  String get typeDtablissement {
+    return Intl.message(
+      'Type of establishment',
+      name: 'typeDtablissement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Public`
+  String get publique {
+    return Intl.message(
+      'Public',
+      name: 'publique',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PUBLIC`
+  String get public {
+    return Intl.message(
+      'PUBLIC',
+      name: 'public',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confessional`
+  String get confessionel {
+    return Intl.message(
+      'Confessional',
+      name: 'confessionel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Private`
+  String get priv {
+    return Intl.message(
+      'Private',
+      name: 'priv',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PRIVATE`
+  String get private {
+    return Intl.message(
+      'PRIVATE',
+      name: 'private',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile Physician created ..`
+  String get profilMdcinCre {
+    return Intl.message(
+      'Profile Physician created ..',
+      name: 'profilMdcinCre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No selected image`
+  String get aucuneImageSelectionne {
+    return Intl.message(
+      'No selected image',
+      name: 'aucuneImageSelectionne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile photo added`
+  String get photoDeProfilAjoute {
+    return Intl.message(
+      'Profile photo added',
+      name: 'photoDeProfilAjoute',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms of service`
+  String get termesDeServices {
+    return Intl.message(
+      'Terms of service',
+      name: 'termesDeServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fermer`
+  String get fermer {
+    return Intl.message(
+      'Fermer',
+      name: 'fermer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name as on the CNI`
+  String get nomTelQueSurLaCni {
+    return Intl.message(
+      'Name as on the CNI',
+      name: 'nomTelQueSurLaCni',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `CNI name`
+  String get nomCni {
+    return Intl.message(
+      'CNI name',
+      name: 'nomCni',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `About`
+  String get aPropos {
+    return Intl.message(
+      'About',
+      name: 'aPropos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Speak briefly about yourself ..`
+  String get parlezBrivementDeVous {
+    return Intl.message(
+      'Speak briefly about yourself ..',
+      name: 'parlezBrivementDeVous',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your address`
+  String get votreAddresse {
+    return Intl.message(
+      'Your address',
+      name: 'votreAddresse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eg: Carrefour TKC, Biyem-Assi`
+  String get exCarrefourTkcBiyemassi {
+    return Intl.message(
+      'Eg: Carrefour TKC, Biyem-Assi',
+      name: 'exCarrefourTkcBiyemassi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `GPS:`
+  String get gps {
+    return Intl.message(
+      'GPS:',
+      name: 'gps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lat: `
+  String get lat {
+    return Intl.message(
+      'Lat: ',
+      name: 'lat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `     Lng: `
+  String get lng {
+    return Intl.message(
+      '     Lng: ',
+      name: 'lng',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add my location`
+  String get ajouterMaLocalisation {
+    return Intl.message(
+      'Add my location',
+      name: 'ajouterMaLocalisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `NB: The addition of the rental is required for the validation of the form`
+  String get nbLajoutDeLaLocationEstRquisePourLaValidation {
+    return Intl.message(
+      'NB: The addition of the rental is required for the validation of the form',
+      name: 'nbLajoutDeLaLocationEstRquisePourLaValidation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Status`
+  String get statut {
+    return Intl.message(
+      'Status',
+      name: 'statut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ex: Surgeon`
+  String get exChirurgien {
+    return Intl.message(
+      'ex: Surgeon',
+      name: 'exChirurgien',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order registration number`
+  String get numroDenrgistrementLordre {
+    return Intl.message(
+      'Order registration number',
+      name: 'numroDenrgistrementLordre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your number`
+  String get votreMatricule {
+    return Intl.message(
+      'Your number',
+      name: 'votreMatricule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your price per hour`
+  String get votreTarifParHeure {
+    return Intl.message(
+      'Your price per hour',
+      name: 'votreTarifParHeure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ex: 3500`
+  String get ex3500 {
+    return Intl.message(
+      'ex: 3500',
+      name: 'ex3500',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name of your establishment`
+  String get nomDeVotreTablissement {
+    return Intl.message(
+      'Name of your establishment',
+      name: 'nomDeVotreTablissement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ex: District Hospital of Limbé`
+  String get exHpitalDeDistrictDeLimb {
+    return Intl.message(
+      'ex: District Hospital of Limbé',
+      name: 'exHpitalDeDistrictDeLimb',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select your schedules`
+  String get slectionnezVosHoraires {
+    return Intl.message(
+      'Select your schedules',
+      name: 'slectionnezVosHoraires',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Days`
+  String get jours {
+    return Intl.message(
+      'Days',
+      name: 'jours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get dbut {
+    return Intl.message(
+      'Start',
+      name: 'dbut',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `End`
+  String get fin {
+    return Intl.message(
+      'End',
+      name: 'fin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Monday to Friday`
+  String get lundiVendredi {
+    return Intl.message(
+      'Monday to Friday',
+      name: 'lundiVendredi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saturday`
+  String get samedi {
+    return Intl.message(
+      'Saturday',
+      name: 'samedi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sunday`
+  String get dimanche {
+    return Intl.message(
+      'Sunday',
+      name: 'dimanche',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select your services`
+  String get slectionnezVosServices {
+    return Intl.message(
+      'Select your services',
+      name: 'slectionnezVosServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Consultation`
+  String get consultation {
+    return Intl.message(
+      'Consultation',
+      name: 'consultation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remote consultation`
+  String get tlconsultation {
+    return Intl.message(
+      'Remote consultation',
+      name: 'tlconsultation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chat`
+  String get chat {
+    return Intl.message(
+      'Chat',
+      name: 'chat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Home visit`
+  String get visiteDomicile {
+    return Intl.message(
+      'Home visit',
+      name: 'visiteDomicile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Supporting documents`
+  String get picesJustificatives {
+    return Intl.message(
+      'Supporting documents',
+      name: 'picesJustificatives',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan of the identity document (CNI, Passport, etc.)`
+  String get scanDeLaPiceDidentitCniPassportEtc {
+    return Intl.message(
+      'Scan of the identity document (CNI, Passport, etc.)',
+      name: 'scanDeLaPiceDidentitCniPassportEtc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Certificate of registration to order`
+  String get certificatDenrgistrementLordre {
+    return Intl.message(
+      'Certificate of registration to order',
+      name: 'certificatDenrgistrementLordre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get mettreJour {
+    return Intl.message(
+      'Update',
+      name: 'mettreJour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Information updates ..`
+  String get informationsMisesJour {
+    return Intl.message(
+      'Information updates ..',
+      name: 'informationsMisesJour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No document selected`
+  String get aucunDocumentSelectionne {
+    return Intl.message(
+      'No document selected',
+      name: 'aucunDocumentSelectionne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `added`
+  String get ajoute {
+    return Intl.message(
+      'added',
+      name: 'ajoute',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved Document`
+  String get documentSauvegard {
+    return Intl.message(
+      'Saved Document',
+      name: 'documentSauvegard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Services Offered`
+  String get servicesOfferts {
+    return Intl.message(
+      'Services Offered',
+      name: 'servicesOfferts',
       desc: '',
       args: [],
     );
