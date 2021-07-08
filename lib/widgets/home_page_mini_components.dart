@@ -957,13 +957,14 @@ class HomePageComponents {
     );
   }
 
-  getProfileStat({String imgUrl, String title, int occurence}) {
+  getProfileStat({String imgUrl, String title, int occurence, Color color = primaryColor}) {
     return Row(children: [
       Container(
         margin: EdgeInsets.only(right: wv * 1),
         child: SvgPicture.asset(
           imgUrl,
           width: wv * 7,
+          color: color,
         ),
       ),
       Column(
@@ -1108,10 +1109,11 @@ class HomePageComponents {
     );
   }
 
-  static Widget getLoanTile({String label, String doctorName, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
+  static Widget getLoanTile({String label, String subtitle, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
     String firstDateString = firstDate.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: wv*2),
       leading: Container(
         width: wv * 12,
         padding: EdgeInsets.symmetric(horizontal: wv * 1),
@@ -1136,27 +1138,19 @@ class HomePageComponents {
       ),
       title: Padding(
         padding: const EdgeInsets.only(top: 8.0),
-        child: Text(
-          "$firstDateString au $lastDateString",
-          style: TextStyle(
-              color: kPrimaryColor,
-              fontSize: wv*3.5),
-          overflow: TextOverflow.fade,
-          maxLines: 1,
-        ),
-      ),
+        child: Text("$firstDateString au $lastDateString", style: TextStyle(color: kPrimaryColor, fontSize: 15, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis, maxLines: 2,),),
       subtitle: Row(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("")
+              Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 14), overflow: TextOverflow.fade, maxLines: 1,)
             ],
           ),
         ],
       ),
       trailing: Container(
-        width: wv*25,
+        width: 120,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -1172,7 +1166,7 @@ class HomePageComponents {
             SizedBox(width: wv*2,),
             Column(
               children: [
-                SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: wv*8,),
+                SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', height: 35,),
                 Text("Payer", style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
               ],
             )
@@ -1401,15 +1395,15 @@ class HomePageComponents {
 
   static accountParameters({String title, String subtitle, String svgIcon, Function action}){
     return Padding(
-      padding: EdgeInsets.only(bottom: 8.0),
+      padding: EdgeInsets.only(bottom: 5.0),
       child: ListTile(
         title: Padding(
           padding: EdgeInsets.only(bottom: 5.0),
-          child: Text(title, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: wv*4)),
+          child: Text(title, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17)),
         ),
         subtitle: Row(children: [
-          SvgPicture.asset(svgIcon, color: kSouthSeas, width: wv*7,), SizedBox(width: wv*2,),
-          Expanded(child: Text(subtitle, style: TextStyle(color: kPrimaryColor), overflow: TextOverflow.fade,))
+          SvgPicture.asset(svgIcon, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
+          Expanded(child: Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
         trailing: TextButton(onPressed: action, child: Text("Modifier..", style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
       ),

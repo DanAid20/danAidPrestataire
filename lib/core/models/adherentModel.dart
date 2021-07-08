@@ -6,15 +6,17 @@ class AdherentModel {
   String adherentId, authId, familyDoctorId, cniName, otherDocName, marriageCertificateName, familyName, surname, matricule, imgUrl, gender, email, profession, regionOfOrigin, marriageCertificateUrl, otherJustificativeDocsUrl, officialDocUrl, town, profileType, address;
   Timestamp dateCreated, validityEndDate, validityStartDate, birthDate, lastDateVisited;
   int adherentPlan, points, visitPoints;
-  bool paymentIsMobile, profileEnabled, isMarried, enable, havePaid, paid;
+  num insuranceLimit;
+  bool paymentIsMobile, profileEnabled, isMarried, enable, havePaid, firstInvoice, paid, stateValidate;
   var phoneList;
   List<AdherentBillModel> adherentNewBill;
-  List visits, keywords, phoneKeywords, nameKeywords;
+  List visits, keywords, phoneKeywords, nameKeywords, allergies;
   Map location;
   DoctorModel familyDoctor;
+  var height, weight;
   Map codeConsult;
 
-  AdherentModel({this.adherentId, this.codeConsult, this.authId, this.keywords, this.paid, this.havePaid, this.validityStartDate, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
+  AdherentModel({this.adherentId, this.codeConsult, this.authId, this.keywords, this.insuranceLimit, this.firstInvoice, this.stateValidate, this.paid, this.havePaid, this.allergies, this.height, this.weight, this.validityStartDate, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
 
   factory AdherentModel.fromDocument(DocumentSnapshot doc) {
     return AdherentModel(
@@ -22,6 +24,7 @@ class AdherentModel {
         authId: doc.data()["authId"],
         keywords: doc.data()["keywords"],
         familyDoctorId: doc.data()["familyDoctorId"],
+        insuranceLimit: doc.data()["plafond"],
         cniName: doc.data()["cniName"],
         visits: doc.data()["visits"],
         paid: doc.data()["paid"],
@@ -58,6 +61,11 @@ class AdherentModel {
         address: doc.data()["adresse"],
         location: doc.data()["localisation"],
         phoneKeywords: doc.data()["phoneKeywords"],
+        firstInvoice: doc.data()["firstfacturationOfUser"],
+        stateValidate: doc.data()["etatValider"],
+        height: doc.data()["height"],
+        weight: doc.data()["weight"],
+        allergies: doc.data()["allergies"],
         codeConsult: doc.data()["CurrentcodeConsultation"],
         nameKeywords: doc.data()["nameKeywords"]
       );

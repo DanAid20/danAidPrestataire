@@ -8,6 +8,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -309,7 +310,8 @@ class SearchResult extends StatelessWidget {
   }
 
   startConversation(BuildContext context, ConversationChatModel conversationData) {
-    ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: target.userId),),);
+    /*ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
     ConversationModel conversationModel = ConversationModel(
       conversationId: Algorithms.getConversationId(userId: user.authId, targetId: target.authId),
       userId: user.authId,
@@ -323,6 +325,6 @@ class SearchResult extends StatelessWidget {
       targetPhoneId: target.userId
     );
     conversation.setConversationModel(conversationModel);
-    Navigator.pushNamed(context, '/conversation');
+    Navigator.pushNamed(context, '/conversation');*/
   }
 }

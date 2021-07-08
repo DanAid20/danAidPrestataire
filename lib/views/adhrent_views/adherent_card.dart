@@ -135,7 +135,7 @@ class _AdherentCardState extends State<AdherentCard> {
           ),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
+          padding: EdgeInsets.only(right: wv*6, left: wv*6, top: hv*2),
           decoration: BoxDecoration(
             color: kCardTextColor,
             borderRadius: BorderRadius.circular(20),
@@ -217,14 +217,18 @@ class _AdherentCardState extends State<AdherentCard> {
                             ]
                           )),
                           SizedBox(height: hv*1.5,),
-                          RichText(text: TextSpan(
+                          RichText(
+                            text: TextSpan(
+                            style: textStyle,
                             children: [
                               TextSpan(text: "Numéro matricule\n"),
                               TextSpan(text: beneficiary.matricule, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
                           )),
                           SizedBox(height: hv*1.5,),
-                          RichText(text: TextSpan(
+                          RichText(text: 
+                          TextSpan(
+                            style: textStyle,
                             children: [
                               TextSpan(text: "Médecin de Famille\n"),
                               TextSpan(text: doctor != null ? doctor : "Aucun", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
@@ -242,7 +246,7 @@ class _AdherentCardState extends State<AdherentCard> {
                 child: PrettyQr(
                       typeNumber: 3,
                       roundEdges: true,
-                      size: 75,
+                      size: 80,
                       elementColor: kCardTextColor,
                       data: adherentModel.adherentId,
                       errorCorrectLevel: QrErrorCorrectLevel.L,

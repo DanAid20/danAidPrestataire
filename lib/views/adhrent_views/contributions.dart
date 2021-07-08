@@ -9,6 +9,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:danaid/widgets/drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class Contributions extends StatefulWidget {
 }
 
 class _ContributionsState extends State<Contributions> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
@@ -29,6 +31,7 @@ class _ContributionsState extends State<Contributions> {
     String inscriptionId;
 
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         leading: IconButton(
@@ -39,8 +42,15 @@ class _ContributionsState extends State<Contributions> {
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
         ],
+      ),
+      endDrawer: DefaultDrawer(
+        entraide: (){Navigator.pop(context); Navigator.pop(context);},
+        accueil: (){Navigator.pop(context); Navigator.pop(context);},
+        carnet: (){Navigator.pop(context); Navigator.pop(context);},
+        partenaire: (){Navigator.pop(context); Navigator.pop(context);},
+        famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
       body: Column(
         children: [
@@ -54,13 +64,13 @@ class _ContributionsState extends State<Contributions> {
           SizedBox(height: hv*2.5,),
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+              padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*2),
               width: double.infinity,
               color: whiteColor,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Mes dernières factures", style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
+                  Text("  Mes dernières factures", style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
                   SizedBox(height: hv*2,),
                   StreamBuilder(
                     stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
@@ -76,8 +86,7 @@ class _ContributionsState extends State<Contributions> {
                       return snapshot.data.docs.length >= 1
                       ? Expanded(
                         child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
+                            physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data.docs.length,
                             itemBuilder: (context, index) {
@@ -94,11 +103,14 @@ class _ContributionsState extends State<Contributions> {
                                 amount: invoice.amount, 
                                 firstDate : invoice.type == "INSCRIPTION" ? invoice.dateCreated.toDate() : invoice.coverageStartDate.toDate(), 
                                 lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate() : invoice.coverageEndDate.toDate(),
-                                paid: invoice.paymentDelayDate != null ? invoice.paid == true ? 1 : invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
+                                paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
                                 type : invoice.type, state : 0, 
                                 action : (){
                                   if(invoice.type == "INSCRIPTION"){
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
+                                  }
+                                  else if(invoice.stateValidate == true || invoice.paid == true){
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Côtisation éffectuée",)));
                                   }
                                   else {
                                     PlanModel plan = PlanModel(
@@ -135,7 +147,7 @@ class _ContributionsState extends State<Contributions> {
     return GestureDetector(
       onTap: action,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: hv*0.5),
+        margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
         decoration: BoxDecoration(
           color: whiteColor,
@@ -164,7 +176,7 @@ class _ContributionsState extends State<Contributions> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(paid == 1 ? "Payée" : paid == 2 ? "En retard!" : "En attente!", style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: 16)),
+                      Center(child: Text(paid == 1 ? "Payée" : paid == 2 ? "En retard!" : paid == 3 ? "Validation en cours" : "En attente!", style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: wv*3.5))),
                       SizedBox(height: hv*2,),
                       Text("Délai de paiement", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
                       Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold, decoration: paid == 1 ? TextDecoration.lineThrough : TextDecoration.none),),

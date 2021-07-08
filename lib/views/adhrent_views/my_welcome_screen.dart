@@ -74,6 +74,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           ),*/
                           Hero(
                             tag: "loanCard",
+                            flightShuttleBuilder: flightShuttleBuilder,
                             child: AdvantageCard(
                               label: "Prêt de santé",
                               state: "DISPONIBLE",
@@ -231,4 +232,17 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
     ) :
     Center(child: Loaders().buttonLoader(kPrimaryColor));
   }
+
+  Widget flightShuttleBuilder(
+    BuildContext flightContext,
+    Animation<double> animation,
+    HeroFlightDirection flightDirection,
+    BuildContext fromHeroContext,
+    BuildContext toHeroContext,
+    ) {
+  return DefaultTextStyle(
+    style: DefaultTextStyle.of(toHeroContext).style,
+    child: toHeroContext.widget,
+  );
+}
 }

@@ -7,6 +7,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
       : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
-    return StreamBuilder(
+    return adherentProvider.getAdherent.location != null ? StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -78,7 +79,12 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
               : Center(
                   child: Text("Aucun medecin disponible pour le moment.."),
                 );
-        });
+        }) : Center(
+          child: CustomTextButton(
+            text: "Mettez à jour votre profil ainsi que votre location GPS",
+            action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit'),
+            ),
+        );
   }
 
   @override

@@ -116,31 +116,35 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ]
                             ),
                             child: Row(children: [
-                              /*SizedBox(width: 10,),
+                              SizedBox(width: 10,),
                               Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    fillColor: whiteColor.withOpacity(0.6),
-                                    prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
-                                      borderRadius: BorderRadius.all(Radius.circular(15))
+                                child: GestureDetector(
+                                  onTap: ()=>Navigator.pushNamed(context, '/partners-search'),
+                                  child: TextField(
+                                    enabled: false,
+                                    decoration: InputDecoration(
+                                      fillColor: whiteColor.withOpacity(0.6),
+                                      prefixIcon: Hero(tag: "search", child: Icon(Icons.search, color: kBrownCanyon,)),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
+                                        borderRadius: BorderRadius.all(Radius.circular(15))
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
+                                        borderRadius: BorderRadius.all(Radius.circular(15))
+                                      ),
+                                      hintText: "Rechercher",
+                                      hintStyle: TextStyle(color: kBrownCanyon)
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
-                                      borderRadius: BorderRadius.all(Radius.circular(15))
-                                    ),
-                                    hintText: "Rechercher",
-                                    hintStyle: TextStyle(color: kBrownCanyon)
                                   ),
                                 ),
                               ),
                               SizedBox(width: 5,),
-                              TextButton(onPressed: (){},
+                              TextButton(onPressed: ()=>controller.toPreviousIndex(),
                                 child: Text("Annuler", style: TextStyle(color: kBrownCanyon),)
                               ),
-                              IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})*/
+                              //IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})
 
                             ],),
                           ),
