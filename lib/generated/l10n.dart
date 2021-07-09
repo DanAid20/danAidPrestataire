@@ -1284,6 +1284,567 @@ class S {
       args: [],
     );
   }
+
+  /// `January to March`
+  String get janvierMars {
+    return Intl.message(
+      'January to March',
+      name: 'janvierMars',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `April to June `
+  String get avrilJuin {
+    return Intl.message(
+      'April to June ',
+      name: 'avrilJuin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `July to September`
+  String get juilletSeptembre {
+    return Intl.message(
+      'July to September',
+      name: 'juilletSeptembre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `October to December`
+  String get octobreDcembre {
+    return Intl.message(
+      'October to December',
+      name: 'octobreDcembre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `H`
+  String get h {
+    return Intl.message(
+      'H',
+      name: 'h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `F`
+  String get f {
+    return Intl.message(
+      'F',
+      name: 'f',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Region`
+  String get region {
+    return Intl.message(
+      'Region',
+      name: 'region',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose a region`
+  String get choisirUneRegion {
+    return Intl.message(
+      'Choose a region',
+      name: 'choisirUneRegion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose City`
+  String get choixDeLaVille {
+    return Intl.message(
+      'Choose City',
+      name: 'choixDeLaVille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `City`
+  String get ville {
+    return Intl.message(
+      'City',
+      name: 'ville',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gallery`
+  String get gallerie {
+    return Intl.message(
+      'Gallery',
+      name: 'gallerie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Camera`
+  String get camera {
+    return Intl.message(
+      'Camera',
+      name: 'camera',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search...`
+  String get chercher {
+    return Intl.message(
+      'Search...',
+      name: 'chercher',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select your country`
+  String get selectionnezVotrePays {
+    return Intl.message(
+      'Select your country',
+      name: 'selectionnezVotrePays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select your country`
+  String get slectionnezVotrePays {
+    return Intl.message(
+      'Select your country',
+      name: 'slectionnezVotrePays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid phone number`
+  String get entrerUnNumeroDeTlphoneValide {
+    return Intl.message(
+      'Enter a valid phone number',
+      name: 'entrerUnNumeroDeTlphoneValide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone number`
+  String get numroDeTlphone {
+    return Intl.message(
+      'Phone number',
+      name: 'numroDeTlphone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone number automatically verified and user signed in:`
+  String get phoneNumberAutomaticallyVerifiedAndUserSignedIn {
+    return Intl.message(
+      'Phone number automatically verified and user signed in:',
+      name: 'phoneNumberAutomaticallyVerifiedAndUserSignedIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please check your phone for the verification code.`
+  String get pleaseCheckYourPhoneForTheVerificationCode {
+    return Intl.message(
+      'Please check your phone for the verification code.',
+      name: 'pleaseCheckYourPhoneForTheVerificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Le code viens d'arriver, patientez encore unpeu ...`
+  String get leCodeViensDarriverPatientezEncoreUnpeu {
+    return Intl.message(
+      'Le code viens d\'arriver, patientez encore unpeu ...',
+      name: 'leCodeViensDarriverPatientezEncoreUnpeu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to Verify Phone Number:`
+  String get phoneNumberVerificationFailedCode {
+    return Intl.message(
+      'Failed to Verify Phone Number:',
+      name: 'phoneNumberVerificationFailedCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `verification code: `
+  String get verificationCode {
+    return Intl.message(
+      'verification code: ',
+      name: 'verificationCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `. Message:`
+  String get message {
+    return Intl.message(
+      '. Message:',
+      name: 'message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A validation code has been sent by sms to: `
+  String get unCodeDeValidationATEnvoyParSmsAu {
+    return Intl.message(
+      'A validation code has been sent by sms to: ',
+      name: 'unCodeDeValidationATEnvoyParSmsAu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validate the code`
+  String get validezLeCode {
+    return Intl.message(
+      'Validate the code',
+      name: 'validezLeCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Return the validation code`
+  String get renvoyezLeCodeDeValidation {
+    return Intl.message(
+      'Return the validation code',
+      name: 'renvoyezLeCodeDeValidation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The code expires in:  `
+  String get leCodeExpireDans {
+    return Intl.message(
+      'The code expires in:  ',
+      name: 'leCodeExpireDans',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Successfully signed in UID: `
+  String get successfullySignedInUid {
+    return Intl.message(
+      'Successfully signed in UID: ',
+      name: 'successfullySignedInUid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to sign in: `
+  String get failedToSignIn {
+    return Intl.message(
+      'Failed to sign in: ',
+      name: 'failedToSignIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset your password with your phone and email address,`
+  String get reinitialisezVotreMotDePasseGrceVotreTlphoneEtAdresse {
+    return Intl.message(
+      'Reset your password with your phone and email address,',
+      name: 'reinitialisezVotreMotDePasseGrceVotreTlphoneEtAdresse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset password`
+  String get reinitialiserMotDePasse {
+    return Intl.message(
+      'Reset password',
+      name: 'reinitialiserMotDePasse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get annuler {
+    return Intl.message(
+      'Cancel',
+      name: 'annuler',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `User`
+  String get utilisateur {
+    return Intl.message(
+      'User',
+      name: 'utilisateur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Doctor`
+  String get mdcin {
+    return Intl.message(
+      'Doctor',
+      name: 'mdcin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `healthprovider`
+  String get prestataireSant {
+    return Intl.message(
+      'healthprovider',
+      name: 'prestataireSant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your information to create your '
+
+  String get entrezVosInformationsAfinDeCrerVotreCompteEt {
+    return Intl.message(
+      'Enter your information to create your \'\r\n                                \'and become a member of the Danaid community.',
+      name: 'entrezVosInformationsAfinDeCrerVotreCompteEt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Already a member?`
+  String get djMembre {
+    return Intl.message(
+      'Already a member?',
+      name: 'djMembre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in.`
+  String get seConnecter {
+    return Intl.message(
+      'Sign in.',
+      name: 'seConnecter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phone`
+  String get tlphone {
+    return Intl.message(
+      'Phone',
+      name: 'tlphone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your phone number`
+  String get entrezVotreNumroDeTlphone {
+    return Intl.message(
+      'Enter your phone number',
+      name: 'entrezVotreNumroDeTlphone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name`
+  String get nom {
+    return Intl.message(
+      'Name',
+      name: 'nom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your name`
+  String get entrezVotreNom {
+    return Intl.message(
+      'Enter your name',
+      name: 'entrezVotreNom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `E-mail address`
+  String get adresseEmail {
+    return Intl.message(
+      'E-mail address',
+      name: 'adresseEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter your email address`
+  String get entrezVotreAdresseEmail {
+    return Intl.message(
+      'Enter your email address',
+      name: 'entrezVotreAdresseEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign up`
+  String get sinscrire {
+    return Intl.message(
+      'Sign up',
+      name: 'sinscrire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to Verify Phone Number: `
+  String get failedToVerifyPhoneNumber {
+    return Intl.message(
+      'Failed to Verify Phone Number: ',
+      name: 'failedToVerifyPhoneNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name of the establishment  *`
+  String get nomDeLtablissement {
+    return Intl.message(
+      'Name of the establishment  *',
+      name: 'nomDeLtablissement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Full name of the contact *`
+  String get nomCompletDuContact {
+    return Intl.message(
+      'Full name of the contact *',
+      name: 'nomCompletDuContact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `e.g.: Hôpial Centrale`
+  String get exHpialCentrale {
+    return Intl.message(
+      'e.g.: Hôpial Centrale',
+      name: 'exHpialCentrale',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contact email`
+  String get emailDuContact {
+    return Intl.message(
+      'Contact email',
+      name: 'emailDuContact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hospital`
+  String get hpital {
+    return Intl.message(
+      'Hospital',
+      name: 'hpital',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pharmacie`
+  String get pharmacie {
+    return Intl.message(
+      'Pharmacie',
+      name: 'pharmacie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pharmacy`
+  String get laboratoire {
+    return Intl.message(
+      'Pharmacy',
+      name: 'laboratoire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Lu et accepté les `
+  String get luEtAcceptLes {
+    return Intl.message(
+      'Lu et accepté les ',
+      name: 'luEtAcceptLes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read and accepted the `
+  String get termesDesServices {
+    return Intl.message(
+      'Read and accepted the ',
+      name: 'termesDesServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid email address`
+  String get entrerUneAddresseEmailValide {
+    return Intl.message(
+      'Enter a valid email address',
+      name: 'entrerUneAddresseEmailValide',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

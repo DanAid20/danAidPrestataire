@@ -1,4 +1,5 @@
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/default_btn.dart';
@@ -64,7 +65,7 @@ class _PasswordResetViewState extends State<PasswordResetView> {
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: horizontal(size: 35)),
-                            child: Text('Re-initialisez votre mot de passe grâce à votre téléphone et adresse email,',
+                            child: Text(S.of(context).reinitialisezVotreMotDePasseGrceVotreTlphoneEtAdresse,
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -88,8 +89,8 @@ class _PasswordResetViewState extends State<PasswordResetView> {
                         child: ListView(
                           children: [
                             loginForm(),
-                            DefaultBtn(formKey: _mFormKey, signText: "Re-initialiser mot de passe", signRoute: '/home',),
-                            SIgnInUpTag(title: '', subTitle: 'Annuler', signRoute: '/login',),
+                            DefaultBtn(formKey: _mFormKey, signText: S.of(context).reinitialiserMotDePasse, signRoute: '/home',),
+                            SIgnInUpTag(title: '', subTitle: S.of(context).annuler, signRoute: '/login',),
                             SizedBox(height: height(size: 25),)
                           ],
                         ),

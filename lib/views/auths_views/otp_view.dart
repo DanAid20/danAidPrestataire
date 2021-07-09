@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/locator.dart';
@@ -95,7 +96,7 @@ class _OtpViewState extends State<OtpView> {
                           padding: EdgeInsets.symmetric(horizontal: 25),
                           alignment: Alignment.center,
                           child: Text(
-                              "Un code de validation a été envoyé par sms au: ${userProvider.getUserId}",
+                              S.of(context).unCodeDeValidationATEnvoyParSmsAu+userProvider.getUserId,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: darkGreyColor,
@@ -107,10 +108,10 @@ class _OtpViewState extends State<OtpView> {
                         otpForm(),
                         //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
                         !(pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty)
-                          ? CustomDisabledTextButton(text: "Validez le code",)
+                          ? CustomDisabledTextButton(text: S.of(context).validezLeCode,)
                           : load ? Center(child: Loaders().buttonLoader(kPrimaryColor))
                             : CustomTextButton(
-                                text: "Validez le code", 
+                                text: S.of(context).validezLeCode, 
                                 color: kPrimaryColor, 
                                 action: 
                                   () async {
@@ -124,7 +125,7 @@ class _OtpViewState extends State<OtpView> {
                         GestureDetector(
                           onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
                           child: Text(
-                            "Renvoyez le code de validation",
+                            S.of(context).renvoyezLeCodeDeValidation,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
@@ -149,7 +150,7 @@ class _OtpViewState extends State<OtpView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Le code expire dans: ", style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
+          Text(S.of(context).leCodeExpireDans, style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
           TweenAnimationBuilder(
             tween: Tween(begin: 40.0, end: 0.0),
             duration: Duration(seconds: 120),
@@ -309,12 +310,12 @@ class _OtpViewState extends State<OtpView> {
         userProvider.setAuthId(user.uid);
         Navigator.pushReplacementNamed(context, '/home');
       }
-      showSnackbar("Successfully signed in UID: ${user.uid}");
+      showSnackbar(S.of(context).successfullySignedInUid+user.uid);
     }).catchError((e){
       setState(() {
         load = false;
       });
-      showSnackbar("Failed to sign in: " + e.message.toString());
+      showSnackbar(S.of(context).failedToSignIn + e.message.toString());
     });
 
     
@@ -322,7 +323,7 @@ class _OtpViewState extends State<OtpView> {
       setState(() {
         load = false;
       });
-      showSnackbar("Failed to sign in: " + e.message.toString());
+      showSnackbar(S.of(context).failedToSignIn + e.message.toString());
     }
   }
 

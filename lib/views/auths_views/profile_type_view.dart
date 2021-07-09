@@ -2,6 +2,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/strings.dart';
@@ -20,7 +21,7 @@ class ProfileTypeView extends StatefulWidget {
 class _ProfileTypeViewState extends State<ProfileTypeView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final List<String> descList = [Strings.USER_DESC, Strings.DOC_DESC, Strings.OTHER_DESC];
-  final List<String> titleList = ['Utilisateur', 'Médécin', 'Prestataire Santé'];
+  final List<String> titleList = [S.current.utilisateur, S.current.mdcin, S.current.prestataireSant];
   final List<String> imageList = ['assets/images/User.svg', 'assets/images/Doctor.svg', 'assets/images/Health.svg'];
   final List<String> routeList = ['/profile-type-adherent', '/profile-type-doctor', ''];
   //final List<Function> actionList = [adherentAction(), doctorAction(), serviceProviderAction()];
