@@ -1,5 +1,5 @@
 {
-  "vousNavezAucunRendezvousPourLeMoment": " Vous n'avez aucun rendez-vous pour le moment..",
+  "vousNavezAucunRendezvousPourLeMoment": "you have no appointment for the moment ..",
   "loading": "loading",
   "somethingWentWrong": "Something went wrong",
   "ajouterUnPatient": "Add a Patient",
@@ -159,7 +159,7 @@
   "utilisateur": "User",
   "mdcin": "Doctor",
   "prestataireSant": "healthprovider",
-  "entrezVosInformationsAfinDeCrerVotreCompteEt": "Enter your information to create your '\r\n                                'and become a member of the Danaid community.",
+  "entrezVosInformationsAfinDeCrerVotreCompteEt": "Enter your information to create your and become a member of the Danaid community.",
   "djMembre": "Already a member?",
   "seConnecter": "Sign in.",
   "tlphone": "Phone",
@@ -241,8 +241,11 @@
   "restePayer": "Remainder to pay ",
   "aucuneTransactionPourCetteAnne": "No Transactions for this year ",
   "bienvenue": "Bienvenue",
-  "maCouverture": "Ma Couverture",
-  "monDocteur": "Mon Docteur",
-  "mesServices": "Mes Services",
-  "mesRendezvous": "Mes Rendez-vous"
+  "maCouverture": "My Cover",
+  "monDocteur": "My Doctor",
+  "mesServices": "My Services",
+  "mesRendezvous": "My Appointments",
+  "aucunPatientEnSalleDattente": " No patients in the waiting room.",
+  "carnet": "Booklet",
+  "partenaire": "partner"
 }

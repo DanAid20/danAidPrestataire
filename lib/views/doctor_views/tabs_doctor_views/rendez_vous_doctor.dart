@@ -224,6 +224,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                             ),
                           );
                         }
+                        
                         if (snapshot.hasError) {
                           return Text(S.of(context).somethingWentWrong);
                         }
@@ -248,7 +249,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               : Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
-                    child: Text(S.of(context).somethingWentWrong),
+                    child: Text(S.of(context).aucunPatientEnSalleDattente),
                   ),
                 );
         });

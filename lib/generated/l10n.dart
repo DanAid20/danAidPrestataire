@@ -35,10 +35,10 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// ` Vous n'avez aucun rendez-vous pour le moment..`
+  /// `you have no appointment for the moment ..`
   String get vousNavezAucunRendezvousPourLeMoment {
     return Intl.message(
-      ' Vous n\'avez aucun rendez-vous pour le moment..',
+      'you have no appointment for the moment ..',
       name: 'vousNavezAucunRendezvousPourLeMoment',
       desc: '',
       args: [],
@@ -1635,10 +1635,10 @@ class S {
     );
   }
 
-  /// `Enter your information to create your '
+  /// `Enter your information to create your and become a member of the Danaid community.`
   String get entrezVosInformationsAfinDeCrerVotreCompteEt {
     return Intl.message(
-      'Enter your information to create your \'\r\n                                \'and become a member of the Danaid community.',
+      'Enter your information to create your and become a member of the Danaid community.',
       name: 'entrezVosInformationsAfinDeCrerVotreCompteEt',
       desc: '',
       args: [],
@@ -2455,41 +2455,71 @@ class S {
     );
   }
 
-  /// `Ma Couverture`
+  /// `My Cover`
   String get maCouverture {
     return Intl.message(
-      'Ma Couverture',
+      'My Cover',
       name: 'maCouverture',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mon Docteur`
+  /// `My Doctor`
   String get monDocteur {
     return Intl.message(
-      'Mon Docteur',
+      'My Doctor',
       name: 'monDocteur',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mes Services`
+  /// `My Services`
   String get mesServices {
     return Intl.message(
-      'Mes Services',
+      'My Services',
       name: 'mesServices',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mes Rendez-vous`
+  /// `My Appointments`
   String get mesRendezvous {
     return Intl.message(
-      'Mes Rendez-vous',
+      'My Appointments',
       name: 'mesRendezvous',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` No patients in the waiting room.`
+  String get aucunPatientEnSalleDattente {
+    return Intl.message(
+      ' No patients in the waiting room.',
+      name: 'aucunPatientEnSalleDattente',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Booklet`
+  String get carnet {
+    return Intl.message(
+      'Booklet',
+      name: 'carnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `partner`
+  String get partenaire {
+    return Intl.message(
+      'partner',
+      name: 'partenaire',
       desc: '',
       args: [],
     );

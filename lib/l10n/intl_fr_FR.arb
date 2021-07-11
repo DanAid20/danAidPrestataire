@@ -1,10 +1,10 @@
 {
-  "vousNavezAucunRendezvousPourLeMoment": "you have no appointment for the moment ..",
+  "vousNavezAucunRendezvousPourLeMoment": " Vous n'avez aucun rendez-vous pour le moment ..",
   "loading": "loading",
   "somethingWentWrong": "Something went wrong",
   "ajouterUnPatient": "Ajouter un Patient",
   "mesMessages": "Mes Messages",
-  "suivreMesPaiements": "Follow my payments",
+  "suivreMesPaiements": "Suivre Mes payments",
   "unPeuDePatienceCettePartieSeraBienttDisponible": "a little patience this part will be available soon",
   "emettreUnDevis": "Emettre un devis",
   "accdezAuCarnetDeSantDigitalDeVosPatientsEt": "Accédez au Carnet de Santé digital de vos patients et déclenchez leur prise en charge",
@@ -159,7 +159,7 @@
   "utilisateur": "Utilisateur",
   "mdcin": "Médécin",
   "prestataireSant": "Prestataire Santé",
-  "entrezVosInformationsAfinDeCrerVotreCompteEt": "Entrez vos informations afin de créer votre compte '\r\n                                'et devenez membre de la communauté Danaid.",
+  "entrezVosInformationsAfinDeCrerVotreCompteEt": "Entrez vos informations afin de créer votre compte et devenez membre de la communauté Danaid.",
   "djMembre": "Déjà membre ? ",
   "seConnecter": "Se connecter",
   "tlphone": "Téléphone",
@@ -244,5 +244,8 @@
   "maCouverture": "Ma Couverture",
   "monDocteur": "Mon Docteur",
   "mesServices": "Mes Services",
-  "mesRendezvous": "Mes Rendez-vous"
+  "mesRendezvous": "Mes Rendez-vous",
+  "aucunPatientEnSalleDattente": " Aucun patient en salle d'attente..",
+  "carnet": "Carnet",
+  "partenaire": "partenaire"
 }
