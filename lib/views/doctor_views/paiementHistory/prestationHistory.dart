@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/models/facture.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
@@ -174,7 +175,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text('Historique des prestqtions'), Text('Vos consultations & paiement')],
+                  children: [Text(S.of(context).historiqueDesPrestations), Text(S.of(context).vosConsultationsPaiement)],
                 ),
               ),
             ),
@@ -307,7 +308,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           alignment: Alignment.centerLeft,
                           margin : EdgeInsets.only(
                               left: 15.w,top: 2.h),
-                          child: Text('Status des Paiements ', style: TextStyle(
+                          child: Text(S.of(context).statusDesPaiements, style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
                                       
@@ -331,7 +332,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               
                               children: [
-                                Text('Consultation', textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -360,7 +361,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                         ),
                                       Container(
                                         width: 80.w,
-                                        child: Text('Beneficiares à jours',style: TextStyle(
+                                        child: Text(S.of(context).beneficiaresJours,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -383,7 +384,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text('Référencements', textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -412,7 +413,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                         ),
                                        Container(
                                         width: 80.w,
-                                        child: Text('Personnes inscrites',style: TextStyle(
+                                        child: Text(S.of(context).personnesInscrites,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -433,7 +434,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Total annuel ', textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -452,7 +453,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Payé ', textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
                                           color: kDeepTeal,
                                           fontWeight: FontWeight.w600,
                                           
@@ -471,7 +472,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Reste à Payer ', textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w600,
                                           
@@ -518,7 +519,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                 // HomePageComponents().paiementItem(),
                               paiementHistory.length==0 ?   Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Center(child: Container(child: Text('Aucune Transaction pour cette année '))),
+                                child: Center(child: Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne))),
                               ):
                                loading? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
                                ListView.builder(
@@ -553,9 +554,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                       }
                                  
                                   }else {
-                                    return Container(child: Text('Aucune Transaction pour cette année '));
+                                    return Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
                                   }
-                                  return  Container(child: Text('Aucune Transaction pour cette année '));
+                                  return  Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
                              
                                  }
                               ),

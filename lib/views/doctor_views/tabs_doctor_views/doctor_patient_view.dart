@@ -199,7 +199,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     isPrestataire
                         ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text(
-                                "un peu de patience cette partie sera bientôt disponible")))
+                                S.of(context).unPeuDePatienceCettePartieSeraBienttDisponible)))
                         : Navigator.pushNamed(context, '/chatroom');
                   },
                   child: displsOtherServices(

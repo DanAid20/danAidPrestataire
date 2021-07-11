@@ -4,6 +4,7 @@ import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/my_coverage_tab.dart';
@@ -35,7 +36,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text("Bienvenue")
+          Text(S.current.bienvenue)
         ],
       )
     ),
@@ -46,7 +47,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text("Ma Couverture")
+          Text(S.current.maCouverture)
         ],
       )
     ),
@@ -57,7 +58,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text("Mon Docteur")
+          Text(S.current.monDocteur)
         ],
       )
     ),
@@ -70,7 +71,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text("Bienvenue")
+          Text(S.current.bienvenue)
         ],
       ),
     ),
@@ -81,7 +82,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text("Mes Services")
+          Text(S.current.mesServices)
         ],
       ),
     ),
@@ -92,7 +93,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text("Mes Rendez-vous")
+          Text(S.current.mesRendezvous)
         ],
       ),
     )

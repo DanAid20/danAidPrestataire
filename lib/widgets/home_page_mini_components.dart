@@ -578,6 +578,8 @@ class HomePageComponents {
            if(iSelected==index){
             onclick(index, adherent, 'remove')
          }else{
+           print(index),
+           print(index),
             onclick(index, adherent, 'add')
          }
       },

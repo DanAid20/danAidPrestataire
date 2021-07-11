@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';
@@ -101,7 +102,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
         });
     userCaprovider.getUseCase.consultationCode=code;
     userCaprovider.getUseCase.dateCreated= Timestamp.fromDate(date);
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Code ce consultation creer avec succes comme médecin de famille..")));
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
         
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -156,6 +157,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   }
   
   getUserSelected(int index, BeneficiaryModel adherent, action ){
+  
     if(action=="add"){
     setState(() {
       userSelected=index;
@@ -243,11 +245,13 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                 adherent: adherentBeneficiary, doctorName: famillyDoctorNAme, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected )),
                       ));
         beneficiaries.add(adherentBeneficiaryCard);
+        print(snapshot.docs.length);
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
           Widget content = InkWell(
                          onTap: ()=>{
+                           print(i),
                            beneficiaryCarouselController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn)
                          }, child: Container(
                         child: Padding(
@@ -285,8 +289,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("infos"),
-    content: Text("Cet adherent a bien été créer ."),
+    title: Text(S.of(context).infos),
+    content: Text(S.of(context).cetAdherentABienTCrer),
     actions: [
       okButton,
     ],
@@ -343,8 +347,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         alignment: Alignment.center,
                         child: Text(
                             widget.isAccountIsExists == false
-                                ? 'Le numéro'
-                                : 'Le Compte de l\'adherent',
+                                ? S.of(context).leNumro
+                                : S.of(context).leCompteDeLadherent,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w500,
@@ -357,14 +361,14 @@ class _InactiveAccountState extends State<InactiveAccount> {
                             widget.isAccountIsExists == false &&
                                     widget.phoneNumber != null
                                 ? widget.phoneNumber
-                                : ' est inatif',
+                                : S.of(context).estInatif,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w700,
                               fontSize: fontSize(size: 21),
                             )),
                       ),
-                     issaveInknowUserLoading==true ?  Text('gfmjgdfgj'): Align(
+                     issaveInknowUserLoading==true ?  Text('...'): Align(
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           "assets/icons/Bulk/Danger.svg",
@@ -377,8 +381,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Text(
                             widget.isAccountIsExists == false &&
                                     widget.phoneNumber != null
-                                ? 'N\'est pas encore adherent a la mutuelle sante DanAid.Recommncer La mutuelle et devenez le medecin de famille de votre patient'
-                                : 'L’adhérent n’etant pas à jour de ses cotisation, vous ne bénéficierez pas de la compensation dans le parsours de soins  DanAid.',
+                                ? S.of(context).nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
+                                : S.of(context).ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w500,
@@ -394,8 +398,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Text(
                           widget.isAccountIsExists == false &&
                                   widget.phoneNumber != null
-                              ? 'Vous recevrez la compensation DanAid(2.000 Cfa) si la famille adherent a la mutuelle'
-                              : 'Poursuivez la consultation hors parcours de soin DanAid',
+                              ? S.of(context).vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
+                              : S.of(context).poursuivezLaConsultationHorsParcoursDeSoinDanaid,
                           style: TextStyle(
                               color: kBlueForce,
                               fontSize: fontSize(size: 17),
@@ -445,8 +449,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                           },
                           child:  Text( 
                             widget.isAccountIsExists == false
-                                ? 'Ajouter une famille'
-                                : 'Poursuivre hors parcours',
+                                ? S.of(context).ajouterUneFamille
+                                : S.of(context).poursuivreHorsParcours,
                             style: TextStyle(
                                 color: textColor,
                                 fontSize: wv * 4.5,
@@ -497,7 +501,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                 alignment: Alignment.center,
                 child: Container(
                   child: Column(
-                    children: [Text('Famille'), Text('...')],
+                    children: [Text(S.of(context).famille), Text('...')],
                   ),
                 ),
               ),
@@ -587,6 +591,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                   width: wv * 80,
                                   child: TextButton(
                                     onPressed: () async {
+                                   
                                       // if (adherent.enable == false) {
                                       //   showDialog(
                                       //       context: context,
@@ -608,6 +613,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                             'codeConsultation': code,
                                             'createdDate': DateTime.now()
                                           };
+                                       
                                        if(userSelected!=-1){
                                          print(adherentModelProvider.getAdherent.adherentId);
                                          print(doctorProvider.getDoctor.id);
@@ -622,7 +628,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                       //   final date2 = DateTime.now();
                                                       //   final difference = date2.difference(d).inDays;
                                                       //    adherentModelProvider.getAdherent.codeConsult['createdDate']
-                                                      if(adherentModelProvider.getAdherent.codeConsult==null){
+                                                      print("--------------------${adherentModelProvider.getAdherent.codeConsult}");
+                                                      print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
+                                                      if(adherentModelProvider.getAdherent.codeConsult['codeConsultation']==null){
                                                         print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
                                                         setState(() {
                                                               isRequestLaunch=true;
@@ -649,7 +657,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text("Une facture vient d'être créer pour cette ...")));
+                                                        SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
                                                           });
                                                       }
                                                           
@@ -688,7 +696,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                             )),
                                                                   ); 
                                                                     ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text("Une facture vient d'être créer pour cette !!! ...")));
+                                                              SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
                                                                 });
                                                         }else{
                                                           Navigator.push(
@@ -704,7 +712,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                             )),
                                                                   ); 
                                                         ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text("Redirtection vers le carnet !! ...")));
+                                                              SnackBar(content: Text(S.of(context).redirtectionVersLeCarnet)));
                                                         }
                                                           
                                                     }
@@ -722,14 +730,14 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text("redirection vers le carnet ...")));
+                                                        SnackBar(content: Text(S.of(context).redirectionVersLeCarnet)));
                                                           }
                                                     });
                                          
                                          
                                         
                                       }else{
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Selectioner un beneficiaire avant de valider")));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).selectionerUnBeneficiaireAvantDeValider)));
                                       }
                                     },
                                     child:adherentUserSelected!=null ? Row(
@@ -742,7 +750,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         ),),
                                         Spacer(),
                                         Text(
-                                            'carnet de : ${adherentUserSelected.cniName}',
+                                            S.of(context).carnetDe+adherentUserSelected.cniName,
                                             style: TextStyle(
                                                 color: textColor,
                                                 fontSize: wv * 4.5,
@@ -759,7 +767,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         ),
                                       ],
                                     ): Text(
-                                          'Acceder au carnet de Sante',
+                                          S.of(context).accederAuCarnetDeSante,
                                           style: TextStyle(
                                               color: textColor,
                                               fontSize: wv * 4.5,

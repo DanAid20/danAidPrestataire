@@ -3,6 +3,7 @@ import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -93,7 +94,7 @@ double imc=0;
               child: Container(
                 child: Column(
                   children: [
-                    Text('Carnet de santé  '),
+                    Text(S.of(context).carnetDeSant),
                     Text('${DateFormat('dd MMMM yyyy, h:mm').format(widget.beneficiare.dateCreated.toDate())}')
                   ],
                 ),
@@ -153,7 +154,7 @@ double imc=0;
                                           MySize.getScaledSizeHeight(19.0))),
                               Row(
                                 children: [
-                                  Text(widget.beneficiare.gender=="H"? 'Masculin':'Feminin',
+                                  Text(widget.beneficiare.gender=="H"? S.of(context).masculin:S.of(context).feminin,
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
@@ -166,7 +167,7 @@ double imc=0;
                                           fontWeight: FontWeight.w800,
                                           fontSize:
                                               MySize.getScaledSizeHeight(17))),
-                                  Text('ans',
+                                  Text(S.of(context).ans,
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
@@ -540,12 +541,12 @@ double imc=0;
                       ],
                     ):Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Center(child: Container(child: Text('les données comme le poids et la taille sont manquantes pour afficher cette section veuillez completer ce profil ' , textAlign: TextAlign.center))),
+                      child: Center(child: Container(child: Text(S.of(context).lesDonnesCommeLePoidsEtLaTailleSontManquantes , textAlign: TextAlign.center))),
                     ),
                     SizedBox(height: MySize.getScaledSizeHeight(5),),
                     GestureDetector(
                         onTap: ()=>{
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("un peut de patience cette partie est en cour de develloppement. Merci de votre comprehension"))) 
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).unPeutDePatienceCettePartieEstEnCourDe))) 
                         },
                         child: Container(
                         height: MySize.getScaledSizeHeight(100),
@@ -575,8 +576,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('Profil', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text('Détaillé', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).profil, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).dtaill, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -611,8 +612,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text('Prochains', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text('Rendez-vous', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).prochains, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).rendezvous, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -646,8 +647,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text('Suive des',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text('Soins', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).suiveDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -681,8 +682,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text('Suivi des ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text('Soins', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).suiviDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -716,8 +717,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text('Données ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text('Vitales', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).donnes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).vitales, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -751,8 +752,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text('Notes du  ',  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text('Médecin', style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).notesDu,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context).mdecin, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -787,7 +788,7 @@ double imc=0;
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          Text('Code De consultation ',style: TextStyle(
+                          Text(S.of(context).codeDeConsultation,style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
                                   fontSize: MySize.getScaledSizeHeight(25) )),

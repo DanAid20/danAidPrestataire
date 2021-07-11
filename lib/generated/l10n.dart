@@ -65,20 +65,20 @@ class S {
     );
   }
 
-  /// `Ajouter un Patient`
+  /// `Add a Patient`
   String get ajouterUnPatient {
     return Intl.message(
-      'Ajouter un Patient',
+      'Add a Patient',
       name: 'ajouterUnPatient',
       desc: '',
       args: [],
     );
   }
 
-  /// `Mes Messages`
+  /// `My Messages`
   String get mesMessages {
     return Intl.message(
-      'Mes Messages',
+      'My Messages',
       name: 'mesMessages',
       desc: '',
       args: [],
@@ -1636,7 +1636,6 @@ class S {
   }
 
   /// `Enter your information to create your '
-
   String get entrezVosInformationsAfinDeCrerVotreCompteEt {
     return Intl.message(
       'Enter your information to create your \'\r\n                                \'and become a member of the Danaid community.',
@@ -1816,10 +1815,10 @@ class S {
     );
   }
 
-  /// `Lu et accepté les `
+  /// `Read and accepted the `
   String get luEtAcceptLes {
     return Intl.message(
-      'Lu et accepté les ',
+      'Read and accepted the ',
       name: 'luEtAcceptLes',
       desc: '',
       args: [],
@@ -1841,6 +1840,656 @@ class S {
     return Intl.message(
       'Enter a valid email address',
       name: 'entrerUneAddresseEmailValide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In the office`
+  String get encabinet {
+    return Intl.message(
+      'In the office',
+      name: 'encabinet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Video`
+  String get video {
+    return Intl.message(
+      'Video',
+      name: 'video',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `codeBar Empty`
+  String get codebarvide {
+    return Intl.message(
+      'codeBar Empty',
+      name: 'codebarvide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `this member does not exist `
+  String get cetAdherentNexistePas {
+    return Intl.message(
+      'this member does not exist ',
+      name: 'cetAdherentNexistePas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please specify the type of consultation`
+  String get veuillezPreciserLeTypeDeConsultation {
+    return Intl.message(
+      'Please specify the type of consultation',
+      name: 'veuillezPreciserLeTypeDeConsultation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please scan a valid phone number`
+  String get veuillezScannerUnnumeroDeTlphoneValideSvp {
+    return Intl.message(
+      'please scan a valid phone number',
+      name: 'veuillezScannerUnnumeroDeTlphoneValideSvp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vidéos`
+  String get vidos {
+    return Intl.message(
+      'Vidéos',
+      name: 'vidos',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start`
+  String get dmarrer {
+    return Intl.message(
+      'Start',
+      name: 'dmarrer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Choose the type of consultation `
+  String get choisirLeTypeDeConsultation {
+    return Intl.message(
+      'Choose the type of consultation ',
+      name: 'choisirLeTypeDeConsultation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `In the office`
+  String get enCabinet {
+    return Intl.message(
+      'In the office',
+      name: 'enCabinet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select or add the patient `
+  String get selectionnerOuAjouterLePatient {
+    return Intl.message(
+      'Select or add the patient ',
+      name: 'selectionnerOuAjouterLePatient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search by phone number`
+  String get rechercherParNumeroDeTlphone {
+    return Intl.message(
+      'Search by phone number',
+      name: 'rechercherParNumeroDeTlphone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` phone number`
+  String get numeroDeTelephone {
+    return Intl.message(
+      ' phone number',
+      name: 'numeroDeTelephone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Or scan a membership card`
+  String get ouScannerUneCarteDadherent {
+    return Intl.message(
+      'Or scan a membership card',
+      name: 'ouScannerUneCarteDadherent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `does not exist `
+  String get existePas {
+    return Intl.message(
+      'does not exist ',
+      name: 'existePas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `REFERENCEMENT`
+  String get referencement {
+    return Intl.message(
+      'REFERENCEMENT',
+      name: 'referencement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search`
+  String get rechercher {
+    return Intl.message(
+      'Search',
+      name: 'rechercher',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This member has been created.`
+  String get cetAdherentABienTCrer {
+    return Intl.message(
+      'This member has been created.',
+      name: 'cetAdherentABienTCrer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The Number`
+  String get leNumro {
+    return Intl.message(
+      'The Number',
+      name: 'leNumro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Member's Account`
+  String get leCompteDeLadherent {
+    return Intl.message(
+      'Member\'s Account',
+      name: 'leCompteDeLadherent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` is inative`
+  String get estInatif {
+    return Intl.message(
+      ' is inative',
+      name: 'estInatif',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not yet a member of DanAid Mutual Health Insurance. Recommend DanAid Mutual Health Insurance and become your patient's family doctor.`
+  String get nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa {
+    return Intl.message(
+      'Not yet a member of DanAid Mutual Health Insurance. Recommend DanAid Mutual Health Insurance and become your patient\'s family doctor.',
+      name: 'nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If the member is not up to date with his contributions, you will not benefit from the compensation in the DanAid care plan.`
+  String get ladhrentNetantPasJourDeSesCotisationVousNeBnficierez {
+    return Intl.message(
+      'If the member is not up to date with his contributions, you will not benefit from the compensation in the DanAid care plan.',
+      name: 'ladhrentNetantPasJourDeSesCotisationVousNeBnficierez',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You will receive the DanAid compensation (2.000 Cfa) if the family adheres to the mutual insurance`
+  String get vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent {
+    return Intl.message(
+      'You will receive the DanAid compensation (2.000 Cfa) if the family adheres to the mutual insurance',
+      name: 'vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue the consultation outside the DanAid care pathway`
+  String get poursuivezLaConsultationHorsParcoursDeSoinDanaid {
+    return Intl.message(
+      'Continue the consultation outside the DanAid care pathway',
+      name: 'poursuivezLaConsultationHorsParcoursDeSoinDanaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a family`
+  String get ajouterUneFamille {
+    return Intl.message(
+      'Add a family',
+      name: 'ajouterUneFamille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Continue off course`
+  String get poursuivreHorsParcours {
+    return Intl.message(
+      'Continue off course',
+      name: 'poursuivreHorsParcours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Familly`
+  String get famille {
+    return Intl.message(
+      'Familly',
+      name: 'famille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An invoice has just been created for this ...`
+  String get uneFactureVientDtreCrerPourCette {
+    return Intl.message(
+      'An invoice has just been created for this ...',
+      name: 'uneFactureVientDtreCrerPourCette',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redirection to the booklet ! ...`
+  String get redirtectionVersLeCarnet {
+    return Intl.message(
+      'Redirection to the booklet ! ...',
+      name: 'redirtectionVersLeCarnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redirection to the booklet  ...`
+  String get redirectionVersLeCarnet {
+    return Intl.message(
+      'Redirection to the booklet  ...',
+      name: 'redirectionVersLeCarnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a beneficiary before validating`
+  String get selectionerUnBeneficiaireAvantDeValider {
+    return Intl.message(
+      'Select a beneficiary before validating',
+      name: 'selectionerUnBeneficiaireAvantDeValider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `booklet of `
+  String get carnetDe {
+    return Intl.message(
+      'booklet of ',
+      name: 'carnetDe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Access to the health booklet`
+  String get accederAuCarnetDeSante {
+    return Intl.message(
+      'Access to the health booklet',
+      name: 'accederAuCarnetDeSante',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Health booklet  `
+  String get carnetDeSant {
+    return Intl.message(
+      'Health booklet  ',
+      name: 'carnetDeSant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Female`
+  String get feminin {
+    return Intl.message(
+      'Female',
+      name: 'feminin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `years`
+  String get ans {
+    return Intl.message(
+      'years',
+      name: 'ans',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `data like weight and height are missing to display this section please complete this profile `
+  String get lesDonnesCommeLePoidsEtLaTailleSontManquantes {
+    return Intl.message(
+      'data like weight and height are missing to display this section please complete this profile ',
+      name: 'lesDonnesCommeLePoidsEtLaTailleSontManquantes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please be patient, this part is under development. Thank you for your understanding`
+  String get unPeutDePatienceCettePartieEstEnCourDe {
+    return Intl.message(
+      'Please be patient, this part is under development. Thank you for your understanding',
+      name: 'unPeutDePatienceCettePartieEstEnCourDe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile`
+  String get profil {
+    return Intl.message(
+      'Profile',
+      name: 'profil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Detailed`
+  String get dtaill {
+    return Intl.message(
+      'Detailed',
+      name: 'dtaill',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upcoming`
+  String get prochains {
+    return Intl.message(
+      'Upcoming',
+      name: 'prochains',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Follows`
+  String get suiveDes {
+    return Intl.message(
+      'Follows',
+      name: 'suiveDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Care`
+  String get soins {
+    return Intl.message(
+      'Care',
+      name: 'soins',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upcoming `
+  String get suiviDes {
+    return Intl.message(
+      'Upcoming ',
+      name: 'suiviDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data `
+  String get donnes {
+    return Intl.message(
+      'Data ',
+      name: 'donnes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vital`
+  String get vitales {
+    return Intl.message(
+      'Vital',
+      name: 'vitales',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notes from  `
+  String get notesDu {
+    return Intl.message(
+      'Notes from  ',
+      name: 'notesDu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Doctor`
+  String get mdecin {
+    return Intl.message(
+      'Doctor',
+      name: 'mdecin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Consultation Code `
+  String get codeDeConsultation {
+    return Intl.message(
+      'Consultation Code ',
+      name: 'codeDeConsultation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `History of services`
+  String get historiqueDesPrestations {
+    return Intl.message(
+      'History of services',
+      name: 'historiqueDesPrestations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your consultations & payment`
+  String get vosConsultationsPaiement {
+    return Intl.message(
+      'Your consultations & payment',
+      name: 'vosConsultationsPaiement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment Status `
+  String get statusDesPaiements {
+    return Intl.message(
+      'Payment Status ',
+      name: 'statusDesPaiements',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `updated beneficiaries`
+  String get beneficiaresJours {
+    return Intl.message(
+      'updated beneficiaries',
+      name: 'beneficiaresJours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Referrals`
+  String get rfrencements {
+    return Intl.message(
+      'Referrals',
+      name: 'rfrencements',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Registered persons`
+  String get personnesInscrites {
+    return Intl.message(
+      'Registered persons',
+      name: 'personnesInscrites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yearly total`
+  String get totalAnnuel {
+    return Intl.message(
+      'Yearly total',
+      name: 'totalAnnuel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Paid `
+  String get pay {
+    return Intl.message(
+      'Paid ',
+      name: 'pay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remainder to pay `
+  String get restePayer {
+    return Intl.message(
+      'Remainder to pay ',
+      name: 'restePayer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Transactions for this year `
+  String get aucuneTransactionPourCetteAnne {
+    return Intl.message(
+      'No Transactions for this year ',
+      name: 'aucuneTransactionPourCetteAnne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bienvenue`
+  String get bienvenue {
+    return Intl.message(
+      'Bienvenue',
+      name: 'bienvenue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ma Couverture`
+  String get maCouverture {
+    return Intl.message(
+      'Ma Couverture',
+      name: 'maCouverture',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mon Docteur`
+  String get monDocteur {
+    return Intl.message(
+      'Mon Docteur',
+      name: 'monDocteur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mes Services`
+  String get mesServices {
+    return Intl.message(
+      'Mes Services',
+      name: 'mesServices',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mes Rendez-vous`
+  String get mesRendezvous {
+    return Intl.message(
+      'Mes Rendez-vous',
+      name: 'mesRendezvous',
       desc: '',
       args: [],
     );
