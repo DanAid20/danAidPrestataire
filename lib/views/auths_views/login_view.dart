@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -103,11 +104,11 @@ class _LoginViewState extends State<LoginView> {
                 titlePadding: EdgeInsets.all(15.0),
                 searchCursorColor: Colors.pinkAccent,
                 searchInputDecoration: InputDecoration(
-                    hintText: 'Chercher...',
+                    hintText: S.of(context).chercher,
                     contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
                 ),
                 isSearchable: true,
-                title: Text('Selectionnez votre pays'),
+                title: Text(S.of(context).selectionnezVotrePays),
                 onValuePicked: (Country country) {
                   print(country.isoCode);
                   print(country.name);
@@ -161,7 +162,7 @@ class _LoginViewState extends State<LoginView> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    child: Text("Sélectionnez votre pays", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                    child: Text(S.of(context).slectionnezVotrePays, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                   ListTile(
                     onTap: _openCountryPickerDialog,
@@ -183,7 +184,7 @@ class _LoginViewState extends State<LoginView> {
                     return (phone.isEmpty)
                         ? kPhoneNumberNullError
                         : (!digitValidatorRegExp.hasMatch(phone))
-                        ? "Entrer un numero de téléphone valide" : null;
+                        ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
                   },
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
@@ -205,7 +206,7 @@ class _LoginViewState extends State<LoginView> {
                       borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.2)),
                       borderRadius: BorderRadius.all(Radius.circular(20))
                     ),
-                    hintText: "Numéro de téléphone",
+                    hintText: S.of(context).numroDeTlphone,
                     hintStyle: TextStyle(color: Colors.grey, fontSize: wv*4),
                   ),
                 ),
@@ -215,7 +216,7 @@ class _LoginViewState extends State<LoginView> {
             loader ?
             Loaders().buttonLoader(kPrimaryColor)
                 : CustomTextButton(
-              text: "Continuer",
+              text: S.of(context).continuer,
               color: kPrimaryColor,
               action: () async {
                 setState(() {
@@ -270,7 +271,7 @@ class _LoginViewState extends State<LoginView> {
 
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser.uid);
       userProvider.setAuthId(_auth.currentUser.uid);
       setState((){
         loader = false;
@@ -298,18 +299,18 @@ class _LoginViewState extends State<LoginView> {
       setState((){
         loader = false;
       });
-      showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message+authException.message);
     };
 
     PhoneCodeSent codeSent = (String verificationId, [int forceResendingToken]) async {
-      showSnackbar('Please check your phone for the verification code.');
+      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
       if(verificationId != null){
         _verificationId = verificationId;
         /*setState((){
           loader = false;
         });*/
         //_navigationService.navigateTo('/otp');
-        showSnackbar("Le code viens d'arriver, patientez encore unpeu ..." );
+        showSnackbar(S.of(context).leCodeViensDarriverPatientezEncoreUnpeu );
       }else{
         setState((){
           loader = false;
@@ -319,7 +320,7 @@ class _LoginViewState extends State<LoginView> {
 
     PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
       phoneVerificationProvider.setVerificationId(verificationId);
-      showSnackbar("verification code: " + verificationId);
+      showSnackbar(S.of(context).verificationCode + verificationId);
       _navigationService.navigateTo('/otp');
       _verificationId = verificationId;
       setState((){
@@ -336,7 +337,7 @@ class _LoginViewState extends State<LoginView> {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
-      showSnackbar("Failed to Verify Phone Number: ${e}");
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e);
     }
   }
 

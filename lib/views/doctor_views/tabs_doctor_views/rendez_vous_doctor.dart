@@ -12,6 +12,7 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/utils.dart';
@@ -223,8 +224,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                             ),
                           );
                         }
+                        
                         if (snapshot.hasError) {
-                          return Text("Something went wrong");
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data.data();
@@ -247,7 +249,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               : Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
-                    child: Text(" Aucun patient en salle d'attente.."),
+                    child: Text(S.of(context).aucunPatientEnSalleDattente),
                   ),
                 );
         });
@@ -262,7 +264,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       },
     );
     Widget continueButton = FlatButton(
-        child: Text("oui j'approuve",
+        child: Text(S.of(context).ouiJapprouve,
             style: TextStyle(
               color: kBlueForce,
               fontWeight: FontWeight.w600,
@@ -291,7 +293,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     }).then((value) {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("rende-vous approuver ")));
+                          SnackBar(content: Text(S.of(context).rendevousApprouver)));
                     })
                   },
               });
@@ -299,14 +301,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Infos",
+      title: Text(S.of(context).infos,
           style: TextStyle(
             color: kBlueForce,
             fontWeight: FontWeight.w700,
             fontSize: fontSize(size: 21),
           )),
       content: Text(
-          "vous êtes sur le point d'approuver ce rendez-vous , êtes-vous sûr de cette operation ?",
+          S.of(context).vousTesSurLePointDapprouverCeRendezvousTesvousSr,
           style: TextStyle(
             color: kBlueForce,
             fontWeight: FontWeight.w400,
@@ -375,7 +377,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text("Something went wrong");
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data.data();
@@ -425,7 +427,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     );
                   })
               : Center(
-                  child: Text("Aucun Adherent  disponible pour le moment.."),
+                  child: Text(S.of(context).aucunAdherentDisponiblePourLeMoment),
                 );
         });
   }
@@ -532,7 +534,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      "Aujourd'hui",
+                      S.of(context).aujourdhui,
                       style: TextStyle(
                           color: isPrestataire ? kBlueForce : whiteColor,
                           fontWeight: isSelected == 'Days'
@@ -556,7 +558,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      "Semaine",
+                      S.of(context).semaine,
                       style: TextStyle(
                           color: isPrestataire ? kBlueForce : whiteColor,
                           fontWeight: isSelected == 'week'
@@ -621,7 +623,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child:
-                              Text("Aucun rendez-vous en vue pour l'instant"),
+                              Text(S.of(context).aucunRendezvousEnVuePourLinstant),
                         )))),
           Container(
             height: 120.h,
@@ -640,12 +642,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Salle d\'attente',
+                      Text(S.of(context).salleDattente,
                           style: TextStyle(
                               color: kBlueDeep,
                               fontWeight: FontWeight.w500,
                               fontSize: 17.sp)),
-                      Text('Voir plus ..',
+                      Text(S.of(context).voirPlus,
                           style: TextStyle(
                               color: kBrownCanyon,
                               fontWeight: FontWeight.w600,
@@ -665,7 +667,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                             child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                                "Aucune activite n'as été enregistrer pour l'instant... "),
+                                S.of(context).aucuneActivitNasTEnregistrerPourLinstant),
                           ))),
               ],
             ),

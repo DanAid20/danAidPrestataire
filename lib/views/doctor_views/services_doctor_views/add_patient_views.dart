@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
@@ -69,9 +70,9 @@ class _AddPatientViewState extends State<AddPatientView> {
   int currentItemSelect = 0;
   int price = 0;
   String consultationTypeData;
-  String encabinet = "EnCabinet";
-  String videos = "Video";
-  String message = "Message";
+  String encabinet = S.current.encabinet;
+  String videos = S.current.video;
+  String message = S.current.message;
   String phone;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
@@ -86,7 +87,7 @@ class _AddPatientViewState extends State<AddPatientView> {
     if (barcode == null) {
       print('nothing return.');
       setState(() {
-        textForQrCode = barcode == null ? 'codeBarVide' : barcode;
+        textForQrCode = barcode == null ? S.of(context).codebarvide : barcode;
       });
     } else {
       setState(() {
@@ -131,7 +132,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                 confirmSpinner = false;
               });
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("cet adherent n'existe pas ")));
+                  SnackBar(content: Text(S.of(context).cetAdherentNexistePas)));
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -149,13 +150,13 @@ class _AddPatientViewState extends State<AddPatientView> {
               confirmSpinner = false;
             });
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Veuillez preciser le type de consultation")));
+                content: Text(S.of(context).veuillezPreciserLeTypeDeConsultation)));
           }
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
-                Text("veuillez scanner unnumero de téléphone valide svp")));
+                Text(S.of(context).veuillezScannerUnnumeroDeTlphoneValideSvp)));
       }
       setState(() {
         confirmSpinner = false;
@@ -218,9 +219,9 @@ class _AddPatientViewState extends State<AddPatientView> {
                     alignment: Alignment.topLeft,
                     child: Container(
                       child: SvgPicture.asset(
-                        consultationType == 'Vidéos'
+                        consultationType == S.of(context).vidos
                             ? 'assets/icons/Bulk/VideoTeal.svg'
-                            : consultationType == 'Message'
+                            : consultationType == S.of(context).message
                                 ? 'assets/icons/Bulk/Message.svg'
                                 : 'assets/icons/Bulk/Profile-color.svg',
                         width: wv * 10,
@@ -291,11 +292,11 @@ class _AddPatientViewState extends State<AddPatientView> {
                 titlePadding: EdgeInsets.all(10.0),
                 searchCursorColor: Colors.pinkAccent,
                 searchInputDecoration: InputDecoration(
-                    hintText: 'Chercher...',
+                    hintText: S.of(context).chercher,
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 10, vertical: 0)),
                 isSearchable: true,
-                title: Text('Selectionnez votre pays'),
+                title: Text(S.of(context).selectionnezVotrePays),
                 onValuePicked: (Country country) {
                   print(country.isoCode);
                   print(country.name);
@@ -358,7 +359,7 @@ class _AddPatientViewState extends State<AddPatientView> {
               child: Container(
                 child: Column(
                   children: [
-                    Text('Démarrer'),
+                    Text(S.of(context).dmarrer),
                     Text(
                         '${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}')
                   ],
@@ -402,7 +403,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                   margin: EdgeInsets.only(
                                       left: wv * 5, top: hv * 1),
                                   child: Text(
-                                      'Choisir le type de consultation ',
+                                      S.of(context).choisirLeTypeDeConsultation,
                                       style: TextStyle(
                                           fontSize: fontSize(size: wv * 4),
                                           fontWeight: FontWeight.w700,
@@ -418,20 +419,20 @@ class _AddPatientViewState extends State<AddPatientView> {
                                   children: <Widget>[
                                     offerPart(
                                         index: 1,
-                                        consultation: 'consultation',
-                                        consultationType: 'En cabinet',
+                                        consultation: S.of(context).consultation,
+                                        consultationType: S.of(context).enCabinet,
                                         price: '2000 FCFA',
                                         typedeConsultation: encabinet),
                                     offerPart(
                                         index: 2,
-                                        consultation: 'consultation',
-                                        consultationType: 'Vidéos',
+                                        consultation: S.of(context).consultation,
+                                        consultationType: S.of(context).vidos,
                                         price: '2000 FCFA',
                                         typedeConsultation: videos),
                                     offerPart(
                                         index: 3,
-                                        consultation: 'consultation',
-                                        consultationType: 'Message',
+                                        consultation: S.of(context).consultation,
+                                        consultationType: S.of(context).message,
                                         price: '2000 FCFA',
                                         typedeConsultation: message),
                                   ],
@@ -477,7 +478,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                 width: wv * 2,
                               ),
                               Text(
-                                'Selectionner ou ajouter le patient ',
+                                S.of(context).selectionnerOuAjouterLePatient,
                                 style: TextStyle(
                                     fontSize: fontSize(size: wv * 4),
                                     fontWeight: FontWeight.w500,
@@ -505,7 +506,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Rechercher par numero de téléphone ",
+                                            S.of(context).rechercherParNumeroDeTlphone,
                                             style: TextStyle(
                                                 fontSize: wv * 4,
                                                 color: kBlueForce),
@@ -516,7 +517,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           InternationalPhoneNumberInput(
                                             validator: (String phone) {
                                               return (phone.isEmpty)
-                                                  ? "Entrer un numero de téléphone valide"
+                                                  ? S.of(context).entrerUnNumeroDeTlphoneValide
                                                   : null;
                                             },
                                             onInputChanged:
@@ -527,7 +528,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                             onInputValidated: (bool value) {
                                               print(value);
                                             },
-                                            hintText: ' numero de telephone',
+                                            hintText: S.of(context).numeroDeTelephone,
                                             spaceBetweenSelectorAndTextField: 0,
                                             selectorConfig: SelectorConfig(
                                               selectorType:
@@ -590,7 +591,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                 height: hv * 2,
                               ),
                               widget.isLaunchConsultation == true
-                                  ? Text("Ou scanner une carte d'adherent",
+                                  ? Text(S.of(context).ouScannerUneCarteDadherent,
                                       style: TextStyle(
                                           fontSize: fontSize(size: wv * 4),
                                           fontWeight: FontWeight.w500,
@@ -694,7 +695,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                       confirmSpinner = false;
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("existe pas ")));
+                                        SnackBar(content: Text(S.of(context).existePas)));
 
                                     Navigator.push(
                                       context,
@@ -703,7 +704,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           isAccountIsExists: false,
                                           data: null,
                                           phoneNumber: phone,
-                                          consultationType: 'REFERENCEMENT',
+                                          consultationType: S.of(context).referencement,
                                         ),
                                       ),
                                     );
@@ -735,8 +736,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           data: adherent,
                                           phoneNumber: phone,
                                           isAccountIsExists: true,
-                                          consultationType: 'CONSULTATION',
-                                        ),
+                                          consultationType: S.of(context).consultation.toString()                                        ),
                                       ),
                                     );
                                   } else {
@@ -753,7 +753,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           isAccountIsExists: false,
                                           data: null,
                                           phoneNumber: phone,
-                                          consultationType: 'REFERENCEMENT',
+                                          consultationType: S.of(context).referencement,
                                         ),
                                       ),
                                     );
@@ -765,12 +765,12 @@ class _AddPatientViewState extends State<AddPatientView> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(
-                                              "Veuillez preciser le type de consultation")));
+                                              S.of(context).veuillezPreciserLeTypeDeConsultation)));
                                 }
                               });
                             },
                             child: Text(
-                              'Rechercher',
+                              S.of(context).rechercher,
                               style: TextStyle(
                                   color: textColor,
                                   fontSize: wv * 4.5,

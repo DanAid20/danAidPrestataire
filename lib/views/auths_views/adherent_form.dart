@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
@@ -48,7 +49,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   bool regionChosen = false;
   bool cityChosen = false;
   bool _serviceTermsAccepted = false;
-  String termsAndConditions = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\n\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la s";
+  String termsAndConditions = S.current.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
   DateTime selectedDate;
   DateTime initialDate = DateTime(1990);
   File imageFileAvatar;
@@ -69,20 +70,20 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     PlanModel plan = planProvider.getPlan;
     
     if(now.month >= 1 && now.month < 4){
-      trimester = "Janvier à Mars " + DateTime.now().year.toString();
+      trimester = S.of(context).janvierMars + DateTime.now().year.toString();
       if (now.month != 3){
         months = (now.day < 25) ? 4 - now.month : 4 - now.month - 1;
       }
       else{
         if(now.day < 25){
           months = 1;
-          trimester = "Janvier à Mars " + DateTime.now().year.toString();
+          trimester = S.of(context).janvierMars + DateTime.now().year.toString();
         }
         else {
           months = 3;
-          trimester = "Avril à Juin " + DateTime.now().year.toString();
+          trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
         }
-        trimester = (now.day < 25) ? "Janvier à Mars " + DateTime.now().year.toString() : "Avril à Juin " + DateTime.now().year.toString(); 
+        trimester = (now.day < 25) ? S.of(context).janvierMars + DateTime.now().year.toString() : S.of(context).avrilJuin + DateTime.now().year.toString(); 
         months = (now.day < 25) ? 1 : 3;
       }
       if(now.month == 3 && now.day > 25){
@@ -95,10 +96,10 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     }
 
     else if(now.month >= 4 && now.month < 7){
-      trimester = "Avril à Juin " + DateTime.now().year.toString();
+      trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
       if (now.month != 6){months = (now.day < 25) ? 7 - now.month : 7 - now.month - 1;}
       else{
-        trimester = (now.day < 25) ? "Avril à Juin " + DateTime.now().year.toString() : "Juillet à Septembre " + DateTime.now().year.toString(); 
+        trimester = (now.day < 25) ? S.of(context).avrilJuin + DateTime.now().year.toString() : S.of(context).juilletSeptembre + DateTime.now().year.toString(); 
         months = (now.day < 25) ? 1 : 3;
       }
       if(now.month == 6 && now.day > 25){
@@ -111,10 +112,10 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     }
 
     else if(now.month >= 7 && now.month < 10){
-      trimester = "Juillet à Septembre " + DateTime.now().year.toString();
+      trimester = S.of(context).juilletSeptembre + DateTime.now().year.toString();
       if (now.month != 9){months = (now.day < 25) ? 10 - now.month : 10 - now.month - 1;}
       else{
-        trimester = (now.day < 25) ? "Juillet à Septembre " + DateTime.now().year.toString() : "Octobre à Décembre " + DateTime.now().year.toString(); 
+        trimester = (now.day < 25) ? S.of(context).juilletSeptembre + DateTime.now().year.toString() : S.of(context).octobreDcembre + DateTime.now().year.toString(); 
         months = (now.day < 25) ? 1 : 3;}
 
       if(now.month == 9 && now.day > 25){
@@ -127,11 +128,11 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     }
 
     else if(now.month >= 10 && now.month <= 12){
-      trimester = "Octobre à Décembre " + DateTime.now().year.toString();
+      trimester = S.of(context).octobreDcembre + DateTime.now().year.toString();
       
       if (now.month != 9){months = (now.day < 25) ? 12 - now.month : 12 - now.month - 1;}
       else{
-        trimester = (now.day < 25) ? "Octobre à Décembre " + DateTime.now().year.toString() : "Janvier à Mars " + (DateTime.now().year+1).toString(); 
+        trimester = (now.day < 25) ? S.of(context).octobreDcembre + DateTime.now().year.toString() : S.of(context).janvierMars + (DateTime.now().year+1).toString(); 
         months = (now.day < 25) ? 1 : 3;
       }
 
@@ -190,17 +191,17 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                       SizedBox(height: hv*3,),
 
                       CustomTextField(
-                        label: "Nom de Famille *",
-                        hintText: "Entrez votre nom de famille",
+                        label: S.of(context).nomDeFamille,
+                        hintText: S.of(context).entrezVotreNomDeFamille,
                         controller: _familynameController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*1.5,),
                       CustomTextField(
-                        label: "Prénom (s)",
-                        hintText: "Entrez votre prénom",
+                        label: S.of(context).prnomS,
+                        hintText: S.of(context).entrezVotrePrnom,
                         controller: _surnameController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*1.5,),
                       Row(
@@ -209,7 +210,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Genre *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).genre, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -223,12 +224,12 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                       value: _gender,
                                       items: [
                                         DropdownMenuItem(
-                                          child: Text("Masculin", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                          value: "H",
+                                          child: Text(S.of(context).masculin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                          value: S.of(context).h,
                                         ),
                                         DropdownMenuItem(
-                                          child: Text("Féminin", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                          value: "F",
+                                          child: Text(S.of(context).fminin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                          value: S.of(context).f,
                                         ),
                                       ],
                                       onChanged: (value) {
@@ -247,7 +248,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Date de naissance *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 GestureDetector(
                                   onTap: () => _selectDate(context),
@@ -277,7 +278,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Region", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -292,7 +293,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _stateCode,
-                                        hint: Text("Choisir une region"),
+                                        hint: Text(S.of(context).choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
@@ -321,7 +322,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           regionChosen ? Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Choix de la ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -336,7 +337,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text("Ville"),
+                                        hint: Text(S.of(context).ville),
                                         items: Algorithms.getTownNamesFromRegion(cities, _stateCode).map((city){
                                           print("city: "+city);
                                           return DropdownMenuItem(
@@ -369,7 +370,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               label: "Region",
                               hintText: "ex: Centre",
                               controller: _regionController,
-                              validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                               //svgIcon: "assets/icons/Bulk/Discovery.svg",
                             ),
                           ),
@@ -379,7 +380,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               label: "Ville",
                               hintText: "ex: Yaoundé",
                               controller: _townController,
-                              validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                             ),
                           ),
                         ],
@@ -412,7 +413,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                   imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
                   (_serviceTermsAccepted & cityChosen & (selectedDate != null)) ?  
                   !buttonLoading ? CustomTextButton(
-                    text: "Envoyer",
+                    text: S.of(context).envoyer,
                     color: kPrimaryColor,
                     action: () async {
                       Random random = new Random();
@@ -629,7 +630,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
               child: Column(
                 children: [
                   SizedBox(height: hv*2,),
-                  Text("Termes de services", style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
+                  Text(S.of(context).termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                   SizedBox(height: hv*2,),
                   Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: BouncingScrollPhysics(),)),
                 ],
@@ -649,7 +650,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   Future uploadImageToFirebase(PickedFile file) async {
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -677,7 +678,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       print("download url: $url");
@@ -724,14 +725,14 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(Icons.photo_library),
-                    title: new Text('Gallerie'),
+                    title: new Text(S.of(context).gallerie),
                     onTap: () {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(Icons.photo_camera),
-                  title: new Text('Camera'),
+                  title: new Text(S.of(context).camera),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();

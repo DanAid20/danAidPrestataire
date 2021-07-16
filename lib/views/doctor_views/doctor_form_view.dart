@@ -8,6 +8,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/getCities.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -59,7 +60,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
   bool _officeCityChosen = false;
   bool _officeRegionChosen = false;
   bool _serviceTermsAccepted = false;
-  String termsAndConditions = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\n\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la s";
+  String termsAndConditions = S.current.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
 
   @override
   void initState() {
@@ -134,7 +135,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               Container(
                 child: (!_isPersonal) ? 
                   (cityChosen & (selectedDate != null)) ? CustomTextButton(
-                    text: "Continuer",
+                    text: S.of(context).continuer,
                     action: (){
                       if(_mFormKey.currentState.validate()){
                         setState(() {
@@ -147,12 +148,12 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                       }
                     },
                   )
-                  : CustomDisabledTextButton(text: "Continuer",)
+                  : CustomDisabledTextButton(text: S.of(context).continuer,)
                 :  Row(
                   children: [
                     Expanded(
                       child: CustomTextButton(
-                        text: "Retour",
+                        text: S.of(context).retour,
                         color: kDeepTeal,
                         expand: false,
                         action: (){
@@ -165,13 +166,13 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                     Expanded(
                       child: (_officeCityChosen & _serviceTermsAccepted & (_category != null) & (_type != null)) ? 
                         !buttonLoading ? CustomTextButton(
-                          text: "Envoyer",
+                          text: S.of(context).envoyer,
                           expand: false,
                           action: () async {
                             registerDoctor();
                           },
                         ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
-                      : CustomDisabledTextButton(text: "Envoyer", expand: false,),
+                      : CustomDisabledTextButton(text: S.of(context).envoyer, expand: false,),
                     ),
                   ],
                 )
@@ -189,22 +190,22 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         child: Column(
           children: [
             CustomTextField(
-              label: "Nom de Famille *",
-              hintText: "Entrez votre nom de famille",
+              label: S.of(context).nomDeFamille,
+              hintText: S.of(context).entrezVotreNomDeFamille,
               controller: _mNameController,
-              validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             CustomTextField(
-              label: "Prénom (s)",
-              hintText: "Entrez votre prénom",
+              label: S.of(context).prnomS,
+              hintText: S.of(context).entrezVotrePrnom,
               controller: _mSurnameController,
-              validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             CustomTextField(
-              label: "Email",
-              hintText: "Entrez votre addresse email",
+              label: S.of(context).email,
+              hintText: S.of(context).entrezVotreAddresseEmail,
               controller: _mEmailController,
               keyboardType: TextInputType.emailAddress,
               validator:  (String mail) {
@@ -221,7 +222,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Genre *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                      Text(S.of(context).genre, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                       SizedBox(height: 5,),
                       Container(
                         constraints: BoxConstraints(minWidth: wv*45),
@@ -235,11 +236,11 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                             value: _gender,
                             items: [
                               DropdownMenuItem(
-                                child: Text("Masculin", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                child: Text(S.of(context).masculin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                 value: "H",
                               ),
                               DropdownMenuItem(
-                                child: Text("Féminin", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                child: Text(S.of(context).fminin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                 value: "F",
                               ),
                             ],
@@ -259,7 +260,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Date de naissance *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                      Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                       SizedBox(height: 5,),
                       GestureDetector(
                         onTap: () => _selectDate(context),
@@ -272,7 +273,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                           child: Row(children: [
                             SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                             VerticalDivider(),
-                            Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                            Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                           ],),
                         ),
                       ),
@@ -368,7 +369,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Etes vous généraliste ou spécialiste ?", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                  Text(S.of(context).tesVousGnralisteOuSpcialiste, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                   SizedBox(height: 5,),
                   Container(
                     constraints: BoxConstraints(minWidth: wv*45),
@@ -379,17 +380,17 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
-                        hint: Text("Choisir"),
+                        hint: Text(S.of(context).choisir),
                         isExpanded: true,
                         value: _type,
                         items: [
                           DropdownMenuItem(
-                            child: Text("Généraliste", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                            value: "Généraliste",
+                            child: Text(S.of(context).gnraliste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                            value: S.of(context).gnraliste,
                           ),
                           DropdownMenuItem(
-                            child: Text("Spécialiste", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                            value: "Spécialiste",
+                            child: Text(S.of(context).spcialiste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                            value: S.of(context).spcialiste,
                           ),
                         ],
                         onChanged: (value) {
@@ -402,24 +403,24 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 ],
               ),
             ),
-            _type == "Spécialiste" ? Column(
+            _type == S.of(context).spcialiste ? Column(
               children: [
                 SizedBox(height: hv*1.5,),
                 CustomTextField(
-                  label: "Spécialité",
-                  hintText: "ex: Pédiatre",
+                  label: S.of(context).spcialit,
+                  hintText: S.of(context).exPdiatre,
                   controller: _mSpecController,
-                  validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                  validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                 ),
               ],
             )
             : Container(),
             SizedBox(height: hv*1.5,),
             CustomTextField(
-              label: "Nom de l'hôpital'",
-              hintText: "ex: Hôpitale Générale",
+              label: S.of(context).nomDeLhpital,
+              hintText: S.of(context).exHpitaleGnrale,
               controller: _mOfficeNameController,
-              validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             Padding(
@@ -451,7 +452,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Type d'établissement *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                  Text(S.of(context).typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                   SizedBox(height: 5,),
                   Container(
                     constraints: BoxConstraints(minWidth: wv*45),
@@ -466,19 +467,19 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                         child: DropdownButton(
                           isExpanded: true,
                           value: _category,
-                          hint: Text("Choisir"),
+                          hint: Text(S.of(context).choisir),
                           items: [
                             DropdownMenuItem(
-                              child: Text("Publique", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                              value: "PUBLIC",
+                              child: Text(S.of(context).publique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                              value: S.of(context).public,
                             ),
                             DropdownMenuItem(
-                              child: Text("Confessionel", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              value: "CONFESSIONEL",
+                              child: Text(S.of(context).confessionel, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              value: S.of(context).confessionel,
                             ),
                             DropdownMenuItem(
-                              child: Text("Privé", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              value: "PRIVATE",
+                              child: Text(S.of(context).priv, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              value: S.of(context).private,
                             ),
                           ],
                           onChanged: (value) {
@@ -579,7 +580,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             HiveDatabase.setAuthPhone(userProvider.getUserId);
             HiveDatabase.setProfileType(doctor);
             Navigator.pushNamed(context, '/home');
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Profil Médécin crée..")));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).profilMdcinCre)));
           })
           .catchError((e) {
             print(e.toString());
@@ -593,7 +594,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucuneImageSelectionne)));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -621,7 +622,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
       String url = await storageReference.getDownloadURL();
       doctorProvider.setImgUrl(url);
       avatarUrl = url;
@@ -685,14 +686,14 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               child: Column(
                 children: [
                   SizedBox(height: hv*2,),
-                  Text("Termes de services", style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
+                  Text(S.of(context).termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                   SizedBox(height: hv*2,),
                   Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: BouncingScrollPhysics(),)),
                 ],
               ),
             ),
             CustomTextButton(
-              text: "Fermer",
+              text: S.of(context).fermer,
               color: kPrimaryColor,
               action: () => Navigator.pop(context),
             )

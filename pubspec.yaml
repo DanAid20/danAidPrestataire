@@ -34,24 +34,25 @@ dependencies:
   shared_preferences: ^2.0.4
   provider: ^4.3.3
   get_it: ^5.0.6
-  connectivity:
-  line_icons:
-  flutter_skeleton:
+  connectivity: null
+  line_icons: null
+  flutter_skeleton: null
   cached_network_image: ^3.0.0
-  intl:
+  intl: null
   flutter_spinkit: ^4.1.2+1
   font_awesome_flutter: ^8.11.0
   flutter_vector_icons: ^0.3.0
   freezed: ^0.12.7
-  simple_moment:
-  percent_indicator:
-  simple_animations:
+  simple_moment: null
+  percent_indicator: null
+  simple_animations: null
+  getwidget: ^1.2.4
   data_connection_checker: ^0.3.4
   flutter_share: ^1.0.5
   flutter_svg: ^0.21.0-nullsafety.0
-  google_maps_flutter: 
+  google_maps_flutter: null
   material_design_icons_flutter: ^4.0.5955
-  carousel_slider:
+  carousel_slider: null
   firebase_core: ^1.0.1
   cloud_firestore: ^1.0.7
   firebase_auth: ^1.0.1
@@ -81,7 +82,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
+  build_runner: null
   flutter_launcher_icons: ^0.9.0
 
 flutter_icons:
@@ -90,7 +91,6 @@ flutter_icons:
   ios: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
 
@@ -107,13 +107,10 @@ flutter:
     - assets/icons/Bulk/
     #- assets/logos/
   #   - images/a_dot_ham.jpeg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
-
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
@@ -133,3 +130,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true
