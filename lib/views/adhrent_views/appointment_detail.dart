@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
@@ -33,13 +34,13 @@ class _AppointmentState extends State<Appointment> {
 
   String currentSymptomText = "";
   List<String> suggestions = [
-    "Migraines",
-    "Fatigue",
-    "Diarrhée",
-    "Fièvre",
-    "Maux de tête",
-    "Courbatures",
-    "Maux de ventre"
+    S.current.migraines,
+    S.current.fatigue,
+    S.current.diarrhe,
+    S.current.fivre,
+    S.current.mauxDeTte,
+    S.current.courbatures,
+    S.current.mauxDeVentre
   ];
 
   bool saveLoading = false;
@@ -89,8 +90,8 @@ class _AppointmentState extends State<Appointment> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Démande de prise en charge", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text("Rendez-vous", 
+              Text(S.of(context).dmandeDePriseEnCharge, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(S.of(context).rendezvous, 
                 style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
               ),
             ],
@@ -145,7 +146,7 @@ class _AppointmentState extends State<Appointment> {
                                     padding: EdgeInsets.only(top: hv*1),
                                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("Pour le patient", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                                        Text(S.of(context).pourLePatient, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                                         SizedBox(height: hv*1,),
                                         Row(children: [
                                           CircleAvatar(
@@ -189,13 +190,13 @@ class _AppointmentState extends State<Appointment> {
                             ],
                           ),
                           SizedBox(height: hv*2.5,),
-                          Text("    Rendez-vous chez", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                          Text(S.of(context).rendezvousChez, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                           SizedBox(height: hv*1.2,),
                           doc != null ? DoctorInfoCard(
                             noPadding: true,
                             avatarUrl: doc.avatarUrl,
                             name: doc.cniName,
-                            title: "Medecin de Famille, " + doc.field,
+                            title: S.of(context).medecinDeFamille + doc.field,
                             speciality: doc.speciality,
                             teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
                             consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
@@ -219,7 +220,7 @@ class _AppointmentState extends State<Appointment> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Raison", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                          Text(S.of(context).raison, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
                           Container(
                             width: double.infinity,
                             margin: EdgeInsets.symmetric(vertical: hv*0.5),
@@ -233,7 +234,7 @@ class _AppointmentState extends State<Appointment> {
 
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: hv*2),
-                            child: Text("Symptômes", style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                            child: Text(S.of(context).symptmes, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
                           ),
 
                           edit ? Container(
@@ -289,7 +290,7 @@ class _AppointmentState extends State<Appointment> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ) :
-                          Text("Aucun symptômes mentionés")
+                          Text(S.of(context).aucunSymptmesMentions)
                         ],
                       ),
                     ),
@@ -306,7 +307,7 @@ class _AppointmentState extends State<Appointment> {
                       noPadding: true,
                       isLoading: announceLoading,
                       enable: appointment.getAppointment.announced == false,
-                      text: "Annoncer  ma venue",
+                      text: S.of(context).annoncerMaVenue,
                       action: (){
                         setState(() {
                           announceLoading = true;
@@ -315,7 +316,7 @@ class _AppointmentState extends State<Appointment> {
                           FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                             "announced": true
                           },  SetOptions(merge: true)).then((value) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le rendez vous a été annoncé..'),));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).leRendezVousATAnnonc),));
                             appointment.setAnnouncement(true);
                             Navigator.pop(context);
                             Navigator.pushNamed(context, '/adherent-card');
@@ -338,7 +339,7 @@ class _AppointmentState extends State<Appointment> {
                     flex: 3,
                     child: CustomTextButton(
                       noPadding: true,
-                      text: "Annuler",
+                      text: S.of(context).annuler,
                       isLoading: cancelLoading,
                       enable: appointment.getAppointment.announced == true,
                       color: kSouthSeas,
@@ -368,7 +369,7 @@ class _AppointmentState extends State<Appointment> {
                   ),
                   SizedBox(width: wv*4,),
                 ],
-              ) : Container(child: Text("N'oubliez pas de revenir içi annoncer votre venue le jour du rendez-vous", textAlign: TextAlign.center, style: TextStyle(color: kSouthSeas, fontSize: wv*4.2, fontWeight: FontWeight.bold)), padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),)
+              ) : Container(child: Text(S.of(context).noubliezPasDeRevenirIiAnnoncerVotreVenueLeJour, textAlign: TextAlign.center, style: TextStyle(color: kSouthSeas, fontSize: wv*4.2, fontWeight: FontWeight.bold)), padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),)
             :
             Container(
               padding: EdgeInsets.symmetric(horizontal: wv*4),
@@ -384,7 +385,7 @@ class _AppointmentState extends State<Appointment> {
                     FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                       "symptoms": symptoms
                     },  SetOptions(merge: true)).then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Les symptômes ont été mises à jour..'),));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).lesSymptmesOntTMisesJour),));
                       setState(() {
                         saveLoading = false;
                         edit = false;

@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -86,20 +87,20 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     //updatePaymentDate({String invoiceId, String regId}){}
     
     if(now.month >= 1 && now.month < 4){
-      trimester = "Janvier à Mars " + DateTime.now().year.toString();
+      trimester = S.of(context).janvierMars + DateTime.now().year.toString();
       if (now.month != 3){
         months = (now.day < 25) ? 4 - now.month : 4 - now.month - 1;
       }
       else{
         if(now.day < 25){
           months = 1;
-          trimester = "Janvier à Mars " + DateTime.now().year.toString();
+          trimester = S.of(context).janvierMars + DateTime.now().year.toString();
         }
         else {
           months = 3;
-          trimester = "Avril à Juin " + DateTime.now().year.toString();
+          trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
         }
-        trimester = (now.day < 25) ? "Janvier à Mars " + DateTime.now().year.toString() : "Avril à Juin " + DateTime.now().year.toString(); 
+        trimester = (now.day < 25) ? S.of(context).janvierMars + DateTime.now().year.toString() : S.of(context).avrilJuin + DateTime.now().year.toString(); 
         months = (now.day < 25) ? 1 : 3;
       }
       if(now.month == 3 && now.day > 25){
@@ -112,10 +113,10 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     }
 
     else if(now.month >= 4 && now.month < 7){
-      trimester = "Avril à Juin " + DateTime.now().year.toString();
+      trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
       if (now.month != 6){months = (now.day < 25) ? 7 - now.month : 7 - now.month - 1;}
       else{
-        trimester = (now.day < 25) ? "Avril à Juin " + DateTime.now().year.toString() : "Juillet à Septembre " + DateTime.now().year.toString(); 
+        trimester = (now.day < 25) ? S.of(context).avrilJuin + DateTime.now().year.toString() : S.of(context).juilletSeptembre + DateTime.now().year.toString(); 
         months = (now.day < 25) ? 1 : 3;
       }
       if(now.month == 6 && now.day > 25){
@@ -128,10 +129,10 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     }
 
     else if(now.month >= 7 && now.month < 10){
-      trimester = "Juillet à Septembre " + DateTime.now().year.toString();
+      trimester = S.of(context).juilletSeptembre + DateTime.now().year.toString();
       if (now.month != 9){months = (now.day < 25) ? 10 - now.month : 10 - now.month - 1;}
       else{
-        trimester = (now.day < 25) ? "Juillet à Septembre " + DateTime.now().year.toString() : "Octobre à Décembre " + DateTime.now().year.toString(); 
+        trimester = (now.day < 25) ? S.of(context).juilletSeptembre + DateTime.now().year.toString() : S.of(context).octobreDcembre + DateTime.now().year.toString(); 
         months = (now.day < 25) ? 1 : 3;}
 
       if(now.month == 9 && now.day > 25){
@@ -144,11 +145,11 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     }
 
     else if(now.month >= 10 && now.month <= 12){
-      trimester = "Octobre à Décembre " + DateTime.now().year.toString();
+      trimester = S.of(context).octobreDcembre + DateTime.now().year.toString();
       
       if (now.month != 9){months = (now.day < 25) ? 12 - now.month : 12 - now.month - 1;}
       else{
-        trimester = (now.day < 25) ? "Octobre à Décembre " + DateTime.now().year.toString() : "Janvier à Mars " + (DateTime.now().year+1).toString(); 
+        trimester = (now.day < 25) ? S.of(context).octobreDcembre + DateTime.now().year.toString() : S.of(context).janvierMars + (DateTime.now().year+1).toString(); 
         months = (now.day < 25) ? 1 : 3;
       }
 
@@ -356,9 +357,9 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Important !!", style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text(S.of(context).important, style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
                         SizedBox(height: hv*1,),
-                        Text("Notre dispositif de paiement est en cours de mise à jour, les paiements se feront donc manuellement pour le moment, faites des virements mobiles aux numéros fournies puis validez le paiement, n'oubliez pas de compléter votre profil avant. Un agent DanAid vous reviendras pour confirmation", style: TextStyle(color: kTextBlue, fontSize: 15)),
+                        Text(S.of(context).notreDispositifDePaiementEstEnCoursDeMiseJour, style: TextStyle(color: kTextBlue, fontSize: 15)),
                       ],
                     ),
                   ),
@@ -429,7 +430,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                         children: [
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text("Trimestre:")
+                            child: Text(S.of(context).trimestre)
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -444,7 +445,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                         children: [
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text("Frais d'inscription:")
+                            child: Text(S.of(context).fraisDinscription)
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -459,7 +460,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                         children: [
                           TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                          child: Text("Paiement trimestrielle:")
+                          child: Text(S.of(context).paiementTrimestrielle)
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -471,7 +472,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                         children: [
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text("Total à payer:")
+                            child: Text(S.of(context).totalPayer)
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -489,7 +490,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
           Container(
             child: CustomTextButton(
               isLoading: spinner2,
-              text: "Confirmer",
+              text: S.of(context).confirmer,
               //enable: choice != null,
               action: (){
                 _confirm(context);
@@ -679,14 +680,14 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                 ),
                 child: Column(children: [
                   SizedBox(height: hv*4),
-                  RichText(text: TextSpan(children: [TextSpan(text: "Avez-vous déjà éffectué le virement mobile?", style: TextStyle(fontWeight: FontWeight.w700)),], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
+                  RichText(text: TextSpan(children: [TextSpan(text: S.of(context).avezvousDjFfectuLeVirementMobile, style: TextStyle(fontWeight: FontWeight.w700)),], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
                   SizedBox(height: hv*2,),
-                  Text("Après confirmation, un agent reviendra vers vous sous 24h pour validation de la facture", style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
+                  Text(S.of(context).aprsConfirmationUnAgentReviendraVersVousSous24hPour, style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
                   Row(children: [
                     Expanded(
                       child: CustomTextButton(
                         expand: false,
-                        text: "Confirmer",
+                        text: S.of(context).confirmer,
                         isLoading: spinner2,
                         color: kPrimaryColor,
                         action: (){
@@ -713,20 +714,20 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                           //updatePaymentDate({String invoiceId, String regId}){}
                           
                           if(now.month >= 1 && now.month < 4){
-                            trimester = "Janvier à Mars " + DateTime.now().year.toString();
+                            trimester = S.of(context).janvierMars + DateTime.now().year.toString();
                             if (now.month != 3){
                               months = (now.day < 25) ? 4 - now.month : 4 - now.month - 1;
                             }
                             else{
                               if(now.day < 25){
                                 months = 1;
-                                trimester = "Janvier à Mars " + DateTime.now().year.toString();
+                                trimester = S.of(context).janvierMars + DateTime.now().year.toString();
                               }
                               else {
                                 months = 3;
-                                trimester = "Avril à Juin " + DateTime.now().year.toString();
+                                trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
                               }
-                              trimester = (now.day < 25) ? "Janvier à Mars " + DateTime.now().year.toString() : "Avril à Juin " + DateTime.now().year.toString(); 
+                              trimester = (now.day < 25) ? S.of(context).janvierMars + DateTime.now().year.toString() : S.of(context).avrilJuin + DateTime.now().year.toString(); 
                               months = (now.day < 25) ? 1 : 3;
                             }
                             if(now.month == 3 && now.day > 25){
@@ -739,10 +740,10 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                           }
 
                           else if(now.month >= 4 && now.month < 7){
-                            trimester = "Avril à Juin " + DateTime.now().year.toString();
+                            trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
                             if (now.month != 6){months = (now.day < 25) ? 7 - now.month : 7 - now.month - 1;}
                             else{
-                              trimester = (now.day < 25) ? "Avril à Juin " + DateTime.now().year.toString() : "Juillet à Septembre " + DateTime.now().year.toString(); 
+                              trimester = (now.day < 25) ? S.of(context).avrilJuin + DateTime.now().year.toString() : S.of(context).juilletSeptembre + DateTime.now().year.toString(); 
                               months = (now.day < 25) ? 1 : 3;
                             }
                             if(now.month == 6 && now.day > 25){
@@ -755,10 +756,10 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                           }
 
                           else if(now.month >= 7 && now.month < 10){
-                            trimester = "Juillet à Septembre " + DateTime.now().year.toString();
+                            trimester = S.of(context).juilletSeptembre + DateTime.now().year.toString();
                             if (now.month != 9){months = (now.day < 25) ? 10 - now.month : 10 - now.month - 1;}
                             else{
-                              trimester = (now.day < 25) ? "Juillet à Septembre " + DateTime.now().year.toString() : "Octobre à Décembre " + DateTime.now().year.toString(); 
+                              trimester = (now.day < 25) ? S.of(context).juilletSeptembre + DateTime.now().year.toString() : S.of(context).octobreDcembre + DateTime.now().year.toString(); 
                               months = (now.day < 25) ? 1 : 3;}
 
                             if(now.month == 9 && now.day > 25){
@@ -771,11 +772,11 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                           }
 
                           else if(now.month >= 10 && now.month <= 12){
-                            trimester = "Octobre à Décembre " + DateTime.now().year.toString();
+                            trimester = S.of(context).octobreDcembre + DateTime.now().year.toString();
                             
                             if (now.month != 9){months = (now.day < 25) ? 12 - now.month : 12 - now.month - 1;}
                             else{
-                              trimester = (now.day < 25) ? "Octobre à Décembre " + DateTime.now().year.toString() : "Janvier à Mars " + (DateTime.now().year+1).toString(); 
+                              trimester = (now.day < 25) ? S.of(context).octobreDcembre + DateTime.now().year.toString() : S.of(context).janvierMars + (DateTime.now().year+1).toString(); 
                               months = (now.day < 25) ? 1 : 3;
                             }
 
@@ -905,7 +906,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     Expanded(
                       child: CustomTextButton(
                         expand: false,
-                        text: "Annuler",
+                        text: S.of(context).annuler,
                         color: kSouthSeas,
                         action: () => Navigator.pop(context), //{setState((){spinner2 = !spinner2;});}
                       ),

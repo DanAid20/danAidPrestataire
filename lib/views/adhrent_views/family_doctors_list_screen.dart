@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -55,7 +56,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                       child: DoctorInfoCard(
                         avatarUrl: doctor.avatarUrl,
                         name: doctor.cniName,
-                        title: "Medecin de Famille, " + doctor.field,
+                        title: S.of(context).medecinDeFamille + doctor.field,
                         speciality: doctor.speciality,
                         teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                         consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -77,11 +78,11 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                     );
                   })
               : Center(
-                  child: Text("Aucun medecin disponible pour le moment.."),
+                  child: Text(S.of(context).aucunMedecinDisponiblePourLeMoment),
                 );
         }) : Center(
           child: CustomTextButton(
-            text: "Mettez à jour votre profil ainsi que votre location GPS",
+            text: S.of(context).mettezJourVotreProfilAinsiQueVotreLocationGps,
             action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit'),
             ),
         );
@@ -93,7 +94,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
       child: Column(children: [
         Row(
           children: [
-            Text("  Ordonner par:  "),
+            Text(S.of(context).ordonnerPar),
             Container(
               margin: EdgeInsets.symmetric(vertical: hv * 1),
               padding:
@@ -112,27 +113,27 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         color: kPrimaryColor,
                       ),
                       hint: Text(
-                        "Choisir",
+                        S.of(context).choisir,
                         style: TextStyle(
                             color: kPrimaryColor, fontWeight: FontWeight.w600),
                       ),
                       value: filter,
                       items: [
                         DropdownMenuItem(
-                          child: Text("Nom",
+                          child: Text(S.of(context).nom,
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.bold)),
-                          value: "name",
+                          value: S.of(context).name,
                         ),
                         DropdownMenuItem(
                           child: Text(
-                            "Distance",
+                            S.of(context).distance,
                             style: TextStyle(
                                 color: kPrimaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          value: "distance",
+                          value: S.of(context).distance,
                         ),
                       ],
                       onChanged: (value) {

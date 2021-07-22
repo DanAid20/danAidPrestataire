@@ -3,6 +3,7 @@ import 'dart:io' show Directory, Platform;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -81,8 +82,8 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Documents", style: TextStyle(fontSize: 45, color: kCardTextColor),),
-                            Text("Aperçu & téléchargement des documents administratifs DanAid", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kCardTextColor),),
+                            Text(S.of(context).documents, style: TextStyle(fontSize: 45, color: kCardTextColor),),
+                            Text(S.of(context).aperuTlchargementDesDocumentsAdministratifsDanaid, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kCardTextColor),),
                           ],
                       )),
                       SizedBox(height: hv*5,),
@@ -127,7 +128,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
                   children: [
                     SizedBox(height: hv*3,),
                     SvgPicture.asset('assets/icons/Two-tone/Paper.svg', color: kDeepTeal.withOpacity(0.4), width: wv*30,),
-                    Text("Défilez pour avoir\nle résumé", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kDeepTeal.withOpacity(0.5)), textAlign: TextAlign.center),
+                    Text(S.of(context).dfilezPourAvoirnleRsum, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kDeepTeal.withOpacity(0.5)), textAlign: TextAlign.center),
                     SizedBox(height: hv*3,)
                   ],
                 )),
