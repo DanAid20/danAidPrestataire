@@ -3,6 +3,7 @@ import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -71,8 +72,8 @@ class _ComparePlansState extends State<ComparePlans> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Comparer les services", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text("Modifier ma couverture",
+            Text(S.of(context).comparerLesServices, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).modifierMaCouverture,
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
@@ -93,8 +94,8 @@ class _ComparePlansState extends State<ComparePlans> {
                   : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
                     : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
                       : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
-                actionLabel: "Comparer Les Services",
-                subtitle: "Vous êtes couverts jusqu'au $limitString",
+                actionLabel: S.of(context).comparerLesServices,
+                subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
                 noAction: true
               ),
             ),
@@ -117,21 +118,21 @@ class _ComparePlansState extends State<ComparePlans> {
                             children: [
                               TextSpan(text: plans[state].label+'\n', style: TextStyle(fontSize: wv*6)),
                               TextSpan(text: plans[state].monthlyAmount.toString(), style: TextStyle(fontSize: wv*8)),
-                              TextSpan(text: " Cfa\n"),
-                              TextSpan(text: "par famille / Mois"),
+                              TextSpan(text: S.of(context).cfan),
+                              TextSpan(text: S.of(context).parFamilleMois),
                             ]
                           )
                         ),
                       ),
-                      headerCell(text: "Niveau 0", icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
-                      headerCell(text: "Niveau I", icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
-                      headerCell(text: "Niveau II", icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
-                      headerCell(text: "Niveau III", icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
+                      headerCell(text: S.of(context).niveau0, icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
+                      headerCell(text: S.of(context).niveauI, icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
+                      headerCell(text: S.of(context).niveauIi, icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
+                      headerCell(text: S.of(context).niveauIii, icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
                     ]
                   ),
                   TableRow(
                     children: [
-                      defaultCell(text: "Couverture santé", center: false),
+                      defaultCell(text: S.of(context).couvertureSant, center: false),
                       defaultCell(text: plans[0].coveragePercentage.toString()+"%", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isDecouverte),
                       defaultCell(text: plans[1].coveragePercentage.toString()+" %", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isAcces),
                       defaultCell(text: plans[2].coveragePercentage.toString()+" %", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isAssist),
@@ -140,7 +141,7 @@ class _ComparePlansState extends State<ComparePlans> {
                   ),
                   TableRow(
                     children: [
-                      defaultCell(text: "Plafond Annuel", center: false),
+                      defaultCell(text: S.of(context).plafondAnnuel, center: false),
                       defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isDecouverte),
                       defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAcces),
                       defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAssist),

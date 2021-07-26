@@ -5,6 +5,7 @@ import 'package:danaid/core/models/invoiceModel.dart';
 import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class _ContributionsState extends State<Contributions> {
           icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
           onPressed: ()=>Navigator.pop(context)
         ),
-        title: Text("Historique des paiements", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+        title: Text(S.of(context).historiqueDesPaiements, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
@@ -56,9 +57,9 @@ class _ContributionsState extends State<Contributions> {
         children: [
           SizedBox(height: hv*2.5,),
           HomePageComponents.getInfoActionCard(
-            title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte" : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès" : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist" : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
-            actionLabel: "Comparer Les Services",
-            subtitle: limitString != null ? "Vous êtes couverts jusqu'au $limitString" : "...",
+            title: adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès" : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist" : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
+            actionLabel: S.of(context).comparerLesServices,
+            subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
             action: ()=>Navigator.pushNamed(context, '/compare-plans')
           ),
           SizedBox(height: hv*2.5,),
@@ -70,7 +71,7 @@ class _ContributionsState extends State<Contributions> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("  Mes dernières factures", style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
+                  Text(S.of(context).mesDerniresFactures, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
                   SizedBox(height: hv*2,),
                   StreamBuilder(
                     stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
@@ -129,7 +130,7 @@ class _ContributionsState extends State<Contributions> {
                             }),
                       )
                       : Center(
-                        child: Container(padding: EdgeInsets.only(top: hv*4),child: Text("Aucune côtisation enrégistrée pour le moment..", textAlign: TextAlign.center)),
+                        child: Container(padding: EdgeInsets.only(top: hv*4),child: Text(S.of(context).aucuneCtisationEnrgistrePourLeMoment, textAlign: TextAlign.center)),
                       );
                     }
                   )
@@ -160,10 +161,10 @@ class _ContributionsState extends State<Contributions> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(type == "INSCRIPTION" ? "Inscription" : "Côtisation", style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(type == "INSCRIPTION" ? S.of(context).inscription : S.of(context).ctisation, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold)),
                 Text(label, style: TextStyle(color: kDeepTeal, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
                 SizedBox(height: hv*2,),
-                Text("Montant", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                Text(S.of(context).montant, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
                 Text("$amount f.", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
               ],
             ),
@@ -176,9 +177,9 @@ class _ContributionsState extends State<Contributions> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(child: Text(paid == 1 ? "Payée" : paid == 2 ? "En retard!" : paid == 3 ? "Validation en cours" : "En attente!", style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: wv*3.5))),
+                      Center(child: Text(paid == 1 ? S.of(context).paye : paid == 2 ? S.of(context).enRetard : paid == 3 ? S.of(context).validationEnCours : S.of(context).enAttente, style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: wv*3.5))),
                       SizedBox(height: hv*2,),
-                      Text("Délai de paiement", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                      Text(S.of(context).dlaiDePaiement, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
                       Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold, decoration: paid == 1 ? TextDecoration.lineThrough : TextDecoration.none),),
                     ],
                   ),
@@ -188,7 +189,7 @@ class _ContributionsState extends State<Contributions> {
                     child: paid != 1 ? Column(
                       children: [
                         Center(child: SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: wv*8,)),
-                        Text("Payer", style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+                        Text(S.of(context).payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
                       ],
                     ) :
                     Container(),

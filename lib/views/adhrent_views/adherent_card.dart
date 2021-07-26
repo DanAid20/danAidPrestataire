@@ -8,6 +8,7 @@ import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -195,7 +196,7 @@ class _AdherentCardState extends State<AdherentCard> {
                     ),
                     state == 0 || adh.validityEndDate.toDate().isBefore(DateTime.now()) ? RotationTransition(
                       turns: new AlwaysStoppedAnimation(330 / 360),
-                      child: new Text("Compte\nInactif", style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                      child: new Text(S.of(context).compteninactif, style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                     ) : Container()
                   ],
                 ),
@@ -212,7 +213,7 @@ class _AdherentCardState extends State<AdherentCard> {
                           RichText(text: TextSpan(
                             style: textStyle,
                             children: [
-                              TextSpan(text: "Nom du bénéficiaire\n"),
+                              TextSpan(text: S.of(context).nomDuBnficiairen),
                               TextSpan(text: beneficiary.surname.toString() + " "+ beneficiary.familyName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
                           )),
@@ -221,7 +222,7 @@ class _AdherentCardState extends State<AdherentCard> {
                             text: TextSpan(
                             style: textStyle,
                             children: [
-                              TextSpan(text: "Numéro matricule\n"),
+                              TextSpan(text: S.of(context).numroMatriculen),
                               TextSpan(text: beneficiary.matricule, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
                           )),
@@ -230,8 +231,8 @@ class _AdherentCardState extends State<AdherentCard> {
                           TextSpan(
                             style: textStyle,
                             children: [
-                              TextSpan(text: "Médecin de Famille\n"),
-                              TextSpan(text: doctor != null ? doctor : "Aucun", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
+                              TextSpan(text: S.of(context).mdecinDeFamillen),
+                              TextSpan(text: doctor != null ? doctor : S.of(context).aucun, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
                           )),
                         ],

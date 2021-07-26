@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/drawer.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -70,12 +71,12 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: hv*3,),
-                Container(child: Text("Famille "+adhr.familyName, style: TextStyle(fontSize: 35, color: kCardTextColor),)),
+                Container(child: Text(S.of(context).famille+adhr.familyName, style: TextStyle(fontSize: 35, color: kCardTextColor),)),
                 Text(
-                  adhr.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
-                  : adhr.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
-                    : adhr.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
-                      : adhr.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...", 
+                  adhr.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
+                  : adhr.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
+                    : adhr.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
+                      : adhr.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "...", 
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kCardTextColor),
                 ),
                 SizedBox(height: hv*2,),
@@ -84,7 +85,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("Adhérent depuis", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlueDeep), textAlign: TextAlign.end,),
+                      Text(S.of(context).adhrentDepuis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlueDeep), textAlign: TextAlign.end,),
                       Text(Algorithms.getTimeElapsed(date: adhr.dateCreated.toDate()), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlueDeep))
                     ],
                   ),
@@ -113,8 +114,8 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                         text: TextSpan(
                                           style: TextStyle(color: kCardTextColor, fontSize: 15),
                                           children: [
-                                            TextSpan(text: "Vous êtes au niveau "),
-                                            TextSpan(text: adhr.adherentPlan == 0 ? "Découverte" : adhr.adherentPlan == 1 ? "Accès" : adhr.adherentPlan == 2 ? "Assist": adhr.adherentPlan == 3 ? "Sérénité" : "...", style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))
+                                            TextSpan(text: S.of(context).vousTesAuNiveau),
+                                            TextSpan(text: adhr.adherentPlan == 0 ? S.of(context).dcouverte : adhr.adherentPlan == 1 ? S.of(context).accs : adhr.adherentPlan == 2 ? S.of(context).assist: adhr.adherentPlan == 3 ? S.of(context).srnit : "...", style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))
                                           ]
                                         ),
                                       ),
@@ -153,7 +154,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                 SizedBox(height: hv*0.5,),
                                 Row(
                                   children: [
-                                    Expanded(child: Text("Votre Consommation", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kCardTextColor))),
+                                    Expanded(child: Text(S.of(context).votreConsommation, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: kCardTextColor))),
                                   ],
                                 ),
                                 SizedBox(height: hv*1.5,),
@@ -168,7 +169,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [ 
                                             Text("200.000Cfa", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: kDeepTeal), textAlign: TextAlign.center,),
-                                            Text("de frais santé", style: TextStyle(fontSize: 11, color: kDeepTeal), textAlign: TextAlign.center),
+                                            Text(S.of(context).deFraisSant, style: TextStyle(fontSize: 11, color: kDeepTeal), textAlign: TextAlign.center),
                                           ],
                                         ),
                                       ),
@@ -196,10 +197,10 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                   ),
                                 ),
                                 SizedBox(height: hv*3,),
-                                getIndicator(color: kSouthSeas, label: "Médecine & soin", percentage: healthcare),
-                                getIndicator(color: kBlueDeep, label: "Médicaments", percentage: pills),
-                                getIndicator(color: kBrownCanyon, label: "Laboratoire", percentage: lab),
-                                getIndicator(color: primaryColor, label: "Autres", percentage: other),
+                                getIndicator(color: kSouthSeas, label: S.of(context).mdecineSoin, percentage: healthcare),
+                                getIndicator(color: kBlueDeep, label: S.of(context).mdicaments, percentage: pills),
+                                getIndicator(color: kBrownCanyon, label: S.of(context).laboratoire, percentage: lab),
+                                getIndicator(color: primaryColor, label: S.of(context).autres, percentage: other),
                                 
                               ],
                             ),
@@ -214,14 +215,14 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
             ),
           ),
           SizedBox(height: hv*3,),
-          Container(child: Text("Vos Statistiques", style: TextStyle(fontSize: 40, color: kCardTextColor, fontWeight: FontWeight.bold)), padding: EdgeInsets.symmetric(horizontal: wv*5),),
+          Container(child: Text(S.of(context).vosStatistiques, style: TextStyle(fontSize: 40, color: kCardTextColor, fontWeight: FontWeight.bold)), padding: EdgeInsets.symmetric(horizontal: wv*5),),
           Container(
             padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
             child: Text(
-              adhr.adherentPlan == 0 ? "Vous êtes au Niveau Découverte comme 40% de nos adhérents"
-              : adhr.adherentPlan == 1 ? "Vous êtes au Niveau Accès comme 30% de nos adhérents"
-                : adhr.adherentPlan == 2 ? "Vous êtes au Niveau Assist comme 20% de nos adhérents"
-                  : adhr.adherentPlan == 3 ? "Vous êtes au Niveau Sérénité comme 10% de nos adhérents" : "...", 
+              adhr.adherentPlan == 0 ? S.of(context).vousTesAuNiveauDcouverteComme40DeNosAdhrents
+              : adhr.adherentPlan == 1 ? S.of(context).vousTesAuNiveauAccsComme30DeNosAdhrents
+                : adhr.adherentPlan == 2 ? S.of(context).vousTesAuNiveauAssistComme20DeNosAdhrents
+                  : adhr.adherentPlan == 3 ? S.of(context).vousTesAuNiveauSrnitComme10DeNosAdhrents : "...", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kCardTextColor),
             ),
           ),
@@ -298,13 +299,13 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
           getTitles: (double value) {
             switch (value.toInt()) {
               case 0:
-                return 'Découverte';
+                return S.of(context).dcouverte;
               case 1:
-                return 'Accès';
+                return S.of(context).accs;
               case 2:
-                return 'Assist';
+                return S.of(context).assist;
               case 3:
-                return 'Sérénité';
+                return S.of(context).srnit;
               default:
                 return '';
             }

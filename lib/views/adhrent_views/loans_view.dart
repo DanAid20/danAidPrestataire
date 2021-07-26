@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/loanModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/drawer.dart';
 import 'package:danaid/widgets/advantage_card.dart';
@@ -52,8 +53,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Aperçu de mon Prêt Santé", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text("Ajouter, modifier ou envoyer les pièces", 
+            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
@@ -100,9 +101,9 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                         child: Hero(
                           tag: "loanCard",
                           child: AdvantageCard(
-                            label: "Prêt de santé",
-                            description: "MAXIMUM DISPONIBLE",
-                            state: "DISPONIBLE",
+                            label: S.of(context).prtDeSant,
+                            description: S.of(context).maximumDisponible,
+                            state: S.of(context).disponible,
                             price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "#200.000 f.",
                             showLogo: true,
                             color: Colors.brown.withOpacity(0.7),
@@ -122,7 +123,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: kSouthSeas,
                             borderRadius: BorderRadius.circular(20)
                           ),
-                          child: Text("Rapide", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: Text(S.of(context).rapide, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                         SizedBox(width: wv*5,),
                         Container(
@@ -131,7 +132,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: kPrimaryColor.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(20)
                           ),
-                          child: Text("Pour tous", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: Text(S.of(context).pourTous, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                         SizedBox(width: wv*5,),
                         Container(
@@ -140,7 +141,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(20)
                           ),
-                          child: Text("Simple", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: Text(S.of(context).simple, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                       ],
                     ),
@@ -153,9 +154,9 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                       Expanded(
                         flex: 6,
                         child: CustomTextField(
-                          label: "Je souhaite emprunter",
+                          label: S.of(context).jeSouhaiteEmprunter,
                           noPadding: true,
-                          hintText: "Entrer le montant",
+                          hintText: S.of(context).entrerLeMontant,
                           controller: _amountController,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
@@ -173,12 +174,12 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                           enable: _amountController.text.isNotEmpty && enable == true,
                           fontSize: 14,
                           borderRadius: 20,
-                          text: "Démander un crédit",
+                          text: S.of(context).dmanderUnCrdit,
                           action: (){
                             double amount = double.parse(_amountController.text);
                             double maxAmount =  adherentProvider.getAdherent.adherentPlan == 0 ? 50000 : adherentProvider.getAdherent.adherentPlan == 1 ? 100000 : adherentProvider.getAdherent.adherentPlan == 2 ? 150000 : 200000;
                             if(amount > maxAmount){
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Désolé, votre plan actuel ne vous permet pas d\'emprunter plus de '+maxAmount.toString()+' f.'),));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
                             }
                             else{
                               //loanProvider.setAmount(double.parse(_amountController.text));
@@ -199,26 +200,26 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
             SizedBox(height: hv*2.5,),
             enable ? HomePageComponents.getInfoActionCard(
               icon: SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
-              title: "Emprunter coûte de l'argent",
-              subtitle: "Un crédit vous engage et doit être remboursé. Vérifiez vos capacités de remboursement avant de vous engager",
-              actionLabel: "F.A.Q",
+              title: S.of(context).emprunterCoteDeLargent,
+              subtitle: S.of(context).unCrditVousEngageEtDoitTreRemboursVrifiezVos,
+              actionLabel: S.of(context).faq,
               action: (){}
             ) :  Container(),
             !enable ? Container(
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
-                title: "Completez d'abord votre profil",
-                subtitle: "Fournir les informations et pièces démandées pour pouvoir emprunter",
-                actionLabel: "Compléter mon profil",
+                title: S.of(context).completezDabordVotreProfil,
+                subtitle: S.of(context).fournirLesInformationsEtPicesDmandesPourPouvoirEmprunter,
+                actionLabel: S.of(context).complterMonProfil,
                 action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
               ),
             ) : Container(),
             adherentProvider.getAdherent.adherentPlan == 0 ? Container(
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
-                title: "Vous êtes au niveau 0 : Découverte",
-                subtitle: "Vous devez réferer 3 amis & connaissances pour pouvoir emprunter",
-                actionLabel: "Inviter des amis",
+                title: S.of(context).vousTesAuNiveau0+S.of(context).dcouverte,
+                subtitle: S.of(context).vousDevezRferer3AmisConnaissancesPourPouvoirEmprunter,
+                actionLabel: S.of(context).inviterDesAmis,
                 action: (){}
               ),
             ) : Container(),
@@ -231,7 +232,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*2,),
-                  Text("   Statut des emprunts", style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+                  Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
                   SizedBox(height: hv*2,),
                   Column(
                     children: [
@@ -248,8 +249,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             labelStyle: TextStyle(fontWeight: FontWeight.bold),
                             labelColor: kPrimaryColor,
                             tabs: [
-                              Tab(text: "En Cours"),
-                              Tab(text: "Achevés"),
+                              Tab(text: S.of(context).enCours),
+                              Tab(text: S.of(context).achevs),
                             ],
                           ),
                         ),
@@ -302,7 +303,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                           );
                                         })
                                     : Center(
-                                      child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text("Aucune demande de crédit enrégistrée\npour le moment..", textAlign: TextAlign.center)),
+                                      child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucuneDemandeDeCrditEnrgistrenpourLeMoment, textAlign: TextAlign.center)),
                                     );
                                 }
                               ),

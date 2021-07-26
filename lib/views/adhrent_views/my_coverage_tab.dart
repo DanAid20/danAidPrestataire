@@ -3,6 +3,7 @@ import 'package:danaid/core/models/usecaseModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -24,12 +25,12 @@ class MyCoverageTabView extends StatelessWidget {
             children: [
               SizedBox(height: hv*2,),
               adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
-                title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
-                  : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
-                    : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
-                      : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
-                actionLabel: "Comparer Les Services",
-                subtitle: limitString != null ? "Vous êtes couverts jusqu'au $limitString" : "...",
+                title: adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
+                  : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
+                    : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
+                      : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "...",
+                actionLabel: S.of(context).comparerLesServices,
+                subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
                 action: (){
                   Navigator.pushNamed(context, '/compare-plans');
                   /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
@@ -83,9 +84,9 @@ class MyCoverageTabView extends StatelessWidget {
                     child: Column(children: [
                       Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
                       SizedBox(height: hv*5,),
-                      Text("Démarrer une prise en charge", style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
+                      Text(S.of(context).dmarrerUnePriseEnCharge, style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
                       SizedBox(height: hv*1,),
-                      Text("Vous êtes malades ? Commencez ici\npour obtenir la couverture de vos frais", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
+                      Text(S.of(context).vousTesMaladesCommencezIcinpourObtenirLaCouvertureDeVos, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
                       SizedBox(height: hv*2,),
                     ],crossAxisAlignment: CrossAxisAlignment.start, ),
                   ),
@@ -101,7 +102,7 @@ class MyCoverageTabView extends StatelessWidget {
                       onTap: ()=>Navigator.pushNamed(context, '/adherent-card'),
                       child: HomePageComponents().getMyCoverageOptionsCard(
                         imgUrl: "assets/images/presentCard.png",
-                        label: "Présenter ma carte d'adhérant",
+                        label: S.of(context).prsenterMaCarteDadhrant,
                         labelColor: kPrimaryColor
                       ),
                     ),
@@ -109,7 +110,7 @@ class MyCoverageTabView extends StatelessWidget {
                       onTap: ()=>Navigator.pushNamed(context, '/contributions'),
                       child: HomePageComponents().getMyCoverageOptionsCard(
                         imgUrl: "assets/images/TrackSavings.png",
-                        label: "Suivre mes côtisations",
+                        label: S.of(context).suivreMesCtisations,
                         labelColor: Colors.white
                       ),
                     ),
@@ -117,7 +118,7 @@ class MyCoverageTabView extends StatelessWidget {
                       onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
                       child: HomePageComponents().getMyCoverageOptionsCard(
                         imgUrl: "assets/images/TrackSavings.png",
-                        label: "Demander un remboursement",
+                        label: S.of(context).demanderUnRemboursement,
                         labelColor: Colors.white
                       ),
                     ),
@@ -131,7 +132,7 @@ class MyCoverageTabView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                   child: Row(children: [
-                    Text("Utilisation", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    Text(S.of(context).utilisation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                     //Text("Voir plus..")
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                 ),
@@ -177,7 +178,7 @@ class MyCoverageTabView extends StatelessWidget {
                             );
                           })
                       : Center(
-                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text("Aucun cas d'utilisation enrégistré pour le moment..", textAlign: TextAlign.center)),
+                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
                       );
                     /*return Container(
                       color: whiteColor,

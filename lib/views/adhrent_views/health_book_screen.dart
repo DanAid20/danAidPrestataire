@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +27,8 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
               SizedBox(height: hv*5,),
-              Text("Carnet de Santé"),
-              Text("Paramètres temporaires : Déconnexion", textAlign: TextAlign.center,),
+              Text(S.of(context).carnetDeSant),
+              Text(S.of(context).paramtresTemporairesDconnexion, textAlign: TextAlign.center,),
               SizedBox(height: hv*2,),
               /*TextField(
                 controller: phone,
@@ -126,7 +127,7 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
               ),*/
               
               TextButton(
-                child: Text("Se Déconnecter"),
+                child: Text(S.of(context).seDconnecter),
                 onPressed: () async {
                   AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
                   ServiceProviderModelProvider sp = Provider.of<ServiceProviderModelProvider>(context, listen: false);

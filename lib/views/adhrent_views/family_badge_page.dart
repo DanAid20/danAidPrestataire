@@ -1,6 +1,7 @@
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,23 +33,23 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: hv*15,),
-              Text("Badges", style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: whiteColor),),
+              Text(S.of(context).badges, style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: whiteColor),),
               SizedBox(height: hv*5,),
               Row(
                 children: [
                   badgeBox(
                     img: 'assets/icons/Bulk/Shield Done.svg',
                     color: kBrownCanyon,
-                    label: "Couvert",
-                    description: "Vous Avez Une Couverture Santé Optimale, Accès, Assist ou Sérénité",
+                    label: S.of(context).couvert,
+                    description: S.of(context).vousAvezUneCouvertureSantOptimaleAccsAssistOuSrnit,
                     active: adherentProvider.getAdherent.adherentPlan != 0
                   ),
                   Spacer(),
                   badgeBox(
                     img: 'assets/icons/Bulk/Ticket Star.svg',
                     color: kDeepTeal,
-                    label: "Ancienneté",
-                    description: "Vous êtes adhérent depuis plus d'un an sans discontinuer",
+                    label: S.of(context).anciennet,
+                    description: S.of(context).vousTesAdhrentDepuisPlusDunAnSansDiscontinuer,
                     active: yearsForBadget >= 365
                   ),
                 ],
@@ -57,8 +58,8 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
               badgeBox(
                 img: 'assets/icons/Bulk/Heart.svg',
                 color: primaryColor,
-                label: "Contributeur",
-                description: "Vous êtes un Contributeur régulier aans le réseau d’entraide DanAid",
+                label: S.of(context).contributeur,
+                description: S.of(context).vousTesUnContributeurRgulierAansLeRseauDentraideDanaid,
                 active: false
               ),
             ],

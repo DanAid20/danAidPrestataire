@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/adhrent_views/family_doctors_list_screen.dart';
 import 'package:danaid/views/adhrent_views/specialist_list.dart';
@@ -68,7 +69,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 }
                 ),
               ),
-              Text("Trouver un Prestataire de Santé", style: TextStyle(color: whiteColor),),
+              Text(S.of(context).trouverUnPrestataireDeSant, style: TextStyle(color: whiteColor),),
             ],
           ),
           actions: [
@@ -134,7 +135,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                                         borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
                                         borderRadius: BorderRadius.all(Radius.circular(15))
                                       ),
-                                      hintText: "Rechercher",
+                                      hintText: S.of(context).rechercher,
                                       hintStyle: TextStyle(color: kBrownCanyon)
                                     ),
                                   ),
@@ -142,7 +143,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ),
                               SizedBox(width: 5,),
                               TextButton(onPressed: ()=>controller.toPreviousIndex(),
-                                child: Text("Annuler", style: TextStyle(color: kBrownCanyon),)
+                                child: Text(S.of(context).annuler, style: TextStyle(color: kBrownCanyon),)
                               ),
                               //IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})
 
@@ -170,12 +171,12 @@ class _PartnersScreenState extends State<PartnersScreen> {
         child: Column(children: [
           SizedBox(height: hv*1,),
           SvgPicture.asset("assets/icons/Bulk/ArrowUp.svg"),
-          Text("Recherchez en inscrivant directement le nom du praticien ou de l’etablissement de santé. Vous pouvez aussi rechercher les prestataires en sélectionant les groupes ci-dessous.", style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
+          Text(S.of(context).recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
           
           SizedBox(height: hv*4,),
 
           getDragSheetTiles(
-            title: "Médécin de Famille",
+            title: S.of(context).mdcinDeFamille,
             markerColor: kBrownCanyon,
             onTap: (){
               setState(() {
@@ -188,7 +189,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: "Autres Spécialistes",
+            title: S.of(context).autresSpcialistes,
             markerColor: kPrimaryColor,
             onTap: (){
               setState(() {
@@ -197,7 +198,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: "Hôpital ou clinique",
+            title: S.of(context).hpitalOuClinique,
             markerColor: kSouthSeas,
             onTap: (){
               setState(() {
@@ -206,7 +207,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: "Laboratoire",
+            title: S.of(context).laboratoire,
             markerColor: primaryColor,
             onTap: (){
               setState(() {
@@ -215,7 +216,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: "Pharmacie",
+            title: S.of(context).pharmacie,
             markerColor: Colors.teal,
             onTap: (){
               setState(() {

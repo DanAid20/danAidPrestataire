@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -271,7 +272,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("Dr. ${doctor.getDoctor.cniName}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
-                                    Text("Medecin de Famille, ${doctor.getDoctor.field}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                    Text(S.of(context).medecinDeFamille+doctor.getDoctor.field, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                     SizedBox(height: hv*1.3,),
                                     Text(doctor.getDoctor.officeName, style: TextStyle(color: whiteColor, fontSize: 15, fontWeight: FontWeight.w600),),
                                     Text("Service - ${doctor.getDoctor.speciality}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
@@ -307,7 +308,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 adherentModelProvider.getAdherent.familyDoctorId == null ? 
                                   TextButton(
                                     onPressed: () => _chooseDoctor(doctor.getDoctor), 
-                                    child: Text("Mon médecin", style: TextStyle(color: kPrimaryColor),),
+                                    child: Text(S.of(context).monMdecin, style: TextStyle(color: kPrimaryColor),),
                                     style: ButtonStyle(
                                       padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
                                       shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
@@ -329,7 +330,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                     children: [
                                       SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: 20, color: kPrimaryColor,),
                                       SizedBox(width: 2,),
-                                      Text("Modifier", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w900),),
+                                      Text(S.of(context).modifier, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w900),),
                                     ],
                                   ),
                                   style: ButtonStyle(
@@ -356,7 +357,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               child: ListTile(
                                 title: Padding(
                                   padding: EdgeInsets.only(bottom: 5.0),
-                                  child: Text("Services Offerts", style: TextStyle(color: whiteColor, fontSize: 15),),
+                                  child: Text(S.of(context).servicesOfferts, style: TextStyle(color: whiteColor, fontSize: 15),),
                                 ),
                                 subtitle: Row(
                                   children: [
@@ -393,15 +394,15 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               SizedBox(height: hv*1),
                               Row(mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  doctor.getDoctor.serviceList["consultation"] ? getFeatureCard(title: "Consultations") : Container(),
-                                  doctor.getDoctor.serviceList["tele-consultation"] ? getFeatureCard(title: "Télé-Consultations") : Container(),
-                                  doctor.getDoctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: "Visite à domicile") : Container(),
+                                  doctor.getDoctor.serviceList["consultation"] ? getFeatureCard(title: S.of(context).consultations) : Container(),
+                                  doctor.getDoctor.serviceList["tele-consultation"] ? getFeatureCard(title: S.of(context).tlconsultations) : Container(),
+                                  doctor.getDoctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: S.of(context).visiteDomicile) : Container(),
                                 ],
                               ),
                               Row(mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  doctor.getDoctor.serviceList["chat"] ? getFeatureCard(title: "Chat") : Container(),
-                                  doctor.getDoctor.serviceList["rdv"] ? getFeatureCard(title: "Rendez-vous") : Container(),
+                                  doctor.getDoctor.serviceList["chat"] ? getFeatureCard(title: S.of(context).chat) : Container(),
+                                  doctor.getDoctor.serviceList["rdv"] ? getFeatureCard(title: S.of(context).rendezvous) : Container(),
                                 ],
                               ),
                               SizedBox(height: hv*1),
@@ -421,7 +422,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         TextButton.icon(
                           onPressed: (){},
                           icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg", color: whiteColor),
-                          label: Text("Ecrire", style: TextStyle(color: whiteColor),),
+                          label: Text(S.of(context).ecrire, style: TextStyle(color: whiteColor),),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                             padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
@@ -437,7 +438,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                             padding: const EdgeInsets.only(top: 3.0),
                             child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
                           ),
-                          label: Text("Prendre Rendez-vous", style: TextStyle(color: kPrimaryColor),),
+                          label: Text(S.of(context).prendreRendezvous, style: TextStyle(color: kPrimaryColor),),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(whiteColor),
                             padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
@@ -453,11 +454,11 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                     style: TextStyle(color: kPrimaryColor),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("  A propos", style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text(S.of(context).aPropos, style: TextStyle(fontWeight: FontWeight.bold),),
                         SizedBox(height: 3,),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(doctor.getDoctor.about == null ? "R.A.S" : doctor.getDoctor.about),
+                          child: Text(doctor.getDoctor.about == null ? S.of(context).ras : doctor.getDoctor.about),
                         ),
                         SizedBox(height: 10.h,),
                         isPrestataire? Padding(
@@ -479,7 +480,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 ),
                                 child: Column(
                                   children: [
-                                    Text('Medecin de famille', textAlign: TextAlign.center, style: TextStyle(
+                                    Text(S.of(context).medecinDeFamille, textAlign: TextAlign.center, style: TextStyle(
                                 color: kCardTextColor,
                                 fontWeight: FontWeight.w600,
                                 fontSize:  14.sp )),
@@ -507,7 +508,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 ),
                                 child: Column(
                                   children: [
-                                    Text('Personnel inscrit', textAlign: TextAlign.center, style: TextStyle(
+                                    Text(S.of(context).personnelInscrit, textAlign: TextAlign.center, style: TextStyle(
                                 color: kCardTextColor,
                                 fontWeight: FontWeight.w600,
                                 fontSize:  14.sp )),
@@ -528,12 +529,12 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                             doctor.getDoctor.availability != null ? Expanded(
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Horaire", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text(S.of(context).horaire, style: TextStyle(fontWeight: FontWeight.w800)),
                                   doctor.getDoctor.availability["monday to friday"]["available"] ? Container(
                                     margin: EdgeInsets.only(right: 10),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Expanded(child: Text("Lundi à Vendredi")),
+                                        Expanded(child: Text(S.of(context).lundiVendredi)),
                                         Text("${availability["monday to friday"]["start"].hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["start"].minute.toString().padLeft(2, '0')} - ${availability["monday to friday"]["end"].hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["end"].minute.toString().padLeft(2, '0')}"),
                                       ]
                                     ),
@@ -542,7 +543,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                     margin: EdgeInsets.only(right: 10),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("Samedi"),
+                                        Text(S.of(context).samedi),
                                         Text("${availability["saturday"]["start"].hour.toString().padLeft(2, '0')}H${availability["saturday"]["start"].minute.toString().padLeft(2, '0')} - ${availability["saturday"]["end"].hour.toString().padLeft(2, '0')}H${availability["saturday"]["end"].minute.toString().padLeft(2, '0')}"),
                                       ]
                                     ),
@@ -551,7 +552,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                     margin: EdgeInsets.only(right: 10),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("Dimanche"),
+                                        Text(S.of(context).dimanche),
                                         Text("${availability["sunday"]["start"].hour.toString().padLeft(2, '0')}H${availability["sunday"]["start"].minute.toString().padLeft(2, '0')} - ${availability["sunday"]["end"].hour.toString().padLeft(2, '0')}H${availability["sunday"]["end"].minute.toString().padLeft(2, '0')}"),
                                       ]
                                     ),
@@ -559,8 +560,8 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
                                   SizedBox(height: 10,),
 
-                                  Text("Adresse", style: TextStyle(fontWeight: FontWeight.w800)),
-                                  Text(doctor.getDoctor.address == null ? "Cameroon" :"${doctor.getDoctor.address}, Cameroun")
+                                  Text(S.of(context).adresse, style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text(doctor.getDoctor.address == null ? S.of(context).cameroon :"${doctor.getDoctor.address}, "+S.of(context).cameroun)
                                 ],
                               ),
                             )  :  Container(),
@@ -573,21 +574,21 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               ),
                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text("Tarif publique ", style: TextStyle(fontWeight: FontWeight.w800)),
+                                  Text(S.of(context).tarifPublique, style: TextStyle(fontWeight: FontWeight.w800)),
                                   Text("${doctor.getDoctor.rate["public"]} f."),
                                   SizedBox(height: 10,),
-                                  Text("Couverture DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                  Text(S.of(context).couvertureDanaid, style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                   Row(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Adhérents : "),
+                                      Text(S.of(context).adhrents),
                                       SizedBox(width: 5,),
                                       Text("70%",style: TextStyle(fontWeight: FontWeight.bold)),
                                     ],
                                   ),
                                   Row(
                                     children: [
-                                      Text("Découverte : "),
+                                      Text(S.of(context).dcouverte),
                                       SizedBox(width: 5,),
                                       Text("5%", style: TextStyle(fontWeight: FontWeight.bold),),
                                     ],
@@ -667,15 +668,15 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                 ),
                 child: Column(children: [
                   SizedBox(height: hv*4),
-                  RichText(text: TextSpan(text: "Voulez vous choisir le ", children: [TextSpan(text: "Dr. "+doctor.cniName, style: TextStyle(fontWeight: FontWeight.w700)), TextSpan(text: " comme medecin de Famille ?")], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
+                  RichText(text: TextSpan(text: S.of(context).voulezVousChoisirLe, children: [TextSpan(text: "Dr. "+doctor.cniName, style: TextStyle(fontWeight: FontWeight.w700)), TextSpan(text: " comme medecin de Famille ?")], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
                   SizedBox(height: hv*2,),
-                  Text("NB: Après confirmation, Vous ne pourrez plus modifier ce paramètre par vous même", style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
+                  Text(S.of(context).nbAprsConfirmationVousNePourrezPlusModifierCeParamtre, style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
                   Row(children: [
                     Expanded(
                       child: CustomTextButton(
                         expand: false,
                         isLoading: confirmSpinner,
-                        text: "Confirmer",
+                        text: S.of(context).confirmer,
                         color: kPrimaryColor,
                         action: confirmDoctor,
                       )
@@ -683,7 +684,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                     Expanded(
                       child: CustomTextButton(
                         expand: false,
-                        text: "Annuler",
+                        text: S.of(context).annuler,
                         color: kSouthSeas,
                         action: () => Navigator.pop(context),
                       ),

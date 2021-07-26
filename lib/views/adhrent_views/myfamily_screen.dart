@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -82,7 +83,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 padding: EdgeInsets.symmetric(horizontal: wv*3),
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Aperçu de votre couverture"),
+                    Text(S.of(context).aperuDeVotreCouverture),
                     TextButton(onPressed: (){}, child: Text(/*"Améliorer..."*/"", style: TextStyle(color: Colors.brown),)),
                   ],
                 ),
@@ -101,16 +102,16 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           RichText(text: TextSpan(
-                            text: "Vous bénéficiez d'une ",
+                            text: S.of(context).vousBnficiezDune,
                             children: [
-                              TextSpan(text: "rémise de 5%", style: TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text: " dans certaines pharmacies & Labos du réseau DanAid")
+                              TextSpan(text: S.of(context).rmiseDe5, style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: S.of(context).dansCertainesPharmaciesLabosDuRseauDanaid)
                             ]
                           , style: TextStyle(color: kBlueDeep, fontSize: wv*3.5)),
                           ),
                           TextButton(onPressed: ()=>Navigator.pushNamed(context, '/compare-plans'),
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50].withOpacity(0.5))),
-                            child: Text("Obtenez une couverture complète à 70% !", style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
+                            child: Text(S.of(context).obtenezUneCouvertureComplte70, style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
                         ],
                       ),
                     ) : Container(),
@@ -149,41 +150,41 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Paramètres du compte", style: TextStyle(color: kBlueDeep, fontSize: 18)),
+                    Text(S.of(context).paramtresDuCompte, style: TextStyle(color: kBlueDeep, fontSize: 18)),
                     SizedBox(height: hv*2,),
                     adherentProvider.getAdherent != null ? HomePageComponents.accountParameters(
-                      title: "Domicile Principale", 
+                      title: S.of(context).domicilePrincipale, 
                       subtitle: adherentProvider.getAdherent.address != null ? adherentProvider.getAdherent.address : "Non configurée", 
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
                       action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
                     ) : Container(),
                     HomePageComponents.accountParameters(
-                      title: "Mes statistiques", 
-                      subtitle: "Consulter..", 
+                      title: S.of(context).mesStatistiques, 
+                      subtitle: S.of(context).consulter, 
                       svgIcon: "assets/icons/Bulk/Graph.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-stats-page')
                     ),
                     HomePageComponents.accountParameters(
-                      title: "Points et badges", 
-                      subtitle: "Consulter et utiliser ses bénéfices.", 
+                      title: S.of(context).pointsEtBadges, 
+                      subtitle: S.of(context).consulterEtUtiliserSesBnfices, 
                       svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-points-page')
                     ),
                     HomePageComponents.accountParameters(
-                      title: "Changez de niveau de service", 
-                      subtitle: "Comparer les niveaux et choisir", 
+                      title: S.of(context).changezDeNiveauDeService, 
+                      subtitle: S.of(context).comparerLesNiveauxEtChoisir, 
                       svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
                       action: ()=>Navigator.pushNamed(context, '/compare-plans')
                     ),
                     HomePageComponents.accountParameters(
-                      title: "Changez de medecin de famille", 
-                      subtitle: "Faites une demande", 
+                      title: S.of(context).changezDeMedecinDeFamille, 
+                      subtitle: S.of(context).faitesUneDemande, 
                       svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
                       action: callDanAid
                     ),
                     HomePageComponents.accountParameters(
-                      title: "Documents DanAid", 
-                      subtitle: "contrats, documents, guides", 
+                      title: S.of(context).documentsDanaid, 
+                      subtitle: S.of(context).contratsDocumentsGuides, 
                       svgIcon: "assets/icons/Two-tone/Paper.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-documents-page')
                     ),
