@@ -1,5 +1,6 @@
 import 'package:danaid/core/models/invoiceModel.dart';
 import 'package:danaid/core/models/loanModel.dart';
+import 'package:danaid/core/models/notificationModel.dart';
 import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/routes.dart';
 import 'package:danaid/core/services/navigation_service.dart';
@@ -23,6 +24,7 @@ import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
+import 'package:danaid/core/providers/notificationModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderTileModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/conversationModelProvider.dart';
@@ -110,6 +112,9 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<InvoiceModelProvider>(
                 create: (_) => InvoiceModelProvider(InvoiceModel()),
+              ),
+              ChangeNotifierProvider<NotificationModelProvider>(
+                create: (_) => NotificationModelProvider(<NotificationModel>[], 0),
               ),
             ],
             child: ScreenUtilInit(

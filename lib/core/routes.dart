@@ -45,6 +45,7 @@ import 'package:danaid/views/adhrent_views/use_case_details.dart';
 import 'package:danaid/views/adhrent_views/coveragePayment.dart';
 import 'package:danaid/views/adhrent_views/productDetails.dart';
 import 'package:danaid/views/adhrent_views/partners_search_screen.dart';
+import 'package:danaid/views/adhrent_views/notifications.dart';
 import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/doctor_views/doctor_profile_edit.dart';
 import 'package:danaid/views/serviceprovider/serviceprovider_profile_edit.dart';
@@ -92,6 +93,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/product-details": (context) => ProductDetails(),
   "/partners-search": (context) => PartnersSearchScreen(),
   "/friend-requests": (context) => FriendRequests(),
+  "/notifications": (context) => Notifications(),
   //"/payment": (context) => Payment(),
 
   /**

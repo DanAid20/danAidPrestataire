@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:danaid/core/providers/notificationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -110,6 +111,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
+    NotificationModelProvider notifications = Provider.of<NotificationModelProvider>(context);
     final birthday = userProvider.getUserModel != null ? userProvider.getUserModel.dateCreated.toDate() : DateTime.now();
     final date2 = DateTime.now();
     final yearsForBadget= date2.difference(birthday).inDays;
@@ -143,7 +145,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                             Positioned(
                               right: 0,
                               child: InkWell(
-                                onTap: () => Navigator.pushNamed(context, "/chatroom"),
+                                onTap: () => Navigator.pushNamed(context, "/notifications"),
                                 child: Container(
                                     padding: EdgeInsets.all(wv * 3),
                                     child: SvgPicture.asset(
@@ -152,23 +154,24 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                                     )),
                               ),
                             ),
-                            /*Positioned(
-                              right: wv * 1,
+                            notifications.unSeen == 0 ? Container() : Positioned(
+                              right: wv * 2,
                               top: hv * 1,
                               child: Container(
-                                padding: EdgeInsets.all(3),
+                                padding: EdgeInsets.all(4.5),
                                 decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(100)),
+                                  shape: BoxShape.circle,
+                                    color: Colors.yellow
+                                  ),
                                 child: Text(
-                                  "9+",
+                                  notifications.unSeen.toString(),
                                   style: TextStyle(
-                                      fontSize: wv * 2.2,
+                                      fontSize: wv * 2.7,
                                       color: Colors.teal,
                                       fontWeight: FontWeight.w900),
                                 ),
                               ),
-                            ),*/
+                            ),
                             Positioned(
                               right: wv * 1,
                               top: hv * 8,

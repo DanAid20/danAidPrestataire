@@ -672,13 +672,13 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   Text("NB: Après confirmation, Vous ne pourrez plus modifier ce paramètre par vous même", style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
                   Row(children: [
                     Expanded(
-                      child: !confirmSpinner ? CustomTextButton(
+                      child: CustomTextButton(
                         expand: false,
+                        isLoading: confirmSpinner,
                         text: "Confirmer",
                         color: kPrimaryColor,
                         action: confirmDoctor,
-                      ) : 
-                      Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),)),
+                      )
                     ),
                     Expanded(
                       child: CustomTextButton(
@@ -702,7 +702,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     setState(() {
       confirmSpinner = true;
     });
-    UserProvider userProvider = Provider.of<UserProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     DoctorTileModelProvider doctor = Provider.of<DoctorTileModelProvider>(context, listen: false);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);

@@ -17,7 +17,7 @@ class _GroupFeedsState extends State<GroupFeeds> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("GROUPS").doc(widget.group.groupId).collection("POSTS").orderBy("dateCreated", descending: true).snapshots(),
+      stream: FirebaseFirestore.instance.collection("GROUPS").doc(widget.group.groupId).collection("POSTS_GROUPS").orderBy("dateCreated", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());

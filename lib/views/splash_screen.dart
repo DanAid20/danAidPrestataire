@@ -4,6 +4,8 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +18,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
+  
 
   checkSignInState() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);

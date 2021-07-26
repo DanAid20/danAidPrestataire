@@ -1,3 +1,4 @@
+import 'package:danaid/core/models/notificationModel.dart';
 import 'package:hive/hive.dart';
 
 class HiveDatabase {
@@ -11,6 +12,24 @@ class HiveDatabase {
   static setProfileType(String val) async {
     Box userBox = await Hive.openBox('user');
     userBox.put('profile', val);
+  }
+
+  static addNotification(NotificationModel val) async {
+    print("Adding notification...");
+    var notificationBox = await Hive.openBox<NotificationModel>('notifications');
+    var unseenNotificationsBox = await Hive.openBox('unseen_notification');
+    notificationBox.add(val);
+    print(unseenNotificationsBox.get('unseen_classic').toString());
+    int unseenClassic = unseenNotificationsBox.get('unseen_classic') == null ? 0 : unseenNotificationsBox.get('unseen_classic');
+    unseenNotificationsBox.put('unseen_classic', unseenClassic+1);
+    print("new value");
+    print(unseenNotificationsBox.get('unseen_classic').toString());
+  }
+
+  static incrementUnseenNotification(int val) async {
+    Box notificationCountBox = await Hive.openBox('notification');
+    num counter = notificationCountBox.get('counter') != null ? notificationCountBox.get('counter') : 0;
+    notificationCountBox.put('counter', counter++);
   }
   static setAuthPhone(String val) async {
     Box adherentBox = await Hive.openBox('adherent');

@@ -13,6 +13,7 @@ import 'package:danaid/widgets/function_widgets.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/drawer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -417,6 +418,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                                   publishLoading = false;
                                 });
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Post ajouté")));
+                                //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous venez d'être crédité de 15 points")));
                                 Navigator.pop(context);
                               }).catchError((e){
                                 print(e.toString());
@@ -461,11 +463,18 @@ class _CreatePublicationState extends State<CreatePublication> {
   }
 
   publish({String id, Map input}) async {
-    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(id + "-" + DateTime.now().toString());
-    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS").doc(id + "-" + DateTime.now().toString());
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc();
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS_GROUPS").doc();
     DocumentReference docRef = widget.groupId == null ? normalRef : groupRef;
     try {
-      await docRef.set(input, SetOptions(merge: true))
+      await docRef.set(input, SetOptions(merge: true)).then((doc) async {
+        print(docRef.id);
+        FirebaseMessaging.instance.subscribeToTopic(docRef.id).whenComplete(() { print("subscribed");});
+        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).update({"points": FieldValue.increment(15)}).then((value){
+          userProvider.modifyPoints(15);
+        });
+      })
         .catchError((e){
           print(e.toString());
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
