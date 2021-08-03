@@ -7184,6 +7184,16 @@ class S {
       args: [],
     );
   }
+
+  /// `A health support network`
+  String get unRseauDentraideSant {
+    return Intl.message(
+      'A health support network',
+      name: 'unRseauDentraideSant',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

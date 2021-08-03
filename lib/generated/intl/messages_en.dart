@@ -679,6 +679,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "unPeuDePatienceCettePartieSeraBienttDisponible" : MessageLookupByLibrary.simpleMessage("a little patience this part will be available soon"),
     "unPeutDePatienceCettePartieEstEnCourDe" : MessageLookupByLibrary.simpleMessage("Please be patient, this part is under development. Thank you for your understanding"),
     "unRseauDentraide" : MessageLookupByLibrary.simpleMessage("A network of mutual aid"),
+    "unRseauDentraideSant" : MessageLookupByLibrary.simpleMessage("A health support network"),
     "uneFactureADejaTGnererPourCetteConstultation" : MessageLookupByLibrary.simpleMessage("An invoice has already been generated for this constultation"),
     "uneFactureVientDtreCrerPourCette" : MessageLookupByLibrary.simpleMessage("An invoice has just been created for this ..."),
     "urgence" : MessageLookupByLibrary.simpleMessage("Emergency"),
