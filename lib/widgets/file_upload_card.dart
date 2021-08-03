@@ -1,4 +1,5 @@
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
@@ -45,7 +46,7 @@ class FileUploadCard extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(kPrimaryColor),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
             ),
-            child: Text(state && !isMultiple ? "Remplacer" : "Ajouter", style: TextStyle(color: Colors.white),)) : 
+            child: Text(state && !isMultiple ? S.of(context).remplacer : S.of(context).ajouter, style: TextStyle(color: Colors.white),)) : 
             Padding(
               padding: EdgeInsets.all(4.0),
               child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),

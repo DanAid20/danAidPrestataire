@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class _SearchState extends State<Search> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucun utilisateur avec pour nom :\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunUtilisateurAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -189,7 +190,7 @@ class _SearchState extends State<Search> {
                         borderSide:
                             BorderSide(color: Colors.grey.withOpacity(0.0)),
                         borderRadius: BorderRadius.circular(10)),
-                    hintText: "Entrez le nom..",
+                    hintText: S.of(context).entrezLeNom,
                     filled: true,
                     contentPadding:
                         EdgeInsets.only(bottom: 12, left: 15, right: 15),
@@ -248,7 +249,7 @@ class _SearchState extends State<Search> {
             ),
           ),
           Text(
-            "Cherchez d'autres utilisateurs",
+            S.of(context).cherchezDautresUtilisateurs,
             style: TextStyle(
                 fontSize: 20, color: Colors.grey, fontWeight: FontWeight.w900),
           )

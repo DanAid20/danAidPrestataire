@@ -4,6 +4,7 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -95,15 +96,15 @@ class UserAvatarAndCoverage extends StatelessWidget {
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userProvider.getProfileType == adherent ? "Bonjour ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? "Bonjour Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(userProvider.getProfileType == adherent ? S.of(context).bonjour+" ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
                 userProvider.getProfileType == adherent ? 
-                adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? "Couverture niveau 0: Découverte" :
-                  adherentProvider.getAdherent.adherentPlan == 1 ? "Couverture niveau I: Accès" :
-                    adherentProvider.getAdherent.adherentPlan == 2 ? "Couverture niveau II: Assist" :
-                      adherentProvider.getAdherent.adherentPlan == 3 ? "Couverture niveau III: Sérénité" : 
+                adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).couvertureNiveau0Dcouverte :
+                  adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).couvertureNiveauIAccs :
+                    adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).couvertureNiveauIiAssist :
+                      adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).couvertureNiveauIiiSrnit : 
                 userProvider.getProfileType == doctor ?   
-                      "Nous vous attendions.." : "Nous vous attendions..": "Nous vous attendions.." : "Nous vous attendions.."
+                      S.of(context).nousVousAttendions : S.of(context).nousVousAttendions: S.of(context).nousVousAttendions : S.of(context).nousVousAttendions
                 , style: TextStyle(fontSize: wv*2.8, color: kPrimaryColor)),
             ],
           ),
@@ -118,7 +119,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
       children: [
         Loaders().buttonLoader(kPrimaryColor),
         SizedBox(width: wv*3,),
-        Text("Bonjour ..", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400))
+        Text(S.of(context).bonjour, style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400))
       ],
     )
     

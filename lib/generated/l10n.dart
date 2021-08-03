@@ -5065,10 +5065,10 @@ class S {
     );
   }
 
-  /// `Choose your\n`
+  /// `Choose your \n`
   String get choisissezVotren {
     return Intl.message(
-      'Choose your\n',
+      'Choose your \n',
       name: 'choisissezVotren',
       desc: '',
       args: [],
@@ -5720,6 +5720,1466 @@ class S {
     return Intl.message(
       'Ask',
       name: 'demander',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Posts`
+  String get posts {
+    return Intl.message(
+      'Posts',
+      name: 'posts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Q&R`
+  String get qr {
+    return Intl.message(
+      'Q&R',
+      name: 'qr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discussions`
+  String get discussions {
+    return Intl.message(
+      'Discussions',
+      name: 'discussions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Start a conversation...`
+  String get commencezUneConversation {
+    return Intl.message(
+      'Start a conversation...',
+      name: 'commencezUneConversation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a group`
+  String get crerUnGroupe {
+    return Intl.message(
+      'Create a group',
+      name: 'crerUnGroupe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `wait`
+  String get wait {
+    return Intl.message(
+      'wait',
+      name: 'wait',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Image`
+  String get image {
+    return Intl.message(
+      'Image',
+      name: 'image',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sticker`
+  String get sticker {
+    return Intl.message(
+      'Sticker',
+      name: 'sticker',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You`
+  String get you {
+    return Intl.message(
+      'You',
+      name: 'you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Write your comment`
+  String get ecrireVotreCommentaire {
+    return Intl.message(
+      'Write your comment',
+      name: 'ecrireVotreCommentaire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `content`
+  String get content {
+    return Intl.message(
+      'content',
+      name: 'content',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aucun utilisateur avec pour nom`
+  String get aucunUtilisateurAvecPourNom {
+    return Intl.message(
+      'Aucun utilisateur avec pour nom',
+      name: 'aucunUtilisateurAvecPourNom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search for users`
+  String get cherchezDesUtilisateurs {
+    return Intl.message(
+      'Search for users',
+      name: 'cherchezDesUtilisateurs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a photo`
+  String get ajouterUnePhoto {
+    return Intl.message(
+      'Add a photo',
+      name: 'ajouterUnePhoto',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name of the group`
+  String get nomDuGroupe {
+    return Intl.message(
+      'Name of the group',
+      name: 'nomDuGroupe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Description of the group`
+  String get descriptionDuGroupe {
+    return Intl.message(
+      'Description of the group',
+      name: 'descriptionDuGroupe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Everyone can see, each entity can add members`
+  String get toutLeMondePeutVoirChaqueIntitPeutAjouterDes {
+    return Intl.message(
+      'Everyone can see, each entity can add members',
+      name: 'toutLeMondePeutVoirChaqueIntitPeutAjouterDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only guests can see, only the admin can add members.`
+  String get seulsLesInvitsPeuventVoirSeulLadminPeutAjouterDes {
+    return Intl.message(
+      'Only guests can see, only the admin can add members.',
+      name: 'seulsLesInvitsPeuventVoirSeulLadminPeutAjouterDes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type of group *`
+  String get typeDeGroupe {
+    return Intl.message(
+      'Type of group *',
+      name: 'typeDeGroupe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Family Doctor Network`
+  String get rseauMdecinDeFamille {
+    return Intl.message(
+      'Family Doctor Network',
+      name: 'rseauMdecinDeFamille',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `MDF`
+  String get mdf {
+    return Intl.message(
+      'MDF',
+      name: 'mdf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ASSOCIATION`
+  String get association {
+    return Intl.message(
+      'ASSOCIATION',
+      name: 'association',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENTREPRISE`
+  String get entreprise {
+    return Intl.message(
+      'ENTREPRISE',
+      name: 'entreprise',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SPONSOR`
+  String get sponsor {
+    return Intl.message(
+      'SPONSOR',
+      name: 'sponsor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name of the organization`
+  String get nomDeLorganisation {
+    return Intl.message(
+      'Name of the organization',
+      name: 'nomDeLorganisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personne contact`
+  String get personneContact {
+    return Intl.message(
+      'Personne contact',
+      name: 'personneContact',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service provider`
+  String get prestataire {
+    return Intl.message(
+      'Service provider',
+      name: 'prestataire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Member`
+  String get adhrent {
+    return Intl.message(
+      'Member',
+      name: 'adhrent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the names of the users to add...`
+  String get entrezLesNomsDesUtilisateursAjouter {
+    return Intl.message(
+      'Enter the names of the users to add...',
+      name: 'entrezLesNomsDesUtilisateursAjouter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Health`
+  String get sant {
+    return Intl.message(
+      'Health',
+      name: 'sant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Politics`
+  String get politique {
+    return Intl.message(
+      'Politics',
+      name: 'politique',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Drug`
+  String get mdicament {
+    return Intl.message(
+      'Drug',
+      name: 'mdicament',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Relaxation`
+  String get dtente {
+    return Intl.message(
+      'Relaxation',
+      name: 'dtente',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Games`
+  String get jeux {
+    return Intl.message(
+      'Games',
+      name: 'jeux',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `DanAid`
+  String get danaid {
+    return Intl.message(
+      'DanAid',
+      name: 'danaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a publication`
+  String get crerUnePublication {
+    return Intl.message(
+      'Create a publication',
+      name: 'crerUnePublication',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hello `
+  String get bonjour {
+    return Intl.message(
+      'Hello ',
+      name: 'bonjour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Question to a doctor`
+  String get questionUnMdecin {
+    return Intl.message(
+      'Question to a doctor',
+      name: 'questionUnMdecin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New Discussion`
+  String get nouvelleDiscussion {
+    return Intl.message(
+      'New Discussion',
+      name: 'nouvelleDiscussion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fundraising`
+  String get leveDeFonds {
+    return Intl.message(
+      'Fundraising',
+      name: 'leveDeFonds',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` Deadlines`
+  String get dlais {
+    return Intl.message(
+      ' Deadlines',
+      name: 'dlais',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` Title`
+  String get titre {
+    return Intl.message(
+      ' Title',
+      name: 'titre',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What do you mean...`
+  String get queVoulezVousDire {
+    return Intl.message(
+      'What do you mean...',
+      name: 'queVoulezVousDire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tags`
+  String get tags {
+    return Intl.message(
+      'Tags',
+      name: 'tags',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add`
+  String get ajouter {
+    return Intl.message(
+      'Add',
+      name: 'ajouter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Photo`
+  String get photo {
+    return Intl.message(
+      'Photo',
+      name: 'photo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Doc`
+  String get doc {
+    return Intl.message(
+      'Doc',
+      name: 'doc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Video`
+  String get vido {
+    return Intl.message(
+      'Video',
+      name: 'vido',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Audio`
+  String get audio {
+    return Intl.message(
+      'Audio',
+      name: 'audio',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Publish`
+  String get publier {
+    return Intl.message(
+      'Publish',
+      name: 'publier',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No discussion for the moment`
+  String get aucuneDiscussionPourLeMoment {
+    return Intl.message(
+      'No discussion for the moment',
+      name: 'aucuneDiscussionPourLeMoment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Il ya `
+  String get ilYa {
+    return Intl.message(
+      'Il ya ',
+      name: 'ilYa',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No group for the moment`
+  String get aucunGroupePourLeMoment {
+    return Intl.message(
+      'No group for the moment',
+      name: 'aucunGroupePourLeMoment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edition of the Post`
+  String get editionDuPost {
+    return Intl.message(
+      'Edition of the Post',
+      name: 'editionDuPost',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `   Replace`
+  String get remplacer {
+    return Intl.message(
+      '   Replace',
+      name: 'remplacer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Post Modified`
+  String get postModifi {
+    return Intl.message(
+      'Post Modified',
+      name: 'postModifi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a group`
+  String get ajouterUnGroupe {
+    return Intl.message(
+      'Add a group',
+      name: 'ajouterUnGroupe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` members`
+  String get membres {
+    return Intl.message(
+      ' members',
+      name: 'membres',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `News \n`
+  String get nouvellesn {
+    return Intl.message(
+      'News \n',
+      name: 'nouvellesn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Conversations`
+  String get conversations {
+    return Intl.message(
+      'Conversations',
+      name: 'conversations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `News  \n`
+  String get nouvellesN {
+    return Intl.message(
+      'News  \n',
+      name: 'nouvellesN',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friendship requests`
+  String get demandesDamiti {
+    return Intl.message(
+      'Friendship requests',
+      name: 'demandesDamiti',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No request for friendship`
+  String get aucuneDmandeDamiti {
+    return Intl.message(
+      'No request for friendship',
+      name: 'aucuneDmandeDamiti',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Don't hesitate to make a friend request`
+  String get nhsitezPasFaireUneDemandeDami {
+    return Intl.message(
+      'Don\'t hesitate to make a friend request',
+      name: 'nhsitezPasFaireUneDemandeDami',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No posts for the moment`
+  String get aucunPostsPourLeMoment {
+    return Intl.message(
+      'No posts for the moment',
+      name: 'aucunPostsPourLeMoment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No description provided`
+  String get aucuneDescriptionFournie {
+    return Intl.message(
+      'No description provided',
+      name: 'aucuneDescriptionFournie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorites`
+  String get favoris {
+    return Intl.message(
+      'Favorites',
+      name: 'favoris',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discover`
+  String get dcouvrir {
+    return Intl.message(
+      'Discover',
+      name: 'dcouvrir',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Welcome to the DanAid Support Network`
+  String get bienvenueAuRseauDentraideDanaid {
+    return Intl.message(
+      'Welcome to the DanAid Support Network',
+      name: 'bienvenueAuRseauDentraideDanaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `What do you want to share?`
+  String get queVoulezVousPartager {
+    return Intl.message(
+      'What do you want to share?',
+      name: 'queVoulezVousPartager',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `News`
+  String get actualits {
+    return Intl.message(
+      'News',
+      name: 'actualits',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friends   `
+  String get amis {
+    return Intl.message(
+      'Friends   ',
+      name: 'amis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Groups`
+  String get groupes {
+    return Intl.message(
+      'Groups',
+      name: 'groupes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comment`
+  String get commenter {
+    return Intl.message(
+      'Comment',
+      name: 'commenter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share`
+  String get partager {
+    return Intl.message(
+      'Share',
+      name: 'partager',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `like`
+  String get aimer {
+    return Intl.message(
+      'like',
+      name: 'aimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Activity`
+  String get activit {
+    return Intl.message(
+      'Activity',
+      name: 'activit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Publications`
+  String get publications {
+    return Intl.message(
+      'Publications',
+      name: 'publications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Comments`
+  String get commentaires {
+    return Intl.message(
+      'Comments',
+      name: 'commentaires',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove friend`
+  String get rtirerLami {
+    return Intl.message(
+      'Remove friend',
+      name: 'rtirerLami',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel request`
+  String get annulerLaDemande {
+    return Intl.message(
+      'Cancel request',
+      name: 'annulerLaDemande',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add a friend`
+  String get ajouterUnAmi {
+    return Intl.message(
+      'Add a friend',
+      name: 'ajouterUnAmi',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request cancelled`
+  String get demandeAnnule {
+    return Intl.message(
+      'Request cancelled',
+      name: 'demandeAnnule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request sent`
+  String get demandeEnvoye {
+    return Intl.message(
+      'Request sent',
+      name: 'demandeEnvoye',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only friends can talk`
+  String get seulsLesAmisPeuventConverser {
+    return Intl.message(
+      'Only friends can talk',
+      name: 'seulsLesAmisPeuventConverser',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Search for other users`
+  String get cherchezDautresUtilisateurs {
+    return Intl.message(
+      'Search for other users',
+      name: 'cherchezDautresUtilisateurs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `70%`
+  String get soixanteDixpourCent {
+    return Intl.message(
+      '70%',
+      name: 'soixanteDixpourCent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The 100% Mobile Health Insurance`
+  String get laMutuelleSant100Mobile {
+    return Intl.message(
+      'The 100% Mobile Health Insurance',
+      name: 'laMutuelleSant100Mobile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A network of mutual aid`
+  String get unRseauDentraide {
+    return Intl.message(
+      'A network of mutual aid',
+      name: 'unRseauDentraide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A family doctor is following me`
+  String get unMdecinDeFamilleMeSuit {
+    return Intl.message(
+      'A family doctor is following me',
+      name: 'unMdecinDeFamilleMeSuit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `With your family, benefit from a health coverage of `
+  String get avecVotreFamilleBnficiezDuneCouvertureSantDe {
+    return Intl.message(
+      'With your family, benefit from a health coverage of ',
+      name: 'avecVotreFamilleBnficiezDuneCouvertureSantDe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `of your health expenses in `
+  String get deVosDpensesSantEn {
+    return Intl.message(
+      'of your health expenses in ',
+      name: 'deVosDpensesSantEn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 hour, `
+  String get UneHeure {
+    return Intl.message(
+      '1 hour, ',
+      name: 'UneHeure',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` everywhere!`
+  String get partout {
+    return Intl.message(
+      ' everywhere!',
+      name: 'partout',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `If you need help, get help from network members or a `
+  String get enCasDeBesoinObtenezLaideDesMembresDuRseau {
+    return Intl.message(
+      'If you need help, get help from network members or a ',
+      name: 'enCasDeBesoinObtenezLaideDesMembresDuRseau',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My personal family doctor: received quickly, referred, long-term follow-up, a family doctor `
+  String get monMdecinDeFamillePersonnelReuRapidementOrientSuiviLong {
+    return Intl.message(
+      'My personal family doctor: received quickly, referred, long-term follow-up, a family doctor ',
+      name: 'monMdecinDeFamillePersonnelReuRapidementOrientSuiviLong',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `in a few minutes.`
+  String get enQuelquesMinutes {
+    return Intl.message(
+      'in a few minutes.',
+      name: 'enQuelquesMinutes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `watches over our health`
+  String get veilleSurNotreSant {
+    return Intl.message(
+      'watches over our health',
+      name: 'veilleSurNotreSant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Skip`
+  String get skip {
+    return Intl.message(
+      'Skip',
+      name: 'skip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `your function  `
+  String get votreFunction {
+    return Intl.message(
+      'your function  ',
+      name: 'votreFunction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pharmacist (e)`
+  String get pharmaciene {
+    return Intl.message(
+      'Pharmacist (e)',
+      name: 'pharmaciene',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Précisez l'emplacement de l'organisation`
+  String get preciserLemplacementDeLorganisation {
+    return Intl.message(
+      'Précisez l\'emplacement de l\'organisation',
+      name: 'preciserLemplacementDeLorganisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ex:face pharmacie du lac`
+  String get exfacePharmacieDuLac {
+    return Intl.message(
+      'ex:face pharmacie du lac',
+      name: 'exfacePharmacieDuLac',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ambulances`
+  String get ambulances {
+    return Intl.message(
+      'Ambulances',
+      name: 'ambulances',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Phamarmacy`
+  String get phamarmacie {
+    return Intl.message(
+      'Phamarmacy',
+      name: 'phamarmacie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hospitalization`
+  String get hospitalisation {
+    return Intl.message(
+      'Hospitalization',
+      name: 'hospitalisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connection`
+  String get connexion {
+    return Intl.message(
+      'Connection',
+      name: 'connexion',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Post reported!`
+  String get postSignal {
+    return Intl.message(
+      'Post reported!',
+      name: 'postSignal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Post successfully deleted!`
+  String get postSupprimAvecSuccs {
+    return Intl.message(
+      'Post successfully deleted!',
+      name: 'postSupprimAvecSuccs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Edit`
+  String get editer {
+    return Intl.message(
+      'Edit',
+      name: 'editer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Report`
+  String get signaler {
+    return Intl.message(
+      'Report',
+      name: 'signaler',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete`
+  String get supprimer {
+    return Intl.message(
+      'Delete',
+      name: 'supprimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View the profile`
+  String get voirLeProfil {
+    return Intl.message(
+      'View the profile',
+      name: 'voirLeProfil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please wait...`
+  String get pleaseWait {
+    return Intl.message(
+      'Please wait...',
+      name: 'pleaseWait',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service requested`
+  String get serviceDemand {
+    return Intl.message(
+      'Service requested',
+      name: 'serviceDemand',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Other doctor...`
+  String get autreMdecin {
+    return Intl.message(
+      'Other doctor...',
+      name: 'autreMdecin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `      Your appointment request is `
+  String get votreDemandeDeRdvEst {
+    return Intl.message(
+      '      Your appointment request is ',
+      name: 'votreDemandeDeRdvEst',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Friendship requests`
+  String get demandesDamitis {
+    return Intl.message(
+      'Friendship requests',
+      name: 'demandesDamitis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms of Use`
+  String get conditionsndutilisation {
+    return Intl.message(
+      'Terms of Use',
+      name: 'conditionsndutilisation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` reduce`
+  String get readLess {
+    return Intl.message(
+      ' reduce',
+      name: 'readLess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` ...read more`
+  String get readMore {
+    return Intl.message(
+      ' ...read more',
+      name: 'readMore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Beneficiary \n`
+  String get bnficiairesn {
+    return Intl.message(
+      'Beneficiary \n',
+      name: 'bnficiairesn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Who is sick? \n`
+  String get quiEstMaladen {
+    return Intl.message(
+      'Who is sick? \n',
+      name: 'quiEstMaladen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` persons`
+  String get personnes {
+    return Intl.message(
+      ' persons',
+      name: 'personnes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coverage level 0: Discovery`
+  String get couvertureNiveau0Dcouverte {
+    return Intl.message(
+      'Coverage level 0: Discovery',
+      name: 'couvertureNiveau0Dcouverte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coverage level I: Access`
+  String get couvertureNiveauIAccs {
+    return Intl.message(
+      'Coverage level I: Access',
+      name: 'couvertureNiveauIAccs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Level II coverage: Assist`
+  String get couvertureNiveauIiAssist {
+    return Intl.message(
+      'Level II coverage: Assist',
+      name: 'couvertureNiveauIiAssist',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Level III coverage: Serenity`
+  String get couvertureNiveauIiiSrnit {
+    return Intl.message(
+      'Level III coverage: Serenity',
+      name: 'couvertureNiveauIiiSrnit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We were waiting for you...`
+  String get nousVousAttendions {
+    return Intl.message(
+      'We were waiting for you...',
+      name: 'nousVousAttendions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `validate`
+  String get valider {
+    return Intl.message(
+      'validate',
+      name: 'valider',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `rejected`
+  String get rejett {
+    return Intl.message(
+      'rejected',
+      name: 'rejett',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Audit`
+  String get auditer {
+    return Intl.message(
+      'Audit',
+      name: 'auditer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Valid until `
+  String get valideJusquau {
+    return Intl.message(
+      'Valid until ',
+      name: 'valideJusquau',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not defined`
+  String get pasDefini {
+    return Intl.message(
+      'Not defined',
+      name: 'pasDefini',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Inactive Account`
+  String get compteInactif {
+    return Intl.message(
+      'Inactive Account',
+      name: 'compteInactif',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Name of the beneficiary`
+  String get nonDuBeneficiaire {
+    return Intl.message(
+      'Name of the beneficiary',
+      name: 'nonDuBeneficiaire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Matricule number`
+  String get numeroMatricule {
+    return Intl.message(
+      'Matricule number',
+      name: 'numeroMatricule',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not defined `
+  String get pasDefinie {
+    return Intl.message(
+      'Not defined ',
+      name: 'pasDefinie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` posed a`
+  String get aPosUne {
+    return Intl.message(
+      ' posed a',
+      name: 'aPosUne',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Question`
+  String get question {
+    return Intl.message(
+      'Question',
+      name: 'question',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Docta, what do you recommend in case of a fever of more than 40° in a child? And what are the measures taken in case of complications of the disease?  `
+  String get doctaQueReccomendezVousEnCasDeFivreDePlus {
+    return Intl.message(
+      'Docta, what do you recommend in case of a fever of more than 40° in a child? And what are the measures taken in case of complications of the disease?  ',
+      name: 'doctaQueReccomendezVousEnCasDeFivreDePlus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` ... reduce`
+  String get reduire {
+    return Intl.message(
+      ' ... reduce',
+      name: 'reduire',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `I hereby acknowledge that in the event of non-payment I am liable to`
+  String get jeReconnaisParLaPrsenteQuenCasDeDfautDe {
+    return Intl.message(
+      'I hereby acknowledge that in the event of non-payment I am liable to',
+      name: 'jeReconnaisParLaPrsenteQuenCasDeDfautDe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Legal proceedings \n`
+  String get desPoursuiteJudiciairesn {
+    return Intl.message(
+      'Legal proceedings \n',
+      name: 'desPoursuiteJudiciairesn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `registration in the public file of bad payers `
+  String get incriptionAuFichierPublicDesMauvaisPayeurs {
+    return Intl.message(
+      'registration in the public file of bad payers ',
+      name: 'incriptionAuFichierPublicDesMauvaisPayeurs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Credit Risk Cameroun`
+  String get creditRiskCameroun {
+    return Intl.message(
+      'Credit Risk Cameroun',
+      name: 'creditRiskCameroun',
       desc: '',
       args: [],
     );

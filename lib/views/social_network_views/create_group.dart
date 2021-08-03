@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -89,7 +90,7 @@ class _CreateGroupState extends State<CreateGroup> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucun utilisateur avec pour nom :\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunUtilisateurAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -150,7 +151,7 @@ class _CreateGroupState extends State<CreateGroup> {
                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.0)), borderRadius: BorderRadius.circular(10)),
                     border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.0)), borderRadius: BorderRadius.circular(10)),
                     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.0)), borderRadius: BorderRadius.circular(10)),
-                    hintText: "Entrez les noms des utilisateurs à ajouter..",
+                    hintText: S.of(context).entrezLesNomsDesUtilisateursAjouter,
                     filled: true,
                     contentPadding:
                         EdgeInsets.only(bottom: 12, left: 15, right: 15),
@@ -179,7 +180,7 @@ class _CreateGroupState extends State<CreateGroup> {
             children: [
               Expanded(child: searches()),
               CustomTextButton(
-                text: "Suivant",
+                text: S.of(context).suivant,
                 color: kDeepTeal,
                 action: ()=>Navigator.pushNamed(context, '/create-group-final'),
               )
@@ -215,7 +216,7 @@ class _CreateGroupState extends State<CreateGroup> {
             ),
           ),
           Text(
-            "Cherchez des utilisateurs",
+            S.of(context).cherchezDesUtilisateurs,
             style: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.w900),
           )
         ],
@@ -255,7 +256,7 @@ class SearchResult extends StatelessWidget {
           child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
         title: Text(target.fullName),
-        subtitle: Text(target.profileType == doctor ? "Médecin" : target.profileType == serviceProvider ? "Prestataire" : "Adhérent", style: TextStyle(color: kTextBlue),),
+        subtitle: Text(target.profileType == doctor ? S.of(context).mdecin : target.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: kDeepTeal,

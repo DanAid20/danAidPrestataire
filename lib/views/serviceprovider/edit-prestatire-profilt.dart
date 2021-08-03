@@ -12,6 +12,7 @@ import 'package:danaid/core/services/getCities.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -342,37 +343,37 @@ class _EditPrestataireState extends State<EditPrestataire> {
                      
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
-                        label: "Nom de l'établissement *",
-                        hintText: "ex: Hôpial Centrale",
+                        label: S.of(context).nomDeLtablissement,
+                        hintText: S.of(context).exHpialCentrale,
                         controller: _nameController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(Icons.account_circle_outlined, color: kDeepTeal,),
-                        label: "Nom complet du contact *",
-                        hintText: "Entrez votre nom",
+                        label: S.of(context).nomCompletDuContact,
+                        hintText: S.of(context).entrezVotreNom,
                         controller: _contactNameController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(Icons.email_outlined, color: kDeepTeal,),
                         keyboardType: TextInputType.emailAddress,
-                        label: "Email du contact",
-                        hintText: "Entrez votre addresse email",
+                        label: S.of(context).emailDuContact,
+                        hintText: S.of(context).entrezVotreAddresseEmail,
                         controller: _contactEmailController,
                         validator: _emailFieldValidator,
                       ),
                       SizedBox(height: hv*2,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: "A propos",
-                        hintText: "Parlez brièvement de vous..",
+                        label: S.of(context).aPropos,
+                        hintText: S.of(context).parlezBrivementDeVous,
                         enabled: aboutEnabled,
                         multiLine: true,
                         controller: _aboutController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             aboutEnabled = true;
@@ -384,11 +385,11 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           SizedBox(height: hv*2,),
                           CustomTextField(
                             prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
-                            label: "votre function  ",
-                            hintText: 'Pharmacien(e)',
+                            label: S.of(context).votreFunction,
+                            hintText: S.of(context).pharmaciene,
                             enabled: specialityEnabled,
                             controller: _specialityController,
-                            validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                            validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                             editAction: (){
                               setState(() {
                                 specialityEnabled = true;
@@ -403,7 +404,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Type d'établissement *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                            Text(S.of(context).typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                             SizedBox(height: 5,),
                             Container(
                               constraints: BoxConstraints(minWidth: wv*45),
@@ -420,16 +421,16 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                     value: _category,
                                     items: [
                                       DropdownMenuItem(
-                                        child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        value: "Hôpital",
+                                        child: Text(S.of(context).hpital, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        value: S.of(context).hpital,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Pharmacie", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: "Pharmacie",
+                                        child: Text(S.of(context).pharmacie, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context).pharmacie,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Laboratoire", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: "Laboratoire",
+                                        child: Text(S.of(context).laboratoire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context).laboratoire,
                                       ),
                                     ],
                                     onChanged: (value) {
@@ -450,7 +451,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Region", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -465,7 +466,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _stateCode,
-                                        hint: Text("Choisir une region"),
+                                        hint: Text(S.of(context).choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
@@ -494,7 +495,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           regionChosen ? Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Choix de la ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -509,7 +510,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text("Ville"),
+                                        hint: Text(S.of(context).ville),
                                         items: getTownNamesFromRegion(cities, _stateCode).map((city){
                                           print("city: "+city);
                                           return DropdownMenuItem(
@@ -537,10 +538,10 @@ class _EditPrestataireState extends State<EditPrestataire> {
                       CustomTextField(
                         prefixIcon: Icon(Icons.location_pin, color: kDeepTeal,),
                         keyboardType: TextInputType.emailAddress,
-                        label: "Preciser l'emplacement de l'organisation",
-                        hintText: "ex: a coté de la mobile omnisport face",
+                        label: S.of(context).preciserLemplacementDeLorganisation,
+                        hintText: S.of(context).exfacePharmacieDuLac,
                         controller: _localisationController,
-                        validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null
                       ),
                       SizedBox(height: hv*4,),
                       (gpsCoords != null) | (serviceProvider.getServiceProvider.coordGps != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
@@ -586,7 +587,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             right: wv*7,
                             child: !positionSpinner ? TextButton(
                               onPressed: _saveLocation,
-                              child: Text("Ajouter ma localisation", style: TextStyle(color: whiteColor),),
+                              child: Text(S.of(context).ajouterMaLocalisation, style: TextStyle(color: whiteColor),),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))
@@ -602,25 +603,25 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           padding: EdgeInsets.symmetric(horizontal: wv*3),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Sélectionnez vos services", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                              Text(S.of(context).slectionnezVosServices, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
                               SizedBox(height: hv*2,),
                               
                               Row(
                                 children: [
                                   DoctorServiceChoiceCard(
-                                    service: "Consultation",
+                                    service: S.of(context).consultation,
                                     icon: "assets/icons/Bulk/Stethoscope.svg",
                                     chosen: consultationChosen,
                                     action: ()=> setState(() {consultationChosen = !consultationChosen;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: "Ambulances",
+                                    service: S.of(context).ambulances,
                                     icon: "assets/icons/Bulk/Danger.svg",
                                     chosen: soinsAmbulances,
                                     action: ()=> setState(() {soinsAmbulances = !soinsAmbulances;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: "Phamarmacie",
+                                    service: S.of(context).phamarmacie,
                                     icon: "assets/icons/Bulk/Soins.svg",
                                     chosen: pharmacie,
                                     action: ()=> setState(() {pharmacie = !pharmacie;})
@@ -631,13 +632,13 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               Row(
                                 children: [
                                   DoctorServiceChoiceCard(
-                                    service: "Laboratoire",
+                                    service: S.of(context).laboratoire,
                                     icon: "assets/icons/Bulk/Ordonance.svg",
                                     chosen: labo,
                                     action: ()=> setState(() {labo = !labo;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: "Hospitalisation",
+                                    service: S.of(context).hospitalisation,
                                     icon: "assets/icons/Bulk/Hospitalisation.svg",
                                     chosen: hospitalisation,
                                     action: ()=> setState(() {hospitalisation = !hospitalisation;})
@@ -654,19 +655,19 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Pièces justificatives", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
+                            Text(S.of(context).picesJustificatives, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
                             SizedBox(height: hv*1,),
                             Column(
                               children: [
                                 FileUploadCard(
-                                  title: "Scan de la CNI",
+                                  title: S.of(context).scanDeLaCni,
                                   state: cniUploaded,
                                   loading: cniSpinner,
                                   action: () async {await getDocFromPhone('CNI');}
                                 ),
                                
                                 FileUploadCard(
-                                  title: "Autre pièce justificative",
+                                  title: S.of(context).autrePiceJustificative,
                                   state: otherFileUploaded,
                                   loading: otherFileSpinner,
                                   action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
@@ -680,7 +681,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                        Container(
               child: 
                 !buttonLoading ? CustomTextButton(
-                  text: "Envoyer",
+                  text: S.of(context).envoyer,
                   color: kPrimaryColor,
                   action: () async {
                     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -834,7 +835,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
    Future uploadDocumentToFirebase(File file, String name) async {
     ServiceProviderModelProvider PrestatireModelProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     
@@ -874,7 +875,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
             .update({
               "urlCNI": url,
             });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Document Sauvegardé")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
           setState(() {
             cniUploaded = true;
             cniSpinner = false;
@@ -893,7 +894,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
             .update({
               "urlCNI": url,
             });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Document Sauvegardé")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
           setState(() {
             cniUploaded = true;
             cniSpinner = false;
@@ -907,7 +908,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
         .set({
           "urlAutrePiecesJustificatif": url,
         }, SetOptions(merge: true)).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Document Sauvegardé")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
           setState(() {
             otherFileUploaded = true;
             otherFileSpinner = false;
@@ -992,7 +993,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
      ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -1020,7 +1021,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Finalisation...")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).finalisation)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       HiveDatabase.setImgUrl(url);
@@ -1035,7 +1036,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
         .update({
           "imageUrl": url,
         }).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Photo de profil ajoutée")));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
           setState(() {
             imageSpinner = false;
           });
@@ -1069,7 +1070,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
     if (!RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(value)) {
-      return "Entrer une addresse email valide";
+      return S.of(context).entrerUneAddresseEmailValide;
     }
   }
 }

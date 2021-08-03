@@ -1,4 +1,5 @@
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/views/social_network_views/discussions.dart';
@@ -37,10 +38,10 @@ class _ActualityPageState extends State<ActualityPage> with SingleTickerProvider
           unselectedLabelColor: Colors.grey[300],
           labelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 25),
           tabs: <Widget>[
-            Tab(text: "Posts"),
-            Tab(text: "Q&R"),
-            Tab(text: "Entraide"),
-            Tab(text:"Discussions")
+            Tab(text: S.of(context).posts),
+            Tab(text: S.of(context).qr),
+            Tab(text: S.of(context).entraide),
+            Tab(text:S.of(context).discussions)
           ],
           controller: actualityController,
         ),

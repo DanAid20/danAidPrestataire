@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,7 +39,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
               SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucune discussion pour le moment", 
+              Text(S.of(context).aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -72,7 +73,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(post.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
-                    Text("Il ya "+time, style: TextStyle(fontSize: 12)),
+                    Text(time+S.of(context).ilYa, style: TextStyle(fontSize: 12)),
                     SizedBox(height: hv*1.5,),
                     Text(post.text, style: TextStyle(color: Colors.black87)),
                     post.imgUrl != null ? Row(

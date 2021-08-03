@@ -4,6 +4,7 @@ import 'package:danaid/core/models/postModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:danaid/views/social_network_views/edit_post.dart';
@@ -90,7 +91,7 @@ class PostContainer extends StatelessWidget {
                                 "postId": post.id,
                                 "dateCreated": DateTime.now()
                               }).then((value){
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Post signalé !")));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSignal)));
                               })
                                 .catchError((e){
                                   print(e.toString());
@@ -98,7 +99,7 @@ class PostContainer extends StatelessWidget {
                               });
                               break;
                             case 2:
-                              docRef.delete().then((value){ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Post supprimé avec succès !")));});
+                              docRef.delete().then((value){ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSupprimAvecSuccs)));});
                               break;
                             case 3:
                               Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post.userId),),);
@@ -117,7 +118,7 @@ class PostContainer extends StatelessWidget {
                               children: [
                                 SvgPicture.asset('assets/icons/Bulk/Edit.svg', color: whiteColor.withOpacity(0.7), width: 25,),
                                 SizedBox(width: wv*1.5,),
-                              Text("Editer", style: TextStyle(color: whiteColor.withOpacity(0.7),),),
+                              Text(S.of(context).editer, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
                               ],
                             ),
                             value: 0,
@@ -128,7 +129,7 @@ class PostContainer extends StatelessWidget {
                               children: [
                                 SvgPicture.asset('assets/icons/Two-tone/NotificationChat.svg', color: whiteColor.withOpacity(0.7),),
                                 SizedBox(width: wv*1.5,),
-                                Text("Signaler", style: TextStyle(color: whiteColor.withOpacity(0.7),),),
+                                Text(S.of(context).signaler, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
                               ],
                             ),
                             value: 1,
@@ -138,7 +139,7 @@ class PostContainer extends StatelessWidget {
                               children: [
                                 SvgPicture.asset('assets/icons/Bulk/Delete.svg', color: whiteColor.withOpacity(0.7),),
                                 SizedBox(width: wv*1.5,),
-                                Text("Supprimer", style: TextStyle(color: whiteColor.withOpacity(0.7),)),
+                                Text(S.of(context).supprimer, style: TextStyle(color: whiteColor.withOpacity(0.7),)),
                               ],
                             ),
                             value: 2,
@@ -147,7 +148,7 @@ class PostContainer extends StatelessWidget {
                               children: [
                                 SvgPicture.asset('assets/icons/Two-tone/Profile.svg', color: whiteColor.withOpacity(0.7),),
                                 SizedBox(width: wv*1.5,),
-                                Text("Voir le profil", style: TextStyle(color: whiteColor.withOpacity(0.7),),),
+                                Text(S.of(context).voirLeProfil, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
                               ],
                             ),
                             value: 3,

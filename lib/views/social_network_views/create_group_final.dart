@@ -8,6 +8,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -155,7 +156,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucun utilisateur avec pour nom :\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunUtilisateurAvecPourNom+" :\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -199,7 +200,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
             }
           ),
-          title: Text("Ajouter un bénéficiaire  ", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w500),),
+          title: Text(S.of(context).ajouterUnBnficiaire, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w500),),
           centerTitle: true,
         ),
         body: Column(
@@ -245,7 +246,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
         imageFileAvatar = File(pickedFile.path);
         imageSpinner = true;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+        ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       }
     });
   }
@@ -260,7 +261,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
         imageFileAvatar = File(pickedFile.path);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
     }
   }
 
@@ -279,7 +280,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
             ),
           ),
           Text(
-            "Cherchez des utilisateurs",
+            S.of(context).cherchezDesUtilisateurs,
             style: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.w900),
           )
         ],
@@ -304,7 +305,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 child: Column(children: [
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Ajouter une photo", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.bold),),
+                      Text(S.of(context).ajouterUnePhoto, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.bold),),
                       IconButton(
                         icon: CircleAvatar(backgroundColor: kDeepTeal,child: Icon(LineIcons.plus, color: whiteColor, size: 25,)), 
                         onPressed: ()=>FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera),
@@ -344,7 +345,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                         SizedBox(height: hv*1.5),
 
                         CustomTextField(
-                          label: "Nom du groupe",
+                          label: S.of(context).nomDuGroupe,
                           onChanged: (val)=>setState((){}),
                           controller: _groupNameController,
                         ),
@@ -352,7 +353,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                         SizedBox(height: hv*2,),
 
                         CustomTextField(
-                          label: "Description du groupe",
+                          label: S.of(context).descriptionDuGroupe,
                           multiLine: true,
                           minLines: 4,
                           maxLines: 5,
@@ -372,8 +373,8 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                                 dense: true,
                                 onChanged: (val)=>setState((){publicGroup = val; privateGroup = !val; groupType = "PUBLIC";}),
                                 activeColor: primaryColor,
-                                title: Text("Publique", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16)),
-                                subtitle: Text("Tout le monde peut voir, chaque intité peut ajouter des membres"),
+                                title: Text(S.of(context).publique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16)),
+                                subtitle: Text(S.of(context).toutLeMondePeutVoirChaqueIntitPeutAjouterDes),
                               ),
                             ),
                           ],
@@ -391,8 +392,8 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                                 dense: true,
                                 onChanged: (val)=>setState((){privateGroup = val; publicGroup = !val; groupType = "PRIVATE";}),
                                 activeColor: primaryColor,
-                                title: Text("Privé", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16)),
-                                subtitle: Text("Seuls les invités peuvent voir, seul l’admin peut ajouter des membres."),
+                                title: Text(S.of(context).priv, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16)),
+                                subtitle: Text(S.of(context).seulsLesInvitsPeuventVoirSeulLadminPeutAjouterDes),
                               ),
                             ),
                           ],
@@ -411,7 +412,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
           children: [
             Expanded(
               child: CustomTextButton(
-                text: "Suivant",
+                text: S.of(context).suivant,
                 expand: false,
                 enable: _groupNameController.text.isNotEmpty && _groupDescriptionController.text.isNotEmpty && groupType != null,
                 action: ()=>controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate),
@@ -419,7 +420,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
             ),
             Expanded(
               child: CustomTextButton(
-                text: "Annuler",
+                text: S.of(context).annuler,
                 color: kSouthSeas,
                 expand: false,
                 action: ()=>Navigator.pop(context),
@@ -448,7 +449,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 child: Column(children: [
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Ajouter une photo", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.bold),),
+                      Text(S.of(context).ajouterUnePhoto, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.bold),),
                       IconButton(
                         icon: CircleAvatar(backgroundColor: kDeepTeal,child: Icon(LineIcons.plus, color: whiteColor, size: 25,)), 
                         onPressed: ()=>FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera),
@@ -468,7 +469,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                           padding: EdgeInsets.symmetric(horizontal: wv*3),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Type de groupe *", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                              Text(S.of(context).typeDeGroupe, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                               SizedBox(height: 5,),
                               Container(
                                 constraints: BoxConstraints(minWidth: wv*45),
@@ -479,25 +480,25 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                                 ),
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton(
-                                    hint: Text("Choisir", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                    hint: Text(S.of(context).choisir, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                     isExpanded: true,
                                     value: _type,
                                     items: [
                                       DropdownMenuItem(
-                                        child: Text("Réseau Médecin de Famille", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        value: "MDF",
+                                        child: Text(S.of(context).rseauMdecinDeFamille, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        value: S.of(context).mdf,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Association", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: "ASSOCIATION",
+                                        child: Text(S.of(context).association, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context).association,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Entreprise", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: "ENTREPRISE",
+                                        child: Text(S.of(context).entreprise, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context).entreprise,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text("Sponsor", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: "SPONSOR",
+                                        child: Text(S.of(context).sponsor, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context).sponsor,
                                       ),
                                     ],
                                     onChanged: (value) {
@@ -513,7 +514,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                         SizedBox(height: hv*2,),
 
                         CustomTextField(
-                          label: "Nom de l'organisation",
+                          label: S.of(context).nomDeLorganisation,
                           onChanged: (val)=>setState((){}),
                           controller: _organizationNameController,
                         ),
@@ -521,7 +522,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                         SizedBox(height: hv*2,),
 
                         CustomTextField(
-                          label: "Personne contact",
+                          label: S.of(context).personneContact,
                           onChanged: (val)=>setState((){}),
                           controller: _contactNameController,
                         ),
@@ -537,7 +538,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                           ),
                           child: ListTile(
                             contentPadding: EdgeInsets.only(left: wv*3),
-                            title: Text("Numéro mobile", style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
+                            title: Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
                             subtitle: Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
@@ -560,12 +561,12 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: wv*3),
                           child: Column(children: [
-                            Text("Numéro mobile", style: TextStyle(fontSize: wv*4),),
+                            Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
                             SizedBox(height: hv*1,),
                             InternationalPhoneNumberInput(
                               validator: (String phone) {
                                 return (phone.isEmpty)
-                                    ?  "Entrer un numero de téléphone valide" : null;
+                                    ?  S.of(context).entrerUnNumeroDeTlphoneValide : null;
                               },
                               onInputChanged: (PhoneNumber number) {
                                 phone = number.phoneNumber;
@@ -605,7 +606,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
           children: [
             Expanded(
               child: CustomTextButton(
-                text: "Suivant",
+                text: S.of(context).suivant,
                 expand: false,
                 enable: _contactNameController.text.isNotEmpty && _organizationNameController.text.isNotEmpty && phone != null && _type != null,
                 action: ()=>controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate),
@@ -613,7 +614,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
             ),
             Expanded(
               child: CustomTextButton(
-                text: "Annuler",
+                text: S.of(context).annuler,
                 color: kSouthSeas,
                 expand: false,
                 action: ()=>Navigator.pop(context),
@@ -642,7 +643,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 child: Column(children: [
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Ajouter une photo", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.bold),),
+                      Text(S.of(context).ajouterUnePhoto, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.bold),),
                       IconButton(
                         icon: CircleAvatar(backgroundColor: kDeepTeal,child: Icon(LineIcons.plus, color: whiteColor, size: 25,)), 
                         onPressed: ()=>FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera),
@@ -695,7 +696,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
           children: [
             Expanded(
               child: CustomTextButton(
-                text: "Terminer",
+                text: S.of(context).terminer,
                 expand: false,
                 isLoading: buttonLoading,
                 enable: _serviceTermsAccepted && _trustConditionAccepted,
@@ -782,7 +783,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
             ),
             Expanded(
               child: CustomTextButton(
-                text: "Annuler",
+                text: S.of(context).annuler,
                 color: kSouthSeas,
                 enable: !buttonLoading,
                 expand: false,
@@ -882,7 +883,7 @@ class SearchResult extends StatelessWidget {
           child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
         title: Text(target.fullName),
-        subtitle: Text(target.profileType == doctor ? "Médecin" : target.profileType == serviceProvider ? "Prestataire" : "Adhérent", style: TextStyle(color: kTextBlue),),
+        subtitle: Text(target.profileType == doctor ? S.of(context).mdecin : target.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: kDeepTeal,

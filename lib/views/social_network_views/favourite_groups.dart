@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/core/models/groupModel.dart';
 import 'package:danaid/views/social_network_views/group.dart';
@@ -78,7 +79,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                       onPressed: ()=>Navigator.pushNamed(context, '/create-group'),
                     ),
                     SizedBox(
-                      child: Text("Ajouter un groupe", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold,
+                      child: Text(S.of(context).ajouterUnGroupe, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold,
                       shadows: [
                         Shadow( // bottomLeft
                           offset: Offset(-1, -1),
@@ -129,7 +130,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                 children: [
                   Text(group.groupName, style: TextStyle(color: whiteColor, fontSize: 22, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
                   SizedBox(height: hv*0.8,),
-                  Text(group.membersIds.length.toString()+" membres", style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: !switchColor ? kDeepTeal : kSouthSeas)),
+                  Text(group.membersIds.length.toString()+S.of(context).membres, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: !switchColor ? kDeepTeal : kSouthSeas)),
                   SizedBox(height: hv*0.7,),
                 ],
               ),
@@ -173,9 +174,9 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                       ),
                       Expanded(flex: 11,
                         child: RichText(text: TextSpan(
-                          text: "Nouvelles\n",
+                          text: S.of(context).nouvellesn,
                           style: TextStyle(color: !switchColor ? kDeepTeal : kSouthSeas, fontSize: 13),
-                          children: [TextSpan(text: "Conversations", style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
+                          children: [TextSpan(text: S.of(context).conversations, style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
                         ),
                       )
                     ],),
@@ -190,9 +191,9 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                       ),
                       Expanded(flex: 11,
                         child: RichText(text: TextSpan(
-                          text: "Nouvelles\n",
+                          text: S.of(context).nouvellesN,
                           style: TextStyle(color: !switchColor ? kDeepTeal : kSouthSeas, fontSize: 13),
-                          children: [TextSpan(text: "Conversations", style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
+                          children: [TextSpan(text: S.of(context).conversations, style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
                         ),
                       )
                     ],),

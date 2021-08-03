@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class DoctorInfoCard extends StatelessWidget {
                             children: [
                               SizedBox(height: hv*1.3,),
                               Text(officeName.toString(), style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
-                              Text("Service - ${field.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                              Text(S.of(context).service+"- ${field.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                             ],
                           ) : Container(),
                         ],
@@ -102,7 +103,7 @@ class DoctorInfoCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text(!isInRdvDetail ? "Services Offerts" : "Service demandé", style: TextStyle(color: whiteColor, fontSize: 15),),
+                    child: Text(!isInRdvDetail ? S.of(context).servicesOfferts : S.of(context).serviceDemand, style: TextStyle(color: whiteColor, fontSize: 15),),
                   ),
                   Row(
                     children: [
@@ -156,7 +157,7 @@ class DoctorInfoCard extends StatelessWidget {
                   SizedBox(width: wv*2,),
                   SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 35, color: whiteColor),
                   SizedBox(width: wv*2,),
-                  Text("Consultation", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
+                  Text(S.of(context).consultation, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
                 ],
               ),
               SizedBox(height: 5,),
@@ -173,7 +174,7 @@ class DoctorInfoCard extends StatelessWidget {
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),
               child: !isInRdvDetail ? Row(children: [
-                Text(includeHospital ? "Autre médecin..." : "Plus de détails", style: TextStyle(color: Colors.white),),
+                Text(includeHospital ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
                 SizedBox(width: 10,),
                 Icon(Icons.arrow_forward_ios, color: Colors.white),
               ],mainAxisAlignment: MainAxisAlignment.end) :
@@ -184,7 +185,7 @@ class DoctorInfoCard extends StatelessWidget {
                   text: TextSpan(
                     style: TextStyle(color: whiteColor),
                     children: [
-                      TextSpan(text: "      Votre demande de RDV est "),
+                      TextSpan(text: S.of(context).votreDemandeDeRdvEst),
                       TextSpan(text: HomePageComponents().getAppointmentStateText(appointmentState), style: TextStyle(fontWeight: FontWeight.bold))
                     ]
                   ),

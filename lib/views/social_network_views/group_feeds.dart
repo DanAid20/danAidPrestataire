@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/groupModel.dart';
 import 'package:danaid/core/models/postModel.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/widgets/social_network_widgets/post_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
@@ -37,7 +38,7 @@ class _GroupFeedsState extends State<GroupFeeds> {
               SizedBox(height: 50,),
               Icon(LineIcons.userShield, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucun posts pour le moment", 
+              Text(S.of(context).aucunPostsPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

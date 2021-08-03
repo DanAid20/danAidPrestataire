@@ -3,6 +3,7 @@ import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/actuality.dart';
@@ -88,8 +89,8 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text("Bonjour ${userProvider.getUserModel.fullName}!", style: TextStyle(color: whiteColor, fontSize: 23),),
-                                      Text("Bienvenue au réseau d'entraide DanAid", style: TextStyle(color: whiteColor.withOpacity(0.5), fontSize: 12),),
+                                      Text(S.of(context).bonjour+"${userProvider.getUserModel.fullName}!", style: TextStyle(color: whiteColor, fontSize: 23),),
+                                      Text(S.of(context).bienvenueAuRseauDentraideDanaid, style: TextStyle(color: whiteColor.withOpacity(0.5), fontSize: 12),),
                                     ],
                                   ),
                                   Spacer(),
@@ -114,7 +115,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                     ),
                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Que voulez vous partager ?", style: TextStyle(color: Colors.white, fontSize: 14),),
+                        Text(S.of(context).queVoulezVousPartager, style: TextStyle(color: Colors.white, fontSize: 14),),
                         Row(mainAxisSize: MainAxisSize.min,
                           children: [
                             Hero(tag: "image", child: SvgPicture.asset('assets/icons/Two-tone/Image.svg', color: kSouthSeas, width: 25)),
@@ -143,9 +144,9 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                   labelStyle: TextStyle(fontWeight: FontWeight.bold),
                   unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400),
                   tabs: <Widget>[
-                    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Outline.svg'), SizedBox(width: wv*2,),Text("Actualités")],)),
-                    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Emoticone.svg'), SizedBox(width: wv*2,), Text("Amis   ")],)),
-                    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Users.svg'),  SizedBox(width: wv*2,), Text("Groupes")],)
+                    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Outline.svg'), SizedBox(width: wv*2,),Text(S.of(context).actualits)],)),
+                    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Emoticone.svg'), SizedBox(width: wv*2,), Text(S.of(context).amis)],)),
+                    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Users.svg'),  SizedBox(width: wv*2,), Text(S.of(context).groupes)],)
                     ),
                   ],
   

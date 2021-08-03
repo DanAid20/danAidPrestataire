@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/forms/custom_text_field.dart';
@@ -51,13 +52,13 @@ class _CreatePublicationState extends State<CreatePublication> {
 
   String currentSymptomText = "";
   List<String> suggestions = [
-    "Santé",
-    "Politique",
-    "Médicament",
-    "Détente",
-    "Jeux",
-    "DanAid",
-    "Soins"
+    S.current.sant,
+    S.current.politique,
+    S.current.mdicament,
+    S.current.dtente,
+    S.current.jeux,
+    S.current.danaid,
+    S.current.soins
   ];
   List<String> tags = [];
 
@@ -74,7 +75,7 @@ class _CreatePublicationState extends State<CreatePublication> {
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 25, color: Colors.grey,), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
-        title: Text("Créer une publication", style: TextStyle(color: kDeepTeal, fontSize: 17),),
+        title: Text(S.of(context).crerUnePublication, style: TextStyle(color: kDeepTeal, fontSize: 17),),
         actions: [IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
       ),
       endDrawer: DefaultDrawer(
@@ -110,7 +111,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           ),
                         ),
                         SizedBox(width: wv*2.5,),
-                        Text("Bonjour "+userProvider.getUserModel.fullName+",", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w600, fontSize: 15),)
+                        Text(S.of(context).bonjour+userProvider.getUserModel.fullName+",", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w600, fontSize: 15),)
                       ],
                     ),
                     SingleChildScrollView(
@@ -119,7 +120,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                         children: [
                           HomePageComponents.publicationType(
                             icon: LineIcons.doctor,
-                            title: "Question à un médecin",
+                            title: S.of(context).questionUnMdecin,
                             selected: pubType == docQuestionChoosed,
                             action: (){
                               setState(() {
@@ -129,7 +130,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           ),
                           HomePageComponents.publicationType(
                             icon: LineIcons.commentDots,
-                            title: "Nouvelle Discussion",
+                            title: S.of(context).nouvelleDiscussion,
                             selected: pubType == discussionChoosed,
                             action: (){
                               setState(() {
@@ -139,7 +140,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           ),
                           HomePageComponents.publicationType(
                             icon: LineIcons.handshake,
-                            title: "Levée de fonds",
+                            title: S.of(context).leveDeFonds,
                             selected: pubType == fundRaisingChoosed,
                             action: (){
                               setState(() {
@@ -175,7 +176,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           children: [
                             Expanded(
                               child: CustomTextField(
-                                label: "Montant",
+                                label: S.of(context).montant,
                                 fillColor: Colors.grey[200],
                                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 onChanged: (val)=>setState((){}),
@@ -186,7 +187,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                             Expanded(
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(" Délais", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),),
+                                  Text(S.of(context).dlais, style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),),
                                   SizedBox(height: 5,),
                                   GestureDetector(
                                     onTap: () => _selectDate(context),
@@ -212,7 +213,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                     ),
 
                     CustomTextField(
-                      label: " Titre",
+                      label: S.of(context).titre,
                       fillColor: Colors.grey[200],
                       labelColor: kDeepTeal,
                       noPadding: true,
@@ -240,7 +241,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 1, color: Colors.grey[300]),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                        hintText: "Que voulez vous dire...",
+                        hintText: S.of(context).queVoulezVousDire,
                         hintStyle: TextStyle(color: kDeepTeal),
                       ),
                     ),
@@ -253,7 +254,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           children: [
                             SizedBox(height: hv*2.5,),
                             Row(children: [
-                            Text("Tags", style: TextStyle(fontSize: 16, color: kTextBlue),), SizedBox(width: wv*3,),
+                            Text(S.of(context).tags, style: TextStyle(fontSize: 16, color: kTextBlue),), SizedBox(width: wv*3,),
                             Expanded(
                               child: Stack(
                                 children: [
@@ -319,32 +320,32 @@ class _CreatePublicationState extends State<CreatePublication> {
             padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Ajouter", style: TextStyle(color: kDeepTeal, fontSize: 20)),
+                Text(S.of(context).ajouter, style: TextStyle(color: kDeepTeal, fontSize: 20)),
                 SizedBox(height: hv*1,),
                 Row(
                   children: [
                     !imageSpinner ? getPublicationIconButton(
                       heroTag: "image",
                       iconPath: 'assets/icons/Two-tone/Camera.svg',
-                      title: "Photo",
+                      title: S.of(context).photo,
                       action: (){FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera);}
                     ) : Loaders().buttonLoader(kDeepTeal),
                     getPublicationIconButton(
                       heroTag: "document",
                       iconPath: 'assets/icons/Two-tone/Document.svg',
-                      title: "Doc",
+                      title: S.of(context).doc,
                       action: (){}
                     ),
                     getPublicationIconButton(
                       heroTag: "video",
                       iconPath: 'assets/icons/Bulk/Video.svg',
-                      title: "Vidéo",
+                      title: S.of(context).vido,
                       action: (){}
                     ),
                     getPublicationIconButton(
                       heroTag: "voice",
                       iconPath: 'assets/icons/Two-tone/Voice.svg',
-                      title: "Audio",
+                      title: S.of(context).audio,
                       action: (){}
                     ),
                   ],
@@ -358,7 +359,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                         child: CustomTextButton(
                           isLoading: publishLoading,
                           loaderColor: kDeepTeal,
-                          text: "Publier",
+                          text: S.of(context).publier,
                           enable: pubButtonEnabled(),
                           noPadding: true,
                           color: kDeepTeal,
@@ -441,7 +442,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                       SizedBox(width: wv*2,),
                       Expanded(
                         child: CustomTextButton(
-                          text: "Annuler",
+                          text: S.of(context).annuler,
                           enable: !publishLoading,
                           noPadding: true,
                           textColor: kDeepTeal,
@@ -519,7 +520,7 @@ class _CreatePublicationState extends State<CreatePublication> {
         imageFileAvatar = File(pickedFile.path);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
     }
     setState(() {
       imageSpinner = false;
