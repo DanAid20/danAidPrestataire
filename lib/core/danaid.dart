@@ -1,6 +1,7 @@
 import 'package:danaid/core/models/invoiceModel.dart';
 import 'package:danaid/core/models/loanModel.dart';
 import 'package:danaid/core/models/notificationModel.dart';
+import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/routes.dart';
 import 'package:danaid/core/services/navigation_service.dart';
@@ -34,6 +35,10 @@ import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/usersListProvider.dart';
 import 'package:danaid/core/providers/loanModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
+import 'package:danaid/core/providers/pharmacyServiceProvider.dart';
+import 'package:danaid/core/providers/hospitalizationServiceProvider.dart';
+import 'package:danaid/core/providers/ambulanceServiceProvider.dart';
+import 'package:danaid/core/providers/labServiceProvider.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
 
@@ -115,6 +120,18 @@ class Danaid extends StatelessWidget {
               ),
               ChangeNotifierProvider<NotificationModelProvider>(
                 create: (_) => NotificationModelProvider(<NotificationModel>[], 0),
+              ),
+              ChangeNotifierProvider<AmbulanceServiceProvider>(
+                create: (_) => AmbulanceServiceProvider(UseCaseServiceModel()),
+              ),
+              ChangeNotifierProvider<HospitalizationServiceProvider>(
+                create: (_) => HospitalizationServiceProvider(UseCaseServiceModel()),
+              ),
+              ChangeNotifierProvider<PharmacyServiceProvider>(
+                create: (_) => PharmacyServiceProvider(UseCaseServiceModel()),
+              ),
+              ChangeNotifierProvider<LabServiceProvider>(
+                create: (_) => LabServiceProvider(UseCaseServiceModel()),
               ),
             ],
             child: ScreenUtilInit(

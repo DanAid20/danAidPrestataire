@@ -46,7 +46,7 @@ class PostContainer extends StatelessWidget {
     DocumentReference docRef = groupId == null ? normalRef : groupRef;
 
     return InkWell(
-      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post),),),
+      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post, groupId: groupId,),),),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*3),
         decoration: BoxDecoration(

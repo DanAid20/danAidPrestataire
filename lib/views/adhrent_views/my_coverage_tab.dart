@@ -172,7 +172,7 @@ class MyCoverageTabView extends StatelessWidget {
                                 action: (){
                                   UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
                                   usecaseProvider.setUseCaseModel(useCase);
-                                 // Navigator.pushNamed(context, '/use-case');
+                                  Navigator.pushNamed(context, '/use-case');
                                 }
                               ) : Container(),
                             );

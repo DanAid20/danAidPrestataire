@@ -7,6 +7,7 @@ import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -133,6 +134,8 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                   ServiceProviderModelProvider sp = Provider.of<ServiceProviderModelProvider>(context, listen: false);
                   DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
                   UserProvider user = Provider.of<UserProvider>(context, listen: false);
+                  await FirebaseMessaging.instance.unsubscribeFromTopic(FirebaseAuth.instance.currentUser.uid);
+                  await FirebaseMessaging.instance.unsubscribeFromTopic(user.getUserId.substring(1));
                   user.setUserId(null);
                   user.setProfileType(null);
                   user.setUserModel(null);

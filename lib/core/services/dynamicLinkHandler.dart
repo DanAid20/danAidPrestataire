@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/postModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/views/social_network_views/post_details.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +52,28 @@ class DynamicLinkHandler {
     );
     return shortenedLink.shortUrl;
   }
+  
+  static Future<Uri> createFriendInviteDynamicLink({@required String userId}) async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://danaid.page.link',
+      link: Uri.parse('https://danaid.page.link/friend?userid=$userId'),
+      androidParameters: AndroidParameters(
+        packageName: 'com.danaid.danaidmobile',
+        minimumVersion: 210020010,
+      ),
+      /*iosParameters: IosParameters(
+        bundleId: 'com.danaid.danaidmobile',
+        minimumVersion: '210020010',
+        appStoreId: '',
+      ),*/
+    );
+    final link = await parameters.buildUrl();
+    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(
+      link,
+      DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
+    );
+    return shortenedLink.shortUrl;
+  }
 
   void fetchClassicLinkData(BuildContext context) async {
     var link = await FirebaseDynamicLinks.instance.getInitialLink();
@@ -62,15 +86,18 @@ class DynamicLinkHandler {
   }
 
   void handleLinkData(PendingDynamicLinkData data, BuildContext context) async {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     final Uri uri = data?.link;
     if(uri != null) {
       final queryParams = uri.queryParameters;
       if(queryParams.length > 0) {
         bool isPost = uri.pathSegments.contains('post');
+        bool isFriendInvite = uri.pathSegments.contains('friend');
         if(isPost){
-          print("This is a post");
+          print("This is a post link");
           BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
-          String userId = queryParams["userid"];
+          String userId = queryParams["userid"].substring(1);
           String postId = queryParams["postid"];
           if(queryParams["isgroup"] != '1'){
             await FirebaseFirestore.instance.collection("POSTS").doc(queryParams["postid"]).get().then((doc) async {
@@ -78,8 +105,24 @@ class DynamicLinkHandler {
               List shares = (post.sharesList != null) ? post.sharesList : [];
               bottomAppBarController.setIndex(0);
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post),),);
-              await FirebaseFirestore.instance.collection("POSTS").doc(queryParams["postid"]).update({'shares': FieldValue.arrayUnion(['+'+queryParams["userid"]])});
+              await FirebaseFirestore.instance.collection("POSTS").doc(queryParams["postid"]).update({'shares': FieldValue.arrayUnion(['+'+queryParams["userid"].substring(1)])});
             });
+          }
+        }
+        else if(isFriendInvite){
+          print("This is a friend invite");
+          print(userProvider.getUserModel.userId.toString());
+          print('+'+queryParams["userid"].substring(1).toString());
+          print('start');
+          if(adherentProvider.getAdherent != null){
+            if (adherentProvider.getAdherent.enable == false){
+              await FirebaseFirestore.instance.collection("USERS").doc(adherentProvider.getAdherent.getAdherentId).set({'friendRequests': FieldValue.arrayUnion(['+'+queryParams["userid"].substring(1)])}, SetOptions(merge: true)).then((doc) async {
+              await FirebaseFirestore.instance.collection("USERS").doc('+'+queryParams["userid"].substring(1).toString()).update({"points": FieldValue.increment(100)}).then((value) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Demande d'amitié en attente")));
+                Navigator.pushNamed(context, '/friend-requests');
+                });
+              });
+            } 
           }
         }
         else {

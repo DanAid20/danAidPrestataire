@@ -2,12 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/dynamicLinkHandler.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class Friends extends StatefulWidget {
   const Friends({ Key key }) : super(key: key);
@@ -58,8 +61,19 @@ class _FriendsState extends State<Friends> {
   }
   @override
   Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       body: Container(child: getFriendsList()),
+      floatingActionButton: FloatingActionButton(
+        child: SvgPicture.asset('assets/icons/Two-tone/AddUser.svg', width: wv*8,),
+        backgroundColor: kDeepTeal,
+        onPressed: () async {
+          var link = await DynamicLinkHandler.createFriendInviteDynamicLink(userId: userProvider.getUserModel.userId);
+          Share.share(link.toString(), subject: "Nouvelle demande d'ami sur DanAid").then((value) {
+            print("Done !");
+          });
+        },
+      ),
     );
   }
 
