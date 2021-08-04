@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/facture.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -63,8 +64,8 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
               child: Container(
                 child: Column(
                   children: [
-                    Text('Historique des prestations '),
-                    Text('Vos consultations & paiement detaillé')
+                    Text(S.of(context).historiqueDesPrestations),
+                    Text(S.of(context).vosConsultationsPaiementDetaill)
                   ],
                 ),
               ),
@@ -121,7 +122,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                             alignment: Alignment.centerLeft,
                             margin: EdgeInsets.only(left: 15.w, top: 2.h),
                             child: Text(
-                              'Status des Paiements ',
+                              S.of(context).statusDesPaiements,
                               style: TextStyle(
                                   color: kFirstIntroColor,
                                   fontWeight: FontWeight.w500,
@@ -144,9 +145,9 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                     itemBuilder: (context, index) {
                                       // print( paiementHistory.elementAt(index)[key]);
                                       // print( paiementHistory.elementAt(index)[key]['month']);
-                                      String etat = '';
+                                      // String etat = '';
 
-                                      String userNamem = 'a';
+                                      // String userNamem = 'a';
                                      
                                     
                                       if (widget.facture[index].types!='REFERENCEMENT') {
@@ -162,7 +163,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                               );
                                             }
                                           if (snapshot.hasError) {
-                                            return Text("Something went wrong");
+                                            return Text(S.of(context).somethingWentWrong);
                                           }
                                           if (snapshot.connectionState == ConnectionState.done) {
                                             return  HomePageComponents()
@@ -177,7 +178,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                               iconesConsultationTypes: widget.facture[index].types=='CONSULTATION' || widget.facture[index].types=='REFERENCEMENT' ?
                                                   'assets/icons/Bulk/Profile.svg' : widget.facture[index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture[index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture[index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
                                        }
-                                           return Text("loading");
+                                           return Text(S.of(context).loading);
                                       });
                                       } else {
                                         userName = widget.facture[index].idFammillyMember;

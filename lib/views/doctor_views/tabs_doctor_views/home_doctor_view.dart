@@ -213,7 +213,7 @@ getDetailDocotor(){
               SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucune discussion pour le moment", 
+              Text(S.of(context).aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

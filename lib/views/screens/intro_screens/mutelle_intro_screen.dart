@@ -1,4 +1,5 @@
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/screens/intro_screens/intro_screens_components/intro_text.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class MutuelleIntroScreen extends StatelessWidget {
               ),
               CoverContainer(),
               FeeContainer(),
-              IntroText(title: 'La Mutuelle Santé 100% Mobile !', rank: 1,)
+              IntroText(title: S.of(context).laMutuelleSant100Mobile, rank: 1,)
             ],
           ),
         ),
