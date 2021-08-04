@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/dynamicLinkHandler.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
@@ -135,7 +136,7 @@ class _PostDetailsState extends State<PostDetails> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(widget.post.userName, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w900),),
-                                      Text("Il ya " + Algorithms.getTimeElapsed(date: widget.post.dateCreated.toDate()), style: TextStyle(fontSize: 12, color: kTextBlue)),
+                                      Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: widget.post.dateCreated.toDate()), style: TextStyle(fontSize: 12, color: kTextBlue)),
                                     ],
                                   ),
                                 ),
@@ -201,7 +202,7 @@ class _PostDetailsState extends State<PostDetails> {
                                   child: Row(children: [
                                     SvgPicture.asset('assets/icons/Bulk/Chat.svg', width: 25),
                                     SizedBox(width: wv*1.5),
-                                    Text("Commenter", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
+                                    Text(S.of(context).commenter, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
                                   ],),
                                 ),
                               ),
@@ -218,7 +219,7 @@ class _PostDetailsState extends State<PostDetails> {
                                   child: Row(children: [
                                     SvgPicture.asset('assets/icons/Bulk/Send.svg', width: 25),
                                     SizedBox(width: wv*1.5),
-                                    Text("Partager", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
+                                    Text(S.of(context).partager, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
                                   ],),
                                 ),
                               )
@@ -295,7 +296,7 @@ class _PostDetailsState extends State<PostDetails> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(width: 1, color: Colors.white.withOpacity(0.35)),
                                 borderRadius: BorderRadius.all(Radius.circular(20))),
-                            hintText: "Ecrire votre commentaire",
+                            hintText: S.of(context).ecrireVotreCommentaire,
                             hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                           ),
                         ),
@@ -447,7 +448,7 @@ class CommentBox extends StatelessWidget {
                       SvgPicture.asset('assets/icons/Bulk/Heart.svg', color: kSouthSeas, width: 20),
                       SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg", color: kSouthSeas, width: 20),
                       SizedBox(width: wv*2,),
-                      Text("Médecin", style: TextStyle(fontSize: 13, color: kTextBlue, fontWeight: FontWeight.bold)),
+                      Text(S.of(context).mdecin, style: TextStyle(fontSize: 13, color: kTextBlue, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -472,7 +473,7 @@ class CommentBox extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Il y'a " + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
+                    Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
                     SizedBox(width: wv*5,),
                     Row(
                       children: [
@@ -495,7 +496,7 @@ class CommentBox extends StatelessWidget {
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                            child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? "Annuler" : "Aimer", style: TextStyle(fontSize: 12)),
+                            child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? S.of(context).annuler : S.of(context).aimer, style: TextStyle(fontSize: 12)),
                           ),
                         ),
                       ],

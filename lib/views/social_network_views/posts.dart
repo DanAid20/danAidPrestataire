@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/social_network_widgets/post_cards.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ class _PostsState extends State<Posts> {
               SizedBox(height: 50,),
               Icon(LineIcons.userShield, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucun groupe pour le moment", 
+              Text(S.of(context).aucunGroupePourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

@@ -82,7 +82,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'idAppointement': idAppointemnt,
       'establishment': doctorProvider.getDoctor.officeName,
       'consultationCode': code,
-      'type': adherent['appointment-type'],
+      'type': 'RDV',
       'amountToPay': doctorProvider.getDoctor.rate['public'],
       'status': 0,
       'createdDate': DateTime.now(),

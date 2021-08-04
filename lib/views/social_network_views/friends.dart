@@ -4,6 +4,7 @@ import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/dynamicLinkHandler.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _FriendsState extends State<Friends> {
               SizedBox(height: hv*15,),
               Icon(LineIcons.userPlus, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("N'hésitez pas à faire une demande d'ami", 
+              Text(S.of(context).nhsitezPasFaireUneDemandeDami, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

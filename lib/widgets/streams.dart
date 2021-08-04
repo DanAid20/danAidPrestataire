@@ -3,6 +3,7 @@ import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -38,9 +39,9 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Column(
                   children: [
                     RichText(text: TextSpan(
-                      text: widget.standardUse ? "Bénéficiaires\n" : "Qui est malade?\n",
+                      text: widget.standardUse ? S.of(context).bnficiairesn : S.of(context).quiEstMaladen,
                       children: [
-                        TextSpan(text: widget.standardUse ? (snapshot.data.docs.length+1).toString()+" personnes" : "Sélectionner le patient", style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
+                        TextSpan(text: widget.standardUse ? (snapshot.data.docs.length+1).toString()+S.of(context).personnes : S.of(context).slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
                       ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
                     ),
                     SizedBox(height: hv*2,),

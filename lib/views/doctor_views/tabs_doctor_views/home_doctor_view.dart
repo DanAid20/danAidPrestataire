@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/social_network_widgets/post_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:line_icons/line_icons.dart';
@@ -203,7 +204,7 @@ getDetailDocotor(){
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data.docs[index];
             PostModel post = PostModel.fromDocument(doc);
-            return getDiscussionContainers(post: post);
+            return PostContainer(post: post);
           },
         ) :
         Container(
@@ -213,7 +214,7 @@ getDetailDocotor(){
               SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucune discussion pour le moment", 
+              Text(S.of(context).aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

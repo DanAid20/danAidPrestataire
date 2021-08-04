@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:danaid/core/models/groupModel.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/create_publication.dart';
 import 'package:danaid/views/social_network_views/group_feeds.dart';
@@ -96,7 +97,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
                                   widget.group.membersIds.length >= 2 ? Positioned(left: wv*5, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group.membersAvatarsUrls != null ? widget.group.membersAvatarsUrls[0] : null, size: 8)) : Container(),
                                   widget.group.membersIds.length >= 3 ? Positioned(left: wv*10, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group.membersAvatarsUrls != null ? widget.group.membersAvatarsUrls[1] : null, size: 8)) : Container(),
                                 ]),
-                                Text(" ${widget.group.membersIds.length} Membres", style: TextStyle(color: kTextBlue))
+                                Text(" ${widget.group.membersIds.length} "+S.of(context).membres, style: TextStyle(color: kTextBlue))
                               ],
                             ),
                           ],
@@ -119,9 +120,9 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
                     unselectedLabelColor: Colors.grey[300],
                     labelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 25),
                     tabs: <Widget>[
-                      Tab(text: "Conversations"),
-                      Tab(text: "Membres"),
-                      Tab(text: "A propos")
+                      Tab(text: S.of(context).conversations),
+                      Tab(text: S.of(context).membres),
+                      Tab(text: S.of(context).aPropos)
                     ],
                     controller: groupController,
                   ),
@@ -135,7 +136,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
           children: <Widget>[
             GroupFeeds(group: widget.group,),
             GroupMembers(groupMembers: widget.group.membersIds,),
-            Center(child: Text(widget.group.groupDescription != null ? widget.group.groupDescription : "Aucune description fournie"))
+            Center(child: Text(widget.group.groupDescription != null ? widget.group.groupDescription : S.of(context).aucuneDescriptionFournie))
           ],
         )
       ),

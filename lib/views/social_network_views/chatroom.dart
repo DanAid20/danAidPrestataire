@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/widgets/drawer.dart';
@@ -49,7 +50,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       SizedBox(height: hv*30,),
                       Icon(LineIcons.commentDots, color: Colors.grey[400], size: 85,),
                       SizedBox(height: 5,),
-                      Text("Commencez une conversation..", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.grey[400]), textAlign: TextAlign.center,),
+                      Text(S.of(context).commencezUneConversation, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600, color: Colors.grey[400]), textAlign: TextAlign.center,),
                     ],
                   ),
                 )
@@ -66,7 +67,7 @@ class _ChatRoomState extends State<ChatRoom> {
         elevation: 2,
         backgroundColor: kDeepTeal,
         leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
-        title: Text("Créer un groupe", style: TextStyle(color: whiteColor),),
+        title: Text(S.of(context).crerUnGroupe, style: TextStyle(color: whiteColor),),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
@@ -150,7 +151,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                               child: Text(
                                 widget.conversation.lastMessage != null
                                     ? widget.conversation.lastMessage
-                                    : "wait",
+                                    : S.of(context).wait,
                                 style: TextStyle(),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -177,7 +178,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text("Image")
+                                  Text(S.of(context).image)
                                 ],
                               ),
                             )
@@ -201,7 +202,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text("Sticker")
+                                  Text(S.of(context).sticker)
                                 ],
                               ),
                             ),
@@ -213,7 +214,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                             ? Algorithms.getDateFromTimestamp(
                                 int.parse(widget.conversation.lastMessageTime),
                               )
-                            : "wait",
+                            : S.of(context).wait,
                         style: TextStyle(fontSize: 13, color: Colors.grey),),
                     SizedBox(height: 5,),
                     !isLocal ? 
