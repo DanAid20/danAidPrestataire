@@ -97,6 +97,16 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void newComment(){
+    _user.comments = _user.comments + 1;
+    notifyListeners();
+  }
+
+  void newPost(){
+    _user.posts = _user.posts + 1;
+    notifyListeners();
+  }
+
   void addFriend(String val) {
     _user.friends.add(val);
     notifyListeners();

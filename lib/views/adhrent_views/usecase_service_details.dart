@@ -549,6 +549,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                     if(widget.service == null){
                                       FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').add({
                                         "usecaseId": usecase.id,
+                                        "adherentId": usecase.adherentId,
                                         "status": 2,
                                         "title": Algorithms.getUseCaseServiceName(type: widget.type),
                                         "amountToPay": num.parse(_costController.text),
@@ -614,6 +615,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                     if(widget.service == null){
                                       FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').add({
                                         "usecaseId": usecase.id,
+                                        "adherentId": usecase.adherentId,
                                         "advance": 0,
                                         "status": 2,
                                         "title": Algorithms.getUseCaseServiceName(type: widget.type),

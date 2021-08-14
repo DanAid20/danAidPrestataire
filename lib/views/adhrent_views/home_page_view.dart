@@ -104,14 +104,25 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
       if(adherentModelProvider.getAdherent != null){
         adherentModel = adherentModelProvider.getAdherent;
-        generateInvoice(adherentModel);
+        //generateInvoice(adherentModel);
         }
         else {
           FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
-            adherentModel = adherent;
-            generateInvoice(adherentModel);
+
+            if(adherent.insuranceLimit == null || adherent.loanLimit == null){
+              DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
+              PlanModel plan = PlanModel.fromDocument(planDoc);
+              await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
+                "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
+                "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
+              }).then((value) {
+                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit);
+                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit);
+              });
+            }
+            //generateInvoice(adherentModel);
           });
         }
     } else {
@@ -119,16 +130,26 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       userProvider.setUserId(phone);
       if(adherentModelProvider.getAdherent != null){
         adherentModel = adherentModelProvider.getAdherent;
-        generateInvoice(adherentModel);
+        //generateInvoice(adherentModel);
           //
         }
         else {
-          FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) {
+          FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
             userProvider.setUserId(adherent.adherentId);
-            adherentModel = adherent;
-            generateInvoice(adherentModel);
+
+            if(adherent.insuranceLimit == null || adherent.loanLimit == null){
+              DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
+              PlanModel plan = PlanModel.fromDocument(planDoc);
+              await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
+                "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
+                "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
+              }).then((value) {
+                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit);
+                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit);
+              });
+            }
           });
         }
     }

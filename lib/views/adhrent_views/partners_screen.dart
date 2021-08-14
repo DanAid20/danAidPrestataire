@@ -3,7 +3,10 @@ import 'dart:ui';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/clinic_list.dart';
 import 'package:danaid/views/adhrent_views/family_doctors_list_screen.dart';
+import 'package:danaid/views/adhrent_views/lab_list.dart';
+import 'package:danaid/views/adhrent_views/pharmacy_list.dart';
 import 'package:danaid/views/adhrent_views/specialist_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -235,13 +238,13 @@ class _PartnersScreenState extends State<PartnersScreen> {
       return SpecialistList();
     }
     else if (contentIndex == 3){
-      return Text("");
+      return ClinicList();
     }
     else if (contentIndex == 4){
-      return Text("");
+      return LabList();
     }
     else if (contentIndex == 5){
-      return Text("");
+      return PharmacyList();
     }
   }
 

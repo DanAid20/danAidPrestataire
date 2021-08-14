@@ -472,8 +472,9 @@ class _CreatePublicationState extends State<CreatePublication> {
       await docRef.set(input, SetOptions(merge: true)).then((doc) async {
         print(docRef.id);
         FirebaseMessaging.instance.subscribeToTopic(docRef.id).whenComplete(() { print("subscribed");});
-        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).update({"points": FieldValue.increment(15)}).then((value){
+        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).update({"posts": FieldValue.increment(1), "points": FieldValue.increment(15)}).then((value){
           userProvider.modifyPoints(15);
+          userProvider.newPost();
         });
       })
         .catchError((e){

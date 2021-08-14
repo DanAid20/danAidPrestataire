@@ -396,7 +396,7 @@ class _PostDetailsState extends State<PostDetails> {
           replyIsSticker = false;
           replyIsText = false;
         });*/
-      }).then((value) {userProvider.modifyPoints(5);});
+      }).then((value) {userProvider.modifyPoints(5); userProvider.newComment();});
       //listScrollController.animateTo(0.0, duration: Duration(microseconds: 300), curve: Curves.easeOut);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le message est vide'),));

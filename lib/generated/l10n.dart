@@ -718,7 +718,7 @@ class S {
   /// `Generalist`
   String get gnraliste {
     return Intl.message(
-      'Généraliste',
+      'Generalist',
       name: 'gnraliste',
       desc: '',
       args: [],
@@ -828,7 +828,7 @@ class S {
   /// `PRIVATE`
   String get private {
     return Intl.message(
-      'Private',
+      'PRIVATE',
       name: 'private',
       desc: '',
       args: [],
@@ -1808,7 +1808,7 @@ class S {
   /// `Pharmacy`
   String get laboratoire {
     return Intl.message(
-      'Pharmacy',
+      'Laboratory',
       name: 'laboratoire',
       desc: '',
       args: [],
@@ -4378,7 +4378,7 @@ class S {
   /// `You are at the Discovery Level like 30% of our members`
   String get vousTesAuNiveauAccsComme30DeNosAdhrents {
     return Intl.message(
-      'You are at the Discovery Level like 30% of our members',
+      'You are at the Access Level like 30% of our members',
       name: 'vousTesAuNiveauAccsComme30DeNosAdhrents',
       desc: '',
       args: [],
@@ -4388,7 +4388,7 @@ class S {
   /// `You are at the Discovery Level like 20% of our members`
   String get vousTesAuNiveauAssistComme20DeNosAdhrents {
     return Intl.message(
-      'You are at the Discovery Level like 20% of our members',
+      'You are at the Assist Level like 20% of our members',
       name: 'vousTesAuNiveauAssistComme20DeNosAdhrents',
       desc: '',
       args: [],
@@ -4398,7 +4398,7 @@ class S {
   /// `You are at the Discovery Level like 10% of our members`
   String get vousTesAuNiveauSrnitComme10DeNosAdhrents {
     return Intl.message(
-      'You are at the Discovery Level like 10% of our members',
+      'You are at the Serenity Level like 10% of our members',
       name: 'vousTesAuNiveauSrnitComme10DeNosAdhrents',
       desc: '',
       args: [],
