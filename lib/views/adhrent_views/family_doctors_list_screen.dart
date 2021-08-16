@@ -31,7 +31,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
       : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
-    return adherentProvider.getAdherent.location != null ? StreamBuilder(
+    return adherentProvider.getAdherent?.location != null ? StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {

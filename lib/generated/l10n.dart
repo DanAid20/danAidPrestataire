@@ -718,7 +718,7 @@ class S {
   /// `Generalist`
   String get gnraliste {
     return Intl.message(
-      'Généraliste',
+      'Generalist',
       name: 'gnraliste',
       desc: '',
       args: [],
@@ -828,7 +828,7 @@ class S {
   /// `PRIVATE`
   String get private {
     return Intl.message(
-      'Private',
+      'PRIVATE',
       name: 'private',
       desc: '',
       args: [],
