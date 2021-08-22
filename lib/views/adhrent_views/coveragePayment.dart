@@ -15,6 +15,7 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:ussd_advanced/ussd_advanced.dart';
 
 class CoveragePayment extends StatefulWidget {
   @override
@@ -486,6 +487,14 @@ class _CoveragePaymentState extends State<CoveragePayment> {
               ),
             ),
           ),
+          /*CustomTextButton(
+            text: "New button",
+            action: () async {
+              String _res =await UssdAdvanced.sendAdvancedUssd(code: '#150*1*1*658112605*50*code#', subscriptionId: -1);
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_res.toString()))); //1 1 num 100f code
+                    
+            },
+          ),*/
 
           Container(
             child: CustomTextButton(

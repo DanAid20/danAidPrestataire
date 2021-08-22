@@ -1615,5 +1615,31 @@ class HomePageComponents {
       ),
     );
   }
+
+  static getStatusIndicator({double size = 15, int status}){
+    Color color = status == 0 ? Colors.red : status == 1 ? kDeepTeal : primaryColor;
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7),
+        color: color.withOpacity(0.4)
+      ),
+      child: Icon(status == 0 ? LineIcons.times : status == 1 ? LineIcons.check : Icons.priority_high_rounded, color: color, size: size,),
+    );
+  }  
+  
+  static getIconBox({double size = 15, String iconPath, Color color, Function action}){
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        padding: EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7),
+          color: color.withOpacity(0.4)
+        ),
+        child: SvgPicture.asset(iconPath, width: size, color: color,),
+      ),
+    );
+  }
 }
 

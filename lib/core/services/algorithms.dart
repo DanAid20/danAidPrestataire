@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:danaid/helpers/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 class Algorithms {
@@ -315,5 +317,23 @@ class Algorithms {
       "start": start,
       "end": end
     };
+  }
+
+  static String getUseCaseServiceName({String type, BuildContext context}){
+    return type == consultation ? "Consultation" 
+      :  type == pharmacy ? "Pharmacie" 
+        : type == labo ? "Laboratoire" 
+          : type == ambulance ? "Soins ambulatoire" 
+           : type == hospitalization ? "Hospitalisation" 
+              : "Non spécifié";
+  }
+
+  static String getUseCaseServiceIcon({String type, BuildContext context}){
+    return type == consultation ? 'assets/icons/Bulk/Consultation.svg' 
+      :  type == pharmacy ? 'assets/icons/Bulk/Ordonance.svg' 
+        : type == labo ? 'assets/icons/Bulk/Labo.svg'
+          : type == ambulance ? 'assets/icons/Bulk/Soins.svg' 
+            : type == hospitalization ? 'assets/icons/Bulk/Hospitalisation.svg' 
+              : 'assets/icons/Bulk/Activity.svg';
   }
 }

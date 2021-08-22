@@ -770,7 +770,7 @@ class _LoanFormState extends State<LoanForm> {
                         "docsUrls": loan.docsUrls,
                         "status": 0
                       })
-                      .then((loanDoc) {
+                      .then((loanDoc) async {
 
                         for (int i = 0; i < _duration; i++){
                           FirebaseFirestore.instance.collection("CREDITS").doc(loanDoc.id).collection("MENSUALITES").doc((i+1).toString()).set({
@@ -783,6 +783,12 @@ class _LoanFormState extends State<LoanForm> {
                             "status": 0
                           });
                         }
+
+                        await FirebaseFirestore.instance.collection('ADHERENTS').doc(adh.adherentId).update({
+                          "creditLimit": adh.loanLimit - loan.amount
+                        }).then((value) {
+                          adherentProvider.updateLoanLimit(-loan.amount);
+                        });
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Votre demande de crédit a été enrégistrée'),));
                         setState(() {

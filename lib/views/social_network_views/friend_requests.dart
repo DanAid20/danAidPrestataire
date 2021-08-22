@@ -126,6 +126,7 @@ class _FriendRequestsState extends State<FriendRequests> {
           ),
           SizedBox(width: wv*2),
           Expanded(
+            flex: 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -139,6 +140,7 @@ class _FriendRequestsState extends State<FriendRequests> {
           ),
           SizedBox(width: wv*1),
           Expanded(
+            flex: 6,
             child: Row(
               children: [
                 Expanded(

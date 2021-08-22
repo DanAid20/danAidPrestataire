@@ -60,12 +60,18 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 Container(
                   child: Row(
                     children: [
-                      Text(userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
-                        style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
+                      InkWell(
+                        onTap: ()=>Navigator.pushNamed(context, '/family-points-page'),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                          child: Text(userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
+                            style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
+                          ),
+                        ),
                       ),
                       SizedBox(width: wv*2,),
                       adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
-                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink(),
+                     yearsForBadget>=365 ? SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink(),
                      SizedBox(width: wv*1),
                     ],
                   ),

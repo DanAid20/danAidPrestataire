@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:simple_tags/simple_tags.dart';
+import 'package:danaid/core/services/dynamicLinkHandler.dart';
 
 class PostContainer extends StatelessWidget {
   final PostModel post;
@@ -41,11 +43,11 @@ class PostContainer extends StatelessWidget {
     List likes = (post.likesList != null) ? post.likesList : [];
 
     DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(post.id);
-    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(groupId).collection("POSTS").doc(post.id);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(groupId).collection("POSTS_GROUPS").doc(post.id);
     DocumentReference docRef = groupId == null ? normalRef : groupRef;
 
     return InkWell(
-      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post),),),
+      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post, groupId: groupId,),),),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*3),
         decoration: BoxDecoration(
@@ -207,12 +209,12 @@ class PostContainer extends StatelessWidget {
                             print(post.likesList.toString());
                             if(!likes.contains(userProvider.getUserModel.userId)){
                               print("like");
-                              FirebaseFirestore.instance.collection('POSTS').doc(post.id).set({
+                              docRef.set({
                                 "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
                               }, SetOptions(merge: true));
                             } else {
                               print("dislike");
-                              FirebaseFirestore.instance.collection('POSTS').doc(post.id).set({
+                              docRef.set({
                                 "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
                               }, SetOptions(merge: true));
                             }
@@ -232,11 +234,19 @@ class PostContainer extends StatelessWidget {
                         ],),
                       ),
                       Expanded(
-                        child: Row(children: [
-                          SvgPicture.asset('assets/icons/Bulk/Send.svg'),
-                          SizedBox(width: wv*1.5),
-                          Text("")
-                        ],),
+                        child: InkWell(
+                          onTap: () async {
+                            var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: post.id, isGroup: groupId == null ? '0' : '1');
+                            Share.share(link.toString(), subject: post.title != null ? post.title : "New Post on DanAid").then((value) {
+                              print("Done !");
+                            });
+                          },
+                          child: Row(children: [
+                            SvgPicture.asset('assets/icons/Bulk/Send.svg'),
+                            SizedBox(width: wv*1.5),
+                            Text(post.sharesList != null ? post.sharesList.length.toString() : '0')
+                          ],),
+                        ),
                       ),
                       Expanded(
                         child: Container(),

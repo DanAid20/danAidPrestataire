@@ -745,8 +745,8 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               "contactFunction": speciality,
                               "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                               "profil": "PRESTATAIRE",
-                              "localisation": localisation,
-                              "CoordoneeGps": gpsCoords != null ? {
+                              "addresse": localisation,
+                              "localisation": gpsCoords != null ? {
                                 "addresse": _localisationController.text,
                                 "latitude": gpsCoords["latitude"],
                                 "longitude": gpsCoords["longitude"],

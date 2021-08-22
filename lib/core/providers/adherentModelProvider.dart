@@ -19,6 +19,18 @@ class AdherentModelProvider with ChangeNotifier {
     _adherent.familyDoctor = val;
     notifyListeners();
   }
+  void setLoanLimit(num val){
+    _adherent.loanLimit = val;
+    notifyListeners();
+  }
+  void updateLoanLimit(num val){
+    _adherent.loanLimit = _adherent.loanLimit + val;
+    notifyListeners();
+  }
+  void setInsuranceLimit(num val){
+    _adherent.insuranceLimit = val;
+    notifyListeners();
+  }
   void addVisit(DateTime date){
     _adherent.visitPoints = _adherent.visitPoints != null ? _adherent.visitPoints + 10 : 10;
     _adherent.visits.add(date);

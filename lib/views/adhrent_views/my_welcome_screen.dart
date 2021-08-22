@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
@@ -6,9 +7,11 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/advantage_card.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/notification_card.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,6 +21,7 @@ class MyWelcomeScreen extends StatefulWidget {
 }
 
 class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
+  final currency = new NumberFormat("#,##0", "en_US");
   callDanAid() {
     String url = "tel:+237233419203";
     launch(url);
@@ -59,7 +63,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           AdvantageCard(
                             label: S.of(context).fondDeSoin,
                             state: S.of(context).disponible,
-                            price: adherentProvider.getAdherent.adherentPlan == 0 ? "#25.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#350.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#650.000 f." : "#1000.000 f.",
+                            price: adherentProvider.getAdherent.insuranceLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent.insuranceLimit)} f.",
                             color: Colors.teal[500],
                             onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
                           ),
@@ -79,7 +83,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             child: AdvantageCard(
                               label: S.of(context).prtDeSant,
                               state: S.of(context).disponible,
-                              price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "#200.000 f.",
+                              price: adherentProvider.getAdherent.loanLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent.loanLimit)} f.",
                               color: Colors.brown.withOpacity(0.7),
                               onTap: ()=>Navigator.pushNamed(context, '/loans'),
                             ),
@@ -178,7 +182,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
             ],
           ),
         ),
-        /*Container(
+        Container(
           decoration: BoxDecoration(
             color: Colors.white,
             border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
@@ -190,44 +194,55 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
               children: [
                 Row(children: [
                   Text("Aujourd'hui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                  Text("Voir plus..")
+                  InkWell(
+                    onTap: ()=>navController.setIndex(0),
+                    child: Text("Voir plus..")
+                  )
                 ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                 
                 SizedBox(height: hv*2,),
 
-                Row(children: [
-                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),     
-                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),     
-                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  HomePageComponents().getAvatar(imgUrl: "assets/images/avatar-profile.jpg"),
-                  Expanded(child: Container()),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(100)
-                    ),
-                    child: Text("+ 150 Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
-                  )                       
-                ],),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel.userId).snapshots(),
+                  builder: (context, snapshot) {
+                    if(!snapshot.hasData){
+                      return Center(child: Loaders().buttonLoader(kPrimaryColor),);
+                    }
+                    return Row(children: [
+                      snapshot.data.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[0].data()["imageUrl"]) : Container(),
+                      snapshot.data.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[1].data()["imageUrl"]) : Container(),
+                      snapshot.data.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[2].data()["imageUrl"]) : Container(),
+                      snapshot.data.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[3].data()["imageUrl"]) : Container(),
+                      snapshot.data.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[4].data()["imageUrl"]) : Container(),
+                      Expanded(child: Container()),
+                      snapshot.data.docs.length > 5 ? Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(100)
+                        ),
+                        child: Text("+ ${snapshot.data.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
+                      ) : Container()                       
+                    ],);
+                  }
+                ),
 
                 SizedBox(height: hv*2,),
                 
                 Row(children: [
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: 72),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
                   HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: 122),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel.comments == null ? 0 : userProvider.getUserModel.comments),
                   HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Followers", occurence: 21),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel.friends == null ? 0 : userProvider.getUserModel.friends.length),
                   HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Messages", occurence: 3),
+                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel.chats == null ? 0 : userProvider.getUserModel.chats.length),
                 ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                 SizedBox(height: hv*7,)
               ],
             ),
           ),
-        ),*/
+        ),
         SizedBox(height: hv*4)
       ],
     ) :

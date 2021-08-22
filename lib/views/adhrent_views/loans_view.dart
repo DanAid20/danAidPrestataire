@@ -15,6 +15,7 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class Loans extends StatefulWidget {
@@ -27,6 +28,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TabController _loanTabController;
   TextEditingController _amountController = new TextEditingController();
+  final currency = new NumberFormat("#,##0", "en_US");
 
   @override
   void initState() {
@@ -104,7 +106,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             label: S.of(context).prtDeSant,
                             description: S.of(context).maximumDisponible,
                             state: S.of(context).disponible,
-                            price: adherentProvider.getAdherent.adherentPlan == 0 ? "#50.000 f." : adherentProvider.getAdherent.adherentPlan == 1 ? "#100.000 f." : adherentProvider.getAdherent.adherentPlan == 2 ? "#150.000 f." : "#200.000 f.",
+                            price: adh.loanLimit == null ? "### f." : "#${currency.format(adh.loanLimit)} f.",
                             showLogo: true,
                             color: Colors.brown.withOpacity(0.7),
                           ),
@@ -176,14 +178,14 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                           borderRadius: 20,
                           text: S.of(context).dmanderUnCrdit,
                           action: (){
-                            double amount = double.parse(_amountController.text);
-                            double maxAmount =  adherentProvider.getAdherent.adherentPlan == 0 ? 50000 : adherentProvider.getAdherent.adherentPlan == 1 ? 100000 : adherentProvider.getAdherent.adherentPlan == 2 ? 150000 : 200000;
+                            num amount = num.parse(_amountController.text);
+                            num maxAmount =  adh.loanLimit;
                             if(amount > maxAmount){
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
                             }
                             else{
                               //loanProvider.setAmount(double.parse(_amountController.text));
-                              loanProvider.setLoanModel(LoanModel(amount: double.parse(_amountController.text), maxAmount: maxAmount));
+                              loanProvider.setLoanModel(LoanModel(amount: num.parse(_amountController.text), maxAmount: maxAmount));
                               //loanProvider.setMaxAmount(maxAmount);
                               Navigator.pushNamed(context, '/loan-form');
                             }

@@ -3,11 +3,13 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/models/notificationModel.dart';
 import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/doctorTileModelProvider.dart';
+import 'package:danaid/core/providers/notificationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
@@ -15,6 +17,7 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/core/services/dynamicLinkHandler.dart';
 import 'package:danaid/views/adhrent_views/aid_network_screen.dart';
 import 'package:danaid/views/adhrent_views/doctor_profile.dart';
 import 'package:danaid/views/adhrent_views/health_book_screen.dart';
@@ -24,26 +27,69 @@ import 'package:danaid/views/adhrent_views/partners_screen.dart';
 import 'package:danaid/views/doctor_views/tabs_doctor_views/profil_doctor_view.dart';
 import 'package:danaid/views/doctor_views/prestataire_profil_page.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/clippers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+
+
+
+
+Future<void> _showNotification({int id, String title, String body}) async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettingsIOS = new IOSInitializationSettings();
+  var initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
+  print("showing..");
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'com.danaid.danaidmobile', 'DanAid', 'Mutuelle Santé 100% mobile',
+      importance: Importance.max,
+      playSound: true,
+      //sound: AndroidNotificationSound,
+      showProgress: true,
+      enableVibration: true,
+      enableLights: true,
+      priority: Priority.high,
+      ticker: 'test ticker'
+  );
+
+  var iOSChannelSpecifics = IOSNotificationDetails();
+  var platformChannelSpecifics = NotificationDetails(android : androidPlatformChannelSpecifics, iOS: iOSChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(id, title, body, platformChannelSpecifics, payload: 'new_notification');
+}
+
+
 
 class HomePageView extends StatefulWidget {
   @override
   _HomePageViewState createState() => _HomePageViewState();
 }
 
-class _HomePageViewState extends State<HomePageView> {
+class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver {
   
   double width = SizeConfig.screenWidth / 100;
   double height = SizeConfig.screenHeight / 100;
   double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;
+  AppLifecycleState _notifier; 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    NotificationModelProvider notifications = Provider.of<NotificationModelProvider>(context, listen: false);
+    await notifications.updateProvider();
+      _notifier = state;
+      print(_notifier.toString());
+  }
 
   //int index = 1;
   loadAdherentprofile() async {
@@ -58,14 +104,25 @@ class _HomePageViewState extends State<HomePageView> {
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
       if(adherentModelProvider.getAdherent != null){
         adherentModel = adherentModelProvider.getAdherent;
-        generateInvoice(adherentModel);
+        //generateInvoice(adherentModel);
         }
         else {
           FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
-            adherentModel = adherent;
-            generateInvoice(adherentModel);
+
+            if(adherent.insuranceLimit == null || adherent.loanLimit == null){
+              DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
+              PlanModel plan = PlanModel.fromDocument(planDoc);
+              await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
+                "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
+                "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
+              }).then((value) {
+                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit);
+                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit);
+              });
+            }
+            //generateInvoice(adherentModel);
           });
         }
     } else {
@@ -73,16 +130,26 @@ class _HomePageViewState extends State<HomePageView> {
       userProvider.setUserId(phone);
       if(adherentModelProvider.getAdherent != null){
         adherentModel = adherentModelProvider.getAdherent;
-        generateInvoice(adherentModel);
+        //generateInvoice(adherentModel);
           //
         }
         else {
-          FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) {
+          FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
             userProvider.setUserId(adherent.adherentId);
-            adherentModel = adherent;
-            generateInvoice(adherentModel);
+
+            if(adherent.insuranceLimit == null || adherent.loanLimit == null){
+              DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
+              PlanModel plan = PlanModel.fromDocument(planDoc);
+              await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
+                "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
+                "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
+              }).then((value) {
+                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit);
+                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit);
+              });
+            }
           });
         }
     }
@@ -269,13 +336,168 @@ class _HomePageViewState extends State<HomePageView> {
     }
   }
 
+
+  handleNotifications() async {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    NotificationModelProvider notifications = Provider.of<NotificationModelProvider>(context, listen: false);
+    notifications.updateProvider();
+    
+    print("0");
+    await FirebaseMessaging.instance.subscribeToTopic(FirebaseAuth.instance.currentUser.uid);
+    await FirebaseMessaging.instance.subscribeToTopic(userProvider.getUserId.substring(1));
+    print("1");
+    
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print("2");
+      print('Got a message while in the foreground!');
+      print('Message data: ${message.data}');
+
+      if(message.data['type'] == "CONSULTATION"){
+        notifications.addNotification(NotificationModel(
+          messageId: message.messageId,
+          title: message.data['status'] == '1' ? "Demande Approuvée" : "Demande rejétée",
+          description: message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille." : "Votre demande de rendez-vous a été réjetée par le médecin de famille.",
+          type: message.data['type'],
+          data: message.data,
+          dateReceived: DateTime.now(),
+          seen: false
+        ));
+        showDialog(context: context,
+          builder: (BuildContext context){
+            return Dialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: wv*5,),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
+                    child: Column(children: [
+                      SizedBox(height: hv*4),
+                      Icon(message.data['status'] == '1' ? LineIcons.check : LineIcons.times, color: message.data['status'] == '1' ? kPrimaryColor : Colors.red, size: 45,),
+                      SizedBox(height: hv*2,),
+                      Text(message.data['body'], style: TextStyle(color: kPrimaryColor, fontSize: 20, fontWeight: FontWeight.w700),),
+                      SizedBox(height: hv*2,),
+                      Text(message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille, vous êtes attendu le jour du rendez-vous" : "Votre demande de rendez-vous a été réjetée par le médecin de famille. Changez de date et réessayez s'il vous plaît", style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
+                      SizedBox(height: hv*2),
+                      CustomTextButton(
+                        text: "OK",
+                        color: kPrimaryColor,
+                        action: ()=>Navigator.pop(context),
+                      )
+                      
+                    ], mainAxisAlignment: MainAxisAlignment.center, ),
+                  ),
+                ],
+              ),
+            );
+          }
+        );
+      }
+      else if (message.data['type'] == "CHAT_MESSAGE"){
+        await _showNotification(id: 3, title: "Nouveau message", body: message.data["contentMessage"]);
+      }
+      else if (message.data['type'] == "POST_COMMMENT"){
+        if(message.data["commentSendId"] != userProvider.getUserModel.userId){
+          await _showNotification(id: 6, title: "New comment on your post by ${message.data['senderName']}", body: '"${message.data["content"]}"');
+        }
+        else {
+          print("no notifications");
+        }
+      }
+      else if (message.data['type'] == "LIKE_COMMMENT"){
+        String name = "";
+        String type = "adhérent";
+        print(message.data["likerId"]);
+        if(message.data["likerId"] != userProvider.getUserModel.userId){
+          FirebaseFirestore.instance.collection('USERS').doc(message.data["likerId"]).get().then((doc) async {
+            name = doc.data()['fullName'];
+            type = doc.data()['profil'] == adherent ? "l'adhérent" : doc.data()['profil'] == doctor ? "le médecin" : "le prestataire";
+            await _showNotification(id: 4, title: "Nouveau like", body: "Votre commentaire a été liké par $type $name");
+          });
+        }
+        else {
+          print("no notifications");
+        }
+        
+      }
+      else if (message.data['type'] == "FRIEND_REQUESTS"){
+        String name = "";
+        String type = "adhérent";
+        FirebaseFirestore.instance.collection('USERS').doc(message.data["userWhoRquestFriendId"]).get().then((doc) async {
+          name = doc.data()['fullName'];
+          type = doc.data()['profil'] == adherent ? "de l'adhérent" : doc.data()['profil'] == doctor ? "du médecin" : "du prestataire";
+          await _showNotification(id: 7, title: "Demande d'amitié", body: "Nouvelle demande d'amitié de la part $type $name");
+          notifications.addNotification(NotificationModel(
+            messageId: message.messageId,
+            title: "Demande d'amitié",
+            description: "Nouvelle demande d'amitié de la part $type $name",
+            type: message.data['type'],
+            data: message.data,
+            dateReceived: DateTime.now(),
+            profileImgUrl: doc.data()['imageUrl'],
+            seen: false
+          ));
+        });
+      }
+      else if (message.data['type'] == "FRIEND_ADDED"){
+        String name = "";
+        String type = "adhérent";
+        FirebaseFirestore.instance.collection('USERS').doc(message.data["friendWhoAddedId"]).get().then((doc) async {
+          name = doc.data()['fullName'];
+          type = doc.data()['profil'] == adherent ? "l'adhérent" : doc.data()['profil'] == doctor ? "le médecin" : "le prestataire";
+          await _showNotification(id: 7, title: "Demande d'amitié acceptée", body: "Vous et $type $name êtes désormais amis");
+        });
+      }
+      else if (message.data['type'] == "LIKE_GROUP_POST"){
+        //String postId = message.data['postId'];
+        String groupId = message.data['groupId'];
+        if(message.data['groupId'] != null){
+          FirebaseFirestore.instance.collection('GROUPS').doc(message.data['groupId']).get().then((doc) async {
+            String groupName = doc.data()['groupName'];
+            await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like de votre publication dans le groupe $groupName");
+          });
+        }
+      }
+      else if (message.data['type'] == "LIKE_CLASSICAL_POST"){
+        await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
+      }
+      else {
+        print("No type recognized");
+      }
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+
+    //FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);  
+    
+  }
+  
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addObserver(this);
+    handleNotifications();
     initializeDateFormatting();
     loadCommonUserProfile();
     loadUserProfile();
+    DynamicLinkHandler().fetchClassicLinkData(context);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
   
   @override

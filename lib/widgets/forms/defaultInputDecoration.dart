@@ -2,7 +2,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-  InputDecoration defaultInputDecoration({String suffix, Color fillColor}) {
+  InputDecoration defaultInputDecoration({String suffix, Color fillColor, String hintText}) {
     return InputDecoration(
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(width: 1, color: Colors.red[300]),
@@ -10,6 +10,7 @@ import 'package:line_icons/line_icons.dart';
       ),
       fillColor: fillColor == null ? Colors.grey[100] : fillColor,
       contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      hintText: hintText,
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(width: 1, color: kPrimaryColor.withOpacity(0.0)),
         borderRadius: BorderRadius.all(Radius.circular(20))
@@ -19,6 +20,6 @@ import 'package:line_icons/line_icons.dart';
         borderRadius: BorderRadius.all(Radius.circular(20))
       ),
       suffixText: suffix != null ? suffix : "",
-      hintStyle: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+      hintStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
     );
   }
