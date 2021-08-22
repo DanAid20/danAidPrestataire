@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/loanModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,8 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Aperçu de mon Prêt Santé", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text("Ajouter, modifier ou envoyer les pièces", 
+            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
@@ -90,7 +91,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                           ),
                           child: Column(
                             children: [
-                              HomePageComponents.header(label: "Demandeur", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                              HomePageComponents.header(label: S.of(context).demandeur, title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                               SizedBox(height: hv*2),
                               Row(
                                 children: [
@@ -98,7 +99,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text("Total à payer", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                      Text(S.of(context).totalPayer, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
                                       Text(loanProvider.getLoan.totalToPay.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
                                     ],
                                   ),
@@ -106,7 +107,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text("Vos mensualités", style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                      Text(S.of(context).vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
                                       Container(
                                         margin: EdgeInsets.only(top: hv*0.2),
                                         padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*0.25),
@@ -152,7 +153,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                 color: Colors.grey[100],
                                 borderRadius: BorderRadius.circular(15)
                               ),
-                              child: Text(loan.duration.toString() + " Mois", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
+                              child: Text(loan.duration.toString() + S.of(context).mois, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
                             )
                           ],
                         ),
@@ -160,7 +161,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Date de fin", style: TextStyle(fontSize: 15, color: kTextBlue)),
+                            Text(S.of(context).dateDeFin, style: TextStyle(fontSize: 15, color: kTextBlue)),
                             SizedBox(height: 5),
                             Container(
                               width: wv*40,
@@ -188,7 +189,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*2,),
-                  Text("   Statut des emprunts", style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+                  Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
                   SizedBox(height: hv*2,),
                   Column(
                     children: [
@@ -205,8 +206,8 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                             labelStyle: TextStyle(fontWeight: FontWeight.bold),
                             labelColor: kPrimaryColor,
                             tabs: [
-                              Tab(text: "En Cours"),
-                              Tab(text: "Effectués"),
+                              Tab(text: S.of(context).enCours),
+                              Tab(text: S.of(context).effectus),
                             ],
                           ),
                         ),

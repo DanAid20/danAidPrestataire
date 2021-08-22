@@ -4,10 +4,10 @@ class UserModel {
   String authId, userId, matricule, fullName, imgUrl, email, profileType, regionOfOrigin, cniUrl, countryCode, countryName;
   Timestamp dateCreated, lastDateVisited;
   bool enabled, enable;
-  int visitPoints, points, comments;
-  List phoneList, phoneKeywords, nameKeywords, friends, groups, visits, friendRequests;
+  int visitPoints, points, comments, posts;
+  List phoneList, phoneKeywords, nameKeywords, friends, groups, visits, friendRequests, chats;
 
-  UserModel({this.visitPoints, this.enable, this.points, this.comments, this.friendRequests, this.visits, this.authId, this.userId, this.dateCreated, this.lastDateVisited,  this.matricule, this.phoneKeywords, this.nameKeywords, this.friends, this.groups, this.fullName, this.imgUrl, this.email, this.profileType, this.regionOfOrigin, this.cniUrl, this.countryCode, this.countryName, this.enabled, this.phoneList});
+  UserModel({this.visitPoints, this.enable, this.points, this.comments, this.friendRequests, this.posts, this.chats, this.visits, this.authId, this.userId, this.dateCreated, this.lastDateVisited,  this.matricule, this.phoneKeywords, this.nameKeywords, this.friends, this.groups, this.fullName, this.imgUrl, this.email, this.profileType, this.regionOfOrigin, this.cniUrl, this.countryCode, this.countryName, this.enabled, this.phoneList});
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
@@ -21,6 +21,8 @@ class UserModel {
       email: doc.data()["emailAdress"],
       points: doc.data()["points"],
       comments: doc.data()["comments"],
+      posts: doc.data()["posts"],
+      chats: doc.data()["chat-users"],
       visits: doc.data()["visits"],
       visitPoints: doc.data()["visitPoints"],
       profileType: doc.data()["profil"],

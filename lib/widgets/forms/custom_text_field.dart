@@ -12,13 +12,13 @@ class CustomTextField extends StatelessWidget {
   final Color fillColor, labelColor;
   final Widget prefixIcon, suffixIcon;
   final bool enabled;
-  final bool multiLine, noPadding;
+  final bool multiLine, noPadding, seal;
   final int minLines, maxLines;
   final Function editAction;
   final Function onChanged;
   final List<TextInputFormatter> inputFormatters;
 
-  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
+  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.seal = false, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +27,17 @@ class CustomTextField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: labelColor ?? Colors.grey[600]),
-          ),
-          SizedBox(
-            height: 5,
-          ),
+          label != null ? Column(
+            children: [
+              Text(
+                label,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: labelColor ?? Colors.grey[600]),
+                  ),
+              SizedBox(
+                height: 5,
+              ),
+            ],
+          ) : Container(),
           Stack(
             clipBehavior: Clip.none,
             alignment: AlignmentDirectional.center,
@@ -41,7 +45,7 @@ class CustomTextField extends StatelessWidget {
               TextFormField(
                 minLines: multiLine ? minLines : 1,
                 maxLines: multiLine ? maxLines : 1,
-                enabled: enabled,
+                enabled: enabled && !seal,
                 keyboardType: keyboardType,
                 controller: controller,
                 validator: this.validator,

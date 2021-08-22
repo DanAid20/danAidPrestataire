@@ -1,4 +1,5 @@
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/views/social_network_views/favourite_groups.dart';
@@ -35,8 +36,8 @@ class _GroupsState extends State<Groups> with SingleTickerProviderStateMixin {
             unselectedLabelColor: Colors.grey[300],
             labelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 25),
             tabs: <Widget>[
-              Tab(text: "Favoris"),
-              Tab(text: "Découvrir")
+              Tab(text: S.of(context).favoris),
+              Tab(text: S.of(context).dcouvrir)
             ],
             controller: groupsController,
           ),

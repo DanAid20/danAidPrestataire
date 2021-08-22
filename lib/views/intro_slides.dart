@@ -1,4 +1,5 @@
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:coast/coast.dart';
@@ -112,8 +113,8 @@ class _IntroSlidesState extends State<IntroSlides> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("  Couverture à  ", style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.bold),),
-                      Text("70%", style: TextStyle(color: whiteColor, fontSize: 50, fontWeight: FontWeight.bold))
+                      Text(S.of(context).couverture, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.bold),),
+                      Text(S.of(context).soixanteDixpourCent, style: TextStyle(color: whiteColor, fontSize: 50, fontWeight: FontWeight.bold))
                     ],
                   ),
                 ),
@@ -127,7 +128,7 @@ class _IntroSlidesState extends State<IntroSlides> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(currentPageValue == 0 ? "La Mutuelle Santé 100% Mobile" : currentPageValue == 1 ?  "Un réseau d'entraide" : "Un médecin de famille me suit", style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*6.2, fontWeight: FontWeight.w900),),
+                      Text(currentPageValue == 0 ? S.of(context).laMutuelleSant100Mobile : currentPageValue == 1 ?  S.of(context).unRseauDentraide : S.of(context).unMdecinDeFamilleMeSuit, style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*6.2, fontWeight: FontWeight.w900),),
                       SizedBox(height: hv*2.5,),
                       SizedBox(
                         width: wv*90,
@@ -136,11 +137,11 @@ class _IntroSlidesState extends State<IntroSlides> {
                           text: TextSpan(
                             style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*5.7, fontWeight: FontWeight.w300),
                             children: [
-                              TextSpan(text: currentPageValue == 0 ? "Avec votre famille, bénéficiez d’une couverture santé de " : currentPageValue == 1 ? "En cas de besoin, obtenez l’aide des membres du réseau ou un " : "Mon médecin de famille personnel : reçu rapidement, orienté, suivi à long terme, un médecin de famille "),
-                              TextSpan(text: currentPageValue == 0 ? "70% " : currentPageValue == 1 ?  "prêt santé " : "DanAid ", style: TextStyle(fontWeight: FontWeight.w600)),
-                              TextSpan(text: currentPageValue == 0 ? "de vos dépenses santé en " : currentPageValue == 1 ?  "en quelques minutes." : "veille sur notre santé"),
-                              TextSpan(text: currentPageValue == 0 ? "1 heure, " : currentPageValue == 1 ?  "" : "", style: TextStyle(fontWeight: FontWeight.w600)),
-                              TextSpan(text: currentPageValue == 0 ? " partout !" : currentPageValue == 1 ?  "" : ""),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).avecVotreFamilleBnficiezDuneCouvertureSantDe : currentPageValue == 1 ? S.of(context).enCasDeBesoinObtenezLaideDesMembresDuRseau : S.of(context).monMdecinDeFamillePersonnelReuRapidementOrientSuiviLong),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).soixanteDixpourCent : currentPageValue == 1 ?  S.of(context).prtSant : S.of(context).danaid, style: TextStyle(fontWeight: FontWeight.w600)),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).deVosDpensesSantEn : currentPageValue == 1 ?  S.of(context).enQuelquesMinutes : S.of(context).veilleSurNotreSant),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).UneHeure : currentPageValue == 1 ?  "" : "", style: TextStyle(fontWeight: FontWeight.w600)),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).partout : currentPageValue == 1 ?  "" : ""),
                             ]
                           ),
                         ),
@@ -168,7 +169,7 @@ class _IntroSlidesState extends State<IntroSlides> {
                     Spacer(),
                     currentPageValue == 2 ? SizedBox(width: wv*1,) : TextButton(
                       onPressed: (){_coastController.animateTo(beach: 2, duration: Duration(milliseconds: 500));}, 
-                      child: Text("Skip", style: TextStyle(color: whiteColor, fontSize: 19, fontWeight: FontWeight.bold),)
+                      child: Text(S.of(context).skip, style: TextStyle(color: whiteColor, fontSize: 19, fontWeight: FontWeight.bold),)
                     )
                   ],
                 ),

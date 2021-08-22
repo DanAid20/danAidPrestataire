@@ -5,6 +5,7 @@ import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
@@ -76,7 +77,7 @@ class _SpecialistListState extends State<SpecialistList> {
                     );
                   })
               : Center(
-                  child: Text("Aucun medecin disponible pour le moment.."),
+                  child: Text(S.of(context).aucunMedecinDisponiblePourLeMoment),
                 );
         });
   }
@@ -87,7 +88,7 @@ class _SpecialistListState extends State<SpecialistList> {
       child: Column(children: [
         Row(
           children: [
-            Text("  Ordonner par:  "),
+            Text(S.of(context).ordonnerPar),
             Container(
               margin: EdgeInsets.symmetric(vertical: hv * 1),
               padding:
@@ -106,27 +107,27 @@ class _SpecialistListState extends State<SpecialistList> {
                         color: kPrimaryColor,
                       ),
                       hint: Text(
-                        "Choisir",
+                        S.of(context).choisir,
                         style: TextStyle(
                             color: kPrimaryColor, fontWeight: FontWeight.w600),
                       ),
                       value: filter,
                       items: [
                         DropdownMenuItem(
-                          child: Text("Nom",
+                          child: Text(S.of(context).nom,
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.bold)),
-                          value: "name",
+                          value: S.of(context).name,
                         ),
                         DropdownMenuItem(
                           child: Text(
-                            "Distance",
+                            S.of(context).distance,
                             style: TextStyle(
                                 color: kPrimaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          value: "distance",
+                          value: S.of(context).distance,
                         ),
                       ],
                       onChanged: (value) {

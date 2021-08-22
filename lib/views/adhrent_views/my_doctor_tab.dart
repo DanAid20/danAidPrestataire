@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/doctorModel.dart';
@@ -10,7 +12,9 @@ import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +23,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/helpers/constants.dart' as constants;
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 class MyDoctorTabView extends StatefulWidget {
   @override
@@ -206,7 +212,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               Navigator.pushNamed(context, "/doctor-profile");
                                             },
                                           child: Text(doctor == null ? "Nom" : "Dr. "+doctor.cniName, style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),)),
-                                        Text("Medecin de Famille, "+ doctor.field, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                        Text(S.of(context).medecinDeFamille+ doctor.field, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                         SizedBox(height: hv*1.3,),
                                         Text(doctor.officeName == null ? "A SON COMPTE" : doctor.officeName, style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
                                         Text("Service - ${doctor.speciality.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
@@ -241,7 +247,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                   child: ListTile(
                                     title: Padding(
                                       padding: EdgeInsets.only(bottom: 5.0),
-                                      child: Text("Services Offerts", style: TextStyle(color: whiteColor, fontSize: 15),),
+                                      child: Text(S.of(context).servicesOfferts, style: TextStyle(color: whiteColor, fontSize: 15),),
                                     ),
                                     subtitle: doctor.serviceList != null ? Row(
                                       children: [
@@ -260,7 +266,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         SizedBox(width: 10,),
                                         SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: doctor.serviceList["visite-a-domicile"] ? whiteColor : kSouthSeas),
                                       ],
-                                    ) : Text("Non-Spécifié", style: TextStyle(color: Colors.white),),
+                                    ) : Text(S.of(context).nonspcifi, style: TextStyle(color: Colors.white),),
                                   ),
                                 ),
                                 Container(
@@ -309,20 +315,20 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                     isExpanded = val;
                                   });
                                 },
-                                title: !isExpanded ? Align(child: Text("Plus de détails", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16)), alignment: Alignment.centerRight,) 
+                                title: !isExpanded ? Align(child: Text(S.of(context).plusDeDtails, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16)), alignment: Alignment.centerRight,) 
                                 : Column(
                                     children: [
                                       Row(
                                         children: [
-                                          doctor.serviceList["consultation"] ? getFeatureCard(title: "Consultations") : Container(),
-                                          doctor.serviceList["tele-consultation"] ? getFeatureCard(title: "Télé-Consultations") : Container(),
+                                          doctor.serviceList["consultation"] ? getFeatureCard(title: S.of(context).consultations) : Container(),
+                                          doctor.serviceList["tele-consultation"] ? getFeatureCard(title: S.of(context).tlconsultations) : Container(),
                                         ],
                                       ),
                                       Row(
                                         children: [
-                                          doctor.serviceList["chat"] ? getFeatureCard(title: "Chat") : Container(),
-                                          doctor.serviceList["rdv"] ? getFeatureCard(title: "Rendez-vous") : Container(),
-                                          doctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: "Visite à domicile") : Container(),
+                                          doctor.serviceList["chat"] ? getFeatureCard(title: S.of(context).chat) : Container(),
+                                          doctor.serviceList["rdv"] ? getFeatureCard(title: S.of(context).rendezvous) : Container(),
+                                          doctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: S.of(context).visiteDomicile) : Container(),
                                         ],
                                       )
                                     ],
@@ -354,7 +360,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                 Navigator.pushNamed(context, '/conversation');
                                               },
                                               icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg", color: whiteColor,),
-                                              label: Text("Ecrire", style: TextStyle(color: whiteColor),),
+                                              label: Text(S.of(context).ecrire, style: TextStyle(color: whiteColor),),
                                               style: ButtonStyle(
                                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                                                 padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
@@ -373,7 +379,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                 padding: const EdgeInsets.only(top: 3.0),
                                                 child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
                                               ),
-                                              label: Text("Prendre Rendez-vous", style: TextStyle(color: kPrimaryColor),),
+                                              label: Text(S.of(context).prendreRendezvous, style: TextStyle(color: kPrimaryColor),),
                                               style: ButtonStyle(
                                                 backgroundColor: MaterialStateProperty.all(whiteColor),
                                                 padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
@@ -392,12 +398,12 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                             Expanded(
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text("Horaire", style: TextStyle(fontWeight: FontWeight.w800)),
+                                                  Text(S.of(context).horaire, style: TextStyle(fontWeight: FontWeight.w800)),
                                                   availability["monday to friday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Expanded(child: Text("Lundi à Vendredi")),
+                                                        Expanded(child: Text(S.of(context).lundiVendredi)),
                                                         Text("${availability["monday to friday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["monday to friday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
@@ -406,7 +412,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Text("Samedi"),
+                                                        Text(S.of(context).samedi),
                                                         Text("${availability["saturday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["saturday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["saturday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["saturday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
@@ -415,7 +421,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Text("Dimanche"),
+                                                        Text(S.of(context).dimanche),
                                                         Text("${availability["sunday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["sunday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["sunday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["sunday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
@@ -423,8 +429,8 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
                                                   SizedBox(height: 10,),
 
-                                                  Text("Adresse", style: TextStyle(fontWeight: FontWeight.w800)),
-                                                  Text(doctor.address == null ? "Cameroon" :"${doctor.address}, Cameroun")
+                                                  Text(S.of(context).adresse, style: TextStyle(fontWeight: FontWeight.w800)),
+                                                  Text(doctor.address == null ? S.of(context).cameroon : doctor.address+S.of(context).cameroun)
                                                 ],
                                               ),
                                             ),
@@ -437,20 +443,20 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               ),
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
-                                                  Text("Tarif publique", style: TextStyle(fontWeight: FontWeight.w800)),
+                                                  Text(S.of(context).tarifPublique, style: TextStyle(fontWeight: FontWeight.w800)),
                                                   Text("${doctor.rate["public"]} f."),
                                                   SizedBox(height: 10,),
-                                                  Text("Couverture DanAid", style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                                  Text(S.of(context).couvertureDanaid, style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                                   Row(
                                                     children: [
-                                                      Text("Adhérents"),
+                                                      Text(S.of(context).adhrents),
                                                       SizedBox(width: 5,),
                                                       Text("70%"),//Text("${doctor.rate["adherent"]} f."),
                                                     ],
                                                   ),
                                                   Row(
                                                     children: [
-                                                      Text("Autres"),
+                                                      Text(S.of(context).autres),
                                                       SizedBox(width: 5,),
                                                       Text("5%"),//Text("${doctor.rate["other"]} f."),
                                                     ],
@@ -497,7 +503,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                   children: [
                     Container(
                       margin: EdgeInsets.only(left: 15, bottom: hv*2),
-                      child: Text("Mes Rendez-vous", style: TextStyle(color: Colors.teal[400], fontSize: 17),)
+                      child: Text(S.of(context).mesRendezvous, style: TextStyle(color: Colors.teal[400], fontSize: 17),)
                     ),
                     SingleChildScrollView(
                       child: Column(
@@ -522,26 +528,49 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       itemBuilder: (context, index) {
                                         DocumentSnapshot rdv = snapshot.data.docs[index];
                                         AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
-                                        print("name: ");
                                         return Padding(
                                           padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
-                                            doctorName: "Dr. ${appointment.doctorName}, Médécin de Famille",
+                                            doctorName: "Dr. ${appointment.doctorName}"+S.of(context).mdcinDeFamille,
                                             date: appointment.startTime.toDate(),
                                             state: appointment.status,
                                             type: Algorithms.getConsultationTypeLabel(appointment.consultationType),
                                             label: Algorithms.getAppointmentReasonLabel(appointment.title),
-                                            action: (){
+                                            action: () async {
                                               AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
                                               appointmentProvider.setAppointmentModel(appointment);
                                               _doc != null ? doctorProvider.setDoctorModel(_doc) : print("nope");
-                                              Navigator.pushNamed(context, '/appointment');
+                                              if(appointment.consultationType == "Video"){
+                                                /*if(appointment.startTime.toDate().isBefore(DateTime.now())){
+                                                  Navigator.pushNamed(context, '/appointment');
+                                                } */
+                                                if(appointment.token != null){
+                                                  print("getting toke..");
+                                                  var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
+                                                
+                                                  //var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.id, "uid": '112233', "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
+                                                  
+                                                  var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.id, "uid": "10000", "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
+                                                  print(response.toString());
+                                                  var body = jsonDecode(response.body);
+                                                  print(body.toString());
+                                                  String token = body['data'];
+                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.id, uid: 10000,),),);
+                                                }
+                                                else {
+                                                  Navigator.pushNamed(context, '/appointment');
+                                                }
+                                              }
+                                              else {
+                                                Navigator.pushNamed(context, '/appointment');
+                                              }
+                                              
                                             }
                                           ),
                                         );
                                       })
                                   : Center(
-                                      child: Container(child: Text("Aucun rendez-vous enrégistré pour le moment..", textAlign: TextAlign.center)),
+                                      child: Container(child: Text(S.of(context).aucunRendezvousEnrgistrPourLeMoment, textAlign: TextAlign.center)),
                                     );
                             }),
                             SizedBox(height: hv*2,),
@@ -602,7 +631,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                         ),
                         child: ListView(children: [
                           SizedBox(height: hv*3,),
-                          RichText(text: TextSpan(text: "Choisissez Votre\n", children: [TextSpan(text: "Médecin de Famille", style: TextStyle(fontWeight: FontWeight.w800))], style: TextStyle(color: kPrimaryColor, fontSize: wv*5.5)), textAlign: TextAlign.center,),
+                          RichText(text: TextSpan(text: S.of(context).choisissezVotren, children: [TextSpan(text: S.of(context).mdecinDeFamille, style: TextStyle(fontWeight: FontWeight.w800))], style: TextStyle(color: kPrimaryColor, fontSize: wv*5.5)), textAlign: TextAlign.center,),
                           SizedBox(height: hv*2),
                           SvgPicture.asset('assets/icons/Bulk/Danger.svg', width: wv*20,),
                           SizedBox(height: hv*2),
@@ -616,7 +645,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                         color: Colors.white,
                         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
                       ),
-                      child: CustomTextButton(text: "Démarrer", action: (){controller.setIndex(3);},),
+                      child: CustomTextButton(text: S.of(context).dmarrer, action: (){controller.setIndex(3);},),
                     )
                   ],
                 ),

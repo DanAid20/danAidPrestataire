@@ -4,6 +4,7 @@ import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/gestures.dart';
@@ -79,7 +80,7 @@ class HomePageComponents {
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
-                                        Text(etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : ''  , style: TextStyle(
+                                        Text(etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : ''  , style: TextStyle(
                                           color:  getCOlor(etat) ,
                                           fontWeight: FontWeight.w400,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -132,7 +133,7 @@ class HomePageComponents {
                                       
                                       fontSize: wv*3.5), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
-                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('Montant', style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current.montant, style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
@@ -178,7 +179,7 @@ class HomePageComponents {
                                         color: kSouthSeas,
                                         width: wv * 10, 
                                   ),
-                                  Text('Auditer', style: TextStyle(
+                                  Text(S.current.auditer, style: TextStyle(
                                       color: kSouthSeas,
                                       fontWeight: FontWeight.w600,
                                       
@@ -205,7 +206,7 @@ class HomePageComponents {
           size: wv * 8,
           renoveIsConnectedButton: false),
       title: Text(
-        nom != null ? nom : 'Fabrice Mbanga',
+        nom != null ? nom : '',
         style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.w700,
@@ -223,7 +224,7 @@ class HomePageComponents {
       ),
       trailing: isSpontane == true
           ? Text(
-              'Spontane',
+              '',
               style:
                   TextStyle(fontSize: 14.sp, color: kDeepTeal),
             )
@@ -232,12 +233,12 @@ class HomePageComponents {
               child: Column(
                 children: [
                   Text(
-                    apointementDate != null ? apointementDate : '12:15',
+                    apointementDate != null ? apointementDate : '',
                     style: TextStyle(
                         fontSize:  14.sp, color: kPrimaryColor),
                   ),
                   Text(
-                    etat==0? 'En attente': etat==1? 'valider': etat==2?'rejetté' : '' ,
+                    etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : '' ,
                     style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
@@ -533,7 +534,7 @@ class HomePageComponents {
                 margin: EdgeInsets.only(left: 3.h),
                   child: Flexible(
                     flex: 1,
-                                      child: Text( nom!=null ? nom :'Fabrice Mbanga',
+                                      child: Text( nom!=null ? nom :'',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             color: kDateTextColor,
@@ -554,7 +555,7 @@ class HomePageComponents {
                     child: Container(
                       width: wv * 30,
                       child: Text(
-                          syntomes !=null ? syntomes : 'Douleurs dentaires et violents mots de tête...',
+                          syntomes !=null ? syntomes : '',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
@@ -604,14 +605,14 @@ class HomePageComponents {
                 children: [
                   Container(
                       width: wv * 15,
-                      child: Text('Valide jusqu\'au ',
+                      child: Text(S.current.valideJusquau,
                           style: TextStyle(
                               color: textWhiteColor,
                               fontSize: fontSize(size: 15),
                               fontWeight: FontWeight.w500))),
                   Container(
                       width: wv * 20,
-                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate.toDate()) : 'Pas defini' ,
+                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate.toDate()) : S.current.pasDefini ,
                           style: TextStyle(
                               color: whiteColor,
                               fontSize: wv * 4.5,
@@ -658,7 +659,7 @@ class HomePageComponents {
                         child: Text(
                           isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
                               ? ''
-                              : 'Compte Inactif',
+                              : S.current.compteInactif,
                           overflow: TextOverflow.clip,
                           style: TextStyle(
                               color: Colors.red,
@@ -700,7 +701,7 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Non du beneficiaire',
+                  Text(S.current.nonDuBeneficiaire,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -718,7 +719,7 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Numero Matricule',
+                  Text(S.current.numeroMatricule,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -726,7 +727,7 @@ class HomePageComponents {
                   Text(
                     (adherent!=null &&  adherent.matricule!=null)
                           ?  adherent.matricule
-                          : 'Pas defini',
+                          : S.current.pasDefini,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -739,13 +740,13 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text('Medecin de Famille ',
+                  Text(S.current.medecinDeFamille,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
-                       doctorName!=null ? 'Dr '+doctorName :  'Pas definie ',
+                       doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -803,7 +804,7 @@ class HomePageComponents {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            Text(' a posé une',
+                            Text(S.current.aPosUne,
                                 style: TextStyle(
                                     color: kPrimaryColor,
                                     fontWeight: FontWeight.w500,
@@ -811,7 +812,7 @@ class HomePageComponents {
                             SizedBox(
                               width: wv * 1,
                             ),
-                            Text('Question',
+                            Text(S.current.question,
                                 style: TextStyle(
                                     color: kPrimaryColor,
                                     fontWeight: FontWeight.w700,
@@ -837,15 +838,15 @@ class HomePageComponents {
                   child: ReadMoreText(
                     text != null
                         ? text
-                        : "Docta, que reccomendez vous en cas de fièvre de plus de 40’ de l’enfant? et quelles sont les mesure prise en cas de complications de la maladie ? ",
+                        : S.current.doctaQueReccomendezVousEnCasDeFivreDePlus,
                     trimLines: 2,
                     trimLength: 73,
                     style:
                         TextStyle(fontWeight: FontWeight.w500, color: bkgColor),
                     colorClickableText: kDeepTeal,
                     trimMode: TrimMode.Length,
-                    trimCollapsedText: ' ... voir Plus',
-                    trimExpandedText: ' ... reduire',
+                    trimCollapsedText: S.current.voirPlus,
+                    trimExpandedText: S.current.reduire,
                   ),
                 ),
                 Container(
@@ -1169,7 +1170,7 @@ class HomePageComponents {
             Column(
               children: [
                 SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', height: 35,),
-                Text("Payer", style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+                Text(S.current.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
               ],
             )
           ],
@@ -1181,13 +1182,13 @@ class HomePageComponents {
 
   String getUseCaseStateText(int val) {
     if (val == 0)
-      return "En attente";
+      return S.current.enAttente;
     else if (val == 1)
-      return "En cours";
+      return S.current.enCours;
     else if (val == 2)
-      return "Rejetté";
+      return S.current.rejett;
     else
-      return "Clôturé";
+      return S.current.cltur;
   }
 
   Color getUseCaseStateColor(int val) {
@@ -1203,13 +1204,13 @@ class HomePageComponents {
 
   String getAppointmentStateText(int val) {
     if (val == 0)
-      return "En attente";
+      return S.current.enAttente;
     else if (val == 1)
-      return "Approuvé";
+      return S.current.enCours;
     else if (val == 2)
-      return "Rejetté";
+      return S.current.rejett;
     else
-      return "Clôturé";
+      return S.current.cltur;
   }
 
   Color getAppointmentStateColor(int val) {
@@ -1407,7 +1408,7 @@ class HomePageComponents {
           SvgPicture.asset(svgIcon, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
           Expanded(child: Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
-        trailing: TextButton(onPressed: action, child: Text("Modifier..", style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
+        trailing: TextButton(onPressed: action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
       ),
     );
   }
@@ -1424,11 +1425,11 @@ class HomePageComponents {
               style: TextStyle(fontSize: 16),
               children: [
                 TextSpan(
-                  text: "Lu et accepté les ",
+                  text: S.current.luEtAcceptLes,
                   style: TextStyle(color: textColor == null ? Colors.grey[600] : textColor),
                 ),
                 TextSpan(
-                  text: "termes des services",
+                  text: S.current.termesDesServices,
                   style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
                   recognizer: TapGestureRecognizer()..onTap = action,
                 )
@@ -1454,7 +1455,7 @@ class HomePageComponents {
         child: Container(
           child: Column(
             children: [
-              Text("Je reconnais par la présente qu’en cas de défaut de paiment je m’expose à:", style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
+              Text(S.current.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
               SizedBox(height: hv*0.5),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -1463,13 +1464,13 @@ class HomePageComponents {
                     style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w400,),
                     children: [
                       TextSpan(
-                        text: "\u2022 " + "Des poursuite judiciaires\n",
+                        text: "\u2022 " + S.current.desPoursuiteJudiciairesn,
                       ),
                       TextSpan(
-                        text: "\u2022 " + "incription au fichier public des mauvais payeurs ",
+                        text: "\u2022 " + S.current.incriptionAuFichierPublicDesMauvaisPayeurs,
                       ),
                       TextSpan(
-                        text: "Credit Risk Cameroun",
+                        text: S.current.creditRiskCameroun,
                         style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
                         //recognizer: TapGestureRecognizer()..onTap = action,
                       ),
@@ -1499,7 +1500,7 @@ class HomePageComponents {
         padding: EdgeInsets.only(top: hv*1),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Pour le patient", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+            Text(S.current.pourLePatient, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
             SizedBox(height: hv*1,),
             Row(
               children: [
@@ -1514,7 +1515,7 @@ class HomePageComponents {
                   child: RichText(text: TextSpan(
                     text: surname + " " +  fname + "\n",
                     children: birthDate != null ? [
-                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: wv*3.3)),
                     ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -1611,6 +1612,32 @@ class HomePageComponents {
             ): Container()
           ],
         ),
+      ),
+    );
+  }
+
+  static getStatusIndicator({double size = 15, int status}){
+    Color color = status == 0 ? Colors.red : status == 1 ? kDeepTeal : primaryColor;
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7),
+        color: color.withOpacity(0.4)
+      ),
+      child: Icon(status == 0 ? LineIcons.times : status == 1 ? LineIcons.check : Icons.priority_high_rounded, color: color, size: size,),
+    );
+  }  
+  
+  static getIconBox({double size = 15, String iconPath, Color color, Function action}){
+    return GestureDetector(
+      onTap: action,
+      child: Container(
+        padding: EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7),
+          color: color.withOpacity(0.4)
+        ),
+        child: SvgPicture.asset(iconPath, width: size, color: color,),
       ),
     );
   }

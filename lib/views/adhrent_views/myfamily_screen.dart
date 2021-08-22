@@ -7,7 +7,9 @@ import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/widgets/user_avatar_coverage.dart';
@@ -90,33 +92,19 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 Container(
                   child: Row(
                     children: [
-                      Text(
-                        userProvider.getUserModel != null
-                            ? userProvider.getUserModel.points.toString() +
-                                    " pts" ??
-                                "0 pts"
-                            : "0 pts",
-                        style: TextStyle(
-                            fontSize: inch * 1.3,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.teal[400]),
+                      InkWell(
+                        onTap: ()=>Navigator.pushNamed(context, '/family-points-page'),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                          child: Text(userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
+                            style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
+                          ),
+                        ),
                       ),
-                      SizedBox(
-                        width: wv * 2,
-                      ),
-                      adherentProvider.getAdherent.adherentPlan != 0
-                          ? SvgPicture.asset(
-                              "assets/icons/Bulk/Shield Done.svg",
-                              width: 18,
-                            )
-                          : Container(),
-                      yearsForBadget >= 365
-                          ? SvgPicture.asset(
-                              "assets/icons/Bulk/Ticket Star.svg",
-                              width: 18,
-                            )
-                          : SizedBox.shrink(),
-                      SizedBox(width: wv * 1),
+                      SizedBox(width: wv*2,),
+                      adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
+                     yearsForBadget>=365 ? SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink(),
+                     SizedBox(width: wv*1),
                     ],
                   ),
                 ),
@@ -136,14 +124,8 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Aperçu de votre couverture"),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          /*"Améliorer..."*/
-                          "",
-                          style: TextStyle(color: Colors.brown),
-                        )),
+                    Text(S.of(context).aperuDeVotreCouverture),
+                    TextButton(onPressed: (){}, child: Text(/*"Améliorer..."*/"", style: TextStyle(color: Colors.brown),)),
                   ],
                 ),
               ),
@@ -161,52 +143,24 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                     ]),
                 child: Column(
                   children: [
-                    adherentProvider.getAdherent.adherentPlan == 0
-                        ? Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: wv * 4, vertical: hv * 3),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RichText(
-                                  text: TextSpan(
-                                      text: "Vous bénéficiez d'une ",
-                                      children: [
-                                        TextSpan(
-                                            text: "rémise de 5%",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold)),
-                                        TextSpan(
-                                            text:
-                                                " dans certaines pharmacies & Labos du réseau DanAid")
-                                      ],
-                                      style: TextStyle(
-                                          color: kBlueDeep,
-                                          fontSize: wv * 3.5)),
-                                ),
-                                TextButton(
-                                    onPressed: () => Navigator.pushNamed(
-                                        context, '/compare-plans'),
-                                    style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.white),
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20))),
-                                        shadowColor: MaterialStateProperty.all(
-                                            Colors.grey[50].withOpacity(0.5))),
-                                    child: Text(
-                                        "Obtenez une couverture complète à 70% !",
-                                        style: TextStyle(
-                                            color: kDeepTeal,
-                                            fontSize: wv * 3.5,
-                                            fontWeight: FontWeight.bold))),
-                              ],
-                            ),
-                          )
-                        : Container(),
+                    adherentProvider.getAdherent.adherentPlan == 0 ? Container(
+                      padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
+                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(text: TextSpan(
+                            text: S.of(context).vousBnficiezDune,
+                            children: [
+                              TextSpan(text: S.of(context).rmiseDe5, style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: S.of(context).dansCertainesPharmaciesLabosDuRseauDanaid)
+                            ]
+                          , style: TextStyle(color: kBlueDeep, fontSize: wv*3.5)),
+                          ),
+                          TextButton(onPressed: ()=>Navigator.pushNamed(context, '/compare-plans'),
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50].withOpacity(0.5))),
+                            child: Text(S.of(context).obtenezUneCouvertureComplte70, style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
+                        ],
+                      ),
+                    ) : Container(),
                     Stack(
                       children: [
                         Container(
@@ -257,10 +211,19 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Paramètres du compte",
-                        style: TextStyle(color: kBlueDeep, fontSize: 18)),
-                    SizedBox(
-                      height: hv * 2,
+                    Text(S.of(context).paramtresDuCompte, style: TextStyle(color: kBlueDeep, fontSize: 18)),
+                    SizedBox(height: hv*2,),
+                    adherentProvider.getAdherent != null ? HomePageComponents.accountParameters(
+                      title: S.of(context).domicilePrincipale, 
+                      subtitle: adherentProvider.getAdherent.address != null ? adherentProvider.getAdherent.address : "Non configurée", 
+                      svgIcon: "assets/icons/Two-tone/Home.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
+                    ) : Container(),
+                    HomePageComponents.accountParameters(
+                      title: S.of(context).mesStatistiques, 
+                      subtitle: S.of(context).consulter, 
+                      svgIcon: "assets/icons/Bulk/Graph.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/family-stats-page')
                     ),
                     adherentProvider.getAdherent != null
                         ? HomePageComponents.accountParameters(
@@ -274,37 +237,31 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                                 context, '/adherent-profile-edit'))
                         : Container(),
                     HomePageComponents.accountParameters(
-                        title: "Mes statistiques",
-                        subtitle: "Consulter..",
-                        svgIcon: "assets/icons/Bulk/Graph.svg",
-                        action: () =>
-                            Navigator.pushNamed(context, '/family-stats-page')),
+                      title: S.of(context).pointsEtBadges, 
+                      subtitle: S.of(context).consulterEtUtiliserSesBnfices, 
+                      svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/family-points-page')
+                    ),
                     HomePageComponents.accountParameters(
-                        title: "Points et badges",
-                        subtitle: "Consulter et utiliser ses bénéfices.",
-                        svgIcon: "assets/icons/Bulk/TicketStarLine.svg",
-                        action: () => Navigator.pushNamed(
-                            context, '/family-points-page')),
+                      title: S.of(context).changezDeNiveauDeService, 
+                      subtitle: S.of(context).comparerLesNiveauxEtChoisir, 
+                      svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/compare-plans')
+                    ),
                     HomePageComponents.accountParameters(
-                        title: "Changez de niveau de service",
-                        subtitle: "Comparer les niveaux et choisir",
-                        svgIcon: "assets/icons/Bulk/ShieldLine.svg",
-                        action: () =>
-                            Navigator.pushNamed(context, '/compare-plans')),
+                      title: S.of(context).changezDeMedecinDeFamille, 
+                      subtitle: S.of(context).faitesUneDemande, 
+                      svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
+                      action: callDanAid
+                    ),
                     HomePageComponents.accountParameters(
-                        title: "Changez de medecin de famille",
-                        subtitle: "Faites une demande",
-                        svgIcon: "assets/icons/Bulk/Stethoscope.svg",
-                        action: callDanAid),
-                    HomePageComponents.accountParameters(
-                        title: "Documents DanAid",
-                        subtitle: "contrats, documents, guides",
-                        svgIcon: "assets/icons/Two-tone/Paper.svg",
-                        action: () => Navigator.pushNamed(
-                            context, '/family-documents-page')),
-                    SizedBox(
-                      height: hv * 10,
-                    )
+                      title: S.of(context).documentsDanaid, 
+                      subtitle: S.of(context).contratsDocumentsGuides, 
+                      svgIcon: "assets/icons/Two-tone/Paper.svg", 
+                      action: ()=>Navigator.pushNamed(context, '/family-documents-page')
+                    ),
+
+                    SizedBox(height: hv*10,)
                   ],
                 ),
               ),

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -45,7 +46,7 @@ class _FriendRequestsState extends State<FriendRequests> {
         backgroundColor: kDeepTeal,
         leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
-        title: Text("Demandes d'amitié", style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
+        title: Text(S.of(context).demandesDamiti, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel.userId).snapshots(),
@@ -76,7 +77,7 @@ class _FriendRequestsState extends State<FriendRequests> {
                   SizedBox(height: 50,),
                   Icon(LineIcons.comment, color: whiteColor, size: 85,),
                   SizedBox(height: 5,),
-                  Text("Aucune démande d'amitié", 
+                  Text(S.of(context).aucuneDmandeDamiti, 
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: whiteColor )
                   , textAlign: TextAlign.center,),
                 ],
@@ -93,7 +94,7 @@ class _FriendRequestsState extends State<FriendRequests> {
                         SizedBox(height: 50,),
                         Icon(LineIcons.comment, color: whiteColor, size: 85,),
                         SizedBox(height: 5,),
-                        Text("Aucune démande d'amitié", 
+                        Text(S.of(context).aucuneDmandeDamiti, 
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: whiteColor )
                         , textAlign: TextAlign.center,),
                       ],
@@ -125,6 +126,7 @@ class _FriendRequestsState extends State<FriendRequests> {
           ),
           SizedBox(width: wv*2),
           Expanded(
+            flex: 5,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -138,6 +140,7 @@ class _FriendRequestsState extends State<FriendRequests> {
           ),
           SizedBox(width: wv*1),
           Expanded(
+            flex: 6,
             child: Row(
               children: [
                 Expanded(

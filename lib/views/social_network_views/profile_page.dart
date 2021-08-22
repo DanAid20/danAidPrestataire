@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/conversationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -153,14 +154,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: hv*7,),
-                        Text("Activité", style: TextStyle(color: kDeepTeal, fontSize: 16)),
+                        Text(S.of(context).activit, style: TextStyle(color: kDeepTeal, fontSize: 16)),
                         SizedBox(height: hv*2,),
                         Row(children: [
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Publications", occurence: publications, color: kSouthSeas),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).publications, occurence: publications, color: kSouthSeas),
                           HomePageComponents().verticalDivider(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: comments, color: kSouthSeas),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: comments, color: kSouthSeas),
                           HomePageComponents().verticalDivider(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "  Amis  ", occurence: friends, color: kSouthSeas),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: friends, color: kSouthSeas),
                         ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                       ],
                     ),
@@ -189,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: user.profileType != doctor ? !friendSpinner ? TextButton(
                             child: Text(
-                              targetFriends.contains(userProvider.getUserModel.userId) ? "Rétirer l'ami" : targetFriendRequests.contains(userProvider.getUserModel.userId) ? "Annuler la demande" : "Ajouter un ami", 
+                              targetFriends.contains(userProvider.getUserModel.userId) ? S.of(context).rtirerLami : targetFriendRequests.contains(userProvider.getUserModel.userId) ? S.of(context).annulerLaDemande : S.of(context).ajouterUnAmi, 
                               style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 15.5)
                             ),
                             style: ButtonStyle(
@@ -209,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     targetFriendRequests.remove(userProvider.getUserModel.userId);
                                   });
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Demande annulée")));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).demandeAnnule)));
                               }
                               else {
                                 FirebaseFirestore.instance.collection("USERS").doc(user.userId).set({'friendRequests': FieldValue.arrayUnion([userProvider.getUserModel.userId])}, SetOptions(merge: true)).then((doc){
@@ -219,7 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   });
                                   print(targetFriendRequests.toString());
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Demande envoyée")));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).demandeEnvoye)));
                               }
 
                               if(targetFriends.contains(userProvider.getUserModel.userId)){
@@ -262,10 +263,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 conversation.setConversationModel(conversationModel);
                                 Navigator.pushNamed(context, '/conversation');
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Seuls les amis peuvent converser")));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).seulsLesAmisPeuventConverser)));
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Seuls les amis peuvent converser")));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).seulsLesAmisPeuventConverser)));
                             }
                             
                           },

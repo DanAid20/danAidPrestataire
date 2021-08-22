@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
@@ -364,7 +365,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           ],),
 
                           Column(children: [
-                            Text("Poids", style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
+                            Text(S.of(context).poids, style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
                             Row(children: [
                               Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', color: kDeepTeal, width: wv*8,)),
                               SizedBox(width: wv*2,),
@@ -399,10 +400,10 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                     ),
                     child: ListTile(
                       contentPadding: EdgeInsets.only(left: wv*3),
-                      title: Text("Numéro mobile", style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
+                      title: Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
                       subtitle: Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text(phone == null ? "AUCUN FOURNI" : phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                        child: Text(phone == null ? S.of(context).aucunFourni : phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                       ),
                       trailing: IconButton(
                         enableFeedback: false,
@@ -422,12 +423,12 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*3),
                     child: Column(children: [
-                      Text("Numéro mobile", style: TextStyle(fontSize: wv*4),),
+                      Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
                       SizedBox(height: hv*1,),
                       InternationalPhoneNumberInput(
                         validator: (String phone) {
                           return (phone.isEmpty)
-                              ?  "Entrer un numero de téléphone valide" : null;
+                              ?  S.of(context).entrerUnNumeroDeTlphoneValide : null;
                         },
                         onInputChanged: (PhoneNumber number) {
                           phone = number.phoneNumber;
@@ -459,7 +460,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                     child: Column(
                       children: [
                         Row(children: [
-                          Text("Allergies", style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
+                          Text(S.of(context).allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
                           Expanded(
                             child: Stack(
                               children: [
@@ -516,9 +517,9 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                         ),
 
                         SizedBox(height: hv*5,),
-                        Text("Télécharger les pièces justificatives", style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                        Text(S.of(context).tlchargerLesPicesJustificatives, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                         SizedBox(height: hv*1,),
-                        Text("Scanner les documents justificatifs (CNI, Actes de naissances, etc..)", style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                        Text(S.of(context).scannerLesDocumentsJustificatifsCniActesDeNaissancesEtc, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                         Center(
                           child: InkWell(
                             onTap: (){getDocument(context);},
@@ -529,37 +530,37 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           ),
                         ),
                         FileUploadCard(
-                          title: "Scan de la CNI",
+                          title: S.of(context).scanDeLaCni,
                           state: cniUploaded,
                           loading: cniSpinner,
                           action: () async {await getDocFromPhone('CNI');}
                         ),
                         SizedBox(height: hv*1,),
                         FileUploadCard(
-                          title: "Acte de Naissance *",
+                          title: S.of(context).acteDeNaissance,
                           state: birthCertificateUploaded,
                           loading: birthCertificateSpinner,
                           action: () async {await getDocFromPhone('Acte_De_Naissance');}
                         ),
                         SizedBox(height: hv*1,),
                         FileUploadCard(
-                          title: "Acte de Marriage",
+                          title: S.of(context).acteDeMarriage,
                           state: marriageCertificateUploaded,
                           loading: marriageCertificateSpinner,
                           action: () async {await getDocFromPhone('Acte_De_Marriage');}
                         ),
                         SizedBox(height: hv*1,),
                         FileUploadCard(
-                          title: "Autre pièce justificative",
+                          title: S.of(context).autrePiceJustificative,
                           state: otherFileUploaded,
                           loading: otherFileSpinner,
                           action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
                         ),
                         SizedBox(height: hv*4,),
 
-                        Text("Déclaration", style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold),),
+                        Text(S.of(context).dclaration, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold),),
                         SizedBox(height: hv*0.5,),
-                        Text("Pour les bénéficiaires sans filiation directe", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.w400)),
+                        Text(S.of(context).pourLesBnficiairesSansFiliationDirecte, style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.w400)),
                         SizedBox(height: hv*2,),
                         CheckboxListTile(
                           value: _confirmFamily,
@@ -568,7 +569,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           tristate: false,
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
                           onChanged: (val)=> setState((){_confirmFamily = val;}),
-                          title: Text("Je confirme par la présente que la personne sus-citée est bien à ma charge et réside dans mon domicile", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
+                          title: Text(S.of(context).jeConfirmeParLaPrsenteQueLaPersonneSusciteEst, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
                         ),
                         SizedBox(height: hv*3,),
                       ],
@@ -582,7 +583,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
           Container(
             child: ((_confirmFamily == true))
             ? !buttonLoading ? CustomTextButton(
-              text: "Sauvegarder", 
+              text: S.of(context).sauvegarder, 
               action: (){
                 if(_editBeneficiaryFormKey.currentState.validate()){
                     setState(() {
@@ -625,7 +626,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                 }
               },
             ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
-            : CustomDisabledTextButton(text: "Sauvegarder",),
+            : CustomDisabledTextButton(text: S.of(context).sauvegarder,),
           ) 
         ],
         ),
@@ -636,7 +637,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     Future uploadImageToFirebase(PickedFile file) async {
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -713,14 +714,14 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(Icons.photo_library),
-                    title: new Text('Gallerie'),
+                    title: new Text(S.of(context).gallerie),
                     onTap: () {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(Icons.photo_camera),
-                  title: new Text('Camera'),
+                  title: new Text(S.of(context).camera),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();
@@ -774,7 +775,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     
@@ -798,7 +799,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name ajoutée")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context).ajoute)));
       String url = await storageReference.getDownloadURL();
       if(name == "Acte_De_Marriage"){
         beneficiary.setMarriageCertificateUrl(url);
@@ -878,14 +879,14 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(LineIcons.identificationCard),
-                    title: new Text('CNI (ou passeport)', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    title: new Text(S.of(context).cniOuPasseport, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                     onTap: () {
                       getDocFromPhone("CNI");
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(MdiIcons.babyFaceOutline),
-                  title: new Text('Acte de naissance', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context).acteDeNaissance, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Acte_De_Naissance");
                     Navigator.of(context).pop();
@@ -893,7 +894,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.ring),
-                  title: new Text('Acte de marriage', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context).acteDeMarriage, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Acte_De_Marriage");
                     Navigator.of(context).pop();
@@ -901,7 +902,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.certificate),
-                  title: new Text('Autre pièce justificative', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context).autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Pièce_Justificative_Supplémentaire");
                     Navigator.of(context).pop();

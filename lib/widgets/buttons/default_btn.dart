@@ -1,5 +1,6 @@
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class DefaultBtn extends StatelessWidget {
           vertical: vertical(size: 25)),
       child: RaisedButton(
         child: Text(
-          signText ?? 'Connexion',
+          signText ?? S.of(context).connexion,
           textAlign: TextAlign.center,
           softWrap: true,
           style: TextStyle(

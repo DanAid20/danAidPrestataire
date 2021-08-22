@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/models/postModel.dart';
 import 'package:line_icons/line_icons.dart';
@@ -33,7 +34,7 @@ class _DiscussionsState extends State<Discussions> {
               SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text("Aucune discussion pour le moment", 
+              Text(S.of(context).aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

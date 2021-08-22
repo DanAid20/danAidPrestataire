@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
+  
   String id, userAuthId, userId, userAvatar, title, userName, text, imgUrl;
   Timestamp  datelineDate, dateCreated;
   num amount, amountCollected;
   int postType, likes, comments;
-  List  tags, imgList, likesList, responderList;
+  List  tags, imgList, likesList, responderList, sharesList;
 
-  PostModel({this.id, this.userAuthId, this.comments, this.responderList, this.likesList, this.userId, this.title, this.userAvatar, this.userName, this.text, this.postType, this.likes, this.tags, this.imgUrl, this.imgList, this.datelineDate, this.dateCreated, this.amount, this.amountCollected});
+  PostModel({this.id, this.userAuthId, this.comments, this.responderList, this.sharesList, this.likesList, this.userId, this.title, this.userAvatar, this.userName, this.text, this.postType, this.likes, this.tags, this.imgUrl, this.imgList, this.datelineDate, this.dateCreated, this.amount, this.amountCollected});
 
   factory PostModel.fromDocument(DocumentSnapshot doc){
     return PostModel(
@@ -25,6 +26,7 @@ class PostModel {
       postType: doc.data()["post-type"],
       likesList: doc.data()["likesList"],
       likes: doc.data()["likes"],
+      sharesList: doc.data()["shares"],
       tags: doc.data()["tags"],
       imgList: doc.data()["imgList"],
       amount: doc.data()["amount"],

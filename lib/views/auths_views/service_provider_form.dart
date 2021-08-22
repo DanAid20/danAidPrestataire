@@ -139,15 +139,15 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                     items: [
                                       DropdownMenuItem(
                                         child: Text(S.of(context).hpital, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        value: S.of(context).hpital,
+                                        value: "Hôpital",
                                       ),
                                       DropdownMenuItem(
                                         child: Text(S.of(context).pharmacie, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: S.of(context).pharmacie,
+                                        value: "Pharmacie",
                                       ),
                                       DropdownMenuItem(
                                         child: Text(S.of(context).laboratoire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: S.of(context).laboratoire,
+                                        value: "Laboratoire",
                                       ),
                                     ],
                                     onChanged: (value) {

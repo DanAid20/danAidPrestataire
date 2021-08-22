@@ -3,6 +3,7 @@ import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -71,8 +72,8 @@ class _ComparePlansState extends State<ComparePlans> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text("Comparer les services", style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text("Modifier ma couverture",
+            Text(S.of(context).comparerLesServices, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).modifierMaCouverture,
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
@@ -93,116 +94,167 @@ class _ComparePlansState extends State<ComparePlans> {
                   : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
                     : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
                       : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
-                actionLabel: "Comparer Les Services",
-                subtitle: "Vous êtes couverts jusqu'au $limitString",
+                actionLabel: S.of(context).comparerLesServices,
+                subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
                 noAction: true
               ),
             ),
             SizedBox(height: hv*1,),
 
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              //physics: BouncingScrollPhysics(),
-              child: currentPlan != null && state != null ? Table(
-                defaultColumnWidth: FixedColumnWidth(wv*30),
-                columnWidths: <int, TableColumnWidth>{0 : FixedColumnWidth(wv*45)},
-                children: [
-                  TableRow(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: wv*2),
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(color: kDeepTeal, fontSize: wv*4),
-                            children: [
-                              TextSpan(text: plans[state].label+'\n', style: TextStyle(fontSize: wv*6)),
-                              TextSpan(text: plans[state].monthlyAmount.toString(), style: TextStyle(fontSize: wv*8)),
-                              TextSpan(text: " Cfa\n"),
-                              TextSpan(text: "par famille / Mois"),
-                            ]
-                          )
+            Row(
+              children: [
+                currentPlan != null && state != null ? Table(
+                  defaultColumnWidth: FixedColumnWidth(wv*30),
+                  columnWidths: <int, TableColumnWidth>{0 : FixedColumnWidth(200)},
+                  children: [
+                    TableRow(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: wv*2),
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: kDeepTeal, fontSize: 16),
+                              children: [
+                                TextSpan(text: plans[state].label+'\n', style: TextStyle(fontSize: 30)),
+                                TextSpan(text: plans[state].monthlyAmount.toString(), style: TextStyle(fontSize: 25)),
+                                TextSpan(text: S.of(context).cfan),
+                                TextSpan(text: S.of(context).parFamilleMois),
+                              ]
+                            )
+                          ),
+                        )
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: S.of(context).couvertureSant, center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: S.of(context).plafondAnnuel, center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: "Prêt santé", center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: "taux d'intérêt", center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: "Médecin de famille gratuit", center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: "Réseau d'entraide", center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: "Gagnez des points", subtitle: "1 pt = 0,5 Cfa", center: false)
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        defaultCell(text: "Couverture familiale", subtitle: "Jusqu'a 5 personnes", center: false)
+                      ]
+                    ),
+                  ],
+                ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    //physics: BouncingScrollPhysics(),
+                    child: currentPlan != null && state != null ? Table(
+                      defaultColumnWidth: FixedColumnWidth(wv*30),
+                      children: [
+                        TableRow(
+                          children: [
+                            headerCell(text: S.of(context).niveau0, icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
+                            headerCell(text: S.of(context).niveauI, icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
+                            headerCell(text: S.of(context).niveauIi, icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
+                            headerCell(text: S.of(context).niveauIii, icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
+                          ]
                         ),
-                      ),
-                      headerCell(text: "Niveau 0", icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
-                      headerCell(text: "Niveau I", icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
-                      headerCell(text: "Niveau II", icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
-                      headerCell(text: "Niveau III", icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
-                    ]
+                        TableRow(
+                          decoration: BoxDecoration(color: whiteColor),
+                          children: [
+                            defaultCell(text: plans[0].coveragePercentage.toString()+"%", fontSize: 30, textColor: kDeepTeal, isActive: state == isDecouverte),
+                            defaultCell(text: plans[1].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcces),
+                            defaultCell(text: plans[2].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAssist),
+                            defaultCell(text: plans[3].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          decoration: BoxDecoration(color: whiteColor),
+                          children: [
+                            defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
+                            defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
+                            defaultCell(text: plans[3].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          decoration: BoxDecoration(color: whiteColor),
+                          children: [
+                            defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
+                            defaultCell(text: plans[1].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: plans[2].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
+                            defaultCell(text: plans[3].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          decoration: BoxDecoration(color: whiteColor),
+                          children: [
+                            defaultCell(text: (plans[0].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isDecouverte),
+                            defaultCell(text: (plans[1].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: (plans[2].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAssist),
+                            defaultCell(text: (plans[3].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          children: [
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[0].familyDoctorIsFree ? yes : no, height: 30, color: plans[0].familyDoctorIsFree ? good : bad)), isActive: state == isDecouverte),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1].familyDoctorIsFree ? yes : no, height: 30, color: plans[1].familyDoctorIsFree ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[2].familyDoctorIsFree ? yes : no, height: 30, color: plans[2].familyDoctorIsFree ? good : bad)), isActive: state == isAssist),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[3].familyDoctorIsFree ? yes : no, height: 30, color: plans[3].familyDoctorIsFree ? good : bad)), isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          children: [
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[0].socialNetworkEnable ? yes : no, height: 30, color: plans[0].socialNetworkEnable ? good : bad)), isActive: state == isDecouverte),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1].socialNetworkEnable ? yes : no, height: 30, color: plans[1].socialNetworkEnable ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[2].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isAssist),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[3].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          children: [
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[0].canWinPoints ? yes : no, height: 30, color: plans[0].canWinPoints ? good : bad)), isActive: state == isDecouverte),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1].canWinPoints ? yes : no, height: 30, color: plans[1].canWinPoints ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[2].canWinPoints ? yes : no, height: 30, color: plans[2].canWinPoints ? good : bad)), isActive: state == isAssist),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[3].canWinPoints ? yes : no, height: 30, color: plans[3].canWinPoints ? good : bad)), isActive: state == isSerenity)
+                          ]
+                        ),
+                        TableRow(
+                          children: [
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[0].familyCoverage ? yes : no, height: 30, color: plans[0].familyCoverage ? good : bad)), isActive: state == isDecouverte),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[1].familyCoverage ? yes : no, height: 30, color: plans[1].familyCoverage ? good : bad)), isActive: state == isAcces),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[2].familyCoverage ? yes : no, height: 30, color: plans[2].familyCoverage ? good : bad)), isActive: state == isAssist),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[3].familyCoverage ? yes : no, height: 30, color: plans[3].familyCoverage ? good : bad)), isActive: state == isSerenity)
+                          ]
+                        ),
+                      ],
+                    ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
                   ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Couverture santé", center: false),
-                      defaultCell(text: plans[0].coveragePercentage.toString()+"%", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isDecouverte),
-                      defaultCell(text: plans[1].coveragePercentage.toString()+" %", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isAcces),
-                      defaultCell(text: plans[2].coveragePercentage.toString()+" %", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isAssist),
-                      defaultCell(text: plans[3].coveragePercentage.toString()+" %", fontSize: wv*7.5, textColor: kDeepTeal, isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Plafond Annuel", center: false),
-                      defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isDecouverte),
-                      defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAcces),
-                      defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAssist),
-                      defaultCell(text: plans[3].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Prêt santé", center: false),
-                      defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isDecouverte),
-                      defaultCell(text: plans[1].maxCreditAmount.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAcces),
-                      defaultCell(text: plans[2].maxCreditAmount.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isAssist),
-                      defaultCell(text: plans[3].maxCreditAmount.toString()+"Cfa", fontSize: wv*3.7, isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "taux d'intérêt", center: false),
-                      defaultCell(text: (plans[0].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isDecouverte),
-                      defaultCell(text: (plans[1].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isAcces),
-                      defaultCell(text: (plans[2].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isAssist),
-                      defaultCell(text: (plans[3].creditRate*100).toString()+"%", fontSize: wv*3.7, isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Médecin de famille gratuit", center: false),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[0].familyDoctorIsFree ? yes : no, height: 30, color: plans[0].familyDoctorIsFree ? good : bad)), isActive: state == isDecouverte),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[1].familyDoctorIsFree ? yes : no, height: 30, color: plans[1].familyDoctorIsFree ? good : bad)), isActive: state == isAcces),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[2].familyDoctorIsFree ? yes : no, height: 30, color: plans[2].familyDoctorIsFree ? good : bad)), isActive: state == isAssist),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[3].familyDoctorIsFree ? yes : no, height: 30, color: plans[3].familyDoctorIsFree ? good : bad)), isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Réseau d'entraide", center: false),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[0].socialNetworkEnable ? yes : no, height: 30, color: plans[0].socialNetworkEnable ? good : bad)), isActive: state == isDecouverte),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[1].socialNetworkEnable ? yes : no, height: 30, color: plans[1].socialNetworkEnable ? good : bad)), isActive: state == isAcces),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[2].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isAssist),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[3].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Gagnez des points", subtitle: "1 pt = 0,5 Cfa", center: false),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[0].canWinPoints ? yes : no, height: 30, color: plans[0].canWinPoints ? good : bad)), isActive: state == isDecouverte),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[1].canWinPoints ? yes : no, height: 30, color: plans[1].canWinPoints ? good : bad)), isActive: state == isAcces),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[2].canWinPoints ? yes : no, height: 30, color: plans[2].canWinPoints ? good : bad)), isActive: state == isAssist),
-                      defaultCell(content: Center(child: SvgPicture.asset(plans[3].canWinPoints ? yes : no, height: 30, color: plans[3].canWinPoints ? good : bad)), isActive: state == isSerenity)
-                    ]
-                  ),
-                  TableRow(
-                    children: [
-                      defaultCell(text: "Couverture familiale", subtitle: "Jusqu'a 5 personnes", center: false),
-                      bottomCell(content: Center(child: SvgPicture.asset(plans[0].familyCoverage ? yes : no, height: 30, color: plans[0].familyCoverage ? good : bad)), isActive: state == isDecouverte),
-                      bottomCell(content: Center(child: SvgPicture.asset(plans[1].familyCoverage ? yes : no, height: 30, color: plans[1].familyCoverage ? good : bad)), isActive: state == isAcces),
-                      bottomCell(content: Center(child: SvgPicture.asset(plans[2].familyCoverage ? yes : no, height: 30, color: plans[2].familyCoverage ? good : bad)), isActive: state == isAssist),
-                      bottomCell(content: Center(child: SvgPicture.asset(plans[3].familyCoverage ? yes : no, height: 30, color: plans[3].familyCoverage ? good : bad)), isActive: state == isSerenity)
-                    ]
-                  ),
-                ],
-              ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                ),
+              ],
             ),
 
             Container(
@@ -266,7 +318,7 @@ class _ComparePlansState extends State<ComparePlans> {
 
   Widget defaultCell({String text, Widget content, String subtitle, double fontSize = 16, bool isActive = false, bool center = true, Color textColor = kPrimaryColor}){
     return Container(
-      constraints: BoxConstraints(minHeight: hv*7),
+      height: 50,
       padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: 5),
       color: isActive ? kSouthSeas.withOpacity(0.7) : whiteColor,
       child: content == null ? Column(
@@ -281,7 +333,7 @@ class _ComparePlansState extends State<ComparePlans> {
 
   Widget headerCell({Widget content, String text, String icon, double fontSize = 20, bool isActive = false}){
     return Container(
-      constraints: BoxConstraints(minHeight: hv*12),
+      height: 110,
       padding: EdgeInsets.only(top: 15, bottom: 5),
       decoration: BoxDecoration(
         color: isActive ? kSouthSeas.withOpacity(0.7) : Colors.transparent,

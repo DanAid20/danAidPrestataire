@@ -62,13 +62,24 @@ navigateTo({BuildContext context, String routeName, Object args}) => Navigator.o
 navigateReplaceTo({BuildContext context, String routeName, Object args}) => Navigator.of(context).pushReplacementNamed(routeName, arguments: args);
 
 //Profile Types
-String adherent = "ADHERENT";
-String doctor = "MEDECIN";
-String serviceProvider = "PRESTATAIRE";
+const String adherent = "ADHERENT";
+const String doctor = "MEDECIN";
+const String serviceProvider = "PRESTATAIRE";
 
 // consultation Types 
 enum ConsultationTypes { Encabinet, Videos, Message }
 
 //Hover action Ids
-String transferOrangeMoney = "d68d2e79";
-String transferMTNMobileMoney = "e33f1918";
+const String transferOrangeMoney = "d68d2e79";
+const String transferMTNMobileMoney = "e33f1918";
+
+//Use case service types
+const  String consultation = "CONSULTATION";
+const  String pharmacy = "PHARMACY";
+const  String labo = "LABO";
+const  String ambulance = "AMBULANCE";
+const  String hospitalization = "HOSPITALIZATION";
+
+//Agora IDs
+const agoraAppId = "e5c433dd91e64cebb55005e05ed16087";
+const agoraAppCertificate = "cebf5d0706cc4d4f88139780b230d9e5";

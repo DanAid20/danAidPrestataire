@@ -6,6 +6,7 @@ import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/create_group.dart';
@@ -55,7 +56,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               child: DoctorInfoCard(
                 avatarUrl: doctor.avatarUrl,
                 name: doctor.cniName,
-                title: "Medecin de Famille, " + doctor.field,
+                title: S.of(context).medecinDeFamille + doctor.field,
                 speciality: doctor.speciality,
                 teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                 consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -83,7 +84,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: kSouthSeas.withOpacity(0.7), size: 85,),
               SizedBox(height: 5,),
-              Text("Aucun médecin avec pour nom :\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunMdecinAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: kSouthSeas )
               , textAlign: TextAlign.center,),
             ],
@@ -148,7 +149,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
                         borderSide:
                             BorderSide(color: Colors.grey.withOpacity(0.0)),
                         borderRadius: BorderRadius.circular(10)),
-                    hintText: "Entrez le nom..",
+                    hintText: S.of(context).entrezLeNom,
                     filled: true,
                     contentPadding:
                         EdgeInsets.only(bottom: 12, left: 15, right: 15),
@@ -194,7 +195,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               ),
             ),
             Text(
-              "Recherche de médecins",
+              S.of(context).rechercheDeMdecins,
               style: TextStyle(fontSize: 17, color: kSouthSeas, fontWeight: FontWeight.w900),
             )
           ],

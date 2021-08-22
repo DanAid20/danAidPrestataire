@@ -8,6 +8,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -66,7 +67,8 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
             child: Column(
               children: [
                 DanAidDefaultHeader(
-                  title: Text("Choisir un niveau de services", style: TextStyle(color: Colors.white, fontSize: wv*5, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
+                  title: Text(S.of(context).choisirUnNiveauDeServices
+                    , style: TextStyle(color: Colors.white, fontSize: wv*5, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
                 ),
                 Expanded(
                   child: Container(
@@ -84,12 +86,12 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
                             Widget content = PackageCard(
                               mPackage: plan.label,
                               mPackageAmount: plan.monthlyAmount.toString(),
-                              mPackageContent: "Couverture santé à ${plan.coveragePercentage}%",
-                              mPackageContent1: "Médécin de famille",
-                              mPackageContent2: "Plafond de ${plan.annualLimit} XAF",
+                              mPackageContent: S.of(context).couvertureSant+" ${plan.coveragePercentage}%",
+                              mPackageContent1: S.of(context).mdcinDeFamille,
+                              mPackageContent2: S.of(context).plafondDe+" ${plan.annualLimit} XAF",
                               mSize: _mSize,
                               titleColor: plan.planNumber == 0 ? kGold : kSouthSeas,
-                              content: "Niveau ${plan.label}\n+ couverture à ${plan.coveragePercentage}% des frais\n+ Plafond de soins à ${plan.annualLimit}Cfa/an",
+                              content: S.of(context).niveau+" ${plan.label}\n+ "+S.of(context).couverture+" ${plan.coveragePercentage}%"+S.of(context).desFraisnPlafondDeSoins+" ${plan.annualLimit}Cfa/an",
                               level: plan.planNumber.toString(),
                               iconUrl: plan.planNumber == 0 ? 'assets/icons/Bulk/HeartOutline.svg' : plan.planNumber == 1 ? 'assets/icons/Bulk/ShieldAcces.svg' : plan.planNumber == 2 ? 'assets/icons/Bulk/ShieldAssist.svg' :plan.planNumber == 3 ? 'assets/icons/Bulk/ShieldSerenity.svg' : 'assets/icons/Bulk/Shield Done.svg',
                               action: (){
@@ -177,12 +179,12 @@ class PackageCard extends StatelessWidget {
             ],),
           ),
           SizedBox(height: 5,),
-          Align(child: Text("  Niveau "+level, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
+          Align(child: Text(S.of(context).niveau+level, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
           
           SizedBox(height: hv*2,),
           RichText(text: TextSpan(text: level == "0" ? "00" : _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: wv*15))),
           SizedBox(height: hv*0.25),
-          Text("par famille / Mois", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: wv*4),),
+          Text(S.of(context).parFamilleMois, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: wv*4),),
           Expanded(
             child: SingleChildScrollView(
               physics: BouncingScrollPhysics(),
@@ -200,7 +202,7 @@ class PackageCard extends StatelessWidget {
           SizedBox(height: hv*1,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: wv*3),
-            child: CustomTextButton(text: "Commencer", color: whiteColor, textColor: kPrimaryColor, action: action,),
+            child: CustomTextButton(text: S.of(context).commencer, color: whiteColor, textColor: kPrimaryColor, action: action,),
           ),
           SizedBox(height: hv*1,)
         ],

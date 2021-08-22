@@ -1,3 +1,4 @@
+import 'package:danaid/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 class Loader extends StatelessWidget {
@@ -6,7 +7,7 @@ class Loader extends StatelessWidget {
     return Column(
       children: [
         Image.asset("assets/images/loading.gif"),
-        Text("Please wait..."),
+        Text(S.of(context).pleaseWait),
       ],
     );
   }

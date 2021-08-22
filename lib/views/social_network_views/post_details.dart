@@ -4,7 +4,9 @@ import 'package:danaid/core/models/postModel.dart';
 import 'package:danaid/core/models/commentModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
+import 'package:danaid/core/services/dynamicLinkHandler.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
@@ -13,12 +15,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class PostDetails extends StatefulWidget {
 
   final PostModel post;
+  final String groupId;
 
-  const PostDetails({ Key key, this.post }) : super(key: key);
+  const PostDetails({ Key key, this.post, this.groupId }) : super(key: key);
 
   @override
   _PostDetailsState createState() => _PostDetailsState();
@@ -55,6 +59,11 @@ class _PostDetailsState extends State<PostDetails> {
   Widget build(BuildContext context) {
 
     UserProvider userProvider = Provider.of<UserProvider>(context);
+    List likes = (widget.post.likesList != null) ? widget.post.likesList : [];
+
+    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(widget.post.id);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS_GROUPS").doc(widget.post.id);
+    DocumentReference docRef = widget.groupId == null ? normalRef : groupRef;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -127,7 +136,7 @@ class _PostDetailsState extends State<PostDetails> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(widget.post.userName, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w900),),
-                                      Text("Il ya " + Algorithms.getTimeElapsed(date: widget.post.dateCreated.toDate()), style: TextStyle(fontSize: 12, color: kTextBlue)),
+                                      Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: widget.post.dateCreated.toDate()), style: TextStyle(fontSize: 12, color: kTextBlue)),
                                     ],
                                   ),
                                 ),
@@ -193,18 +202,26 @@ class _PostDetailsState extends State<PostDetails> {
                                   child: Row(children: [
                                     SvgPicture.asset('assets/icons/Bulk/Chat.svg', width: 25),
                                     SizedBox(width: wv*1.5),
-                                    Text("Commenter", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
+                                    Text(S.of(context).commenter, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
                                   ],),
                                 ),
                               ),
                               SizedBox(width: wv*3),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                                child: Row(children: [
-                                  SvgPicture.asset('assets/icons/Bulk/Send.svg', width: 25),
-                                  SizedBox(width: wv*1.5),
-                                  Text("Partager", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
-                                ],),
+                              InkWell(
+                                onTap: () async {
+                                  var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: widget.post.id, isGroup: widget.groupId == null ? '0' : '1');
+                                  Share.share(link.toString(), subject: widget.post.title != null ? widget.post.title : "New Post on DanAid").then((value) {
+                                    print("Done !");
+                                  });
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                                  child: Row(children: [
+                                    SvgPicture.asset('assets/icons/Bulk/Send.svg', width: 25),
+                                    SizedBox(width: wv*1.5),
+                                    Text(S.of(context).partager, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kTextBlue))
+                                  ],),
+                                ),
                               )
                             ],
                           ),
@@ -215,7 +232,7 @@ class _PostDetailsState extends State<PostDetails> {
                       SizedBox(height: hv*3,),
 
                       StreamBuilder(
-                        stream: FirebaseFirestore.instance.collection("POSTS").doc(widget.post.id).collection("COMMENTAIRES").snapshots(),
+                        stream: docRef.collection("COMMENTAIRES").snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Center(
@@ -224,7 +241,7 @@ class _PostDetailsState extends State<PostDetails> {
                           }
                           List<CommentBox> comments = [];
                           for(int i = 0; i < snapshot.data.docs.length; i++){
-                            comments.add(CommentBox(comment: CommentModel.fromDocument(snapshot.data.docs[i]),));
+                            comments.add(CommentBox(comment: CommentModel.fromDocument(snapshot.data.docs[i]), groupId: widget.groupId,));
                           }
                           return Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -279,7 +296,7 @@ class _PostDetailsState extends State<PostDetails> {
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(width: 1, color: Colors.white.withOpacity(0.35)),
                                 borderRadius: BorderRadius.all(Radius.circular(20))),
-                            hintText: "Ecrire votre commentaire",
+                            hintText: S.of(context).ecrireVotreCommentaire,
                             hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                           ),
                         ),
@@ -340,23 +357,28 @@ class _PostDetailsState extends State<PostDetails> {
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
 
+    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(widget.post.id);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS_GROUPS").doc(widget.post.id);
+    DocumentReference docRef = widget.groupId == null ? normalRef : groupRef;
+
     if (msg != "") {
       _commentController.clear();
-      var docRef = FirebaseFirestore.instance.collection("POSTS").doc(widget.post.id).collection("COMMENTAIRES").doc(DateTime.now().millisecondsSinceEpoch.toString());
+      var commentRef = docRef.collection("COMMENTAIRES").doc();
       /*setState(() {
         lastMsgFrom = conversation.getConversation.userId;
       });*/
       FirebaseFirestore.instance.runTransaction((transaction) async {
-        await FirebaseFirestore.instance.collection("POSTS").doc(widget.post.id).set({
+        await docRef.set({
           "comments": FieldValue.increment(1),
           "responderList": FieldValue.arrayUnion([userProvider.getUserModel.userId])
           }, SetOptions(merge: true));
 
         await FirebaseFirestore.instance.collection("USERS").doc(widget.post.userId).set({
-          "comments": FieldValue.increment(1)
+          "comments": FieldValue.increment(1),
+          "points": FieldValue.increment(5)
           }, SetOptions(merge: true));
         
-          transaction.set(docRef, {
+          transaction.set(commentRef, {
             "postId": widget.post.id,
             "responderId": userProvider.getUserModel.userId,
             "responder": FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId),
@@ -374,7 +396,7 @@ class _PostDetailsState extends State<PostDetails> {
           replyIsSticker = false;
           replyIsText = false;
         });*/
-      });
+      }).then((value) {userProvider.modifyPoints(5); userProvider.newComment();});
       //listScrollController.animateTo(0.0, duration: Duration(microseconds: 300), curve: Curves.easeOut);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le message est vide'),));
@@ -385,8 +407,9 @@ class _PostDetailsState extends State<PostDetails> {
 class CommentBox extends StatelessWidget {
 
   final CommentModel comment;
+  final String groupId;
 
-  const CommentBox({ Key key, this.comment }) : super(key: key);
+  const CommentBox({ Key key, this.comment, this.groupId }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -394,6 +417,10 @@ class CommentBox extends StatelessWidget {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     bool isLocal = comment.userId == userProvider.getUserModel.userId;
     bool isDoctor = comment.userProfileType == doctor;
+
+    DocumentReference normalRef = FirebaseFirestore.instance.collection('POSTS').doc(comment.postId);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(groupId).collection("POSTS_GROUPS").doc(comment.postId);
+    DocumentReference docRef = groupId == null ? normalRef : groupRef;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -421,7 +448,7 @@ class CommentBox extends StatelessWidget {
                       SvgPicture.asset('assets/icons/Bulk/Heart.svg', color: kSouthSeas, width: 20),
                       SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg", color: kSouthSeas, width: 20),
                       SizedBox(width: wv*2,),
-                      Text("Médecin", style: TextStyle(fontSize: 13, color: kTextBlue, fontWeight: FontWeight.bold)),
+                      Text(S.of(context).mdecin, style: TextStyle(fontSize: 13, color: kTextBlue, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -446,7 +473,7 @@ class CommentBox extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Il y'a " + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
+                    Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
                     SizedBox(width: wv*5,),
                     Row(
                       children: [
@@ -457,19 +484,19 @@ class CommentBox extends StatelessWidget {
                         InkWell(
                           onTap: (){
                             if(!comment.likesList.contains(userProvider.getUserModel.userId)){
-                              FirebaseFirestore.instance.collection('POSTS').doc(comment.postId).collection('COMMENTAIRES').doc(comment.id).set({
+                              docRef.collection('COMMENTAIRES').doc(comment.id).set({
                                 "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
                               }, SetOptions(merge: true));
                             } else {
                               print("dislike");
-                              FirebaseFirestore.instance.collection('POSTS').doc(comment.postId).collection('COMMENTAIRES').doc(comment.id).set({
+                              docRef.collection('COMMENTAIRES').doc(comment.id).set({
                                 "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
                               }, SetOptions(merge: true));
                             }
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                            child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? "Annuler" : "Aimer", style: TextStyle(fontSize: 12)),
+                            child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? S.of(context).annuler : S.of(context).aimer, style: TextStyle(fontSize: 12)),
                           ),
                         ),
                       ],

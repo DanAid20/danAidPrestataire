@@ -96,8 +96,8 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   bool imageSpinner = false;
   bool positionSpinner = false;
 
-  String _category;
-  String _type;
+  String _category= 'PRIVATE';
+  String _type='Généraliste';
 
   bool mondayToFridaySwitched = true;
   bool saturdaySwitched = false;
@@ -711,13 +711,17 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                       child: Text(S.of(context).publique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                       value: S.of(context).public,
                                     ),
+                                    // DropdownMenuItem(
+                                    //   child: Text(S.of(context).confessionel, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    //   value: S.of(context).confessionel.toUpperCase(),
+                                    // ),
                                     DropdownMenuItem(
-                                      child: Text(S.of(context).confessionel, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: S.of(context).confessionel.toUpperCase(),
+                                      child: Text(S.of(context).private, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      value: S.of(context).private,
                                     ),
                                     DropdownMenuItem(
-                                      child: Text(S.of(context).priv, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: S.of(context).private,
+                                      child: Text('Confessionel', style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      value: 'Confessionel',
                                     ),
                                   ],
                                   onChanged: (value) {

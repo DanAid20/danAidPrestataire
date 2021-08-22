@@ -87,13 +87,14 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
    
     return WillPopScope(
       onWillPop: () async {
-        controller.setIndex(1);
+        //controller.setIndex(1);
+        Navigator.pop(context);
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: isPrestataire? kGold:kPrimaryColor,
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> controller.setIndex(1)),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: (){/*controller.setIndex(1)*/Navigator.pop(context);}),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -153,7 +154,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                   padding: const EdgeInsets.all(10.0),
                   child:Container(
                     width: 105.h,
-                    child: TextButton(
+                    child: userProvider.getUserModel.profileType == serviceProvider ? TextButton(
                                   onPressed: ()=>{
                                      Navigator.pushNamed(context, '/serviceprovider-profile-edit')
                                   }, 
@@ -171,7 +172,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                     shadowColor: MaterialStateProperty.all(Colors.grey),
                                     elevation: MaterialStateProperty.all(3)
                                   ),
-                                ),
+                                ) : Container(),
                   ),
                 )),
 

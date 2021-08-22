@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/postModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/drawer.dart';
@@ -42,13 +43,13 @@ class _EditPostState extends State<EditPost> {
 
   String currentSymptomText = "";
   List<String> suggestions = [
-    "Santé",
-    "Politique",
-    "Médicament",
-    "Détente",
-    "Jeux",
-    "DanAid",
-    "Soins"
+    S.current.sant,
+    S.current.politique,
+    S.current.mdicament,
+    S.current.dtente,
+    S.current.jeux,
+    S.current.danaid,
+    S.current.soins
   ];
   List<String> tags = [];
 
@@ -102,7 +103,7 @@ class _EditPostState extends State<EditPost> {
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 25, color: Colors.grey[600],), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
-        title: Text("Edition du Post", style: TextStyle(color: kDeepTeal, fontSize: 17),),
+        title: Text(S.of(context).editionDuPost, style: TextStyle(color: kDeepTeal, fontSize: 17),),
         actions: [IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
       ),
       endDrawer: DefaultDrawer(
@@ -136,7 +137,7 @@ class _EditPostState extends State<EditPost> {
                     ) : Container(),
 
                     CustomTextField(
-                      label: " Titre",
+                      label: S.of(context).titre,
                       fillColor: Colors.grey[200],
                       labelColor: kDeepTeal,
                       noPadding: true,
@@ -164,7 +165,7 @@ class _EditPostState extends State<EditPost> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(width: 1, color: Colors.grey[300]),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
-                        hintText: "Que voulez vous dire...",
+                        hintText: S.of(context).queVoulezVousDire,
                         hintStyle: TextStyle(color: kDeepTeal),
                       ),
                     ),
@@ -177,7 +178,7 @@ class _EditPostState extends State<EditPost> {
                           children: [
                             SizedBox(height: hv*2.5,),
                             Row(children: [
-                            Text("Tags", style: TextStyle(fontSize: 16, color: kTextBlue),), SizedBox(width: wv*3,),
+                            Text(S.of(context).tags, style: TextStyle(fontSize: 16, color: kTextBlue),), SizedBox(width: wv*3,),
                             Expanded(
                               child: Stack(
                                 children: [
@@ -245,7 +246,7 @@ class _EditPostState extends State<EditPost> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("   Remplacer", style: TextStyle(color: kDeepTeal, fontSize: 20)),
+              Text(S.of(context).remplacer, style: TextStyle(color: kDeepTeal, fontSize: 20)),
               SizedBox(height: hv*1,),
               Row(
                 children: [
@@ -253,32 +254,32 @@ class _EditPostState extends State<EditPost> {
                   !imageSpinner ? SocialNetworkMiniComponents.getPublicationIconButton(
                     heroTag: "image",
                     iconPath: 'assets/icons/Two-tone/Camera.svg',
-                    title: "Photo",
+                    title: S.of(context).photo,
                     action: (){FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera);}
                   ) : Loaders().buttonLoader(kDeepTeal),
                   SocialNetworkMiniComponents.getPublicationIconButton(
                     heroTag: "document",
                     iconPath: 'assets/icons/Two-tone/Document.svg',
-                    title: "Doc",
+                    title: S.of(context).doc,
                     action: (){}
                   ),
                   SocialNetworkMiniComponents.getPublicationIconButton(
                     heroTag: "video",
                     iconPath: 'assets/icons/Bulk/Video.svg',
-                    title: "Vidéo",
+                    title: S.of(context).vido,
                     action: (){}
                   ),
                   SocialNetworkMiniComponents.getPublicationIconButton(
                     heroTag: "voice",
                     iconPath: 'assets/icons/Two-tone/Voice.svg',
-                    title: "Audio",
+                    title: S.of(context).audio,
                     action: (){}
                   ),
                 ],
               ),
               SizedBox(height: hv*0.5,),
               CustomTextButton(
-                text: "Sauvegarder",
+                text: S.of(context).sauvegarder,
                 isLoading: publishLoading,
                 color: kDeepTeal,
                 action: () async {
@@ -329,7 +330,7 @@ class _EditPostState extends State<EditPost> {
                       setState(() {
                         publishLoading = false;
                       });
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Post Modifié")));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postModifi)));
                       Navigator.pop(context);
                     }).catchError((e){
                       print(e.toString());
@@ -339,7 +340,7 @@ class _EditPostState extends State<EditPost> {
                     setState(() {
                       publishLoading = false;
                     });
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Post Modifié")));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postModifi)));
                     Navigator.pop(context);
                   }
 
@@ -382,7 +383,7 @@ class _EditPostState extends State<EditPost> {
         imageFileAvatar = File(pickedFile.path);
         imageSpinner = true;
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       }
       imageSpinner = false;
     });
@@ -398,7 +399,7 @@ class _EditPostState extends State<EditPost> {
         imageFileAvatar = File(pickedFile.path);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
     }
     setState(() {
       imageSpinner = false;

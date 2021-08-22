@@ -4,6 +4,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/models/productModel.dart';
 import 'package:danaid/core/utils/config_size.dart';
+import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/adhrent_views/family_badge_page.dart';
 import 'package:danaid/views/adhrent_views/productDetails.dart';
@@ -48,7 +49,7 @@ class _FamilyPointsPageState extends State<FamilyPointsPage> {
             ),
             title: Column(crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Démarrer", style: TextStyle(color: currentPage == 0 ? kDeepTeal : whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+                Text(S.of(context).dmarrer, style: TextStyle(color: currentPage == 0 ? kDeepTeal : whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
                 Text(DateTime.now().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(DateTime.now())+" "+ DateTime.now().year.toString(), style: TextStyle(color: currentPage == 0 ? kDeepTeal : kSouthSeas, fontSize: wv*3.8, fontWeight: FontWeight.w300),),
               ],
             ),
@@ -128,7 +129,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
 
-    List visits = userProvider.getUserModel.visits;
+    List visits = userProvider.getUserModel.visits == null ? [] : userProvider.getUserModel.visits;
 
     int totalPoints = userProvider.getUserModel.points;
 
