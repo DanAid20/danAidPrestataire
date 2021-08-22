@@ -30,29 +30,6 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
     launch(url);
   }
 
-  static const platform = const MethodChannel('danaidproject.sendmoney');
-  String receivedString = "";
-
-  Future<void> callNativeFunction() async {
-    String amount = "60", data = "", phoneNumber = "650913861";
-
-    //moneyTransferMTNAction, moneyTransferOrangeAction
-    try {
-      final String temp = await platform.invokeMethod(
-          'moneyTransferMTNAction',
-          {"amount": amount, "phoneNumber": phoneNumber});
-      data = temp;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(data),
-        duration: Duration(seconds: (50)),
-      ));
-    } on PlatformException catch (e) {
-      data = "Failed";
-    }
-    setState(() {
-      receivedString = data;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +64,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 IconButton(
                     icon: SvgPicture.asset('assets/icons/Bulk/Setting.svg',
                         width: wv * 10),
-                    onPressed: callNativeFunction),
+                    onPressed: (){}),
                 Spacer(),
                 Container(
                   child: Row(

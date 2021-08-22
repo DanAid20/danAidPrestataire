@@ -1192,7 +1192,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     "start-time": consultationStartDate,
                     "end-time": consultationEndDate,
                     "price": tarif,
-                    "announced": false,
+                    "announced": purpose == "consult-today"? true : false,
                     "avatarUrl": beneficiary.getBeneficiary.avatarUrl,
                     "birthDate": beneficiary.getBeneficiary.birthDate,
                     "username":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,

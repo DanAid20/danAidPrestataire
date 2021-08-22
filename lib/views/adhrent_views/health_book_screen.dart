@@ -130,12 +130,13 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
               TextButton(
                 child: Text(S.of(context).seDconnecter),
                 onPressed: () async {
+                  print("Disconnectiong..");
                   AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
                   ServiceProviderModelProvider sp = Provider.of<ServiceProviderModelProvider>(context, listen: false);
                   DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
                   UserProvider user = Provider.of<UserProvider>(context, listen: false);
                   await FirebaseMessaging.instance.unsubscribeFromTopic(FirebaseAuth.instance.currentUser.uid);
-                  await FirebaseMessaging.instance.unsubscribeFromTopic(user.getUserId.substring(1));
+                  await FirebaseMessaging.instance.unsubscribeFromTopic(user?.getUserId?.substring(1));
                   user.setUserId(null);
                   user.setProfileType(null);
                   user.setUserModel(null);

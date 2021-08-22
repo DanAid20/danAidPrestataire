@@ -57,6 +57,12 @@ class DynamicLinkHandler {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://danaid.page.link',
       link: Uri.parse('https://danaid.page.link/compare?comp=yes'),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        imageUrl: Uri.parse("https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com/o/FCMImages%2FDanAid%20Logo%20mini%20icon.png?alt=media&token=93298300-7e26-4760-962a-08a3b31960c6"),
+        title: "Plans DanAid",
+        description: "Consultez nos différents plans de service pour profiter de la méga reduction"
+      ),
+      dynamicLinkParametersOptions: DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short),
       androidParameters: AndroidParameters(
         packageName: 'com.danaid.danaidmobile',
         minimumVersion: 210020010,
@@ -68,9 +74,7 @@ class DynamicLinkHandler {
       ),*/
     );
     final link = await parameters.buildUrl();
-    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(
-      link,
-      DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
+    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(link, DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
     );
     return shortenedLink.shortUrl;
   }
@@ -95,13 +99,10 @@ class DynamicLinkHandler {
         appStoreId: '',
       ),*/
     );
-    final ShortDynamicLink shortLink =  await parameters.buildShortLink();
     final link = await parameters.buildUrl();
-    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(
-      link,
-      DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
+    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(link, DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
     );
-    return shortLink.shortUrl;
+    return shortenedLink.shortUrl;
   }
 
   void fetchClassicLinkData(BuildContext context) async {

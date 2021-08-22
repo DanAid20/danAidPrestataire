@@ -62,91 +62,9 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
 
     DateTime now = DateTime.now();
-
-    int months = 0;
-    String trimester;
-    DateTime start;
-    DateTime end;
+    DateTime start = now;
+    DateTime end = now.add(Duration(days: 365));
     PlanModel plan = planProvider.getPlan;
-    
-    if(now.month >= 1 && now.month < 4){
-      trimester = S.of(context).janvierMars + DateTime.now().year.toString();
-      if (now.month != 3){
-        months = (now.day < 25) ? 4 - now.month : 4 - now.month - 1;
-      }
-      else{
-        if(now.day < 25){
-          months = 1;
-          trimester = S.of(context).janvierMars + DateTime.now().year.toString();
-        }
-        else {
-          months = 3;
-          trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
-        }
-        trimester = (now.day < 25) ? S.of(context).janvierMars + DateTime.now().year.toString() : S.of(context).avrilJuin + DateTime.now().year.toString(); 
-        months = (now.day < 25) ? 1 : 3;
-      }
-      if(now.month == 3 && now.day > 25){
-        start = DateTime(now.year, 04, 01);
-        end = DateTime(now.year, 07, 01);
-      } else {
-        start = DateTime(now.year, 01, 01);
-        end = DateTime(now.year, 04, 01);
-      }
-    }
-
-    else if(now.month >= 4 && now.month < 7){
-      trimester = S.of(context).avrilJuin + DateTime.now().year.toString();
-      if (now.month != 6){months = (now.day < 25) ? 7 - now.month : 7 - now.month - 1;}
-      else{
-        trimester = (now.day < 25) ? S.of(context).avrilJuin + DateTime.now().year.toString() : S.of(context).juilletSeptembre + DateTime.now().year.toString(); 
-        months = (now.day < 25) ? 1 : 3;
-      }
-      if(now.month == 6 && now.day > 25){
-        start = DateTime(now.year, 07, 01);
-        end = DateTime(now.year, 10, 01);
-      } else {
-        start = DateTime(now.year, 04, 01);
-        end = DateTime(now.year, 07, 01);
-      }
-    }
-
-    else if(now.month >= 7 && now.month < 10){
-      trimester = S.of(context).juilletSeptembre + DateTime.now().year.toString();
-      if (now.month != 9){months = (now.day < 25) ? 10 - now.month : 10 - now.month - 1;}
-      else{
-        trimester = (now.day < 25) ? S.of(context).juilletSeptembre + DateTime.now().year.toString() : S.of(context).octobreDcembre + DateTime.now().year.toString(); 
-        months = (now.day < 25) ? 1 : 3;}
-
-      if(now.month == 9 && now.day > 25){
-        start = DateTime(now.year, 10, 01);
-        end = DateTime(now.year, 12, 31);
-      } else {
-        start = DateTime(now.year, 07, 01);
-        end = DateTime(now.year, 10, 01);
-      }
-    }
-
-    else if(now.month >= 10 && now.month <= 12){
-      trimester = S.of(context).octobreDcembre + DateTime.now().year.toString();
-      
-      if (now.month != 9){months = (now.day < 25) ? 12 - now.month : 12 - now.month - 1;}
-      else{
-        trimester = (now.day < 25) ? S.of(context).octobreDcembre + DateTime.now().year.toString() : S.of(context).janvierMars + (DateTime.now().year+1).toString(); 
-        months = (now.day < 25) ? 1 : 3;
-      }
-
-      if(now.month == 12 && now.day > 25){
-        start = DateTime(now.year+1, 01, 01);
-        end = DateTime(now.year+1, 04, 01);
-      } else {
-        start = DateTime(now.year, 10, 01);
-        end = DateTime(now.year, 12, 31);
-      }
-    }
-
-    num total = plan.monthlyAmount*months;
-    num registrationFee = plan.registrationFee;
 
     return SafeArea(
       top: false,
@@ -483,58 +401,16 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "regionDorigione": adherentProvider.getAdherent.regionOfOrigin,
                                 "statuMatrimonialMarie": false,
                                 "ville": adherentProvider.getAdherent.town,
-                                "datDebutvalidite" : adherentProvider.getAdherent.adherentPlan == 0 ? DateTime.now() : start,
-                                "datFinvalidite": adherentProvider.getAdherent.adherentPlan == 0 ? DateTime.now().add(Duration(days: 365)) : end,
+                                "datDebutvalidite" : start,
+                                "datFinvalidite": end,
                                 "paid": false,
                                 "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                               }, SetOptions(merge: true))
                               .then((value) async {
                                 adherentProvider.setValidityEndDate(end);
-                                adherentProvider.setDateCreated(DateTime.now());
-
-                                DocumentReference contributionRef = FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc();
-                                String inscriptionId = contributionRef.id;
-
-                                adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0 ? FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').doc(inscriptionId).set({
-                                  "montant": registrationFee,
-                                  "createdDate": DateTime.now(),
-                                  "trimester": trimester,
-                                  "etatValider": false,
-                                  "categoriePaiement": "INSCRIPTION",
-                                  "intitule": "COSTISATION Q-"+start.year.toString(),
-                                  "dateDelai": start.add(Duration(days: 15)),
-                                  "numeroNiveau": plan.planNumber,
-                                  "paymentDate": null,
-                                  "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
-                                  "paid": false
-                                }) : print("Il a payé");
-
-                                plan.planNumber != 0 ? await FirebaseFirestore.instance.collection("ADHERENTS").doc(userProvider.getUserId).collection('NEW_FACTURATIONS_ADHERENT').add({
-                                  "montant": total,
-                                  "inscriptionId": inscriptionId,
-                                  "createdDate": DateTime.now(),
-                                  "trimester": trimester,
-                                  "intitule": "COSTISATION Q-"+start.year.toString(),
-                                  "dateDebutCouvertureAdherent" : start,
-                                  "dateFinCouvertureAdherent": end,
-                                  "categoriePaiement" : "COTISATION_TRIMESTRIELLE",
-                                  "dateDelai": start.add(Duration(days: 15)),
-                                  "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
-                                  "numeroNiveau": plan.planNumber,
-                                  "paymentDate": null,
-                                  "etatValider": false,
-                                  "paid": false
-
-                                }).then((doc) {
-
-                                  adherentProvider.setAdherentPlan(plan.planNumber);
-                                  adherentProvider.setValidityEndDate(end);
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Factures enrégistrées",)));
-                                }).catchError((e){
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
-                                }) 
-                                : print("pas besoin");
+                                adherentProvider.setDateCreated(now);
+                                adherentProvider.setAdherentPlan(plan.planNumber);
 
                                 await HiveDatabase.setRegisterState(true);
                                 HiveDatabase.setAuthPhone(userProvider.getUserId);

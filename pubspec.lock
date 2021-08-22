@@ -1272,13 +1272,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  ussd_advanced:
-    dependency: "direct main"
-    description:
-      name: ussd_advanced
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
   uuid:
     dependency: transitive
     description:

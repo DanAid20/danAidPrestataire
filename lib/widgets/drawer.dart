@@ -89,6 +89,11 @@ class DefaultDrawer extends StatelessWidget {
                           leading: SvgPicture.asset("assets/icons/Two-tone/InfoSquare.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
                           title: Text(S.of(context).conditionsndutilisation, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
+                        ),
+                        SizedBox(height: hv*3,),
+                        ListTile(
+                          title: Text("Version 2.0.0-alpha+210020013", style: TextStyle(color: whiteColor.withOpacity(0.4), fontSize: 17, fontWeight: FontWeight.bold),),
+                          onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
                         )
                       ],
                     ),

@@ -44,6 +44,22 @@ class _ComparePlansState extends State<ComparePlans> {
     });
   }
 
+  changePlan(int plan) async {
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+      "protectionLevel": plan,
+      //"datDebutvalidite" : DateTime.now(),
+      //"datFinvalidite": DateTime.now().add(Duration(days: 365)),
+      "paid": false,
+    }, SetOptions(merge: true));
+    setState(() {
+      //spinner2 = false;
+    });
+    planProvider.setPlanModel(plans[plan]);
+    Navigator.of(context).pushNamed('/contributions');
+  }
+
   @override
   void initState() {
     getPlans();
@@ -280,24 +296,21 @@ class _ComparePlansState extends State<ComparePlans> {
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldAcces.svg', height: 30, color: kSouthSeas),
                                 title: new Text('Niveau I : Accès', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
-                                  planProvider.setPlanModel(plans[1]);
-                                  Navigator.of(context).pushNamed('/coverage-payment');
+                                  changePlan(1);
                                 },
                               ) : Container(),
                               state != isAssist ? ListTile(
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldAssist.svg', height: 30, color: kSouthSeas),
                                 title: new Text('Niveau II : Assist', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
-                                  planProvider.setPlanModel(plans[2]);
-                                  Navigator.of(context).pushNamed('/coverage-payment');
+                                  changePlan(2);
                                 },
                               ) : Container(),
                               state != isSerenity ? ListTile(
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldSerenity.svg', height: 30, color: kSouthSeas),
                                 title: new Text('Niveau III : Sérénité', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
-                                  planProvider.setPlanModel(plans[3]);
-                                  Navigator.of(context).pushNamed('/coverage-payment');
+                                  changePlan(3);
                                 },
                               ) : Container(),
                             ],
