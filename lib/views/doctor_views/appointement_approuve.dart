@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
@@ -10,11 +11,14 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/utils.dart';
+import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +26,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:simple_tags/simple_tags.dart';
+import 'package:http/http.dart' as http;
 
 class AppointmentDetails extends StatefulWidget {
   final AdherentModel adherent;
@@ -107,8 +112,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'otherInfo': '',
       'establishment': doctorProvider.getDoctor.officeName,
       'consultationCode': code,
-      'type': adherent['appointment-type'],
-      'amountToPay': 2000,
+      'type': 'RDV',
+      'amountToPay': doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
+      "consultationCost": doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
       'status': 0,
       'canPay': 0,
       'createdDate': DateTime.now(),
@@ -177,6 +183,16 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
     DateTime startTime = appointment.getAppointment.startTime.toDate();
     DateTime endTime = appointment.getAppointment.endTime.toDate();
+
+    var options = BaseOptions(
+      baseUrl: 'http://admin.danaid.org:3000/api/v1',
+      method: 'GET',
+      contentType: 'application/json',
+      connectTimeout: 5000,
+      receiveTimeout: 3000,
+    );
+    Dio dio = Dio(options);
+
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -363,11 +379,23 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     isLoading: announceLoading,
                     enable:  appointment.getAppointment.status==1 ? false: true,
                     text: S.of(context).approuver,
-                    action: (){
+                    action: () async {
                       setState(() {
                         announceLoading = true;
                       });
                       try {
+                        String token;
+
+                        if(appointment.getAppointment.consultationType == "Video"){
+                          var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
+                          var response = await http.post(url, body: {"appID": agoraAppId, "appCertificate": agoraAppCertificate, "channelName": appointment.getAppointment.id, "uid": "20000", "roleApi" : "AUTHOR"}).catchError((e){print(e.toString());});
+                          print(response.toString());
+                          var body = jsonDecode(response.body);
+                          print(body.toString());
+                          token = body['data'];
+                          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 20000,),),);
+                        }
+                        
                          final Map<String, dynamic> codes = {
                           'codeConsultation': code,
                           'createdDate': DateTime.now()
@@ -389,6 +417,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                   .doc(appointment.getAppointment.id)
                                   .set({
                                 "status": 1,
+                                "agoraToken": token
                               },  SetOptions(merge: true)).then((value) async {
                                  print('ok33333333333333333333333333333');
                                   var usecase= FirebaseFirestore.instance.collection('USECASES')

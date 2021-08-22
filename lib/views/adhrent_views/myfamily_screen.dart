@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/widgets/user_avatar_coverage.dart';
@@ -55,7 +56,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
           actions: [
             Column(crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Setting.svg', width: wv*10), onPressed: (){}),
+                IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Setting.svg', width: wv*10), onPressed: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(),),),),
                 Spacer(),
                 Container(
                   child: Row(

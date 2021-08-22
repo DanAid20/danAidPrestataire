@@ -79,3 +79,7 @@ const  String pharmacy = "PHARMACY";
 const  String labo = "LABO";
 const  String ambulance = "AMBULANCE";
 const  String hospitalization = "HOSPITALIZATION";
+
+//Agora IDs
+const agoraAppId = "e5c433dd91e64cebb55005e05ed16087";
+const agoraAppCertificate = "cebf5d0706cc4d4f88139780b230d9e5";

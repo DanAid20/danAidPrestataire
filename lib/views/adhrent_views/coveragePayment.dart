@@ -808,9 +808,27 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                             setState(() {
                             spinner2 = true;
                           });
+
+                          try {
+                            if(adherentProvider.getAdherent.havePaid == false){
+                              FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+                                "havePaidBefore": true,
+                              }, SetOptions(merge: true)).then((value) {
+                                setState(() {
+                                  spinner2 = false;
+                                });
+                              });
+                            }
+                            
+                          }
+                          catch(e) {
+                            setState(() {
+                              spinner2 = false;
+                            });
+                          }
                           
                           //choice == 1 ? orangeMoneyTransfer(amount: invoice.amount.toInt().toString()) :  mobileMoneyTransfer(amount: invoice.amount.toInt().toString());
-                          FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
+                          /*FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
                             "paymentDate": DateTime.now(),
                             "paid": true
                           }).then((doc) {
@@ -830,27 +848,44 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                               "paymentDate": DateTime.now(),
                             }) : print("Il a payé");*/
 
-                            if(adherentProvider.getAdherent.havePaid == false){
-                              FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
-                                "havePaidBefore": true,
-                              }, SetOptions(merge: true));
-                            }
-                            setState(() {
-                              spinner2 = false;
-                            });
+                            
                           }).catchError((e){
                             setState(() {
                               spinner2 = false;
                             });
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
-                          });
+                          });*/
                           }
                           else {
                             setState(() {
                               spinner2 = true;
                             });
+                            try {
+                                FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+                                  "protectionLevel": plan.planNumber,
+                                  "datDebutvalidite" : start,
+                                  "havePaidBefore": true,
+                                  "datFinvalidite": end,
+                                  "paid": false,
+                                }, SetOptions(merge: true));
+                                setState(() {
+                                  spinner2 = false;
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
+                                adherentProvider.setAdherentPlan(plan.planNumber);
+                                adherentProvider.setValidityEndDate(end);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, '/compare-plans');
+                            }
+                            catch(e){
+                              setState(() {
+                                spinner2 = false;
+                              });
+                            }
 
-                            adherentProvider.getAdherent.havePaid == false ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(inscriptionId).set({
+                            /*adherentProvider.getAdherent.havePaid == false ? FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(inscriptionId).set({
                               "montant": registrationFee,
                               "etatValider": false,
                               "createdDate": DateTime.now(),
@@ -864,8 +899,9 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                               "numeroRecu": start.year.toString()+"-"+random.nextInt(99999).toString(),
                               "paid": true
                             }) : print("Il a payé");
+                            */
                             
-                            FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').add({
+                            /*FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').add({
                               "inscriptionId": adherentProvider.getAdherent.havePaid == false ? inscriptionId : null,
                               "montant": total,
                               "createdDate": DateTime.now(),
@@ -884,29 +920,13 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                             }).then((doc) {
                               //choice == 1 ? orangeMoneyTransfer(amount: (registrationFee + total).toInt().toString()) :  mobileMoneyTransfer(amount: (registrationFee + total).toInt().toString());
 
-                              FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
-                                "protectionLevel": plan.planNumber,
-                                "datDebutvalidite" : start,
-                                "havePaidBefore": true,
-                                "datFinvalidite": end,
-                                "paid": false,
-                              }, SetOptions(merge: true));
-                              setState(() {
-                                spinner2 = false;
-                              });
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
-                              adherentProvider.setAdherentPlan(plan.planNumber);
-                              adherentProvider.setValidityEndDate(end);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, '/compare-plans');
+                              
                             }).catchError((e){
                               setState(() {
                                 spinner2 = false;
                               });
                               //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Erreur",)));
-                            });
+                            });*/
                           }
                         
                         },
