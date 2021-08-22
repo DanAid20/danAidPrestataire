@@ -12,6 +12,7 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/widgets/user_avatar_coverage.dart';
 import 'package:danaid/widgets/streams.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,22 +23,48 @@ class MyFamilyScreen extends StatefulWidget {
 }
 
 class _MyFamilyScreenState extends State<MyFamilyScreen> {
-  
   callDanAid() {
     String url = "tel:+237233419203";
     launch(url);
   }
 
+  static const platform = const MethodChannel('danaidproject.sendmoney');
+  String receivedString = "";
+
+  Future<void> callNativeFunction() async {
+    String amount = "60", data = "", phoneNumber = "650913861";
+
+    //moneyTransferMTNAction, moneyTransferOrangeAction
+    try {
+      final String temp = await platform.invokeMethod(
+          'moneyTransferMTNAction',
+          {"amount": amount, "phoneNumber": phoneNumber});
+      data = temp;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(data),
+        duration: Duration(seconds: (50)),
+      ));
+    } on PlatformException catch (e) {
+      data = "Failed";
+    }
+    setState(() {
+      receivedString = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    AdherentModelProvider adherentProvider =
+        Provider.of<AdherentModelProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
+    BottomAppBarControllerProvider controller =
+        Provider.of<BottomAppBarControllerProvider>(context);
 
-    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel.dateCreated.toDate() : DateTime.now();
+    final birthday = userProvider.getUserModel != null
+        ? userProvider.getUserModel.dateCreated.toDate()
+        : DateTime.now();
     final date2 = DateTime.now();
-    final yearsForBadget= date2.difference(birthday).inDays;
+    final yearsForBadget = date2.difference(birthday).inDays;
 
     return WillPopScope(
       onWillPop: () async {
@@ -49,27 +76,53 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
           elevation: 1,
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          toolbarHeight: hv*12,
+          toolbarHeight: hv * 12,
           title: UserAvatarAndCoverage(),
           actions: [
-            Column(crossAxisAlignment: CrossAxisAlignment.end,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Setting.svg', width: wv*10), onPressed: (){}),
+                IconButton(
+                    icon: SvgPicture.asset('assets/icons/Bulk/Setting.svg',
+                        width: wv * 10),
+                    onPressed: callNativeFunction),
                 Spacer(),
                 Container(
                   child: Row(
                     children: [
-                      Text(userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
-                        style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
+                      Text(
+                        userProvider.getUserModel != null
+                            ? userProvider.getUserModel.points.toString() +
+                                    " pts" ??
+                                "0 pts"
+                            : "0 pts",
+                        style: TextStyle(
+                            fontSize: inch * 1.3,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.teal[400]),
                       ),
-                      SizedBox(width: wv*2,),
-                      adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
-                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink(),
-                     SizedBox(width: wv*1),
+                      SizedBox(
+                        width: wv * 2,
+                      ),
+                      adherentProvider.getAdherent.adherentPlan != 0
+                          ? SvgPicture.asset(
+                              "assets/icons/Bulk/Shield Done.svg",
+                              width: 18,
+                            )
+                          : Container(),
+                      yearsForBadget >= 365
+                          ? SvgPicture.asset(
+                              "assets/icons/Bulk/Ticket Star.svg",
+                              width: 18,
+                            )
+                          : SizedBox.shrink(),
+                      SizedBox(width: wv * 1),
                     ],
                   ),
                 ),
-                SizedBox(height: hv*0.5,),
+                SizedBox(
+                  height: hv * 0.5,
+                ),
               ],
             )
           ],
@@ -79,59 +132,110 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
           child: ListView(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: wv*3),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                padding: EdgeInsets.symmetric(horizontal: wv * 3),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("Aperçu de votre couverture"),
-                    TextButton(onPressed: (){}, child: Text(/*"Améliorer..."*/"", style: TextStyle(color: Colors.brown),)),
+                    TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          /*"Améliorer..."*/
+                          "",
+                          style: TextStyle(color: Colors.brown),
+                        )),
                   ],
                 ),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: wv*3),
+                margin: EdgeInsets.symmetric(horizontal: wv * 3),
                 decoration: BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0, 1))]
-                ),
+                    color: whiteColor,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey[300],
+                          blurRadius: 2.0,
+                          spreadRadius: 1.0,
+                          offset: Offset(0, 1))
+                    ]),
                 child: Column(
                   children: [
-                    adherentProvider.getAdherent.adherentPlan == 0 ? Container(
-                      padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(text: TextSpan(
-                            text: "Vous bénéficiez d'une ",
-                            children: [
-                              TextSpan(text: "rémise de 5%", style: TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text: " dans certaines pharmacies & Labos du réseau DanAid")
-                            ]
-                          , style: TextStyle(color: kBlueDeep, fontSize: wv*3.5)),
-                          ),
-                          TextButton(onPressed: ()=>Navigator.pushNamed(context, '/compare-plans'),
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50].withOpacity(0.5))),
-                            child: Text("Obtenez une couverture complète à 70% !", style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
-                        ],
-                      ),
-                    ) : Container(),
+                    adherentProvider.getAdherent.adherentPlan == 0
+                        ? Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: wv * 4, vertical: hv * 3),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                      text: "Vous bénéficiez d'une ",
+                                      children: [
+                                        TextSpan(
+                                            text: "rémise de 5%",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                        TextSpan(
+                                            text:
+                                                " dans certaines pharmacies & Labos du réseau DanAid")
+                                      ],
+                                      style: TextStyle(
+                                          color: kBlueDeep,
+                                          fontSize: wv * 3.5)),
+                                ),
+                                TextButton(
+                                    onPressed: () => Navigator.pushNamed(
+                                        context, '/compare-plans'),
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.white),
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20))),
+                                        shadowColor: MaterialStateProperty.all(
+                                            Colors.grey[50].withOpacity(0.5))),
+                                    child: Text(
+                                        "Obtenez une couverture complète à 70% !",
+                                        style: TextStyle(
+                                            color: kDeepTeal,
+                                            fontSize: wv * 3.5,
+                                            fontWeight: FontWeight.bold))),
+                              ],
+                            ),
+                          )
+                        : Container(),
                     Stack(
                       children: [
                         Container(
-                          padding: EdgeInsets.only(bottom: wv*3, right: hv*4, left: wv*3, top: wv*3),
+                          padding: EdgeInsets.only(
+                              bottom: wv * 3,
+                              right: hv * 4,
+                              left: wv * 3,
+                              top: wv * 3),
                           decoration: BoxDecoration(
-                            color: kSouthSeas.withOpacity(0.4),
-                            borderRadius: BorderRadius.circular(15)
-                          ),
+                              color: kSouthSeas.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(15)),
                           child: BeneficiaryStream(standardUse: true),
                         ),
                         Positioned(
-                          right: wv*0, bottom: hv*8,
+                          right: wv * 0,
+                          bottom: hv * 8,
                           child: IconButton(
-                            onPressed: (){ Navigator.pushNamed(context, '/add-beneficiary'); },
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/add-beneficiary');
+                            },
                             iconSize: 35,
                             icon: CircleAvatar(
                               backgroundColor: kPrimaryColor,
-                              child: Center(child: Icon(Icons.add, size: 35, color: Colors.white,)),
+                              child: Center(
+                                  child: Icon(
+                                Icons.add,
+                                size: 35,
+                                color: Colors.white,
+                              )),
                             ),
                           ),
                         )
@@ -141,63 +245,77 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  boxShadow: [BoxShadow(color: Colors.grey[200], spreadRadius: 3.0, blurRadius: 5.0)]
-                ),
-                margin: EdgeInsets.only(top: hv*4),
-                padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                decoration: BoxDecoration(color: whiteColor, boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[200],
+                      spreadRadius: 3.0,
+                      blurRadius: 5.0)
+                ]),
+                margin: EdgeInsets.only(top: hv * 4),
+                padding:
+                    EdgeInsets.symmetric(horizontal: wv * 3, vertical: hv * 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Paramètres du compte", style: TextStyle(color: kBlueDeep, fontSize: 18)),
-                    SizedBox(height: hv*2,),
-                    adherentProvider.getAdherent != null ? HomePageComponents.accountParameters(
-                      title: "Domicile Principale", 
-                      subtitle: adherentProvider.getAdherent.address != null ? adherentProvider.getAdherent.address : "Non configurée", 
-                      svgIcon: "assets/icons/Two-tone/Home.svg", 
-                      action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
-                    ) : Container(),
-                    HomePageComponents.accountParameters(
-                      title: "Mes statistiques", 
-                      subtitle: "Consulter..", 
-                      svgIcon: "assets/icons/Bulk/Graph.svg", 
-                      action: ()=>Navigator.pushNamed(context, '/family-stats-page')
+                    Text("Paramètres du compte",
+                        style: TextStyle(color: kBlueDeep, fontSize: 18)),
+                    SizedBox(
+                      height: hv * 2,
                     ),
+                    adherentProvider.getAdherent != null
+                        ? HomePageComponents.accountParameters(
+                            title: "Domicile Principale",
+                            subtitle:
+                                adherentProvider.getAdherent.address != null
+                                    ? adherentProvider.getAdherent.address
+                                    : "Non configurée",
+                            svgIcon: "assets/icons/Two-tone/Home.svg",
+                            action: () => Navigator.pushNamed(
+                                context, '/adherent-profile-edit'))
+                        : Container(),
                     HomePageComponents.accountParameters(
-                      title: "Points et badges", 
-                      subtitle: "Consulter et utiliser ses bénéfices.", 
-                      svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
-                      action: ()=>Navigator.pushNamed(context, '/family-points-page')
-                    ),
+                        title: "Mes statistiques",
+                        subtitle: "Consulter..",
+                        svgIcon: "assets/icons/Bulk/Graph.svg",
+                        action: () =>
+                            Navigator.pushNamed(context, '/family-stats-page')),
                     HomePageComponents.accountParameters(
-                      title: "Changez de niveau de service", 
-                      subtitle: "Comparer les niveaux et choisir", 
-                      svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
-                      action: ()=>Navigator.pushNamed(context, '/compare-plans')
-                    ),
+                        title: "Points et badges",
+                        subtitle: "Consulter et utiliser ses bénéfices.",
+                        svgIcon: "assets/icons/Bulk/TicketStarLine.svg",
+                        action: () => Navigator.pushNamed(
+                            context, '/family-points-page')),
                     HomePageComponents.accountParameters(
-                      title: "Changez de medecin de famille", 
-                      subtitle: "Faites une demande", 
-                      svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
-                      action: callDanAid
-                    ),
+                        title: "Changez de niveau de service",
+                        subtitle: "Comparer les niveaux et choisir",
+                        svgIcon: "assets/icons/Bulk/ShieldLine.svg",
+                        action: () =>
+                            Navigator.pushNamed(context, '/compare-plans')),
                     HomePageComponents.accountParameters(
-                      title: "Documents DanAid", 
-                      subtitle: "contrats, documents, guides", 
-                      svgIcon: "assets/icons/Two-tone/Paper.svg", 
-                      action: ()=>Navigator.pushNamed(context, '/family-documents-page')
-                    ),
-
-                    SizedBox(height: hv*10,)
+                        title: "Changez de medecin de famille",
+                        subtitle: "Faites une demande",
+                        svgIcon: "assets/icons/Bulk/Stethoscope.svg",
+                        action: callDanAid),
+                    HomePageComponents.accountParameters(
+                        title: "Documents DanAid",
+                        subtitle: "contrats, documents, guides",
+                        svgIcon: "assets/icons/Two-tone/Paper.svg",
+                        action: () => Navigator.pushNamed(
+                            context, '/family-documents-page')),
+                    SizedBox(
+                      height: hv * 10,
+                    )
                   ],
                 ),
               ),
             ],
           ),
         ),
-
       ),
     );
   }
-  Widget marginX = SizedBox(width: wv*3,);
+
+  Widget marginX = SizedBox(
+    width: wv * 3,
+  );
 }
