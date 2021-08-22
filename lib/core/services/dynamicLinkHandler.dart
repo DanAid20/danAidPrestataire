@@ -53,10 +53,10 @@ class DynamicLinkHandler {
     return shortenedLink.shortUrl;
   }
   
-  static Future<Uri> createFriendInviteDynamicLink({@required String userId}) async {
+  static Future<Uri> createCompareServiceDynamicLink() async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://danaid.page.link',
-      link: Uri.parse('https://danaid.page.link/friend?userid=$userId'),
+      link: Uri.parse('https://danaid.page.link/compare?comp=yes'),
       androidParameters: AndroidParameters(
         packageName: 'com.danaid.danaidmobile',
         minimumVersion: 210020010,
@@ -73,6 +73,35 @@ class DynamicLinkHandler {
       DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
     );
     return shortenedLink.shortUrl;
+  }
+  
+  static Future<Uri> createFriendInviteDynamicLink({@required String userId}) async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://danaid.page.link',
+      link: Uri.parse('https://danaid.page.link/friend?userid=$userId'),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        imageUrl: Uri.parse("https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com/o/FCMImages%2FDanAid%20Logo%20mini%20icon.png?alt=media&token=93298300-7e26-4760-962a-08a3b31960c6"),
+        title: "Friend Request",
+        description: "A new friend request from DanAid"
+      ),
+      dynamicLinkParametersOptions: DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short),
+      androidParameters: AndroidParameters(
+        packageName: 'com.danaid.danaidmobile',
+        minimumVersion: 210020010,
+      ),
+      /*iosParameters: IosParameters(
+        bundleId: 'com.danaid.danaidmobile',
+        minimumVersion: '210020010',
+        appStoreId: '',
+      ),*/
+    );
+    final ShortDynamicLink shortLink =  await parameters.buildShortLink();
+    final link = await parameters.buildUrl();
+    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(
+      link,
+      DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
+    );
+    return shortLink.shortUrl;
   }
 
   void fetchClassicLinkData(BuildContext context) async {
@@ -94,6 +123,7 @@ class DynamicLinkHandler {
       if(queryParams.length > 0) {
         bool isPost = uri.pathSegments.contains('post');
         bool isFriendInvite = uri.pathSegments.contains('friend');
+        bool isCompareService = uri.pathSegments.contains('compare');
         if(isPost){
           print("This is a post link");
           BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
@@ -124,6 +154,12 @@ class DynamicLinkHandler {
               });
             } 
           }
+        }
+        else if(isCompareService){
+          BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
+          bottomAppBarController.setIndex(1);
+          print("This is a compare service link");
+          Navigator.pushNamed(context, '/compare-plans');
         }
         else {
           String userId = queryParams["userid"];

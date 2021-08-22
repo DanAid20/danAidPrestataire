@@ -129,7 +129,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
 
-    List visits = userProvider.getUserModel.visits;
+    List visits = userProvider.getUserModel.visits == null ? [] : userProvider.getUserModel.visits;
 
     int totalPoints = userProvider.getUserModel.points;
 

@@ -182,64 +182,67 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
             ],
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
-          ),
-          padding: EdgeInsets.only(top: hv*1),
+        GestureDetector(
+          onVerticalDragStart: (val)=>navController.setIndex(0),
           child: Container(
-            margin: EdgeInsets.only(left:inch*1.5, right:inch*1.5, top: inch*0),
-            child: Column(
-              children: [
-                Row(children: [
-                  Text("Aujourd'hui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                  InkWell(
-                    onTap: ()=>navController.setIndex(0),
-                    child: Text("Voir plus..")
-                  )
-                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                
-                SizedBox(height: hv*2,),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
+            ),
+            padding: EdgeInsets.only(top: hv*1),
+            child: Container(
+              margin: EdgeInsets.only(left:inch*1.5, right:inch*1.5, top: inch*0),
+              child: Column(
+                children: [
+                  Row(children: [
+                    Text("Aujourd'hui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    InkWell(
+                      onTap: ()=>navController.setIndex(0),
+                      child: Text("Voir plus..")
+                    )
+                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                  
+                  SizedBox(height: hv*2,),
 
-                StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel.userId).snapshots(),
-                  builder: (context, snapshot) {
-                    if(!snapshot.hasData){
-                      return Center(child: Loaders().buttonLoader(kPrimaryColor),);
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel.userId).snapshots(),
+                    builder: (context, snapshot) {
+                      if(!snapshot.hasData){
+                        return Center(child: Loaders().buttonLoader(kPrimaryColor),);
+                      }
+                      return Row(children: [
+                        snapshot.data.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[0].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[1].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[2].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[3].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[4].data()["imageUrl"]) : Container(),
+                        Expanded(child: Container()),
+                        snapshot.data.docs.length > 5 ? Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(100)
+                          ),
+                          child: Text("+ ${snapshot.data.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
+                        ) : Container()                       
+                      ],);
                     }
-                    return Row(children: [
-                      snapshot.data.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[0].data()["imageUrl"]) : Container(),
-                      snapshot.data.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[1].data()["imageUrl"]) : Container(),
-                      snapshot.data.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[2].data()["imageUrl"]) : Container(),
-                      snapshot.data.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[3].data()["imageUrl"]) : Container(),
-                      snapshot.data.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[4].data()["imageUrl"]) : Container(),
-                      Expanded(child: Container()),
-                      snapshot.data.docs.length > 5 ? Container(
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(100)
-                        ),
-                        child: Text("+ ${snapshot.data.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
-                      ) : Container()                       
-                    ],);
-                  }
-                ),
+                  ),
 
-                SizedBox(height: hv*2,),
-                
-                Row(children: [
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
-                  HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel.comments == null ? 0 : userProvider.getUserModel.comments),
-                  HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel.friends == null ? 0 : userProvider.getUserModel.friends.length),
-                  HomePageComponents().verticalDivider(),
-                  HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel.chats == null ? 0 : userProvider.getUserModel.chats.length),
-                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                SizedBox(height: hv*7,)
-              ],
+                  SizedBox(height: hv*2,),
+                  
+                  Row(children: [
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
+                    HomePageComponents().verticalDivider(),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel.comments == null ? 0 : userProvider.getUserModel.comments),
+                    HomePageComponents().verticalDivider(),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel.friends == null ? 0 : userProvider.getUserModel.friends.length),
+                    HomePageComponents().verticalDivider(),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel.chats == null ? 0 : userProvider.getUserModel.chats.length),
+                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                  SizedBox(height: hv*7,)
+                ],
+              ),
             ),
           ),
         ),

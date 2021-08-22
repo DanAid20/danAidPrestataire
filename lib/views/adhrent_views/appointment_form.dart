@@ -672,7 +672,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                   });
                                 }
                               ),
-                              /*HomePageComponents.consultationType(
+                              HomePageComponents.consultationType(
                                 iconPath: 'assets/icons/Bulk/Video.svg',
                                 title: "Consultation",
                                 type: "Vidéo",
@@ -683,7 +683,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                     consultationType = "Video";
                                   });
                                 }
-                              ),*/
+                              ),
                               HomePageComponents.consultationType(
                                 iconPath: 'assets/icons/Bulk/Home.svg',
                                 title: S.of(context).consultation,
