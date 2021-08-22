@@ -388,7 +388,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "gagnezDesPoints" : MessageLookupByLibrary.simpleMessage("Earn points"),
     "gallerie" : MessageLookupByLibrary.simpleMessage("Gallery"),
     "genre" : MessageLookupByLibrary.simpleMessage("Genre *"),
-    "gnraliste" : MessageLookupByLibrary.simpleMessage("Generalist"),
+    "gnraliste" : MessageLookupByLibrary.simpleMessage("Généraliste"),
     "gps" : MessageLookupByLibrary.simpleMessage("GPS:"),
     "groupeSanguin" : MessageLookupByLibrary.simpleMessage("Blood type"),
     "groupes" : MessageLookupByLibrary.simpleMessage("Groups"),

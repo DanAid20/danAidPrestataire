@@ -715,10 +715,10 @@ class S {
     );
   }
 
-  /// `Generalist`
+  /// `Généraliste`
   String get gnraliste {
     return Intl.message(
-      'Generalist',
+      'Généraliste',
       name: 'gnraliste',
       desc: '',
       args: [],

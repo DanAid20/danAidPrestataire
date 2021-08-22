@@ -102,7 +102,8 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   bool mondayToFridaySwitched = true;
   bool saturdaySwitched = false;
   bool sundaySwitched = false;
-
+  final String defaultLocale = Platform.localeName;
+  
   Map availability = {
     "monday to friday": {
       "available": true,
@@ -126,6 +127,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
   void _saveLocation(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    
     setState(() {
       positionSpinner = true;
     });
@@ -598,7 +600,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                   items: [
                                     DropdownMenuItem(
                                       child: Text(S.of(context).gnraliste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                      value: S.of(context).gnraliste,
+                                      value: defaultLocale.contains('fr')==true? "Généraliste":  S.of(context).gnraliste ,
                                     ),
                                     DropdownMenuItem(
                                       child: Text(S.of(context).spcialiste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),

@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/postModel.dart';
+import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/social_network_widgets/post_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -32,7 +34,7 @@ class _HomeDoctorViewState extends State<HomeDoctorView> {
 Widget notificationWidget(BuildContext context){
    UserProvider userProvider = Provider.of<UserProvider>(context);
    bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
-   
+   BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
   return Column(
     children: [
       SizedBox(
@@ -321,8 +323,74 @@ getDetailDocotor(){
         );
   }
 Widget questionDuDocteur() {
+  UserProvider userProvider = Provider.of<UserProvider>(context);
+   BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
   return Column(
     children: [
+      GestureDetector(
+          onVerticalDragStart: (val)=>navController.setIndex(0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
+            ),
+            padding: EdgeInsets.only(top: hv*1),
+            child: Container(
+              margin: EdgeInsets.only(left:inch*1.5, right:inch*1.5, top: inch*0),
+              child: Column(
+                children: [
+                  Row(children: [
+                    Text("Aujourd'hui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    InkWell(
+                      onTap: ()=>navController.setIndex(0),
+                      child: Text("Voir plus..")
+                    )
+                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                  
+                  SizedBox(height: hv*2,),
+
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel.userId).snapshots(),
+                    builder: (context, snapshot) {
+                      if(!snapshot.hasData){
+                        return Center(child: Loaders().buttonLoader(kPrimaryColor),);
+                      }
+                      return Row(children: [
+                        snapshot.data.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[0].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[1].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[2].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[3].data()["imageUrl"]) : Container(),
+                        snapshot.data.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[4].data()["imageUrl"]) : Container(),
+                        Expanded(child: Container()),
+                        snapshot.data.docs.length > 5 ? Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(100)
+                          ),
+                          child: Text("+ ${snapshot.data.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
+                        ) : Container()                       
+                      ],);
+                    }
+                  ),
+
+                  SizedBox(height: hv*2,),
+                  
+                  Row(children: [
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
+                    HomePageComponents().verticalDivider(),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel.comments == null ? 0 : userProvider.getUserModel.comments),
+                    HomePageComponents().verticalDivider(),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel.friends == null ? 0 : userProvider.getUserModel.friends.length),
+                    HomePageComponents().verticalDivider(),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel.chats == null ? 0 : userProvider.getUserModel.chats.length),
+                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                  SizedBox(height: hv*2,) 
+                ],
+              ),
+            ),
+          ),
+        ),
       Container(
        
         margin:

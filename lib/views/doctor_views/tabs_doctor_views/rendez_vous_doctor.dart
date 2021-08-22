@@ -234,7 +234,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
                               syntomes: '${doc.data()["title"]}', 
-                              isanounced: doc.data()["announced"]);
+                              isanounced: doc.data()["appointment-type"]=="consult-today");
                               
                         }
                         return Center(

@@ -7,13 +7,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/utils.dart';
 import 'package:danaid/views/adhrent_views/video_room.dart';
+import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
@@ -62,7 +65,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   bool edit = false;
 
   initialization(){
-
+     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     if(doctorProvider.getDoctor != null){
@@ -372,6 +375,53 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             !edit ? Row(
               children: [
                 SizedBox(width: wv*4,),
+                appointment.getAppointment.status==1 ?Expanded(
+                  flex: 7,
+                  child: CustomTextButton(
+                    noPadding: true,
+                    color: kDeepTealCAdress,
+                    isLoading: announceLoading,
+                    enable:  DateTime.now().isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? true: false,
+                    text: 'consulter directememt',
+                    action: () async =>{ 
+                     //DateTime.now().isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? : false,
+                         await FirebaseFirestore.instance
+                                  .collection('ADHERENTS')
+                                  .doc('${appointment.getAppointment?.adherentId!=null? appointment.getAppointment?.adherentId: appointment.getAppointment?.beneficiaryId}')
+                                  .get()
+                                  .then((doc) {
+                                if (doc.exists) {
+                                    AdherentModelProvider
+                                        adherentModelProvider =
+                                        Provider.of<AdherentModelProvider>(
+                                            context,
+                                            listen: false);
+                                    AdherentModel adherent =
+                                        AdherentModel.fromDocument(doc);
+                                    adherentModelProvider
+                                        .setAdherentModel(adherent);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                "${adherent.dateCreated} ")));
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => InactiveAccount(
+                                          data: adherent,
+                                          phoneNumber:'${appointment.getAppointment?.adherentId!=null? appointment.getAppointment?.adherentId: appointment.getAppointment?.beneficiaryId}',
+                                          isAccountIsExists: true,
+                                          consultationType:
+                                              appointment.getAppointment.appointmentType,
+                                        ),
+                                      ),
+                                    );
+                                  } 
+                               })
+                    },
+                  )
+                ): 
                 Expanded(
                   flex: 7,
                   child: CustomTextButton(

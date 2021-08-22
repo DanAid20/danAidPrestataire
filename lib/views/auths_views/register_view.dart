@@ -266,8 +266,9 @@ class _RegisterViewState extends State<RegisterView> {
               validator: (String mail) {
                 return (mail.isEmpty)
                     ? kEmailNullErrorFr
-                    : (!emailValidatorRegExp.hasMatch(mail))
-                    ? kInvalidEmailError : null;
+                    // : (!emailValidatorRegExp.hasMatch(mail))
+                    // ? kInvalidEmailError 
+                    : null;
               },
             ),
 
