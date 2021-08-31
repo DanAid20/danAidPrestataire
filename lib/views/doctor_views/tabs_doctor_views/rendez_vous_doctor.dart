@@ -13,6 +13,7 @@ import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
+import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/helpers/utils.dart';
@@ -600,6 +601,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
   @override
   Widget build(BuildContext context) {
+    MySize().init(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
@@ -655,20 +657,22 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     ],
                   ),
                 ),
-                Container(
-                    height: 90.h,
-                    child: userProvider.getProfileType == doctor &&
-                            doctorProvider.getDoctor.id != null &&
-                            startDays != null &&
-                            endDay != null
-                        ? waitingRoomFuture(startDays, endDay, _selectedDay,
-                            doctorProvider.getDoctor.id)
-                        : Center(
-                            child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                S.of(context).aucuneActivitNasTEnregistrerPourLinstant),
-                          ))),
+                Expanded(
+                  child: Container(
+                      height: 90.h,
+                      child: userProvider.getProfileType == doctor &&
+                              doctorProvider.getDoctor.id != null &&
+                              startDays != null &&
+                              endDay != null
+                          ? waitingRoomFuture(startDays, endDay, _selectedDay,
+                              doctorProvider.getDoctor.id)
+                          : Center(
+                              child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  S.of(context).aucuneActivitNasTEnregistrerPourLinstant),
+                            ))),
+                ),
               ],
             ),
           )

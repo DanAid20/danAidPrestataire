@@ -1795,20 +1795,20 @@ class S {
     );
   }
 
-  /// `Pharmacie`
+  /// `Pharmacy`
   String get pharmacie {
     return Intl.message(
-      'Pharmacie',
+      'Pharmacy',
       name: 'pharmacie',
       desc: '',
       args: [],
     );
   }
 
-  /// `Pharmacy`
+  /// `Laboratory`
   String get laboratoire {
     return Intl.message(
-      'Pharmacy',
+      'Laboratory',
       name: 'laboratoire',
       desc: '',
       args: [],
@@ -8400,6 +8400,16 @@ class S {
     return Intl.message(
       'Please send your feedback, comments, requests for technical support by email: support@danaid.org.\n\n',
       name: 'pleaseSendYourFeedbackCommentsRequestsForTechnicalSupportBy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Chats`
+  String get chats {
+    return Intl.message(
+      'Chats',
+      name: 'chats',
       desc: '',
       args: [],
     );

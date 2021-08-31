@@ -72,8 +72,8 @@ class _ClinicListState extends State<ClinicList> {
                             adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
                               ? sp.coordGps["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
-                          spProvider.getServiceProvider.coordGps != null && sp.coordGps != null
-                              ? (Algorithms.calculateDistance(spProvider.getServiceProvider.coordGps["latitude"], spProvider.getServiceProvider.coordGps["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
+                          spProvider.getServiceProvider?.coordGps != null && sp.coordGps != null
+                              ? (Algorithms.calculateDistance(spProvider.getServiceProvider.coordGps["latitude"], spProvider.getServiceProvider.coordGps["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : '--',
                         onTap: () {
                           spTileProvider.setServiceProviderModel(sp);
                           spProvider.setServiceProviderModel(sp);

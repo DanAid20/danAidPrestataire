@@ -791,7 +791,7 @@ double imc=0;
                           Text(S.of(context).codeDeConsultation,style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: MySize.getScaledSizeHeight(25) )),
+                                  fontSize: MySize.getScaledSizeHeight(25))),
                           Text('${widget.consultationCode}',style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w600,
