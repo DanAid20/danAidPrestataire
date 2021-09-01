@@ -620,6 +620,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                              var usecase= FirebaseFirestore.instance.collection('USECASES')
                                               .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:doctorProvider.getDoctor.id).orderBy('createdDate').get(); 
                                               usecase.then((value) async {
+                                                print("++++++++++++++");
                                                 print(value.docs);
                                                     if(value.docs.isEmpty){    
                                                       // cette consultation existe pas encore    
@@ -628,9 +629,10 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                       //   final date2 = DateTime.now();
                                                       //   final difference = date2.difference(d).inDays;
                                                       //    adherentModelProvider.getAdherent.codeConsult['createdDate']
-                                                      print("--------------------${adherentModelProvider.getAdherent.codeConsult}");
-                                                      print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
-                                                      if(adherentModelProvider.getAdherent.codeConsult['codeConsultation']==null){
+                                                      // print("--------------------${adherentModelProvider.getAdherent.adherentId}");
+                                                      // print("--------------------${adherentModelProvider.getAdherent.codeConsult}");
+                                                      //print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
+                                                      if(adherentModelProvider.getAdherent.codeConsult==null){
                                                         print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
                                                         setState(() {
                                                               isRequestLaunch=true;

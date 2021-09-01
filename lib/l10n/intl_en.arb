@@ -175,8 +175,8 @@
   "exHpialCentrale": "e.g.: Hôpial Centrale",
   "emailDuContact": "Contact email",
   "hpital": "Hospital",
-  "pharmacie": "Pharmacie",
-  "laboratoire": "Pharmacy",
+  "pharmacie": "Pharmacy",
+  "laboratoire": "Laboratory",
   "luEtAcceptLes": "Read and accepted the ",
   "termesDesServices": "Read and accepted the ",
   "entrerUneAddresseEmailValide": "Enter a valid email address",
@@ -835,5 +835,6 @@
   "Acknowledgementnn": "26. Acknowledgement\n\n",
   "byUsingServiceOrOtherServicesProvidedByUsYou": "BY USING SERVICE OR OTHER SERVICES PROVIDED BY US, YOU ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS OF SERVICE AND AGREE TO BE BOUND BY THEM.\n\n",
   "ContactUsnn": "27. Contact Us\n\n",
-  "pleaseSendYourFeedbackCommentsRequestsForTechnicalSupportBy": "Please send your feedback, comments, requests for technical support by email: support@danaid.org.\n\n"
+  "pleaseSendYourFeedbackCommentsRequestsForTechnicalSupportBy": "Please send your feedback, comments, requests for technical support by email: support@danaid.org.\n\n",
+  "chats": "Chats"
 }

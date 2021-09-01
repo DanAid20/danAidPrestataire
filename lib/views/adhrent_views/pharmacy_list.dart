@@ -69,7 +69,7 @@ class _PharmacyListState extends State<PharmacyList> {
                             adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
                               ? sp.coordGps["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
-                          spProvider.getServiceProvider.coordGps != null && sp.coordGps != null
+                          spProvider.getServiceProvider?.coordGps != null && sp.coordGps != null
                               ? (Algorithms.calculateDistance(spProvider.getServiceProvider.coordGps["latitude"], spProvider.getServiceProvider.coordGps["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
                         onTap: () {
                           spTileProvider.setServiceProviderModel(sp);

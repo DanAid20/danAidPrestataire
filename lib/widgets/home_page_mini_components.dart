@@ -5,6 +5,7 @@ import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
+import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/gestures.dart';
@@ -294,7 +295,7 @@ class HomePageComponents {
           ),
           Container(
             width: wv * 70,
-            height: hv * 9,
+            height: MySize.getScaledSizeHeight(90),
             margin: EdgeInsets.only(bottom: wv * 2),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -397,17 +398,17 @@ class HomePageComponents {
                                 style: TextStyle(
                                     color: kCardTextColor,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 15.sp)),
+                                    fontSize: MySize.getScaledSizeHeight(15))),
                           ),
                           SizedBox(
-                            height: 2.h,
+                            height: MySize.getScaledSizeHeight(5),
                           ),
                           Text(consultationType,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: kDeepTeal,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16.sp)),
+                                  fontSize: MySize.getScaledSizeHeight(16))),
                         ],
                       ),
                     ],
@@ -421,8 +422,8 @@ class HomePageComponents {
                       },
                       child: Container(
                         padding: EdgeInsets.all(6),
-                        width: 36.w,
-                        height: hv * 4,
+                        width: MySize.getScaledSizeWidth(38.5), 
+                        height: MySize.getScaledSizeHeight(40),
                         decoration: BoxDecoration(
                             color: isPrestataire ? kGoldForIconesBg:kSouthSeas,
                             borderRadius: BorderRadius.only(
@@ -532,15 +533,12 @@ class HomePageComponents {
             children: [
               Container(
                 margin: EdgeInsets.only(left: 3.h),
-                  child: Flexible(
-                    flex: 1,
-                                      child: Text( nom!=null ? nom :'',
+                  child: Text( nom!=null ? nom :'',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             color: kDateTextColor,
                             fontWeight: FontWeight.w700,
                             fontSize: fontSize(size: wv * 3.5))),
-                  ),
                 ),
               SizedBox(
                 height: hv * .5,
@@ -550,19 +548,16 @@ class HomePageComponents {
                   padding: EdgeInsets.only(
                     left: wv * 1,
                   ),
-                  child: Flexible(
-                    flex: 1,
-                    child: Container(
-                      width: wv * 30,
-                      child: Text(
-                          syntomes !=null ? syntomes : '',
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(
-                              color: kDateTextColor,
-                              fontWeight: FontWeight.w500,
-                              fontSize: fontSize(size: wv * 3.5))),
-                    ),
+                  child: Container(
+                    width: wv * 30,
+                    child: Text(
+                        syntomes !=null ? syntomes : '',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                            color: kDateTextColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: fontSize(size: wv * 3.5))),
                   ),
                 ),
               ),
