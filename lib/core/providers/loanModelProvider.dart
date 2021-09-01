@@ -18,6 +18,11 @@ class LoanModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  addPaidAmount(num val){
+    _loan.amountPaid = _loan.amountPaid == null ? val : _loan.amountPaid + val;
+    notifyListeners();
+  }
+
   setMaxAmount(num val){
     _loan.maxAmount = val;
     notifyListeners();

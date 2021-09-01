@@ -88,6 +88,9 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data.docs.length,
                         itemBuilder: (context, index){
+                          if(snapshot.data.docs[index]['adherentId'] == null){
+                            return Container();
+                          }
                           DocumentSnapshot doc = snapshot.data.docs[index];
                           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
                           print("name: ");

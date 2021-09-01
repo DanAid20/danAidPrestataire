@@ -154,7 +154,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 ),
                               ) : Container(),
 
-                              adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0 ? GestureDetector(
+                              adherentProvider.getAdherent.paid != true && adherentProvider.getAdherent.adherentPlan != 0 ? GestureDetector(
                                 onTap: ()=>Navigator.pushNamed(context, '/contributions'),
                                 child: NotificationCard(
                                   isprestataire: false,
@@ -163,7 +163,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 ),
                               ) : Container(),
 
-                              enable && adherentProvider.getAdherent.familyDoctorId != null && !(adherentProvider.getAdherent.havePaid != true && adherentProvider.getAdherent.adherentPlan != 0) ?  NotificationCard(
+                              enable && adherentProvider.getAdherent.familyDoctorId != null && !(adherentProvider.getAdherent.paid != true && adherentProvider.getAdherent.adherentPlan != 0) ?  NotificationCard(
                                   isprestataire: false,
                                   instruction: "",
                                   description: S.of(context).aucuneNotificationsPourLeMoment,

@@ -108,6 +108,9 @@ class UserProvider with ChangeNotifier {
   }
 
   void addFriend(String val) {
+    if(_user.friends == null){
+      _user.friends = [];
+    }
     _user.friends.add(val);
     notifyListeners();
   }

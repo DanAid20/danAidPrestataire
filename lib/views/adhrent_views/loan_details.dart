@@ -11,6 +11,7 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -250,17 +251,55 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                               mensuality: mensuality.amount.toInt(),
                                               type: "gfg",
                                               state: mensuality.status,
-                                              action: (){}
+                                              action: (){pay(amount: mensuality.amount.toInt(), id: mensuality.id);}
                                             ),
                                           );
                                         })
                                     : Center(
-                                      child: Container(padding: EdgeInsets.only(bottom: hv*4, right: wv*5, left: wv*5),child: Text("Votre demande de crédit ne respecte pas le nouveau format. Veillez récommencer la procédure s'il vous plait", textAlign: TextAlign.center)),
+                                      child: Container(padding: EdgeInsets.only(bottom: hv*4, right: wv*5, left: wv*5),child: Text("Aucune mensualité en cours", textAlign: TextAlign.center)),
                                     );
                                 }
                               ),
                             ),
-                            Container(),
+                            Container(
+                              //margin: EdgeInsets.symmetric(vertical: hv*2),
+                              child: StreamBuilder(
+                                stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 1).orderBy('number').snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                      ),
+                                    );
+                                  }
+                                  return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        physics: BouncingScrollPhysics(),
+                                        itemCount: snapshot.data.docs.length,
+                                        itemBuilder: (context, index) {
+                                          int lastIndex = snapshot.data.docs.length - 1;
+                                          DocumentSnapshot mensualityDoc = snapshot.data.docs[index];
+                                          MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
+                                          print("name: ");
+                                          return Padding(
+                                            padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                            child: HomePageComponents.getLoanTile(
+                                              label: "hhgfhfghfh",
+                                              subtitle: "",
+                                              date: mensuality.startDate.toDate(),
+                                              firstDate: mensuality.startDate.toDate(),
+                                              lastDate: mensuality.endDate.toDate(),
+                                              mensuality: mensuality.amount.toInt(),
+                                              type: "gfg",
+                                              state: mensuality.status,
+                                              action: (){}
+                                            ),
+                                          );
+                                        });
+                                }
+                              ),
+                            )
                           ],
                         ),
                       )
@@ -275,5 +314,100 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
       ),
     
     );
+  }
+
+  static const platform = const MethodChannel('danaidproject.sendmoney');
+
+  Future<String> makePayment({int cost, bool isOrange}) async {
+    String amount = cost.toString();
+    String operator = isOrange ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
+    String phoneNumber = isOrange ? '658112605' : '673662062';
+
+    try {
+      final String result = await platform.invokeMethod(operator, {"amount": amount, "phoneNumber": phoneNumber});
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result == "SUCCESS" ? "Transaction réussie" : "Transaction échouée")));
+      if(result == null){
+        //setState(() { spinner2 = false;});
+      }
+      return result;
+    } on PlatformException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Transaction échouée")));
+      //setState(() { spinner2 = false;});
+      return "FAILED";
+    }
+  }
+
+  pay({int amount, String id}){
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext bc){
+        return SafeArea(
+          child: Container(
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: Container(
+                      height: 35,
+                      width: wv*13,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(image: AssetImage('assets/images/om.jpg'), fit: BoxFit.cover)
+                      ),
+                    ),
+                    title: Text("ORANGE MONEY"),
+                    onTap: (){processPayment(amount: amount, id: id, isOrange: true);}
+                    ),
+                ListTile(
+                  leading: Container(
+                    height: 35,
+                    width: wv*13,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(image: AssetImage('assets/images/momo.jpg'), fit: BoxFit.cover)
+                    ),
+                  ),
+                  title: Text("MTN MOBILE MONEY"),
+                  onTap: () {processPayment(amount: amount, id: id, isOrange: false);},
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  processPayment({int amount, String id, bool isOrange}) async {
+
+    LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+
+    LoanModel loan = loanProvider.getLoan;
+
+    String res = await makePayment(cost: 50, isOrange: isOrange);
+    if(res == "SUCCESS"){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
+      FirebaseFirestore.instance.collection("CREDITS").doc(loan.id).collection("MENSUALITES").doc(id).update({
+        "paymentDate": DateTime.now(),
+        "status": 1
+      }).then((value) async {
+        await FirebaseFirestore.instance.collection('CREDITS').doc(loan.id).update({
+          "paymentDates": FieldValue.arrayUnion([DateTime.now()]),
+          "amountPaid": FieldValue.increment(amount)
+        });
+        loanProvider.addPaidAmount(amount);
+        if(loanProvider.getLoan.amountPaid >= loan.totalToPay){
+          await FirebaseFirestore.instance.collection('CREDITS').doc(loan.id).update({
+            "status": 1,
+          });
+          await FirebaseFirestore.instance.collection('ADHERENTS').doc(adherentProvider.getAdherent.adherentId).update({
+            "creditLimit": FieldValue.increment(loan.amount)
+          });
+          adherentProvider.updateLoanLimit(loan.amount);
+        }
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mise à jour des statuts éffectué",)));
+
+      });
+    }
   }
 }

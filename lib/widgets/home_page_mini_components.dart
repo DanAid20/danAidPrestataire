@@ -993,7 +993,7 @@ class HomePageComponents {
       child: Align(
         child: Text(label,
             style: TextStyle(
-                color: labelColor, fontSize: 14, fontWeight: FontWeight.w800)),
+                color: labelColor, fontSize: 16, fontWeight: FontWeight.w800)),
         alignment: Alignment.bottomLeft,
       ),
     );
@@ -1310,7 +1310,7 @@ class HomePageComponents {
               )
             ],
           ),
-          Text(name, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
+          Text(name != null ? name : "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
         ],
       ),
     );

@@ -58,37 +58,25 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     }
   }
 
-  /*void orangeMoneyTransfer({String amount, String pin}) async {
-    var res = _hoverUssd.sendUssd(actionId: transferOrangeMoney, extras: {"1": "658112605", "2": amount, "pin": ""});
-    print("Afterrereer");
-    print(res.toString()+": vaall");
-    print("Doonnneee");
-  }
-
-  void mobileMoneyTransfer({String amount, String pin}) async {
-    var res = _hoverUssd.sendUssd(actionId: transferMTNMobileMoney, extras: {"phoneNumber": "673662062", "montantTransfert": amount, "raison": "DanAid Payment", "pin": ""});
-    print("Afterrereer");
-    print(res.toString()+": vaall");
-    print("Doonnneee");
-  }*/
-
-  Future<dynamic> sendMoney(String phoneNumber, amount) async {
-      var sendMap = <String, dynamic>{
-        'phoneNumber': "658112605",
-        'amount': amount,
-      };
-  // vide en attendant le code JAVA
-  String response = "";
-    try {
-      final String result = await  _hoverChannel.invokeMethod('sendMoney',sendMap);
-      response = result;
-    } on PlatformException catch (e) {
-      response = "Failed to Invoke: '${e.message}'.";
-    }
-  return response;
-  }
 
   bool reduction = false;
+
+  int removedAmount = 0;
+  bool campaignOn = false;
+
+  init() async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance.collection('DANAID_DATA').doc('CAMPAGNE').get();
+    setState(() {
+      campaignOn = doc.data()["active"];
+      removedAmount = doc.data()["amount"];
+    });
+  }
+
+  @override
+  void initState() { 
+    super.initState();
+    init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,8 +100,9 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     DateTime end;
 
 
-    num registrationFee = adherentProvider.getAdherent.havePaid == false ? plan.registrationFee : 0;
-    num total = !reduction ? invoice.amount + registrationFee : (invoice.amount + registrationFee - 25000);
+    num registrationFee = (invoice.paid == false || invoice.stateValidate == false) && invoice.inscriptionId != null ? plan.registrationFee : 0;
+    num total = !reduction ? invoice.amount + registrationFee : (invoice.amount + registrationFee - removedAmount);
+    total = total.toInt();
     
     return Scaffold(
       appBar: AppBar(
@@ -190,7 +179,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                   ),
                   SizedBox(height: hv*3,),
                   
-                  invoice.planNumber == 1 ? Container(
+                  invoice.planNumber == 1 && campaignOn ? Container(
                     padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
                     margin: EdgeInsets.symmetric(horizontal: wv*4),
                     decoration: BoxDecoration(
@@ -203,7 +192,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                       children: [
                         Text(S.of(context).important, style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
                         SizedBox(height: hv*1,),
-                        Text("Obtenez 25,000 FCFA de réduction pour l'achat de ce plan de service", style: TextStyle(color: kTextBlue, fontSize: 15)),
+                        Text("Obtenez $removedAmount FCFA de réduction pour l'achat de ce plan de service", style: TextStyle(color: kTextBlue, fontSize: 15)),
                         SizedBox(height: hv*1,),
                         CustomTextButton(
                           noPadding: true,
@@ -318,7 +307,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                                         text: TextSpan(
                                           style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
                                           children: [
-                                            TextSpan(text: "${total + 25000}", style: TextStyle(decoration: TextDecoration.lineThrough, fontWeight: FontWeight.w400)),
+                                            TextSpan(text: "${total + removedAmount}", style: TextStyle(decoration: TextDecoration.lineThrough, fontWeight: FontWeight.w400)),
                                             TextSpan(text: "  $total Cfa", style: TextStyle(color: kDeepTeal))
                                           ]
                                         ),

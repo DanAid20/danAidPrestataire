@@ -384,10 +384,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: female == false ? whiteColor : kSouthSeas,
+                          color: _gender != "F" ? whiteColor : kSouthSeas,
                           boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300], offset: Offset(0, 1))]
                         ),
-                        child: SvgPicture.asset('assets/icons/Bulk/Woman.svg', width: wv*8, color: female == false ? kSouthSeas : whiteColor,),
+                        child: SvgPicture.asset('assets/icons/Bulk/Woman.svg', width: wv*8, color: _gender != "F" ? kSouthSeas : whiteColor,),
                       ),
                     ),
                     SizedBox(width: wv*3,),
@@ -401,10 +401,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: male == false ? whiteColor : kSouthSeas,
+                          color: _gender != "H" ? whiteColor : kSouthSeas,
                           boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300], offset: Offset(0, 1))]
                         ),
-                        child: SvgPicture.asset('assets/icons/Bulk/Man.svg', width: wv*8, color: male == false ? kSouthSeas : whiteColor,),
+                        child: SvgPicture.asset('assets/icons/Bulk/Man.svg', width: wv*8, color: _gender != "H" ? kSouthSeas : whiteColor,),
                       ),
                     )
                   ],),
@@ -630,7 +630,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
             ),
           ),
         ),
-        ((_confirmFamily == true) & (birthCertificateUploaded == true))
+        ((_confirmFamily == true) && (birthCertificateUploaded == true) && _gender != null)
           ? !buttonLoading ? CustomTextButton(
             text: S.of(context).suivant, 
             action: (){
@@ -657,7 +657,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   "urlCNI": beneficiary.getBeneficiary.cniUrl,
                   "urlActeNaissance": beneficiary.getBeneficiary.birthCertificateUrl,
                   "createdDate": DateTime.now(),
-                  "datFinvalidite": beneficiary.getBeneficiary.validityEndDate,
+                  "datFinvalidite": adherentModel.getAdherent.validityEndDate,
                   "dateNaissance": selectedDate,
                   "enabled": false,
                   "ifVivreMemeDemeure": _confirmFamily,

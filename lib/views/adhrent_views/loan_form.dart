@@ -785,9 +785,11 @@ class _LoanFormState extends State<LoanForm> {
                         }
 
                         await FirebaseFirestore.instance.collection('ADHERENTS').doc(adh.adherentId).update({
-                          "creditLimit": adh.loanLimit - loan.amount
+                          "creditLimit": FieldValue.increment(-loan.amount),
+                          "plafond": FieldValue.increment(loan.amount)
                         }).then((value) {
                           adherentProvider.updateLoanLimit(-loan.amount);
+                          adherentProvider.updateInsuranceLimit(loan.amount);
                         });
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Votre demande de crédit a été enrégistrée'),));

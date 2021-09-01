@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
@@ -9,6 +10,7 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
+import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,6 +31,7 @@ import 'package:provider/provider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/getCities.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
+import 'package:simple_tags/simple_tags.dart';
 
 class ProfileEdit extends StatefulWidget {
   @override
@@ -44,6 +47,11 @@ class _ProfileEditState extends State<ProfileEdit> {
   TextEditingController _cniNameController = new TextEditingController();
   TextEditingController _professionController = new TextEditingController();
   TextEditingController _addressController = new TextEditingController();
+  TextEditingController _heightController = TextEditingController();
+  TextEditingController _weightController = TextEditingController();
+  TextEditingController _allergyController = TextEditingController();
+  GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
+
   bool autovalidate = false;
   String _region;
   List<String> myCities = [];
@@ -73,6 +81,21 @@ class _ProfileEditState extends State<ProfileEdit> {
   bool otherFileSpinner = false;
   bool imageSpinner = false;
   bool positionSpinner = false;
+  String _bloodGroup;
+  List<String> allergies = [];
+  String currentAllergyText = "";
+  bool heightEnabled = true;
+  bool weightEnabled = true;
+
+  List<String> suggestions = [
+    "Lactose",
+    "Pénicilline",
+    "Pollen",
+    "Abeille",
+    "Feu",
+    "Herbes",
+    "Plastique"
+  ];
 
   LatLng _initialcameraposition = LatLng(4.044656688777058, 9.695724531228858);
   GoogleMapController _controller;
@@ -189,6 +212,30 @@ class _ProfileEditState extends State<ProfileEdit> {
       setState(() {
         _addressController.text = adherentProvider.getAdherent.address;
         addressEnabled = false;
+      });
+    }
+    if (adherentProvider.getAdherent.allergies != null){
+      setState(() {
+        for (int i = 0; i < adherentProvider.getAdherent.allergies.length; i++){
+          allergies.add(adherentProvider.getAdherent.allergies[i]);
+        }
+      });
+    }
+    if (adherentProvider.getAdherent.height != null){
+      setState(() {
+        _heightController.text = adherentProvider.getAdherent.height.toString();
+        heightEnabled = false;
+      });
+    }
+    if (adherentProvider.getAdherent.weight != null){
+      setState(() {
+        _weightController.text = adherentProvider.getAdherent.weight.toString();
+        weightEnabled = false;
+      });
+    }
+    if (adherentProvider.getAdherent.bloodGroup != null){
+      setState(() {
+        _bloodGroup = adherentProvider.getAdherent.bloodGroup;
       });
     }
     
@@ -564,7 +611,161 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ],
                       ),
                       Divider(),
+
+                      SizedBox(height: hv*3),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3),
+                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                            Column(children: [
+                              Text("Taille", style: TextStyle(fontSize: 17)), SizedBox(height: hv*0.5,),
+                              Row(children: [
+                                Container(child: SvgPicture.asset('assets/icons/Bulk/row-height.svg', color: kDeepTeal, width: wv*8,)),
+                                SizedBox(width: wv*2,),
+                                Container(
+                                  width: wv*30,
+                                  child: TextFormField(
+                                    controller: _heightController,
+                                    onChanged: (val) => setState((){}),
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                    ],
+                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                    style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                                    decoration: defaultInputDecoration(suffix: "cm")
+                                  ),
+                                ),
+                              ]),
+                            ],),
+
+                            Column(children: [
+                              Text(S.of(context).poids, style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
+                              Row(children: [
+                                Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', color: kDeepTeal, width: wv*8,)),
+                                SizedBox(width: wv*2,),
+                                Container(
+                                  width: wv*30,
+                                  child: TextFormField(
+                                    controller: _weightController,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                    ],
+                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                    style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                                    decoration: defaultInputDecoration(suffix: "Kg")
+                                  ),
+                                ),
+                              ]),
+                            ],),
+                          ],),
+                        ),
                       SizedBox(height: hv*2),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: wv*3),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Groupe sanguin", style: TextStyle(fontSize: 17),),
+                            SizedBox(height: hv*1,),
+                            Container(
+                              constraints: BoxConstraints(minWidth: wv*45),
+                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              child: ButtonTheme(alignedDropdown: true,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton(isExpanded: true, hint: Text("Choisir.."), value: _bloodGroup,
+                                    items: [
+                                      DropdownMenuItem(child: Text("A+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A+",),
+                                      DropdownMenuItem(child: Text("B+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B+",),
+                                      DropdownMenuItem(child: Text("A-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "A-",),
+                                      DropdownMenuItem(child: Text("B-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B-",),
+                                      DropdownMenuItem(child: Text("O-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "O-",),
+                                      DropdownMenuItem(child: Text("O+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "O+",),
+                                      DropdownMenuItem(child: Text("AB-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB-",),
+                                      DropdownMenuItem(child: Text("AB+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB+",),
+                                    ],
+                                    onChanged: (value) => setState(() {_bloodGroup = value;})
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                        SizedBox(height: hv*3.5,),
+
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3),
+                          child: Column(
+                            children: [
+                              Row(children: [
+                                Text(S.of(context).allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      SimpleAutoCompleteTextField(
+                                        key: autoCompleteKey,
+                                        suggestions: suggestions,
+                                        controller: _allergyController,
+                                        decoration: defaultInputDecoration(),
+                                        textChanged: (text) => currentAllergyText = text,
+                                        clearOnSubmit: false,
+                                        submitOnSuggestionTap: false,
+                                        textSubmitted: (text) {
+                                          if (text != "") {
+                                            !allergies.contains(_allergyController.text) ? allergies.add(_allergyController.text) : print("yo"); 
+                                          }
+                                        }
+                                      ),
+                                      Positioned(
+                                        right: 0,
+                                        child: IconButton(
+                                          onPressed: (){
+                                            if (_allergyController.text.isNotEmpty) {
+                                            setState(() {
+                                              !allergies.contains(_allergyController.text) ? allergies.add(_allergyController.text) : print("yo");
+                                              _allergyController.clear();
+                                            });
+                                          }
+                                          },
+                                          icon: CircleAvatar(child: Icon(Icons.add, color: whiteColor), backgroundColor: kDeepTeal,),),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],),
+
+                              Padding(
+                                padding: EdgeInsets.only(top: hv*2),
+                                child: SimpleTags(
+                                  content: allergies,
+                                  wrapSpacing: 4,
+                                  wrapRunSpacing: 4,
+                                  onTagPress: (tag) {
+                                    setState(() {
+                                      allergies.remove(tag);
+                                    });
+                                  },
+                                  tagContainerPadding: EdgeInsets.all(6),
+                                  tagTextStyle: TextStyle(color: kPrimaryColor),
+                                  tagIcon: Icon(Icons.clear, size: 15, color: kPrimaryColor,),
+                                  tagContainerDecoration: BoxDecoration(
+                                    color: kPrimaryColor.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+
+                      SizedBox(height: hv*2.5),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -612,7 +813,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         ),
                       ),
                       
-                      SizedBox(height: hv*3.5,),
+                      SizedBox(height: hv*4.5,),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -707,6 +908,10 @@ class _ProfileEditState extends State<ProfileEdit> {
                               "prenom": sname,
                               "enabled": true,
                               "regionDorigione": _region,
+                              "height": _heightController.text,
+                              "weight": _weightController.text,
+                              "bloodGroup": _bloodGroup,
+                              "allergies": allergies,
                               "statuMatrimonialMarie": isMarried,
                               "ville": _city == null ? adherentProvider.getAdherent.town : _city,
                               "localisation": gpsCoords != null ? {
@@ -722,7 +927,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                             }, SetOptions(merge: true))
                             .then((value) async {
                               adherentProvider.setEnableState(true);
-                              textFieldsControl();
+                              adherentProvider.setHeight(_heightController.text);
+                              adherentProvider.setWeight(_weightController.text);
+                              adherentProvider.setBloodGroup(_bloodGroup);
+                              adherentProvider.setAllergies(allergies);
+                              //textFieldsControl();
                               await HiveDatabase.setRegisterState(true);
                               HiveDatabase.setFamilyName(fname);
                               HiveDatabase.setSurname(sname);

@@ -225,7 +225,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                                 lineWidth: wv*2,
                                                 animation: true,
                                                 animationDuration: 500,
-                                                percent: adhr.insuranceLimit/coverage,
+                                                percent: adhr.insuranceLimit >= coverage ? 1 : adhr.insuranceLimit/coverage,
                                                 center: Text("${((adhr.insuranceLimit/coverage)*100).round()}%", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kDeepTeal)),
                                                 progressColor: kDeepTeal,
                                                 backgroundColor: kSouthSeas,

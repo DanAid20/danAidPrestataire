@@ -133,14 +133,20 @@ class MyCoverageTabView extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                   child: Row(children: [
                     Text(S.of(context).utilisation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                    //Text("Voir plus..")
+                    InkWell(
+                      onTap: ()=>Navigator.pushNamed(context, "/usecases"),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Text("Voir plus..")
+                      ),
+                    )
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                 ),
               ),
               Container(
                 color: whiteColor,
                 child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('createdDate', descending: true).snapshots(),
+                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(

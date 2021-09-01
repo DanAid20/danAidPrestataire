@@ -57,6 +57,7 @@ class _ComparePlansState extends State<ComparePlans> {
       //spinner2 = false;
     });
     planProvider.setPlanModel(plans[plan]);
+    adherentProvider.setAdherentPlan(plan);
     Navigator.of(context).pushNamed('/contributions');
   }
 

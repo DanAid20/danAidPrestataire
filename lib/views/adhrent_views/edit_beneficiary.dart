@@ -603,12 +603,11 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       "autrePieceName": "${_familynameController.text} ${_surnameController.text}",
                       "acteMariageName": "${_familynameController.text} ${_surnameController.text}",
                       "urlImage": avatarUrl,
-                      "genre": _gender,
                       "urlActeMariage": beneficiary.getBeneficiary.marriageCertificateUrl,
                       "urlAutrPiece": beneficiary.getBeneficiary.otherDocUrl,
                       "urlCNI": beneficiary.getBeneficiary.cniUrl,
                       "urlActeNaissance": beneficiary.getBeneficiary.birthCertificateUrl,
-                      "createdDate": DateTime.now(),
+                      "datFinvalidite": adherentModel.getAdherent.validityEndDate,
                       "enabled": false,
                       "ifVivreMemeDemeure": _confirmFamily,
                       "phoneList": [{"number": phone}],
@@ -617,7 +616,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       "allergies": allergies,
                       "relation": _relation,
                     }, SetOptions(merge: true)).then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${_surnameController.text} ajouté comme bénéficiaire'),));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Informations du bénéficiaire ${_surnameController.text} mises à jour..'),));
                       setState(() {
                         buttonLoading = false;
                       });

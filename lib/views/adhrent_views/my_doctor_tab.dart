@@ -14,6 +14,7 @@ import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/appointments.dart';
 import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
@@ -23,8 +24,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/helpers/constants.dart' as constants;
-import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 
 class MyDoctorTabView extends StatefulWidget {
   @override
@@ -501,10 +500,23 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                 color: whiteColor,
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 15, bottom: hv*2),
-                      child: Text(S.of(context).mesRendezvous, style: TextStyle(color: Colors.teal[400], fontSize: 17),)
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Text(S.of(context).mesRendezvous, style: TextStyle(color: Colors.teal[400], fontSize: 17),)
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => AppointmentsList(doc: _doc),),),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Text("Voir plus..")
+                          ),
+                        )
+                      ],
                     ),
+                    SizedBox(height: hv*2,),
                     SingleChildScrollView(
                       child: Column(
                         children: [
@@ -540,30 +552,8 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
                                               appointmentProvider.setAppointmentModel(appointment);
                                               _doc != null ? doctorProvider.setDoctorModel(_doc) : print("nope");
-                                              if(appointment.consultationType == "Video"){
-                                                /*if(appointment.startTime.toDate().isBefore(DateTime.now())){
-                                                  Navigator.pushNamed(context, '/appointment');
-                                                } */
-                                                if(appointment.token != null){
-                                                  print("getting toke..");
-                                                  var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
-                                                
-                                                  //var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.id, "uid": '112233', "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
-                                                  
-                                                  var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.id, "uid": "10000", "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
-                                                  print(response.toString());
-                                                  var body = jsonDecode(response.body);
-                                                  print(body.toString());
-                                                  String token = body['data'];
-                                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.id, uid: 10000,),),);
-                                                }
-                                                else {
-                                                  Navigator.pushNamed(context, '/appointment');
-                                                }
-                                              }
-                                              else {
-                                                Navigator.pushNamed(context, '/appointment');
-                                              }
+                                              Navigator.pushNamed(context, '/appointment');
+                                              
                                               
                                             }
                                           ),

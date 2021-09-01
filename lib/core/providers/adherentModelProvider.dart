@@ -31,6 +31,10 @@ class AdherentModelProvider with ChangeNotifier {
     _adherent.insuranceLimit = val;
     notifyListeners();
   }
+  void updateInsuranceLimit(num val){
+    _adherent.insuranceLimit = _adherent.insuranceLimit + val;
+    notifyListeners();
+  }
   void addVisit(DateTime date){
     _adherent.visitPoints = _adherent.visitPoints != null ? _adherent.visitPoints + 10 : 10;
     _adherent.visits.add(date);
@@ -89,6 +93,30 @@ class AdherentModelProvider with ChangeNotifier {
 
   void setEmail(String val){
     _adherent.email = val;
+    notifyListeners();
+  }
+
+  void setHeight(var val){
+    _adherent.height = val;
+    notifyListeners();
+  }
+
+  void setWeight(var val){
+    _adherent.weight = val;
+    notifyListeners();
+  }
+
+  void setBloodGroup(String val){
+    _adherent.bloodGroup = val;
+    notifyListeners();
+  }
+
+  void setAllergies(List val){
+    _adherent.allergies = [];
+    for(int i=0; i < val.length; i++){
+      _adherent.allergies.add(val[i]);
+    }
+    
     notifyListeners();
   }
 

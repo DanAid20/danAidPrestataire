@@ -1,6 +1,7 @@
 import 'package:danaid/views/adhrent_views/add_beneficiary_form.dart';
 import 'package:danaid/views/adhrent_views/edit_beneficiary.dart';
 import 'package:danaid/views/adhrent_views/appointment_form.dart';
+import 'package:danaid/views/adhrent_views/usecases.dart';
 import 'package:danaid/views/auths_views/adherent_form.dart';
 import 'package:danaid/views/auths_views/login_view.dart';
 import 'package:danaid/views/auths_views/otp_view.dart';
@@ -94,6 +95,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/partners-search": (context) => PartnersSearchScreen(),
   "/friend-requests": (context) => FriendRequests(),
   "/notifications": (context) => Notifications(),
+  "/usecases": (context) => UseCaseList(),
   //"/payment": (context) => Payment(),
 
   /**

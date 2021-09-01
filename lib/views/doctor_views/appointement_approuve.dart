@@ -436,15 +436,15 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       try {
                         String token;
 
-                        /*if(appointment.getAppointment.consultationType == "Video"){
+                        if(appointment.getAppointment.consultationType == "Video"){
                           var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
                           var response = await http.post(url, body: {"appID": agoraAppId, "appCertificate": agoraAppCertificate, "channelName": appointment.getAppointment.id, "uid": "20000", "roleApi" : "AUTHOR"}).catchError((e){print(e.toString());});
                           print(response.toString());
                           var body = jsonDecode(response.body);
                           print(body.toString());
                           token = body['data'];
-                          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 20000,),),);
-                        }*/
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 20000,),),);
+                        }
                         
                          final Map<String, dynamic> codes = {
                           'codeConsultation': code,
@@ -518,6 +518,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               })
                             },
                         });
+                        
                         // FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                         //   "status": 1
                         // },  SetOptions(merge: true)).then((value) async {

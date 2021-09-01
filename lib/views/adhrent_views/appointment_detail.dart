@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,6 +8,7 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
@@ -17,6 +20,8 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:simple_tags/simple_tags.dart';
+import 'package:http/http.dart' as http;
+import 'package:danaid/helpers/constants.dart' as constants;
 
 class Appointment extends StatefulWidget {
   @override
@@ -315,14 +320,34 @@ class _AppointmentState extends State<Appointment> {
                         try {
                           FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                             "announced": true
-                          },  SetOptions(merge: true)).then((value) {
+                          },  SetOptions(merge: true)).then((value) async {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).leRendezVousATAnnonc),));
                             appointment.setAnnouncement(true);
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, '/adherent-card');
-                            setState(() {
-                              announceLoading = false;
-                            });
+                            if(appointment.getAppointment.consultationType == "Video"){
+                              if(appointment.getAppointment.token != null){
+                                print("getting toke..");
+                                var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
+                                var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.getAppointment.id, "uid": "10000", "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
+                                print(response.toString());
+                                var body = jsonDecode(response.body);
+                                print(body.toString());
+                                String token = body['data'];
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 10000,),),);
+                              }
+                              else {
+                                setState(() {
+                                  announceLoading = false;
+                                });
+                                //Navigator.pushNamed(context, '/appointment');
+                              }
+                            } else {
+                              Navigator.pop(context);
+                              Navigator.pushNamed(context, '/adherent-card');
+                              setState(() {
+                                announceLoading = false;
+                              });
+                            }
+                            
                           });
                         }
                         catch(e) {
