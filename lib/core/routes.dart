@@ -32,6 +32,11 @@ import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
+import 'package:danaid/views/serviceprovider/Ordonance.dart';
+import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
+import 'package:danaid/views/serviceprovider/PrestationsEnCours.dart';
+import 'package:danaid/views/serviceprovider/ScanPatient.dart';
+import 'package:danaid/views/serviceprovider/create_Quote.dart';
 import 'package:danaid/views/serviceprovider/edit-prestatire-profilt.dart';
 import 'package:danaid/views/social_network_views/chatroom.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
@@ -116,6 +121,11 @@ final Map<String, Widget Function(BuildContext)> routes = {
   // Service provider routes (prestataire)
   "/serviceprovider-profile-edit": (context) => EditPrestataire(),
   "/serviceprovider-profile": (context) => PrestataireProfilePage(),
+  "/QuoteEmit-serviceprovider": (context) => CreateQuote(),
+  "/scanPatient-serviceprovider": (context) => ScanPatient(),
+  "/prestationEncours-serviceprovider": (context) => PrestationEnCours(),
+  "/ordonanceDuPatient-serviceprovider": (context) => OrdonanceDuPatient(),
+  "/ordonance-serviceprovider": (context) => Ordonances(),
 
   // Social network screens
   "/social-home": (context) => SocialMediaHomePage(),

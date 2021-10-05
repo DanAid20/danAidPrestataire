@@ -6,11 +6,14 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
+import 'package:danaid/language/DefaultLanguage.dart';
+import 'package:danaid/language/LanguageProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:danaid/helpers/SizeConfig.dart';
+import 'dart:ui' as ui;
 class HealthBookScreen extends StatefulWidget {
   @override
   _HealthBookScreenState createState() => _HealthBookScreenState();
@@ -19,8 +22,10 @@ class HealthBookScreen extends StatefulWidget {
 class _HealthBookScreenState extends State<HealthBookScreen> {
   TextEditingController phone = new TextEditingController();
   TextEditingController name = new TextEditingController();
+  final DefaultLanguage defaultLanguage = DefaultLanguage();
   @override
   Widget build(BuildContext context) {
+     MySize().init(context);
     return SafeArea(
       child: Scaffold(
         body: Center(
@@ -147,6 +152,43 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                   Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
+               Consumer<LanguageProvider>(
+                    builder: (context, currentData, child) {
+                      return Container(
+                            width: MySize.getScaledSizeWidth(19.0),
+                            margin: Spacing.top(40),
+                            constraints: BoxConstraints(minWidth: wv*45),
+                            padding: EdgeInsets.symmetric(horizontal: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  value: currentData.defineCurrentLanguage(context),
+                                  hint: Text(S.of(context).choisir),
+                                   items: defaultLanguage.languagesListDefault
+                                    .map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  },
+                                ).toList(),
+                                  onChanged: (String newValue) async {
+                                  //currentData.changeLocale(newValue);
+                                  context.read<LanguageProvider>().changeLocale(newValue);
+                                },
+                              ),
+                            ),
+                          )
+                          );
+              }),
+              
             ],),
           ),
         ),

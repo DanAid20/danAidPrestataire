@@ -211,9 +211,47 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data.docs[index];
-                    CollectionReference users =
+                    var component;
+                    if(doc.data()["adherentId"] != doc.data()["beneficiaryId"]){
+                       CollectionReference users =
+                        FirebaseFirestore.instance.collection("ADHERENTS/${doc.data()["adherentId"]}/BENEFICIAIRES");
+                      component= FutureBuilder<DocumentSnapshot>(
+                      future: users.doc(doc.data()["beneficiaryId"]).get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.hasData == null) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                            ),
+                          );
+                        }
+                        
+                        if (snapshot.hasError) {
+                          return Text(S.of(context).somethingWentWrong);
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          Map<String, dynamic> data = snapshot.data.data();
+                          return HomePageComponents().waitingRoomListOfUser(
+                              userImage: "${data["imageUrl"]}",
+                              nom: "${data["prenom"]} ${data["nomFamille"]} ",
+                              syntomes: '${doc.data()["title"]}', 
+                              isanounced: doc.data()["appointment-type"]=="consult-today");
+                              
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                          ),
+                        );
+                      },
+                    );
+                    }else if(doc.data()["adherentId"] == doc.data()["beneficiaryId"]){
+                         CollectionReference users =
                         FirebaseFirestore.instance.collection('ADHERENTS');
-                    return FutureBuilder<DocumentSnapshot>(
+                    component= FutureBuilder<DocumentSnapshot>(
                       future: users.doc(doc.data()["adherentId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -246,6 +284,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         );
                       },
                     );
+                    }
+                    return component;
                   })
               : Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -362,10 +402,11 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data.docs[index];
-                    
-                    CollectionReference users =
-                        FirebaseFirestore.instance.collection('ADHERENTS');
-                    return FutureBuilder<DocumentSnapshot>(
+                    var widget;
+                    // si doc.data()["adherentId"] === doc.data()["beneficiaryId"]
+                    if(doc.data()["adherentId"] == doc.data()["beneficiaryId"]){
+                    CollectionReference users = FirebaseFirestore.instance.collection('ADHERENTS');
+                        widget = FutureBuilder<DocumentSnapshot>(
                       future: users.doc(doc.data()["adherentId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -426,6 +467,75 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         return Text(" ");
                       },
                     );
+                    }else if (doc.data()["adherentId"] != doc.data()["beneficiaryId"]){
+                          CollectionReference users =
+                        FirebaseFirestore.instance.collection("ADHERENTS/${doc.data()["adherentId"]}/BENEFICIAIRES");
+                       widget= FutureBuilder<DocumentSnapshot>(
+                      future: users.doc(doc.data()["beneficiaryId"]).get(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        if (snapshot.hasData == null) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                            ),
+                          );
+                        }
+                        if (snapshot.hasError) {
+                          return Text(S.of(context).somethingWentWrong);
+                        }
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          Map<String, dynamic> data = snapshot.data.data();
+                          Timestamp t = data["dateNaissance"];
+                          DateTime d = t.toDate();
+                          DateTime dateTimeNow = DateTime.now();
+                          final differenceInDays =
+                              dateTimeNow.difference(d).inDays ~/ 365;
+                          Timestamp day = doc.data()["start-time"];
+                          DateTime dateTime = day.toDate();
+                          String formattedTime =DateFormat.Hm().format(dateTime);
+                          return doc.data()["status"]==2? SizedBox.shrink() : GestureDetector(
+                                onTap: ()=>{
+                                appointmentModel=AppointmentModel.fromDocument(doc),
+                                rendezVous.setAppointmentModel(appointmentModel),
+                                rendezVous.getAppointment.adherentId=snapshot.data.id,
+                                rendezVous.getAppointment.avatarUrl=data["imageUrl"],
+                                rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
+                                rendezVous.getAppointment.birthDate=data["dateNaissance"],
+                                
+                                Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AppointmentDetails(adherent: adherent),
+                                      ),)
+                                  
+                                },
+                                
+                                child: HomePageComponents().timeline(
+                                isanounced: doc.data()["announced"],
+                                adhrentId: doc.data()["adherentId"],
+                                doctorId: doctor.getDoctor.id,
+                                consultationtype: doc.data()["consultation-type"],
+                                isPrestataire: false,
+                                age: "$differenceInDays ans",
+                                consultationDetails: '${doc.data()["title"]}',
+                                consultationType:
+                                    "${doc.data()["appointment-type"]}",
+                                time: "$formattedTime",
+                                userImage: '${data["imageUrl"]}',
+                                userName:
+                                    '${data["prenom"]} ${data["nomFamille"]} '),
+                          );
+                        }
+                        return Text(" ");
+                      },
+                      
+                    );
+                    }
+                    // alors on affiche adherent
+                    // sinom on affiche beneficiares 
+                    return widget;
                   })
               : Center(
                   child: Text(S.of(context).aucunAdherentDisponiblePourLeMoment),
@@ -478,6 +588,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                       Radius.circular(10),
                     ),
                   ),
+                  outsideTextStyle:TextStyle(
+                      color: isPrestataire ? kBlueForce : whiteColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: calendarTextValue) ,
+                  rangeEndTextStyle: TextStyle(
+                      color: isPrestataire ? kBlueForce : whiteColor,
+                      fontWeight: FontWeight.w700,
+                      fontSize: calendarTextValue),
                   rangeStartTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,

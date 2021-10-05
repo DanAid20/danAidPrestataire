@@ -375,7 +375,6 @@ Widget questionDuDocteur() {
                   ),
 
                   SizedBox(height: hv*2,),
-                  
                   Row(children: [
                     HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
                     HomePageComponents().verticalDivider(),
