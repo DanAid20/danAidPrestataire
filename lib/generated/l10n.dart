@@ -1505,10 +1505,10 @@ class S {
     );
   }
 
-  /// `. Message:`
+  /// `Message`
   String get message {
     return Intl.message(
-      '. Message:',
+      'Message',
       name: 'message',
       desc: '',
       args: [],
@@ -8410,6 +8410,346 @@ class S {
     return Intl.message(
       'Chats',
       name: 'chats',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create a quote`
+  String get crerUnDevis {
+    return Intl.message(
+      'Create a quote',
+      name: 'crerUnDevis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan the patient's card`
+  String get scannerLaCarteDuPatient {
+    return Intl.message(
+      'Scan the patient\'s card',
+      name: 'scannerLaCarteDuPatient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Or enter the payment code`
+  String get ouInscrireLeCodeDePaiement {
+    return Intl.message(
+      'Or enter the payment code',
+      name: 'ouInscrireLeCodeDePaiement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `an error has occurred `
+  String get uneErreurSestProduite {
+    return Intl.message(
+      'an error has occurred ',
+      name: 'uneErreurSestProduite',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `invalid Qr code`
+  String get qrCodeInvaldie {
+    return Intl.message(
+      'invalid Qr code',
+      name: 'qrCodeInvaldie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `this user does not exist`
+  String get cetUtilisateurNexistePas {
+    return Intl.message(
+      'this user does not exist',
+      name: 'cetUtilisateurNexistePas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `an error has occurred`
+  String get uneErreurEstSurvenue {
+    return Intl.message(
+      'an error has occurred',
+      name: 'uneErreurEstSurvenue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Benefits in progress`
+  String get prestationsEnCours {
+    return Intl.message(
+      'Benefits in progress',
+      name: 'prestationsEnCours',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `no quote matched this patient`
+  String get aucunDevisNeCorrespondACePatient {
+    return Intl.message(
+      'no quote matched this patient',
+      name: 'aucunDevisNeCorrespondACePatient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel`
+  String get cancel {
+    return Intl.message(
+      'Cancel',
+      name: 'cancel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Order`
+  String get ordonance {
+    return Intl.message(
+      'Order',
+      name: 'ordonance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copayment`
+  String get copaiement {
+    return Intl.message(
+      'Copayment',
+      name: 'copaiement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `state unknouw`
+  String get tatInconue {
+    return Intl.message(
+      'state unknouw',
+      name: 'tatInconue',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `are you sure ?`
+  String get tesvousSur {
+    return Intl.message(
+      'are you sure ?',
+      name: 'tesvousSur',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `medicaments delete`
+  String get medicamentsSupprimer {
+    return Intl.message(
+      'medicaments delete',
+      name: 'medicamentsSupprimer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `covered by Danaid`
+  String get couvertParDanaid {
+    return Intl.message(
+      'covered by Danaid',
+      name: 'couvertParDanaid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Niveau I Decouverte`
+  String get niveauIDecouverte {
+    return Intl.message(
+      'Niveau I Decouverte',
+      name: 'niveauIDecouverte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validate The Benefit`
+  String get validerLaPrestation {
+    return Intl.message(
+      'Validate The Benefit',
+      name: 'validerLaPrestation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not Editable..`
+  String get nonEditable {
+    return Intl.message(
+      'Not Editable..',
+      name: 'nonEditable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount paid`
+  String get montantPercu {
+    return Intl.message(
+      'Amount paid',
+      name: 'montantPercu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Issue a review`
+  String get emettreUnDvis {
+    return Intl.message(
+      'Issue a review',
+      name: 'emettreUnDvis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total Amount`
+  String get montantTotal {
+    return Intl.message(
+      'Total Amount',
+      name: 'montantTotal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `import your quotes`
+  String get importerVosDevis {
+    return Intl.message(
+      'import your quotes',
+      name: 'importerVosDevis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `delete`
+  String get effacer {
+    return Intl.message(
+      'delete',
+      name: 'effacer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `upload of`
+  String get uploadDe {
+    return Intl.message(
+      'upload of',
+      name: 'uploadDe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `send ...`
+  String get envoie {
+    return Intl.message(
+      'send ...',
+      name: 'envoie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `image(s)`
+  String get images {
+    return Intl.message(
+      'image(s)',
+      name: 'images',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `image(s) select`
+  String get imagesSlectionner {
+    return Intl.message(
+      'image(s) select',
+      name: 'imagesSlectionner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `enter the consultation code`
+  String get entrezLeCodeDeConsultation {
+    return Intl.message(
+      'enter the consultation code',
+      name: 'entrezLeCodeDeConsultation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `enter the amount of the quote`
+  String get entrezLeMontantDuDevis {
+    return Intl.message(
+      'enter the amount of the quote',
+      name: 'entrezLeMontantDuDevis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `import the image(s) of the quote`
+  String get importerLesImagesDuDevis {
+    return Intl.message(
+      'import the image(s) of the quote',
+      name: 'importerLesImagesDuDevis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `an error occurred during the sending`
+  String get uneErreurSestProduiteLorsDeLenvoie {
+    return Intl.message(
+      'an error occurred during the sending',
+      name: 'uneErreurSestProduiteLorsDeLenvoie',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `invalid consultation code`
+  String get codeDeConsultationInvalide {
+    return Intl.message(
+      'invalid consultation code',
+      name: 'codeDeConsultationInvalide',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `you cannot import more than 10 images`
+  String get vousNePouvezPasImporterPlusDe5Images {
+    return Intl.message(
+      'you cannot import more than 10 images',
+      name: 'vousNePouvezPasImporterPlusDe5Images',
       desc: '',
       args: [],
     );

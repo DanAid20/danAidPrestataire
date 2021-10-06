@@ -117,6 +117,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   Hive.init(directory.path);
   Hive.registerAdapter(NotificationModelAdapter());
+  await Hive.openBox('language');
   setupLocator();
   runApp(Danaid(env: "prod",));
 }

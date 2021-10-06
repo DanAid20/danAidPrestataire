@@ -12,6 +12,7 @@ void main() async {
   Directory directory = await pathProvider.getApplicationDocumentsDirectory();
   await Firebase.initializeApp();
   Hive.init(directory.path);
+  await Hive.openBox('language');
   setupLocator();
   runApp(Danaid(env: "dev",));
 }

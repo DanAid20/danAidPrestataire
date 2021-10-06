@@ -43,8 +43,10 @@ const kTealsLinearColors = LinearGradient(
 const kThirdColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 const kTabs2 = Color(0xFFAE9282);
+const kMaron = Color(0xFFA18C26);
 const kShadowColor = Color(0xFF959da5);
 const kTextLightColor = Color.fromRGBO(237, 237, 237, 1);
+const kLightWhite = Color(0xFFEEEEEE);
 
 const kSouthSeas = Color(0xFF57CECA);
 const kGold = Color(0xFFECCA33);
@@ -56,6 +58,8 @@ const kGoldlightYellow = Color(0xFFF9E088);
 const kDeepTeal = Color(0xFF05837C);
 const kDeepDarkTeal = Color(0xFF008778);
 const kDeepTealClair = Color(0xFFC0E3E1);
+const kDeepTellow = Color(0xFFFAD427);
+const kDeepYellow = Color(0xFFFAD427);
 const kDeepTealCAdress = Color(0xFF51BDB1);
 const kBrownCanyon = Color(0xFFAE9284);
 const kSmoothBrown = Color(0xFFDFD3CE);
@@ -65,6 +69,7 @@ const kSimpleForce = Color(0xFF4F5F8E);
 const kblueSky = Color(0xFF57CECA);
 const kBlueDeep = Color(0xFF0075AA);
 const kTextBlue = Color(0xFF4F5F8E);
+const bgInputGray =  Color(0xFFECECEC);
 
 //  print(_selectedDay);
 //                     print(_selectedDay.runtimeType);

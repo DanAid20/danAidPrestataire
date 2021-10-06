@@ -71,9 +71,17 @@ class HiveDatabase {
     Box authBox = await Hive.openBox('auth');
     authBox.put('isRegistered', val);
   }
+  static setLanguage(String val) async {
+    Box languageBox = await Hive.openBox('language');
+    languageBox.put('language', val);
+  }
 
   //Getters
 
+  static Future<String> getlanguage() async {
+    Box languageBox = await Hive.openBox('language');
+    return languageBox.get('language');
+  }
   static Future<String> getProfileType() async {
     Box userBox = await Hive.openBox('user');
     return userBox.get('profile');
