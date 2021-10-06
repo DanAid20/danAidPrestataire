@@ -8,6 +8,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/language/DefaultLanguage.dart';
 import 'package:danaid/language/LanguageProvider.dart';
+import 'package:danaid/language/Language_Helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -180,8 +181,10 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                                   },
                                 ).toList(),
                                   onChanged: (String newValue) async {
-                                  //currentData.changeLocale(newValue);
-                                  context.read<LanguageProvider>().changeLocale(newValue);
+                                  currentData.changeLocale(newValue);
+                                  //await HiveDatabase.setLanguage(LanguageHelper().convertLocaleToLangName(newValue));
+                                  
+                                  // context.read<LanguageProvider>().changeLocale(newValue);
                                 },
                               ),
                             ),

@@ -117,7 +117,18 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   Hive.init(directory.path);
   Hive.registerAdapter(NotificationModelAdapter());
-  await Hive.openBox('language');
+  await chechIfExists();
   setupLocator();
   runApp(Danaid(env: "prod",));
+}
+
+chechIfExists() async {
+  bool exists = await Hive.boxExists('language');
+  if(exists){
+     await Hive.openBox('language');
+  }else{
+    var box = await Hive.openBox('language');
+     await box.put('language', 'Français');
+     await Hive.openBox('language');
+  }
 }

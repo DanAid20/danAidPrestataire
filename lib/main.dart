@@ -12,7 +12,18 @@ void main() async {
   Directory directory = await pathProvider.getApplicationDocumentsDirectory();
   await Firebase.initializeApp();
   Hive.init(directory.path);
-  await Hive.openBox('language');
+  await chechIfExists();
   setupLocator();
   runApp(Danaid(env: "dev",));
+}
+
+chechIfExists() async {
+  bool exists = await Hive.boxExists('language');
+  if(exists){
+     await Hive.openBox('language');
+  }else{
+    var box = await Hive.openBox('language');
+     await box.put('language', 'English');
+      await Hive.openBox('language');
+  }
 }
