@@ -34,6 +34,7 @@ import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
 import 'package:danaid/views/serviceprovider/edit-prestatire-profilt.dart';
+import 'package:danaid/views/social_network_views/ambassador_dashboard.dart';
 import 'package:danaid/views/social_network_views/chatroom.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/views/social_network_views/search.dart';
@@ -126,6 +127,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/create-publication": (context) => CreatePublication(),
   "/search": (context) => Search(),
   "/create-group": (context) => CreateGroup(),
-  "/create-group-final": (context) => CreateGroupFinalStep()
+  "/create-group-final": (context) => CreateGroupFinalStep(),
+  "/ambassador-dashboard": (context) => AmbassadorDashboard(),
   
 };

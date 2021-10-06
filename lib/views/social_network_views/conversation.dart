@@ -138,7 +138,7 @@ class _ConversationState extends State<Conversation> {
                       Text((conversation.getConversation.targetProfileType != doctor ? "" : "Dr. ") + conversation.getConversation.targetName, overflow: TextOverflow.fade, style: TextStyle( color: Colors.white),),
                       SizedBox(height: 1),
                       Text(
-                        conversation.getConversation.targetProfileType == doctor ? "Médecin" : conversation.getConversation.targetProfileType == serviceProvider ? "Prestataire" : "Adhérent",
+                        conversation.getConversation.targetIsSupport == true ? "Support DandAid" : conversation.getConversation.targetProfileType == doctor ? "Médecin" : conversation.getConversation.targetProfileType == serviceProvider ? "Prestataire" : "Adhérent",
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,

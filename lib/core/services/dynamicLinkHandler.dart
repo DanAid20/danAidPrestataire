@@ -31,10 +31,16 @@ class DynamicLinkHandler {
     return shortenedLink.shortUrl;
   }
   
-  static Future<Uri> createPostDynamicLink({@required String userId, @required String postId, @required String isGroup}) async {
+  static Future<Uri> createPostDynamicLink({@required String userId, @required String postId, @required String isGroup, String text, String title}) async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: 'https://danaid.page.link',
       link: Uri.parse('https://danaid.page.link/post?userid=$userId&postid=$postId&isgroup=$isGroup'),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        imageUrl: Uri.parse("https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com/o/FCMImages%2FDanAid%20Logo%20mini%20icon.png?alt=media&token=93298300-7e26-4760-962a-08a3b31960c6"),
+        title: title == null ? "Publicaton DanAid" : title,
+        description: text
+      ),
+      dynamicLinkParametersOptions: DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short),
       androidParameters: AndroidParameters(
         packageName: 'com.danaid.danaidmobile',
         minimumVersion: 210020010,
@@ -104,6 +110,32 @@ class DynamicLinkHandler {
     );
     return shortenedLink.shortUrl;
   }
+  
+  static Future<Uri> createAmbassadorDynamicLink({@required String userId, @required String couponCode}) async {
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: 'https://danaid.page.link',
+      link: Uri.parse('https://danaid.page.link/ambassador?userid=$userId&coupon=$couponCode'),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        imageUrl: Uri.parse("https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com/o/FCMImages%2FDanAid%20Logo%20mini%20icon.png?alt=media&token=93298300-7e26-4760-962a-08a3b31960c6"),
+        title: "Invitation DanAid",
+        description: "Réjoignez la mutuelle DanAid et profitez d'une couverture à hauteur de 70%"
+      ),
+      dynamicLinkParametersOptions: DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short),
+      androidParameters: AndroidParameters(
+        packageName: 'com.danaid.danaidmobile',
+        minimumVersion: 210020010,
+      ),
+      /*iosParameters: IosParameters(
+        bundleId: 'com.danaid.danaidmobile',
+        minimumVersion: '210020010',
+        appStoreId: '',
+      ),*/
+    );
+    final link = await parameters.buildUrl();
+    final ShortDynamicLink shortenedLink = await DynamicLinkParameters.shortenUrl(link, DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.unguessable),
+    );
+    return shortenedLink.shortUrl;
+  }
 
   void fetchClassicLinkData(BuildContext context) async {
     var link = await FirebaseDynamicLinks.instance.getInitialLink();
@@ -125,6 +157,7 @@ class DynamicLinkHandler {
         bool isPost = uri.pathSegments.contains('post');
         bool isFriendInvite = uri.pathSegments.contains('friend');
         bool isCompareService = uri.pathSegments.contains('compare');
+        bool isAmbassadorInvite = uri.pathSegments.contains('ambassador');
         if(isPost){
           print("This is a post link");
           BottomAppBarControllerProvider bottomAppBarController = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
@@ -154,6 +187,30 @@ class DynamicLinkHandler {
                 });
               });
             } 
+          }
+        }
+        else if(isAmbassadorInvite){
+          print("This is an ambassador invite");
+          print(userProvider.getUserModel.userId.toString());
+          print('+'+queryParams["userid"].substring(1).toString());
+          print('start');
+          String ambaId = '+'+queryParams["userid"].substring(1).toString();
+          String couponCode = queryParams["coupon"];
+          if(adherentProvider.getAdherent != null){
+            await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.getAdherentId).set({'invited': true, 'invitedBy': ambaId, 'couponCodeUsed': couponCode}, SetOptions(merge: true)).then((doc) async {
+            await FirebaseFirestore.instance.collection("USERS").doc(ambaId).update({"invites": FieldValue.arrayUnion([adherentProvider.getAdherent.getAdherentId])}).then((value) async {
+              await FirebaseFirestore.instance.collection("COMPTES_CREER_VIA_INVITATION").doc(adherentProvider.getAdherent.getAdherentId).set({
+                "firstPaiementProceded": false,
+                "getingInvitationDate": DateTime.now(),
+                "coupon": couponCode,
+                "id": "",
+                "receiverId": adherentProvider.getAdherent.getAdherentId,
+                "senderId": ambaId,
+                "sendingInvitationDate": DateTime.now(),
+              });
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Bienvenue sur DanAid")));
+              });
+            });
           }
         }
         else if(isCompareService){

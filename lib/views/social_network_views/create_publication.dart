@@ -376,6 +376,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                               "userId": userProvider.getUserModel.userId,
                               "userAvatar": userProvider.getUserModel.imgUrl,
                               "userName": userProvider.getUserModel.fullName,
+                              "isFromDanAid": userProvider.getUserModel.isDanAIdAccount,
                               "text": textController.text,
                               "post-type": pubType,
                               "likes": 0,

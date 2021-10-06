@@ -345,6 +345,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     print("0");
     await FirebaseMessaging.instance.subscribeToTopic(FirebaseAuth.instance.currentUser.uid);
     await FirebaseMessaging.instance.subscribeToTopic(userProvider.getUserId.substring(1));
+    await FirebaseMessaging.instance.unsubscribeFromTopic("DanAidAccount");
     print("1");
     
 
@@ -467,6 +468,9 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       }
       else if (message.data['type'] == "LIKE_CLASSICAL_POST"){
         await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
+      }
+      else if (message.data['type'] == "DANAID_POST"){
+        await _showNotification(id: 6, title: "Important", body: message.data['body']);
       }
       else {
         print("No type recognized");

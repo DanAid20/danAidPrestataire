@@ -1636,5 +1636,142 @@ class HomePageComponents {
       ),
     );
   }
+
+  static Widget getPromotionTile({String title, String description, num amount, DateTime firstDate, DateTime lastDate, bool active, bool chosen, Function action}) {
+    String lastDateString = lastDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate.year.toString();
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
+      padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.grey[200].withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title.toString(), style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold)),
+          Text(description.toString(), style: TextStyle(color: kDeepTeal, fontSize: 14), overflow: TextOverflow.fade),
+          SizedBox(height: hv*2,),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Montant", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                  Text("$amount f.", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
+                ],
+              ),
+              Spacer(),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Fin de la promotion", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                        Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                    SizedBox(width: wv*5,),
+                    Container(
+                      child: CustomTextButton(
+                        text: chosen ? " Annuler " : " Profiter ",
+                        fontSize: 14,
+                        color: chosen ? kSouthSeas : kDeepTeal,
+                        noPadding: true,
+                        expand: false,
+                        action: action,
+                      )
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget getInvoiceSegmentTile({String label, String subtitle, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
+    String firstDateString = firstDate.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
+    String lastDateString = lastDate.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
+      padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+      decoration: BoxDecoration(
+        color: whiteColor,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.grey[200].withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: wv*2),
+        leading: Container(
+          width: wv * 12,
+          padding: EdgeInsets.symmetric(horizontal: wv * 1),
+          decoration: BoxDecoration(
+              color: kBrownCanyon,
+              borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(date.day.toString().padLeft(2, '0'),
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.8),
+                      fontSize: inch * 1.7,
+                      fontWeight: FontWeight.w700)),
+              Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.8),
+                  fontSize: inch * 1.5,
+                  fontWeight: FontWeight.w400)),
+            ],
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text("$firstDateString au $lastDateString", style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w600), overflow: TextOverflow.ellipsis, maxLines: 2,),),
+        subtitle: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(subtitle, style: TextStyle(color: Colors.grey[600], fontSize: 14), overflow: TextOverflow.fade, maxLines: 1,)
+              ],
+            ),
+          ],
+        ),
+        trailing: Container(
+          width: 120,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Spacer(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(mensuality.toString()+" .f", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, decoration: state == 1 ? TextDecoration.lineThrough : TextDecoration.none, fontSize: 16)),
+                  Text("", style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),),
+                ],
+              ),
+              action == null || state == 1 ? Container() : SizedBox(width: wv*2,),
+              action == null || state == 1 ? Container() : Column(
+                children: [
+                  SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', height: 35,),
+                  Text(S.current.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+                ],
+              )
+            ],
+          ),
+        ),
+        onTap: action,
+      ),
+    );
+  }
 }
 

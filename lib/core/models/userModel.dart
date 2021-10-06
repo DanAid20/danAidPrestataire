@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  String authId, userId, matricule, fullName, imgUrl, email, profileType, regionOfOrigin, cniUrl, countryCode, countryName;
+  String authId, userId, matricule, fullName, imgUrl, email, profileType, regionOfOrigin, cniUrl, countryCode, countryName, couponCode;
   Timestamp dateCreated, lastDateVisited;
-  bool enabled, enable;
-  int visitPoints, points, comments, posts;
+  bool enabled, enable, isDanAIdAccount;
+  int visitPoints, points, comments, posts, isAmbassador;
   List phoneList, phoneKeywords, nameKeywords, friends, groups, visits, friendRequests, chats;
 
-  UserModel({this.visitPoints, this.enable, this.points, this.comments, this.friendRequests, this.posts, this.chats, this.visits, this.authId, this.userId, this.dateCreated, this.lastDateVisited,  this.matricule, this.phoneKeywords, this.nameKeywords, this.friends, this.groups, this.fullName, this.imgUrl, this.email, this.profileType, this.regionOfOrigin, this.cniUrl, this.countryCode, this.countryName, this.enabled, this.phoneList});
+  UserModel({this.visitPoints, this.enable, this.points, this.isAmbassador, this.isDanAIdAccount, this.comments, this.friendRequests, this.couponCode, this.posts, this.chats, this.visits, this.authId, this.userId, this.dateCreated, this.lastDateVisited,  this.matricule, this.phoneKeywords, this.nameKeywords, this.friends, this.groups, this.fullName, this.imgUrl, this.email, this.profileType, this.regionOfOrigin, this.cniUrl, this.countryCode, this.countryName, this.enabled, this.phoneList});
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
@@ -37,7 +37,10 @@ class UserModel {
       nameKeywords: doc.data()["nameKeywords"],
       friendRequests: doc.data()["friendRequests"],
       friends: doc.data()["friends"],
-      groups: doc.data()["groups"]
+      groups: doc.data()["groups"],
+      isAmbassador: doc.data()["isAmbassador"],
+      couponCode: doc.data()["couponCode"],
+      isDanAIdAccount: doc.data()["danAidAccount"]
     );
   }
 }

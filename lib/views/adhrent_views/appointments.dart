@@ -81,31 +81,7 @@ class _AppointmentsListState extends State<AppointmentsList> {
                           AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
                           appointmentProvider.setAppointmentModel(appointment);
                           widget.doc != null ? doctorProvider.setDoctorModel(widget.doc) : print("nope");
-                          if(appointment.consultationType == "Video"){
-                            /*if(appointment.startTime.toDate().isBefore(DateTime.now())){
-                              Navigator.pushNamed(context, '/appointment');
-                            } */
-                            if(appointment.token != null){
-                              print("getting toke..");
-                              var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
-                            
-                              //var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.id, "uid": '112233', "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
-                              
-                              var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.id, "uid": "10000", "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
-                              print(response.toString());
-                              var body = jsonDecode(response.body);
-                              print(body.toString());
-                              String token = body['data'];
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.id, uid: 10000,),),);
-                            }
-                            else {
-                              Navigator.pushNamed(context, '/appointment');
-                            }
-                          }
-                          else {
-                            Navigator.pushNamed(context, '/appointment');
-                          }
-                          
+                          Navigator.pushNamed(context, '/appointment');
                         }
                       ),
                     );

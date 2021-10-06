@@ -162,11 +162,11 @@ class _PostDetailsState extends State<PostDetails> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(widget.post.title, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: kTextBlue)),
+                                SelectableText(widget.post.title, style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: kTextBlue)),
                               ],
                             ),
                           ) : Container(),
-                          Text(widget.post.text.toString(), style: TextStyle(fontSize: 14,  color: Colors.grey[700])),
+                          SelectableText(widget.post.text.toString(), style: TextStyle(fontSize: 14,  color: Colors.grey[700])),
 
                           SizedBox(height: hv*2,),
 
@@ -463,7 +463,7 @@ class CommentBox extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(comment.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
-                    Text(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    SelectableText(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ],
                 )
               ),

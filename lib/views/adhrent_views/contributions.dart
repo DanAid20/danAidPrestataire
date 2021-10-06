@@ -7,6 +7,10 @@ import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/views/adhrent_views/invoiceSplit.dart';
+import 'package:danaid/views/adhrent_views/paymentCart.dart';
+import 'package:danaid/views/adhrent_views/subCoveragePayment.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,6 +25,28 @@ class Contributions extends StatefulWidget {
 
 class _ContributionsState extends State<Contributions> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  InvoiceModel latestInvoice;
+
+  init() async {
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').where('categoriePaiement', isEqualTo: "COTISATION_ANNUELLE").get().then((query) {
+      DateTime witness = DateTime(2000);
+      for(int i = 0; i < query.docs.length; i++){
+        InvoiceModel model = InvoiceModel.fromDocument(query.docs[i]);
+        if(model.coverageStartDate.toDate().isAfter(witness)){
+          witness = model.coverageStartDate.toDate();
+          latestInvoice = model;
+        }
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+  }
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
@@ -62,7 +88,84 @@ class _ContributionsState extends State<Contributions> {
             subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
             action: ()=>Navigator.pushNamed(context, '/compare-plans')
           ),
-          SizedBox(height: hv*2.5,),
+          SizedBox(height: hv*1,),
+          latestInvoice != null ? Container(
+            margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+            padding: EdgeInsets.symmetric(horizontal: wv*3.5, vertical: hv*2.25),
+            decoration: BoxDecoration(
+              color: kSouthSeas.withOpacity(0.3),
+              borderRadius: BorderRadius.circular(20)
+            ),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(child: Text("Côtisation de base", style: TextStyle(color: kCardTextColor, fontSize: 16),), width: wv*40,),
+                    SizedBox(width: wv*2,),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("1 X ${latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                          Text("Famille", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                          Text("(1 à 5 personnes)", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: wv*2,),
+                    Text("${latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                SizedBox(height: hv*1.5),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(child: Text("Supplément", style: TextStyle(color: kCardTextColor, fontSize: 16),), width: wv*40,),
+                    SizedBox(width: wv*2,),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("0 X 15000 f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                          Text("Personnes", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                          Text("additionelles", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: wv*2,),
+                    Text("0 f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+                SizedBox(height: hv*1.5),
+                Divider(color: kSouthSeas, thickness: 3, height: hv*1.5,),
+                Row(
+                  children: [
+                    Text("Total annuel", style: TextStyle(color: kCardTextColor, fontSize: 16)),
+                    Spacer(),
+                    Text("${latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16))
+                  ],
+                ),
+                SizedBox(height: hv*0.5),
+                Row(
+                  children: [
+                    Text("Payé", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold)),
+                    Spacer(),
+                    Text("${latestInvoice.amountPaid != null ? latestInvoice.amountPaid : 0} f.", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold))
+                  ],
+                ),
+                SizedBox(height: hv*1.5),
+                Row(
+                  children: [
+                    Text("Reste à payer", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold)),
+                    Spacer(),
+                    Text("${latestInvoice.amountPaid != null ? latestInvoice.amount - latestInvoice.amountPaid < 0 ? 0 : latestInvoice.amount - latestInvoice.amountPaid : latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold))
+                  ],
+                ),
+              ],
+            ),
+          ) : Container(),
+          SizedBox(height: hv*1,),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*2),
@@ -114,16 +217,49 @@ class _ContributionsState extends State<Contributions> {
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Côtisation éffectuée",)));
                                   }
                                   else {
-                                    PlanModel plan = PlanModel(
-                                      id: inscriptionId,
-                                      monthlyAmount: invoice.amount,
-                                      label: invoice.label,
-                                      registrationFee: 10000,
-                                      text: {"titreNiveau": invoice.label}
-                                    );
-                                    planProvider.setPlanModel(plan);
-                                    invoiceProvider.setInvoiceModel(invoice);
-                                    Navigator.pushNamed(context, '/coverage-payment');
+                                    if(invoice.invoiceIsSplitted == true){
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice,),),);
+                                    }
+                                    else {
+                                      showModalBottomSheet(
+                                        context: context, 
+                                        builder: (BuildContext bc){
+                                          return SafeArea(
+                                            child: Container(
+                                              child: new Wrap(
+                                                children: <Widget>[
+                                                  ListTile(
+                                                    contentPadding: EdgeInsets.symmetric(vertical: hv*0.75),
+                                                    leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
+                                                    title: new Text('Payer en une fois', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                                    subtitle: Text("Opérer un paiement unique pour votre couverture annuelle"),
+                                                    onTap: () {
+                                                      //Paiement unique
+                                                      PlanModel plan = PlanModel(
+                                                        id: inscriptionId,
+                                                        monthlyAmount: invoice.amount,
+                                                        label: invoice.label,
+                                                        registrationFee: 10000,
+                                                        text: {"titreNiveau": invoice.label}
+                                                      );
+                                                      planProvider.setPlanModel(plan);
+                                                      invoiceProvider.setInvoiceModel(invoice);
+                                                      Navigator.pushNamed(context, '/coverage-payment');
+                                                  }),
+                                                  ListTile(
+                                                    contentPadding: EdgeInsets.symmetric(vertical: hv*0.75),
+                                                    leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
+                                                    title: new Text('Segmenter la facture', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                                    subtitle: Text("Des frais de gestion supplémentaires de 250FCFA s'appliqueront à chaque segmentation"),
+                                                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice),),),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      );
+                                    }
                                   }
                                 }
                               );
@@ -202,4 +338,6 @@ class _ContributionsState extends State<Contributions> {
       ),
     );
   }
+
+
 }

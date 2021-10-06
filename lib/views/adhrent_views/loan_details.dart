@@ -274,29 +274,29 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                     );
                                   }
                                   return ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        physics: BouncingScrollPhysics(),
-                                        itemCount: snapshot.data.docs.length,
-                                        itemBuilder: (context, index) {
-                                          int lastIndex = snapshot.data.docs.length - 1;
-                                          DocumentSnapshot mensualityDoc = snapshot.data.docs[index];
-                                          MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
-                                          print("name: ");
-                                          return Padding(
-                                            padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                                            child: HomePageComponents.getLoanTile(
-                                              label: "hhgfhfghfh",
-                                              subtitle: "",
-                                              date: mensuality.startDate.toDate(),
-                                              firstDate: mensuality.startDate.toDate(),
-                                              lastDate: mensuality.endDate.toDate(),
-                                              mensuality: mensuality.amount.toInt(),
-                                              type: "gfg",
-                                              state: mensuality.status,
-                                              action: (){}
-                                            ),
-                                          );
-                                        });
+                                    scrollDirection: Axis.vertical,
+                                    physics: BouncingScrollPhysics(),
+                                    itemCount: snapshot.data.docs.length,
+                                    itemBuilder: (context, index) {
+                                      int lastIndex = snapshot.data.docs.length - 1;
+                                      DocumentSnapshot mensualityDoc = snapshot.data.docs[index];
+                                      MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
+                                      print("name: ");
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                        child: HomePageComponents.getLoanTile(
+                                          label: "hhgfhfghfh",
+                                          subtitle: "",
+                                          date: mensuality.startDate.toDate(),
+                                          firstDate: mensuality.startDate.toDate(),
+                                          lastDate: mensuality.endDate.toDate(),
+                                          mensuality: mensuality.amount.toInt(),
+                                          type: "gfg",
+                                          state: mensuality.status,
+                                          action: (){}
+                                        ),
+                                      );
+                                    });
                                 }
                               ),
                             )
@@ -384,7 +384,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
 
     LoanModel loan = loanProvider.getLoan;
 
-    String res = await makePayment(cost: 50, isOrange: isOrange);
+    String res = await makePayment(cost: amount, isOrange: isOrange);
     if(res == "SUCCESS"){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
       FirebaseFirestore.instance.collection("CREDITS").doc(loan.id).collection("MENSUALITES").doc(id).update({

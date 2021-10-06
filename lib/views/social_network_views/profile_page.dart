@@ -9,6 +9,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
@@ -170,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 userProvider.getUserModel.userId != user.userId ? Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
+                    user.isDanAIdAccount != true && userProvider.getUserModel.isDanAIdAccount != true  ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
@@ -245,8 +246,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(width: 20,),
                         GestureDetector(
                           onTap: (){
-                            if(user.friends != null){
-                              if(user.friends.contains(userProvider.getUserModel.userId)){
+                            if(user.friends != null || userProvider.getUserModel.isDanAIdAccount == true){
+                              if(user.friends.contains(userProvider.getUserModel.userId) || userProvider.getUserModel.isDanAIdAccount == true){
                                 ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
                                 ConversationModel conversationModel = ConversationModel(
                                   conversationId: Algorithms.getConversationId(userId: userProvider.getUserModel.authId, targetId: user.authId),
@@ -281,6 +282,33 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ],
+                    ) 
+                    :
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: wv*10),
+                      child: CustomTextButton(
+                        text: user.isDanAIdAccount == true ? "Ecrire au support DanAid" : "Ecrire à l'utilisateur",
+                        color: kSouthSeas,
+                        noPadding: true,
+                        action: (){
+                          ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
+                          ConversationModel conversationModel = ConversationModel(
+                            conversationId: Algorithms.getConversationId(userId: userProvider.getUserModel.authId, targetId: user.authId),
+                            userId: userProvider.getUserModel.authId,
+                            targetId: user.authId,
+                            userName: userProvider.getUserModel.fullName,
+                            targetName: user.fullName,
+                            userAvatar: userProvider.getUserModel.imgUrl,
+                            targetAvatar: user.imgUrl,
+                            targetProfileType: user.profileType,
+                            userPhoneId: userProvider.getUserModel.userId,
+                            targetIsSupport: user.isDanAIdAccount,
+                            targetPhoneId: user.userId
+                          );
+                          conversation.setConversationModel(conversationModel);
+                          Navigator.pushNamed(context, '/conversation');
+                        },
+                      ),
                     ),
                   ],
                 ) : GestureDetector(
