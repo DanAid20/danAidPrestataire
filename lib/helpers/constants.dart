@@ -65,6 +65,7 @@ navigateReplaceTo({BuildContext context, String routeName, Object args}) => Navi
 const String adherent = "ADHERENT";
 const String doctor = "MEDECIN";
 const String serviceProvider = "PRESTATAIRE";
+const String beneficiary = "BENEFICIAIRE";
 
 // consultation Types 
 enum ConsultationTypes { Encabinet, Videos, Message }

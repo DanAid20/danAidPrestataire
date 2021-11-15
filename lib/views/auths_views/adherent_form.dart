@@ -363,7 +363,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                             'emailAdress': userProvider.getEmail,
                             'enabled': false,
                             "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
-                            "urlCNI": "",
+                            "urlCNI": null,
                             "profilEnabled": false,
                             "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                             "userCountryName": userProvider.getCountryName,

@@ -35,6 +35,10 @@ class HiveDatabase {
     Box adherentBox = await Hive.openBox('adherent');
     adherentBox.put('phone', val);
   }
+  static setAdherentParentAuthPhone(String val) async {
+    Box adherentBox = await Hive.openBox('adherent');
+    adherentBox.put('phone-adherent', val);
+  }
   static setVisit(DateTime val) async {
     Box adherentBox = await Hive.openBox('adherent');
     adherentBox.put('visit', val.toString());
@@ -117,6 +121,10 @@ class HiveDatabase {
   static Future<String> getAuthPhone() async {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('phone');
+  }
+  static Future<String> getParentAdherentAuthPhone() async {
+    Box adherentBox = await Hive.openBox('adherent');
+    return adherentBox.get('phone-adherent');
   }
   
 }

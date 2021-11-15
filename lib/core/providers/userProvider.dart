@@ -59,6 +59,7 @@ class UserProvider with ChangeNotifier {
 
   void setProfileType(String val) {
     _profileType = val;
+    _user.profileType = val;
     notifyListeners();
   }
 

@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
@@ -71,6 +73,7 @@ class _ComparePlansState extends State<ComparePlans> {
 
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     DateTime limit = adherentProvider.getAdherent.validityEndDate.toDate();
     String limitString = limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString();
 
@@ -278,7 +281,7 @@ class _ComparePlansState extends State<ComparePlans> {
               margin: EdgeInsets.symmetric(horizontal: wv*12, vertical: hv*3),
               child: CustomTextButton(
                 text: "Changer de niveau",
-                enable: currentPlan != null && state != null,
+                enable: currentPlan != null && state != null && userProvider.getUserModel?.profileType != beneficiary,
                 action: (){
                   adherentProvider.getAdherent.adherentPlan == 0 ? showModalBottomSheet(
                     context: context, 

@@ -143,14 +143,7 @@ class _FriendsState extends State<Friends> {
         backgroundColor: kDeepTeal,
         onPressed: () async {
           var link;
-          //var link = userProvider.getUserModel.isAmbassador == 1 ? await DynamicLinkHandler.createAmbassadorDynamicLink(userId: userProvider.getUserModel.userId) : await DynamicLinkHandler.createFriendInviteDynamicLink(userId: userProvider.getUserModel.userId);
-          if(userProvider.getUserModel.isAmbassador == 1) {
-            String couponCode = userProvider.getUserModel.matricule.replaceAll(new RegExp(r'[^0-9]'),'');
-            link = await DynamicLinkHandler.createAmbassadorDynamicLink(userId: userProvider.getUserModel.userId, couponCode: couponCode);
-          }
-          else {
-            link = await DynamicLinkHandler.createFriendInviteDynamicLink(userId: userProvider.getUserModel.userId);
-          }
+          link = await DynamicLinkHandler.createFriendInviteDynamicLink(userId: userProvider.getUserModel.userId);
           Share.share(link.toString(), subject: "Nouvelle demande d'ami sur DanAid").then((value) {
             print("Done !");
           });

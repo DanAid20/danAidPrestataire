@@ -3,10 +3,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -25,6 +27,7 @@ import 'package:danaid/widgets/streams.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -98,6 +101,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
       FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent.familyDoctorId).get().then((doc) {
         DoctorModel doctorModel = DoctorModel.fromDocument(doc);
         doctorProvider.setDoctorModel(doctorModel);
+        chosenDoctor = doctorModel;
+        setState((){});
       });
     } else {
       setState(() {
@@ -120,6 +125,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
       "time": formattedTime
     };
   }
+
+  QuerySnapshot searchSnapshot;
+  Future<QuerySnapshot> futureSearchResults;
+  TextEditingController _searchController = new TextEditingController();
+  bool searchDoc = true;
+  ServiceProviderModel chosenSP;
+  DoctorModel chosenDoctor;
 
   @override
   void initState() {
@@ -626,25 +638,101 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           ),
                         ),
                         Container(
-                          child: DoctorInfoCard(
+                          child: chosenDoctor != null ? DoctorInfoCard(
                             noPadding: true,
-                            avatarUrl: doc.avatarUrl,
-                            name: doc.cniName,
-                            title: S.of(context).medecinDeFamille + doc.field,
-                            speciality: doc.speciality,
-                            teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
-                            consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
-                            chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
-                            rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
-                            visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
-                            field: doc.speciality,
-                            officeName: doc.officeName,
+                            avatarUrl: chosenDoctor.avatarUrl,
+                            name: chosenDoctor.cniName,
+                            title: S.of(context).medecinDeFamille + chosenDoctor.field,
+                            speciality: chosenDoctor.speciality,
+                            teleConsultation: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["tele-consultation"] : false,
+                            consultation: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["consultation"] : false,
+                            chat: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["chat"] : false,
+                            rdv: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["rdv"] : false,
+                            visiteDomicile: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["visite-a-domicile"] : false,
+                            field: chosenDoctor.speciality,
+                            officeName: chosenDoctor.officeName,
                             includeHospital: true,
-                            distance: adherentProvider.getAdherent.location["latitude"] != null && doc.location["latitude"] != null
-                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doc.location["latitude"], doc.location["longitude"]).toStringAsFixed(2)).toString() : null,
+                            distance: adherentProvider.getAdherent.location["latitude"] != null && chosenDoctor.location["latitude"] != null
+                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], chosenDoctor.location["latitude"], chosenDoctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
                             onTap: () {
+                              showModalBottomSheet(
+                                context: context, 
+                                builder: (BuildContext bc){
+                                  return SafeArea(
+                                    child: Container(
+                                      child: new Wrap(
+                                        children: <Widget>[
+                                          ListTile(
+                                            contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                            leading: Icon(LineIcons.doctor, size: 45, color: kDeepTeal,),
+                                            title: new Text('Médecin', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                            subtitle: Text("Voir un médecin"),
+                                            onTap: searchPartners
+                                          ),
+                                          ListTile(
+                                            contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                            leading: Icon(LineIcons.hospital, size: 40, color: kDeepTeal),
+                                            title: new Text('Prestataire', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                            subtitle: Text("Voir un prestataire"),
+                                            onTap: ()=>searchPartners(isDoctor: false)
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                              );
                             },
-                          ),
+                          ) 
+                          : chosenSP != null ? 
+                            DoctorInfoCard(
+                              noPadding: true,
+                              avatarUrl: chosenSP.avatarUrl,
+                              name: chosenSP.contactName,
+                              title: S.of(context).medecinDeFamille + chosenSP.contactName,
+                              isServiceProvider: true,
+                              speciality: chosenSP.category,
+                              teleConsultation: false,
+                              consultation: false,
+                              chat: false,
+                              rdv: false,
+                              visiteDomicile: false,
+                              field: "field",
+                              officeName: "céoffic",
+                              includeHospital: true,
+                              distance: adherentProvider.getAdherent.location["latitude"] != null && chosenSP.coordGps != null
+                                ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], chosenSP.coordGps["latitude"], chosenSP.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context, 
+                                  builder: (BuildContext bc){
+                                    return SafeArea(
+                                      child: Container(
+                                        child: new Wrap(
+                                          children: <Widget>[
+                                            ListTile(
+                                              contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                              leading: Icon(LineIcons.doctor, size: 45, color: kDeepTeal,),
+                                              title: new Text('Médecin', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                              subtitle: Text("Voir un médecin"),
+                                              onTap: searchPartners
+                                            ),
+                                            ListTile(
+                                              contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                              leading: Icon(LineIcons.hospital, size: 40, color: kDeepTeal),
+                                              title: new Text('Prestataire', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                              subtitle: Text("Voir un prestataire"),
+                                              onTap: ()=>searchPartners(isDoctor: false)
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                );
+                              },
+                            )
+                          : Container(),
                         ),
                       ],
                     ),
@@ -721,6 +809,187 @@ class _AppointmentFormState extends State<AppointmentForm> {
       ),
     );
   }
+
+  searchPartners({bool isDoctor = true}){
+    showDialog(context: context,
+      builder: (BuildContext context){
+        return StatefulBuilder(
+          builder: (context, setState) {
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            insetPadding: EdgeInsets.symmetric(horizontal: wv*3),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  height: hv*80,
+                  width: wv*90,
+                  padding: EdgeInsets.symmetric(horizontal: wv*2,),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Column(children: [
+                    SizedBox(height: hv*2,),
+                    //Text(message.data['body'], style: TextStyle(color: kPrimaryColor, fontSize: 20, fontWeight: FontWeight.w700),),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+
+                      // TextField
+                      child: TextField(
+                        autofocus: true,
+                        controller: _searchController,
+                        onChanged: (val) => setState((){}),
+                        cursorColor: kPrimaryColor,
+                        style: TextStyle(color: kPrimaryColor),
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.4)), borderRadius: BorderRadius.circular(10)),
+                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
+                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
+                          hintText: S.of(context).entrezLeNom,
+                          filled: true,
+                          contentPadding: EdgeInsets.only(bottom: 12, left: 15, right: 15),
+                          suffixIcon: IconButton(icon: Icon(Icons.cancel, color: Colors.white,), onPressed: () => _searchController.clear(),),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: hv*2),
+                    (_searchController.text.isNotEmpty)
+                      ? Expanded(
+                          child: searchResults(isDoctor: isDoctor))
+                      : Expanded(child: noUsers(context)),
+                    SizedBox(height: hv*2),
+                    CustomTextButton(
+                      text: "Fermer",
+                      color: kPrimaryColor,
+                      action: ()=>Navigator.pop(context),
+                    )
+                    
+                  ], mainAxisAlignment: MainAxisAlignment.start, ),
+                ),
+              ],
+            ),
+          );
+        });
+      }
+    );
+  }
+
+  searchResults({bool isDoctor = true}) {
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    var query = isDoctor ? FirebaseFirestore.instance.collection("MEDECINS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).snapshots() : FirebaseFirestore.instance.collection("PRESTATAIRE").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).snapshots();
+    return StreamBuilder(
+      stream: query,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        int lastIndex = snapshot.data.docs.length - 1;
+        return snapshot.data.docs.length >= 1 ? ListView.builder(
+          //shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemCount: snapshot.data.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot doc = snapshot.data.docs[index];
+            DoctorModel doctor = isDoctor ? DoctorModel.fromDocument(doc) : null;
+            ServiceProviderModel sp = !isDoctor ? ServiceProviderModel.fromDocument(doc) : null;
+
+            return Padding(
+              padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 10 : 0),
+              child: isDoctor ? DoctorInfoCard(
+                actionText: "Choisir",
+                avatarUrl: doctor.avatarUrl,
+                name: doctor.cniName,
+                title: S.of(context).medecinDeFamille + doctor.field,
+                speciality: doctor.speciality,
+                teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
+                consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
+                chat: doctor.serviceList != null ? doctor.serviceList["chat"] : false,
+                rdv: doctor.serviceList != null ? doctor.serviceList["rdv"] : false,
+                visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
+                distance: 
+                  adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
+                    ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
+                ,
+                onTap: () {
+                  chosenSP = null;
+                  chosenDoctor = doctor;
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState((){});
+                },
+              )
+              :
+              DoctorInfoCard(
+                actionText: "Choisir",
+                avatarUrl: sp.avatarUrl,
+                isServiceProvider: true,
+                name: sp.name.toString(),
+                title: sp.contactName.toString(),
+                speciality: sp.category.toString(),
+                teleConsultation: false,
+                consultation: false,
+                chat: false,
+                rdv: false,
+                visiteDomicile: false,
+                distance: adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
+                    ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
+                onTap: () {
+                  chosenSP = sp;
+                  chosenDoctor = null;
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  setState((){});
+                },
+              ),
+            );
+          }) :
+        Container(
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 50,),
+              Icon(MdiIcons.databaseRemove, color: kPrimaryColor.withOpacity(0.7), size: 85,),
+              SizedBox(height: 5,),
+              Text(S.of(context).aucunMdecinAvecPourNom+":\n \"${_searchController.text}\"", 
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: kPrimaryColor )
+              , textAlign: TextAlign.center,),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget noUsers(context) {
+    return SingleChildScrollView(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: hv*5,),
+            Hero(
+              tag: "search",
+              child: Icon(
+                LineIcons.search,
+                size: 70,
+                color: kPrimaryColor,
+              ),
+            ),
+            Text(
+              "Autres partenaires DanAid",
+              style: TextStyle(fontSize: 17, color: kPrimaryColor, fontWeight: FontWeight.w900),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget schedule(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
     DoctorModel doc = doctorProvider.getDoctor;
@@ -1180,9 +1449,10 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
                 await FirebaseFirestore.instance.collection("APPOINTMENTS").add({
                     "adherentId": adherentModel.getAdherentId,
-                    "doctorId": doc.id,
+                    "rdvPrestataire": chosenSP != null,
+                    "doctorId": chosenSP != null ? chosenSP.id : chosenDoctor.id,
                     "beneficiaryId": beneficiary.getBeneficiary.matricule,
-                    "doctorName": doc.surname + " " + doc.familyName,
+                    "doctorName": chosenSP != null ? chosenSP.name : chosenDoctor.surname + " " + chosenDoctor.familyName,
                     "createdDate": DateTime.now(),
                     "enabled": false,
                     "symptoms": symptoms,

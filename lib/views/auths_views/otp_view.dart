@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -293,12 +294,26 @@ class _OtpViewState extends State<OtpView> {
       Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
       bool registered = res["exists"];
       String profile = res["profile"];
+      UserModel userModel = res["user"];
+
       if(registered == false){
         setState(() {
           load = false;
         });
         Navigator.pushNamed(context, '/profile-type');
       } else {
+        userProvider.setUserModel(userModel);
+        if(profile == beneficiary){
+          if(userModel.authId == null){
+            FirebaseFirestore.instance.collection("USERS").doc(userModel.userId).update({
+              "authId": _auth.currentUser.uid,
+              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+              "userCountryName": userProvider.getCountryName,
+            }).then((value) {
+              showSnackbar("Profil bénéficiaire recupéré..");
+            });
+          }
+        }
         HiveDatabase.setRegisterState(true);
         setState(() {
           load = false;
@@ -329,14 +344,17 @@ class _OtpViewState extends State<OtpView> {
 
   Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
     String profile;
+    UserModel userProfile;
     DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
     bool exists = (user.exists) ? true : false;
     if (exists) {
       profile = user.data()["profil"];
+      userProfile = UserModel.fromDocument(user);
     }
     return {
       "exists": exists,
-      "profile": profile
+      "profile": profile,
+      "user": userProfile
     };
   }
 

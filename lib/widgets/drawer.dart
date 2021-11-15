@@ -92,7 +92,7 @@ class DefaultDrawer extends StatelessWidget {
                         ),
                         SizedBox(height: hv*3,),
                         ListTile(
-                          title: Text("Version 2.0.0-alpha+210020017", style: TextStyle(color: whiteColor.withOpacity(0.4), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text("Version 2.0.0-alpha+210020019", style: TextStyle(color: whiteColor.withOpacity(0.4), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
                         )
                       ],

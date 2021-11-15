@@ -3,6 +3,7 @@ import 'package:danaid/core/models/postModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/post_details.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -148,6 +149,7 @@ class DynamicLinkHandler {
   }
 
   void handleLinkData(PendingDynamicLinkData data, BuildContext context) async {
+    print("Handling dynamic link");
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     final Uri uri = data?.link;
@@ -191,26 +193,33 @@ class DynamicLinkHandler {
         }
         else if(isAmbassadorInvite){
           print("This is an ambassador invite");
-          print(userProvider.getUserModel.userId.toString());
+          //print(userProvider.getUserModel.userId.toString());
           print('+'+queryParams["userid"].substring(1).toString());
           print('start');
           String ambaId = '+'+queryParams["userid"].substring(1).toString();
           String couponCode = queryParams["coupon"];
           if(adherentProvider.getAdherent != null){
-            await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.getAdherentId).set({'invited': true, 'invitedBy': ambaId, 'couponCodeUsed': couponCode}, SetOptions(merge: true)).then((doc) async {
-            await FirebaseFirestore.instance.collection("USERS").doc(ambaId).update({"invites": FieldValue.arrayUnion([adherentProvider.getAdherent.getAdherentId])}).then((value) async {
-              await FirebaseFirestore.instance.collection("COMPTES_CREER_VIA_INVITATION").doc(adherentProvider.getAdherent.getAdherentId).set({
-                "firstPaiementProceded": false,
-                "getingInvitationDate": DateTime.now(),
-                "coupon": couponCode,
-                "id": "",
-                "receiverId": adherentProvider.getAdherent.getAdherentId,
-                "senderId": ambaId,
-                "sendingInvitationDate": DateTime.now(),
+            print("Processing adherent..");
+            DateTime created = adherentProvider.getAdherent.dateCreated.toDate();
+            DateTime now = DateTime.now();
+            print("Got the time");
+            if(DateTime(created.year, created.month, created.day).compareTo(DateTime(now.year, now.month, now.day)) == 0 && adherentProvider.getAdherent.invitedBy == null){
+              print("creating ambassador tasks..");
+              await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.getAdherentId).set({'invited': true, 'invitedBy': ambaId, 'couponCodeUsed': couponCode}, SetOptions(merge: true)).then((doc) async {
+              await FirebaseFirestore.instance.collection("USERS").doc(ambaId).update({"invites": FieldValue.arrayUnion([adherentProvider.getAdherent.getAdherentId])}).then((value) async {
+                await FirebaseFirestore.instance.collection("COMPTES_CREER_VIA_INVITATION").doc(adherentProvider.getAdherent.getAdherentId).set({
+                  "firstPaiementProceded": false,
+                  "getingInvitationDate": DateTime.now(),
+                  "coupon": couponCode,
+                  "id": "",
+                  "receiverId": adherentProvider.getAdherent.getAdherentId,
+                  "senderId": ambaId,
+                  "sendingInvitationDate": DateTime.now(),
+                });
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Bienvenue sur DanAid")));
+                });
               });
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Bienvenue sur DanAid")));
-              });
-            });
+            }
           }
         }
         else if(isCompareService){

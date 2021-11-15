@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AppointmentModel {
   String id, adherentId, beneficiaryId, avatarUrl, appointmentType, consultationType, username, doctorName, doctorId, title, token;
   Timestamp birthDate, endTime, startTime, dateCreated;
-  bool announced, enabled;
+  bool announced, enabled, isNotWithDoctor;
   int status;
   double price;
   List symptoms;
 
-  AppointmentModel({this.id, this.adherentId, this.beneficiaryId, this.status, this.dateCreated, this.token, this.enabled, this.avatarUrl, this.appointmentType, this.consultationType, this.username, this.doctorName, this.doctorId, this.title, this.birthDate, this.endTime, this.startTime, this.announced, this.price, this.symptoms});
+  AppointmentModel({this.id, this.adherentId, this.beneficiaryId, this.status, this.dateCreated, this.isNotWithDoctor, this.token, this.enabled, this.avatarUrl, this.appointmentType, this.consultationType, this.username, this.doctorName, this.doctorId, this.title, this.birthDate, this.endTime, this.startTime, this.announced, this.price, this.symptoms});
 
   factory AppointmentModel.fromDocument(DocumentSnapshot doc){
     return AppointmentModel(
@@ -19,6 +19,7 @@ class AppointmentModel {
       doctorName: doc.data()["doctorName"],
       username: doc.data()["username"],
       title: doc.data()["title"],
+      isNotWithDoctor: doc.data()["rdvPrestataire"],
       symptoms: doc.data()["symptoms"],
       avatarUrl: doc.data()["avatarUrl"],
       appointmentType: doc.data()["appointment-type"],

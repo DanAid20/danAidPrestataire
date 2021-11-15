@@ -178,7 +178,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                               child: Container(
                                 child: Row(
                                   children: [
-                                    userProvider.getProfileType == adherent ? InkWell(
+                                    userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? InkWell(
                                       onTap: ()=>Navigator.pushNamed(context, '/family-points-page'),
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
@@ -218,7 +218,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                               fontWeight: FontWeight.w700, fontSize: inch * 1.7),
                           unselectedLabelStyle:
                               TextStyle(fontWeight: FontWeight.w400),
-                          tabs: userProvider.getProfileType == adherent
+                          tabs: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary
                               ? tabs
                               : tabsDoctor),
                     )
@@ -227,13 +227,13 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                 body: TabBarView(
                   controller: _tabController,
                   children: <Widget>[
-                    userProvider.getProfileType == adherent
+                    userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary
                         ? MyWelcomeScreen()
                         :  HomeDoctorView(),
-                    userProvider.getProfileType == adherent
+                    userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary
                         ? MyCoverageTabView()
                         : DoctorPatientView(),
-                    userProvider.getProfileType == adherent
+                    userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary
                         ? MyDoctorTabView()
                         : RendezVousDoctorView()
                   ],

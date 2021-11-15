@@ -294,12 +294,19 @@ class _PaymentCartState extends State<PaymentCart> {
                                                             isLoading: spinner,
                                                             action: (){
                                                               if(_codeController.text == adherentProvider.getAdherent.couponCodeUsed) {
-                                                                campaignsChosen.add(camp.id);
-                                                                registrationFee = registrationFee - camp.amount;
-                                                                promoRegistrationSum = promoRegistrationSum + camp.amount;
-                                                                print("promo somme: $promoRegistrationSum,\n regFee: $registrationFee \n campagnes: $campaignsChosen");
-                                                                setState(() {});
-                                                                Navigator.pop(context);
+                                                                if(adherentProvider.getAdherent.dateCreated.toDate().add(Duration(days: 30)).isBefore(DateTime.now())){
+                                                                  campaignsChosen.add(camp.id);
+                                                                  registrationFee = registrationFee - camp.amount;
+                                                                  promoRegistrationSum = promoRegistrationSum + camp.amount;
+                                                                  print("promo somme: $promoRegistrationSum,\n regFee: $registrationFee \n campagnes: $campaignsChosen");
+                                                                  setState(() {});
+                                                                  Navigator.pop(context);
+                                                                }
+                                                                else {
+                                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ce code promo a déjà expiré..."), backgroundColor: Colors.red,));
+                                                                  _codeController.clear();
+                                                                  Navigator.pop(context);
+                                                                }
                                                               } else {
                                                                 _codeController.clear();
                                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le code promo est incorrecte")));

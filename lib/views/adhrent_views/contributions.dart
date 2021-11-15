@@ -37,6 +37,7 @@ class _ContributionsState extends State<Contributions> {
         if(model.coverageStartDate.toDate().isAfter(witness)){
           witness = model.coverageStartDate.toDate();
           latestInvoice = model;
+          setState(() { });
         }
       }
     });

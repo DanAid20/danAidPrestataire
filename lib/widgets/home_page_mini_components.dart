@@ -1227,7 +1227,7 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryCard({String name, String imgUrl, Function action}){
+  static beneficiaryCard({String name, String imgUrl, bool edit = true, Function action}){
     return Container(
       width: wv*25,
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
@@ -1246,7 +1246,7 @@ class HomePageComponents {
                 ),
                 child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: wv*25,) : Container(),
               ),
-              Positioned(
+              edit ? Positioned(
                 bottom: hv*0,
                 child: IconButton(padding: EdgeInsets.all(0),
                   icon: Container(
@@ -1257,7 +1257,7 @@ class HomePageComponents {
                     child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
                   onPressed: action
                 ),
-              )
+              ) : Container()
             ],
           )
         ],

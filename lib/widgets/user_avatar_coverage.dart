@@ -77,12 +77,29 @@ class UserAvatarAndCoverage extends StatelessWidget {
                   imageUrl: serviceProviderMP.getServiceProvider != null ? serviceProviderMP.getServiceProvider.avatarUrl : null),
               ),
             ) :
+            userProvider.getProfileType == beneficiary ?
+              CircleAvatar(
+              radius: wv*8,
+              backgroundColor: Colors.blueGrey[100],
+              //backgroundImage: ((doctorProvider.getDoctor.avatarUrl == "") & (doctorProvider.getDoctor.avatarUrl == null))  ? null : CachedNetworkImageProvider(doctorProvider.getDoctor.avatarUrl),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  height: wv*16,
+                  width: wv*16,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Container(
+                    child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                    padding: EdgeInsets.all(20.0),
+                  ),
+                  imageUrl: userProvider.getUserModel.imgUrl),
+              ),
+            ) :
             CircleAvatar(
               radius: wv*8,
               backgroundColor: Colors.blueGrey[100],
               child: Icon(LineIcons.user, color: Colors.white, size: wv*13,),
             ),
-            Positioned(child: GestureDetector(
+            userProvider.getProfileType != beneficiary ? Positioned(child: GestureDetector(
               onTap: ()=> Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : userProvider.getProfileType == adherent ? '/adherent-profile-edit' : '/serviceprovider-profile-edit'),
               child: CircleAvatar(
                 radius: wv*3,
@@ -90,15 +107,16 @@ class UserAvatarAndCoverage extends StatelessWidget {
                 child: Icon(Icons.edit, color: whiteColor, size: wv*4,),
               )
             ), bottom: hv*0, right: wv*0,)
+            : Container()
           ],
         ),
         SizedBox(width: wv*2,),
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userProvider.getProfileType == adherent ? S.of(context).bonjour+" ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).bonjour+" ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
-                userProvider.getProfileType == adherent ? 
+                userProvider.getProfileType == adherent||userProvider.getProfileType == beneficiary ? 
                 adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).couvertureNiveau0Dcouverte :
                   adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).couvertureNiveauIAccs :
                     adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).couvertureNiveauIiAssist :

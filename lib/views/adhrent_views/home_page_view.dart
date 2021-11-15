@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
+import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/models/notificationModel.dart';
 import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/models/userModel.dart';
+import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/doctorTileModelProvider.dart';
 import 'package:danaid/core/providers/notificationModelProvider.dart';
@@ -264,6 +266,41 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
      // print("service provider"+serviceProviderM.getServiceProvider.avatarUrl);
   }
 
+
+  loadBeneficiaryProfile() async {
+
+    print("Loading beneficiaire..");
+
+    DateTime fullDate = DateTime.now();
+    DateTime date = DateTime(fullDate.year, fullDate.month, fullDate.day);
+    AdherentModel adherentModel;
+    UserModel user;
+
+    AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    
+    if(userProvider.getUserModel != null && adherentModelProvider.getAdherent != null){
+
+    } else {
+      String phone = await HiveDatabase.getAuthPhone();
+      String adhPhone = await HiveDatabase.getParentAdherentAuthPhone();
+      userProvider.setUserId(phone);
+      FirebaseFirestore.instance.collection('USERS').doc(phone).get().then((userSnap) async {
+        user = UserModel.fromDocument(userSnap);
+        userProvider.setUserModel(user);
+        DocumentSnapshot benSnap = await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel.adherentId).collection('BENEFICIAIRES').doc(userProvider.getUserModel.matricule).get();
+        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(benSnap);
+        FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel.adherentId).get().then((adhSnap) async {
+          AdherentModel adherent = AdherentModel.fromDocument(adhSnap);
+          adherentModelProvider.setAdherentModel(adherent);
+          adherentModelProvider.setSurname(beneficiary.surname);
+          adherentModelProvider.setFamilyName(beneficiary.familyName);
+          adherentModelProvider.setCniName(user.fullName);
+        });
+      });
+    }
+  }
+
   loadCommonUserProfile() async {
 
     DateTime fullDate = DateTime.now();
@@ -318,6 +355,9 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       else if(userProvider.getProfileType == serviceProvider){
         loadServiceProviderProfile();
       }
+      else if(userProvider.getProfileType == beneficiary){
+        loadBeneficiaryProfile();
+      }
     }
     else {
       String profile = await HiveDatabase.getProfileType();
@@ -332,6 +372,9 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         else if(userProvider.getProfileType == serviceProvider){
           loadServiceProviderProfile();
         }
+        else if(userProvider.getProfileType == beneficiary){
+          loadBeneficiaryProfile();
+        }
       }
     }
   }
@@ -345,7 +388,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     print("0");
     await FirebaseMessaging.instance.subscribeToTopic(FirebaseAuth.instance.currentUser.uid);
     await FirebaseMessaging.instance.subscribeToTopic(userProvider.getUserId.substring(1));
-    await FirebaseMessaging.instance.unsubscribeFromTopic("DanAidAccount");
+    await FirebaseMessaging.instance.subscribeToTopic("DanAidAccount");
     print("1");
     
 
@@ -494,6 +537,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     initializeDateFormatting();
     loadCommonUserProfile();
     loadUserProfile();
+    print("Before dynamic link");
     DynamicLinkHandler().fetchClassicLinkData(context);
     super.initState();
   }
@@ -556,7 +600,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                       index == 1 ? iconActive(svgUrl: "assets/icons/Two-tone/Home.svg") : Container(),
                       index == 2 ? iconActive(svgUrl: "assets/icons/Two-tone/Paper.svg") : Container(),
                       index == 3 ? iconActive(svgUrl: "assets/icons/Two-tone/Location.svg") : Container(),
-                      index == 4 ? iconActive(svgUrl: userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg") : Container(),
+                      index == 4 ? iconActive(svgUrl: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg") : Container(),
                     ],
                   ),
                 ),
@@ -577,8 +621,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                       index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context).partenaire, onTap: partenaireTapped),
                       index == 4 ? SizedBox(width: width*13,) 
                         : bottomIcon(
-                          svgUrl: userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", 
-                          title: userProvider.getProfileType == adherent ? S.of(context).famille : S.of(context).profile, 
+                          svgUrl: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", 
+                          title: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).famille : S.of(context).profile, 
                           onTap: familleTapped
                         ),
                     ],
@@ -662,7 +706,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     }
     else if(controller.getIndex == 4){
       userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor) : print("waouu");
-      return userProvider.getProfileType == adherent ?  MyFamilyScreen() : userProvider.getProfileType == serviceProvider  ? PrestataireProfilePage(): DoctorProfilePage();
+      return userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ?  MyFamilyScreen() : userProvider.getProfileType == serviceProvider  ? PrestataireProfilePage(): DoctorProfilePage();
     }
   }
 

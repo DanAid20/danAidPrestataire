@@ -17,10 +17,10 @@ class DoctorInfoCard extends StatelessWidget {
   final int appointmentState;
   final bool chat, consultation, teleConsultation, rdv, visiteDomicile;
   final bool noPadding, includeHospital, isServiceProvider;
-  final String field, officeName;
+  final String field, officeName, actionText;
   final Function onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.isServiceProvider = false, this.appointmentState, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
+  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.isServiceProvider = false, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +133,7 @@ class DoctorInfoCard extends StatelessWidget {
                   ),
                 ],
               ),
-              !isInRdvDetail ? Row(
+              !isInRdvDetail && !isServiceProvider ? Row(
                 children: [
                   SizedBox(width: 10,),
                   SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: teleConsultation ? whiteColor : kSouthSeas),
@@ -187,7 +187,7 @@ class DoctorInfoCard extends StatelessWidget {
                 ),
               ) :
               Row(children: [
-                Text(includeHospital ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
+                Text(actionText != null ? actionText : includeHospital ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
                 SizedBox(width: 10,),
                 Icon(Icons.arrow_forward_ios, color: Colors.white),
               ],mainAxisAlignment: MainAxisAlignment.end)

@@ -236,7 +236,7 @@ class PostContainer extends StatelessWidget {
                       Expanded(
                         child: InkWell(
                           onTap: () async {
-                            var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: post.id, isGroup: groupId == null ? '0' : '1');
+                            var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: post.id, isGroup: groupId == null ? '0' : '1', text: post.text, title: post.title);
                             Share.share(link.toString(), subject: post.title != null ? post.title : "New Post on DanAid").then((value) {
                               print("Done !");
                             });

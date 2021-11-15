@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
     @override
     Widget build(BuildContext context){
       AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
+      UserProvider userProvider = Provider.of<UserProvider>(context);
       BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
       return StreamBuilder(
         stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
@@ -36,7 +39,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
             children: [
               !widget.noLabel ? Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
+                child: Column( 
                   children: [
                     RichText(text: TextSpan(
                       text: widget.standardUse ? S.of(context).bnficiairesn : S.of(context).quiEstMaladen,
@@ -53,11 +56,12 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Row(
                   children: [
                     widget.standardUse ? HomePageComponents.beneficiaryCard(
-                      name: adherentProvider.getAdherent.surname,
+                      name: adherentProvider.getAdherent.cniName,
+                      edit: userProvider.getUserModel?.profileType != beneficiary,
                       imgUrl: adherentProvider.getAdherent.imgUrl, 
                       action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
                     )
-                    : HomePageComponents.beneficiaryChoiceCard(
+                    : userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.beneficiaryChoiceCard(
                       name: adherentProvider.getAdherent.surname, 
                       imgUrl: adherentProvider.getAdherent.imgUrl,
                       isSelected: selectedMatricule == adherentProvider.getAdherent.adherentId,
@@ -81,7 +85,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                         setState(() { });
                         Navigator.pushNamed(context, '/adherent-profile-edit');
                       }
-                    ),
+                    ) : Container(),
                     snapshot.data.docs.length >= 1 ? Expanded(
                       child: ListView.builder(
                         physics: BouncingScrollPhysics(),
@@ -97,6 +101,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                           return widget.standardUse ? HomePageComponents.beneficiaryCard(
                             name: beneficiary.surname, 
                             imgUrl: beneficiary.avatarUrl, 
+                            edit: userProvider.getUserModel?.matricule == beneficiary.matricule,
                             action: (){
                               beneficiaryProvider.setBeneficiaryModel(beneficiary);
                               Navigator.pushNamed(context, '/edit-beneficiary');

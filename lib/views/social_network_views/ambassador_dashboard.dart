@@ -3,14 +3,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/dynamicLinkHandler.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 
 class AmbassadorDashboard extends StatefulWidget {
   const AmbassadorDashboard({ Key key }) : super(key: key);
@@ -135,6 +138,22 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
           )
         ],
       ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: hv*6.5+30),
+        child: FloatingActionButton(
+          tooltip: "Share invitation link",
+          child: SvgPicture.asset('assets/icons/Two-tone/AddUser.svg', width: wv*8,),
+          backgroundColor: kDeepTeal,
+          onPressed: () async {
+            var link;
+            String couponCode = userProvider.getUserModel.matricule.replaceAll(new RegExp(r'[^0-9]'),'');
+            link = await DynamicLinkHandler.createAmbassadorDynamicLink(userId: userProvider.getUserModel.userId, couponCode: couponCode);
+            Share.share(link.toString(), subject: "Nouvelle demande d'ami d'ambassadeur").then((value) {
+              print("Done !");
+            });
+          },
+        ),
+      )
     );
   }
 

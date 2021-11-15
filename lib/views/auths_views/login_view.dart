@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
+import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
@@ -252,14 +253,17 @@ class _LoginViewState extends State<LoginView> {
 
   Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
     String profile;
+    UserModel userProfile;
     DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
     bool exists = (user.exists) ? true : false;
     if (exists) {
       profile = user.data()["profil"];
+      userProfile = UserModel.fromDocument(user);
     }
     return {
       "exists": exists,
-      "profile": profile
+      "profile": profile,
+      "user": userProfile
     };
   }
 
@@ -279,14 +283,28 @@ class _LoginViewState extends State<LoginView> {
       Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
       bool registered = res["exists"];
       String profile = res["profile"];
+      UserModel user = res["user"];
       
       if(registered == false){
         Navigator.pushNamed(context, '/profile-type');
       } else {
+        userProvider.setUserModel(user);
+        if(profile == beneficiary){
+          if(user.authId == null){
+            FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
+              "authId": _auth.currentUser.uid,
+              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+              "userCountryName": userProvider.getCountryName,
+            }).then((value) {
+              showSnackbar("Profil bénéficiaire recupéré..");
+            });
+          }
+        }
         HiveDatabase.setRegisterState(true);
         HiveDatabase.setSignInState(true);
-        HiveDatabase.setAuthPhone(userProvider.getUserId);
-        print("profile");
+        HiveDatabase.setAuthPhone(userProvider.getUserModel.userId);
+        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel.adherentId);
+        print("profile:");
         print(profile);
         userProvider.setProfileType(profile);
         HiveDatabase.setProfileType(profile);

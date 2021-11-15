@@ -209,7 +209,7 @@ class _PostDetailsState extends State<PostDetails> {
                               SizedBox(width: wv*3),
                               InkWell(
                                 onTap: () async {
-                                  var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: widget.post.id, isGroup: widget.groupId == null ? '0' : '1');
+                                  var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: widget.post.id, isGroup: widget.groupId == null ? '0' : '1', text: widget.post.text, title: widget.post.title);
                                   Share.share(link.toString(), subject: widget.post.title != null ? widget.post.title : "New Post on DanAid").then((value) {
                                     print("Done !");
                                   });

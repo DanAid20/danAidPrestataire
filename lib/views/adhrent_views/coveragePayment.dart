@@ -217,6 +217,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                             child: Row(
                               children: [
                                 Container(
+                                  
                                   height: wv*7,
                                   width: wv*7,
                                   decoration: BoxDecoration(

@@ -54,6 +54,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   List<String> allergies = [];
   String currentAllergyText = "";
   String phone;
+  String phoneCode;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
 
@@ -245,7 +246,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                       },
                       onInputChanged: (PhoneNumber number) {
                         phone = number.phoneNumber;
+                        phoneCode = number.isoCode;
                         print(number.phoneNumber);
+                        print(number.isoCode);
                       },
                       onInputValidated: (bool value) {
                         print(value);
@@ -631,8 +634,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           ),
         ),
         ((_confirmFamily == true) && (birthCertificateUploaded == true) && _gender != null)
-          ? !buttonLoading ? CustomTextButton(
+          ? CustomTextButton(
             text: S.of(context).suivant, 
+            isLoading: buttonLoading,
             action: (){
               setState(() {
                 buttonLoading = true;
@@ -666,7 +670,30 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   "weight": _weightController.text,
                   "allergies": allergies,
                   "relation": _relation,
-                }, SetOptions(merge: true)).then((value) {
+                }, SetOptions(merge: true)).then((value) async {
+                  if(phone != null) {
+                    await FirebaseFirestore.instance.collection("USERS").doc(phone).set({
+                      "authId": null,
+                      "adherentId": adherentModel.getAdherent.getAdherentId,
+                      'createdDate': DateTime.now(),
+                      'emailAdress': null,
+                      'enabled': false,
+                      "phoneList": FieldValue.arrayUnion([{"number": phone}]),
+                      "urlCNI": null,
+                      "profilEnabled": false,
+                      "userCountryCodeIso": phoneCode,
+                      "userCountryName": "Cameroon",
+                      'fullName': "${_familynameController.text} ${_surnameController.text}",
+                      "imageUrl" : avatarUrl,
+                      "points": 500,
+                      "visitPoints": 0,
+                      "matricule": matricule,
+                      "profil": "BENEFICIAIRE",
+                      "regionDorigione": adherentModel.getAdherent.regionOfOrigin,
+                      "phoneKeywords": Algorithms.getKeyWords(phone),
+                      "nameKeywords": Algorithms.getKeyWords(_familynameController.text + " "+ _surnameController.text)
+                    }, SetOptions(merge: true));
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${_surnameController.text} ajouté comme bénéficiaire'),));
                   setState(() {
                     buttonLoading = false;
@@ -674,7 +701,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   Navigator.pop(context);
                 });
             },
-          ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
+          )
           : CustomDisabledTextButton(text: S.of(context).suivant,)
       ],
     );

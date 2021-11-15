@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AdherentModelProvider adherentProvider =
-        Provider.of<AdherentModelProvider>(context);
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
     BottomAppBarControllerProvider controller =
         Provider.of<BottomAppBarControllerProvider>(context);
@@ -151,7 +151,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                               borderRadius: BorderRadius.circular(15)),
                           child: BeneficiaryStream(standardUse: true),
                         ),
-                        Positioned(
+                        userProvider.getUserModel?.profileType != beneficiary ? Positioned(
                           right: wv * 0,
                           bottom: hv * 8,
                           child: IconButton(
@@ -169,7 +169,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                               )),
                             ),
                           ),
-                        )
+                        ) : Container()
                       ],
                     )
                   ],
@@ -190,7 +190,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                   children: [
                     Text(S.of(context).paramtresDuCompte, style: TextStyle(color: kBlueDeep, fontSize: 18)),
                     SizedBox(height: hv*2,),
-                    adherentProvider.getAdherent != null ? HomePageComponents.accountParameters(
+                    adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
                       title: S.of(context).domicilePrincipale, 
                       subtitle: adherentProvider.getAdherent.address != null ? adherentProvider.getAdherent.address : "Non configurée", 
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
@@ -202,7 +202,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       svgIcon: "assets/icons/Bulk/Graph.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-stats-page')
                     ),
-                    adherentProvider.getAdherent != null
+                    adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary
                         ? HomePageComponents.accountParameters(
                             title: "Domicile Principale",
                             subtitle:
@@ -219,18 +219,18 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-points-page')
                     ),
-                    HomePageComponents.accountParameters(
+                    userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
                       title: S.of(context).changezDeNiveauDeService, 
                       subtitle: S.of(context).comparerLesNiveauxEtChoisir, 
                       svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
                       action: ()=>Navigator.pushNamed(context, '/compare-plans')
-                    ),
-                    HomePageComponents.accountParameters(
+                    ) : Container(),
+                    userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
                       title: S.of(context).changezDeMedecinDeFamille, 
                       subtitle: S.of(context).faitesUneDemande, 
                       svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
                       action: callDanAid
-                    ),
+                    ) : Container(),
                     HomePageComponents.accountParameters(
                       title: S.of(context).documentsDanaid, 
                       subtitle: S.of(context).contratsDocumentsGuides, 
