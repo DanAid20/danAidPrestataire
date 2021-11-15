@@ -2,8 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/models/devisModel.dart';
+import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/ServicesProviderInvoice.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -11,6 +13,7 @@ import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 class PrestationEnCours extends StatefulWidget {
   final bool isbeneficiare;
@@ -36,88 +39,16 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
      super.initState();
      
    }
-//     Future<void> getDevis(String code)  async {
-//      print("--------------------------------");
-//       List<Future<QuerySnapshot>> futures = [];
-//       var query= FirebaseFirestore.instance
-//           .collection('DEVIS');
-//     var firstQuery = query
-//         .where('adherentId', isEqualTo: code)
-//         .get();
 
-//     var secondQuery = query
-//         .where('beneficiaryId', isEqualTo: code)
-//         .get();
-
-//     futures.add(firstQuery);
-//     futures.add(secondQuery);
-
-//     List<QuerySnapshot> results = await Future.wait(futures);
-//     results.forEach((res) {
-//       res.docs.forEach((docResults) {
-//           if(docResults.data().isNotEmpty){
-//             print(docResults.data());
-//             // docResults.data().forEach((element) {
-//             //   setState(() {
-//             //   devis.add(DevisModel.fromDocument(element));
-//             // });
-//             // });
-//           }else{
-//             devis=[];
-//           }
-//       });
-//     });
-//     //  var result= FirebaseFirestore.instance
-//     //       .collection('DEVIS').where('userId', isEqualTo: code).get()
-//     //       .then((value) {
-//     //   }).onError((error, stackTrace) {
-//     //       print(error);
-//     //       print(stackTrace);
-//     //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("une erreur s'est produite "),));
-//     //   });
-//    print("--------------------------------");
-//  }
-//     Future<void> getAdhenents(String code)  async {
-//      print("--------------------------------");
-//      setState(() {
-//             isGetdevis=true;
-//           });
-//      await FirebaseFirestore.instance
-//           .collection('APPOINTMENTS').doc(code).get()
-//           .then((value) {
-//           print(code);
-//           print(value.data().toString());
-//         if (value.data()!=null) {
-//           setState(() {
-//            userId= code;
-//            dateNaiss= value.data()['birthDate'];
-//            urlImage= value.data()['avatarUrl'];
-//            username= value.data()['username'];
-//           });
-//         }else {
-//            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("cet utilisateur n'existe pas "),));
-//            setState(() {
-//             isGetdevis=false;
-//           });
-//         }
-//       }).onError((error, stackTrace) {
-//          setState(() {
-//             isGetdevis=false;
-//           });
-//           print(error);
-//           print(stackTrace);
-//           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("une erreur s'est produite "),));
-//       });
-//    print("--------------------------------");
-//  }
  
   @override
   Widget build(BuildContext context) {
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
-    print(devis.length);
-     Stream<QuerySnapshot> query = widget.isbeneficiare==false? FirebaseFirestore.instance.collection('DEVIS').where("adherentId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots():
-     FirebaseFirestore.instance.collection('DEVIS').where("beneficiaryId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots();
+    print(prestatiaireObject.id);
+    print(userId.toString());
+     Stream<QuerySnapshot> query = widget.isbeneficiare==false? FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("adherentId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots():
+     FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("beneficiaryId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots();
 
     return  WillPopScope(
       onWillPop:()async{
@@ -138,7 +69,8 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
             child: Container(
               child: Column(
                 children: [
-                  Text(S.of(context).prestationsEnCours, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
+                  Text("Prestations", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w600), ),
+                  Text("du ${widget.userId}", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
                   
                 ],
               ),
@@ -213,24 +145,34 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
                      shrinkWrap: true,
                      itemCount: snapshot.data.docs.length,
                      itemBuilder: (context, index) {
-                         DocumentSnapshot doc = snapshot.data.docs[index];
-                        var devis=DevisModel.fromDocument(doc);
-                        return  HomePageComponents().paiementPrestaireItem(
-                            lastDatePaiement: "gfdg",
-                            month:"${devis.intitule}", 
-                            paidAllReady: "fdf",
-                            paidOrNot: devis.ispaid? 1: 0,
-                            prix: "${devis.amount}",
+                        DocumentSnapshot doc = snapshot.data.docs[index];
+                        // var devis=DevisModel.fromDocument(doc);
+                        UseCaseServiceModel service = UseCaseServiceModel.fromDocument(doc);
+
+                        return  HomePageComponents().prestataireItemList(
+                            etat: service.paid? 1:0,
+                            montant: DateFormat("dd MMMM yyy ")
+                                .format(service.dateCreated.toDate()),
+                            date:"${service.title}- ${service.amount}.f" ,
+                            nom: "${service.titleDuDEvis}",
+                            iconesConsultationTypes:Algorithms.getUseCaseServiceIcon(type: service.type), 
                             redirectOncliked: (){
                                 Navigator.push(context,MaterialPageRoute(builder: (context) =>
-                                OrdonanceDuPatient(devis: devis))                                       );
-
+                                OrdonanceDuPatient(devis: service))
+                                );
                             }
-                            );
+                        );
+
                      }
-                  ): Center(
-                  child: Text(S.of(context).aucunDevisNeCorrespondACePatient),
-                );
+                  ): Container(
+                    width: double.infinity,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(
+                      child: Text(S.of(context).aucunDevisNeCorrespondACePatient),
+                ),
+                    ),
+                  );
                 },
               ),
 

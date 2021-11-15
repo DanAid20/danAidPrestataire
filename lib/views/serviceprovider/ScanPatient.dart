@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/models/devisModel.dart';
+import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/ServicesProviderInvoice.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
@@ -36,7 +37,8 @@ class _ScanPatientState extends State<ScanPatient> {
     String phone, textForQrCode;
     bool isUserExists=false, confirmSpinner = false;
    BeneficiaryModel adherentBeneficiaryInfos;
-  DevisModel devis;
+    UseCaseServiceModel devis;
+    bool  ifFoundDoc= false;
   @override
   Widget build(BuildContext context) {
       ServicesProviderInvoice devisProvider = Provider.of<ServicesProviderInvoice>(context,listen: false);
@@ -255,8 +257,9 @@ class _ScanPatientState extends State<ScanPatient> {
         action: () async {
           if(_phoneNumber.text!=null){
             await checkIfDocExists( _phoneNumber.text.toString()).then((value){
+               print(value);
                if(value==true){
-                 Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devisProvider.getInvoice)));
+                 Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devis)));
                }else{
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Code de paiements invalide"),));
                }
@@ -279,29 +282,31 @@ class _ScanPatientState extends State<ScanPatient> {
        ServicesProviderInvoice devisProvider = Provider.of<ServicesProviderInvoice>(context,listen: false);
 
      bool result;
-     await FirebaseFirestore.instance
-          .collection('DEVIS')
+     print(code);
+    var res= FirebaseFirestore.instance
+          .collectionGroup('PRESTATIONS')
           .where('PaiementCode', isEqualTo: code)
-          .get()
-          .then((value) {
-        
-        if (value.docs.isNotEmpty) {
-           result= true;
+          .snapshots();
+      res.first.then((value){
+         var data= value.docs[0];
+        if (data.data().isNotEmpty) {
            setState(() { 
-            devis=DevisModel.fromDocument(value.docs[0]);
-            print(devis.toString());
-            devisProvider.setInvoiceModel(devis);
+             ifFoundDoc= true;
+            devis=UseCaseServiceModel.fromDocument(data);
+            print("++++++++++++++++++++++++++++++++++++");
+            print(devis.adherentId);
           });
         } else {
+           setState(() {   
+             ifFoundDoc= false;
+           });
            result= false;
         }
-      }).onError((error, stackTrace) {
-        print(error);
-        print(stackTrace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduite),));
-      });
-    
-    return result;
+    });
+    print("000000");
+    print(result);
+    print(result);
+    return ifFoundDoc;
  }
  bool validateMobile(String value) {
     String pattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
@@ -330,52 +335,22 @@ class _ScanPatientState extends State<ScanPatient> {
         setState(() {
           confirmSpinner = true;
         });
-        await FirebaseFirestore.instance
-            .collection('DEVIS')
-            // .doc('${barcode}')
-            .where('adherentId', isEqualTo: barcode)
-            .where('prestataireId', isEqualTo: prestataire)
-            .get()
-            .then((doc) {
-            setState(() {
-              confirmSpinner = false;
-            });
-            if (doc.docs.isNotEmpty) {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(userId: barcode, isbeneficiare: false ,))                                       );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).cetUtilisateurNexistePas)));
-            }
-          
-        });
-      } else {
-         setState(() {
-          confirmSpinner = true;
-        });
-        await FirebaseFirestore.instance
-            .collection('DEVIS')
-            // .doc('${barcode}')
-            .where('beneficiaryId', isEqualTo: barcode)
-            .where('prestataireId', isEqualTo: prestataire)
-            .get()
-            .then((doc) {
-            setState(() {
-              confirmSpinner = false;
-            });
-            if (doc.docs.isNotEmpty) {
-                Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(userId: barcode, isbeneficiare: true,))                                       );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(S.of(context).cetUtilisateurNexistePas)));
-
-            }
-          
-        }).onError((error, stackTrace){
-          print(error);
-          print(stackTrace);
-           ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(S.of(context).uneErreurEstSurvenue)));
-
-        });
+        var res=   FirebaseFirestore.instance
+          .collectionGroup('PRESTATIONS')
+           .where('adherentId', isEqualTo: barcode)
+          .where('prestataireId', isEqualTo: prestataire)
+          .snapshots();
+        res.first.then((value){
+          print(value.docs.length);
+         var data= value.docs;
+        if (data.isNotEmpty) {
+          Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(userId: barcode, isbeneficiare: false ,))                                       );
+        } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).cetUtilisateurNexistePas)));
+        }
+    });
+      
+      
       }
       setState(() {
         confirmSpinner = false;

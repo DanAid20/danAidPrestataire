@@ -85,6 +85,7 @@ dependencies:
   agora_rtc_engine: ^4.0.6
   dio: ^4.0.0
   http: ^0.13.3
+  expansion_tile_card: ^2.0.0
 
 dev_dependencies:
   flutter_test:

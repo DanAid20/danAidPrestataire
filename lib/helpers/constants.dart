@@ -79,6 +79,28 @@ const  String pharmacy = "PHARMACY";
 const  String labo = "LABO";
 const  String ambulance = "AMBULANCE";
 const  String hospitalization = "HOSPITALIZATION";
+const  arrayOfServicesType=[
+   {
+        "value": "CONSULTATION",
+        "key":  consultation,
+   },
+   {
+        "value": "PHARMACY",
+        "key":  pharmacy,
+   },
+   {
+        "value": "LABO",
+        "key":  labo,
+   },
+   {
+        "value": "AMBULANCE",
+        "key":  ambulance,
+   },
+   {
+        "value": "HOSPITALIZATION",
+        "key":  hospitalization,
+   },
+];
 
 //Agora IDs
 const agoraAppId = "e5c433dd91e64cebb55005e05ed16087";

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -23,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
 class CreateQuote extends StatefulWidget {
@@ -45,8 +47,27 @@ class _CreateQuoteState extends State<CreateQuote> {
   bool isAllOk=false;
   bool buttonLoading = false;
   String devisId;
+  String categoriesType=consultation;
   String appontementId, userId, adherentId, beneficiaryId;
   int numberOfImagesuploaded=0;
+   num danAidCov = 0;
+  bool doc1Spinner = false;
+  bool doc1Uploaded = false;
+  bool doc2Spinner = false;
+  bool doc2Uploaded = false;
+  bool doc3Spinner = false;
+  bool doc3Uploaded = false;
+
+  bool confirmEnable = false;
+  bool confirmSpinner = false;
+
+  int docs1Uploaded = 0;
+  int docs2Uploaded = 0;
+  int docs3Uploaded = 0;
+
+  List docs1List = [];
+  List docs2List = [];
+  List docs3List = [];
   @override
     void initState() {
       initTextfields();
@@ -69,20 +90,29 @@ class _CreateQuoteState extends State<CreateQuote> {
         length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
     return 'Devis N.' + result;
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
+    String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc2 = "Recu";
+    String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
+
     setState(() {
           prestataireInfos=prestatiaireObject;
         });
     return WillPopScope(
       onWillPop:()async{
-         Navigator.pop(context);
+          Navigator.pop(context);
+          return false;
       },
       child: Scaffold(
       key: _scaffoldKey,  
+      resizeToAvoidBottomInset : false,
       appBar: AppBar(
           backgroundColor:  kDeepYellow,
           leading: IconButton(
@@ -137,7 +167,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                 children: [
                     Container(
                       margin: EdgeInsets.only(left: wv*1),
-                      child: Text(S.of(context).codeDeConsultation, style: TextStyle(letterSpacing: 1, color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
+                      child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
                     SizedBox(height: hv*0.3,),
                     Container(
                        width: MySize.getScaledSizeWidth(153),
@@ -164,240 +194,301 @@ class _CreateQuoteState extends State<CreateQuote> {
                      ),
                 ],
               )),
-            Expanded(child:
-             Column(
-               children: [
-                 Container(
-                  margin: EdgeInsets.all(wv*5),
-                   child:Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                    Container(
-                      margin: EdgeInsets.only(left: wv*1),
-                      child: Text(S.of(context).montantTotal, style: TextStyle(letterSpacing: 0.2, color: kSimpleForce, fontSize: wv*5.5, fontWeight: FontWeight.w500),)),
-                    SizedBox(height: hv*1,),
-                    Container(
-                       width: double.infinity,
-                       height: MySize.getScaledSizeHeight(42),
-                       child: TextFormField(
-                         controller:_montantController,
-                        inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                          ],
-                         keyboardType: TextInputType.numberWithOptions(decimal: true),
-                         textAlign: TextAlign.end,
-                         style: TextStyle(fontSize: 25, color: kBlueForce, fontWeight: FontWeight.w400),
-                         decoration: InputDecoration(
-                             fillColor: bgInputGray.withOpacity(0.6),
-                             hintText: ' Ex: 12000',
-                              enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.transparent),
-                              borderRadius: BorderRadius.all(Radius.circular(20))),
-                             hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  width: 1, color: Colors.transparent),
-                              borderRadius: BorderRadius.all(Radius.circular(20))),
-                            contentPadding: EdgeInsets.only(right: wv*10),
-                         ),
-                       ),
-                     ),
-                ],
-              ),
-                 ),
-                SizedBox( width: wv * 30,),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(hv*3),
-                    child: Column(
-                     mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center, 
-                      children: [
-                        Center(
-                          child: Container(
-                            margin: EdgeInsets.only(left:hv*3),
-                            width: double.infinity,
-                            height: hv*45,
-                            child: Column(
-                              
-                              crossAxisAlignment: CrossAxisAlignment.start, 
+           
+            Container(child: Row(
+                 children: [
+                 SizedBox(width: wv*3, height:hv*3),
+                 Expanded(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(S.of(context).importerVosDevis, style: TextStyle(color: kFirstIntroColor, fontSize: fontSize(size: hv * 2)),),
-                                    images.length>0?
-                                    InkWell(
-                                      onTap: (){
-                                        setState(() {
-                                          images.clear();
-                                        });
-                                      },
-                                      child: Text(S.of(context).effacer, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: fontSize(size: hv * 2)),))
-                                      : SizedBox.shrink()
-                                  ],
-                                ),
-                                 SizedBox( width: hv * 1,),
-                                
-                                 Container(
-                                      margin: EdgeInsets.only(
-                                          right: inch * 2,
-                                          top: inch * 3),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          getImage(context,images);
-                                        },
-                                        child: Align(
-                                          alignment: Alignment.center,
-                                          child: SvgPicture.asset(
-                                            'assets/icons/Bulk/Scan.svg',
-                                            color: kSouthSeas,
-                                            height: hv * 8,
-                                            width: wv * 8,
-                                          ),
+                                Container(
+                                  child:Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                    SizedBox(height: hv*1,),
+                                    Container(
+                                      margin: EdgeInsets.only(left: wv*1),
+                                      child: Text(S.of(context).montantTotal, style: TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
+                                    SizedBox(height: hv*1,),
+                                    Container(
+                                      width: double.infinity,
+                                      height: MySize.getScaledSizeHeight(42),
+                                      child: TextFormField(
+                                        controller:_montantController,
+                                        inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                          ],
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(fontSize: 20, color: kBlueForce, fontWeight: FontWeight.w400),
+                                        decoration: InputDecoration(
+                                            fillColor: bgInputGray.withOpacity(0.6),
+                                            hintText: ' Ex: 12000',
+                                              enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.transparent),
+                                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                                            hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.transparent),
+                                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                                            contentPadding: EdgeInsets.only(right: wv*10),
                                         ),
                                       ),
                                     ),
-                                   SizedBox(height: hv*1.5,),
-                                   Expanded(
-                                     child: ListView.builder(
-                                      itemCount: images.length,
-                                      itemBuilder:(BuildContext ctxt, int index) {
-                                        var e= images[index];
-                                      return new Container(
-                                      width: double.infinity,
-                                      height: hv*5,
-                                      // margin: EdgeInsets.only(left:wv*5, right: wv*5),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                        Container(
-                                        child: Text('${e.name}', style: TextStyle(color: kBlueForce, fontSize: hv*2.1),)),
-                                        SizedBox(width: wv*4,),
-                                        Container(
-                                          child: Text('IMG', style: TextStyle(color: kDeepDarkTeal,  fontSize: hv*2.1),),
-                                        )
-                                      ],),
-                                  );
-                                      }),
-                                   ),
-                                  images.length>0 ? Center(
-                                    child: Container(
-                                      margin: EdgeInsets.only(top:inch*5),
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        color: whiteColor.withOpacity(0.7),
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6)],
-                                      ),
-                                      child: Text("${images.length}"+S.of(context).imagesSlectionner, textScaleFactor: 1.0, style: TextStyle(color:kPrimaryColor, fontWeight: FontWeight.w500, fontSize: fontSize(size: 15))),
-                                    ),
-                                  ): SizedBox.shrink(),
-                                 SizedBox(height: hv*2.5,),
-                                 CustomTextButton(
-                                  enable: true,
-                                  text:  buttonLoading? S.of(context).envoie : isUploadingImg ? S.of(context).uploadDe+"${numberOfImagesuploaded} / ${images.length}"+S.of(context).images: S.of(context).envoyer, 
-                                  action: () async =>{
-                                    if( _codeConsultationController.text.isEmpty){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).entrezLeCodeDeConsultation),))
-                                    }else if(_montantController.text.isEmpty){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).entrezLeMontantDuDevis),))
-
-                                    }else if(images.isEmpty || images.length==0){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).importerLesImagesDuDevis),))
-                                    }else{
-                                    await checkIfDocExists( _codeConsultationController.text.toString()).then((value){
-                                      if(value==true){
-                                            setState((){isUploadingImg=true;});
-                                            uploadFiles(images).then((url){
-                                                setState((){
-                                              isUploadingImg=false;
-                                              buttonLoading = true;
-                                            });
-                                          // var data= [
-                                          //         {
-                                          //             "NomMedicaments": "1 AMOCLAN 8:1 500mg/62,5 Comp. B/10 1.000 f",
-                                          //             "NonScientifique": "DCI (AMOXICILLINE/ACIDE CLAVULANIQUE)",
-                                          //             "Prix": 10000,
-                                          //             "PrixCOuvert": 7000,
-                                          //         },
-                                          //         {
-                                          //             "NomMedicaments": "1 AMOCLAN  500mg/62,5 Comp. B/10 1.000 f",
-                                          //             "NonScientifique": "DCI (AMOXICILLINE/ CLAVULANIQUE)",
-                                          //             "Prix": 10000,
-                                          //             "PrixCOuvert": 7000,
-                                          //         },
-                                          //         {
-                                          //             "NomMedicaments": "1 AMOCLAN 8:1  Comp. B/10 1.000 f",
-                                          //             "NonScientifique": " (AMOXICILLINE/ACIDE CLAVULANIQUE)",
-                                          //             "Prix": 10000,
-                                          //             "PrixCOuvert": 7000,
-                                          //         },
-                                          //     ];
-                                         FirebaseFirestore.instance.collection("DEVIS")
-                                          .doc().set({
-                                            "intitule":devisId,
-                                            "appointementId": appontementId,
-                                            "adherentId" :adherentId,
-                                            "beneficiaryId": beneficiaryId,
-                                            "prestataireId":prestataireInfos.id,
-                                            "consultationCode":  _codeConsultationController.text,
-                                            "montant":  _montantController.text,
-                                            "ispaid": false,
-                                            "isAdminHasTreatedRequest": false,
-                                            "urlImagesDevis": FieldValue.arrayUnion(url),
-                                            "status": 0,
-                                            "RequestTreatedList": FieldValue.arrayUnion(null) ,
-                                            "PaiementCode":null,
-                                            "type": 'DEVIS',
-                                            "createdDate": DateTime.now(),
-                                          }, SetOptions(merge: true)).then((value){
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('le dévis a bien été créer '),));
-                                            setState(() {
-                                              buttonLoading = false;
-                                            });
-                                            Navigator.pop(context);
-                                          }).onError((error, stackTrace){
-                                             print(error);
-                                             print(stackTrace);
-                                              setState(() {
-                                              buttonLoading = false;
-                                            });
-                                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduiteLorsDeLenvoie),));
-
-                                          });
-                                        });
-                                      }else if(value==false){
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
-                                      }
-                                    })
-                                     }
-                                    
-                                  },
-                                 )
+                                ],
+                              ),
+                                ),
                               ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                )
-               ],
-             )
+                            ), 
+                          )
+                 ])
             ),
+            Container(child: Row(
+                 children: [
+                 SizedBox(width: wv*3,),
+                 Expanded(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5,),
+                                 Container(
+                                      margin: EdgeInsets.only(left: wv*1),
+                                      child: Text("Type de devis", style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
+                                    SizedBox(height: hv*1,),
+                                Container(
+                                  constraints: BoxConstraints(minWidth: wv*45),
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                      alignedDropdown: true,
+                                      child: DropdownButton(
+                                        isExpanded: true,
+                                        value: categoriesType,
+                                        hint: Text("type de devis", style: TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
+                                        items: arrayOfServicesType.map((region){
+                                          return DropdownMenuItem(
+                                            child: SizedBox(child: Text(region["value"], style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
+                                            value: region["key"],
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) async {
+                                          //List<String> reg = getTownNamesFromRegion(cities, value);
+                                          setState(() {
+                                           categoriesType=value;
+                                          });
+                                        }),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ), 
+                          )
+                 ])
+            ),
+            Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: hv*2.5),
+                    decoration: BoxDecoration(
+                      color: whiteColor,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                    ),
+                    child:Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                          child: Column(
+                            children: [
+                              SizedBox(height: hv*2,),
+                              Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                              SizedBox(height: hv*0.5,),
+                              Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                              Center(
+                                child: InkWell(
+                                  onTap: (){getDocument(context);},
+                                  child: Container(
+                                    margin: EdgeInsets.symmetric(vertical: hv*2),
+                                    child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                                  ),
+                                ),
+                              ),
+                              FileUploadCard(
+                                title: doc1+" ($docs1Uploaded)",
+                                state: doc1Uploaded,
+                                isMultiple: true,
+                                loading: doc1Spinner,
+                                action: () async {await getDocFromGallery(doc1);}
+                              ),
+                              SizedBox(height: 5,),
+                              FileUploadCard(
+                                title: doc2+" ($docs2Uploaded)",
+                                state: doc2Uploaded,
+                                isMultiple: true,
+                                loading: doc2Spinner,
+                                action: () async {await getDocFromGallery(doc2);}
+                              ),
+                              SizedBox(height: 5,),
+                              FileUploadCard(
+                                title: doc3+" ($docs3Uploaded)",
+                                state: doc3Uploaded,
+                                isMultiple: true,
+                                loading: doc3Spinner,
+                                action: () async {await getDocFromGallery(doc3);}
+                              ),
+
+                              SizedBox(height: hv*2,),
+                            CustomTextButton(
+                                text: "créer",
+                                enable: true,
+                                isLoading: confirmSpinner,
+                                noPadding: true,
+                                action: () async {
+                                  setState((){confirmSpinner = true;});
+                                  print("aaa");
+                                  var data= [
+                                                  {
+                                                      "NomMedicaments": "1 AMOCLAN 8:1 500mg/62,5 Comp. B/10 1.000 f",
+                                                      "NonScientifique": "DCI (AMOXICILLINE/ACIDE CLAVULANIQUE)",
+                                                      "Prix": 10000,
+                                                      "PrixCOuvert": 7000,
+                                                  },
+                                                  {
+                                                      "NomMedicaments": "1 AMOCLAN  500mg/62,5 Comp. B/10 1.000 f",
+                                                      "NonScientifique": "DCI (AMOXICILLINE/ CLAVULANIQUE)",
+                                                      "Prix": 10000,
+                                                      "PrixCOuvert": 7000,
+                                                  },
+                                                  {
+                                                      "NomMedicaments": "1 AMOCLAN 8:1  Comp. B/10 1.000 f",
+                                                      "NonScientifique": " (AMOXICILLINE/ACIDE CLAVULANIQUE)",
+                                                      "Prix": 10000,
+                                                      "PrixCOuvert": 7000,
+                                                  },
+                                              ];
+                                   await checkIfDocExists( _codeConsultationController.text.toString()).then((value){
+                                    if(value!=null){ 
+                                    if(categoriesType == pharmacy || categoriesType == labo){
+                                     FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
+                                        "usecaseId": value["id"],
+                                        "adherentId": adherentId,
+                                        "beneficiaryId": beneficiaryId,
+                                        "isConfirmDrugList": false,
+                                        "status": 2,
+                                        "paid": false,
+                                        "PaiementCode":null,
+                                        "drugsList" : FieldValue.arrayUnion(data),
+                                        "appointementId": value["idAppointement"],
+                                        "title": Algorithms.getUseCaseServiceName(type: categoriesType),
+                                        "titleDuDEvis":devisId,
+                                        "consultationCode": _codeConsultationController.text.toString(),
+                                        "amountToPay":num.parse(_montantController.text.toString()),
+                                        "establishment": prestataireInfos.name,
+                                        "prestataireId":prestataireInfos.id,
+                                        "adminFeedback": null,
+                                        "justifiedFees": null,
+                                        "type": categoriesType,
+                                        "createdDate": DateTime.now(),
+                                        "serviceDate": null,
+                                        "precriptionUrls": FieldValue.arrayUnion(docs1List),
+                                        "receiptUrls": FieldValue.arrayUnion(docs2List),
+                                        "drugsUrls": categoriesType == pharmacy ? FieldValue.arrayUnion(docs3List) : [],
+                                        "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
+                                        'closed': true,
+                                        "precriptionIsValid": null,
+                                        "receiptIsValid": null,
+                                        "drugsIsValid": null,
+                                        "resultsIsValid": null,
+                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
+                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
+                                        "drugsUploadDate": docs3List.length > 0 && categoriesType == pharmacy ? DateTime.now() : null,
+                                        "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
+                                        "executed": docs2List.length > 0 ? true : false,
+                                        "estimated": docs1List.length > 0 ? true : false
+                                      }).then((doc) {
+                                        
+                                        setState((){confirmSpinner = false;});
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouvelle prestation ajoutée'),));
+                                        Navigator.pop(context);
+                                      }).onError((error, stackTrace) {
+                                        setState((){confirmSpinner = false;});
+                                      });
+                                  }
+                                  if(categoriesType == hospitalization || categoriesType == ambulance){
+                                  
+                                      FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
+                                        "usecaseId": value["id"],
+                                        "adherentId": adherentId,
+                                        "beneficiaryId": beneficiaryId,
+                                        "advance": 0,
+                                        "status": 2,
+                                        "paid": false,
+                                        "isConfirmDrugList": false,
+                                        "appointementId": value["idAppointement"],
+                                        "title": Algorithms.getUseCaseServiceName(type: categoriesType),
+                                        "drugsList" : FieldValue.arrayUnion(data),
+                                        "titleDuDEvis":devisId,
+                                        "consultationCode": _codeConsultationController.text.toString(),
+                                        "amountToPay":num.parse(_montantController.text.toString()),
+                                        "establishment": prestataireInfos.name,
+                                        "adminFeedback": null,
+                                        "justifiedFees": 0,
+                                        "type": categoriesType,
+                                        "createdDate": DateTime.now(),
+                                        "serviceDate": null,
+                                        "precriptionUrls": FieldValue.arrayUnion(docs1List),
+                                        "receiptUrls": FieldValue.arrayUnion(docs2List),
+                                        "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List) : [],
+                                        "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
+                                        'closed': true,
+                                        "precriptionIsValid": null,
+                                        "receiptIsValid": null,
+                                        "drugsIsValid": null,
+                                        "resultsIsValid": null,
+                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
+                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
+                                        "drugsUploadDate": docs3List.length > 0 && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
+                                        "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
+                                        "executed": docs2List.length > 0 ? true : false,
+                                        "estimated": docs1List.length > 0 ? true : false,
+                                        "ongoing": true,
+                                        "requested": docs1List.length > 0 ? true : false,
+                                      }).then((doc) {
+                                        setState((){confirmSpinner = false;});
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouvelle prestation ajoutée'),));
+                                        Navigator.pop(context);
+                                      }).onError((error, stackTrace) {
+                                        setState((){confirmSpinner = false;});
+                                      });
+                                    } 
+                                  
+                                  }else if(categoriesType==null){
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("choisissez le type de devis")));
+                                     setState((){confirmSpinner = false;});
+                                  }else if(value==null){
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
+                                     setState((){confirmSpinner = false;});
+                                  }
+                                });
+                                 
+                                },
+                              )
+                          ]))
+                      ],
+            )),
           ],
         ),
       )))
     );
   }
-
- Future<bool> checkIfDocExists(String code) async {
-     bool result;
+ 
+ Future<dynamic> checkIfDocExists(String code) async {
+     var result=null;
      await FirebaseFirestore.instance
           .collection('USECASES')
           .where('consultationCode', isEqualTo: code)
@@ -405,7 +496,7 @@ class _CreateQuoteState extends State<CreateQuote> {
           .then((value) {
           print(code);
         if (value.docs.isNotEmpty) {
-           result= true;
+           result= value.docs[0].data();
           setState(() { 
             appontementId= value.docs[0].data()['idAppointement'];
             if(value.docs[0].data()['adherentId']==value.docs[0].data()['beneficiaryId']){
@@ -417,7 +508,7 @@ class _CreateQuoteState extends State<CreateQuote> {
             beneficiaryId= value.docs[0].data()['beneficiaryId'];
            });
         } else {
-           result= false;
+           result= null;
         }
       }).onError((error, stackTrace) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("une erreur s'est produite "),));
@@ -425,39 +516,8 @@ class _CreateQuoteState extends State<CreateQuote> {
     
     return result;
  }
- Future<List<String>> uploadFiles(List<File> _images) async {
-  var imageUrls = await Future.wait(_images.map((_image) => uploadFile(_image)));
-  print(imageUrls);
-  setState(() {
-      numberOfImagesuploaded=0;
-    });
-  return imageUrls;
-}
 
-Future<String> uploadFile(File _image) async {
- Reference  storageReference = FirebaseStorage.instance
-      .ref()
-      .child('devis/PRESTATAIRES/${prestataireInfos.id}/$userId/Devis-${DateTime.now().millisecondsSinceEpoch.toString()}');
-  UploadTask uploadTask = storageReference.putFile(_image);
-  await uploadTask.whenComplete((){ setState(() {
-      numberOfImagesuploaded++;
-    });});
-  print(numberOfImagesuploaded);
-  return await storageReference.getDownloadURL();
-}
 
-  List<File> renameFile(List<File> fileList, prestatataireId,String idDuDevis) {
-  int index=0;
-  List<File> ingArray=[];
-  fileList.forEach((f) {
-    String newFileName = idDuDevis+'_'+index.toString()+'_'+DateTime.now().millisecondsSinceEpoch.toString()+path.extension(f.path);
-    var img=changeFileNameOnlySync(f,newFileName);
-    index++;
-    print(img.name);
-    ingArray.add(img);
-  });
-  return ingArray;
-}
 File changeFileNameOnlySync(File file, String newFileName) {
   var path = file.path;
   var lastSeparator = path.lastIndexOf(Platform.pathSeparator);
@@ -491,63 +551,7 @@ File changeFileNameOnlySync(File file, String newFileName) {
     });
     //uploadImageToFirebase(pickedFile);
   }
-  Future getMultiplemage(List<File> images) async {
-    FilePickerResult result = await FilePicker.platform.pickFiles(allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png'],
-    );
 
-    if (result != null && result.files.length<=10) {
-      List<File> files = result.paths.map((path) => File(path)).toList();
-      //print(files.length);
-      //print(files.toString());
-      List<File> fileRenamed= renameFile(files, prestataireInfos.id, devisId.replaceAll(" ", ""));
-      //images.addAll(fileRenamed);
-     setImageList(fileRenamed);
-        
-       
-    } else if(result.files.length>5) {
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).vousNePouvezPasImporterPlusDe5Images),));
-    }
-     else{
-       print('No image selected.');
-    }
-    // final pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
-    // setState(() {
-    //   if (pickedFile != null) {
-    //     imageSpinner = true;
-    //      images.add(File(pickedFile.path));
-    //     //imageLoading = true;
-    //   } else {
-       
-    //   }
-    // });
-    //uploadImageToFirebase(pickedFile);
-  }
-
-
-  getImage(BuildContext context, List<File> images){
-    showModalBottomSheet(
-      context: context, 
-      builder: (BuildContext bc){
-        return SafeArea(
-          child: Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text(S.of(context).gallerie),
-                    onTap: () {
-                      getMultiplemage(images);
-                      Navigator.of(context).pop();
-                    }),
-              ],
-            ),
-          ),
-        );
-      }
-    );
-  }
   Future getDocFromPhone(String name) async {
 
     setState(() {
@@ -569,39 +573,141 @@ File changeFileNameOnlySync(File file, String newFileName) {
     }
   }
 
-  Future uploadDocumentToFirebase(File file, String name) async {
-    // AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+Future uploadDocumentToFirebase(File file, String name) async {
+   
+    String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc2 = "Recu";
+    String doc3 =categoriesType == consultation ? "Autre" :categoriesType == labo ? "Resultat" : "Medicamment";
+    if (file == null) {
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      return null;
+    }
+    Reference storageReference = FirebaseStorage.instance.ref()
+      .child('devis/PRESTATAIRES/${prestataireInfos.id}/$userId/Devis-${DateTime.now().millisecondsSinceEpoch.toString()}');//.child('photos/profils_adherents/$fileName');
+    final metadata = SettableMetadata(
+      //contentType: 'image/jpeg',
+      customMetadata: {'picked-file-path': file.path}
+    );
 
-    // if (file == null) {
-    //   ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
-    //   return null;
-    // }
-
-    // String adherentId = adherentModelProvider.getAdherent.adherentId;
-    // Reference storageReference = FirebaseStorage.instance.ref().child('Prestatires/devis/doc/$adherentId/'); //.child('photos/profils_adherents/$fileName');
-    // final metadata = SettableMetadata(
-    //   //contentType: 'image/jpeg',
-    //   customMetadata: {'picked-file-path': file.path}
-    // );
-
-    // UploadTask storageUploadTask;
-    // if (kIsWeb) {
-    //   storageUploadTask = storageReference.putData(await file.readAsBytes(), metadata);
-    // } else {
-    //   storageUploadTask = storageReference.putFile(File(file.path), metadata);
-    // }
-    //  storageUploadTask.catchError((e){
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
-    // });
+    UploadTask storageUploadTask;
+    if (kIsWeb) {
+      storageUploadTask = storageReference.putData(await file.readAsBytes(), metadata);
+    } else {
+      storageUploadTask = storageReference.putFile(File(file.path), metadata);
+    }
+    
     //storageUploadTask = storageReference.putFile(imageFileAvatar);
-  }
+
+    storageUploadTask.catchError((e){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+    });
+    storageUploadTask.whenComplete(() async {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context).ajoute)));
+      String url = await storageReference.getDownloadURL();
+      if (name == doc1){
+        setState(() {
+          docs1Uploaded = docs1Uploaded + 1;
+          docs1List.add(url);
+          doc1Uploaded = true;
+          doc1Spinner = false;
+        });
+      } else if(name == doc2){
+        setState(() {
+          docs2Uploaded = docs2Uploaded + 1;
+          docs2List.add(url);
+          doc2Uploaded = true;
+          doc2Spinner = false;
+        });
+
+      } else if(name == doc3) {
+        setState(() {
+          docs3Uploaded = docs3Uploaded + 1;
+          docs3List.add(url);
+          doc3Uploaded = true;
+          doc3Spinner = false;
+        });
+
+      }
+      
+      print("download url: $url");
+    }).catchError((e){
+      print(e.toString());
+  });
 }
-extension FileExtention on FileSystemEntity {
-  String get name {
-    return this?.path?.split("/")?.last;
+  Future getDocFromGallery(String name) async {
+
+    String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc2 = "Recu";
+    String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
+
+    setState(() {
+      if (name == doc1){
+        doc1Spinner = true;
+      } else if(name == doc2){
+        doc2Spinner = true;
+      } else if(name == doc3) {
+        doc3Spinner = true;
+      }
+    });
+    
+    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    if(result != null) {
+      File file = File(result.files.single.path);
+      uploadDocumentToFirebase(file, name);
+    } else {
+      setState(() {
+        if (name == doc1){
+          doc1Spinner = false;
+        } else if(name == doc2){
+          doc2Spinner = false;
+        } else if(name == doc3) {
+          doc3Spinner = false;
+        }
+      });
+    }
+  }
+  getDocument(BuildContext context){
+
+    String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc2 = "Recu";
+    String doc3 =categoriesType == consultation ? "Autre" : categoriesType== labo ? "Resultat" : "Medicamment";
+
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext bc){
+        return SafeArea(
+          child: Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(LineIcons.certificate),
+                    title: new Text(doc1+" ($docs1Uploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    onTap: () {
+                      getDocFromPhone(doc1);
+                      Navigator.of(context).pop();
+                    }),
+                new ListTile(
+                  leading: new Icon(LineIcons.certificate),
+                  title: new Text(doc2+" ($docs2Uploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    getDocFromPhone(doc2);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                new ListTile(
+                  leading: new Icon(LineIcons.certificate),
+                  title: new Text(doc3+" ($docs3Uploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  onTap: () {
+                    getDocFromPhone(doc3);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
   }
 
-  String get directoryPath {
-    return this?.path?.replaceAll("/${name}", '');
-  }
 }

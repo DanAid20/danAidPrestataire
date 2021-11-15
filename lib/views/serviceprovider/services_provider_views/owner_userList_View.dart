@@ -146,8 +146,7 @@ double imc=0;
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                               widget.beneficiare.cniName!=null? S.of(context).carnetDe+ widget.beneficiare.cniName: "nom Pas définie",
+                              Text(widget.beneficiare.cniName,
                                   style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,

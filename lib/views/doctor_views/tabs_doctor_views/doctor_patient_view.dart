@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/appointmentModel.dart';
 import 'package:danaid/core/models/devisModel.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
+import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/ServicesProviderInvoice.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -17,6 +19,7 @@ import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
 import 'package:danaid/views/serviceprovider/ScanPatient.dart';
 import 'package:danaid/views/serviceprovider/ServicesProvider_QuoteEmit.dart';
 import 'package:danaid/views/serviceprovider/create_Quote.dart';
+import 'package:danaid/views/serviceprovider/services_provider_views/add_patient_views_service_Providers.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -203,12 +206,27 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     isPrestataire: isPrestataire,
                   ),
                 ),
+                isPrestataire?GestureDetector(
+                  onTap: () {
+                   Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddPatientViewServiceProvider(
+                                      isLaunchConsultation: true,
+                                    )),
+                          );
+                  },
+                  child: displsOtherServices(
+                    iconesUrl: 'assets/icons/Two-tone/3User.svg',
+                    title: "prendre rendez-vous",
+                    isPrestataire: isPrestataire,
+                  ),
+                ): SizedBox.shrink(),
                 GestureDetector(
                   onTap: () {
                     isPrestataire
-                        ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                S.of(context).unPeuDePatienceCettePartieSeraBienttDisponible)))
+                        ? Navigator.pushNamed(
+                            context, '/history-prestation-doctor')
                         : Navigator.pushNamed(
                             context, '/history-prestation-doctor');
                   },
@@ -221,9 +239,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 GestureDetector(
                   onTap: () {
                     isPrestataire
-                        ? ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                S.of(context).unPeuDePatienceCettePartieSeraBienttDisponible)))
+                        ? Navigator.pushNamed(context, '/chatroom')
                         : Navigator.pushNamed(context, '/chatroom');
                   },
                   child: displsOtherServices(
@@ -487,9 +503,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   getPrestataireList( prestatairesId){
     UserProvider userProvider = Provider.of<UserProvider>(context);
      Stream<QuerySnapshot> query = FirebaseFirestore.instance
-        .collection("DEVIS")
+        .collectionGroup("PRESTATIONS")
         .where("prestataireId", isEqualTo: prestatairesId)
-        .where("status", isEqualTo: 0)
+        .where("status", isEqualTo: 2)
+         .where("createdDate", isGreaterThan: startDays, isLessThan: endDay)
         .orderBy("createdDate", descending: true)
         .snapshots();
       return StreamBuilder(
@@ -509,24 +526,28 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                      itemCount: snapshot.data.docs.length,
                      itemBuilder: (context, index) {
                          DocumentSnapshot doc = snapshot.data.docs[index];
-                        var devis=DevisModel.fromDocument(doc);
+                        // var devis=DevisModel.fromDocument(doc);
+                        UseCaseServiceModel devis= UseCaseServiceModel.fromDocument(doc);
                         return HomePageComponents()
                          .prestataireItemList(
-                            etat: devis.ispaid? 1: 0,
-                            montant: "${devis.amount}.f",
-                            date: DateFormat("dd MMMM yyy ")
-                                .format(devis.createdDate.toDate()),
-                            nom: "${devis.intitule}",
-                            iconesConsultationTypes:'assets/icons/Bulk/Profile.svg', 
+                            etat: devis.paid? 1:0,
+                            montant: DateFormat("dd MMMM yyy ")
+                                .format(devis.dateCreated.toDate()),
+                            date:"${devis.title}- ${devis.amount}.f" ,
+                            nom: "${devis.titleDuDEvis}",
+                            iconesConsultationTypes:Algorithms.getUseCaseServiceIcon(type: devis.type), 
                             redirectOncliked: (){
                                 Navigator.push(context,MaterialPageRoute(builder: (context) =>
-                                OrdonanceDuPatient(devis: devis))                                       );
-
+                                OrdonanceDuPatient(devis: devis))
+                                );
                             });
                       
                      }
                   ): Center(
-                  child: Text("aucun devis ne correspond a ce patient "),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text("aucun devis en attente aujourd'hui "),
+                  ),
                 );
         }     
       );
@@ -644,10 +665,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   @override
   Widget build(BuildContext context) {
      UserProvider userProvider = Provider.of<UserProvider>(context);
-   ServiceProviderModelProvider prestataire =
-        Provider.of<ServiceProviderModelProvider>(context);
-    DoctorModelProvider doctorProvider =
-        Provider.of<DoctorModelProvider>(context, listen: false);
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
     return SingleChildScrollView(

@@ -26,20 +26,20 @@ import '../../../helpers/constants.dart';
 import '../../../widgets/home_page_mini_components.dart';
 import '../../../helpers/utils.dart';
 
-class InactiveAccount extends StatefulWidget {
+class InactiveAccountProvider extends StatefulWidget {
   final AdherentModel data;
   final bool isAccountIsExists;
   final String phoneNumber;
   final String consultationType;
-  InactiveAccount(
+  InactiveAccountProvider(
       {Key key, this.data, this.isAccountIsExists, this.phoneNumber, this.consultationType})
       : super(key: key);
 
   @override
-  _InactiveAccountState createState() => _InactiveAccountState();
+  _InactiveAccountProviderState createState() => _InactiveAccountProviderState();
 }
 
-class _InactiveAccountState extends State<InactiveAccount> {
+class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   bool isActive;
   AdherentModelProvider adherentModelProvider;
   ScrollController scrollController;
@@ -57,8 +57,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
   @override
   void initState() {
      code= getRandomString(4);
+     print(widget.data.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (widget.isAccountIsExists == false) {
+      if (widget.isAccountIsExists == false || widget.data==null) {
         await showDialog<String>(
             barrierDismissible: false,
             context: context,
@@ -78,9 +79,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
   userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
   }
  Future<String> createConsultationCode({bool exists=false, String id}) async {
-     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
-      
+    
     var date= DateTime.now();
     var newUseCase =FirebaseFirestore.instance.collection('USECASES').doc();
      newUseCase.set({
@@ -127,8 +128,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   
   }
   facturationCode(id) async {
-    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-
+     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     await FirebaseFirestore.instance.collection('USECASES').doc(id)
     .collection('FACTURATIONS').doc().set({
       'id':Utils.createCryptoRandomString(8),
@@ -484,7 +484,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   Widget build(BuildContext context) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
-     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
 
     return SafeArea(
         top: false,
@@ -617,7 +617,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                        
                                        if(userSelected!=-1){
                                          print(adherentModelProvider.getAdherent.adherentId);
-                                        
+                                         print(prestataire.getServiceProvider.id);
                                              var usecase= FirebaseFirestore.instance.collection('USECASES')
                                               .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:prestataire.getServiceProvider.id).orderBy('createdDate').get(); 
                                               usecase.then((value) async {
@@ -753,7 +753,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         ),),
                                         Spacer(),
                                         Text(
-                                            adherentUserSelected.cniName!=null? S.of(context).carnetDe+adherentUserSelected.cniName: "nom Pas définie",
+                                            S.of(context).carnetDe+adherentUserSelected.cniName,
                                             style: TextStyle(
                                                 color: textColor,
                                                 fontSize: wv * 4.5,
