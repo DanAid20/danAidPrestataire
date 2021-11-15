@@ -33,8 +33,15 @@ import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
 import 'package:danaid/views/screens/splashscreen.dart';
+import 'package:danaid/views/serviceprovider/Ordonance.dart';
+import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
+import 'package:danaid/views/serviceprovider/PrestationsEnCours.dart';
+import 'package:danaid/views/serviceprovider/ScanPatient.dart';
+import 'package:danaid/views/serviceprovider/create_Quote.dart';
 import 'package:danaid/views/serviceprovider/edit-prestatire-profilt.dart';
 import 'package:danaid/views/social_network_views/ambassador_dashboard.dart';
+import 'package:danaid/views/serviceprovider/services_provider_views/add_patient_views_service_Providers.dart';
+import 'package:danaid/views/serviceprovider/services_provider_views/inactive_account_views_Providers.dart';
 import 'package:danaid/views/social_network_views/chatroom.dart';
 import 'package:danaid/views/social_network_views/home_page_social.dart';
 import 'package:danaid/views/social_network_views/search.dart';
@@ -110,7 +117,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/ownerList-patient": (context) => OwnerUserListView(),
   "/history-prestation-doctor": (context) => PrestationHistory(),
   "/details-history-prestation-doctor": (context) => DetailsPrestationHistory(), 
- "/appointment-apointement": (context) => AppointmentDetails(),
+  "/appointment-apointement": (context) => AppointmentDetails(),
   /**
    * End section routes that concern the doctor activities in the
    * application system
@@ -119,6 +126,13 @@ final Map<String, Widget Function(BuildContext)> routes = {
   // Service provider routes (prestataire)
   "/serviceprovider-profile-edit": (context) => EditPrestataire(),
   "/serviceprovider-profile": (context) => PrestataireProfilePage(),
+  "/QuoteEmit-serviceprovider": (context) => CreateQuote(),
+  "/scanPatient-serviceprovider": (context) => ScanPatient(),
+  "/prestationEncours-serviceprovider": (context) => PrestationEnCours(),
+  "/ordonanceDuPatient-serviceprovider": (context) => OrdonanceDuPatient(),
+  "/ordonance-serviceprovider": (context) => Ordonances(),
+  "/serviceprovider-add-patient": (context) => AddPatientViewServiceProvider(),
+  "/inactive-account-patient-serviceProviders": (context) => InactiveAccountProvider(),
 
   // Social network screens
   "/social-home": (context) => SocialMediaHomePage(),

@@ -55,7 +55,7 @@ dependencies:
   carousel_slider: null
   firebase_core: ^1.0.1
   cloud_firestore: ^1.0.7
-  firebase_auth: ^1.0.1
+  firebase_auth: ^3.2.0
   firebase_storage: ^8.0.0
   country_pickers: ^2.0.0
   hive: ^2.0.4
@@ -84,6 +84,7 @@ dependencies:
   agora_rtc_engine: ^4.0.6
   dio: ^4.0.0
   http: ^0.13.3
+  expansion_tile_card: ^2.0.0
 
 dev_dependencies:
   flutter_test:

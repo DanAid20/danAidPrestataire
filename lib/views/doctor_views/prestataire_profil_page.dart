@@ -67,7 +67,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
 
         Marker(markerId: MarkerId('1'),
         
-        icon: customIcon1, position: LatLng(prestataire.getServiceProvider.coordGps['latitude'], prestataire.getServiceProvider.coordGps['longitude']));
+        icon: customIcon1, position: prestataire.getServiceProvider.coordGps==null? LatLng(0.0, 0.0) : LatLng(prestataire.getServiceProvider?.coordGps['latitude'], prestataire.getServiceProvider.coordGps['longitude']));
     setState(() {
 
           markers.add(f);

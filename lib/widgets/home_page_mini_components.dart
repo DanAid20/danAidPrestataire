@@ -20,6 +20,91 @@ import '../helpers/styles.dart';
 import '../widgets/readMoreText.dart';
 
 class HomePageComponents {
+
+  Widget prestataireItemList({
+    String nom, 
+    String date,
+    String montant, 
+    int etat,
+    String iconesConsultationTypes,
+    Function redirectOncliked,
+  }){
+    print(etat.runtimeType);
+    return GestureDetector(
+      onTap: (){
+        redirectOncliked();
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+            margin: EdgeInsets.only( top: hv*2) ,
+          child: Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                       Container(
+                                           padding: EdgeInsets.all(5) ,
+                                          decoration: BoxDecoration(color: kDeepTeal, boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),],borderRadius: BorderRadius.all(Radius.circular(10))),
+                                         child: SvgPicture.asset(
+                                                iconesConsultationTypes,
+                                                height: 28.h,
+                                                color: kSouthSeas,
+                                                width: wv * 12, 
+                                          ),
+                                       ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                  width: wv * 2.3,
+                                ),
+                                    Column(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              child: Text(nom, overflow: TextOverflow.clip,  style: TextStyle(
+                                                color: kBlueForce,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            ),
+                                                SizedBox(
+                                  width: hv * 2.3,
+                                ),
+                                            Text(date,  style: TextStyle(
+                                              color: kBlueForce,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Column(
+                                      children: [
+                                        Column(
+                                           crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            Text(montant, style: TextStyle(
+                                              color: kBlueForce,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            Text(etat==0? S.current.enAttente: etat==1? 'Payer': etat==2?"Livré" : 'inconue'  , style: TextStyle(
+                                              color:  getCOlor(etat) ,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+        ),
+      ),
+    );
+  }
+  
+
   Widget paienementDetailsListItem({
     String nom, 
     String date,
@@ -93,11 +178,12 @@ class HomePageComponents {
                             ),
     );
   }
+
   Color getCOlor(etat){
     Color couleurs; 
-    if(etat==0) couleurs=Colors.red;
-    else if( etat==1)  couleurs=Colors.green;
-    else if(etat==2)  couleurs=kblueSky;
+    if(etat==0) couleurs=Colors.yellow;
+    else if( etat==1)  couleurs=Colors.teal;
+    else if(etat==2)  couleurs=kMaron;
     return couleurs;
   }
   Widget paiementItem({
@@ -194,6 +280,108 @@ class HomePageComponents {
                  ),
     );
   }
+ 
+   Widget paiementPrestaireItem({
+    String month, 
+    String prix,
+    String lastDatePaiement,
+    int paidOrNot,
+    String paidAllReady,
+    Function redirectOncliked,
+  }){
+    return 
+    Container(
+        margin: EdgeInsets.all( wv * 3),
+                 decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+      child: Padding(
+                   padding: const EdgeInsets.all(12.0),
+                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                     children: [
+                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         children: [
+                          Column(
+                             mainAxisSize: MainAxisSize.min,
+                             crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                                   Container(alignment: Alignment.centerLeft, child: Text(month, style: TextStyle(
+                                      color: kDeepTeal,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                   SizedBox( height: hv * 1.3,),
+                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current.montant, style: TextStyle(
+                                      color: kBlueForce,
+                                      fontWeight: FontWeight.w500,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
+                                      color: kBlueForce,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),],)),
+                             ],
+                           ),
+                         
+                          Column(
+                             mainAxisSize: MainAxisSize.min,
+                             crossAxisAlignment: CrossAxisAlignment.end,
+                             children: [
+                                   Container(alignment: Alignment.centerRight, child: Text(paidOrNot==0 ? 'En attente ' : paidOrNot==1? 'Payé': paidOrNot==2 ? "Livré":" ", style: TextStyle(
+                                      color:paidOrNot ==1 ? kDeepTealCAdress:  paidOrNot==2? kDeepTealClair: kArgent,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                   SizedBox( height: hv * 1.3,),
+                                   Container(alignment: Alignment.centerRight, child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Text('Copaiement Restant',style: TextStyle(
+                                      color: kBlueForce,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
+                                        alignment: Alignment.centerRight,
+                                        child: Text(lastDatePaiement, style: TextStyle(
+                                        color: kBlueForce,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: wv*3.5), textScaleFactor: 1.0),
+                                      ),],)),
+                             ],
+                           ),
+                          GestureDetector(
+                             onTap: ()=>{
+                                redirectOncliked(),
+                            },
+                            child: Column(
+                               mainAxisSize: MainAxisSize.min,
+                               children: [
+                                    
+                                   Container(child: Column(children: [SvgPicture.asset(
+                                          'assets/icons/Bulk/Wallet.svg',
+                                          height: hv * 3,
+                                          color: kSouthSeas,
+                                          width: wv * 10, 
+                                    ),
+                                    Text("Livrer", style: TextStyle(
+                                        color: kSouthSeas,
+                                        fontWeight: FontWeight.w600,
+                                        
+                                        fontSize: wv*3.5), textScaleFactor: 1.0),],)),
+                               ],
+                             ),
+                          ),
+
+                         ],
+                       ),
+                     ],
+                   ),
+                 ),
+    );
+  }
+ 
   Widget patientsItem(
       {String imgUrl,
       String nom,
@@ -567,6 +755,171 @@ class HomePageComponents {
       ),
     );
   }
+
+  getAdherentsListForPrestataire({ String doctorName, BeneficiaryModel adherent, bool isAccountIsExists}) {
+    return Container(
+      width: wv * 78,
+      height: hv*55,
+      decoration: BoxDecoration(
+        color: kBlueForce,
+        borderRadius: BorderRadius.all(
+          Radius.circular(30),
+        ),
+         boxShadow: [
+                BoxShadow(color:  kBlueForce, spreadRadius: 2, blurRadius: 4),
+              ],
+      ),
+      margin: EdgeInsets.only(left: wv * 2, right:2.5.w),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: wv * 3, right: wv * 2, top: hv * 1),
+            child: Row(
+              children: [
+                Container(
+                    width: wv * 15,
+                    child: Text(S.current.valideJusquau,
+                        style: TextStyle(
+                            color: textWhiteColor,
+                            fontSize: fontSize(size: 15),
+                            fontWeight: FontWeight.w500))),
+                Container(
+                    width: wv * 20,
+                    child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate.toDate()) : S.current.pasDefini ,
+                        style: TextStyle(
+                            color: whiteColor,
+                            fontSize: wv * 4.5,
+                            fontWeight: FontWeight.w700))),
+                Spacer(),
+                SvgPicture.asset(
+               (adherent!=null && adherent.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                  color: whiteColor,
+                ),
+                SvgPicture.asset(
+                adherent!=null && adherent.protectionLevel==0 ? '': 'assets/icons/Bulk/Shield Done.svg',
+                  height: hv * 5,
+                  width: wv * 5,
+                )
+              ],
+            ),
+          ),
+          Container(
+            child: Align(
+              alignment: Alignment.center,
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: 
+                             adherent!=null && adherent.enabled == true
+                          ? new ColorFilter.mode(
+                              Colors.red.withOpacity(1), BlendMode.dstATop)
+                          : new ColorFilter.mode(
+                              Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                      image: adherent==null
+                          ? AssetImage("assets/images/image 25.png")
+                          : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
+                      fit: BoxFit.cover,
+                    ),
+                    color: Colors.red,
+                    shape: BoxShape.circle),
+                width: wv * 40,
+                height: hv * 20,
+                child: Stack(children: <Widget>[
+                  Align(
+                    alignment: Alignment.center,
+                    child: Transform.rotate(
+                      angle: -math.pi / 4,
+                      child: Text(
+                         adherent!=null && adherent.enabled == true
+                            ? ''
+                            : S.current.compteInactif,
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(
+                            color: Colors.red,
+                            letterSpacing: 0.5,
+                            fontSize: wv * 6.5,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  
+                ]),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(S.current.nonDuBeneficiaire,
+                    style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: fontSize(size: 15),
+                        fontWeight: FontWeight.w500)),
+                Text((adherent!=null && adherent.cniName!=null) ? adherent.cniName : ''  ,
+                    style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: fontSize(size: 15),
+                        fontWeight: FontWeight.w700))
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(S.current.numeroMatricule,
+                    style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: fontSize(size: 15),
+                        fontWeight: FontWeight.w500)),
+                Text(
+                  (adherent!=null &&  adherent.matricule!=null)
+                        ?  adherent.matricule
+                        : S.current.pasDefini,
+                    style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: fontSize(size: 15),
+                        fontWeight: FontWeight.w700))
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: wv * 10, right: wv * 2, top: hv * 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(S.current.medecinDeFamille,
+                    style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: fontSize(size: 15),
+                        fontWeight: FontWeight.w500)),
+                Text(
+                     doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
+                    style: TextStyle(
+                        color: textWhiteColor,
+                        fontSize: fontSize(size: 15),
+                        fontWeight: FontWeight.w700))
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: hv * 4),
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Image.asset('assets/icons/DanaidLogo.png'),
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+ 
   getAdherentsList({int iSelected, String doctorName, BeneficiaryModel adherent, bool isAccountIsExists, int index, Function onclick}) {
     return GestureDetector(
       onTap: ()=>{

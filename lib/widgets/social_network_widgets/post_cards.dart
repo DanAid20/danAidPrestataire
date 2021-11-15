@@ -79,83 +79,85 @@ class PostContainer extends StatelessWidget {
                       ),
                       Spacer(),
                       //IconButton(icon: Icon(Icons.more_horiz), padding: EdgeInsets.all(0), constraints: BoxConstraints(), onPressed: (){}),
-                      PopupMenuButton<int>(
-                        color: kDeepTeal,
-                        onSelected: (int value){
-                          switch (value) {
-                            case 0:
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditPost(post: post, groupId: groupId,),),);
-                              break;
-                            case 1:
-                              docRef.collection("SIGNALEMENTS_POST").add({
-                                "complainantId": userProvider.getUserModel.userId,
-                                "complainantAuthId": FirebaseAuth.instance.currentUser.uid,
-                                "postId": post.id,
-                                "dateCreated": DateTime.now()
-                              }).then((value){
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSignal)));
-                              })
-                                .catchError((e){
-                                  print(e.toString());
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-                              });
-                              break;
-                            case 2:
-                              docRef.delete().then((value){ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSupprimAvecSuccs)));});
-                              break;
-                            case 3:
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post.userId),),);
-                              break;
-                          }
-                        },
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                        icon: Padding(
-                          padding: EdgeInsets.only(bottom: 50),
-                          child: Icon(Icons.more_horiz, color: kDeepTeal,),
-                        ),
-                        padding: EdgeInsets.all(0),
-                        itemBuilder: (context) => [
-                          userProvider.getUserModel.userId == post.userId ? PopupMenuItem(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/Bulk/Edit.svg', color: whiteColor.withOpacity(0.7), width: 25,),
-                                SizedBox(width: wv*1.5,),
-                              Text(S.of(context).editer, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
-                              ],
-                            ),
-                            value: 0,
-                          )
-                          :
-                          PopupMenuItem(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/Two-tone/NotificationChat.svg', color: whiteColor.withOpacity(0.7),),
-                                SizedBox(width: wv*1.5,),
-                                Text(S.of(context).signaler, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
-                              ],
-                            ),
-                            value: 1,
+                      Expanded(
+                        child: PopupMenuButton<int>(
+                          color: kDeepTeal,
+                          onSelected: (int value){
+                            switch (value) {
+                              case 0:
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditPost(post: post, groupId: groupId,),),);
+                                break;
+                              case 1:
+                                docRef.collection("SIGNALEMENTS_POST").add({
+                                  "complainantId": userProvider.getUserModel.userId,
+                                  "complainantAuthId": FirebaseAuth.instance.currentUser.uid,
+                                  "postId": post.id,
+                                  "dateCreated": DateTime.now()
+                                }).then((value){
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSignal)));
+                                })
+                                  .catchError((e){
+                                    print(e.toString());
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                });
+                                break;
+                              case 2:
+                                docRef.delete().then((value){ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSupprimAvecSuccs)));});
+                                break;
+                              case 3:
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post.userId),),);
+                                break;
+                            }
+                          },
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          icon: Padding(
+                            padding: EdgeInsets.only(bottom: 50),
+                            child: Icon(Icons.more_horiz, color: kDeepTeal,),
                           ),
-                          userProvider.getUserModel.userId == post.userId ? PopupMenuItem(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/Bulk/Delete.svg', color: whiteColor.withOpacity(0.7),),
-                                SizedBox(width: wv*1.5,),
-                                Text(S.of(context).supprimer, style: TextStyle(color: whiteColor.withOpacity(0.7),)),
-                              ],
+                          padding: EdgeInsets.all(0),
+                          itemBuilder: (context) => [
+                            userProvider.getUserModel.userId == post.userId ? PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/Bulk/Edit.svg', color: whiteColor.withOpacity(0.7), width: 25,),
+                                  SizedBox(width: wv*1.5,),
+                                Text(S.of(context).editer, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
+                                ],
+                              ),
+                              value: 0,
+                            )
+                            :
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/Two-tone/NotificationChat.svg', color: whiteColor.withOpacity(0.7),),
+                                  SizedBox(width: wv*1.5,),
+                                  Text(S.of(context).signaler, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
+                                ],
+                              ),
+                              value: 1,
                             ),
-                            value: 2,
-                          ) : PopupMenuItem(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset('assets/icons/Two-tone/Profile.svg', color: whiteColor.withOpacity(0.7),),
-                                SizedBox(width: wv*1.5,),
-                                Text(S.of(context).voirLeProfil, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
-                              ],
-                            ),
-                            value: 3,
-                          )
-                        ]
+                            userProvider.getUserModel.userId == post.userId ? PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/Bulk/Delete.svg', color: whiteColor.withOpacity(0.7),),
+                                  SizedBox(width: wv*1.5,),
+                                  Text(S.of(context).supprimer, style: TextStyle(color: whiteColor.withOpacity(0.7),)),
+                                ],
+                              ),
+                              value: 2,
+                            ) : PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset('assets/icons/Two-tone/Profile.svg', color: whiteColor.withOpacity(0.7),),
+                                  SizedBox(width: wv*1.5,),
+                                  Text(S.of(context).voirLeProfil, style: TextStyle(color: whiteColor.withOpacity(0.7),),),
+                                ],
+                              ),
+                              value: 3,
+                            )
+                          ]
+                        ),
                       )
                     ],
                   ),
