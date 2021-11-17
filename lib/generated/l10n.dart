@@ -1785,10 +1785,10 @@ class S {
     );
   }
 
-  /// `Hospital`
+  /// `Hôpital`
   String get hpital {
     return Intl.message(
-      'Hospital',
+      'Hôpital',
       name: 'hpital',
       desc: '',
       args: [],

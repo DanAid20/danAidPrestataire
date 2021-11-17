@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/appointmentProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -237,7 +238,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
                               syntomes: '${doc.data()["title"]}', 
-                              isanounced: doc.data()["appointment-type"]=="consult-today");
+                              isanounced: doc.data()["announced"]==true? true: false);
                               
                         }
                         return Center(
@@ -273,7 +274,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
                               syntomes: '${doc.data()["title"]}', 
-                              isanounced: doc.data()["appointment-type"]=="consult-today");
+                              isanounced: doc.data()["announced"]==true? true: false);
                               
                         }
                         return Center(
@@ -379,11 +380,15 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             isGreaterThanOrEqualTo: startDays, isLessThanOrEqualTo: endDay)
         .orderBy("start-time")
         .snapshots();
+     UserProvider userProvider = Provider.of<UserProvider>(context);
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     AppointmentModelProvider rendezVous = Provider.of<AppointmentModelProvider>(context);
     AppointmentModel appointmentModel;
      adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
+     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
+    bool isPrestataire =
+        userProvider.getProfileType == serviceProvider ? true : false;
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -451,9 +456,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 child: HomePageComponents().timeline(
                                 isanounced: doc.data()["announced"],
                                 adhrentId: doc.data()["adherentId"],
-                                doctorId: doctor.getDoctor.id,
+                                doctorId: isPrestataire? prestataire.getServiceProvider.id: doctor.getDoctor.id,
                                 consultationtype: doc.data()["consultation-type"],
-                                isPrestataire: false,
+                                isPrestataire: isPrestataire,
                                 age: "$differenceInDays ans",
                                 consultationDetails: '${doc.data()["title"]}',
                                 consultationType:
@@ -725,6 +730,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         Provider.of<DoctorModelProvider>(context, listen: false);
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);    
     return Container(
       child: Column(
         children: <Widget>[
@@ -739,12 +745,11 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           endDay != null
                       ? getListOfUser(startDays, endDay, _selectedDay,
                           doctorProvider.getDoctor.id)
-                      : Center(
-                          child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child:
-                              Text(S.of(context).aucunRendezvousEnVuePourLinstant),
-                        )))),
+                     
+                      :  getListOfUser(startDays, endDay, _selectedDay,
+                          prestataire.getServiceProvider.id)
+                        )
+                        ),
           Container(
             height: 120.h,
             margin: EdgeInsets.only(bottom: 60.h),
@@ -784,12 +789,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                               endDay != null
                           ? waitingRoomFuture(startDays, endDay, _selectedDay,
                               doctorProvider.getDoctor.id)
-                          : Center(
-                              child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                  S.of(context).aucuneActivitNasTEnregistrerPourLinstant),
-                            ))),
+                          :  waitingRoomFuture(startDays, endDay, _selectedDay,
+                               prestataire.getServiceProvider.id)
+                            ),
                 ),
               ],
             ),

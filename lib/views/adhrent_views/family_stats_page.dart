@@ -573,8 +573,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
         show: true,
         bottomTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) =>
-              const TextStyle(color: kCardTextColor, fontSize: 11),
+          getTextStyles: (context, value) => const TextStyle(color: kCardTextColor, fontSize: 11),
           margin: 3,
           getTitles: (double value) {
             switch (value.toInt()) {

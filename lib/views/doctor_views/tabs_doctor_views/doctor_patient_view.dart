@@ -226,7 +226,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   onTap: () {
                     isPrestataire
                         ? Navigator.pushNamed(
-                            context, '/history-prestation-doctor')
+                            context, '/history-prestation-serviceProvider')
                         : Navigator.pushNamed(
                             context, '/history-prestation-doctor');
                   },
