@@ -7,6 +7,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/drawer.dart';
 import 'package:danaid/widgets/advantage_card.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
@@ -16,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class Loans extends StatefulWidget {
@@ -30,12 +32,58 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
   TextEditingController _amountController = new TextEditingController();
   final currency = new NumberFormat("#,##0", "en_US");
 
+  checkIfBeneficiary() async {
+    await Future.delayed(Duration(seconds: 1));
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    if(userProvider.getUserModel.profileType == beneficiary){
+      Navigator.pop(context);
+      showDialog(context: context,
+        builder: (BuildContext context){
+          return Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*5,),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Column(children: [
+                    SizedBox(height: hv*4),
+                    Icon(LineIcons.times, color: Colors.red, size: 45,),
+                    SizedBox(height: hv*2,),
+                    Text("Accès restreint", style: TextStyle(color: kPrimaryColor, fontSize: 20, fontWeight: FontWeight.w700),),
+                    SizedBox(height: hv*2,),
+                    Text("Seul l'adhérent principale peux éffectuer un prêt..", style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
+                    SizedBox(height: hv*2),
+                    CustomTextButton(
+                      text: "OK",
+                      color: kPrimaryColor,
+                      action: ()=>Navigator.pop(context),
+                    )
+                    
+                  ], mainAxisAlignment: MainAxisAlignment.center, ),
+                ),
+              ],
+            ),
+          );
+        }
+      );
+    }
+  }
+
   @override
   void initState() {
     _loanTabController = new TabController(length: 2, vsync: this);
     // TODO: implement initState
     super.initState();
+    checkIfBeneficiary();
   }
+  
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
