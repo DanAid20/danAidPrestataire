@@ -26,7 +26,7 @@ class PrestataireProfilePage extends StatefulWidget {
 class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
   
   GoogleMapController mapCardController;
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+  final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
   bool isExpanded = false;
   BitmapDescriptor customIcon1;
   Set<Marker> markers;
@@ -39,35 +39,41 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
     // TODO: implement initState
     super.initState();
     markers = Set.from([]);
+    setCustomMapPin().then((value) =>getMarkets());
   }
   
-  createMarker(context) {
+    Future<void> setCustomMapPin() async {
+      customIcon1 = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(devicePixelRatio: 2.5),
+      'assets/images/Location.png');
+      
+   }
+//   createMarker(context) {
+//   if (customIcon1 == null) {
+//     ImageConfiguration configuration = createLocalImageConfiguration(context);
+    
+//     BitmapDescriptor.fromAssetImage(configuration, 'assets/images/Location.png')
 
-  if (customIcon1 == null) {
+//         .then((icon) {
 
-    ImageConfiguration configuration = createLocalImageConfiguration(context);
+//       setState(() {
 
-    BitmapDescriptor.fromAssetImage(configuration, 'assets/images/Location.png')
+//         customIcon1 = icon;
 
-        .then((icon) {
+//       });
 
-      setState(() {
+//     });
 
-        customIcon1 = icon;
-
-      });
-
-    });
-
-  }
-}
+//   }
+// }
   getMarkets(){
+    print(customIcon1.toJson());
     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
      Marker f =
 
         Marker(markerId: MarkerId('1'),
         
-        icon: customIcon1, position: prestataire.getServiceProvider.coordGps==null? LatLng(0.0, 0.0) : LatLng(prestataire.getServiceProvider?.coordGps['latitude'], prestataire.getServiceProvider.coordGps['longitude']));
+        icon: customIcon1, position: prestataire.getServiceProvider.coordGps==null? _center : LatLng(prestataire.getServiceProvider?.coordGps['latitude'], prestataire.getServiceProvider.coordGps['longitude']));
     setState(() {
 
           markers.add(f);
@@ -82,8 +88,6 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
     var prestatiaireObject= prestataire.getServiceProvider;
     bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
     print(prestatiaireObject.toString());
-    createMarker(context);
-    getMarkets();
    
     return WillPopScope(
       onWillPop: () async {
@@ -409,12 +413,9 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                            scrollGesturesEnabled: true,
                            zoomGesturesEnabled: true,
                            markers: markers,  
-                         
                           onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(
-                            target: prestatiaireObject.coordGps == null ? _center : LatLng(prestatiaireObject.coordGps["latitude"], prestatiaireObject.coordGps["longitude"]),
-                            zoom: 11.0,
-                          ),
+                          initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center : LatLng(prestatiaireObject?.coordGps["latitude"] != null ? prestatiaireObject?.coordGps["latitude"] : _center.latitude,prestatiaireObject?.coordGps["longitude"] != null ? prestatiaireObject?.coordGps["longitude"] : _center.longitude), zoom: 11.0),
+                          
                         ),
                             ),
                           ),

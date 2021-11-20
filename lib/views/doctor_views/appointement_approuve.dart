@@ -6,8 +6,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -42,6 +44,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
 
   DoctorModel doc;
+  ServiceProviderModel  presta;
   String reason = "";
   List<String> symptoms = [];
 
@@ -61,15 +64,25 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   bool cancelLoading = false;
   var code;
   bool edit = false;
-
+  bool isPrestataire =false;
   initialization(){
      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    if(doctorProvider.getDoctor != null){
+      setState((){
+        isPrestataire = userProvider.getProfileType == serviceProvider ? true : false;
+      });
+
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);    
+    if(isPrestataire==false && doctorProvider.getDoctor != null){
       setState((){
         doc = doctorProvider.getDoctor;
       });
+    }else if(isPrestataire==true){
+      setState((){
+        presta = prestataire.getServiceProvider;
+      });
+
     }
 
     setState(() {
@@ -84,8 +97,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
   @override
   void initState() {
-    initialization();
     super.initState();
+    initialization();
   code = getRandomString(4);
   }
 
@@ -305,7 +318,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                           SizedBox(height: hv*2.5,),
                           Text(S.of(context).rendezvousChez, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                           SizedBox(height: hv*1.2,),
-                          doc != null ? DoctorInfoCard(
+                          isPrestataire==false && doc != null ? DoctorInfoCard(
                             noPadding: true,
                             avatarUrl: doc.avatarUrl,
                             name: doc.cniName,
@@ -323,7 +336,25 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             includeHospital: true,
                             onTap: () {
                             },
-                          ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                          ) : isPrestataire && presta != null ?  DoctorInfoCard(
+                            noPadding: true,
+                            avatarUrl: presta.avatarUrl,
+                            name: presta.name,
+                            title: "Prestataire" + presta.contactName,
+                            speciality: presta.specialite,
+                            teleConsultation: presta.serviceList != null ? presta.serviceList["tele-consultation"] : false,
+                            consultation: presta.serviceList != null ? presta.serviceList["consultation"] : false,
+                            chat: presta.serviceList != null ? presta.serviceList["chat"] : false,
+                            rdv: presta.serviceList != null ? presta.serviceList["rdv"] : false,
+                            visiteDomicile: presta.serviceList != null ? presta.serviceList["visite-a-domicile"] : false,
+                            field: presta.specialite,
+                            officeName: presta.contactName,
+                            isInRdvDetail: true,
+                            appointmentState: appointment.getAppointment.status,
+                            includeHospital: true,
+                            onTap: () {
+                            },
+                          ): Center(child: Loaders().buttonLoader(kSouthSeas)),
                         ],
                       ),
                     ),

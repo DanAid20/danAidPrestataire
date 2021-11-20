@@ -411,7 +411,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historiqueDesPrestations" : MessageLookupByLibrary.simpleMessage("History of services"),
     "horaire" : MessageLookupByLibrary.simpleMessage("Schedule"),
     "hospitalisation" : MessageLookupByLibrary.simpleMessage("Hospitalization"),
-    "hpital" : MessageLookupByLibrary.simpleMessage("Hospital"),
+    "hpital" : MessageLookupByLibrary.simpleMessage("Hôpital"),
     "hpitalDePrfrence" : MessageLookupByLibrary.simpleMessage("Hôpital de préférence"),
     "hpitalOuClinique" : MessageLookupByLibrary.simpleMessage("Hospital or clinic"),
     "ifAnyProvisionOfTermsIsHeldByACourt" : MessageLookupByLibrary.simpleMessage("If any provision of Terms is held by a court or other tribunal of competent jurisdiction to be invalid, illegal or unenforceable for any reason, such provision shall be eliminated or limited to the minimum extent such that the remaining provisions of Terms will continue in full force and effect.\n\n"),

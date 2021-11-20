@@ -30,6 +30,7 @@ class _PharmacyListState extends State<PharmacyList> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     query = spProvider.getServiceProvider != null ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Pharmacie").where(FieldPath.documentId, isNotEqualTo: spProvider.getServiceProvider.id).snapshots()
       : FirebaseFirestore.instance.collection("PRESTATAIRE").where("categorieEtablissement", isEqualTo: "Pharmacie").where("profilEnabled", isEqualTo: true).snapshots();
+    print(spProvider.getServiceProvider?.coordGps);
     return StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
@@ -65,8 +66,8 @@ class _PharmacyListState extends State<PharmacyList> {
                         rdv: sp.serviceList != null ? sp.serviceList["Consultation"] : true,
                         visiteDomicile: sp.serviceList != null ? sp.serviceList["Consultation"] : false,
                         distance: 
-                          userProvider.getProfileType == adherent ?  
-                            adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
+                         userProvider.getProfileType == adherent ?  
+                             adherentProvider.getAdherent.location!=null&& adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
                               ? sp.coordGps["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
                           spProvider.getServiceProvider?.coordGps != null && sp.coordGps != null

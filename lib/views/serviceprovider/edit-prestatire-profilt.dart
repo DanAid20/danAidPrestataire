@@ -54,7 +54,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
   String _region;
   String _city;
   String _stateCode;
-  String _category;
+  String _category="fdfdf";
   String _localisation;
   String avatarUrl;
   String cniUpload;
@@ -421,8 +421,8 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                     value: _category,
                                     items: [
                                       DropdownMenuItem(
-                                        child: Text(S.of(context).hpital, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        value: S.of(context).hpital,
+                                        child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        value: "Hôpital",
                                       ),
                                       DropdownMenuItem(
                                         child: Text(S.of(context).pharmacie, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
