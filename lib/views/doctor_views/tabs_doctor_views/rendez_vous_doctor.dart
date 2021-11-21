@@ -506,21 +506,19 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 rendezVous.setAppointmentModel(appointmentModel),
                                 rendezVous.getAppointment.adherentId=snapshot.data.id,
                                 rendezVous.getAppointment.avatarUrl=data["imageUrl"],
-                                rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
+                                rendezVous.getAppointment.username= '${data["prenom"]} ${data["nomDFamille"]} ',
                                 rendezVous.getAppointment.birthDate=data["dateNaissance"],
-                                
                                 Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => AppointmentDetails(adherent: adherent),
                                       ),)
-                                  
                                 },
                                 
                                 child: HomePageComponents().timeline(
                                 isanounced: doc.data()["announced"],
                                 adhrentId: doc.data()["adherentId"],
-                                doctorId: doctor.getDoctor.id,
+                                doctorId:  isPrestataire? prestataire.getServiceProvider.id: doctor.getDoctor.id,
                                 consultationtype: doc.data()["consultation-type"],
                                 isPrestataire: false,
                                 age: "$differenceInDays ans",
@@ -530,7 +528,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 time: "$formattedTime",
                                 userImage: '${data["imageUrl"]}',
                                 userName:
-                                    '${data["prenom"]} ${data["nomFamille"]} '),
+                                    '${data["prenom"]} ${data["nomDFamille"]} '),
                           );
                         }
                         return Text(" ");
