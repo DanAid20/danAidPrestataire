@@ -316,8 +316,13 @@ class _FamilyPointsState extends State<FamilyPoints> {
         children: [
           GestureDetector(
             onTap: (){
-              if(adherentPoints > product.points){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductDetails(product: product,),),);
+              if(adherentPoints >= product.points){
+                if(product.qty > 0){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductDetails(product: product,),),);
+                }
+                else {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Désolé, le stock disponible pour ce lot est épuisé...",)));
+                }
               }
               else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Désolé vous n'avez pas encore assez de points pour passer la commande du produit.",)));

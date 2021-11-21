@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -430,7 +431,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           return (phone.isEmpty)
                               ?  S.of(context).entrerUnNumeroDeTlphoneValide : null;
                         },
-                        onInputChanged: (PhoneNumber number) {
+                        onInputChanged: (PhoneNumber nber) {
+                          number = nber;
                           phone = number.phoneNumber;
                           print(number.phoneNumber);
                         },
@@ -615,7 +617,28 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       "weight": _weightController.text,
                       "allergies": allergies,
                       "relation": _relation,
-                    }, SetOptions(merge: true)).then((value) {
+                    }, SetOptions(merge: true)).then((value) async {
+                      if(phone != null) {
+                        await FirebaseFirestore.instance.collection("USERS").doc(phone).set({
+                          "authId": null,
+                          "adherentId": adherentModel.getAdherent.getAdherentId,
+                          'createdDate': beneficiary.getBeneficiary.dateCreated,
+                          //'emailAdress': null,
+                          'enabled': false,
+                          "phoneList": FieldValue.arrayUnion([{"number": phone}]),
+                          "urlCNI": beneficiary.getBeneficiary.cniUrl,
+                          "profilEnabled": false,
+                          "userCountryCodeIso": number.isoCode,
+                          //"userCountryName": "Cameroon",
+                          'fullName': "${_familynameController.text} ${_surnameController.text}",
+                          "imageUrl" : avatarUrl,
+                          "matricule": beneficiary.getBeneficiary.matricule,
+                          "profil": "BENEFICIAIRE",
+                          "regionDorigione": adherentModel.getAdherent.regionOfOrigin,
+                          "phoneKeywords": Algorithms.getKeyWords(phone),
+                          "nameKeywords": Algorithms.getKeyWords(_familynameController.text + " "+ _surnameController.text)
+                        }, SetOptions(merge: true));
+                      }
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Informations du bénéficiaire ${_surnameController.text} mises à jour..'),));
                       setState(() {
                         buttonLoading = false;

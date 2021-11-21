@@ -67,7 +67,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
 //   }
 // }
   getMarkets(){
-    print(customIcon1.toJson());
+    //print(customIcon1.toJson());
     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
      Marker f =
 

@@ -21,7 +21,7 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   CarouselController carouselController = CarouselController();
-  int qty = 1;
+  int qty = 0;
   bool buttonSpinner = false;
   
   @override
@@ -188,6 +188,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     text: S.of(context).commander, 
                     color: kDeepTeal,
                     isLoading: buttonSpinner,
+                    enable: qty > 0,
                     action: (){
                       setState(() {
                         buttonSpinner = true;

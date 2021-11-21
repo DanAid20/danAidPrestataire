@@ -671,6 +671,13 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   "allergies": allergies,
                   "relation": _relation,
                 }, SetOptions(merge: true)).then((value) async {
+                  if(beneficiary.getBeneficiary.phoneList[0] != null){
+                    if(phone == null){
+                      setState(() {
+                        phone = beneficiary.getBeneficiary.phoneList[0]["number"];
+                      });
+                    }
+                  }
                   if(phone != null) {
                     await FirebaseFirestore.instance.collection("USERS").doc(phone).set({
                       "authId": null,

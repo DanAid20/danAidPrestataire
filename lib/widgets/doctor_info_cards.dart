@@ -14,13 +14,14 @@ class DoctorInfoCard extends StatelessWidget {
   final String speciality;
   final String distance;
   final bool isInRdvDetail;
+  final String service;
   final int appointmentState;
   final bool chat, consultation, teleConsultation, rdv, visiteDomicile;
   final bool noPadding, includeHospital, isServiceProvider;
   final String field, officeName, actionText;
   final Function onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.isServiceProvider = false, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
+  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +158,7 @@ class DoctorInfoCard extends StatelessWidget {
                   SizedBox(width: wv*2,),
                   SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 35, color: whiteColor),
                   SizedBox(width: wv*2,),
-                  Text(S.of(context).consultation, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
+                  Text(service == null ? S.of(context).consultation : service, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
                 ],
               ),
               SizedBox(height: 5,),
@@ -173,7 +174,7 @@ class DoctorInfoCard extends StatelessWidget {
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),
-              child: isInRdvDetail && !isServiceProvider ? Align(
+              child: isInRdvDetail ? Align(
                 alignment: Alignment.centerLeft,
                 child: RichText(
                   textAlign: TextAlign.center,

@@ -697,8 +697,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               chat: false,
                               rdv: false,
                               visiteDomicile: false,
-                              field: "field",
-                              officeName: "céoffic",
+                              field: "",
+                              officeName: "",
                               includeHospital: true,
                               distance: adherentProvider.getAdherent.location["latitude"] != null && chosenSP.coordGps != null
                                 ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], chosenSP.coordGps["latitude"], chosenSP.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,

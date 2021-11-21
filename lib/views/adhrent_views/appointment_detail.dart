@@ -4,10 +4,13 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/doctorModel.dart';
+import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
+import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/adhrent_views/video_room.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
@@ -34,6 +37,7 @@ class _AppointmentState extends State<Appointment> {
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
 
   DoctorModel doc;
+  ServiceProviderModel sp;
   String reason = "";
   List<String> symptoms = [];
 
@@ -58,10 +62,19 @@ class _AppointmentState extends State<Appointment> {
 
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    if(doctorProvider.getDoctor != null){
-      setState((){
-        doc = doctorProvider.getDoctor;
+    if(appointment.getAppointment.isNotWithDoctor == true){
+      FirebaseFirestore.instance.collection(serviceProvider).doc(appointment.getAppointment.doctorId).get().then((docSnapshot) {
+        ServiceProviderModel serviceP = ServiceProviderModel.fromDocument(docSnapshot);
+        sp = serviceP;
+        setState((){});
       });
+    }
+    else {
+      if(doctorProvider.getDoctor != null){
+        setState((){
+          doc = doctorProvider.getDoctor;
+        });
+      }
     }
 
     setState(() {
@@ -213,9 +226,31 @@ class _AppointmentState extends State<Appointment> {
                             isInRdvDetail: true,
                             appointmentState: appointment.getAppointment.status,
                             includeHospital: true,
+                            service: "Consultation - " + appointment.getAppointment.consultationType,
                             onTap: () {
                             },
-                          ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                          ) : 
+                            sp != null ? DoctorInfoCard(
+                              isServiceProvider: true,
+                              noPadding: true,
+                              avatarUrl: sp.avatarUrl,
+                              name: sp.name,
+                              title: sp.category,
+                              speciality: sp.category,
+                              //teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
+                              //consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
+                              //chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
+                              //rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
+                              //visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
+                              field: sp.contactEmail,
+                              officeName: sp.contactName,
+                              isInRdvDetail: true,
+                              appointmentState: appointment.getAppointment.status,
+                              includeHospital: true,
+                              onTap: () {
+                              },
+                            ) 
+                            : Center(child: Loaders().buttonLoader(kSouthSeas)),
                         ],
                       ),
                     ),

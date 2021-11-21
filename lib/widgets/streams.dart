@@ -6,7 +6,7 @@ import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
-import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/helpers/constants.dart' as CONST;
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,11 +57,11 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                   children: [
                     widget.standardUse ? HomePageComponents.beneficiaryCard(
                       name: adherentProvider.getAdherent.cniName,
-                      edit: userProvider.getUserModel?.profileType != beneficiary,
+                      edit: userProvider.getUserModel?.profileType != CONST.beneficiary,
                       imgUrl: adherentProvider.getAdherent.imgUrl, 
                       action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
                     )
-                    : userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.beneficiaryChoiceCard(
+                    : userProvider.getUserModel?.profileType != CONST.beneficiary ? HomePageComponents.beneficiaryChoiceCard(
                       name: adherentProvider.getAdherent.surname, 
                       imgUrl: adherentProvider.getAdherent.imgUrl,
                       isSelected: selectedMatricule == adherentProvider.getAdherent.adherentId,
@@ -101,7 +101,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                           return widget.standardUse ? HomePageComponents.beneficiaryCard(
                             name: beneficiary.surname, 
                             imgUrl: beneficiary.avatarUrl, 
-                            edit: userProvider.getUserModel?.matricule == beneficiary.matricule,
+                            edit: userProvider.getUserModel?.profileType != CONST.beneficiary ? true : userProvider.getUserModel?.matricule == beneficiary.matricule,
                             action: (){
                               beneficiaryProvider.setBeneficiaryModel(beneficiary);
                               Navigator.pushNamed(context, '/edit-beneficiary');
