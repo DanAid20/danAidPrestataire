@@ -56,6 +56,7 @@ class Danaid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     statusBar.setColor(context: context);
+    
     final LanguageProvider currentData = LanguageProvider();
       return ChangeNotifierProvider(
       create: (context) => currentData,
@@ -153,7 +154,7 @@ class Danaid extends StatelessWidget {
                   routes: routes,
                   initialRoute: '/splash',
                   navigatorKey: locator<NavigationService>().navigatorKey,
-                  locale:context.watch<LanguageProvider>().locale==Locale('fr', 'FR')? Locale('fr', 'FR') : Locale('en', 'EN'),
+                  locale:context.watch<LanguageProvider>().locale,
                   localizationsDelegates: [
                   S.delegate,
                   GlobalMaterialLocalizations.delegate,
