@@ -114,7 +114,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   Future<String> createConsultationCode(QueryDocumentSnapshot adherent, id) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
-
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     var date = DateTime.now();
     var newUseCase = FirebaseFirestore.instance.collection('USECASES').doc();
     newUseCase.set({
@@ -124,11 +124,11 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'beneficiaryId': adherent['beneficiaryId'],
       'beneficiaryName': adherent['username'],
       'otherInfo': '',
-      'establishment': doctorProvider.getDoctor.officeName,
+      'establishment': isPrestataire? prestataire.getServiceProvider.id: doctorProvider.getDoctor.officeName,
       'consultationCode': code,
       'type': 'RDV',
-      'amountToPay': doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
-      "consultationCost": doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
+      'amountToPay':  isPrestataire? null : doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
+      "consultationCost": isPrestataire? null :  doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
       'status': 0,
       'canPay': 0,
       'createdDate': DateTime.now(),
@@ -161,6 +161,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   facturationCode(id, adherent, idAppointement) async {
     DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
+     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     await FirebaseFirestore.instance
         .collection('USECASES')
         .doc(id)
@@ -171,8 +172,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'idAppointement':idAppointement,
       'idAdherent': adherent['adherentId'],
       'idBeneficiairy': adherent['beneficiaryId'],
-      'idMedecin': doctorProvider.getDoctor.id,
-      'amountToPay':2000,
+      'idMedecin':isPrestataire?prestataire.getServiceProvider.id: doctorProvider.getDoctor.id,
+      'amountToPay':null,
       'isSolve': false,
       'Type': adherent['appointment-type'],
       'createdAt': DateTime.now(),
@@ -197,6 +198,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
     DateTime startTime = appointment.getAppointment.startTime.toDate();
     DateTime endTime = appointment.getAppointment.endTime.toDate();
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
     var options = BaseOptions(
       baseUrl: 'http://admin.danaid.org:3000/api/v1',
@@ -479,11 +481,85 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                           'codeConsultation': code,
                           'createdDate': DateTime.now()
                          };
-                         var data =  FirebaseFirestore.instance
+                      
+                        if(appointment.getAppointment.adherentId == appointment.getAppointment.beneficiaryId){
+                          print("---------------------------------------------------------");
+                               var query= FirebaseFirestore.instance
                         .collection("APPOINTMENTS")
-                        .where("doctorId", isEqualTo: doctorProvider.getDoctor.id)
-                        .where("adherentId", isEqualTo:appointment.getAppointment.adherentId);
-                        data.get().then((docSnapshot) async => {
+                        .where("doctorId", isEqualTo: isPrestataire? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
+                        .where("beneficiaryId", isEqualTo:appointment.getAppointment.adherentId);
+                        query.get().then((docSnapshot) async => {
+                          if (docSnapshot.docs.isEmpty)
+                            { // il  existe pas mais
+                                 print("jhdsfjkhdsjkfd")
+                            }
+                          else
+                            {
+                              print("55555555555555555555555555"),
+                              FirebaseFirestore.instance
+                                  .collection("APPOINTMENTS")
+                                  .doc(appointment.getAppointment.id)
+                                  .set({
+                                "status": 1,
+                                "agoraToken": token
+                              },  SetOptions(merge: true)).then((value) async {
+                                 print('ok33333333333333333333333333333');
+                                  var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                .where("idAppointement", isEqualTo: appointment.getAppointment.id).get(); 
+                                usecase.then((value) async {
+                                      if(value.docs.isEmpty){   
+                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
+                                        adherent.then((value) async {
+                                          if(value.exists && value.data()['CurrentcodeConsultation']!=null){
+                                              
+                                                Timestamp t = value.data()['CurrentcodeConsultation']['createdDate'];
+                                                    DateTime d = t.toDate();
+                                                   print(t);
+                                                   print(d);
+                                                  final date2 = DateTime.now(); 
+                                                  final difference = date2.difference(d).inDays;
+                                                  print(difference);
+                                                  if( difference>14){
+                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await addCodeToAdherent(codes, docSnapshot.docs[0].id);
+                                                    });
+                                                  }
+                                          }else{
+                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await addCodeToAdherent(codes, docSnapshot.docs[0].id);
+                                              });
+                                          }
+
+                                        });
+                                       appointment.setAnnouncement(true);
+                                      }else{
+                                         ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(S.of(context).uneFactureADejaTGnererPourCetteConstultation)));
+                                      }
+                                });
+                            
+                             
+                              setState(() {
+                                announceLoading = false;
+                                edit=false;
+                                 appointment.getAppointment.status=1;
+                              });
+                              }).then((value) {
+                                // Navigator.pop(context);
+                              
+                              })
+                            },
+                        });
+
+                        }else if(appointment.getAppointment.adherentId!=appointment.getAppointment.beneficiaryId){
+                           print("**********************************************************");
+                           var query= FirebaseFirestore.instance
+                        .collection("APPOINTMENTS")
+                        .where("doctorId", isEqualTo: isPrestataire? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
+                        .where("beneficiaryId", isEqualTo:appointment.getAppointment.beneficiaryId);
+                        query.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
                             { // il  existe pas mais
                                  print("jhdsfjkhdsjkfd")
@@ -547,7 +623,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               })
                             },
                         });
-                        
+
+                        }
+                      
                         // FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                         //   "status": 1
                         // },  SetOptions(merge: true)).then((value) async {

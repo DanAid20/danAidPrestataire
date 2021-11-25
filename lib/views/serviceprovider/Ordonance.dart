@@ -82,12 +82,12 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
            username= value.data()['username'];
           });
         }else {
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("cet utilisateur n'existe pas "),));
+           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).cetUtilisateurNexistePas),));
         }
       }).onError((error, stackTrace) {
           print(error);
           print(stackTrace);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("une erreur s'est produite "),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduite),));
       });
    print("--------------------------------");
  }
@@ -96,13 +96,13 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
 
   // set up the buttons
   Widget cancelButton = TextButton(
-    child: Text("Cancel"),
+    child: Text(S.of(context).cancel),
     onPressed:  () {
       Navigator.of(context).pop();
     },
   );
   Widget continueButton = TextButton(
-    child: Text("supprimer"),
+    child: Text(S.of(context).supprimer),
     onPressed:  () {
       function();
     }
@@ -113,7 +113,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Alert"),
+    title: Text(S.of(context).alerte),
     content: Text(title),
     actions: [
       cancelButton,
@@ -197,7 +197,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                 CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ),
-                Text('Chargement', style: TextStyle(color: Colors.grey[600], fontSize: 25, fontWeight: FontWeight.bold),),
+                Text('Chargement...', style: TextStyle(color: Colors.grey[600], fontSize: 25, fontWeight: FontWeight.bold),),
               ],
             )
           ,);
@@ -210,211 +210,213 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
           child: Column(
              mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
+              IntrinsicHeight(
+                child: Container(
             color: kGoldlightYellow,
-            height: hv*43,
-            child: Column(
-              children: [
-                Container(
-                        margin: EdgeInsets.only(top: hv*1, left: 5, right: 5),
-                        decoration: BoxDecoration(
-                          color: whiteColor,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: hv*13.8,
-                              padding: EdgeInsets.only(bottom: hv*1.2),
-                              decoration: BoxDecoration(
-                                color: kGoldlightYellow.withOpacity(0.3),
-                                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-                              ),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(child:
-                                       HomePageComponents.header(label: S.of(context).pourLePatient, title: username!=null? username: "Pas defini", subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis.dateCreated.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage , titleColor: kTextBlue)),
-                                      HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: kDeepTeal, size: 25, action: ()=>setState((){
-                                        print(edit);
-                                        edit = !edit;
-                                        })),
-                                      SizedBox(width: wv*4,)
-                                    ],
+            height: hv*44.5, 
+            child: Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                            margin: EdgeInsets.only(top: hv*1, left: 5, right: 5),
+                            decoration: BoxDecoration(
+                              color: whiteColor,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                            ),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: hv*14.1,
+                                  padding: EdgeInsets.only(bottom: hv*1.2),
+                                  decoration: BoxDecoration(
+                                    color: kGoldlightYellow.withOpacity(0.3),
+                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                  child: Column(
                                     children: [
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                      Row(
                                         children: [
-                                          Text(S.of(context).codeDeConsultation,
-                            style: TextStyle(
-                                fontSize: fontSize(size: wv * 5),
-                                fontWeight: FontWeight.w400,
-                                letterSpacing: 0.2,
-                                color: kFirstIntroColor),),
-                                          Text("${widget.devis.consultationCode}",
-                            style: TextStyle(
-                                fontSize: fontSize(size: wv * 3.5),
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.2,
-                                color: kFirstIntroColor),),
+                                          Expanded(child:
+                                           HomePageComponents.header(label: S.of(context).pourLePatient, title: username!=null? username: S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis.dateCreated.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage , titleColor: kTextBlue)),
+                                          HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: kDeepTeal, size: 25, action: ()=>setState((){
+                                            print(edit);
+                                            edit = !edit;
+                                            })),
+                                          SizedBox(width: wv*4,)
                                         ],
                                       ),
-                                      SizedBox(width: wv*4,)
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(S.of(context).codeDeConsultation,
+                                style: TextStyle(
+                                    fontSize: fontSize(size: wv * 5),
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 0.2,
+                                    color: kFirstIntroColor),),
+                                              Text("${widget.devis.consultationCode}",
+                                style: TextStyle(
+                                    fontSize: fontSize(size: wv * 3.5),
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.2,
+                                    color: kFirstIntroColor),),
+                                            ],
+                                          ),
+                                          SizedBox(width: wv*4,)
+                                        ],
+                                      ),
+                                       
+                                    ],
+                                )),
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child:  Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text( 'Date*', style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
+                                            SizedBox(height: 3,),
+                                            GestureDetector(
+                                              onTap: () => _selectDate(context),
+                                              child: Container(
+                                                width: wv*50,
+                                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: hv*1.6),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[100],
+                                                  borderRadius: BorderRadius.all(Radius.circular(20))
+                                                ),
+                                                child: Row(children: [
+                                                  SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
+                                                  VerticalDivider(),
+                                                  Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                                ],),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ),
+                                      SizedBox(width: wv*2,),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(S.of(context).montantPercu, style: TextStyle(fontSize: 15, color: kTextBlue)),
+                                            SizedBox(height: 5),
+                                            TextFormField(
+                                              controller: _costController,
+                                              onChanged: (val)=>setState((){}),
+                                              enabled: edit,
+                                              inputFormatters: <TextInputFormatter>[
+                                                FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                              ],
+                                              textAlign: TextAlign.end,
+                                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                              style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                                              decoration: defaultInputDecoration(suffix: "f.", hintText: S.of(context).nonEditable)
+                                            )
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                   
-                                ],
-                            )),
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child:  Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text( 'Date*', style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
-                                        SizedBox(height: 3,),
-                                        GestureDetector(
-                                          onTap: () => _selectDate(context),
-                                          child: Container(
-                                            width: wv*50,
-                                            padding: EdgeInsets.symmetric(horizontal: 15, vertical: hv*1.6),
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[100],
-                                              borderRadius: BorderRadius.all(Radius.circular(20))
-                                            ),
-                                            child: Row(children: [
-                                              SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
-                                              VerticalDivider(),
-                                              Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                            ],),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ),
-                                  SizedBox(width: wv*2,),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(S.of(context).montantPercu, style: TextStyle(fontSize: 15, color: kTextBlue)),
-                                        SizedBox(height: 5),
-                                        TextFormField(
-                                          controller: _costController,
-                                          onChanged: (val)=>setState((){}),
-                                          enabled: edit,
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                                          ],
-                                          textAlign: TextAlign.end,
-                                          keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                          style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
-                                          decoration: defaultInputDecoration(suffix: "f.", hintText: S.of(context).nonEditable)
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                ),
-
-                Expanded(child: 
-             Column(
-               children: [
-                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
-                    child: Column(
-                      children: [
-                        SizedBox(height: hv*1,),
-                        Row(
-                          children: [
-                            Text(S.of(context).couvertureDanaid, style: TextStyle(color: kCardTextColor, fontSize: 16,)),
-                            Spacer(),
-                            Text(S.of(context).copaiement, style: TextStyle(color: kCardTextColor, fontSize: 16,))
-                          ],
-                        ),
-                        SizedBox(height: hv*1,),
-                        Stack(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
-                              decoration: BoxDecoration(
-                                color: kLightWhite.withOpacity(0.45),
-                                borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: Row(
-                                children: [
-                                  Spacer(),
-                                  Text("${prixpatient.toDouble().round().toString()}.f", style: TextStyle(color: kCardTextColor, fontSize: 17,))
-                                ],
-                              ),
+                                )
+                              ],
                             ),
-                            Container(
-                              width: wv*60,
-                              decoration: BoxDecoration(
-                                color: whiteColor,
-                                borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                                boxShadow: [BoxShadow(color: Colors.grey[500].withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: Offset(0,4))]
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
-                                    decoration: BoxDecoration(
-                                      color: kLightWhite.withOpacity(0.65),
-                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Spacer(),
-                                        Text('$prixDAnaid.f', style: TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold))
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(children: [
-                                          Expanded(
-                                            child: Text(
-                                               widget.devis.status==0? S.of(context).enAttente : widget.devis.status==1? S.of(context).pay: S.of(context).tatInconue ,
-                                               style: TextStyle(color:  widget.devis.status==0? kBlueForce: widget.devis.status==1? kDeepTeal: kDeepDarkTeal, fontWeight: FontWeight.bold),
-                                               textAlign: TextAlign.right,
-                                            ),
-                                          ),
-                                          SizedBox(width: wv*1.5,),
-                                          HomePageComponents.getStatusIndicator(status: widget.devis.status, size: 12)
-                                        ],)
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      ],
                     ),
-                  ),
-                 
-               ],
-             )
-            ), 
-              ],
+
+                    Column(
+                      children: [
+                        Padding(
+                           padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
+                           child: Column(
+                             children: [
+                               SizedBox(height: hv*1,),
+                               Row(
+                                 children: [
+                                   Text(S.of(context).couvertureDanaid, style: TextStyle(color: kCardTextColor, fontSize: 16,)),
+                                   Spacer(),
+                                   Text(S.of(context).copaiement, style: TextStyle(color: kCardTextColor, fontSize: 16,))
+                                 ],
+                               ),
+                               SizedBox(height: hv*1,),
+                               Stack(
+                                 children: [
+                                   Container(
+                                     padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
+                                     decoration: BoxDecoration(
+                                       color: kLightWhite.withOpacity(0.45),
+                                       borderRadius: BorderRadius.circular(15)
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         Spacer(),
+                                         Text("${prixpatient.toDouble().round().toString()}.f", style: TextStyle(color: kCardTextColor, fontSize: 17,))
+                                       ],
+                                     ),
+                                   ),
+                                   Container(
+                                     width: wv*60,
+                                     decoration: BoxDecoration(
+                                       color: whiteColor,
+                                       borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                       boxShadow: [BoxShadow(color: Colors.grey[500].withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: Offset(0,4))]
+                                     ),
+                                     child: Column(
+                                       children: [
+                                         Container(
+                                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
+                                           decoration: BoxDecoration(
+                                             color: kLightWhite.withOpacity(0.65),
+                                             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+                                           ),
+                                           child: Row(
+                                             children: [
+                                               Spacer(),
+                                               Text('$prixDAnaid.f', style: TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold))
+                                             ],
+                                           ),
+                                         ),
+                                         Container(
+                                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                                           child: Column(
+                                             crossAxisAlignment: CrossAxisAlignment.start,
+                                             children: [
+                                               Row(children: [
+                                                 Expanded(
+                                                   child: Text(
+                                                      widget.devis.status==0? S.of(context).enAttente : widget.devis.status==1? S.of(context).pay: S.of(context).tatInconue ,
+                                                      style: TextStyle(color:  widget.devis.status==0? kBlueForce: widget.devis.status==1? kDeepTeal: kDeepDarkTeal, fontWeight: FontWeight.bold),
+                                                      textAlign: TextAlign.right,
+                                                   ),
+                                                 ),
+                                                 SizedBox(width: wv*1.5,),
+                                                 HomePageComponents.getStatusIndicator(status: widget.devis.status, size: 12)
+                                               ],)
+                                             ],
+                                           ),
+                                         )
+                                       ],
+                                     ),
+                                   )
+                                 ],
+                               )
+                             ],
+                           ),
+                         ),
+                        
+                      ],
+                    ), 
+                  ],
+                ),
             ),
           ),
+              ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
                   decoration: BoxDecoration(
@@ -425,7 +427,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                     children: [
                       Row(
                         children: [
-                          Text('Suivie des prestations', style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
+                          Text(S.of(context).suivieDesPrestations, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
                         ],
                       ),
                       SizedBox(height: hv*1,),
@@ -577,7 +579,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                       "closed":true,
                       "paid": true,
                     }).then((value) {
-                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Prestation Clôturer'),));
+                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
                    setState(() {
                         buttonLoading = false;
                         deletedData=[];
@@ -633,53 +635,78 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
       });
   }
 
+ 
    Widget getDetailOrdonanceDevis({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
-  var state= service.drugsList==null? "en cours de traitement... " :"${Algorithms.getUseCaseServiceName(type: service.type)}- ${service.drugsUrls.length} images";
+  var state= service.drugsList==null? S.of(context).enCoursDeTraitement :"${Algorithms.getUseCaseServiceName(type: service.type)}- ${service.drugsUrls.length} images";
+  print(service.drugsList);
+  print("333333333333333333333333333333333333333333333333333333");
+ 
   return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  Colors.grey[200],expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: service.type), color: kDeepTeal, width: wv*8,),
             title:Text(title, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
             subtitle: Text(state),
             children: <Widget>[
               Container(width: double.infinity, height:hv*30,decoration: BoxDecoration(color: Colors.white, ),
-            child: Expanded(child: service.drugsList!=null && service.drugsUrls !=null?
+            child: Expanded(child: service.drugsList.isNotEmpty && service.drugsUrls.isNotEmpty?
             ListView.builder(
                  itemCount:  service.drugsList.length,
                  itemBuilder: (BuildContext context, int index) {
+                  var  item=  service.drugsList[0];
+                  print(item['Prix']);
+                  print("66666666666666666666666666666666666666666");
                    return Dismissible(
                      key:  UniqueKey(), 
-                     onDismissed: (direction){
-                       if(direction== DismissDirection.endToStart){
-                         showAlertDialog(
-                         context,
-                         S.of(context).tesvousSur,
-                         (){
-                           setState(() {
-                           print("66666666666666666666666666666");
-                           print(index);
-                           print(service.drugsList[index]);
-                           widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
-                           prixDAnaid= (widget.devis.amount*70/100);
-                           prixpatient= widget.devis.amount-prixDAnaid;
-                           deletedData.add(widget.devis.drugsList[index]);
-                           widget.devis.drugsList.removeAt(index);
-                           print(deletedData);
-                           });
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsSupprimer)));
-                           Navigator.of(context).pop();
-                         }
-                         );
-                       }
-                        
-                     },
+                      confirmDismiss: (DismissDirection direction) async {
+                      return await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                            title:  Text(S.of(context).confirmation),
+                            content: Text(S.of(context).tesvousSurDffectuerCetteAction),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: (){
+                                  
+                                    widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
+                                    prixDAnaid= (widget.devis.amount*70/100);
+                                    prixpatient= widget.devis.amount-prixDAnaid;
+                                    deletedData.add(widget.devis.drugsList[index]);
+                                    isDeleteddrugsItems=true; 
+                                    var set1 = Set.from(deletedData);
+                                    var set2 = Set.from(service.drugsList);
+                                    service.drugsList=List.from(set2.difference(set1));
+                                    widget.devis.drugsList= service.drugsList;    
+                                    print(widget.devis.drugsList.length);
+                                    print(service.drugsList.length);
+                                
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsSupprimer)));
+                                   Navigator.of(context).pop(true);
+                                  
+                                },
+                                child: Text(S.of(context).delete)
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: Text(S.of(context).cancel),
+                              ),
+                            ],
+                          );
+                          });
+                          
+                        },
+                      );
+                      },
                      direction: DismissDirection.endToStart,
                      background: Container(color: Colors.red, child: 
                      Row(mainAxisAlignment: MainAxisAlignment.end,children: [ Icon(Icons.delete,color: Colors.white,), SizedBox(width: wv*3,),],), ),
-                     child: ListTile(title: Text(widget.devis.drugsList[index]['NomMedicaments'], style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
+                     child: ListTile(title: Text(item['NomMedicaments'], style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
                      subtitle: Text(widget.devis.drugsList[index]['NonScientifique'], style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce),),
                        trailing: Column(mainAxisAlignment: MainAxisAlignment.center,
                          children: [
-                           Text("${service.drugsList[index]['Prix'].toString()}.f", style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
-                           Text("-${service.drugsList[index]['PrixCOuvert'].toString()}.f", style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
+                           Text("${item['Prix'].toString()}.f", style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
+                           Text("-${item['PrixCOuvert'].toString()}.f", style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
                          ],
                        ),
                      ),
@@ -692,12 +719,15 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                  },
                ),)  
          ),
-         ButtonBar(alignment: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
+         ButtonBar(alignment:  widget.devis.drugsList.length==0?  MainAxisAlignment.center: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
+          widget.devis.drugsList.length==0? 
+           Container( alignment: Alignment.center, child: Center(child: TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),)))
+           :
           TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
-           TextButton(
+          widget.devis.drugsList.length==0? Container() :TextButton(
             style: flatButtonStyle,
-            onPressed: () {
+            onPressed: () { 
               if(widget.devis.drugsList!=null){
                 print(deletedData.toString());
                   if(isDeleteddrugsItems==true  && deletedData!=null){
@@ -712,7 +742,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                          "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData) :FieldValue.arrayUnion(widget.devis.drugsList),
                          "amountToPay":widget.devis.amount,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Medicaments mise à jour'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsMiseJour),));
                       setState(() {
                            deletedData=[];
                          isUpdatatingDrugs=false;
@@ -720,20 +750,20 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                     }).catchError((onError){
                       setState(() {
                          isUpdatatingDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
                     }else if(deletedData==[]){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez selectionner un médicament au préalable"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).veuillezSelectionnerUnMdicamentAuPralable),));
                     }
                     // else if(isDeleteddrugsItems==true && isuserHasAccepteddrugsItems==false){
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez confirmer la liste des médicaments auprès du client du client"),));
                     // }
                     else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moins element dans la liste"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
                     }
               }else{
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ce button ne sera actif qu'après validation des images par l'administrateur "),));
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
               }
                 
             },
@@ -745,10 +775,12 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
               ],
             ),
           ),
-           TextButton(
+          widget.devis.drugsList.length==0? Container() : TextButton(
             style: flatButtonStyle,
             onPressed: () {
                 if(isDeleteddrugsItems==true){
+                  print(deletedData);
+                  print(service.drugsList);
                     setState(() {
                          isconfirmgDrugs=true;
                       });
@@ -756,7 +788,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                        {
                          "isConfirmDrugList": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Prestation Clôturer'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
                       setState(() {
                            widget.devis.isConfirmDrugList=true;
                            buttonLoading = false;
@@ -767,11 +799,12 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                     }).catchError((onError){
                       setState(() {
                          isconfirmgDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
+                
                 }else{
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moin un médicament dans la liste"),));
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
                 }
             },
             child: isconfirmgDrugs? CircularProgressIndicator(
@@ -780,7 +813,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
               children: <Widget>[
                 Icon(Icons.thumb_up, color: kDeepTeal),
                 Padding(  padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-                Text('confirmer la liste', style: TextStyle(color:kDeepTeal )),
+                Text(S.of(context).confirmerLaListe, style: TextStyle(color:kDeepTeal )),
               ],
             ),
           )
@@ -878,6 +911,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                            widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
                            prixDAnaid= (widget.devis.amount*70/100);
                            prixpatient= widget.devis.amount-prixDAnaid;
+                            print("++++++++++++++++PRix du patient : "+prixpatient.toString());
                            deletedData.add(widget.devis.drugsList[index]);
                            widget.devis.precriptionUrls.removeAt(index);
                            print(deletedData);
@@ -931,7 +965,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                          "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData) :FieldValue.arrayUnion(widget.devis.drugsList),
                          "amountToPay":widget.devis.amount,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Medicaments mise à jour'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsMiseJour),));
                       setState(() {
                            deletedData=[];
                          isUpdatatingDrugs=false;
@@ -939,20 +973,20 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                     }).catchError((onError){
                       setState(() {
                          isUpdatatingDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
                     }else if(deletedData==[]){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez selectionner un médicament au préalable"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).veuillezSelectionnerUnMdicamentAuPralable),));
                     }
                     // else if(isDeleteddrugsItems==true && isuserHasAccepteddrugsItems==false){
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez confirmer la liste des médicaments auprès du client du client"),));
                     // }
                     else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moins element dans la liste"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
                     }
               }else{
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ce button ne sera actif qu'après validation des images par l'administrateur "),));
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
               }
                 
             },
@@ -975,7 +1009,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                        {
                          "isConfirmDrugList": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Prestation Clôturer'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
                       setState(() {
                            widget.devis.isConfirmDrugList=true;
                            buttonLoading = false;
@@ -986,11 +1020,11 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                     }).catchError((onError){
                       setState(() {
                          isconfirmgDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
                 }else{
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moin un médicament dans la liste"),));
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
                 }
             },
             child: isconfirmgDrugs? CircularProgressIndicator(
@@ -999,7 +1033,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
               children: <Widget>[
                 Icon(Icons.thumb_up, color: kDeepTeal),
                 Padding(  padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-                Text('confirmer la liste', style: TextStyle(color:kDeepTeal )),
+                Text(S.of(context).confirmerLaListe, style: TextStyle(color:kDeepTeal )),
               ],
             ),
           )
@@ -1008,4 +1042,5 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             ]
   );
   }
+
 }

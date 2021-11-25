@@ -218,7 +218,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Two-tone/3User.svg',
-                    title: "prendre rendez-vous",
+                    title:S.of(context).prendreRendezvous,
                     isPrestataire: isPrestataire,
                   ),
                 ): SizedBox.shrink(),
@@ -632,7 +632,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           child: Row(
             children: [
               Text(
-               'Dernières Prestations',
+               isPrestataire? S.of(context).derniresPrestations: S.of(context).derniresRendezvous,
                 style: TextStyle(
                     color: kFirstIntroColor,
                     fontSize: 15.sp,

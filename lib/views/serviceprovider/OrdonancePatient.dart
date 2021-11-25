@@ -258,7 +258,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     children: [
                         Container(
                           margin: EdgeInsets.only(left: wv*1),
-                          child: Text('pour Le patient', style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w500),)),
+                          child: Text(S.of(context).pourLePatient, style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w500),)),
                         SizedBox(height: hv*0.3,),
                          Container(
                           margin: EdgeInsets.only(left: wv*1),
@@ -266,7 +266,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                          SizedBox(height: hv*0.3,),
                            Container(
                           margin: EdgeInsets.only(left: wv*1),
-                          child: Text('Code de consultation', style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w400),)),
+                          child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w400),)),
                          SizedBox(height: hv*0.3,),
                            Container(
                           margin: EdgeInsets.only(left: wv*1),
@@ -367,7 +367,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                       children: [
                         Row(
                           children: [
-                            Text('Suivie des prestations', style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
+                            Text(S.of(context).suivieDesPrestations, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
                           ],
                         ),
                         SizedBox(height: hv*1,),
@@ -598,54 +598,79 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
  
   }
 
-  Widget getDetailOrdonanceDevis({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
-  var state= service.drugsList==null? "en cours de traitement... " :"${Algorithms.getUseCaseServiceName(type: service.type)}- ${service.drugsUrls.length} images";
+ 
+ 
+   Widget getDetailOrdonanceDevis({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
+  var state= service.drugsList==null? S.of(context).enCoursDeTraitement :"${Algorithms.getUseCaseServiceName(type: service.type)}- ${service.drugsUrls.length} images";
+  print(service.drugsList);
+  print("333333333333333333333333333333333333333333333333333333");
+ 
   return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  Colors.grey[200],expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: service.type), color: kDeepTeal, width: wv*8,),
             title:Text(title, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
             subtitle: Text(state),
             children: <Widget>[
               Container(width: double.infinity, height:hv*30,decoration: BoxDecoration(color: Colors.white, ),
-            child: Expanded(child: service.drugsList!=null && service.drugsUrls !=null?
+            child: Expanded(child: service.drugsList.isNotEmpty && service.drugsUrls.isNotEmpty?
             ListView.builder(
                  itemCount:  service.drugsList.length,
                  itemBuilder: (BuildContext context, int index) {
+                  var  item=  service.drugsList[0];
+                  print(item['Prix']);
+                  print("66666666666666666666666666666666666666666");
                    return Dismissible(
                      key:  UniqueKey(), 
-                     onDismissed: (direction){
-                       if(direction== DismissDirection.endToStart){
-                         showAlertDialog(
-                         context,
-                         S.of(context).tesvousSur,
-                         (){
-                           setState(() {
-                           print("66666666666666666666666666666");
-                           print(index);
-                           print(service.drugsList[index]);
-                           widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
-                           prixDAnaid= (widget.devis.amount*70/100);
-                           prixpatient= widget.devis.amount-prixDAnaid;
-                            print("++++++++++++++++PRix du patient : "+prixpatient.toString());
-                           deletedData.add(widget.devis.drugsList[index]);
-                           widget.devis.drugsList.removeAt(index);
-                           print(deletedData);
-                           });
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsSupprimer)));
-                           Navigator.of(context).pop();
-                         }
-                         );
-                       }
-                        
-                     },
+                      confirmDismiss: (DismissDirection direction) async {
+                      return await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                            title:  Text(S.of(context).confirmation),
+                            content: Text(S.of(context).tesvousSurDffectuerCetteAction),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: (){
+                                  
+                                    widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
+                                    prixDAnaid= (widget.devis.amount*70/100);
+                                    prixpatient= widget.devis.amount-prixDAnaid;
+                                    deletedData.add(widget.devis.drugsList[index]);
+                                    isDeleteddrugsItems=true; 
+                                    var set1 = Set.from(deletedData);
+                                    var set2 = Set.from(service.drugsList);
+                                    service.drugsList=List.from(set2.difference(set1));
+                                    widget.devis.drugsList= service.drugsList;    
+                                    print(widget.devis.drugsList.length);
+                                    print(service.drugsList.length);
+                                
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsSupprimer)));
+                                   Navigator.of(context).pop(true);
+                                  
+                                },
+                                child: Text(S.of(context).delete)
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: Text(S.of(context).cancel),
+                              ),
+                            ],
+                          );
+                          });
+                          
+                        },
+                      );
+                      },
                      direction: DismissDirection.endToStart,
                      background: Container(color: Colors.red, child: 
                      Row(mainAxisAlignment: MainAxisAlignment.end,children: [ Icon(Icons.delete,color: Colors.white,), SizedBox(width: wv*3,),],), ),
-                     child: ListTile(title: Text(widget.devis.drugsList[index]['NomMedicaments'], style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
+                     child: ListTile(title: Text(item['NomMedicaments'], style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
                      subtitle: Text(widget.devis.drugsList[index]['NonScientifique'], style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce),),
                        trailing: Column(mainAxisAlignment: MainAxisAlignment.center,
                          children: [
-                           Text("${service.drugsList[index]['Prix'].toString()}.f", style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
-                           Text("-${service.drugsList[index]['PrixCOuvert'].toString()}.f", style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
+                           Text("${item['Prix'].toString()}.f", style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
+                           Text("-${item['PrixCOuvert'].toString()}.f", style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
                          ],
                        ),
                      ),
@@ -658,12 +683,15 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                  },
                ),)  
          ),
-         ButtonBar(alignment: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
+         ButtonBar(alignment:  widget.devis.drugsList.length==0?  MainAxisAlignment.center: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
+          widget.devis.drugsList.length==0? 
+           Container( alignment: Alignment.center, child: Center(child: TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),)))
+           :
           TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
-           TextButton(
+          widget.devis.drugsList.length==0? Container() :TextButton(
             style: flatButtonStyle,
-            onPressed: () {
+            onPressed: () { 
               if(widget.devis.drugsList!=null){
                 print(deletedData.toString());
                   if(isDeleteddrugsItems==true  && deletedData!=null){
@@ -678,7 +706,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                          "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData) :FieldValue.arrayUnion(widget.devis.drugsList),
                          "amountToPay":widget.devis.amount,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Medicaments mise à jour'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsMiseJour),));
                       setState(() {
                            deletedData=[];
                          isUpdatatingDrugs=false;
@@ -686,20 +714,20 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isUpdatatingDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
                     }else if(deletedData==[]){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez selectionner un médicament au préalable"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).veuillezSelectionnerUnMdicamentAuPralable),));
                     }
                     // else if(isDeleteddrugsItems==true && isuserHasAccepteddrugsItems==false){
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez confirmer la liste des médicaments auprès du client du client"),));
                     // }
                     else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moins element dans la liste"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
                     }
               }else{
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ce button ne sera actif qu'après validation des images par l'administrateur "),));
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
               }
                 
             },
@@ -711,10 +739,12 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
               ],
             ),
           ),
-           TextButton(
+          widget.devis.drugsList.length==0? Container() : TextButton(
             style: flatButtonStyle,
             onPressed: () {
                 if(isDeleteddrugsItems==true){
+                  print(deletedData);
+                  print(service.drugsList);
                     setState(() {
                          isconfirmgDrugs=true;
                       });
@@ -722,7 +752,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                        {
                          "isConfirmDrugList": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Prestation Clôturer'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
                       setState(() {
                            widget.devis.isConfirmDrugList=true;
                            buttonLoading = false;
@@ -733,11 +763,12 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isconfirmgDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
+                
                 }else{
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moin un médicament dans la liste"),));
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
                 }
             },
             child: isconfirmgDrugs? CircularProgressIndicator(
@@ -746,7 +777,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
               children: <Widget>[
                 Icon(Icons.thumb_up, color: kDeepTeal),
                 Padding(  padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-                Text('confirmer la liste', style: TextStyle(color:kDeepTeal )),
+                Text(S.of(context).confirmerLaListe, style: TextStyle(color:kDeepTeal )),
               ],
             ),
           )
@@ -898,7 +929,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                          "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData) :FieldValue.arrayUnion(widget.devis.drugsList),
                          "amountToPay":widget.devis.amount,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Medicaments mise à jour'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsMiseJour),));
                       setState(() {
                            deletedData=[];
                          isUpdatatingDrugs=false;
@@ -906,20 +937,20 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isUpdatatingDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
                     }else if(deletedData==[]){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez selectionner un médicament au préalable"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).veuillezSelectionnerUnMdicamentAuPralable),));
                     }
                     // else if(isDeleteddrugsItems==true && isuserHasAccepteddrugsItems==false){
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez confirmer la liste des médicaments auprès du client du client"),));
                     // }
                     else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moins element dans la liste"),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
                     }
               }else{
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("ce button ne sera actif qu'après validation des images par l'administrateur "),));
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
               }
                 
             },
@@ -942,7 +973,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                        {
                          "isConfirmDrugList": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Prestation Clôturer'),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
                       setState(() {
                            widget.devis.isConfirmDrugList=true;
                            buttonLoading = false;
@@ -953,11 +984,11 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isconfirmgDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Une erreur est survenu'),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
                       });
                     });
                 }else{
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La sauvegarde n'est possible qu'apres avoir supprimer au moin un médicament dans la liste"),));
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
                 }
             },
             child: isconfirmgDrugs? CircularProgressIndicator(
@@ -966,7 +997,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
               children: <Widget>[
                 Icon(Icons.thumb_up, color: kDeepTeal),
                 Padding(  padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-                Text('confirmer la liste', style: TextStyle(color:kDeepTeal )),
+                Text(S.of(context).confirmerLaListe, style: TextStyle(color:kDeepTeal )),
               ],
             ),
           )
