@@ -255,21 +255,32 @@ class _ScanPatientState extends State<ScanPatient> {
         enable: adherentBeneficiaryInfos!=null || _phoneNumber.text!=null? true: false ,
         text: S.of(context).envoyer, 
         action: () async {
-          if(_phoneNumber.text!=null){
-            await checkIfDocExists( _phoneNumber.text.toString()).then((value){
-               print(value);
-               if(value==true){
-                 Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devis)));
-               }else{
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Code de paiements invalide"),));
-               }
-            });
-          }else{
-            Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(
-                  data: adherentBeneficiaryInfos ,
-                  userId: adherentInfos.adherentId,
-                )));
+          if(_phoneNumber.text.toString().isEmpty){
+             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("entrer le code de paiement"),));
+          }else if(_phoneNumber.text.toString().isNotEmpty){
+            print(_phoneNumber.text.toString());
+              var res= FirebaseFirestore.instance
+                    .collectionGroup('PRESTATIONS')
+                    .where('PaiementCode', isEqualTo:  _phoneNumber.text.toString())
+                    .orderBy('createdDate', descending: true)
+                    .snapshots();
+                  res.first.then((value){
+                    print(value.docs.length);
+                  var data= value.docs;
+                  if (data.isNotEmpty) {
+                     devis=UseCaseServiceModel.fromDocument(value.docs[0]);
+                     Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devis)));
+                  } else {
+                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("code de paiements invalide ")));
+                  }
+                  });
           }
+          // else{
+          //   Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(
+          //         data: adherentBeneficiaryInfos ,
+          //         userId: adherentInfos.adherentId,
+          //       )));
+          // }
         }),
           ]
           )
@@ -329,7 +340,7 @@ class _ScanPatientState extends State<ScanPatient> {
       setState(() {
         textForQrCode = barcode;
       });
-      
+     
       if (validateMobile(textForQrCode) == true) {
         print(textForQrCode);
         setState(() {
@@ -346,7 +357,7 @@ class _ScanPatientState extends State<ScanPatient> {
         if (data.isNotEmpty) {
           Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(userId: barcode, isbeneficiare: false ,))                                       );
         } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).cetUtilisateurNexistePas)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Aucunes prestations  entre vous cet adherent n'as été enregistré")));
         }
     });
       

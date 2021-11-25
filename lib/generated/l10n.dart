@@ -125,10 +125,10 @@ class S {
     );
   }
 
-  /// `Vérifier le statut des paiements avant de réaliser les services à un adhérent`
+  /// `Check the status of payments before performing services to a member`
   String get vrifierLeStatutDesPaiementsAvantDeRaliserLesServices {
     return Intl.message(
-      'Vérifier le statut des paiements avant de réaliser les services à un adhérent',
+      'Check the status of payments before performing services to a member',
       name: 'vrifierLeStatutDesPaiementsAvantDeRaliserLesServices',
       desc: '',
       args: [],
@@ -8750,6 +8750,206 @@ class S {
     return Intl.message(
       'you cannot import more than 10 images',
       name: 'vousNePouvezPasImporterPlusDe5Images',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last services`
+  String get derniresPrestations {
+    return Intl.message(
+      'Last services',
+      name: 'derniresPrestations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last Appointments`
+  String get derniresRendezvous {
+    return Intl.message(
+      'Last Appointments',
+      name: 'derniresRendezvous',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Type of quote`
+  String get typeDeDevis {
+    return Intl.message(
+      'Type of quote',
+      name: 'typeDeDevis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New service added`
+  String get nouvellePrestationAjoute {
+    return Intl.message(
+      'New service added',
+      name: 'nouvellePrestationAjoute',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `choose the type of quote`
+  String get choisissezLeTypeDeDevis {
+    return Intl.message(
+      'choose the type of quote',
+      name: 'choisissezLeTypeDeDevis',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Alert`
+  String get alerte {
+    return Intl.message(
+      'Alert',
+      name: 'alerte',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tracking of benefits`
+  String get suivieDesPrestations {
+    return Intl.message(
+      'Tracking of benefits',
+      name: 'suivieDesPrestations',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service Closing`
+  String get prestationClturer {
+    return Intl.message(
+      'Service Closing',
+      name: 'prestationClturer',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `in process... `
+  String get enCoursDeTraitement {
+    return Intl.message(
+      'in process... ',
+      name: 'enCoursDeTraitement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmation`
+  String get confirmation {
+    return Intl.message(
+      'Confirmation',
+      name: 'confirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `are you sure you want to do this action`
+  String get tesvousSurDffectuerCetteAction {
+    return Intl.message(
+      'are you sure you want to do this action',
+      name: 'tesvousSurDffectuerCetteAction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `SUPPRIMER`
+  String get delete {
+    return Intl.message(
+      'SUPPRIMER',
+      name: 'delete',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updated drugs`
+  String get medicamentsMiseJour {
+    return Intl.message(
+      'Updated drugs',
+      name: 'medicamentsMiseJour',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An error has occurred`
+  String get uneErreurEstSurvenu {
+    return Intl.message(
+      'An error has occurred',
+      name: 'uneErreurEstSurvenu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `please select a drug first`
+  String get veuillezSelectionnerUnMdicamentAuPralable {
+    return Intl.message(
+      'please select a drug first',
+      name: 'veuillezSelectionnerUnMdicamentAuPralable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saving is only possible after deleting at least one element from the list`
+  String get laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement {
+    return Intl.message(
+      'Saving is only possible after deleting at least one element from the list',
+      name: 'laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `this button will be active only after validation of the images by the administrator `
+  String get ceButtonNeSeraActifQuaprsValidationDesImagesPar {
+    return Intl.message(
+      'this button will be active only after validation of the images by the administrator ',
+      name: 'ceButtonNeSeraActifQuaprsValidationDesImagesPar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saving is only possible after deleting at least one drug in the list`
+  String get laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn {
+    return Intl.message(
+      'Saving is only possible after deleting at least one drug in the list',
+      name: 'laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `confirm list`
+  String get confirmerLaListe {
+    return Intl.message(
+      'confirm list',
+      name: 'confirmerLaListe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `create`
+  String get crer {
+    return Intl.message(
+      'create',
+      name: 'crer',
       desc: '',
       args: [],
     );

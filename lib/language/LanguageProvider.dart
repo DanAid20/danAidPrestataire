@@ -14,7 +14,7 @@ class LanguageProvider with ChangeNotifier {
   Locale resuperLocalLang(){
     var box = Hive.box('language');
     String lang=box.get('language')!=null ? box.get('language'): null;
-    var value=lang.contains("English") && lang!=null ? Locale('en', 'EN'):  lang.contains("Français") && lang!=null?Locale('fr', 'FR'): Locale('en', 'EN');
+    var value=lang.contains("English") && lang!=null ? Locale('en', 'EN'): Locale('fr', 'FR');
     this.locale=value;
     return value;
   }

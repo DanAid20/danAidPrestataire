@@ -183,7 +183,7 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                                 ).toList(),
                                   onChanged: (String newValue) async {
                                   currentData.changeLocale(newValue);
-                                  //await HiveDatabase.setLanguage(LanguageHelper().convertLocaleToLangName(newValue));
+                                  // await HiveDatabase.setLanguage(LanguageHelper().convertLocaleToLangName(newValue));
                                   
                                   // context.read<LanguageProvider>().changeLocale(newValue);
                                 },

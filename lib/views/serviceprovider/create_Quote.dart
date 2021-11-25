@@ -256,7 +256,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                 SizedBox(height: 5,),
                                  Container(
                                       margin: EdgeInsets.only(left: wv*1),
-                                      child: Text("Type de devis", style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
+                                      child: Text(S.of(context).typeDeDevis, style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
                                     SizedBox(height: hv*1,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -271,7 +271,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: categoriesType,
-                                        hint: Text("type de devis", style: TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
+                                        hint: Text(S.of(context).typeDeDevis, style: TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
                                         items: arrayOfServicesType.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"], style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
@@ -292,195 +292,206 @@ class _CreateQuoteState extends State<CreateQuote> {
                           )
                  ])
             ),
-            Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: hv*2.5),
-                    decoration: BoxDecoration(
-                      color: whiteColor,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
-                    ),
-                    child:Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-                          child: Column(
-                            children: [
-                              SizedBox(height: hv*2,),
-                              Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
-                              SizedBox(height: hv*0.5,),
-                              Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
-                              Center(
-                                child: InkWell(
-                                  onTap: (){getDocument(context);},
-                                  child: Container(
-                                    margin: EdgeInsets.symmetric(vertical: hv*2),
-                                    child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+            Expanded(
+              child: Container(
+                        height: MySize.getScaledSizeHeight(100),
+                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: hv*2.5),
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                      ),
+                      child:Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                            child: Column(
+                              children: [
+                                SizedBox(height: hv*0.5),
+                                Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                                SizedBox(height: hv*0.2),
+                                Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                                Center(
+                                  child: InkWell(
+                                    onTap: (){getDocument(context);},
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(vertical: hv*1),
+                                      child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              FileUploadCard(
-                                title: doc1+" ($docs1Uploaded)",
-                                state: doc1Uploaded,
-                                isMultiple: true,
-                                loading: doc1Spinner,
-                                action: () async {await getDocFromGallery(doc1);}
-                              ),
-                              SizedBox(height: 5,),
-                              FileUploadCard(
-                                title: doc2+" ($docs2Uploaded)",
-                                state: doc2Uploaded,
-                                isMultiple: true,
-                                loading: doc2Spinner,
-                                action: () async {await getDocFromGallery(doc2);}
-                              ),
-                              SizedBox(height: 5,),
-                              FileUploadCard(
-                                title: doc3+" ($docs3Uploaded)",
-                                state: doc3Uploaded,
-                                isMultiple: true,
-                                loading: doc3Spinner,
-                                action: () async {await getDocFromGallery(doc3);}
-                              ),
+                                FileUploadCard(
+                                  title: doc1+" ($docs1Uploaded)",
+                                  state: doc1Uploaded,
+                                  isMultiple: true,
+                                  loading: doc1Spinner,
+                                  action: () async {await getDocFromGallery(doc1);}
+                                ),
+                                SizedBox(height: 5,),
+                                FileUploadCard(
+                                  title: doc2+" ($docs2Uploaded)",
+                                  state: doc2Uploaded,
+                                  isMultiple: true,
+                                  loading: doc2Spinner,
+                                  action: () async {await getDocFromGallery(doc2);}
+                                ),
+                                SizedBox(height: 5,),
+                                FileUploadCard(
+                                  title: doc3+" ($docs3Uploaded)",
+                                  state: doc3Uploaded,
+                                  isMultiple: true,
+                                  loading: doc3Spinner,
+                                  action: () async {await getDocFromGallery(doc3);}
+                                ),
 
-                              SizedBox(height: hv*2,),
-                            CustomTextButton(
-                                text: "créer",
-                                enable: true,
-                                isLoading: confirmSpinner,
-                                noPadding: true,
-                                action: () async {
-                                  setState((){confirmSpinner = true;});
-                                  print("aaa");
-                                  var data= [
-                                                  {
-                                                      "NomMedicaments": "1 AMOCLAN 8:1 500mg/62,5 Comp. B/10 1.000 f",
-                                                      "NonScientifique": "DCI (AMOXICILLINE/ACIDE CLAVULANIQUE)",
-                                                      "Prix": 10000,
-                                                      "PrixCOuvert": 7000,
-                                                  },
-                                                  {
-                                                      "NomMedicaments": "1 AMOCLAN  500mg/62,5 Comp. B/10 1.000 f",
-                                                      "NonScientifique": "DCI (AMOXICILLINE/ CLAVULANIQUE)",
-                                                      "Prix": 10000,
-                                                      "PrixCOuvert": 7000,
-                                                  },
-                                                  {
-                                                      "NomMedicaments": "1 AMOCLAN 8:1  Comp. B/10 1.000 f",
-                                                      "NonScientifique": " (AMOXICILLINE/ACIDE CLAVULANIQUE)",
-                                                      "Prix": 10000,
-                                                      "PrixCOuvert": 7000,
-                                                  },
-                                              ];
-                                   await checkIfDocExists( _codeConsultationController.text.toString()).then((value){
-                                    if(value!=null){ 
-                                    if(categoriesType == pharmacy || categoriesType == labo){
-                                     FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
-                                        "usecaseId": value["id"],
-                                        "adherentId": adherentId,
-                                        "beneficiaryId": beneficiaryId,
-                                        "isConfirmDrugList": false,
-                                        "status": 2,
-                                        "paid": false,
-                                        "PaiementCode":null,
-                                        "drugsList" : FieldValue.arrayUnion(data),
-                                        "appointementId": value["idAppointement"],
-                                        "title": Algorithms.getUseCaseServiceName(type: categoriesType),
-                                        "titleDuDEvis":devisId,
-                                        "consultationCode": _codeConsultationController.text.toString(),
-                                        "amountToPay":num.parse(_montantController.text.toString()),
-                                        "establishment": prestataireInfos.name,
-                                        "prestataireId":prestataireInfos.id,
-                                        "adminFeedback": null,
-                                        "justifiedFees": null,
-                                        "type": categoriesType,
-                                        "createdDate": DateTime.now(),
-                                        "serviceDate": null,
-                                        "precriptionUrls": FieldValue.arrayUnion(docs1List),
-                                        "receiptUrls": FieldValue.arrayUnion(docs2List),
-                                        "drugsUrls": categoriesType == pharmacy ? FieldValue.arrayUnion(docs3List) : [],
-                                        "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
-                                        'closed': true,
-                                        "precriptionIsValid": null,
-                                        "receiptIsValid": null,
-                                        "drugsIsValid": null,
-                                        "resultsIsValid": null,
-                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
-                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
-                                        "drugsUploadDate": docs3List.length > 0 && categoriesType == pharmacy ? DateTime.now() : null,
-                                        "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
-                                        "executed": docs2List.length > 0 ? true : false,
-                                        "estimated": docs1List.length > 0 ? true : false
-                                      }).then((doc) {
-                                        
-                                        setState((){confirmSpinner = false;});
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouvelle prestation ajoutée'),));
-                                        Navigator.pop(context);
-                                      }).onError((error, stackTrace) {
-                                        setState((){confirmSpinner = false;});
-                                      });
-                                  }
-                                  if(categoriesType == hospitalization || categoriesType == ambulance){
+                                SizedBox(height: hv*1),
+                              CustomTextButton(
+                                  text: S.of(context).crer,
+                                  enable: true,
+                                  isLoading: confirmSpinner,
+                                  noPadding: true,
+                                  action: () async {
                                   
-                                      FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
-                                        "usecaseId": value["id"],
-                                        "adherentId": adherentId,
-                                        "beneficiaryId": beneficiaryId,
-                                        "advance": 0,
-                                        "status": 2,
-                                        "paid": false,
-                                        "isConfirmDrugList": false,
-                                        "appointementId": value["idAppointement"],
-                                        "title": Algorithms.getUseCaseServiceName(type: categoriesType),
-                                        "drugsList" : FieldValue.arrayUnion(data),
-                                        "titleDuDEvis":devisId,
-                                        "consultationCode": _codeConsultationController.text.toString(),
-                                        "amountToPay":num.parse(_montantController.text.toString()),
-                                        "establishment": prestataireInfos.name,
-                                        "adminFeedback": null,
-                                        "justifiedFees": 0,
-                                        "type": categoriesType,
-                                        "createdDate": DateTime.now(),
-                                        "serviceDate": null,
-                                        "precriptionUrls": FieldValue.arrayUnion(docs1List),
-                                        "receiptUrls": FieldValue.arrayUnion(docs2List),
-                                        "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List) : [],
-                                        "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
-                                        'closed': true,
-                                        "precriptionIsValid": null,
-                                        "receiptIsValid": null,
-                                        "drugsIsValid": null,
-                                        "resultsIsValid": null,
-                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
-                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
-                                        "drugsUploadDate": docs3List.length > 0 && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
-                                        "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
-                                        "executed": docs2List.length > 0 ? true : false,
-                                        "estimated": docs1List.length > 0 ? true : false,
-                                        "ongoing": true,
-                                        "requested": docs1List.length > 0 ? true : false,
-                                      }).then((doc) {
-                                        setState((){confirmSpinner = false;});
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouvelle prestation ajoutée'),));
-                                        Navigator.pop(context);
-                                      }).onError((error, stackTrace) {
-                                        setState((){confirmSpinner = false;});
-                                      });
-                                    } 
+                                    /**********************
+                                     * Formes des medicaments a entrer dans la partie administration
+                                     */
+                                    // var data= [
+                                    //                 {
+                                    //                     "NomMedicaments": "1 AMOCLAN 8:1 500mg/62,5 Comp. B/10 1.000 f",
+                                    //                     "NonScientifique": "DCI (AMOXICILLINE/ACIDE CLAVULANIQUE)",
+                                    //                     "Prix": 10000,
+                                    //                     "PrixCOuvert": 7000,
+                                    //                 },
+                                    //                 {
+                                    //                     "NomMedicaments": "1 AMOCLAN  500mg/62,5 Comp. B/10 1.000 f",
+                                    //                     "NonScientifique": "DCI (AMOXICILLINE/ CLAVULANIQUE)",
+                                    //                     "Prix": 10000,
+                                    //                     "PrixCOuvert": 7000,
+                                    //                 },
+                                    //                 {
+                                    //                     "NomMedicaments": "1 AMOCLAN 8:1  Comp. B/10 1.000 f",
+                                    //                     "NonScientifique": " (AMOXICILLINE/ACIDE CLAVULANIQUE)",
+                                    //                     "Prix": 10000,
+                                    //                     "PrixCOuvert": 7000,
+                                    //                 },
+                                    //             ];
+                                    
+                                        await checkIfDocExists( _codeConsultationController.text.toString()).then((value){
+                                          setState((){confirmSpinner = true;});
+                                      if(value!=null && _montantController.text.toString().isNotEmpty  &&  _codeConsultationController.text.toString().isNotEmpty){
+                                      if(categoriesType == pharmacy || categoriesType == labo){
+                                       FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
+                                          "usecaseId": value["id"],
+                                          "adherentId": adherentId,
+                                          "beneficiaryId": beneficiaryId,
+                                          "isConfirmDrugList": false,
+                                          "status": 2,
+                                          "paid": false,
+                                          "PaiementCode":null,
+                                          "drugsList" : null,
+                                          "appointementId": value["idAppointement"],
+                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType),
+                                          "titleDuDEvis":devisId,
+                                          "consultationCode": _codeConsultationController.text.toString(),
+                                          "amountToPay":num.parse(_montantController.text.toString()),
+                                          "establishment": prestataireInfos.name,
+                                          "prestataireId":prestataireInfos.id,
+                                          "adminFeedback": null,
+                                          "justifiedFees": null,
+                                          "type": categoriesType,
+                                          "createdDate": DateTime.now(),
+                                          "serviceDate": null,
+                                          "precriptionUrls": FieldValue.arrayUnion(docs1List),
+                                          "receiptUrls": FieldValue.arrayUnion(docs2List),
+                                          "drugsUrls": categoriesType == pharmacy ? FieldValue.arrayUnion(docs3List) : [],
+                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
+                                          'closed': true,
+                                          "precriptionIsValid": null,
+                                          "receiptIsValid": null,
+                                          "drugsIsValid": null,
+                                          "resultsIsValid": null,
+                                          "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
+                                          "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
+                                          "drugsUploadDate": docs3List.length > 0 && categoriesType == pharmacy ? DateTime.now() : null,
+                                          "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
+                                          "executed": docs2List.length > 0 ? true : false,
+                                          "estimated": docs1List.length > 0 ? true : false
+                                        }).then((doc) {
+                                          
+                                          setState((){confirmSpinner = false;});
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouvelle prestation ajoutée'),));
+                                          Navigator.pop(context);
+                                        }).onError((error, stackTrace) {
+                                          setState((){confirmSpinner = false;});
+                                        });
+                                    }
+                                    if(categoriesType == hospitalization || categoriesType == ambulance){
+                                    
+                                        FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
+                                          "usecaseId": value["id"],
+                                          "adherentId": adherentId,
+                                          "beneficiaryId": beneficiaryId,
+                                          "advance": 0,
+                                          "status": 2,
+                                          "paid": false,
+                                          "isConfirmDrugList": false,
+                                          "appointementId": value["idAppointement"],
+                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType),
+                                          "drugsList" :null,
+                                          "titleDuDEvis":devisId,
+                                          "consultationCode": _codeConsultationController.text.toString(),
+                                          "amountToPay":num.parse(_montantController.text.toString()),
+                                          "establishment": prestataireInfos.name,
+                                          "adminFeedback": null,
+                                          "justifiedFees": 0,
+                                          "type": categoriesType,
+                                          "createdDate": DateTime.now(),
+                                          "serviceDate": null,
+                                          "precriptionUrls": FieldValue.arrayUnion(docs1List),
+                                          "receiptUrls": FieldValue.arrayUnion(docs2List),
+                                          "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List) : [],
+                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
+                                          'closed': true,
+                                          "precriptionIsValid": null,
+                                          "receiptIsValid": null,
+                                          "drugsIsValid": null,
+                                          "resultsIsValid": null,
+                                          "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
+                                          "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
+                                          "drugsUploadDate": docs3List.length > 0 && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
+                                          "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
+                                          "executed": docs2List.length > 0 ? true : false,
+                                          "estimated": docs1List.length > 0 ? true : false,
+                                          "ongoing": true,
+                                          "requested": docs1List.length > 0 ? true : false,
+                                        }).then((doc) {
+                                          setState((){confirmSpinner = false;});
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).nouvellePrestationAjoute),));
+                                          Navigator.pop(context);
+                                        }).onError((error, stackTrace) {
+                                          setState((){confirmSpinner = false;});
+                                        });
+                                      } 
+                                    
+                                    }else if(categoriesType==null){
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).choisissezLeTypeDeDevis)));
+                                       setState((){confirmSpinner = false;});
+                                    }else if(value==null){
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
+                                       setState((){confirmSpinner = false;});
+                                    }else{
+                                       setState((){confirmSpinner = false;});
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez remplir le formulaire "),));
+                                    }
+                                  });
                                   
-                                  }else if(categoriesType==null){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("choisissez le type de devis")));
-                                     setState((){confirmSpinner = false;});
-                                  }else if(value==null){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
-                                     setState((){confirmSpinner = false;});
-                                  }
-                                });
-                                 
-                                },
-                              )
-                          ]))
-                      ],
-            )),
+                                   
+                                  },
+                                )
+                            ]))
+                        ],
+              )),
+            ),
           ],
         ),
       )))
@@ -511,7 +522,7 @@ class _CreateQuoteState extends State<CreateQuote> {
            result= null;
         }
       }).onError((error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("une erreur s'est produite "),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduite),));
       });
     
     return result;
