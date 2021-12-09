@@ -11,6 +11,7 @@ import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
+import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';

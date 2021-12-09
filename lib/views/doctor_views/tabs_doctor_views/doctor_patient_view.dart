@@ -19,6 +19,7 @@ import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
 import 'package:danaid/views/serviceprovider/ScanPatient.dart';
 import 'package:danaid/views/serviceprovider/ServicesProvider_QuoteEmit.dart';
 import 'package:danaid/views/serviceprovider/create_Quote.dart';
+import 'package:danaid/views/serviceprovider/paiementHistory/PrestationHistoryForProvider.dart';
 import 'package:danaid/views/serviceprovider/services_provider_views/add_patient_views_service_Providers.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           GestureDetector(
             onTap: () {
               isPrestataire? 
-              Navigator.push(
+              Navigator.push( 
                 context,
                 MaterialPageRoute(
                     builder: (context) => ScanPatient()),
@@ -224,11 +225,12 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 ): SizedBox.shrink(),
                 GestureDetector(
                   onTap: () {
-                    isPrestataire
-                        ? Navigator.pushNamed(
-                            context, '/history-prestation-serviceProvider')
-                        : Navigator.pushNamed(
-                            context, '/history-prestation-doctor');
+                     Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PrestationHistoryForProvider()),
+              );
+                     
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
@@ -236,6 +238,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     isPrestataire: isPrestataire,
                   ),
                 ),
+                
+               
+                
                 GestureDetector(
                   onTap: () {
                     isPrestataire
@@ -301,7 +306,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: 17.sp),
+                              fontSize: 16.sp),
                         ),
                       ),
                     ],
@@ -667,6 +672,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
      UserProvider userProvider = Provider.of<UserProvider>(context);
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
+    
     return SingleChildScrollView(
       physics: NeverScrollableScrollPhysics(),
       child: Container(

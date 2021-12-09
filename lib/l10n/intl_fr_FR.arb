@@ -891,5 +891,7 @@
   "ceButtonNeSeraActifQuaprsValidationDesImagesPar": "ce button ne sera actif qu'après validation des images par l'administrateur ",
   "laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn": "La sauvegarde n'est possible qu'apres avoir supprimer au moin un médicament dans la liste",
   "confirmerLaListe": "confirmer la liste",
-  "crer": "créer"
+  "crer": "créer",
+  "enregistrer": "enregistrer",
+  "close": "Fermer"
 }

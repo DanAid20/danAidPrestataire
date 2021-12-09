@@ -27,7 +27,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
    String data= DateFormat("yyyy").format(DateTime.now());
    String newsDate='';
    DateTime today = DateTime.now();
-   List<UseCaseServiceModel> facture=[];
+   List<Facture> facture=[];
    int currentYears= 0 ;
    List<Map<int, Map<String, Object>>> paiementHistory= [];
    int consultationpersonnes=0;
@@ -38,6 +38,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
    bool loading=false;
     @override
   void initState() {
+    
     print(getMonthsInYear().toString());
     getPaiement(currentDate: data);
     setState((){
@@ -70,52 +71,55 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
     
     // on get la listes 
     print(prestataireProvider.getServiceProvider.id);
-    var facturation =  FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where('prestataireId',  isEqualTo: prestataireProvider.getServiceProvider.id).orderBy('createdAt', descending: true).get();
+    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider.id).orderBy('createdAt', descending: true).get();
         facturation.then((querySnapshot){
         print( querySnapshot.docs.length);
         // ont get la list des ffacture ici
         querySnapshot.docs.forEach((doc) {
 
-           UseCaseServiceModel facturesList= UseCaseServiceModel.fromDocument(doc);
-          print(facturesList.amount);
+           Facture facturesList= Facture.fromDocument(doc);
+          print(facturesList.createdAt);
           
            setState(() {
               facture.add(facturesList);
            });
         });
-       print(facture.length);
+       print(facture.length.toString()+"********************");
 
       List<String> monthName= getMonthsInYear();
      // print(monthName.length);
       monthName.asMap().forEach((key, value) {
-         // print(key.toString()+'----');
+          print(key.toString()+'----');
           print(monthName[key].toString()+'----');
               var data =facture.where((element){
-               //   print(element.createdAt.month);
-               Timestamp t = element.dateCreated;
-               DateTime date = t.toDate();
-                String data= DateFormat("MMMM").format(date);
+
+                DateTime date = element.createdAt;
+                String datetime= DateFormat("MMMM").format(date);
                 String year= DateFormat("yyyy").format(date);
-                return data==monthName[key] && date==year ;
+                return datetime==monthName[key] && date.year.toString()==year;
               });
-            
+      // print(data.toString());
             if(data.length>0){
-                List<UseCaseServiceModel > fac=data.toList();
-                print("+++++++++++++++++++++++++"+fac.length.toString());
-                UseCaseServiceModel  lastObject= fac.last;
-                var isSolve= fac.every((element) => element.paid==true);
-                var ispaidalready= fac.where((element) =>  element.paid==true);
-                var notReadyispaidalready= fac.where((element) =>  element.paid==false );
-                var personesConsultForMonth= fac.where((element) => element.type!='REFERENCEMENT' );
-                var personesConsultForMonthAll= fac.where((element) => element.type!='REFERENCEMENT'  );
-                var personesReftForMonth= fac.where((element) => element.type.contains('REFERENCEMENT')==true);
-                var personesReftForMonthAll= fac.where((element) => element.type.contains('REFERENCEMENT')==true);
+                List<Facture> fac=data.toList();
+                print("+++++++++++++++++++++++++"+fac[0].toString());
+                Facture lastObject= fac.last;
+                var isSolve= fac.every((element) => element.isSolve==true);
+                var ispaidalready= fac.where((element) => element.isSolve==true);
+                var notReadyispaidalready= fac.where((element) => element.isSolve==false && element.canPay==1);
+                var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null && element.canPay==1 );
+                var personesConsultForMonthAll= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null  );
+                var personesReftForMonth= fac.where((element) =>  element.types!=null && element.types.contains('REFERENCEMENT')==true && element.isSolve==true);
+                var personesReftForMonthAll= fac.where((element) => element.types!=null &&  element.types.contains('REFERENCEMENT')==true );
                 int sum=0;
-                fac.forEach((e) => sum += e.amount);
+                fac.forEach((e)=>{
+                  if(e.amountToPay!=null){
+                     sum += e.amountToPay
+                  }
+                });
                 int readyPaid=0;
-                ispaidalready.forEach((e) => readyPaid += e.amount);
+                ispaidalready.forEach((e) => readyPaid += e.amountToPay);
                 int readyPaidYet=0;
-                notReadyispaidalready.forEach((e) => readyPaidYet += e.amount);
+                notReadyispaidalready.forEach((e) => readyPaidYet += e.amountToPay);
                 setState((){
                     consultationpersonnes+=personesConsultForMonth.length;
                     referencemeentPersonnes+=personesReftForMonth.length;
@@ -123,9 +127,9 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                     paidYear+=readyPaid;
                     notpaidYear+=readyPaidYet;
                 });
-                fac.sort((a, b) => a.date.compareTo(a.date));
-                DateTime lastDayOfMonth = new DateTime(fac.last.date.toDate().year, fac.last.date.toDate().month + 1, 0);
-                var lastDate= new DateTime(fac.last.date.toDate().year, fac.last.date.toDate().month, lastDayOfMonth.day+15  );
+                fac.sort((a, b) => a.createdAt.compareTo(a.createdAt));
+                DateTime lastDayOfMonth = new DateTime(fac.last.createdAt.year, fac.last.createdAt.month + 1, 0);
+                var lastDate= new DateTime(fac.last.createdAt.year, fac.last.createdAt.month, lastDayOfMonth.day+15  );
                 var formatedDate= DateFormat("dd-MM-yyyy").format(lastDate);
                 var obj={
                   key :{
@@ -148,7 +152,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                 print(paidYear);
               paiementHistory.add(obj);
             }
-            
+         
         
       });
 
@@ -532,6 +536,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 primary: false,
+                                reverse: true,
                                 itemCount: paiementHistory.length,
                                 itemBuilder: (context, index) {
                                   if(paiementHistory.elementAt(index)!=null){

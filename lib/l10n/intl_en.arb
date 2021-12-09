@@ -890,5 +890,7 @@
   "ceButtonNeSeraActifQuaprsValidationDesImagesPar": "this button will be active only after validation of the images by the administrator ",
   "laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn": "Saving is only possible after deleting at least one drug in the list",
   "confirmerLaListe": "confirm list",
-  "crer": "create"
+  "crer": "create",
+  "enregistrer": "save",
+  "close": "Close"
 }
