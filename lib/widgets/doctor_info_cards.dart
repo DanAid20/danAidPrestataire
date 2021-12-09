@@ -16,12 +16,12 @@ class DoctorInfoCard extends StatelessWidget {
   final bool isInRdvDetail;
   final String service;
   final int appointmentState;
-  final bool chat, consultation, teleConsultation, rdv, visiteDomicile;
+  final bool chat, consultation, teleConsultation, rdv, visiteDomicile, noShadow;
   final bool noPadding, includeHospital, isServiceProvider;
   final String field, officeName, actionText;
   final Function onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
+  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.noShadow = false, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class DoctorInfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: kSouthSeas,
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        boxShadow: [BoxShadow(
+        boxShadow: noShadow ? [] : [BoxShadow(
           color: Colors.grey[300],
           spreadRadius: 1.5,
           blurRadius: 3,

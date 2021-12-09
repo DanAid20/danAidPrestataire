@@ -29,9 +29,10 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
     DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+    query = userProvider.getProfileType == doctor ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
       : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
-    return adherentProvider.getAdherent?.location != null ? StreamBuilder(
+    return (adherentProvider.getAdherent?.location != null && (userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary)) || (doctorProvider.getDoctor?.location != null && userProvider.getProfileType == doctor) 
+      ? StreamBuilder(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -64,7 +65,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         rdv: doctor.serviceList != null ? doctor.serviceList["rdv"] : false,
                         visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
                         distance: 
-                          userProvider.getProfileType == adherent ?  
+                          userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ?  
                             adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
                               ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
                           :

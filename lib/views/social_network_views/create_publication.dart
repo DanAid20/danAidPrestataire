@@ -394,7 +394,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                               });
                               File file = imageFileAvatar;
                               String name = (pubType == 0) ? "question-image" : (pubType == 1) ? "discussion-image" : "crowdfunding-image";
-                              String path = (pubType == 0) ? 'posts/${userProvider.getUserModel.userId}/question/$name' : (pubType == 1) ? 'posts/${userProvider.getUserModel.userId}/discussion/$name' : 'posts/${userProvider.getUserModel.userId}/crowdfunding/$name';
+                              String path = (pubType == 0) ? 'posts/${userProvider.getUserModel.userId}/question/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : (pubType == 1) ? 'posts/${userProvider.getUserModel.userId}/discussion/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : 'posts/${userProvider.getUserModel.userId}/crowdfunding/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString();
                               Reference storageReference = FirebaseStorage.instance.ref().child(path);
                               final metadata = SettableMetadata(
                                 customMetadata: {'picked-file-path': file.path}

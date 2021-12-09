@@ -67,8 +67,8 @@ android {
         prod {
             dimension "my-flavor"
             applicationId "com.danaid.danaidmobile"
-            versionCode 210020020
-            versionName "2.0.1-alpha"
+            versionCode 210020021
+            versionName "2.1.0-beta"
         }
     }
 

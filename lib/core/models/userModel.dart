@@ -6,8 +6,9 @@ class UserModel {
   bool enabled, enable, isDanAIdAccount;
   int visitPoints, points, comments, posts, isAmbassador;
   List phoneList, phoneKeywords, nameKeywords, friends, groups, visits, friendRequests, chats;
+  Map location;
 
-  UserModel({this.visitPoints, this.enable, this.adherentId, this.points, this.isAmbassador, this.isDanAIdAccount, this.comments, this.friendRequests, this.couponCode, this.posts, this.chats, this.visits, this.authId, this.userId, this.dateCreated, this.lastDateVisited,  this.matricule, this.phoneKeywords, this.nameKeywords, this.friends, this.groups, this.fullName, this.imgUrl, this.email, this.profileType, this.regionOfOrigin, this.cniUrl, this.countryCode, this.countryName, this.enabled, this.phoneList});
+  UserModel({this.visitPoints, this.enable, this.adherentId, this.points, this.isAmbassador, this.isDanAIdAccount, this.comments, this.location, this.friendRequests, this.couponCode, this.posts, this.chats, this.visits, this.authId, this.userId, this.dateCreated, this.lastDateVisited,  this.matricule, this.phoneKeywords, this.nameKeywords, this.friends, this.groups, this.fullName, this.imgUrl, this.email, this.profileType, this.regionOfOrigin, this.cniUrl, this.countryCode, this.countryName, this.enabled, this.phoneList});
 
   factory UserModel.fromDocument(DocumentSnapshot doc) {
     return UserModel(
@@ -41,6 +42,7 @@ class UserModel {
       groups: doc.data()["groups"],
       isAmbassador: doc.data()["isAmbassador"],
       couponCode: doc.data()["couponCode"],
+      location: doc.data()["localisation"],
       isDanAIdAccount: doc.data()["danAidAccount"]
     );
   }

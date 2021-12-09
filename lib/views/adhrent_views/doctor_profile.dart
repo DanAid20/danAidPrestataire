@@ -119,14 +119,14 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        userProvider.getProfileType == adherent ? Navigator.pop(context) : doctorProvider.getDoctor.id == doctor.getDoctor.id ? controller.setIndex(1) : Navigator.pop(context);
+        userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor.id == doctor.getDoctor.id ? controller.setIndex(1) : Navigator.pop(context);
         //(adherentModelProvider.getAdherent != null) ? (adherentModelProvider.getAdherent.adherentId == userProvider.getUserId) ? Navigator.pop(context) : controller.setIndex(1) : controller.setIndex(1);
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: isPrestataire? kGold:kPrimaryColor,
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> userProvider.getProfileType == adherent ? Navigator.pop(context) : doctorProvider.getDoctor.id == doctor.getDoctor.id ? controller.setIndex(1) : Navigator.pop(context),),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor.id == doctor.getDoctor.id ? controller.setIndex(1) : Navigator.pop(context),),
           actions: [
             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
           ],
@@ -323,7 +323,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                     backgroundColor: Colors.white,
                                     child: Icon(LineIcons.stethoscope, size: wv*8, color: kSouthSeas, ),
                                   ) 
-                              : (doctorProvider.getDoctor.id == doctor.getDoctor.id) ?
+                              : (doctorProvider.getDoctor?.id == doctor.getDoctor?.id) ?
                                 TextButton(
                                   onPressed: () {Navigator.pushNamed(context, '/doctor-profile-edit');}, 
                                   child: Row(
