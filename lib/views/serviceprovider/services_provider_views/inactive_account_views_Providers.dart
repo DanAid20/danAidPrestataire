@@ -308,12 +308,16 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   Widget _buildAboutDialog(BuildContext context, bool isIninitState) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
+    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+
      bool issaveInknowUserLoading=false;
       saveDataForUnknow() async { 
         setState(() {issaveInknowUserLoading=true;});
         print(issaveInknowUserLoading);
         await createConsultationCode(exists: widget.isAccountIsExists).then((value) async {
+          if(prestataire.getServiceProvider.category=='Pharmacie'|| prestataire.getServiceProvider.category=='Hôpital'){
             await facturationCode(value);
+           } 
           setState(() {issaveInknowUserLoading=false;});
         });
         print(issaveInknowUserLoading);
@@ -639,7 +643,10 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                               isRequestLaunch=true;
                                                             });
                                                           await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
-                                                              await facturationCode(value);
+
+                                                               if(prestataire.getServiceProvider.category=='Pharmacie'|| prestataire.getServiceProvider.category=='Hôpital'){
+                                                                await facturationCode(value);
+                                                              } 
                                                               await addCodeToAdherent(userData);
                                                               adherentModelProvider.getAdherent.codeConsult=userData;
                                                               setState(() {
@@ -678,7 +685,9 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                     isRequestLaunch=true;
                                                                   });
                                                                 await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
-                                                                    await facturationCode(value);
+                                                                    if(prestataire.getServiceProvider.category=='Pharmacie'|| prestataire.getServiceProvider.category=='Hôpital'){
+                                                                      await facturationCode(value);
+                                                                    }
                                                                     await addCodeToAdherent(userData);
                                                                     adherentModelProvider.getAdherent.codeConsult=userData;
                                                                     setState(() {

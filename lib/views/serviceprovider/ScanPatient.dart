@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
+import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/serviceprovider/Ordonance.dart';
@@ -41,6 +42,7 @@ class _ScanPatientState extends State<ScanPatient> {
     bool  ifFoundDoc= false;
   @override
   Widget build(BuildContext context) {
+     MySize().init(context);
       ServicesProviderInvoice devisProvider = Provider.of<ServicesProviderInvoice>(context,listen: false);
   ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
@@ -112,7 +114,7 @@ class _ScanPatientState extends State<ScanPatient> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: wv * 68,
+                    width:  MySize.getScaledSizeHeight(45),
                     height: hv*6,
                     decoration: BoxDecoration(
                       color: kDeepTellow,
@@ -141,7 +143,7 @@ class _ScanPatientState extends State<ScanPatient> {
                         Text(
                           S.of(context).scannerLaCarteDuPatient,
                           style: TextStyle(
-                              fontSize: fontSize(size: wv * 5),
+                              fontSize: MySize.size10,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.3,
                               color: kFirstIntroColor),

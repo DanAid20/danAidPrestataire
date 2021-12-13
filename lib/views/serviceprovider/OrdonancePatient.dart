@@ -247,7 +247,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             child: Column(
               children: [
                 Container(
-                  height: MySize.getScaledSizeHeight(120),
+                  height: MySize.getScaledSizeHeight(130),
                   width: double.infinity,
                   padding: EdgeInsets.only(bottom: hv*1, left: wv*2),
                   decoration: BoxDecoration( color: kGoldlightYellow),
@@ -457,7 +457,6 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                 ),
                             Container(
                               width: double.infinity,
-                              height: hv*12,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 mainAxisSize: MainAxisSize.max,
@@ -611,7 +610,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             subtitle: Text(state),
             children: <Widget>[
               Container(width: double.infinity, height:hv*30,decoration: BoxDecoration(color: Colors.white, ),
-            child: Expanded(child: service.drugsList.isNotEmpty && service.drugsUrls.isNotEmpty?
+            child: Expanded(child: service.drugsList!=null && service.drugsUrls!=null && service.drugsList.isNotEmpty && service.drugsUrls.isNotEmpty?
             ListView.builder(
                  itemCount:  service.drugsList.length,
                  itemBuilder: (BuildContext context, int index) {
@@ -683,13 +682,13 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                  },
                ),)  
          ),
-         ButtonBar(alignment:  widget.devis.drugsList.length==0?  MainAxisAlignment.center: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
+         ButtonBar(alignment: widget.devis.drugsList!=null?  MainAxisAlignment.center: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
-          widget.devis.drugsList.length==0? 
+         widget.devis.drugsList!=null? 
            Container( alignment: Alignment.center, child: Center(child: TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),)))
            :
           TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
-          widget.devis.drugsList.length==0? Container() :TextButton(
+         widget.devis.drugsList!=null? Container() :TextButton(
             style: flatButtonStyle,
             onPressed: () { 
               if(widget.devis.drugsList!=null){
@@ -735,11 +734,11 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                   valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ) : Column( children: <Widget>[Icon(Icons.save, color: isDeleteddrugsItems==true? kBlueForce: Colors.grey),
                 Padding( padding: const EdgeInsets.symmetric(vertical: 2.0),),
-                Text('enregistrer', style: TextStyle(color: isDeleteddrugsItems==true? kBlueForce: Colors.grey )),
+                Text(S.of(context).enregistrer, style: TextStyle(color: isDeleteddrugsItems==true? kBlueForce: Colors.grey )),
               ],
             ),
           ),
-          widget.devis.drugsList.length==0? Container() : TextButton(
+         widget.devis.drugsList!=null? Container() : TextButton(
             style: flatButtonStyle,
             onPressed: () {
                 if(isDeleteddrugsItems==true){
@@ -808,7 +807,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             children: <Widget>[
               Icon(Icons.arrow_upward),
               Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-              Text('Close'),
+              Text(S.of(context).close),
             ],
           ),
         ),

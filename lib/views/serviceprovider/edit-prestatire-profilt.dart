@@ -760,7 +760,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                               "userCountryName": userProvider.getCountryName,
                               "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
-                              "nameKeywords": Algorithms.getKeyWords( _companyController.text.toString())
+                              "nameKeywords": Algorithms.getKeyWords( _companyController.text.toString().isEmpty? contactName: _companyController.text.toString())
                             }, SetOptions(merge: true))
                             .then((value) async {
                               HiveDatabase.setRegisterState(true);

@@ -702,7 +702,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       return HealthBookScreen();
     }
     else if(controller.getIndex == 3){
-      return userProvider.getProfileType != serviceProvider ?  PartnersScreen() : ProfilDoctorView();
+      return  PartnersScreen();
     }
     else if(controller.getIndex == 4){
       userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor) : print("waouu");

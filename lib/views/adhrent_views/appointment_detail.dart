@@ -370,9 +370,7 @@ class _AppointmentState extends State<Appointment> {
                                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 10000,),),);
                               }
                               else {
-                                setState(() {
-                                  announceLoading = false;
-                                });
+                                setState(() { announceLoading = false; });
                                 //Navigator.pushNamed(context, '/appointment');
                               }
                             } else {
