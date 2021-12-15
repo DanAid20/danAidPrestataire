@@ -68,9 +68,15 @@ class _ScanPatientState extends State<ScanPatient> {
             child: Container(
               child: Column(
                 children: [
-                  Text(S.of(context).crerUnDevis),
+                  Text("Scanner le code",style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.3,
+                              color: kPrimaryColor)),
                   Text(
-                      '${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}')
+                      '${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}',style: TextStyle(
+                              fontWeight: FontWeight.w200,
+                              letterSpacing: 0.3,
+                              color: kPrimaryColor))
                 ],
               ),
             ),
@@ -114,7 +120,7 @@ class _ScanPatientState extends State<ScanPatient> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width:  MySize.getScaledSizeHeight(45),
+                    width:  MySize.getScaledSizeHeight(250),
                     height: hv*6,
                     decoration: BoxDecoration(
                       color: kDeepTellow,
@@ -143,7 +149,7 @@ class _ScanPatientState extends State<ScanPatient> {
                         Text(
                           S.of(context).scannerLaCarteDuPatient,
                           style: TextStyle(
-                              fontSize: MySize.size10,
+                              fontSize: MySize.size18,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.3,
                               color: kFirstIntroColor),

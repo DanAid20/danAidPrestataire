@@ -15,18 +15,18 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class OwnerUserListView extends StatefulWidget {
+class OwnerUserListViewServicesProviders extends StatefulWidget {
   final String idOfAdherent;
   final BeneficiaryModel  beneficiare;
   final String consultationCode;
   final DateTime createdAt;
-  OwnerUserListView({Key key, this.consultationCode, this.createdAt, this.idOfAdherent, this.beneficiare}) : super(key: key);
+  OwnerUserListViewServicesProviders({Key key, this.consultationCode, this.createdAt, this.idOfAdherent, this.beneficiare}) : super(key: key);
 
   @override
-  _OwnerUserListViewState createState() => _OwnerUserListViewState();
+  _OwnerUserListViewServicesProvidersState createState() => _OwnerUserListViewServicesProvidersState();
 }
 
-class _OwnerUserListViewState extends State<OwnerUserListView> {
+class _OwnerUserListViewServicesProvidersState extends State<OwnerUserListViewServicesProviders> {
 UseCaseModelProvider userCaprovider;
 double underWeight;
 double normaleWeight;

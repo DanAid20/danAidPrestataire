@@ -89,12 +89,14 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
      await FirebaseFirestore.instance
           .collection('APPOINTMENTS').doc(code).get()
           .then((value) {
-          print(value);
-          print(value.data().toString());
+          print(value.id);
+          print(value.data());
+        print("--------------------------------");   
+          print( value.data().toString());
         print("--------------------------------");   
         if (value.data()!=null) {
           setState(() {
-           userId= code;
+           userId= code;  
            dateNaiss= value.data()['birthDate'];
            urlImage= value.data()['avatarUrl'];
            username= value.data()['username'];
@@ -262,7 +264,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                         SizedBox(height: hv*0.3,),
                          Container(
                           margin: EdgeInsets.only(left: wv*1),
-                          child: Text('$username', style: TextStyle( color: kSimpleForce, fontSize: wv*9, fontWeight: FontWeight.w800),)),
+                          child: Text(username!=null?'$username':"pas definie", style: TextStyle( color: kSimpleForce, fontSize: wv*9, fontWeight: FontWeight.w800),)),
                          SizedBox(height: hv*0.3,),
                            Container(
                           margin: EdgeInsets.only(left: wv*1),

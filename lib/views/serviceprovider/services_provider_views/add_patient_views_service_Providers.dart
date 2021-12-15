@@ -11,6 +11,7 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
+import 'package:danaid/views/serviceprovider/services_provider_views/inactive_account_views_Providers.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -116,7 +117,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => InactiveAccount(
+                  builder: (context) => InactiveAccountProvider(
                     data: adherent,
                     phoneNumber: barcode,
                     isAccountIsExists: true,
@@ -133,7 +134,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => InactiveAccount(
+                  builder: (context) => InactiveAccountProvider(
                     isAccountIsExists: false,
                     data: null,
                     phoneNumber: phone,
@@ -688,7 +689,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => InactiveAccount(
+                                        builder: (context) => InactiveAccountProvider(
                                           data: adherent,
                                           phoneNumber: phone,
                                           isAccountIsExists: true,
@@ -707,7 +708,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => InactiveAccount(
+                                        builder: (context) => InactiveAccountProvider(
                                           isAccountIsExists: false,
                                           data: null,
                                           phoneNumber: phone,
@@ -739,7 +740,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => InactiveAccount(
+                                        builder: (context) => InactiveAccountProvider(
                                           data: adherent,
                                           phoneNumber: phone,
                                           isAccountIsExists: true,
@@ -756,7 +757,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => InactiveAccount(
+                                        builder: (context) => InactiveAccountProvider(
                                           isAccountIsExists: false,
                                           data: null,
                                           phoneNumber: phone,

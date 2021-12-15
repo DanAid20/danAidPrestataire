@@ -15,6 +15,7 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/add_patient_views.dart';
+import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart';
 import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
 import 'package:danaid/views/serviceprovider/ScanPatient.dart';
 import 'package:danaid/views/serviceprovider/ServicesProvider_QuoteEmit.dart';
@@ -225,11 +226,14 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 ): SizedBox.shrink(),
                 GestureDetector(
                   onTap: () {
-                     Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PrestationHistoryForProvider()),
-              );
+                    isPrestataire? 
+                     Navigator.push( context,
+                        MaterialPageRoute(
+                            builder: (context) => PrestationHistoryForProvider()),
+                      ): Navigator.push( context,
+                        MaterialPageRoute(
+                            builder: (context) =>PrestationHistory()),
+                      );
                      
                   },
                   child: displsOtherServices(
@@ -360,7 +364,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   getListOfUser(startDays, endDay, date, doctorId) {
     print(doctorId);
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
-        .collection("DEVIS")
+        .collection("APPOINTMENTS")
         .where("doctorId", isEqualTo: doctorId)
         .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
         .orderBy("start-time", descending: true)

@@ -62,16 +62,22 @@ double imc=0;
    return input!=null ? double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1)):0.0 ;
  }
  calculWeight(){
-   if(widget.beneficiare.weight!=null && widget.beneficiare.height!=null){
-   print(widget.beneficiare.weight.runtimeType); 
-   print(widget.beneficiare.weight);
-   print(widget.beneficiare.weight.runtimeType);
+   try {
+      if(widget.beneficiare.weight!=null && widget.beneficiare.height!=null &&  widget.beneficiare.height!=""){
      imc=getNumber(toInt(widget.beneficiare.weight) / (convertToMeter(widget.beneficiare.height) * convertToMeter(widget.beneficiare.height)), precision: 1);
     if(imc<=18.5){setState(() {underWeight=imc;});}
     else if(imc>=18.5 && imc<=25){setState(() {normaleWeight=imc;});}
     else if(imc>=25 && imc<=30){setState(() {overWeight=imc;});}
     else if(imc>30){setState(() {svarWeight=imc;});}
+    print(underWeight);
+    print(normaleWeight);
+    print(overWeight);
+    print(svarWeight);
    }
+   } catch (e) {
+     print(e.toString());
+   }
+  
  }
 
   @override

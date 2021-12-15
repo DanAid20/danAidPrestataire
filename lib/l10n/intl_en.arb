@@ -892,5 +892,11 @@
   "confirmerLaListe": "confirm list",
   "crer": "create",
   "enregistrer": "save",
-  "close": "Close"
+  "close": "Close",
+  "lePatientABienTAjouter": "le patient a bien été ajouter ",
+  "uneConsultationEnCoursTDtecterPourCePatientDonc": "une consultation en cours à été détecter pour ce patient donc il ne vous est pas possible de créer une nouvelle consultation dans un intervalle de deux semaines depuis sa dernière consultation. Pour plus d'informations contactez le service client. ",
+  "lePatientABienTAjouterAuSysteme": "le patient a bien été ajouter au systeme.",
+  "uneErreurEstSurvenuVeuillezContacterLeService": "une erreur est survenu veuillez contacter le service ",
+  "ajouterCePatient": "Ajouter ce patient",
+  "nomDuPatient": "Nom du patient"
 }

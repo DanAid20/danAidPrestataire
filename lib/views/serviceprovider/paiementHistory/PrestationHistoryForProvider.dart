@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 class PrestationHistoryForProvider extends StatefulWidget {
   PrestationHistoryForProvider({Key key}) : super(key: key);
@@ -63,7 +64,9 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
             paidYear=0;
             notpaidYear=0;
             facture=[];
-          loading=true  ;                            
+      setState(() {
+          loading=true ;  
+        });                            
     var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate), 1, 1, 0, 0 ));
  
      ServiceProviderModelProvider prestataireProvider =
@@ -189,12 +192,11 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
               ),
             ),
             actions: [
-              IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icons/Bulk/Search.svg',
-                  color: kSouthSeas,
-                ),
-                onPressed: () {},
+                IconButton(
+                icon: Icon(MdiIcons.refresh, color: kSouthSeas, size: wv*8,),
+                onPressed: () {
+                   getPaiement(currentDate: data);
+                },
                 color: kSouthSeas,
               ),
               IconButton(
@@ -211,6 +213,10 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
     
       child: Column(
               children: [
+                loading?Container(
+                width: double.infinity,
+                height: hv*7.5,
+                child: Loaders().buttonLoader(kPrimaryColor),): Container(),
                 Container(   
                   margin : EdgeInsets.only(
                               left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,

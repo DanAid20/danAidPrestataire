@@ -1,10 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
+import 'package:danaid/core/models/usecaseModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
@@ -14,11 +16,14 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_View.dart';
+import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/providers/doctorModelProvider.dart';
@@ -48,47 +53,49 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   BeneficiaryModel beneficiary;
   bool isloading=false;
   bool isRequestLaunch=false;
+  bool registerClientError=false;
+  String registerClient;
   UseCaseModelProvider userCaprovider;
   String famillyDoctorNAme;
   CarouselController beneficiaryCarouselController = CarouselController();
+  TextEditingController _patientController = new TextEditingController();
+    final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
 
   List<Widget> beneficiaries;
   var code;
   @override
   void initState() {
      code= getRandomString(4);
-     print(widget.data.toString());
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (widget.isAccountIsExists == false || widget.data==null) {
+      if (widget.isAccountIsExists == false) {
         await showDialog<String>(
             barrierDismissible: false,
             context: context,
             builder: (BuildContext context) =>
                 _buildAboutDialog(context, true));
       }else{
-         getListOfUser();
-          if(widget.data!=null){
-            
-            getFamillyDoctorName(widget.data.familyDoctorId);
-            
-          }
+        getListOfUser();
       }
 
     });
     super.initState();
   userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
-  }
- Future<String> createConsultationCode({bool exists=false, String id}) async {
-    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
-
+   if(widget.data!=null){
     
+    getFamillyDoctorName(widget.data.familyDoctorId);
+    
+   }
+  }
+ Future<String> createConsultationCode({bool exists=false, String id, String name, String phone}) async {
+     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
+
     var date= DateTime.now();
     var newUseCase =FirebaseFirestore.instance.collection('USECASES').doc();
      newUseCase.set({
       'id': exists==false?newUseCase.id:code,
-      'adherentId':exists==false?null: adherentUserSelected.adherentId,
-      'beneficiaryId':exists==false?null: adherentUserSelected.matricule,
-      'beneficiaryName':exists==false?null:adherentUserSelected.familyName,
+      'adherentId':exists==false && phone.isNotEmpty?phone: adherentUserSelected.adherentId,
+      'beneficiaryId':exists==false && phone.isNotEmpty?phone: adherentUserSelected.matricule,
+      'beneficiaryName':exists==false&& name.isNotEmpty ? name:adherentUserSelected.familyName,
       'otherInfo':'',
       'consultationCode': code,
       'idMedecin' : prestataire.getServiceProvider.id,
@@ -127,14 +134,15 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     });
   
   }
-  facturationCode(id) async {
-     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+  facturationCode(id,{String name,String phone}) async {
+     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
+
     await FirebaseFirestore.instance.collection('USECASES').doc(id)
     .collection('FACTURATIONS').doc().set({
       'id':Utils.createCryptoRandomString(8),
-      'idAdherent': widget.isAccountIsExists==false?null: adherentUserSelected.adherentId,
-      'idFammillyMember': widget.isAccountIsExists==false ? widget.phoneNumber : null,
-      'idBeneficiairy': widget.isAccountIsExists==false ? null: adherentUserSelected.matricule,
+      'idAdherent': widget.isAccountIsExists==false && phone.isNotEmpty?phone: adherentUserSelected.adherentId,
+      'idFammillyMember': widget.isAccountIsExists==false && phone.isNotEmpty ? widget.phoneNumber : phone,
+      'idBeneficiairy': widget.isAccountIsExists==false && phone.isNotEmpty ? phone: adherentUserSelected.matricule,
       'idMedecin':prestataire.getServiceProvider.id,
       'amountToPay': 2000,
       'isSolve':false,
@@ -202,7 +210,9 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
      AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
       BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
       String medecin;
-      
+      print("------------");
+      print(adherentProvider.getAdherent);
+      print("------------");
       if(adherentProvider.getAdherent.familyDoctorId != null){
         FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent.familyDoctorId).get().then((doc){
           String name = doc.data()["nomDefamille"];
@@ -278,26 +288,22 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     return 'YM'+result;
   } 
   
-  saveSucces(BuildContext context) {
-
+  saveSucces(BuildContext context, {String string}) {
   // set up the button
-  Widget okButton = FlatButton(
+  Widget okButton = TextButton(
     child: Text("OK"),
     onPressed: () {
         Navigator.pop(context);
      },
   );
-
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text(S.of(context).infos),
-    content: Text(S.of(context).cetAdherentABienTCrer),
+    content: Text(string.isNotEmpty? string :S.of(context).cetAdherentABienTCrer),
     actions: [
       okButton,
     ],
   );
-
-  // show the dialog
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -308,16 +314,12 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   Widget _buildAboutDialog(BuildContext context, bool isIninitState) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
-    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-
      bool issaveInknowUserLoading=false;
-      saveDataForUnknow() async { 
+      saveDataForUnknow(name,phone) async { 
         setState(() {issaveInknowUserLoading=true;});
         print(issaveInknowUserLoading);
-        await createConsultationCode(exists: widget.isAccountIsExists).then((value) async {
-          if(prestataire.getServiceProvider.category=='Pharmacie'|| prestataire.getServiceProvider.category=='Hôpital'){
-            await facturationCode(value);
-           } 
+        await createConsultationCode(exists: widget.isAccountIsExists ,name:name,phone:phone).then((value) async {
+            await facturationCode(value,name:name,phone:phone);
           setState(() {issaveInknowUserLoading=false;});
         });
         print(issaveInknowUserLoading);
@@ -348,6 +350,20 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      Align(
+                        alignment: Alignment.topRight,
+                        child:GestureDetector(
+                          onTap: (){
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration:BoxDecoration(
+                               borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Icon(MdiIcons.close, color: kPrimaryColor, size: wv*10,)),
+                        )
+                      ),
                       Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -412,6 +428,19 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                           textAlign: TextAlign.center,
                         ),
                       ),
+                      SizedBox(height: hv*2.5,),
+                        Form(key: _FormKey,
+                           child: Column(children: [
+                      CustomTextField(
+                        label: "Nom du patient",
+                        hintText:"Jean MArie Nkah",
+                        enabled: true,
+                        controller: _patientController,
+                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                      ),
+                     
+                            ] )
+                            )
                     ],
                   ),
                 ),
@@ -442,19 +471,50 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         ),
                         child:   TextButton(
                           onPressed: () async {
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (BuildContext context) =>
-                            //       _buildAboutDialog(context, false),
-                            // );
-                            
-                            if(widget.isAccountIsExists == false){
-                                saveDataForUnknow().then((value) => saveSucces(context));
+                            if (_FormKey.currentState.validate()){
+                               print(_patientController.text);
+                               print(widget.phoneNumber);
+                                 ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
+
+                                 var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                .where('adherentId', isEqualTo: widget.phoneNumber ).where('idMedecin',isEqualTo:prestataire.getServiceProvider.id).orderBy('createdDate').limit(1).get(); 
+                                usecase.then((value) async {
+                                  if(value.size>0){
+                                      print(value.docs[0].data());
+                                    var useCase= value.docs[0].data();
+                                     Timestamp t = useCase['createdDate'].runtimeType==DateTime?Timestamp.fromDate( useCase['createdDate']): useCase['createdDate'];
+                                                    DateTime d = t.toDate();
+                                                   print(t);
+                                       print(d);
+                                    final date2 = DateTime.now(); 
+                                    final difference = date2.difference(d).inDays;
+                                     if( difference>14 &&  useCase['consultationCode']!=null ){
+                                         saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
+                                          saveSucces(context,string:S.of(context).lePatientABienTAjouter);
+                                          _patientController.clear();
+                                            setState(() {issaveInknowUserLoading=false;});
+                                        });
+                                     }else{
+                                        saveSucces(context,string:S.of(context).uneConsultationEnCoursTDtecterPourCePatientDonc);
+                                     }
+                                  }else{
+                                     saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
+                                          saveSucces(context,string:S.of(context).lePatientABienTAjouterAuSysteme);
+                                          _patientController.clear();
+                                           setState(() {issaveInknowUserLoading=false;});
+                                        });
+                                  }
+                                    
+                                }).catchError((onError){
+                                  print(onError);
+                                  saveSucces(context,string:S.of(context).uneErreurEstSurvenuVeuillezContacterLeService);
+                                });
                             }
+                           
                           },
                           child:  Text( 
                             widget.isAccountIsExists == false
-                                ? S.of(context).ajouterUneFamille
+                                ? "Ajouter ce patient"
                                 : S.of(context).poursuivreHorsParcours,
                             style: TextStyle(
                                 color: textColor,
@@ -488,8 +548,9 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   Widget build(BuildContext context) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel adherent = adherentModelProvider.getAdherent;
-    ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-
+     DoctorModelProvider doctorProvider =
+        Provider.of<DoctorModelProvider>(context, listen: false);
+        print(widget.data);
     return SafeArea(
         top: false,
         bottom: false,
@@ -506,7 +567,12 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                 alignment: Alignment.center,
                 child: Container(
                   child: Column(
-                    children: [Text(S.of(context).famille), Text('...')],
+                    children: [Text(S.of(context).famille ,style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.3,
+                              color: kPrimaryColor)), Text('...',style: TextStyle(
+                              letterSpacing: 0.3,
+                              color: kPrimaryColor))],
                   ),
                 ),
               ),
@@ -586,6 +652,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                   //     Text(adherentUserSelected.),
                   //   ],
                   // ))),
+                 
                       widget.isAccountIsExists == false
                           ? SizedBox.shrink()
                           : isRequestLaunch ? Loaders().buttonLoader(kPrimaryColor) :Container(
@@ -596,7 +663,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                   width: wv * 80,
                                   child: TextButton(
                                     onPressed: () async {
-                                   
+                                         print("fdskfjgdskjfhdljksflkjsdflkjsdhfkljasdfhjkdasf");
                                       // if (adherent.enable == false) {
                                       //   showDialog(
                                       //       context: context,
@@ -614,6 +681,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                         //           )),
                                         // );
                                       //}
+                                      print(userSelected);
                                        final Map<String, dynamic> userData = {
                                             'codeConsultation': code,
                                             'createdDate': DateTime.now()
@@ -621,32 +689,28 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                        
                                        if(userSelected!=-1){
                                          print(adherentModelProvider.getAdherent.adherentId);
-                                         print(prestataire.getServiceProvider.id);
+                                          ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context,listen: false);
+
                                              var usecase= FirebaseFirestore.instance.collection('USECASES')
                                               .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:prestataire.getServiceProvider.id).orderBy('createdDate').get(); 
                                               usecase.then((value) async {
-                                                print("++++++++++++++");
-                                                print(value.docs);
-                                                    if(value.docs.isEmpty){    
+                                                print(value.docs.isEmpty);
+                                                    if(value.docs.length==0){    
                                                       // cette consultation existe pas encore    
                                                       //  Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'];
                                                       //   DateTime d = t.toDate();
                                                       //   final date2 = DateTime.now();
                                                       //   final difference = date2.difference(d).inDays;
                                                       //    adherentModelProvider.getAdherent.codeConsult['createdDate']
-                                                      // print("--------------------${adherentModelProvider.getAdherent.adherentId}");
-                                                      // print("--------------------${adherentModelProvider.getAdherent.codeConsult}");
-                                                      //print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
+                                                       print("-------nnnnnnn--------${adherentModelProvider.getAdherent.codeConsult}");
+                                                      // print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
                                                       if(adherentModelProvider.getAdherent.codeConsult==null){
                                                         print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
                                                         setState(() {
                                                               isRequestLaunch=true;
                                                             });
                                                           await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
-
-                                                               if(prestataire.getServiceProvider.category=='Pharmacie'|| prestataire.getServiceProvider.category=='Hôpital'){
-                                                                await facturationCode(value);
-                                                              } 
+                                                              await facturationCode(value);
                                                               await addCodeToAdherent(userData);
                                                               adherentModelProvider.getAdherent.codeConsult=userData;
                                                               setState(() {
@@ -669,10 +733,23 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                             ScaffoldMessenger.of(context).showSnackBar(
                                                         SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
                                                           });
+                                                      }else{
+                                                         Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      OwnerUserListView(
+                                                                        idOfAdherent:
+                                                                            widget.phoneNumber,
+                                                                        beneficiare: adherentUserSelected,
+                                                                        consultationCode:  adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
+                                                                        createdAt:  DateTime.now(),
+                                                                      )),
+                                                            ); 
                                                       }
                                                           
                                                     }else if(value.docs.isNotEmpty){
-                                                     Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider.getAdherent.codeConsult['createdDate']):adherentModelProvider.getAdherent.codeConsult['createdDate'];
+                                                    Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider.getAdherent.codeConsult['createdDate']):adherentModelProvider.getAdherent.codeConsult['createdDate'];
                                                     DateTime d = t.toDate();
                                                    print(t);
                                                    print(d);
@@ -685,9 +762,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                     isRequestLaunch=true;
                                                                   });
                                                                 await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
-                                                                    if(prestataire.getServiceProvider.category=='Pharmacie'|| prestataire.getServiceProvider.category=='Hôpital'){
-                                                                      await facturationCode(value);
-                                                                    }
+                                                                    await facturationCode(value);
                                                                     await addCodeToAdherent(userData);
                                                                     adherentModelProvider.getAdherent.codeConsult=userData;
                                                                     setState(() {
