@@ -151,7 +151,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                               borderRadius: BorderRadius.circular(15)),
                           child: BeneficiaryStream(standardUse: true),
                         ),
-                        userProvider.getUserModel?.profileType != beneficiary ? Positioned(
+                        userProvider.getUserModel?.profileType != beneficiary && adherentProvider.getAdherent.adherentPlan != 1.1 ? Positioned(
                           right: wv * 0,
                           bottom: hv * 8,
                           child: IconButton(
@@ -196,23 +196,23 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
                       action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
                     ) : Container(),
+                    /*adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary
+                      ? HomePageComponents.accountParameters(
+                          title: "Domicile Principale",
+                          subtitle:
+                              adherentProvider.getAdherent.address != null
+                                  ? adherentProvider.getAdherent.address
+                                  : "Non configurée",
+                          svgIcon: "assets/icons/Two-tone/Home.svg",
+                          action: () => Navigator.pushNamed(
+                              context, '/adherent-profile-edit'))
+                    : Container(),*/
                     HomePageComponents.accountParameters(
                       title: S.of(context).mesStatistiques, 
                       subtitle: S.of(context).consulter, 
                       svgIcon: "assets/icons/Bulk/Graph.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-stats-page')
                     ),
-                    adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary
-                        ? HomePageComponents.accountParameters(
-                            title: "Domicile Principale",
-                            subtitle:
-                                adherentProvider.getAdherent.address != null
-                                    ? adherentProvider.getAdherent.address
-                                    : "Non configurée",
-                            svgIcon: "assets/icons/Two-tone/Home.svg",
-                            action: () => Navigator.pushNamed(
-                                context, '/adherent-profile-edit'))
-                        : Container(),
                     HomePageComponents.accountParameters(
                       title: S.of(context).pointsEtBadges, 
                       subtitle: S.of(context).consulterEtUtiliserSesBnfices, 

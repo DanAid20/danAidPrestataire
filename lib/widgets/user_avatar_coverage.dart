@@ -3,6 +3,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -116,13 +117,8 @@ class UserAvatarAndCoverage extends StatelessWidget {
             children: [
               Text(userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).bonjour+" ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
-                userProvider.getProfileType == adherent||userProvider.getProfileType == beneficiary ? 
-                adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).couvertureNiveau0Dcouverte :
-                  adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).couvertureNiveauIAccs :
-                    adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).couvertureNiveauIiAssist :
-                      adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).couvertureNiveauIiiSrnit : 
-                userProvider.getProfileType == doctor ?   
-                      S.of(context).nousVousAttendions : S.of(context).nousVousAttendions: S.of(context).nousVousAttendions : S.of(context).nousVousAttendions
+                userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan) : 
+                userProvider.getProfileType == doctor ?   S.of(context).nousVousAttendions : S.of(context).nousVousAttendions
                 , style: TextStyle(fontSize: wv*2.8, color: kPrimaryColor)),
             ],
           ),

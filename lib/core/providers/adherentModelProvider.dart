@@ -150,8 +150,13 @@ class AdherentModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setAdherentPlan(int val){
+  void setAdherentPlan(num val){
     _adherent.adherentPlan = val;
+    notifyListeners();
+  }
+
+  void setAnnualCoverageLimit(num val){
+    _adherent.insuranceLimit = val;
     notifyListeners();
   }
 

@@ -3,6 +3,7 @@ import 'package:danaid/core/models/planModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -22,12 +23,13 @@ class ComparePlans extends StatefulWidget {
 
 class _ComparePlansState extends State<ComparePlans> {
 
-  int isDecouverte = 0;
-  int isAcces = 1;
-  int isAssist = 2;
-  int isSerenity = 3;
-  int state;
-  Map<int, PlanModel> plans = {};
+  num isDecouverte = 0;
+  num isAcces = 1;
+  num isAssist = 2;
+  num isSerenity = 3;
+  num isAcademik = 1.1;
+  num state;
+  Map<num, PlanModel> plans = {};
   PlanModel currentPlan;
 
   getPlans() async {
@@ -46,7 +48,7 @@ class _ComparePlansState extends State<ComparePlans> {
     });
   }
 
-  changePlan(int plan) async {
+  changePlan(num plan) async {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
     await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
@@ -110,10 +112,7 @@ class _ComparePlansState extends State<ComparePlans> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
               child: HomePageComponents.getInfoActionCard(
-                title: adherentProvider.getAdherent.adherentPlan == 0 ? "Vous êtes au Niveau 0: Découverte"
-                  : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès"
-                    : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist"
-                      : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
+                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan),
                 actionLabel: S.of(context).comparerLesServices,
                 subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
                 noAction: true
@@ -198,6 +197,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             headerCell(text: S.of(context).niveau0, icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
                             headerCell(text: S.of(context).niveauI, icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
+                            headerCell(text: "Niveau I.I", icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcademik),
                             headerCell(text: S.of(context).niveauIi, icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
                             headerCell(text: S.of(context).niveauIii, icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
                           ]
@@ -207,6 +207,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(text: plans[0].coveragePercentage.toString()+"%", fontSize: 30, textColor: kDeepTeal, isActive: state == isDecouverte),
                             defaultCell(text: plans[1].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcces),
+                            defaultCell(text: plans[1.1].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcademik),
                             defaultCell(text: plans[2].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAssist),
                             defaultCell(text: plans[3].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isSerenity)
                           ]
@@ -216,6 +217,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
                             defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: plans[1.1].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcademik),
                             defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
                             defaultCell(text: plans[3].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
                           ]
@@ -225,6 +227,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
                             defaultCell(text: plans[1].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: plans[1.1].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcademik),
                             defaultCell(text: plans[2].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
                             defaultCell(text: plans[3].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
                           ]
@@ -234,6 +237,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(text: (plans[0].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isDecouverte),
                             defaultCell(text: (plans[1].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: (plans[1.1].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAcademik),
                             defaultCell(text: (plans[2].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAssist),
                             defaultCell(text: (plans[3].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isSerenity)
                           ]
@@ -242,6 +246,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(content: Center(child: SvgPicture.asset(plans[0].familyDoctorIsFree ? yes : no, height: 30, color: plans[0].familyDoctorIsFree ? good : bad)), isActive: state == isDecouverte),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[1].familyDoctorIsFree ? yes : no, height: 30, color: plans[1].familyDoctorIsFree ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1].familyDoctorIsFree ? yes : no, height: 30, color: plans[1.1].familyDoctorIsFree ? good : bad)), isActive: state == isAcademik),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[2].familyDoctorIsFree ? yes : no, height: 30, color: plans[2].familyDoctorIsFree ? good : bad)), isActive: state == isAssist),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[3].familyDoctorIsFree ? yes : no, height: 30, color: plans[3].familyDoctorIsFree ? good : bad)), isActive: state == isSerenity)
                           ]
@@ -250,6 +255,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(content: Center(child: SvgPicture.asset(plans[0].socialNetworkEnable ? yes : no, height: 30, color: plans[0].socialNetworkEnable ? good : bad)), isActive: state == isDecouverte),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[1].socialNetworkEnable ? yes : no, height: 30, color: plans[1].socialNetworkEnable ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1].socialNetworkEnable ? yes : no, height: 30, color: plans[1.1].socialNetworkEnable ? good : bad)), isActive: state == isAcademik),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[2].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isAssist),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[3].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isSerenity)
                           ]
@@ -258,6 +264,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             defaultCell(content: Center(child: SvgPicture.asset(plans[0].canWinPoints ? yes : no, height: 30, color: plans[0].canWinPoints ? good : bad)), isActive: state == isDecouverte),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[1].canWinPoints ? yes : no, height: 30, color: plans[1].canWinPoints ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1].canWinPoints ? yes : no, height: 30, color: plans[1.1].canWinPoints ? good : bad)), isActive: state == isAcademik),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[2].canWinPoints ? yes : no, height: 30, color: plans[2].canWinPoints ? good : bad)), isActive: state == isAssist),
                             defaultCell(content: Center(child: SvgPicture.asset(plans[3].canWinPoints ? yes : no, height: 30, color: plans[3].canWinPoints ? good : bad)), isActive: state == isSerenity)
                           ]
@@ -266,6 +273,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           children: [
                             bottomCell(content: Center(child: SvgPicture.asset(plans[0].familyCoverage ? yes : no, height: 30, color: plans[0].familyCoverage ? good : bad)), isActive: state == isDecouverte),
                             bottomCell(content: Center(child: SvgPicture.asset(plans[1].familyCoverage ? yes : no, height: 30, color: plans[1].familyCoverage ? good : bad)), isActive: state == isAcces),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[1.1].familyCoverage ? yes : no, height: 30, color: plans[1.1].familyCoverage ? good : bad)), isActive: state == isAcademik),
                             bottomCell(content: Center(child: SvgPicture.asset(plans[2].familyCoverage ? yes : no, height: 30, color: plans[2].familyCoverage ? good : bad)), isActive: state == isAssist),
                             bottomCell(content: Center(child: SvgPicture.asset(plans[3].familyCoverage ? yes : no, height: 30, color: plans[3].familyCoverage ? good : bad)), isActive: state == isSerenity)
                           ]
@@ -301,6 +309,13 @@ class _ComparePlansState extends State<ComparePlans> {
                                 title: new Text('Niveau I : Accès', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   changePlan(1);
+                                },
+                              ) : Container(),
+                              state != isAcademik ? ListTile(
+                                leading: SvgPicture.asset('assets/icons/Bulk/ShieldAcces.svg', height: 30, color: kSouthSeas),
+                                title: new Text('Niveau I.I : Academik', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                                onTap: () {
+                                  changePlan(1.1);
                                 },
                               ) : Container(),
                               state != isAssist ? ListTile(

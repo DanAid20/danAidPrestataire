@@ -336,4 +336,12 @@ class Algorithms {
             : type == hospitalization ? 'assets/icons/Bulk/Hospitalisation.svg' 
               : 'assets/icons/Bulk/Activity.svg';
   }
+
+  static String getPlanDescriptionText({num plan}){
+    return plan == 0 ? "Vous êtes au Niveau 0: Découverte"
+      : plan == 1 ? "Vous êtes au Niveau I: Accès"
+      : plan == 1.1 ? "Vous êtes au Niveau I.I: Academik"
+        : plan == 2 ? "Vous êtes au Niveau II: Assist"
+          : plan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...";
+  }
 }

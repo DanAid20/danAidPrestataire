@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/usecaseModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -25,37 +26,38 @@ class MyCoverageTabView extends StatelessWidget {
             children: [
               SizedBox(height: hv*2,),
               adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
-                title: adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
+                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan)
+                /*adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
                   : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
                     : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
-                      : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "...",
+                      : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "..."*/,
                 actionLabel: S.of(context).comparerLesServices,
                 subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
                 action: (){
                   Navigator.pushNamed(context, '/compare-plans');
                   /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
-                    .doc("3")
+                    .doc("11")
                     .set({
-                      "cotisationMensuelleFondDSoint": 9500,
+                      "cotisationMensuelleFondDSoint": 1500,
                       "couverture": 70,
                       "descriptionText": {
-                        "textCotisation" : "9500 fcfa/mois/famille",
-                        "textPeriodeTypePaiement" : "Tous les 3 mois par virement mobile",
+                        "textCotisation" : "150000 fcfa/étudiant/an",
+                        "textPeriodeTypePaiement" : "Paiement annuel ou semestriel par virement mobile",
                         "textSuivi" : "Medecin de famille",
-                        "titreNiveau" : "Niveau III: Sérénité"
+                        "titreNiveau" : "Niveau 1.1: Academik"
                       },
-                      "fraisIncription": 10000,
-                      "modeDePaiement": "Tous les 3 mois par virement mobile",
-                      "montantMaxPretSante": 200000,
+                      "fraisIncription": 5000,
+                      "modeDePaiement": "Paiement annuel ou semestriel par virement mobile",
+                      "montantMaxPretSante": 15000,
                       "montantPaiementSupplement": 2450,
-                      "nomNiveau": "Sérénité",
-                      "numeroNiveau": 3,
-                      "plafondAnnuelle": 1000000,
+                      "nomNiveau": "Academik",
+                      "numeroNiveau": 1.1,
+                      "plafondAnnuelle": 15000,
                       "userSelectedIt": false,
                       "rate": 0.05,
                       "familyDoctorIsFree": true,
                       "canWinPoints": true,
-                      "familyCoverage": true,
+                      "familyCoverage": false,
                       "socialNetworkEnable": true
                     }, SetOptions(merge: true));*/
                 }

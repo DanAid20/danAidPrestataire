@@ -5,8 +5,8 @@ import 'adherentFacturationModel.dart';
 class AdherentModel {
   String adherentId, authId, familyDoctorId, cniName, bloodGroup, otherDocName, invitedBy, marriageCertificateName, familyName, surname, couponCodeUsed, matricule, imgUrl, gender, email, profession, regionOfOrigin, marriageCertificateUrl, otherJustificativeDocsUrl, officialDocUrl, town, profileType, address;
   Timestamp dateCreated, validityEndDate, validityStartDate, birthDate, lastDateVisited;
-  int adherentPlan, points, visitPoints;
-  num insuranceLimit, loanLimit;
+  int  points, visitPoints;
+  num insuranceLimit, adherentPlan, loanLimit;
   bool paymentIsMobile, profileEnabled, isMarried, enable, havePaid, firstInvoice, paid, stateValidate, invited;
   var phoneList;
   List<AdherentBillModel> adherentNewBill;

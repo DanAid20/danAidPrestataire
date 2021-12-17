@@ -211,6 +211,7 @@ class _ContributionsState extends State<Contributions> {
                                 paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
                                 type : invoice.type, state : 0, 
                                 action : (){
+                                  int regFee = 10000;
                                   if(invoice.type == "INSCRIPTION"){
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
                                   }
@@ -222,6 +223,10 @@ class _ContributionsState extends State<Contributions> {
                                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice,),),);
                                     }
                                     else {
+                                      FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
+                                        InvoiceModel regInvoice = InvoiceModel.fromDocument(doc);
+                                        regFee = regInvoice.amount;
+                                      });
                                       showModalBottomSheet(
                                         context: context, 
                                         builder: (BuildContext bc){
@@ -240,7 +245,7 @@ class _ContributionsState extends State<Contributions> {
                                                         id: inscriptionId,
                                                         monthlyAmount: invoice.amount,
                                                         label: invoice.label,
-                                                        registrationFee: 10000,
+                                                        registrationFee: regFee,
                                                         text: {"titreNiveau": invoice.label}
                                                       );
                                                       planProvider.setPlanModel(plan);

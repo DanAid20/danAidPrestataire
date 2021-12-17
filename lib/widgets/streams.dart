@@ -56,7 +56,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Row(
                   children: [
                     widget.standardUse ? HomePageComponents.beneficiaryCard(
-                      name: adherentProvider.getAdherent.cniName,
+                      name: adherentProvider.getAdherent.cniName != null ? adherentProvider.getAdherent.cniName : adherentProvider.getAdherent.surname,
                       edit: userProvider.getUserModel?.profileType != CONST.beneficiary,
                       imgUrl: adherentProvider.getAdherent.imgUrl, 
                       action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
