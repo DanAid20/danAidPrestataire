@@ -4,6 +4,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/models/invoiceModel.dart';
 import 'package:danaid/core/providers/invoiceModelProvider.dart';
 import 'package:danaid/core/providers/planModelProvider.dart';
+import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -84,7 +85,7 @@ class _ContributionsState extends State<Contributions> {
         children: [
           SizedBox(height: hv*2.5,),
           HomePageComponents.getInfoActionCard(
-            title: adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte : adherentProvider.getAdherent.adherentPlan == 1 ? "Vous êtes au Niveau I: Accès" : adherentProvider.getAdherent.adherentPlan == 2 ? "Vous êtes au Niveau II: Assist" : adherentProvider.getAdherent.adherentPlan == 3 ? "Vous êtes au Niveau III: Sérénité" : "...",
+            title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan),
             actionLabel: S.of(context).comparerLesServices,
             subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
             action: ()=>Navigator.pushNamed(context, '/compare-plans')
@@ -210,7 +211,7 @@ class _ContributionsState extends State<Contributions> {
                                 lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate() : invoice.coverageEndDate.toDate(),
                                 paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
                                 type : invoice.type, state : 0, 
-                                action : (){
+                                action : () async {
                                   int regFee = 10000;
                                   if(invoice.type == "INSCRIPTION"){
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
@@ -219,14 +220,14 @@ class _ContributionsState extends State<Contributions> {
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Côtisation éffectuée",)));
                                   }
                                   else {
+                                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
+                                      InvoiceModel regInvoice = InvoiceModel.fromDocument(doc);
+                                      regFee = regInvoice.amount;
+                                    });
                                     if(invoice.invoiceIsSplitted == true){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice,),),);
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee,),),);
                                     }
                                     else {
-                                      FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
-                                        InvoiceModel regInvoice = InvoiceModel.fromDocument(doc);
-                                        regFee = regInvoice.amount;
-                                      });
                                       showModalBottomSheet(
                                         context: context, 
                                         builder: (BuildContext bc){
@@ -257,7 +258,7 @@ class _ContributionsState extends State<Contributions> {
                                                     leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
                                                     title: new Text('Segmenter la facture', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                                                     subtitle: Text("Des frais de gestion supplémentaires de 250FCFA s'appliqueront à chaque segmentation"),
-                                                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice),),),
+                                                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee),),),
                                                   )
                                                 ],
                                               ),

@@ -36,9 +36,9 @@ class MyCoverageTabView extends StatelessWidget {
                 action: (){
                   Navigator.pushNamed(context, '/compare-plans');
                   /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
-                    .doc("11")
+                    .doc("1.1")
                     .set({
-                      "cotisationMensuelleFondDSoint": 1500,
+                      "cotisationMensuelleFondDSoint": 1250,
                       "couverture": 70,
                       "descriptionText": {
                         "textCotisation" : "150000 fcfa/étudiant/an",

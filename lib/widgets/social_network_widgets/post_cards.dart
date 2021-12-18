@@ -9,6 +9,7 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:danaid/views/social_network_views/edit_post.dart';
 import 'package:danaid/views/social_network_views/post_details.dart';
+import 'package:danaid/widgets/social_network_widgets/image_full_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -172,14 +173,20 @@ class PostContainer extends StatelessWidget {
                   post.imgUrl != null ? Row(
                     children: [
                       Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(right: wv*3, top: hv*1),
-                          height: hv*15,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
-                            image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl), fit: BoxFit.cover)
+                        child: Hero(
+                          tag: post.id,
+                          child: GestureDetector(
+                            onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImageFullScreen(hero: post.id, imgUrl: post.imgUrl, title: post.title.toString(),)),),
+                            child: Container(
+                              margin: EdgeInsets.only(right: wv*3, top: hv*1),
+                              height: hv*15,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[400],
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
+                                image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl), fit: BoxFit.cover)
+                              ),
+                            ),
                           ),
                         ),
                       ),

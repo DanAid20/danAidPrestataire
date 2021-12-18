@@ -403,6 +403,8 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "ville": adherentProvider.getAdherent.town,
                                 "datDebutvalidite" : start,
                                 "datFinvalidite": end,
+                                "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                                "userCountryName": userProvider.getCountryName,
                                 "paid": false,
                                 "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)

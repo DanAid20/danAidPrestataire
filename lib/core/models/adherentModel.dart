@@ -3,7 +3,7 @@ import 'package:danaid/core/models/doctorModel.dart';
 import 'adherentFacturationModel.dart';
 
 class AdherentModel {
-  String adherentId, authId, familyDoctorId, cniName, bloodGroup, otherDocName, invitedBy, marriageCertificateName, familyName, surname, couponCodeUsed, matricule, imgUrl, gender, email, profession, regionOfOrigin, marriageCertificateUrl, otherJustificativeDocsUrl, officialDocUrl, town, profileType, address;
+  String adherentId, authId, familyDoctorId, cniName, countryName, bloodGroup, otherDocName, invitedBy, marriageCertificateName, familyName, surname, couponCodeUsed, matricule, imgUrl, gender, email, profession, regionOfOrigin, marriageCertificateUrl, otherJustificativeDocsUrl, officialDocUrl, town, profileType, address;
   Timestamp dateCreated, validityEndDate, validityStartDate, birthDate, lastDateVisited;
   int  points, visitPoints;
   num insuranceLimit, adherentPlan, loanLimit;
@@ -16,7 +16,7 @@ class AdherentModel {
   var height, weight;
   Map codeConsult;
 
-  AdherentModel({this.adherentId, this.codeConsult, this.authId, this.keywords, this.bloodGroup, this.invitedBy, this.insuranceLimit, this.invited, this.loanLimit, this.couponCodeUsed, this.firstInvoice, this.stateValidate, this.paid, this.havePaid, this.allergies, this.height, this.weight, this.validityStartDate, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
+  AdherentModel({this.adherentId, this.codeConsult, this.authId, this.keywords, this.countryName, this.bloodGroup, this.invitedBy, this.insuranceLimit, this.invited, this.loanLimit, this.couponCodeUsed, this.firstInvoice, this.stateValidate, this.paid, this.havePaid, this.allergies, this.height, this.weight, this.validityStartDate, this.phoneKeywords, this.nameKeywords, this.lastDateVisited, this.visits, this.visitPoints, this.points, this.familyDoctorId, this.familyDoctor, this.cniName, this.enable, this.otherDocName, this.marriageCertificateName, this.familyName, this.surname, this.matricule, this.imgUrl, this.gender, this.email, this.profession, this.regionOfOrigin, this.marriageCertificateUrl, this.otherJustificativeDocsUrl, this.officialDocUrl, this.town, this.profileType, this.dateCreated, this.validityEndDate, this.birthDate, this.paymentIsMobile, this.profileEnabled, this.isMarried, this.phoneList, this.adherentNewBill, this.adherentPlan, this.address, this.location});
 
   factory AdherentModel.fromDocument(DocumentSnapshot doc) {
     return AdherentModel(
@@ -72,6 +72,7 @@ class AdherentModel {
         couponCodeUsed: doc.data()["couponCodeUsed"],
         invited: doc.data()["invited"],
         invitedBy: doc.data()["invitedBy"],
+        countryName: doc.data()["userCountryName"],
         nameKeywords: doc.data()["nameKeywords"]
       );
   }

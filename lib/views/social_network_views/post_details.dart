@@ -11,6 +11,8 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/social_network_views/profile_page.dart';
 import 'package:danaid/widgets/drawer.dart';
+import 'package:danaid/widgets/social_network_widgets/image_full_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
@@ -35,6 +37,7 @@ class _PostDetailsState extends State<PostDetails> {
   FocusNode _commentFocusNode = new FocusNode();
   bool liked = false;
   List likes = [];
+  String commentToReplyId;
 
   init(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -94,14 +97,20 @@ class _PostDetailsState extends State<PostDetails> {
                       Stack(
                         alignment: AlignmentDirectional.bottomCenter,
                         children: [
-                          Container(
-                            width: double.infinity,
-                            height: 280,
-                            decoration: BoxDecoration(
-                              color: kDeepTeal,
-                              image: widget.post.imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(widget.post.imgUrl), fit: BoxFit.cover) : null
+                          Hero(
+                            tag: widget.post.id,
+                            child: GestureDetector(
+                              onTap: widget.post.imgUrl == null ? (){} : ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImageFullScreen(hero: widget.post.id, imgUrl: widget.post.imgUrl, title: widget.post.title.toString(),)),),
+                              child: Container(
+                                width: double.infinity,
+                                height: 280,
+                                decoration: BoxDecoration(
+                                  color: kDeepTeal,
+                                  image: widget.post.imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(widget.post.imgUrl), fit: BoxFit.cover) : null
+                                ),
+                                child: widget.post.imgUrl == null ? Image.asset('assets/icons/DanaidLogo.png') : null,
+                              ),
                             ),
-                            child: widget.post.imgUrl == null ? Image.asset('assets/icons/DanaidLogo.png') : null,
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(vertical: hv*3, horizontal: wv*2.5),
@@ -232,7 +241,7 @@ class _PostDetailsState extends State<PostDetails> {
                       SizedBox(height: hv*3,),
 
                       StreamBuilder(
-                        stream: docRef.collection("COMMENTAIRES").snapshots(),
+                        stream: docRef.collection("COMMENTAIRES").orderBy("dateCreated", descending: true).snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Center(
@@ -241,7 +250,7 @@ class _PostDetailsState extends State<PostDetails> {
                           }
                           List<CommentBox> comments = [];
                           for(int i = 0; i < snapshot.data.docs.length; i++){
-                            comments.add(CommentBox(comment: CommentModel.fromDocument(snapshot.data.docs[i]), groupId: widget.groupId,));
+                            comments.add(CommentBox(comment: CommentModel.fromDocument(snapshot.data.docs[i]), groupId: widget.groupId, replyFocusNode: _commentFocusNode, notifyReply: replyToComment,));
                           }
                           return Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -353,6 +362,13 @@ class _PostDetailsState extends State<PostDetails> {
       ),
     );
   }
+  void replyToComment(String commentId){
+    setState(() {
+      commentToReplyId = commentId;
+    });
+    print(commentToReplyId);
+  }
+
   void sendComment(String msg, int type){
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -363,15 +379,29 @@ class _PostDetailsState extends State<PostDetails> {
 
     if (msg != "") {
       _commentController.clear();
-      var commentRef = docRef.collection("COMMENTAIRES").doc();
+      _commentFocusNode.unfocus();
+      DocumentReference simpleCommentRef = docRef.collection("COMMENTAIRES").doc();
+      DocumentReference commentToReplyRef = docRef.collection("COMMENTAIRES").doc(commentToReplyId).collection("COMMENT_REPLIES").doc();
+      DocumentReference commentRef = commentToReplyId == null ? simpleCommentRef : commentToReplyRef;
       /*setState(() {
         lastMsgFrom = conversation.getConversation.userId;
       });*/
+      if(commentToReplyId == null){
+        FirebaseMessaging.instance.subscribeToTopic(simpleCommentRef.id);
+      }
+      else {
+        FirebaseMessaging.instance.subscribeToTopic(commentToReplyId + "_OTHER_REPLIES");
+      }
       FirebaseFirestore.instance.runTransaction((transaction) async {
         await docRef.set({
           "comments": FieldValue.increment(1),
           "responderList": FieldValue.arrayUnion([userProvider.getUserModel.userId])
           }, SetOptions(merge: true));
+        if(commentToReplyId != null){
+          docRef.collection("COMMENTAIRES").doc(commentToReplyId).update({
+            "replies": FieldValue.increment(1)
+          });
+        }
 
         await FirebaseFirestore.instance.collection("USERS").doc(widget.post.userId).set({
           "comments": FieldValue.increment(1),
@@ -388,7 +418,8 @@ class _PostDetailsState extends State<PostDetails> {
             "content": msg,
             "type": type,
             "responderProfile": userProvider.getUserModel.profileType,
-            "replying": false,
+            "replying": (commentToReplyId == null) ? false : true,
+            "replyingTo": commentToReplyId,
             "likesList": []
           });
         /*setState(() {
@@ -396,7 +427,7 @@ class _PostDetailsState extends State<PostDetails> {
           replyIsSticker = false;
           replyIsText = false;
         });*/
-      }).then((value) {userProvider.modifyPoints(5); userProvider.newComment();});
+      }).then((value) {commentToReplyId = null; userProvider.modifyPoints(5); userProvider.newComment();});
       //listScrollController.animateTo(0.0, duration: Duration(microseconds: 300), curve: Curves.easeOut);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Le message est vide'),));
@@ -407,9 +438,11 @@ class _PostDetailsState extends State<PostDetails> {
 class CommentBox extends StatelessWidget {
 
   final CommentModel comment;
+  final FocusNode replyFocusNode;
   final String groupId;
+  final Function(String id) notifyReply;
 
-  const CommentBox({ Key key, this.comment, this.groupId }) : super(key: key);
+  const CommentBox({ Key key, this.comment, this.groupId, this.replyFocusNode, this.notifyReply }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -426,7 +459,7 @@ class CommentBox extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       //mainAxisAlignment: isLocal ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        !isLocal ? Padding(
+        !(isLocal && (comment.replies == null || comment.replies == 0)) ? Padding(
           padding: EdgeInsets.only(right: wv*1, top: isDoctor ? 25 : 0),
           child: CircleAvatar(
             backgroundImage: comment.userAvatar != null ? CachedNetworkImageProvider(comment.userAvatar) : null,
@@ -436,10 +469,10 @@ class CommentBox extends StatelessWidget {
         ) : Container(),
         Expanded(
           child: Column(
-            crossAxisAlignment: isLocal ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            crossAxisAlignment: isLocal && (comment.replies == null || comment.replies == 0)  ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               isDoctor ? Align(
-                alignment: isLocal ? Alignment.bottomRight : Alignment.bottomLeft,
+                alignment: isLocal && (comment.replies == null || comment.replies == 0) ? Alignment.bottomRight : Alignment.bottomLeft,
                 child: Container(
                   margin: EdgeInsets.only(bottom: hv*0.5),
                   child: Row(
@@ -456,7 +489,7 @@ class CommentBox extends StatelessWidget {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(isLocal ? 0 : 15), topLeft: Radius.circular(isLocal ? 15 : 0), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(isLocal && (comment.replies == null || comment.replies == 0) ? 0 : 15), topLeft: Radius.circular(isLocal && (comment.replies == null || comment.replies == 0) ? 15 : 0), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
                   color: isDoctor ? kSouthSeas.withOpacity(0.2) : Colors.grey[200]
                 ),
                 child: Column(
@@ -468,13 +501,11 @@ class CommentBox extends StatelessWidget {
                 )
               ),
               Align(
-                alignment: isLocal ? Alignment.bottomRight : Alignment.bottomLeft,
+                alignment: isLocal && (comment.replies == null || comment.replies == 0) ? Alignment.bottomRight : Alignment.bottomLeft,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
-                    SizedBox(width: wv*5,),
                     Row(
                       children: [
                         Icon(comment.likesList.contains(userProvider.getUserModel.userId) ? Icons.thumb_up : LineIcons.thumbsUp, color: kSouthSeas, size: 20,),
@@ -500,15 +531,80 @@ class CommentBox extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(width: wv*2,),
+                    Row(
+                      children: [
+                        Icon(LineIcons.comment, color: kSouthSeas, size: 20,),
+                        SizedBox(width: wv*0.5,),
+                        Text(comment.replies == null ? "0" : comment.replies.toString(), style: TextStyle(fontSize: 12, color: kSouthSeas, fontWeight: FontWeight.bold)),
+                        SizedBox(width: wv*1.5,),
+                        InkWell(
+                          onTap: (){
+                            notifyReply(comment.id);
+                            replyFocusNode.requestFocus();
+                            /*if(!comment.likesList.contains(userProvider.getUserModel.userId)){
+                              docRef.collection('COMMENTAIRES').doc(comment.id).set({
+                                "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
+                              }, SetOptions(merge: true));
+                            } else {
+                              print("dislike");
+                              docRef.collection('COMMENTAIRES').doc(comment.id).set({
+                                "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
+                              }, SetOptions(merge: true));
+                            }*/
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            child: Text("Répondre", style: TextStyle(fontSize: 12)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: wv*5,),
+                    Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
                   ],
                 ),
+              ),
+              StreamBuilder(
+                stream: FirebaseFirestore.instance.collection("POSTS").doc(comment.postId).collection("COMMENTAIRES").doc(comment.id).collection("COMMENT_REPLIES").orderBy('dateCreated').snapshots(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(kSouthSeas),),
+                    );
+                  }
+                  List<ReplyBox> comments = [];
+                  for(int i = 0; i < snapshot.data.docs.length; i++){
+                    comments.add(ReplyBox(comment: CommentModel.fromDocument(snapshot.data.docs[i]), isDoctor: isDoctor, isLocal: isLocal, groupId: groupId, parentCommentId: comment.id,));
+                  }
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: wv*3),
+                    child: Column(
+                      children: comments,
+                    ),
+                  );
+                  /*return Container(
+                    padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(isLocal ? 0 : 15), topLeft: Radius.circular(isLocal ? 15 : 0), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      color: isDoctor ? kSouthSeas.withOpacity(0.2) : Colors.grey[200]
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(comment.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
+                        SelectableText(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                      ],
+                    )
+                  );*/
+                },
               ),
               SizedBox(height: hv*1,),
             ],
           ),
         ),
-        isLocal ? Padding(
+        isLocal && (comment.replies == null || comment.replies == 0) ? Padding(
           padding: EdgeInsets.only(left: wv*1, top: isDoctor ? 25 : 0),
           child: CircleAvatar(
             backgroundImage: comment.userAvatar != null ? CachedNetworkImageProvider(comment.userAvatar) : null,
@@ -517,6 +613,97 @@ class CommentBox extends StatelessWidget {
           ),
         ) : Container(),
       ],
+    );
+  }
+
+}
+
+class ReplyBox extends StatelessWidget {
+  final CommentModel comment; 
+  final String groupId, parentCommentId;
+  final bool isDoctor; 
+  final bool isLocal;
+  const ReplyBox({ Key key, this.comment, this.isDoctor, this.isLocal, this.groupId, this.parentCommentId }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+
+    DocumentReference normalRef = FirebaseFirestore.instance.collection('POSTS').doc(comment.postId).collection('COMMENTAIRES').doc(parentCommentId).collection('COMMENT_REPLIES').doc(comment.id);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(groupId).collection("POSTS_GROUPS").doc(comment.postId).collection('COMMENTAIRES').doc(parentCommentId).collection('COMMENT_REPLIES').doc(comment.id);
+    DocumentReference docRef = groupId == null ? normalRef : groupRef;
+    
+    return Container(
+      margin: EdgeInsets.only(top: hv*1),
+      child: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: wv*1, top: isDoctor ? 25 : 0),
+            child: CircleAvatar(
+              backgroundImage: comment.userAvatar != null ? CachedNetworkImageProvider(comment.userAvatar) : null,
+              backgroundColor: kDeepTeal,
+              child: comment.userAvatar == null ? Icon(LineIcons.user, color: whiteColor,) : null,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topRight: Radius.circular(isLocal ? 0 : 15), topLeft: Radius.circular(isLocal ? 15 : 0), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                  color: isDoctor ? kSouthSeas.withOpacity(0.2) : Colors.grey[200]
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(comment.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
+                    SelectableText(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                  ],
+                )
+              ),
+              
+              Align(
+                alignment: isLocal && (comment.replies == null || comment.replies == 0) ? Alignment.bottomRight : Alignment.bottomLeft,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(comment.likesList.contains(userProvider.getUserModel.userId) ? Icons.thumb_up : LineIcons.thumbsUp, color: kSouthSeas, size: 20,),
+                        SizedBox(width: wv*0.5,),
+                        Text(comment.likesList.length.toString(), style: TextStyle(fontSize: 12, color: kSouthSeas, fontWeight: FontWeight.bold)),
+                        SizedBox(width: wv*1.5,),
+                        InkWell(
+                          onTap: (){
+                            if(!comment.likesList.contains(userProvider.getUserModel.userId)){
+                              docRef.set({
+                                "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
+                              }, SetOptions(merge: true));
+                            } else {
+                              print("dislike");
+                              docRef.set({
+                                "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
+                              }, SetOptions(merge: true));
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? S.of(context).annuler : S.of(context).aimer, style: TextStyle(fontSize: 12)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: wv*5,),
+                    Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

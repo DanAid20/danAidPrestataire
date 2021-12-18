@@ -17,7 +17,8 @@ import 'package:provider/provider.dart';
 
 class PaymentCart extends StatefulWidget {
   final InvoiceModel invoice;
-  const PaymentCart({ Key key, this.invoice }) : super(key: key);
+  final num regFee;
+  const PaymentCart({ Key key, this.invoice, this.regFee }) : super(key: key);
 
   @override
   _PaymentCartState createState() => _PaymentCartState();
@@ -44,7 +45,7 @@ class _PaymentCartState extends State<PaymentCart> {
     months = widget.invoice.monthsPaid == null ? 12 : 12 - widget.invoice.monthsPaid;
     maxMonths = months;
     totalAmount = widget.invoice.amount;
-    registrationFee = widget.invoice.inscriptionId == null || widget.invoice.registrationPaid == true ? 0 : 10000;
+    registrationFee = widget.invoice.inscriptionId == null || widget.invoice.registrationPaid == true ? 0 : widget.regFee;
 
     setState(() {});
   }
@@ -138,7 +139,7 @@ class _PaymentCartState extends State<PaymentCart> {
                                         backgroundColor: kPrimaryColor,
                                         child: Icon(LineIcons.minus, color: whiteColor,),
                                       ), 
-                                      onPressed: ()=>setState((){months>1? months = months - 1 : months = 1;})
+                                      onPressed: (adherentProvider.getAdherent.adherentPlan != 1.1) ? ()=>setState((){months>1? months = months - 1 : months = 1;}) : ()=>setState((){months = 6;})
                                     ),
                                     SizedBox(width: wv*2,),
                                     IconButton(
@@ -146,7 +147,7 @@ class _PaymentCartState extends State<PaymentCart> {
                                         backgroundColor: kPrimaryColor,
                                         child: Icon(LineIcons.plus, color: whiteColor,),
                                       ), 
-                                      onPressed: ()=>setState((){months<maxMonths? months = months + 1 : months = maxMonths;})
+                                      onPressed: (adherentProvider.getAdherent.adherentPlan != 1.1) ? ()=>setState((){months<maxMonths? months = months + 1 : months = maxMonths;}) : ()=>setState((){months = 12;})
                                     ),
                                   ],
                                 ),
@@ -245,17 +246,23 @@ class _PaymentCartState extends State<PaymentCart> {
                                 description: camp.description,
                                 firstDate: camp.startDate.toDate(),
                                 lastDate: camp.endDate.toDate(),
-                                amount: camp.amount,
+                                amount: camp.scope == "INSCRIPTION" ? widget.regFee < 10000 ? widget.regFee : camp.amount : camp.amount,
                                 active: camp.active,
                                 chosen: campaignsChosen.contains(camp.id),
                                 action: (){
+                                  num amount = camp.amount;
+                                  if(camp.scope == "INSCRIPTION"){
+                                    if(widget.regFee < 10000){
+                                      amount = widget.regFee;
+                                      setState(() {});
+                                    }
+                                  }
                                   if(camp.requireCoupon == true){
                                     if(adherentProvider.getAdherent.couponCodeUsed != null){
                                       if(campaignsChosen.contains(camp.id)){
                                         campaignsChosen.remove(camp.id);
-                                        registrationFee = registrationFee + camp.amount;
-                                        promoRegistrationSum = promoRegistrationSum + camp.amount;
-                                        setState(() {});
+                                        registrationFee = registrationFee + amount;
+                                        promoRegistrationSum = promoRegistrationSum + amount;
                                       }
                                       else {
                                         showDialog(context: context,
@@ -296,8 +303,8 @@ class _PaymentCartState extends State<PaymentCart> {
                                                               if(_codeController.text == adherentProvider.getAdherent.couponCodeUsed) {
                                                                 if(adherentProvider.getAdherent.dateCreated.toDate().add(Duration(days: 30)).isBefore(DateTime.now())){
                                                                   campaignsChosen.add(camp.id);
-                                                                  registrationFee = registrationFee - camp.amount;
-                                                                  promoRegistrationSum = promoRegistrationSum + camp.amount;
+                                                                  registrationFee = registrationFee - amount;
+                                                                  promoRegistrationSum = promoRegistrationSum + amount;
                                                                   print("promo somme: $promoRegistrationSum,\n regFee: $registrationFee \n campagnes: $campaignsChosen");
                                                                   setState(() {});
                                                                   Navigator.pop(context);
@@ -332,12 +339,12 @@ class _PaymentCartState extends State<PaymentCart> {
                                   else {
                                     if(campaignsChosen.contains(camp.id)){
                                       campaignsChosen.remove(camp.id);
-                                      totalAmount = totalAmount + camp.amount;
-                                      promoSum = promoSum + camp.amount;
+                                      totalAmount = totalAmount + amount;
+                                      promoSum = promoSum + amount;
                                     } else {
                                       campaignsChosen.add(camp.id);
-                                      totalAmount = totalAmount - camp.amount;
-                                      promoSum = promoSum + camp.amount;
+                                      totalAmount = totalAmount - amount;
+                                      promoSum = promoSum - amount;
                                     }
                                   }
                                   

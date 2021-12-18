@@ -4,10 +4,10 @@ class CommentModel {
   final String id, postId, userId, userName, userAvatar, content, userProfileType;
   final Timestamp dateCreated;
   final bool replying;
-  final int type;
+  final int type, replies;
   final List likesList;
 
-  CommentModel({this.id, this.replying, this.postId, this.userId, this.userName, this.userAvatar, this.content, this.userProfileType, this.dateCreated, this.type, this.likesList});
+  CommentModel({this.id, this.replying, this.replies, this.postId, this.userId, this.userName, this.userAvatar, this.content, this.userProfileType, this.dateCreated, this.type, this.likesList});
 
   factory CommentModel.fromDocument(DocumentSnapshot doc){
     return CommentModel(
@@ -21,6 +21,7 @@ class CommentModel {
       type: doc.data()["type"],
       userProfileType: doc.data()["responderProfile"],
       likesList: doc.data()["likesList"],
+      replies: doc.data()["replies"],
       replying: doc.data()["replying"]
     );
   }

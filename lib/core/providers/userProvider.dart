@@ -98,12 +98,12 @@ class UserProvider with ChangeNotifier {
   }
 
   void newComment(){
-    _user.comments = _user.comments + 1;
+    _user.comments = _user.comments != null ? _user.comments + 1 : 1;
     notifyListeners();
   }
 
   void newPost(){
-    _user.posts = _user.posts + 1;
+    _user.posts = _user.posts != null ? _user.posts + 1 : 1;
     notifyListeners();
   }
 
