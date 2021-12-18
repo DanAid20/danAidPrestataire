@@ -40,6 +40,7 @@ import 'package:danaid/views/serviceprovider/ScanPatient.dart';
 import 'package:danaid/views/serviceprovider/create_Quote.dart';
 import 'package:danaid/views/serviceprovider/edit-prestatire-profilt.dart';
 import 'package:danaid/views/serviceprovider/paiementHistory/PrestationHistoryForProvider.dart';
+import 'package:danaid/views/serviceprovider/services_provider_views/OwnerUserListViewServicesProviders.dart';
 import 'package:danaid/views/social_network_views/ambassador_dashboard.dart';
 import 'package:danaid/views/serviceprovider/services_provider_views/add_patient_views_service_Providers.dart';
 import 'package:danaid/views/serviceprovider/services_provider_views/inactive_account_views_Providers.dart';
@@ -135,6 +136,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/ordonance-serviceprovider": (context) => Ordonances(),
   "/serviceprovider-add-patient": (context) => AddPatientViewServiceProvider(),
   "/inactive-account-patient-serviceProviders": (context) => InactiveAccountProvider(),
+  "/ownerList-patient-restataire": (context) => OwnerUserListViewServicesProviders(),
 
   // Social network screens
   "/social-home": (context) => SocialMediaHomePage(),

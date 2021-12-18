@@ -648,6 +648,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               horizontal: wv * 3.2, vertical: hv * 2),
                           child: TextButton(
                             onPressed: () async {
+                           
                               print('${phone}');
                               setState(() {
                                 confirmSpinner = true;
@@ -673,10 +674,10 @@ class _AddPatientViewState extends State<AddPatientView> {
                                         AdherentModel.fromDocument(doc);
                                     adherentModelProvider
                                         .setAdherentModel(adherent);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                "${adherent.dateCreated} ")));
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //     SnackBar(
+                                    //         content: Text(
+                                    //             "${adherent.dateCreated} ")));
 
                                     Navigator.push(
                                       context,

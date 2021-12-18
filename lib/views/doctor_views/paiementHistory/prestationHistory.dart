@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 class PrestationHistory extends StatefulWidget {
   PrestationHistory({Key key}) : super(key: key);
@@ -60,7 +61,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
             paidYear=0;
             notpaidYear=0;
             facture=[];
-          loading=true  ;                            
+    setState(() {
+          loading=true ;  
+        });                          
     var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate), 1, 1, 0, 0 ));
  
      DoctorModelProvider doctorProvider =
@@ -181,11 +184,10 @@ class _PrestationHistoryState extends State<PrestationHistory> {
             ),
             actions: [
               IconButton(
-                icon: SvgPicture.asset(
-                  'assets/icons/Bulk/Search.svg',
-                  color: kSouthSeas,
-                ),
-                onPressed: () {},
+                icon: Icon(MdiIcons.refresh, color: kSouthSeas, size: wv*8,),
+                onPressed: () {
+                   getPaiement(currentDate: data);
+                },
                 color: kSouthSeas,
               ),
               IconButton(
@@ -202,7 +204,12 @@ class _PrestationHistoryState extends State<PrestationHistory> {
     
       child: Column(
               children: [
-                Container(   margin : EdgeInsets.only(
+                loading?Container(
+                width: double.infinity,
+                height: hv*7.5,
+                child: Loaders().buttonLoader(kPrimaryColor),): Container(),
+                Container(  
+                   margin : EdgeInsets.only(
                               left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,
                                child: Row(
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,

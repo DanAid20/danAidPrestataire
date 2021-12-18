@@ -8974,6 +8974,66 @@ class S {
       args: [],
     );
   }
+
+  /// `le patient a bien été ajouter `
+  String get lePatientABienTAjouter {
+    return Intl.message(
+      'le patient a bien été ajouter ',
+      name: 'lePatientABienTAjouter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `une consultation en cours à été détecter pour ce patient donc il ne vous est pas possible de créer une nouvelle consultation dans un intervalle de deux semaines depuis sa dernière consultation. Pour plus d'informations contactez le service client. `
+  String get uneConsultationEnCoursTDtecterPourCePatientDonc {
+    return Intl.message(
+      'une consultation en cours à été détecter pour ce patient donc il ne vous est pas possible de créer une nouvelle consultation dans un intervalle de deux semaines depuis sa dernière consultation. Pour plus d\'informations contactez le service client. ',
+      name: 'uneConsultationEnCoursTDtecterPourCePatientDonc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `le patient a bien été ajouter au systeme.`
+  String get lePatientABienTAjouterAuSysteme {
+    return Intl.message(
+      'le patient a bien été ajouter au systeme.',
+      name: 'lePatientABienTAjouterAuSysteme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `une erreur est survenu veuillez contacter le service `
+  String get uneErreurEstSurvenuVeuillezContacterLeService {
+    return Intl.message(
+      'une erreur est survenu veuillez contacter le service ',
+      name: 'uneErreurEstSurvenuVeuillezContacterLeService',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ajouter ce patient`
+  String get ajouterCePatient {
+    return Intl.message(
+      'Ajouter ce patient',
+      name: 'ajouterCePatient',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nom du patient`
+  String get nomDuPatient {
+    return Intl.message(
+      'Nom du patient',
+      name: 'nomDuPatient',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
