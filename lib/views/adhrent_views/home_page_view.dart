@@ -513,7 +513,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
       }
       else if (message.data['type'] == "DANAID_POST"){
-        await _showNotification(id: 6, title: "Important", body: message.data['body']);
+        await _showNotification(id: 6, title: "Alerte: ${message.data['title']}", body: message.data['body']);
       }
       else {
         print("No type recognized");

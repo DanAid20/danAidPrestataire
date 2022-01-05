@@ -481,7 +481,7 @@ class CommentBox extends StatelessWidget {
                       SvgPicture.asset('assets/icons/Bulk/Heart.svg', color: kSouthSeas, width: 20),
                       SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg", color: kSouthSeas, width: 20),
                       SizedBox(width: wv*2,),
-                      Text(S.of(context).mdecin, style: TextStyle(fontSize: 13, color: kTextBlue, fontWeight: FontWeight.bold)),
+                      Text(S.of(context).mdecin.toString(), style: TextStyle(fontSize: 13, color: kTextBlue, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -495,7 +495,7 @@ class CommentBox extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(comment.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
+                    Text(comment.userName.toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
                     SelectableText(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
                   ],
                 )
@@ -636,6 +636,7 @@ class ReplyBox extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: hv*1),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.only(right: wv*1, top: isDoctor ? 25 : 0),
@@ -645,62 +646,64 @@ class ReplyBox extends StatelessWidget {
               child: comment.userAvatar == null ? Icon(LineIcons.user, color: whiteColor,) : null,
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(isLocal ? 0 : 15), topLeft: Radius.circular(isLocal ? 15 : 0), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                  color: isDoctor ? kSouthSeas.withOpacity(0.2) : Colors.grey[200]
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(isLocal ? 0 : 15), topLeft: Radius.circular(isLocal ? 15 : 0), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                    color: isDoctor ? kSouthSeas.withOpacity(0.2) : Colors.grey[200]
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(comment.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
+                      SelectableText(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
+                    ],
+                  )
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(comment.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 14),),
-                    SelectableText(comment.content, style: TextStyle(color: Colors.black87, fontSize: 14)),
-                  ],
-                )
-              ),
-              
-              Align(
-                alignment: isLocal && (comment.replies == null || comment.replies == 0) ? Alignment.bottomRight : Alignment.bottomLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  //crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(comment.likesList.contains(userProvider.getUserModel.userId) ? Icons.thumb_up : LineIcons.thumbsUp, color: kSouthSeas, size: 20,),
-                        SizedBox(width: wv*0.5,),
-                        Text(comment.likesList.length.toString(), style: TextStyle(fontSize: 12, color: kSouthSeas, fontWeight: FontWeight.bold)),
-                        SizedBox(width: wv*1.5,),
-                        InkWell(
-                          onTap: (){
-                            if(!comment.likesList.contains(userProvider.getUserModel.userId)){
-                              docRef.set({
-                                "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
-                              }, SetOptions(merge: true));
-                            } else {
-                              print("dislike");
-                              docRef.set({
-                                "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
-                              }, SetOptions(merge: true));
-                            }
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                            child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? S.of(context).annuler : S.of(context).aimer, style: TextStyle(fontSize: 12)),
+                
+                Align(
+                  alignment: isLocal && (comment.replies == null || comment.replies == 0) ? Alignment.bottomRight : Alignment.bottomLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(comment.likesList.contains(userProvider.getUserModel.userId) ? Icons.thumb_up : LineIcons.thumbsUp, color: kSouthSeas, size: 20,),
+                          SizedBox(width: wv*0.5,),
+                          Text(comment.likesList.length.toString(), style: TextStyle(fontSize: 12, color: kSouthSeas, fontWeight: FontWeight.bold)),
+                          SizedBox(width: wv*1.5,),
+                          InkWell(
+                            onTap: (){
+                              if(!comment.likesList.contains(userProvider.getUserModel.userId)){
+                                docRef.set({
+                                  "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
+                                }, SetOptions(merge: true));
+                              } else {
+                                print("dislike");
+                                docRef.set({
+                                  "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
+                                }, SetOptions(merge: true));
+                              }
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                              child: Text(comment.likesList.contains(userProvider.getUserModel.userId) ? S.of(context).annuler : S.of(context).aimer, style: TextStyle(fontSize: 12)),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: wv*5,),
-                    Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
-                  ],
+                        ],
+                      ),
+                      SizedBox(width: wv*5,),
+                      Text(S.of(context).ilYa + Algorithms.getTimeElapsed(date: comment.dateCreated.toDate()), style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
