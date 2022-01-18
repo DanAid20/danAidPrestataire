@@ -16,13 +16,14 @@ import 'locator.dart';
 
 Future<void> _showNotification({int id, String title, String body}) async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettingsIOS = new IOSInitializationSettings();
-  var initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettingsIOS = const IOSInitializationSettings();
+  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
   print("showing..");
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.danaid.danaidmobile', 'DanAid', 'Mutuelle Santé 100% mobile',
+  var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+      'com.danaid.danaidmobile', 'DanAid',
+      channelDescription: 'Mutuelle Santé 100% mobile',
       importance: Importance.max,
       playSound: true,
       //sound: AndroidNotificationSound,
@@ -33,7 +34,7 @@ Future<void> _showNotification({int id, String title, String body}) async {
       ticker: 'test ticker'
   );
 
-  var iOSChannelSpecifics = IOSNotificationDetails();
+  var iOSChannelSpecifics = const IOSNotificationDetails();
   var platformChannelSpecifics = NotificationDetails(android : androidPlatformChannelSpecifics, iOS: iOSChannelSpecifics);
   await flutterLocalNotificationsPlugin.show(id, title, body, platformChannelSpecifics, payload: 'new_notification');
 }
