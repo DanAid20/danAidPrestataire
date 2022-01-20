@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DevisModel {
   
-   String id,appointementId, adherentId,beneficiaryId, paiementCode,consultationCode, prestataireEmitQuoteId, intitule, type ;
-   num amount;
-   Timestamp createdDate;
-   bool ispaid, isAdminHasTreatedRequest;
-   List requestTreatedList, urlImageDevis;
-   int status;
+   String? id,appointementId, adherentId,beneficiaryId, paiementCode,consultationCode, prestataireEmitQuoteId, intitule, type ;
+   num? amount;
+   Timestamp? createdDate;
+   bool? ispaid, isAdminHasTreatedRequest;
+   List? requestTreatedList, urlImageDevis;
+   int? status;
   DevisModel({this.id, this.appointementId, this.adherentId, this.beneficiaryId, this.paiementCode, this.consultationCode, this.prestataireEmitQuoteId, this.intitule, this.status, this.type, this.amount, this.createdDate, this.ispaid, this.isAdminHasTreatedRequest, this.urlImageDevis, this.requestTreatedList});
 
   factory DevisModel.fromDocument(DocumentSnapshot doc){
@@ -37,7 +37,7 @@ class DevisModel {
 
   getData(data){
     List.from(data).forEach((element){
-         urlImageDevis.add(element);
+         urlImageDevis?.add(element);
       });
     return urlImageDevis;
   }

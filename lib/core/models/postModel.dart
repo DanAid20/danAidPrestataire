@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostModel {
   
-  String id, userAuthId, userId, userAvatar, title, userName, text, imgUrl;
-  Timestamp  datelineDate, dateCreated;
-  num amount, amountCollected;
-  int postType, likes, comments;
-  bool isFromDanAid;
-  List  tags, imgList, likesList, responderList, sharesList;
+  String? id, userAuthId, userId, userAvatar, title, userName, text, imgUrl;
+  Timestamp?  datelineDate, dateCreated;
+  num? amount, amountCollected;
+  int? postType, likes, comments;
+  bool? isFromDanAid;
+  List?  tags, imgList, likesList, responderList, sharesList;
 
   PostModel({this.id, this.userAuthId, this.comments, this.isFromDanAid, this.responderList, this.sharesList, this.likesList, this.userId, this.title, this.userAvatar, this.userName, this.text, this.postType, this.likes, this.tags, this.imgUrl, this.imgList, this.datelineDate, this.dateCreated, this.amount, this.amountCollected});
 

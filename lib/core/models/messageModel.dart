@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MessageModel {
-  final String id;
-  final String idFrom;
-  final String idTo;
-  final String content;
-  final String replierId;
-  final String replyContent;
-  final int replyType;
-  final bool replying;
-  final bool seen;
-  final String timeStamp;
-  final int type;
+  final String? id;
+  final String? idFrom;
+  final String? idTo;
+  final String? content;
+  final String? replierId;
+  final String? replyContent;
+  final int? replyType;
+  final bool? replying;
+  final bool? seen;
+  final String? timeStamp;
+  final int? type;
   MessageModel({this.id, this.idFrom, this.idTo, this.content, this.replierId, this.replyContent, this.replyType, this.replying, this.seen, this.timeStamp, this.type});
 
   factory MessageModel.fromDocument(DocumentSnapshot doc) {

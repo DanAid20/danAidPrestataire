@@ -4,31 +4,31 @@ part 'notificationModel.g.dart';
 @HiveType(typeId: 0)
 class NotificationModel {
   @HiveField(0)
-  final String messageId;
+  final String? messageId;
 
   @HiveField(1)
-  final String title;
+  final String? title;
 
   @HiveField(2)
-  final String description;
+  final String? description;
 
   @HiveField(3)
-  final String type;
+  final String? type;
 
   @HiveField(4)
-  final Map<String, dynamic> data;
+  final Map<String, dynamic>? data;
 
   @HiveField(5)
-  final String imgUrl;
+  final String? imgUrl;
 
   @HiveField(6)
-  final DateTime dateReceived;
+  final DateTime? dateReceived;
 
   @HiveField(7)
-  final bool seen;
+  final bool? seen;
 
   @HiveField(8)
-  final String profileImgUrl;
+  final String? profileImgUrl;
 
   NotificationModel({this.messageId, this.title, this.type, this.data, this.imgUrl, this.description, this.dateReceived, this.seen, this.profileImgUrl});
 }

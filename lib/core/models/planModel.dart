@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlanModel {
-  final String id, paymentMode, label;
-  final num monthlyAmount, registrationFee, coveragePercentage, maxCreditAmount, additionalFee, planNumber, annualLimit, creditRate;
-  final bool isSelected, familyDoctorIsFree, familyCoverage, canWinPoints, socialNetworkEnable;
-  final Map text;
+  final String? id, paymentMode, label;
+  final num? monthlyAmount, registrationFee, coveragePercentage, maxCreditAmount, additionalFee, planNumber, annualLimit, creditRate;
+  final bool? isSelected, familyDoctorIsFree, familyCoverage, canWinPoints, socialNetworkEnable;
+  final Map? text;
 
   PlanModel({this.paymentMode, this.text, this.label, this.monthlyAmount, this.registrationFee, this.coveragePercentage, this.maxCreditAmount, this.additionalFee, this.planNumber, this.annualLimit, this.creditRate, this.isSelected, this.familyDoctorIsFree, this.familyCoverage, this.canWinPoints, this.socialNetworkEnable, this.id});
 

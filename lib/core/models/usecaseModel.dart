@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UseCaseModel {
-  String id, adherentId, consultationCode, beneficiaryId, doctorId, appointmentId, consultationId, hospitalizationId, ambulanceId, doctorName, beneficiaryName, establishment, otherInfo, title, type;
-  Timestamp dateCreated;
-  num amount, coverage, consultationCost;
-  num status, consultationStatus;
-  List bookletUrls, receiptUrls, otherDocUrls;
-  bool closed, bookletIsValid, receiptIsValid, otherDocIsValid, executed;
+  String? id, adherentId, consultationCode, beneficiaryId, doctorId, appointmentId, consultationId, hospitalizationId, ambulanceId, doctorName, beneficiaryName, establishment, otherInfo, title, type;
+  Timestamp? dateCreated;
+  num? amount, coverage, consultationCost;
+  num? status, consultationStatus;
+  List? bookletUrls, receiptUrls, otherDocUrls;
+  bool? closed, bookletIsValid, receiptIsValid, otherDocIsValid, executed;
 
   UseCaseModel({this.id, this.adherentId, this.doctorId, this.consultationCode, this.consultationStatus, this.ambulanceId, this.consultationId, this.hospitalizationId, this.executed, this.consultationCost, this.closed, this.coverage, this.doctorName, this.appointmentId, this.beneficiaryId, this.beneficiaryName, this.amount, this.establishment, this.otherInfo, this.title, this.type, this.dateCreated, this.status, this.bookletUrls, this.receiptUrls, this.otherDocUrls, this.bookletIsValid, this.receiptIsValid, this.otherDocIsValid});
 

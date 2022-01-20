@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MensualityModel {
-  String id, loanId;
-  num amount, number, status;
-  Timestamp startDate, endDate, paymentDate;
+  String? id, loanId;
+  num? amount, number, status;
+  Timestamp? startDate, endDate, paymentDate;
 
   MensualityModel({this.status, this.id, this.amount, this.startDate, this.endDate, this.paymentDate, this.loanId, this.number});
 

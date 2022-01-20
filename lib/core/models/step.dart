@@ -1,8 +1,8 @@
 class StepModel {
-  final int id;
-  final String text;
-  final String image;
-  final String title;
+  final int? id;
+  final String? text;
+  final String? image;
+  final String? title;
 
   StepModel({this.id, this.text, this.image, this.title});
 

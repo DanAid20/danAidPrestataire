@@ -20,7 +20,7 @@ class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
       messageId: fields[0] as String,
       title: fields[1] as String,
       type: fields[3] as String,
-      data: (fields[4] as Map)?.cast<String, dynamic>(),
+      data: (fields[4] as Map).cast<String, dynamic>(),
       imgUrl: fields[5] as String,
       description: fields[2] as String,
       dateReceived: fields[6] as DateTime,

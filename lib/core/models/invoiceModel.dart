@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InvoiceModel{
-  final String id, inscriptionId, label, trimester, type, status, invoiceNber;
-  final num amount, planNumber, segments, amountPaid, monthsPaid;
-  final List paymentDates, campaignsChosen;
-  final Timestamp dateCreated, coverageStartDate, coverageEndDate, currentPaidStartDate, currentPaidEndDate, paymentDelayDate;
-  final bool paid, stateValidate, invoiceIsSplitted, registrationPaid;
+  final String? id, inscriptionId, label, trimester, type, status, invoiceNber;
+  final num? amount, planNumber, segments, amountPaid, monthsPaid;
+  final List? paymentDates, campaignsChosen;
+  final Timestamp? dateCreated, coverageStartDate, coverageEndDate, currentPaidStartDate, currentPaidEndDate, paymentDelayDate;
+  final bool? paid, stateValidate, invoiceIsSplitted, registrationPaid;
 
   InvoiceModel({this.label, this.inscriptionId, this.invoiceIsSplitted, this.campaignsChosen, this.registrationPaid, this.amountPaid, this.monthsPaid, this.paymentDates, this.currentPaidStartDate, this.currentPaidEndDate ,this.segments, this.trimester, this.type, this.status, this.stateValidate, this.invoiceNber, this.planNumber, this.dateCreated, this.coverageStartDate, this.coverageEndDate, this.paymentDelayDate, this.paid, this.id, this.amount});
 

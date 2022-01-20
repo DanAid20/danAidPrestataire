@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UseCaseServiceModel {
-  String id,adherentId,prestataireId,paiementCode, beneficiaryId,titleDuDEvis, consultationCode, idAppointement, usecaseId, title, type, adminFeedback, establishment;
-  Timestamp dateCreated, date, precriptionUploadDate, receiptUploadDate, drugsUploadDate, resultsUploadDate;
-  num amount, advance, justifiedFees;
-  num status;
-  List precriptionUrls, drugsList, receiptUrls, drugsUrls, resultsUrls, bookletUrls, otherDocUrls;
-  bool closed, paid, isConfirmDrugList, precriptionIsValid, receiptIsValid, drugsIsValid, resultsIsValid, bookletIsValid, otherDocIsValid, executed, estimate, ongoing, requested;
+  String? id,adherentId,prestataireId,paiementCode, beneficiaryId,titleDuDEvis, consultationCode, idAppointement, usecaseId, title, type, adminFeedback, establishment;
+  Timestamp? dateCreated, date, precriptionUploadDate, receiptUploadDate, drugsUploadDate, resultsUploadDate;
+  num? amount, advance, justifiedFees;
+  num? status;
+  List? precriptionUrls, drugsList, receiptUrls, drugsUrls, resultsUrls, bookletUrls, otherDocUrls;
+  bool? closed, paid, isConfirmDrugList, precriptionIsValid, receiptIsValid, drugsIsValid, resultsIsValid, bookletIsValid, otherDocIsValid, executed, estimate, ongoing, requested;
 
   UseCaseServiceModel({this.id, this.isConfirmDrugList, this.drugsList, this.prestataireId, this.paiementCode, this.adherentId, this.beneficiaryId, this.titleDuDEvis ,this.consultationCode, this.idAppointement, this.paid, this.closed, this.amount, this.establishment, this.title, this.type, this.usecaseId, this.dateCreated, this.date, this.advance, this.justifiedFees, this.status, this.precriptionUrls, this.receiptUrls, this.drugsUrls, this.resultsUrls, this.otherDocUrls, this.bookletUrls, this.otherDocIsValid, this.bookletIsValid, this.precriptionIsValid, this.receiptIsValid, this.drugsIsValid, this.resultsIsValid, this.precriptionUploadDate, this.receiptUploadDate, this.drugsUploadDate, this.resultsUploadDate, this.adminFeedback, this.estimate, this.executed, this.ongoing, this.requested});
 

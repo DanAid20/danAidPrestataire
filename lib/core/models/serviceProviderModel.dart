@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ServiceProviderModel {
-  String id, about, localisation,specialite, profileType, category, name, region, town, contactName, contactEmail, authPhone, countryName, isoCountryCode, contactFunction, avatarUrl, cniUrl, orderRegistrationCertificateUrl, otherDocUrl;
-  bool profileEnabled;
-  List phoneList = [], phoneKeywords, nameKeywords;
+  String? id, about, localisation,specialite, profileType, category, name, region, town, contactName, contactEmail, authPhone, countryName, isoCountryCode, contactFunction, avatarUrl, cniUrl, orderRegistrationCertificateUrl, otherDocUrl;
+  bool? profileEnabled;
+  List? phoneList = [], phoneKeywords, nameKeywords;
   var serviceList;
-  Map coordGps;
-  Timestamp dateCreated;
+  Map? coordGps;
+  Timestamp? dateCreated;
 
   ServiceProviderModel({this.id, this.about,  this.specialite, this.serviceList, this.coordGps, this.profileType, this.category, this.phoneKeywords, this.nameKeywords, this.name, this.region, this.town, this.contactName, this.contactEmail, this.authPhone, this.countryName, this.isoCountryCode, this.contactFunction, this.localisation, this.avatarUrl, this.cniUrl, this.orderRegistrationCertificateUrl, this.otherDocUrl, this.profileEnabled, this.phoneList, this.dateCreated});
 

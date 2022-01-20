@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoanModel {
-  String id, carnetUrl, adherentId, otherDocUrl, avalistName, avalistPhone, employerName, employerPhone, purpose, docUrl;
-  num amount, maxAmount, mensuality, totalToPay, monthlySalary, amountPaid;
-  int duration, status;
-  Timestamp firstPaymentDate, lastPaymentDate, dateCreated, mostRecentPaymentDate;
-  List paymentDates, docsUrls;
-  bool isSalaryMan, avalistAdded; 
+  String? id, carnetUrl, adherentId, otherDocUrl, avalistName, avalistPhone, employerName, employerPhone, purpose, docUrl;
+  num? amount, maxAmount, mensuality, totalToPay, monthlySalary, amountPaid;
+  int? duration, status;
+  Timestamp? firstPaymentDate, lastPaymentDate, dateCreated, mostRecentPaymentDate;
+  List? paymentDates, docsUrls;
+  bool? isSalaryMan, avalistAdded; 
 
   LoanModel({this.avalistName, this.avalistPhone, this.docsUrls, this.amountPaid, this.employerName, this.monthlySalary, this.employerPhone, this.purpose, this.docUrl, this.mensuality, this.totalToPay, this.duration, this.status, this.firstPaymentDate, this.lastPaymentDate, this.dateCreated, this.mostRecentPaymentDate, this.paymentDates, this.isSalaryMan, this.avalistAdded, this.id, this.amount, this.maxAmount, this.adherentId, this.carnetUrl, this.otherDocUrl});
 

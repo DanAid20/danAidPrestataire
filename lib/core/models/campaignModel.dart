@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CampaignModel {
-  String id, name, description, scope;
-  bool active, requireCoupon;
-  Timestamp startDate, endDate;
-  List targetLevels;
-  num amount;
+  String? id, name, description, scope;
+  bool? active, requireCoupon;
+  Timestamp? startDate, endDate;
+  List? targetLevels;
+  num? amount;
 
   CampaignModel({this.id, this.name, this.description, this.active, this.requireCoupon, this.scope, this.startDate, this.endDate, this.targetLevels, this.amount});
 
