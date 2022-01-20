@@ -12,17 +12,17 @@ class CommentModel {
   factory CommentModel.fromDocument(DocumentSnapshot doc){
     return CommentModel(
       id: doc.id,
-      postId: doc.data()["postId"],
-      userId: doc.data()["responderId"],
-      userName: doc.data()["responderName"],
-      userAvatar: doc.data()["responderAvatarUrl"],
-      dateCreated: doc.data()["dateCreated"],
-      content: doc.data()["content"],
-      type: doc.data()["type"],
-      userProfileType: doc.data()["responderProfile"],
-      likesList: doc.data()["likesList"],
-      replies: doc.data()["replies"],
-      replying: doc.data()["replying"]
+      postId: doc.get("postId"),
+      userId: doc.get("responderId"),
+      userName: doc.get("responderName"),
+      userAvatar: doc.get("responderAvatarUrl"),
+      dateCreated: doc.get("dateCreated"),
+      content: doc.get("content"),
+      type: doc.get("type"),
+      userProfileType: doc.get("responderProfile"),
+      likesList: doc.get("likesList"),
+      replies: doc.get("replies"),
+      replying: doc.get("replying")
     );
   }
 }

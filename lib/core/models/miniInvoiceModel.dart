@@ -10,13 +10,13 @@ class MiniInvoiceModel {
   factory MiniInvoiceModel.fromDocument(DocumentSnapshot doc){
     return MiniInvoiceModel(
       id: doc.id,
-      label: doc.data()['label'],
-      startDate: doc.data()['startDate'],
-      endDate: doc.data()['endDate'],
-      paymentDate: doc.data()['paymentDate'],
-      amount: doc.data()['amount'],
-      status: doc.data()['status'],
-      number: doc.data()['number']
+      label: doc.get('label'),
+      startDate: doc.get('startDate'),
+      endDate: doc.get('endDate'),
+      paymentDate: doc.get('paymentDate'),
+      amount: doc.get('amount'),
+      status: doc.get('status'),
+      number: doc.get('number')
     );
   }
 }

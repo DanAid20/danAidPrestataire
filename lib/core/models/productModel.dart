@@ -10,12 +10,12 @@ class ProductModel {
   factory ProductModel.fromDocument(DocumentSnapshot doc){
     return ProductModel(
       id: doc.id,
-      name: doc.data()["name"],
-      description: doc.data()["description"],
-      imgUrl: doc.data()["imageUrl"],
-      points: doc.data()["points"],
-      qty: doc.data()["quantity"],
-      imgGroup: doc.data()["imageGroup"]
+      name: doc.get("name"),
+      description: doc.get("description"),
+      imgUrl: doc.get("imageUrl"),
+      points: doc.get("points"),
+      qty: doc.get("quantity"),
+      imgGroup: doc.get("imageGroup")
     );
   }
 }

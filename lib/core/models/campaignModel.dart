@@ -12,15 +12,15 @@ class CampaignModel {
   factory CampaignModel.fromDocument(DocumentSnapshot doc){
     return CampaignModel(
       id: doc.id,
-      name: doc.data()['name'],
-      description: doc.data()['description'],
-      active: doc.data()['active'],
-      requireCoupon: doc.data()['requireCoupon'],
-      startDate: doc.data()['startDate'],
-      endDate: doc.data()['endDate'],
-      targetLevels: doc.data()['niveaux'],
-      scope: doc.data()['reductionScope'],
-      amount: doc.data()['amount'],
+      name: doc.get('name'),
+      description: doc.get('description'),
+      active: doc.get('active'),
+      requireCoupon: doc.get('requireCoupon'),
+      startDate: doc.get('startDate'),
+      endDate: doc.get('endDate'),
+      targetLevels: doc.get('niveaux'),
+      scope: doc.get('reductionScope'),
+      amount: doc.get('amount'),
     );
   }
 }

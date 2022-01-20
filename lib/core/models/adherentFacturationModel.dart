@@ -13,19 +13,19 @@ class AdherentBillModel {
   factory AdherentBillModel.fromDocument(DocumentSnapshot doc){
     return AdherentBillModel(
       billId: doc.id,
-      adherentId: doc.data()["idAdherent"],
-      paymentCategory: doc.data()["categoriePaiement"],
-      title: doc.data()["intitule"],
-      receivedNumber: doc.data()["numeroRecu"],
-      dateCreated: doc.data()["createdDate"],
-      startCoverageDate: doc.data()["dateDebutCouvertureAdherent"],
-      endCoverageDate: doc.data()["dateFinCouvertureAdherent"],
-      paymentSettlementDate: doc.data()["dateReglementDuPaiement"],
-      validated: doc.data()["etatValider"],
-      amount: doc.data()["montant"],
-      nbPersonSupplement: doc.data()["nbPersonneSupplement"],
-      billTrimesterNber: doc.data()["numeroTrimestrielleFacture"],
-      contributionLevel: doc.data()["niveauCotisation"],
+      adherentId: doc.get("idAdherent"),
+      paymentCategory: doc.get("categoriePaiement"),
+      title: doc.get("intitule"),
+      receivedNumber: doc.get("numeroRecu"),
+      dateCreated: doc.get("createdDate"),
+      startCoverageDate: doc.get("dateDebutCouvertureAdherent"),
+      endCoverageDate: doc.get("dateFinCouvertureAdherent"),
+      paymentSettlementDate: doc.get("dateReglementDuPaiement"),
+      validated: doc.get("etatValider"),
+      amount: doc.get("montant"),
+      nbPersonSupplement: doc.get("nbPersonneSupplement"),
+      billTrimesterNber: doc.get("numeroTrimestrielleFacture"),
+      contributionLevel: doc.get("niveauCotisation"),
     );
   }
 

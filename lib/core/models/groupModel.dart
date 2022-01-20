@@ -10,21 +10,21 @@ class GroupModel {
   factory GroupModel.fromDocument(DocumentSnapshot doc){
     return GroupModel(
       groupId: doc.id,
-      creatorId: doc.data()["creatorId"],
-      dateCreated: doc.data()["dateCreated"],
-      creatorAuthId: doc.data()["creatorAuthId"],
-      adminsIds: doc.data()["adminsIds"],
-      creatorAvatar: doc.data()["creatorAvatar"],
-      groupName: doc.data()["groupName"],
-      groupDescription: doc.data()["groupDescription"],
-      contactName: doc.data()["contactName"],
-      organizationName: doc.data()["organizationName"],
-      groupType: doc.data()["groupType"],
-      groupCategory: doc.data()["groupCategory"],
-      contactPhone: doc.data()["contactPhone"],
-      membersIds: doc.data()["membersIds"],
-      membersAvatarsUrls: doc.data()["membersAvatarsUrls"],
-      imgUrl: doc.data()["imgUrl"]
+      creatorId: doc.get("creatorId"),
+      dateCreated: doc.get("dateCreated"),
+      creatorAuthId: doc.get("creatorAuthId"),
+      adminsIds: doc.get("adminsIds"),
+      creatorAvatar: doc.get("creatorAvatar"),
+      groupName: doc.get("groupName"),
+      groupDescription: doc.get("groupDescription"),
+      contactName: doc.get("contactName"),
+      organizationName: doc.get("organizationName"),
+      groupType: doc.get("groupType"),
+      groupCategory: doc.get("groupCategory"),
+      contactPhone: doc.get("contactPhone"),
+      membersIds: doc.get("membersIds"),
+      membersAvatarsUrls: doc.get("membersAvatarsUrls"),
+      imgUrl: doc.get("imgUrl")
     );
   }
 }

@@ -13,25 +13,25 @@ class DevisModel {
 
   factory DevisModel.fromDocument(DocumentSnapshot doc){
     print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    print(doc.data()["urlImagesDevis"].runtimeType);
-    print(doc.data()["urlImagesDevis"].length);
+    print(doc.get("urlImagesDevis").runtimeType);
+    print(doc.get("urlImagesDevis").length);
     return DevisModel(
       id: doc.id,
-      prestataireEmitQuoteId: doc.data()["prestataireId"],
-      paiementCode: doc.data()["PaiementCode"],
-      appointementId: doc.data()["appointementId"],
-      requestTreatedList: doc.data()["RequestTreatedList"],
-      amount: doc.data()["montant"] != null ? double.parse(doc.data()["montant"].toString()) : null ,
-      intitule: doc.data()["intitule"],
-      consultationCode: doc.data()["consultationCode"],
-      isAdminHasTreatedRequest: doc.data()["isAdminHasTreatedRequest"],
-      ispaid: doc.data()["ispaid"],
-      adherentId: doc.data()["adherentId"],
-      beneficiaryId: doc.data()["beneficiaryId"],
-      urlImageDevis: doc.data()["urlImagesDevis"],
-      type: doc.data()["type"],
-      status: doc.data()["status"],
-      createdDate: doc.data()["createdDate"],
+      prestataireEmitQuoteId: doc.get("prestataireId"),
+      paiementCode: doc.get("PaiementCode"),
+      appointementId: doc.get("appointementId"),
+      requestTreatedList: doc.get("RequestTreatedList"),
+      amount: doc.get("montant") != null ? double.parse(doc.get("montant").toString()) : null ,
+      intitule: doc.get("intitule"),
+      consultationCode: doc.get("consultationCode"),
+      isAdminHasTreatedRequest: doc.get("isAdminHasTreatedRequest"),
+      ispaid: doc.get("ispaid"),
+      adherentId: doc.get("adherentId"),
+      beneficiaryId: doc.get("beneficiaryId"),
+      urlImageDevis: doc.get("urlImagesDevis"),
+      type: doc.get("type"),
+      status: doc.get("status"),
+      createdDate: doc.get("createdDate"),
     );
   }
 

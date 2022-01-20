@@ -11,22 +11,22 @@ class PlanModel {
   factory PlanModel.fromDocument(DocumentSnapshot doc){
     return PlanModel(
       id: doc.id,
-      monthlyAmount: doc.data()["cotisationMensuelleFondDSoint"],
-      coveragePercentage: doc.data()["couverture"],
-      text: doc.data()["descriptionText"],
-      registrationFee: doc.data()["fraisIncription"],
-      paymentMode: doc.data()["modeDePaiement"],
-      maxCreditAmount: doc.data()["montantMaxPretSante"],
-      additionalFee: doc.data()["montantPaiementSupplement"],
-      label: doc.data()["nomNiveau"],
-      planNumber: doc.data()["numeroNiveau"],
-      annualLimit: doc.data()["plafondAnnuelle"],
-      isSelected: doc.data()["userSelectedIt"],
-      creditRate: doc.data()["rate"],
-      familyDoctorIsFree: doc.data()["familyDoctorIsFree"],
-      canWinPoints: doc.data()["canWinPoints"],
-      familyCoverage: doc.data()["familyCoverage"],
-      socialNetworkEnable: doc.data()["socialNetworkEnable"]
+      monthlyAmount: doc.get("cotisationMensuelleFondDSoint"),
+      coveragePercentage: doc.get("couverture"),
+      text: doc.get("descriptionText"),
+      registrationFee: doc.get("fraisIncription"),
+      paymentMode: doc.get("modeDePaiement"),
+      maxCreditAmount: doc.get("montantMaxPretSante"),
+      additionalFee: doc.get("montantPaiementSupplement"),
+      label: doc.get("nomNiveau"),
+      planNumber: doc.get("numeroNiveau"),
+      annualLimit: doc.get("plafondAnnuelle"),
+      isSelected: doc.get("userSelectedIt"),
+      creditRate: doc.get("rate"),
+      familyDoctorIsFree: doc.get("familyDoctorIsFree"),
+      canWinPoints: doc.get("canWinPoints"),
+      familyCoverage: doc.get("familyCoverage"),
+      socialNetworkEnable: doc.get("socialNetworkEnable")
     );
   }
 }

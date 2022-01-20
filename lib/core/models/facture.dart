@@ -10,19 +10,19 @@ class Facture {
   Facture({this.amountToPay, this.canPay, this.createdAt, this.id, this.idAdherent, this.idBeneficiairy, this.idFammillyMember, this.idMedecin, this.isSolve, this.types});
 
   factory Facture.fromDocument(DocumentSnapshot doc){
-     Timestamp t = doc.data()["createdAt"];
+     Timestamp t = doc.get("createdAt");
     DateTime date = t.toDate();
 
     return Facture(
-      id: doc.data()["id"],
-      types: doc.data()["Type"],
-      idAdherent: doc.data()["idAdherent"],
-      idBeneficiairy: doc.data()["idBeneficiairy"],
-      idFammillyMember: doc.data()["idFammillyMember"],
-      idMedecin: doc.data()["idMedecin"],
-      amountToPay: doc.data()["amountToPay"],
-      canPay: doc.data()["canPay"],
-      isSolve: doc.data()["isSolve"],
+      id: doc.get("id"),
+      types: doc.get("Type"),
+      idAdherent: doc.get("idAdherent"),
+      idBeneficiairy: doc.get("idBeneficiairy"),
+      idFammillyMember: doc.get("idFammillyMember"),
+      idMedecin: doc.get("idMedecin"),
+      amountToPay: doc.get("amountToPay"),
+      canPay: doc.get("canPay"),
+      isSolve: doc.get("isSolve"),
       createdAt:date,
     );
   }

@@ -10,13 +10,13 @@ class MensualityModel {
   factory MensualityModel.fromDocument(DocumentSnapshot doc){
     return MensualityModel(
       id: doc.id,
-      amount: doc.data()["amount"],
-      loanId: doc.data()["loanId"],
-      number: doc.data()["number"],
-      startDate: doc.data()["startDate"],
-      endDate: doc.data()["endDate"],
-      paymentDate: doc.data()["paymentDate"],
-      status: doc.data()["status"]
+      amount: doc.get("amount"),
+      loanId: doc.get("loanId"),
+      number: doc.get("number"),
+      startDate: doc.get("startDate"),
+      endDate: doc.get("endDate"),
+      paymentDate: doc.get("paymentDate"),
+      status: doc.get("status")
     );
   }
 }

@@ -17,16 +17,16 @@ class MessageModel {
   factory MessageModel.fromDocument(DocumentSnapshot doc) {
     return MessageModel(
       id: doc.id,
-      idFrom: doc.data()["idFrom"],
-      idTo: doc.data()["idTo"],
-      replierId: doc.data()["replierId"],
-      content: doc.data()["content"],
-      replyContent: doc.data()["replyContent"],
-      replyType: doc.data()["replyType"],
-      replying: doc.data()["replying"],
-      seen: doc.data()["seen"],
-      timeStamp: doc.data()["timeStamp"],
-      type: doc.data()["type"],
+      idFrom: doc.get("idFrom"),
+      idTo: doc.get("idTo"),
+      replierId: doc.get("replierId"),
+      content: doc.get("content"),
+      replyContent: doc.get("replyContent"),
+      replyType: doc.get("replyType"),
+      replying: doc.get("replying"),
+      seen: doc.get("seen"),
+      timeStamp: doc.get("timeStamp"),
+      type: doc.get("type"),
     );
   }
 }

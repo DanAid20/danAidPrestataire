@@ -12,14 +12,14 @@ class ConversationChatModel {
   factory ConversationChatModel.fromDocument(DocumentSnapshot doc){
     return ConversationChatModel(
       conversationId: doc.id,
-      lastMessage: doc.data()["lastMessage"],
-      lastMessageFrom: doc.data()["lastMessageFrom"],
-      lastMessageTime: doc.data()["lastMessageTime"],
-      lastMessageSeen: doc.data()["lastMessageSeen"],
-      unseenMessages: doc.data()["unseenMessages"],
-      lastMessageType: doc.data()["lastMessageType"],
-      users: doc.data()["users"],
-      phoneIds: doc.data()["phoneIds"]
+      lastMessage: doc.get("lastMessage"),
+      lastMessageFrom: doc.get("lastMessageFrom"),
+      lastMessageTime: doc.get("lastMessageTime"),
+      lastMessageSeen: doc.get("lastMessageSeen"),
+      unseenMessages: doc.get("unseenMessages"),
+      lastMessageType: doc.get("lastMessageType"),
+      users: doc.get("users"),
+      phoneIds: doc.get("phoneIds")
     );
   }
 }
