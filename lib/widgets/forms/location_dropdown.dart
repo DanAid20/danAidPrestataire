@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 
 class LocationDropdown extends StatelessWidget {
   
-  final String stateCode, city;
-  final bool regionChosen, cityChosen;
-  final Function(dynamic) regionOnChanged, cityOnChanged;
+  final String? stateCode, city;
+  final bool? regionChosen, cityChosen;
+  final Function(dynamic)? regionOnChanged, cityOnChanged;
 
-  const LocationDropdown({Key key, this.stateCode, this.city, this.regionChosen, this.cityChosen, this.regionOnChanged, this.cityOnChanged}) : super(key: key);
+  const LocationDropdown({Key? key, this.stateCode, this.city, this.regionChosen, this.cityChosen, this.regionOnChanged, this.cityOnChanged}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,7 +36,7 @@ class LocationDropdown extends StatelessWidget {
                       hint: Text("Choisir une region"),
                       items: regions.map((region){
                         return DropdownMenuItem(
-                          child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                          child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
                           value: region["key"],
                         );
                       }).toList(),
@@ -48,7 +48,7 @@ class LocationDropdown extends StatelessWidget {
           ),
         ),
         SizedBox(width: wv*3,),
-        regionChosen ? Expanded(
+        regionChosen! ? Expanded(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
@@ -67,7 +67,7 @@ class LocationDropdown extends StatelessWidget {
                       isExpanded: true,
                       value: city,
                       hint: Text("Ville"),
-                      items: Algorithms.getTownNamesFromRegion(cities, stateCode).map((city){
+                      items: Algorithms.getTownNamesFromRegion(cities, stateCode!).map((city){
                         return DropdownMenuItem(
                           child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                           value: city,

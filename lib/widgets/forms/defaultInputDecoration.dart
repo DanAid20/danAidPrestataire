@@ -2,10 +2,10 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
-  InputDecoration defaultInputDecoration({String suffix, Color fillColor, String hintText}) {
+  InputDecoration defaultInputDecoration({String? suffix, Color? fillColor, String? hintText}) {
     return InputDecoration(
       errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.red[300]),
+        borderSide: BorderSide(width: 1, color: Colors.red[300]!),
         borderRadius: BorderRadius.all(Radius.circular(20))
       ),
       fillColor: fillColor == null ? Colors.grey[100] : fillColor,

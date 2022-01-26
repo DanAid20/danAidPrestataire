@@ -29,7 +29,7 @@ class _AdherentCardState extends State<AdherentCard> {
 
   CarouselController beneficiaryCarouselController = CarouselController();
 
-  List<Widget> beneficiaries;
+  List<Widget>? beneficiaries;
   Uint8List bytes = Uint8List(0);
   TextStyle textStyle = TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 15);
 
@@ -41,34 +41,34 @@ class _AdherentCardState extends State<AdherentCard> {
   getBeneficiaries() async {
       AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
       BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-      String medecin;
+      String? medecin;
       
-      if(adherentProvider.getAdherent.familyDoctorId != null){
-        FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent.familyDoctorId).get().then((doc){
-          String name = doc.data()["nomDefamille"];
+      if(adherentProvider.getAdherent!.familyDoctorId != null){
+        FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent?.familyDoctorId).get().then((doc){
+          String? name = doc.get("nomDefamille");
             if(name != null){
               medecin = "Dr $name";
             }
         });
       }
 
-      FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").get().then((snapshot) async {
+      FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent?.adherentId).collection("BENEFICIAIRES").get().then((snapshot) async {
         print(snapshot.docs.length.toString());
         beneficiaries = [];
         BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
-          avatarUrl: adherentProvider.getAdherent.imgUrl,
-          surname: adherentProvider.getAdherent.surname,
-          familyName: adherentProvider.getAdherent.familyName,
-          matricule: adherentProvider.getAdherent.matricule,
-          gender: adherentProvider.getAdherent.gender
+          avatarUrl: adherentProvider.getAdherent?.imgUrl,
+          surname: adherentProvider.getAdherent?.surname,
+          familyName: adherentProvider.getAdherent?.familyName,
+          matricule: adherentProvider.getAdherent?.matricule,
+          gender: adherentProvider.getAdherent?.gender
         );
-        Widget adherentBeneficiaryCard = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent, beneficiary: adherentBeneficiary, state: adherentProvider.getAdherent.adherentPlan, doctor: medecin);
-        beneficiaries.add(adherentBeneficiaryCard);
+        Widget? adherentBeneficiaryCard = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent!, beneficiary: adherentBeneficiary, state: adherentProvider.getAdherent!.adherentPlan!.toInt(), doctor: medecin!);
+        beneficiaries?.add(adherentBeneficiaryCard);
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
-          Widget content = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent, beneficiary: beneficiary, state: adherentProvider.getAdherent.adherentPlan, doctor: medecin);
-          beneficiaries.add(content);
+          Widget content = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent!, beneficiary: beneficiary, state: adherentProvider.getAdherent!.adherentPlan!.toInt(), doctor: medecin!);
+          beneficiaries?.add(content);
         }
         setState(() {
           
@@ -124,9 +124,9 @@ class _AdherentCardState extends State<AdherentCard> {
       ),
     );
   }
-  Widget getBeneficiaryCard({BeneficiaryModel beneficiary, AdherentModel adherentModel, int state, String doctor}){
+  Widget getBeneficiaryCard({BeneficiaryModel? beneficiary, AdherentModel? adherentModel, int? state, String? doctor}){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    AdherentModel adh = adherentProvider.getAdherent;
+    AdherentModel? adh = adherentProvider.getAdherent;
     return Stack(
       children: [
         Container(
@@ -159,8 +159,8 @@ class _AdherentCardState extends State<AdherentCard> {
                   Spacer(),
                   Row(
                     children: [
-                      SvgPicture.asset(beneficiary.gender == "H" ? 'assets/icons/Two-tone/Male.svg' : 'assets/icons/Two-tone/Female.svg', width: wv*8),
-                      adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset('assets/icons/Bulk/Shield Done.svg', width: wv*8,) : Container()
+                      SvgPicture.asset(beneficiary?.gender == "H" ? 'assets/icons/Two-tone/Male.svg' : 'assets/icons/Two-tone/Female.svg', width: wv*8),
+                      adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset('assets/icons/Bulk/Shield Done.svg', width: wv*8,) : Container()
                     ],
                   )
                 ],
@@ -173,28 +173,28 @@ class _AdherentCardState extends State<AdherentCard> {
                     CircleAvatar(
                       radius: wv*15,
                       backgroundColor: whiteColor,
-                      backgroundImage: beneficiary.avatarUrl != null ? CachedNetworkImageProvider(beneficiary.avatarUrl) : null,
-                      child: beneficiary.avatarUrl == null ? Icon(LineIcons.user, color: kCardTextColor, size: wv*18,) : Container(),
+                      backgroundImage: beneficiary?.avatarUrl != null ? CachedNetworkImageProvider(beneficiary!.avatarUrl!) : null,
+                      child: beneficiary?.avatarUrl == null ? Icon(LineIcons.user, color: kCardTextColor, size: wv*18,) : Container(),
                     ),
-                    state == 0 || adh.validityEndDate.toDate().isBefore(DateTime.now()) ? CircleAvatar(
+                    state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? CircleAvatar(
                       radius: wv*15,
                       backgroundColor: Colors.red.withOpacity(0.3),
                     ) : Container(),
                     Positioned(
-                      right: state == 0 || adh.validityEndDate.toDate().isBefore(DateTime.now()) ? 0 : wv*19,
+                      right: state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? 0 : wv*19,
                       bottom: 0,
                       child: Container(
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: state == 0 || adh.validityEndDate.toDate().isBefore(DateTime.now()) ? Colors.red : Colors.lightGreen[700],
+                          color: state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? Colors.red : Colors.lightGreen[700],
                           shape: BoxShape.circle,
-                          boxShadow: [BoxShadow(color: Colors.grey[700], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1.5))]
+                          boxShadow: [BoxShadow(color: Colors.grey[700]!, blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1.5))]
                         ),
                         child: Icon(MdiIcons.exclamation, color: state == 0 ? whiteColor : Colors.transparent,),
                       ),
                     ),
-                    state == 0 || adh.validityEndDate.toDate().isBefore(DateTime.now()) ? RotationTransition(
+                    state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? RotationTransition(
                       turns: new AlwaysStoppedAnimation(330 / 360),
                       child: new Text(S.of(context).compteninactif, style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                     ) : Container()
@@ -214,7 +214,7 @@ class _AdherentCardState extends State<AdherentCard> {
                             style: textStyle,
                             children: [
                               TextSpan(text: S.of(context).nomDuBnficiairen),
-                              TextSpan(text: beneficiary.surname.toString() + " "+ beneficiary.familyName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
+                              TextSpan(text: beneficiary!.surname.toString() + " "+ beneficiary.familyName!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
                           )),
                           SizedBox(height: hv*1.5,),
@@ -249,7 +249,7 @@ class _AdherentCardState extends State<AdherentCard> {
                       roundEdges: true,
                       size: 80,
                       elementColor: kCardTextColor,
-                      data: adherentModel.adherentId,
+                      data: adherentModel!.adherentId!,
                       errorCorrectLevel: QrErrorCorrectLevel.L,
                       ),
               ),

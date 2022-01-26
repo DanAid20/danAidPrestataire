@@ -24,16 +24,16 @@ class MedecinIntroScreen extends StatelessWidget {
                 bgColor: Colors.grey,
               ),
               IconContainer(
-                sizeTop: defSize * 42,
-                sizeRight: defSize * 4,
+                sizeTop: defSize! * 42,
+                sizeRight: defSize! * 4,
                 containerBgColor: Colors.white70,
                 iconColor: kPrimaryColor,
                 icon: 'assets/icons/Two-tone/Activity.svg',
               ),
               CoverContainer(sizePosition: defSize),
               FeeContainer(
-                sizeLeft: defSize * 2.5,
-                sizeTop: defSize * 12,
+                sizeLeft: defSize! * 2.5,
+                sizeTop: defSize! * 12,
                 feeBgColor: kPrimaryColor,
               ),
               IntroText(title: S.of(context).unMdecinDeFamilleMeSuit, rank: 3,)

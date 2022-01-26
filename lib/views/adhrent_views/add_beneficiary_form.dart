@@ -47,29 +47,29 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _allergyController = TextEditingController();
 
-  String matricule;
-  String _relation;
-  DateTime selectedDate;
-  DateTime initialDate;
+  String? matricule;
+  String? _relation;
+  DateTime? selectedDate;
+  DateTime? initialDate;
   List<String> allergies = [];
   String currentAllergyText = "";
-  String phone;
-  String phoneCode;
+  String? phone;
+  String? phoneCode;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
 
   
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   
   PageController controller = PageController(initialPage: 0, keepPage: false);
   int currentPageValue = 0;
-  List<Widget> pageList;
+  List<Widget>? pageList;
 
-  String _gender;
-  String _bloodGroup;
+  String? _gender;
+  String? _bloodGroup;
   bool male = false;
   bool female = false;
 
@@ -85,9 +85,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
   initTextfields(){
     AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
-    if (adherentModel.getAdherent.familyName != null){
+    if (adherentModel.getAdherent!.familyName != null){
       setState(() {
-        _familynameController.text = adherentModel.getAdherent.familyName;
+        _familynameController.text = adherentModel.getAdherent!.familyName!;
       });
     }
   }
@@ -111,7 +111,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           Navigator.pop(context);
         else
           controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
-        return null;
+        return false;
       },
       child: Scaffold(
         key: _scaffoldKey,
@@ -130,7 +130,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           centerTitle: true,
           actions: [
             //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState!.openEndDrawer())
           ],
         ),
         endDrawer: DefaultDrawer(
@@ -152,13 +152,13 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   child: PageView.builder(
                     pageSnapping: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: pageList.length,
+                    itemCount: pageList!.length,
                     onPageChanged: (int page) {
                       getChangedPageAndMoveBar(page);
                     },
                     controller: controller,
                     itemBuilder: (context, index) {
-                      return pageList[index];
+                      return pageList![index];
                     },
                   ),
                 ),
@@ -168,7 +168,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      for (int i = 0; i < pageList.length; i++)
+                      for (int i = 0; i < pageList!.length; i++)
                         if (i == currentPageValue) ...[circleBar(true)] else
                           circleBar(false),
                     ],
@@ -198,7 +198,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         backgroundColor: Colors.grey[300],
                         radius: wv*14,
                         child: imageFileAvatar == null ? Icon(LineIcons.user, color: Colors.white, size: wv*20,) : Container(),
-                        backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar),
+                        backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar!),
                       ),
                       Positioned(
                         bottom: 0,
@@ -241,7 +241,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
                     SizedBox(height: hv*1,),
                     InternationalPhoneNumberInput(
-                      validator: (String phone) {
+                      validator: (String? phone) {
                         return null;
                       },
                       onInputChanged: (PhoneNumber number) {
@@ -285,7 +285,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                           child: ButtonTheme(
                             alignedDropdown: true,
                             child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
+                              child: DropdownButton<String>(
                                 isExpanded: true,
                                 hint: Text(S.of(context).choisir),
                                 value: _relation,
@@ -336,7 +336,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             child: Row(children: [
                               SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                               VerticalDivider(),
-                              Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                             ],),
                           ),
                         ),
@@ -354,7 +354,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           ((selectedDate != null) & (_relation != null)) ? CustomTextButton(
             text: S.of(context).suivant,
             action: (){
-              if (_form1Key.currentState.validate()){
+              if (_form1Key.currentState!.validate()){
                 controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
               }
             },
@@ -388,7 +388,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: _gender != "F" ? whiteColor : kSouthSeas,
-                          boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300], offset: Offset(0, 1))]
+                          boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300]!, offset: Offset(0, 1))]
                         ),
                         child: SvgPicture.asset('assets/icons/Bulk/Woman.svg', width: wv*8, color: _gender != "F" ? kSouthSeas : whiteColor,),
                       ),
@@ -405,7 +405,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: _gender != "H" ? whiteColor : kSouthSeas,
-                          boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300], offset: Offset(0, 1))]
+                          boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300]!, offset: Offset(0, 1))]
                         ),
                         child: SvgPicture.asset('assets/icons/Bulk/Man.svg', width: wv*8, color: _gender != "H" ? kSouthSeas : whiteColor,),
                       ),
@@ -423,7 +423,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     ),
                     child: ButtonTheme(alignedDropdown: true,
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton(isExpanded: true, hint: Text(S.of(context).choisir), value: _bloodGroup,
+                        child: DropdownButton<String>(isExpanded: true, hint: Text(S.of(context).choisir), value: _bloodGroup,
                           items: [
                             DropdownMenuItem(child: Text("A+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A+",),
                             DropdownMenuItem(child: Text("B+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B+",),
@@ -553,7 +553,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
             child: ((_gender != null) & (_heightController.text.isNotEmpty)) 
               ? CustomTextButton(action: (){
                 AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-                matricule = Algorithms().getMatricule(selectedDate, adherentModelProvider.getAdherent.regionOfOrigin, _gender);
+                matricule = Algorithms().getMatricule(selectedDate!, adherentModelProvider.getAdherent!.regionOfOrigin!, _gender!);
                 controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
                 }, text: S.of(context).suivant,) 
               : CustomDisabledTextButton(text: S.of(context).suivant,),
@@ -624,7 +624,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     activeColor: kDeepTeal,
                     tristate: false,
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    onChanged: (val)=> setState((){_confirmFamily = val;}),
+                    onChanged: (val)=> setState((){_confirmFamily = val!;}),
                     title: Text(S.of(context).jeConfirmeParLaPrsenteQueLaPersonneSusciteEst, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
                   ),
                   SizedBox(height: hv*3,),
@@ -644,10 +644,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
               AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
               BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
               FirebaseFirestore.instance.collection("ADHERENTS")
-                .doc(adherentModel.getAdherent.getAdherentId)
+                .doc(adherentModel.getAdherent!.getAdherentId)
                 .collection("BENEFICIAIRES").doc(matricule)
                 .set({
-                  "adherentId": adherentModel.getAdherent.getAdherentId,
+                  "adherentId": adherentModel.getAdherent!.getAdherentId,
                   "nomDFamille" : _familynameController.text,
                   "prenom": _surnameController.text,
                   "cniName": "${_familynameController.text} ${_surnameController.text}",
@@ -661,7 +661,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   "urlCNI": beneficiary.getBeneficiary.cniUrl,
                   "urlActeNaissance": beneficiary.getBeneficiary.birthCertificateUrl,
                   "createdDate": DateTime.now(),
-                  "datFinvalidite": adherentModel.getAdherent.validityEndDate,
+                  "datFinvalidite": adherentModel.getAdherent!.validityEndDate,
                   "dateNaissance": selectedDate,
                   "enabled": false,
                   "ifVivreMemeDemeure": _confirmFamily,
@@ -671,17 +671,17 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   "allergies": allergies,
                   "relation": _relation,
                 }, SetOptions(merge: true)).then((value) async {
-                  if(beneficiary.getBeneficiary.phoneList[0] != null){
+                  if(beneficiary.getBeneficiary.phoneList![0] != null){
                     if(phone == null){
                       setState(() {
-                        phone = beneficiary.getBeneficiary.phoneList[0]["number"];
+                        phone = beneficiary.getBeneficiary.phoneList![0]["number"];
                       });
                     }
                   }
                   if(phone != null) {
                     await FirebaseFirestore.instance.collection("USERS").doc(phone).set({
                       "authId": null,
-                      "adherentId": adherentModel.getAdherent.getAdherentId,
+                      "adherentId": adherentModel.getAdherent!.getAdherentId,
                       'createdDate': DateTime.now(),
                       'emailAdress': null,
                       'enabled': false,
@@ -696,8 +696,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                       "visitPoints": 0,
                       "matricule": matricule,
                       "profil": "BENEFICIAIRE",
-                      "regionDorigione": adherentModel.getAdherent.regionOfOrigin,
-                      "phoneKeywords": Algorithms.getKeyWords(phone),
+                      "regionDorigione": adherentModel.getAdherent!.regionOfOrigin,
+                      "phoneKeywords": Algorithms.getKeyWords(phone!),
                       "nameKeywords": Algorithms.getKeyWords(_familynameController.text + " "+ _surnameController.text)
                     }, SetOptions(merge: true));
                   }
@@ -736,7 +736,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0)]
+        boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0)]
       ),
       child: content,
     );
@@ -753,7 +753,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     setState(() {
       imageLoading = true;
     });
-    String folder = userProvider.getUserId;
+    String folder = userProvider.getUserId!;
     String date = DateTime.now().toString();
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_beneficiaires/$folder/Beneficiaire-$date'); //.child('photos/profils_adherents/$fileName');
@@ -769,7 +769,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
@@ -796,7 +796,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   Future getImageFromCamera() async {
@@ -809,7 +809,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   getImage(BuildContext context){
@@ -887,7 +887,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
+    String adherentId = adherentModelProvider.getAdherent!.adherentId!;
     Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_beneficiaires/$adherentId/$matricule/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -958,9 +958,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -1046,7 +1046,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   }
 
   _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime(1990),
       firstDate: DateTime(1900),

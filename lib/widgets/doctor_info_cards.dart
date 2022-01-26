@@ -8,30 +8,30 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class DoctorInfoCard extends StatelessWidget {
 
-  final String name;
-  final String avatarUrl;
-  final String title;
-  final String speciality;
-  final String distance;
-  final bool isInRdvDetail;
-  final String service;
-  final int appointmentState;
-  final bool chat, consultation, teleConsultation, rdv, visiteDomicile, noShadow;
-  final bool noPadding, includeHospital, isServiceProvider;
-  final String field, officeName, actionText;
-  final Function onTap;
+  final String? name;
+  final String? avatarUrl;
+  final String? title;
+  final String? speciality;
+  final String? distance;
+  final bool? isInRdvDetail;
+  final String? service;
+  final int? appointmentState;
+  final bool? chat, consultation, teleConsultation, rdv, visiteDomicile, noShadow;
+  final bool? noPadding, includeHospital, isServiceProvider;
+  final String? field, officeName, actionText;
+  final Function? onTap;
 
-  const DoctorInfoCard({Key key, this.name, this.title, this.speciality, this.noShadow = false, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
+  const DoctorInfoCard({Key? key, this.name, this.title, this.speciality, this.noShadow = false, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: !noPadding ? EdgeInsets.symmetric(horizontal: wv*5, vertical: 5) : EdgeInsets.zero,
+      margin: !noPadding! ? EdgeInsets.symmetric(horizontal: wv*5, vertical: 5) : EdgeInsets.zero,
       decoration: BoxDecoration(
         color: kSouthSeas,
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        boxShadow: noShadow ? [] : [BoxShadow(
-          color: Colors.grey[300],
+        boxShadow: noShadow! ? [] : [BoxShadow(
+          color: Colors.grey[300]!,
           spreadRadius: 1.5,
           blurRadius: 3,
           offset: Offset(0, 2)
@@ -61,7 +61,7 @@ class DoctorInfoCard extends StatelessWidget {
                       ),
                       child: CircleAvatar(
                           backgroundColor: Colors.grey,
-                          backgroundImage: avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(avatarUrl),
+                          backgroundImage: avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(avatarUrl!) as ImageProvider,
                           radius: 30,
                       ),
                     ),
@@ -69,9 +69,9 @@ class DoctorInfoCard extends StatelessWidget {
                     Expanded(
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(isServiceProvider ? name : "Dr. $name", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
-                          Text("$title${includeHospital ? "" : " ,"+speciality}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
-                          includeHospital ? Column(crossAxisAlignment: CrossAxisAlignment.start,
+                          Text(isServiceProvider! ? name! : "Dr. $name", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
+                          Text("$title${includeHospital! ? "" : " ,"+speciality!}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                          includeHospital! ? Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: hv*1.3,),
                               Text(officeName.toString(), style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
@@ -104,7 +104,7 @@ class DoctorInfoCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text(!isInRdvDetail ? S.of(context).servicesOfferts : S.of(context).serviceDemand, style: TextStyle(color: whiteColor, fontSize: 15),),
+                    child: Text(!isInRdvDetail! ? S.of(context).servicesOfferts : S.of(context).serviceDemand, style: TextStyle(color: whiteColor, fontSize: 15),),
                   ),
                   Row(
                     children: [
@@ -134,23 +134,23 @@ class DoctorInfoCard extends StatelessWidget {
                   ),
                 ],
               ),
-              !isInRdvDetail && !isServiceProvider ? Row(
+              !isInRdvDetail! && !isServiceProvider! ? Row(
                 children: [
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: teleConsultation ? whiteColor : kSouthSeas),
+                  SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: teleConsultation! ? whiteColor : kSouthSeas),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20, color: chat ? whiteColor : kSouthSeas),
+                  SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20, color: chat! ? whiteColor : kSouthSeas),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: consultation ? whiteColor : kSouthSeas),
+                  SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: consultation! ? whiteColor : kSouthSeas),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: visiteDomicile ? whiteColor : kSouthSeas,),
+                  SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: visiteDomicile! ? whiteColor : kSouthSeas,),
                   SizedBox(width: 10,),
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
-                    child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: rdv ? whiteColor : kSouthSeas),
+                    child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: rdv! ? whiteColor : kSouthSeas),
                   ),
                   SizedBox(width: 10,),
-                  SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: visiteDomicile ? whiteColor : kSouthSeas),
+                  SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: visiteDomicile! ? whiteColor : kSouthSeas),
                 ],
               ) :
               Row(
@@ -158,7 +158,7 @@ class DoctorInfoCard extends StatelessWidget {
                   SizedBox(width: wv*2,),
                   SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 35, color: whiteColor),
                   SizedBox(width: wv*2,),
-                  Text(service == null ? S.of(context).consultation : service, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
+                  Text(service == null ? S.of(context).consultation : service!, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
                 ],
               ),
               SizedBox(height: 5,),
@@ -170,11 +170,11 @@ class DoctorInfoCard extends StatelessWidget {
           )*/
           Container(height: 30,
             child: TextButton(
-              onPressed: onTap,
+              onPressed: ()=>onTap,
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),
-              child: isInRdvDetail ? Align(
+              child: isInRdvDetail! ? Align(
                 alignment: Alignment.centerLeft,
                 child: RichText(
                   textAlign: TextAlign.center,
@@ -182,13 +182,13 @@ class DoctorInfoCard extends StatelessWidget {
                     style: TextStyle(color: whiteColor),
                     children: [
                       TextSpan(text: S.of(context).votreDemandeDeRdvEst),
-                      TextSpan(text: HomePageComponents().getAppointmentStateText(appointmentState), style: TextStyle(fontWeight: FontWeight.bold))
+                      TextSpan(text: HomePageComponents().getAppointmentStateText(appointmentState!), style: TextStyle(fontWeight: FontWeight.bold))
                     ]
                   ),
                 ),
               ) :
               Row(children: [
-                Text(actionText != null ? actionText : includeHospital ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
+                Text(actionText != null ? actionText! : includeHospital! ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
                 SizedBox(width: 10,),
                 Icon(Icons.arrow_forward_ios, color: Colors.white),
               ],mainAxisAlignment: MainAxisAlignment.end)

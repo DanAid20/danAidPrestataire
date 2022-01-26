@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 class IntroText extends StatelessWidget {
   const IntroText({
-    Key key, this.title, this.rank
+    Key? key, this.title, this.rank
   }) : super(key: key);
-  final String title;
-  final int rank;
+  final String? title;
+  final int? rank;
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: bottom(size: defSize * 13),
+      bottom: bottom(size: defSize! * 13),
       left: 0,
       right: 0,
       child: Container(
@@ -23,7 +23,7 @@ class IntroText extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              title,
+              title!,
               style: TextStyle(
                   color: Colors.white,
                   fontSize: fontSize(size: 23),

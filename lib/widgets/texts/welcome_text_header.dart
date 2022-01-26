@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class WelcomeHeader extends StatelessWidget {
   const WelcomeHeader({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

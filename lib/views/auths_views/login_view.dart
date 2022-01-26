@@ -30,8 +30,8 @@ class _LoginViewState extends State<LoginView> {
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String _verificationId;
-  TextEditingController _mPhoneController, _mPasswordController;
+  String? _verificationId;
+  TextEditingController? _mPhoneController, _mPasswordController;
   bool loader = false;
   bool _mIsPass = true;
 
@@ -74,11 +74,11 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 Expanded(
                   child: Container(
-                    height: SizeConfig.screenHeight * .8,
+                    height: SizeConfig.screenHeight! * .8,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(defaultSize * 2.5),
-                            topRight: Radius.circular(defaultSize * 2.5)
+                            topLeft: Radius.circular(defaultSize! * 2.5),
+                            topRight: Radius.circular(defaultSize! * 2.5)
                         )
                     ),
                     child: ListView(
@@ -181,8 +181,8 @@ class _LoginViewState extends State<LoginView> {
               child: TextFormField(
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   controller: _mPhoneController,
-                  validator: (String phone) {
-                    return (phone.isEmpty)
+                  validator: (String? phone) {
+                    return (phone!.isEmpty)
                         ? kPhoneNumberNullError
                         : (!digitValidatorRegExp.hasMatch(phone))
                         ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
@@ -194,7 +194,7 @@ class _LoginViewState extends State<LoginView> {
                   decoration: InputDecoration(
                     prefixIcon: Icon(LineIcons.phone),
                     errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: Colors.red[300]),
+                      borderSide: BorderSide(width: 1, color: Colors.red[300]!),
                       borderRadius: BorderRadius.all(Radius.circular(20))
                     ),
                     fillColor: Colors.grey[100],
@@ -224,14 +224,14 @@ class _LoginViewState extends State<LoginView> {
                   autovalidate = true;
                 });
                 UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                print("${_mPhoneController.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
+                print("${_mPhoneController?.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
 
-                if (_mFormKey.currentState.validate()){
+                if (_mFormKey.currentState!.validate()){
                   setState(() {
                     loader = true;
                   });
-                  userProvider.setUserId("+$phoneCode${_mPhoneController.text}");
-                  print("+${userProvider.getCountryCode}${_mPhoneController.text}");
+                  userProvider.setUserId("+$phoneCode${_mPhoneController?.text}");
+                  print("+${userProvider.getCountryCode}${_mPhoneController?.text}");
                   verifyPhoneNumber();
                   /*bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
                   if(registered == false){
@@ -252,12 +252,12 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
-    String profile;
-    UserModel userProfile;
+    String? profile;
+    UserModel? userProfile;
     DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
     bool exists = (user.exists) ? true : false;
     if (exists) {
-      profile = user.data()["profil"];
+      profile = user.get("profil");
       userProfile = UserModel.fromDocument(user);
     }
     return {
@@ -275,12 +275,12 @@ class _LoginViewState extends State<LoginView> {
 
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser.uid);
-      userProvider.setAuthId(_auth.currentUser.uid);
+      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
+      userProvider.setAuthId(_auth.currentUser!.uid);
       setState((){
         loader = false;
       });
-      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
+      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
       bool registered = res["exists"];
       String profile = res["profile"];
       UserModel user = res["user"];
@@ -292,8 +292,8 @@ class _LoginViewState extends State<LoginView> {
         if(profile == beneficiary){
           if(user.authId == null){
             FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
-              "authId": _auth.currentUser.uid,
-              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+              "authId": _auth.currentUser!.uid,
+              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
               "userCountryName": userProvider.getCountryName,
             }).then((value) {
               showSnackbar("Profil bénéficiaire recupéré..");
@@ -302,8 +302,8 @@ class _LoginViewState extends State<LoginView> {
         }
         HiveDatabase.setRegisterState(true);
         HiveDatabase.setSignInState(true);
-        HiveDatabase.setAuthPhone(userProvider.getUserModel.userId);
-        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel.adherentId);
+        HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
+        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
         print("profile:");
         print(profile);
         userProvider.setProfileType(profile);
@@ -317,10 +317,10 @@ class _LoginViewState extends State<LoginView> {
       setState((){
         loader = false;
       });
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message+authException.message);
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message + authException.message!);
     };
 
-    PhoneCodeSent codeSent = (String verificationId, [int forceResendingToken]) async {
+    PhoneCodeSent codeSent = (String? verificationId, [int? forceResendingToken]) async {
       showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
       if(verificationId != null){
         _verificationId = verificationId;
@@ -348,14 +348,14 @@ class _LoginViewState extends State<LoginView> {
 
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: userProvider.getUserId,
+          phoneNumber: userProvider.getUserId!,
           timeout: const Duration(seconds: 40),
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,
           codeSent: codeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e);
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
     }
   }
 

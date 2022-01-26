@@ -20,9 +20,9 @@ import 'package:simple_tags/simple_tags.dart';
 import 'package:danaid/core/services/dynamicLinkHandler.dart';
 
 class PostContainer extends StatelessWidget {
-  final PostModel post;
-  final String groupId;
-  const PostContainer({ Key key, this.post, this.groupId }) : super(key: key);
+  final PostModel? post;
+  final String? groupId;
+  const PostContainer({ Key? key, this.post, this.groupId }) : super(key: key);
 
   void handleClick(int value){
     switch (value) {
@@ -36,19 +36,19 @@ class PostContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    String time = Algorithms.getTimeElapsed(date: post.dateCreated.toDate());
+    String? time = Algorithms.getTimeElapsed(date: post!.dateCreated!.toDate());
     List<String> tags = [];
-    for(int i = 0; i < post.tags.length; i++){
-      tags.add(post.tags[i]);
+    for(int i = 0; i < post!.tags!.length; i++){
+      tags.add(post!.tags![i]);
     }
-    List likes = (post.likesList != null) ? post.likesList : [];
+    List? likes = (post!.likesList != null) ? post!.likesList : [];
 
-    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(post.id);
-    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(groupId).collection("POSTS_GROUPS").doc(post.id);
+    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(post!.id);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(groupId).collection("POSTS_GROUPS").doc(post!.id);
     DocumentReference docRef = groupId == null ? normalRef : groupRef;
 
     return InkWell(
-      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post, groupId: groupId,),),),
+      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post!, groupId: groupId!,),),),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*3),
         decoration: BoxDecoration(
@@ -57,12 +57,12 @@ class PostContainer extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post.userId),),);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post!.userId!),),);
               },
               child: CircleAvatar(
                 backgroundColor: Colors.grey[300],
-                backgroundImage: post.userAvatar != null ? CachedNetworkImageProvider(post.userAvatar) : null,
-                child: post.userAvatar == null ? Icon(LineIcons.user, color: whiteColor,) : Container(),
+                backgroundImage: post!.userAvatar != null ? CachedNetworkImageProvider(post!.userAvatar!) : null,
+                child: post!.userAvatar == null ? Icon(LineIcons.user, color: whiteColor,) : Container(),
               ),
             ),
             SizedBox(width: wv*3,),
@@ -74,8 +74,8 @@ class PostContainer extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(post.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
-                          Text("Il ya "+time, style: TextStyle(fontSize: 12)),
+                          Text(post!.userName!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
+                          Text("Il ya "+time!, style: TextStyle(fontSize: 12)),
                         ],
                       ),
                       Spacer(),
@@ -86,13 +86,13 @@ class PostContainer extends StatelessWidget {
                           onSelected: (int value){
                             switch (value) {
                               case 0:
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditPost(post: post, groupId: groupId,),),);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditPost(post: post!, groupId: groupId!,),),);
                                 break;
                               case 1:
                                 docRef.collection("SIGNALEMENTS_POST").add({
-                                  "complainantId": userProvider.getUserModel.userId,
-                                  "complainantAuthId": FirebaseAuth.instance.currentUser.uid,
-                                  "postId": post.id,
+                                  "complainantId": userProvider.getUserModel?.userId,
+                                  "complainantAuthId": FirebaseAuth.instance.currentUser!.uid,
+                                  "postId": post?.id,
                                   "dateCreated": DateTime.now()
                                 }).then((value){
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSignal)));
@@ -106,7 +106,7 @@ class PostContainer extends StatelessWidget {
                                 docRef.delete().then((value){ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).postSupprimAvecSuccs)));});
                                 break;
                               case 3:
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post.userId),),);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: post!.userId!),),);
                                 break;
                             }
                           },
@@ -117,7 +117,7 @@ class PostContainer extends StatelessWidget {
                           ),
                           padding: EdgeInsets.all(0),
                           itemBuilder: (context) => [
-                            userProvider.getUserModel.userId == post.userId ? PopupMenuItem(
+                            userProvider.getUserModel!.userId == post!.userId ? PopupMenuItem(
                               child: Row(
                                 children: [
                                   SvgPicture.asset('assets/icons/Bulk/Edit.svg', color: whiteColor.withOpacity(0.7), width: 25,),
@@ -138,7 +138,7 @@ class PostContainer extends StatelessWidget {
                               ),
                               value: 1,
                             ),
-                            userProvider.getUserModel.userId == post.userId ? PopupMenuItem(
+                            userProvider.getUserModel!.userId == post!.userId ? PopupMenuItem(
                               child: Row(
                                 children: [
                                   SvgPicture.asset('assets/icons/Bulk/Delete.svg', color: whiteColor.withOpacity(0.7),),
@@ -163,28 +163,28 @@ class PostContainer extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: hv*1.0,),
-                  post.title != null ? Column(
+                  post!.title != null ? Column(
                     children: [
-                      Text(post.title, style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
+                      Text(post!.title!, style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
                       SizedBox(height: hv*0.5,),
                     ],
                   ) : Container(),
-                  Text(post.text, style: TextStyle(color: Colors.black87)),
-                  post.imgUrl != null ? Row(
+                  Text(post!.text!, style: TextStyle(color: Colors.black87)),
+                  post?.imgUrl != null ? Row(
                     children: [
                       Expanded(
                         child: Hero(
-                          tag: post.id,
+                          tag: post!.id!,
                           child: GestureDetector(
-                            onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImageFullScreen(hero: post.id, imgUrl: post.imgUrl, title: post.title.toString(),)),),
+                            onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImageFullScreen(hero: post?.id, imgUrl: post?.imgUrl, title: post?.title.toString(),)),),
                             child: Container(
                               margin: EdgeInsets.only(right: wv*3, top: hv*1),
                               height: hv*15,
                               decoration: BoxDecoration(
                                 color: Colors.grey[400],
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
-                                image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl), fit: BoxFit.cover)
+                                boxShadow: [BoxShadow(color: Colors.grey[500]!, blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
+                                image: DecorationImage(image: CachedNetworkImageProvider(post!.imgUrl!), fit: BoxFit.cover)
                               ),
                             ),
                           ),
@@ -193,7 +193,7 @@ class PostContainer extends StatelessWidget {
                     ],
                   ) : Container(),
 
-                  post.postType == 1 && post.tags.length >= 1 ? Padding(
+                  post?.postType == 1 && post!.tags!.length >= 1 ? Padding(
                     padding: EdgeInsets.only(top: hv*2),
                     child: SimpleTags(
                       content: tags,
@@ -215,23 +215,23 @@ class PostContainer extends StatelessWidget {
                       Expanded(
                         child: InkWell(
                           onTap: (){
-                            print(post.likesList.toString());
-                            if(!likes.contains(userProvider.getUserModel.userId)){
+                            print(post?.likesList.toString());
+                            if(!likes!.contains(userProvider.getUserModel!.userId)){
                               print("like");
                               docRef.set({
-                                "likesList": FieldValue.arrayUnion([userProvider.getUserModel.userId]),
+                                "likesList": FieldValue.arrayUnion([userProvider.getUserModel?.userId]),
                               }, SetOptions(merge: true));
                             } else {
                               print("dislike");
                               docRef.set({
-                                "likesList": FieldValue.arrayRemove([userProvider.getUserModel.userId]),
+                                "likesList": FieldValue.arrayRemove([userProvider.getUserModel?.userId]),
                               }, SetOptions(merge: true));
                             }
                           },
                           child: Row(children: [
                             SvgPicture.asset('assets/icons/Bulk/Heart.svg'),
                             SizedBox(width: wv*1.5),
-                            Text(likes.length.toString())
+                            Text(likes!.length.toString())
                           ],),
                         ),
                       ),
@@ -239,21 +239,21 @@ class PostContainer extends StatelessWidget {
                         child: Row(children: [
                           SvgPicture.asset('assets/icons/Bulk/Chat.svg'),
                           SizedBox(width: wv*1.5),
-                          Text(post.comments != null ? post.comments.toString() : "0")
+                          Text(post!.comments != null ? post!.comments.toString() : "0")
                         ],),
                       ),
                       Expanded(
                         child: InkWell(
                           onTap: () async {
-                            var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel.userId, postId: post.id, isGroup: groupId == null ? '0' : '1', text: post.text, title: post.title);
-                            Share.share(link.toString(), subject: post.title != null ? post.title : "New Post on DanAid").then((value) {
+                            var link = await DynamicLinkHandler.createPostDynamicLink(userId: userProvider.getUserModel?.userId, postId: post?.id, isGroup: groupId == null ? '0' : '1', text: post!.text, title: post!.title);
+                            Share.share(link.toString(), subject: post!.title != null ? post!.title : "New Post on DanAid").then((value) {
                               print("Done !");
                             });
                           },
                           child: Row(children: [
                             SvgPicture.asset('assets/icons/Bulk/Send.svg'),
                             SizedBox(width: wv*1.5),
-                            Text(post.sharesList != null ? post.sharesList.length.toString() : '0')
+                            Text(post!.sharesList != null ? post!.sharesList!.length.toString() : '0')
                           ],),
                         ),
                       ),

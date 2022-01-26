@@ -16,9 +16,9 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class PaymentCart extends StatefulWidget {
-  final InvoiceModel invoice;
-  final num regFee;
-  const PaymentCart({ Key key, this.invoice, this.regFee }) : super(key: key);
+  final InvoiceModel? invoice;
+  final num? regFee;
+  const PaymentCart({ Key? key, this.invoice, this.regFee }) : super(key: key);
 
   @override
   _PaymentCartState createState() => _PaymentCartState();
@@ -26,12 +26,12 @@ class PaymentCart extends StatefulWidget {
 
 class _PaymentCartState extends State<PaymentCart> {
   int payments = 0;
-  int months;
+  int? months;
   int maxMonths = 12;
-  num amountPerMonth;
-  num totalAmount;
-  num total;
-  num registrationFee;
+  num? amountPerMonth;
+  num? totalAmount;
+  num? total;
+  num? registrationFee;
   List campaignsChosen = [];
   num promoSum = 0;
   num promoRegistrationSum = 0;
@@ -42,10 +42,10 @@ class _PaymentCartState extends State<PaymentCart> {
   bool spinner = false;
 
   init(){
-    months = widget.invoice.monthsPaid == null ? 12 : 12 - widget.invoice.monthsPaid;
-    maxMonths = months;
-    totalAmount = widget.invoice.amount;
-    registrationFee = widget.invoice.inscriptionId == null || widget.invoice.registrationPaid == true ? 0 : widget.regFee;
+    months = (widget.invoice?.monthsPaid == null ? 12 : 12 - widget.invoice!.monthsPaid!) as int?;
+    maxMonths = months!;
+    totalAmount = widget.invoice!.amount!;
+    registrationFee = widget.invoice?.inscriptionId == null || widget.invoice?.registrationPaid == true ? 0 : widget.regFee;
 
     setState(() {});
   }
@@ -58,16 +58,16 @@ class _PaymentCartState extends State<PaymentCart> {
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    DateTime invStart = widget.invoice.coverageStartDate?.toDate();
-    DateTime invEnd = widget.invoice.coverageEndDate?.toDate();
-    DateTime invPaidStart = widget.invoice.currentPaidStartDate?.toDate();
-    DateTime invPaidEnd = widget.invoice.currentPaidEndDate?.toDate();
-    amountPerMonth = totalAmount/12;
-    num amountToPay = (months*amountPerMonth).round();
-    DateTime start = invPaidEnd == null ? invStart : invPaidEnd.add(Duration(days: 1));
-    DateTime end = invPaidEnd == null ? invStart.add(Duration(days: months*30)) : invPaidEnd.add(Duration(days: months*30));
+    DateTime? invStart = widget.invoice?.coverageStartDate?.toDate();
+    DateTime? invEnd = widget.invoice?.coverageEndDate?.toDate();
+    DateTime? invPaidStart = widget.invoice?.currentPaidStartDate?.toDate();
+    DateTime? invPaidEnd = widget.invoice?.currentPaidEndDate?.toDate();
+    amountPerMonth = totalAmount!/12;
+    num? amountToPay = (months! * amountPerMonth!).round();
+    DateTime? start = invPaidEnd == null ? invStart : invPaidEnd.add(Duration(days: 1));
+    DateTime end = invPaidEnd == null ? invStart!.add(Duration(days: months!*30)) : invPaidEnd.add(Duration(days: months!*30));
 
-    List campaigns = widget.invoice.campaignsChosen == null ? [] : widget.invoice.campaignsChosen;
+    List? campaigns = widget.invoice?.campaignsChosen == null ? [] : widget.invoice?.campaignsChosen;
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -119,7 +119,7 @@ class _PaymentCartState extends State<PaymentCart> {
                                     SizedBox(height: hv*2,),
                                     Row(
                                       children: [
-                                        Text(widget.invoice.label, style: TextStyle(color: kDeepTeal, fontSize: 16.5, fontWeight: FontWeight.bold)),
+                                        Text(widget.invoice!.label!, style: TextStyle(color: kDeepTeal, fontSize: 16.5, fontWeight: FontWeight.bold)),
                                         Spacer(),
                                         Text("$amountToPay f.", style: TextStyle(color: kCardTextColor, fontSize: 16.5, fontWeight: FontWeight.bold)),
                                       ],
@@ -139,7 +139,7 @@ class _PaymentCartState extends State<PaymentCart> {
                                         backgroundColor: kPrimaryColor,
                                         child: Icon(LineIcons.minus, color: whiteColor,),
                                       ), 
-                                      onPressed: (adherentProvider.getAdherent.adherentPlan != 1.1) ? ()=>setState((){months>1? months = months - 1 : months = 1;}) : ()=>setState((){months = 6;})
+                                      onPressed: (adherentProvider.getAdherent?.adherentPlan != 1.1) ? ()=>setState((){months!>1? months = months! - 1 : months = 1;}) : ()=>setState((){months = 6;})
                                     ),
                                     SizedBox(width: wv*2,),
                                     IconButton(
@@ -147,7 +147,7 @@ class _PaymentCartState extends State<PaymentCart> {
                                         backgroundColor: kPrimaryColor,
                                         child: Icon(LineIcons.plus, color: whiteColor,),
                                       ), 
-                                      onPressed: (adherentProvider.getAdherent.adherentPlan != 1.1) ? ()=>setState((){months<maxMonths? months = months + 1 : months = maxMonths;}) : ()=>setState((){months = 12;})
+                                      onPressed: (adherentProvider.getAdherent?.adherentPlan != 1.1) ? ()=>setState((){months!<maxMonths? months = months! + 1 : months = maxMonths;}) : ()=>setState((){months = 12;})
                                     ),
                                   ],
                                 ),
@@ -155,7 +155,7 @@ class _PaymentCartState extends State<PaymentCart> {
                             ],
                           ),
                         ),
-                        widget.invoice.inscriptionId != null && payInscription == true && widget.invoice.registrationPaid != true ? Container(
+                        widget.invoice?.inscriptionId != null && payInscription == true && widget.invoice?.registrationPaid != true ? Container(
                           margin: EdgeInsets.symmetric(vertical: hv*0.25),
                           padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1.5),
                           decoration: BoxDecoration(
@@ -200,7 +200,7 @@ class _PaymentCartState extends State<PaymentCart> {
                     ),
                   ),
                   Container(
-                    child: StreamBuilder(
+                    child: StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance.collection('CAMPAGNES').where('active', isEqualTo: true).snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
@@ -210,7 +210,7 @@ class _PaymentCartState extends State<PaymentCart> {
                             ),
                           );
                         }
-                        if (!(snapshot.data.docs.length >= 1)) {
+                        if (!(snapshot.data!.docs.length >= 1)) {
                           return Center(
                             child: Container(
                               width: 150,
@@ -227,18 +227,18 @@ class _PaymentCartState extends State<PaymentCart> {
                           height: hv*40,
                           margin: EdgeInsets.symmetric(vertical: hv*1.5, horizontal: wv*2),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey[200]),
+                            border: Border.all(color: Colors.grey[200]!),
                             borderRadius: BorderRadius.circular(10)
                           ),
                           child: ListView.builder(
                             physics: BouncingScrollPhysics(),
-                            itemCount: snapshot.data.docs.length,
+                            itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index){
-                              CampaignModel camp = CampaignModel.fromDocument(snapshot.data.docs[index]);
-                              if((widget.invoice.inscriptionId == null || payInscription == false || widget.invoice.registrationPaid == true) && camp.scope == "INSCRIPTION"){
+                              CampaignModel camp = CampaignModel.fromDocument(snapshot.data!.docs[index]);
+                              if((widget.invoice?.inscriptionId == null || payInscription == false || widget.invoice?.registrationPaid == true) && camp.scope == "INSCRIPTION"){
                                 return Container();
                               }
-                              if(campaigns.contains(camp.id)){
+                              if(campaigns!.contains(camp.id)){
                                 return Container();
                               }
                               return HomePageComponents.getPromotionTile(

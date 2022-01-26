@@ -49,9 +49,9 @@ import 'package:danaid/core/models/beneficiaryModel.dart';
 import '../locator.dart';
 
 class Danaid extends StatelessWidget {
-  final String env;
+  final String? env;
 
-  const Danaid({Key key, this.env}) : super(key: key);
+  const Danaid({Key? key, this.env}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class Danaid extends StatelessWidget {
         builder: (context, provider, child) => MultiProvider(
               providers: [
                 ChangeNotifierProvider<DevEnvironmentProvider>(
-                  create: (_) => DevEnvironmentProvider(env),
+                  create: (_) => DevEnvironmentProvider(env!),
                 ),
                 ChangeNotifierProvider<UserProvider>(
                   create: (_) => UserProvider(

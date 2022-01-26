@@ -5,30 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class KTextFormField extends StatelessWidget {
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final Widget suffixIcon;
-  final Widget prefixIcon;
-  final String hintText;
-  final String labelText;
-  final bool isPassword;
-  final bool isTextArea;
-  final bool isBorderLess;
-  final bool isComposed;
-  final String helperText;
-  final bool readOnly;
-  final Function(String) validator;
-  final String initialValue;
-  final Function onTap;
-  final Function(String) onChanged;
-  final Function(String) onSaved;
-  final Function(String) onFieldSubmitted;
-  final List<TextInputFormatter> inputFormatters;
-  final int maxLength;
-  final int maxLines;
-  final int minLines;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+  final String? hintText;
+  final String? labelText;
+  final bool? isPassword;
+  final bool? isTextArea;
+  final bool? isBorderLess;
+  final bool? isComposed;
+  final String? helperText;
+  final bool? readOnly;
+  final FormFieldValidator<String>? validator;
+  final String? initialValue;
+  final Function? onTap;
+  final Function(String)? onChanged;
+  final Function(String)? onSaved;
+  final Function(String)? onFieldSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLength;
+  final int? maxLines;
+  final int? minLines;
   final isExpands;
-  final BorderSide borderSide;
+  final BorderSide? borderSide;
 
   KTextFormField(
       {this.controller,
@@ -66,10 +66,10 @@ class KTextFormField extends StatelessWidget {
         style: TextStyle(fontSize: 18, color: kTextColor),
         validator: validator,
         controller: controller,
-        readOnly: this.readOnly,
+        readOnly: this.readOnly!,
         initialValue: initialValue,
-        onTap: onTap,
-        onSaved: onSaved,
+        onTap: ()=> onTap,
+        onSaved: (string)=> onSaved,
         inputFormatters: inputFormatters,
         onFieldSubmitted: onFieldSubmitted,
         onChanged: onChanged,
@@ -78,7 +78,7 @@ class KTextFormField extends StatelessWidget {
         expands: isExpands,
         maxLines: maxLines,
         minLines: minLines,
-        obscureText: isPassword,
+        obscureText: isPassword!,
         maxLength: maxLength,
         decoration: InputDecoration(
           helperText: helperText,
@@ -99,10 +99,10 @@ class KTextFormField extends StatelessWidget {
 
 
 class ChoiceTile extends StatelessWidget {
-  final bool isActive;
-  final String label;
-  final IconData icon;
-  final VoidCallback onPressed;
+  final bool? isActive;
+  final String? label;
+  final IconData? icon;
+  final VoidCallback? onPressed;
 
   ChoiceTile({this.isActive = false, this.onPressed, this.label, this.icon});
 
@@ -113,7 +113,7 @@ class ChoiceTile extends StatelessWidget {
       height: 90,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
-        color: isActive ? Theme.of(context).primaryColor : Colors.white,
+        color: isActive! ? Theme.of(context).primaryColor : Colors.white,
         boxShadow: [
           BoxShadow(
             blurRadius: 4.0,
@@ -137,15 +137,15 @@ class ChoiceTile extends StatelessWidget {
                     icon,
                     size: 30,
                     color:
-                    isActive ? Colors.white : kPrimaryColor
+                    isActive! ? Colors.white : kPrimaryColor
                 ),
                 SizedBox(height: 10),
                 Text(
-                  label,
+                  label!,
                   style: TextStyle(
                     fontSize: fontSize(size: 15),
                     fontWeight: FontWeight.w700,
-                    color: isActive
+                    color: isActive!
                         ? Colors.white
                         : kPrimaryColor,
                   ),
@@ -160,18 +160,18 @@ class ChoiceTile extends StatelessWidget {
 }
 
 class CustomDropDownButton extends StatelessWidget {
-  final String label, initialText;
-  final dynamic value;
-  final Function(dynamic val) onChanged;
-  final List<DropdownMenuItem<dynamic>> items;
+  final String? label, initialText;
+  final dynamic? value;
+  final Function(dynamic val)? onChanged;
+  final List<DropdownMenuItem<dynamic>>? items;
 
-  const CustomDropDownButton({Key key, this.label, this.value, this.initialText = "Choisir..", this.onChanged, this.items}) : super(key: key);
+  const CustomDropDownButton({Key? key, this.label, this.value, this.initialText = "Choisir..", this.onChanged, this.items}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 16, color: kTextBlue),),
+        Text(label!, style: TextStyle(fontSize: 16, color: kTextBlue),),
           SizedBox(height: 5,),
           Container(
             constraints: BoxConstraints(minWidth: wv*45),
@@ -184,7 +184,7 @@ class CustomDropDownButton extends StatelessWidget {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton(
                   isExpanded: true, 
-                  hint: Text(initialText), 
+                  hint: Text(initialText!), 
                   value: value,
                   items: items,
                   onChanged: onChanged)

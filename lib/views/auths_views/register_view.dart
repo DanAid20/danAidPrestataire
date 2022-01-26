@@ -26,7 +26,7 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
-  TextEditingController _mPhoneController, _mPasswordController, _mEmailController, _mCountryController, _mNameController;
+  TextEditingController? _mPhoneController, _mPasswordController, _mEmailController, _mCountryController, _mNameController;
   bool _mIsPass = true;
   bool autovalidate = false;
   String phoneCode = "237";
@@ -35,7 +35,7 @@ class _RegisterViewState extends State<RegisterView> {
   Country _selectedFilteredDialogCountry = CountryPickerUtils.getCountryByPhoneCode('237');
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String _verificationId;
+  String? _verificationId;
 
   @override
   void initState() {
@@ -58,14 +58,14 @@ class _RegisterViewState extends State<RegisterView> {
             child: Stack(
               children: [
                 Container(
-                  height: SizeConfig.screenHeight * .45,
+                  height: SizeConfig.screenHeight! * .45,
                   decoration: BoxDecoration(color: kPrimaryColor),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height: SizeConfig.screenHeight * .3,
+                      height: SizeConfig.screenHeight! * .3,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -100,12 +100,12 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     Expanded(
                       child: Container(
-                        height: SizeConfig.screenHeight * .8,
+                        height: SizeConfig.screenHeight! * .8,
                         decoration: BoxDecoration(
                             color: whiteColor,
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(defaultSize * 2.5),
-                                topRight: Radius.circular(defaultSize * 2.5)
+                                topLeft: Radius.circular(defaultSize! * 2.5),
+                                topRight: Radius.circular(defaultSize! * 2.5)
                             )
                         ),
                         child: ListView(
@@ -213,7 +213,7 @@ class _RegisterViewState extends State<RegisterView> {
             SizedBox(height: hv*2,),
             
             KTextFormField(
-              controller: _mPhoneController,
+              controller: _mPhoneController!,
               labelText: S.of(context).tlphone,
               hintText: S.of(context).entrezVotreNumroDeTlphone,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -222,8 +222,8 @@ class _RegisterViewState extends State<RegisterView> {
               ],
               prefixIcon:
               Icon(SimpleLineIcons.phone),
-              validator: (String phone) {
-                return (phone.isEmpty)
+              validator: (String? phone) {
+                return (phone!.isEmpty)
                     ? kPhoneNumberNullError
                     : (!digitValidatorRegExp.hasMatch(phone))
                     ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
@@ -244,27 +244,27 @@ class _RegisterViewState extends State<RegisterView> {
             ),*/
 
             KTextFormField(
-              controller: _mNameController,
+              controller: _mNameController!,
               labelText: S.of(context).nom,
               hintText: S.of(context).entrezVotreNom,
               prefixIcon:
               Icon(SimpleLineIcons.flag),
-              validator: (String name) {
-                return (name.isEmpty)
+              validator: (String? name) {
+                return (name!.isEmpty)
                     ? kCountryNullError
                     : null;
               },
             ),
 
             KTextFormField  (
-              controller: _mEmailController,
+              controller: _mEmailController!,
               labelText: S.of(context).adresseEmail,
               hintText: S.of(context).entrezVotreAdresseEmail,
               keyboardType: TextInputType.emailAddress,
               prefixIcon:
               Icon(SimpleLineIcons.envelope),
-              validator: (String mail) {
-                return (mail.isEmpty)
+              validator: (String? mail) {
+                return (mail!.isEmpty)
                     ? kEmailNullErrorFr
                     // : (!emailValidatorRegExp.hasMatch(mail))
                     // ? kInvalidEmailError 
@@ -305,14 +305,14 @@ class _RegisterViewState extends State<RegisterView> {
                   autovalidate = true;
                 });
                 UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                print("${_mCountryController.text}, ${_mEmailController.text}, ${_mPhoneController.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
+                print("${_mCountryController!.text}, ${_mEmailController!.text}, ${_mPhoneController!.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
                 
-                if (_mFormKey.currentState.validate()){
+                if (_mFormKey.currentState!.validate()){
 
-                  userProvider.setEmail(_mEmailController.text);
-                  userProvider.setFullName(_mNameController.text);
-                  userProvider.setUserId("+$phoneCode${_mPhoneController.text}");
-                  print("+${userProvider.getCountryCode}${_mPhoneController.text}");
+                  userProvider.setEmail(_mEmailController!.text);
+                  userProvider.setFullName(_mNameController!.text);
+                  userProvider.setUserId("+$phoneCode${_mPhoneController!.text}");
+                  print("+${userProvider.getCountryCode}${_mPhoneController!.text}");
                   verifyPhoneNumber();
                   //_navigationService.navigateTo('/otp');
                 }else{
@@ -335,16 +335,16 @@ class _RegisterViewState extends State<RegisterView> {
 
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn +_auth.currentUser.uid);
+      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn +_auth.currentUser!.uid);
       _navigationService.navigateTo('/home');
     };
 
     //Listens for errors with verification, such as too many attempts
     PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message+authException.message);
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message+authException.message!);
     };
 
-    PhoneCodeSent codeSent = (String verificationId, [int forceResendingToken]) async {
+    PhoneCodeSent codeSent = (String verificationId, [int? forceResendingToken]) async {
       showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode); 
       _verificationId = verificationId;
     };
@@ -357,7 +357,7 @@ class _RegisterViewState extends State<RegisterView> {
     
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: userProvider.getUserId,
+          phoneNumber: userProvider.getUserId!,
           timeout: const Duration(seconds: 30),
           verificationCompleted: verificationCompleted,
           verificationFailed: verificationFailed,

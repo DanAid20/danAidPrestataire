@@ -73,31 +73,31 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
                 Expanded(
                   child: Container(
                       decoration: BoxDecoration(),
-                      child: StreamBuilder(
+                      child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return Center(child: CircularProgressIndicator());
                           }
                           List<Widget> plans = [];
-                          for (int i = 0; i < snapshot.data.docs.length; i++){
-                            DocumentSnapshot doc = snapshot.data.docs[i];
+                          for (int i = 0; i < snapshot.data!.docs.length; i++){
+                            DocumentSnapshot doc = snapshot.data!.docs[i];
                             PlanModel plan = PlanModel.fromDocument(doc);
                             Widget content = PackageCard(
-                              mPackage: plan.label,
+                              mPackage: plan.label!,
                               mPackageAmount: plan.monthlyAmount.toString(),
                               mPackageContent: S.of(context).couvertureSant+" ${plan.coveragePercentage}%",
                               mPackageContent1: S.of(context).mdcinDeFamille,
                               mPackageContent2: S.of(context).plafondDe+" ${plan.annualLimit} XAF",
-                              mSize: _mSize,
+                              mSize: _mSize!,
                               titleColor: plan.planNumber == 0 ? kGold : kSouthSeas,
                               content: S.of(context).niveau+" ${plan.label}\n+ "+S.of(context).couverture+" ${plan.coveragePercentage}% "+S.of(context).desFraisnPlafondDeSoins+" ${plan.annualLimit}Cfa/an",
                               level: plan.planNumber.toString(),
                               iconUrl: plan.planNumber == 0 ? 'assets/icons/Bulk/HeartOutline.svg' : plan.planNumber == 1 ? 'assets/icons/Bulk/ShieldAcces.svg' : plan.planNumber == 2 ? 'assets/icons/Bulk/ShieldAssist.svg' :plan.planNumber == 3 ? 'assets/icons/Bulk/ShieldSerenity.svg' : 'assets/icons/Bulk/Shield Done.svg',
                               action: (){
                                 adherentProvider.setAdherentModel(AdherentModel());
-                                adherentProvider.setAdherentPlan(plan.planNumber);
-                                adherentProvider.setAnnualCoverageLimit(plan.annualLimit);
+                                adherentProvider.setAdherentPlan(plan.planNumber!);
+                                adherentProvider.setAnnualCoverageLimit(plan.annualLimit!);
                                 planProvider.setPlanModel(plan);
                                 adherentProvider.setProfileEnableState(false);
                                 Navigator.pushNamed(context, '/adherent-reg-form');
@@ -126,13 +126,13 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
 
 class PackageCard extends StatelessWidget {
   const PackageCard({
-    Key key,
-    @required String mPackage,
-    @required String mPackageAmount,
-    @required String mPackageContent,
-    @required String mPackageContent1,
-    @required String mPackageContent2,
-    @required double mSize,
+    Key? key,
+    @required String? mPackage,
+    @required String? mPackageAmount,
+    @required String? mPackageContent,
+    @required String? mPackageContent1,
+    @required String? mPackageContent2,
+    @required double? mSize,
     this.action, this.titleColor, this.iconUrl, this.level, this.content,
   })  : _mPackage = mPackage,
         _mPackageAmount = mPackageAmount,
@@ -142,17 +142,17 @@ class PackageCard extends StatelessWidget {
         _mSize = mSize,
         super(key: key);
 
-  final String _mPackage;
-  final String _mPackageAmount;
-  final String _mPackageContent;
-  final String _mPackageContent1;
-  final String _mPackageContent2;
-  final String content;
-  final String level;
-  final Color titleColor;
-  final String iconUrl;
-  final double _mSize;
-  final Function action;
+  final String? _mPackage;
+  final String? _mPackageAmount;
+  final String? _mPackageContent;
+  final String? _mPackageContent1;
+  final String? _mPackageContent2;
+  final String? content;
+  final String? level;
+  final Color? titleColor;
+  final String? iconUrl;
+  final double? _mSize;
+  final Function? action;
 
   @override
   Widget build(BuildContext context) {
@@ -175,12 +175,12 @@ class PackageCard extends StatelessWidget {
             ),
             width: double.infinity,
             child: Column(children: [
-              SvgPicture.asset(iconUrl, color: Colors.white, width: wv*10,),
-              Text(_mPackage, style: TextStyle(fontSize: hv*5, fontWeight: FontWeight.w600, color: Colors.white), ),
+              SvgPicture.asset(iconUrl!, color: Colors.white, width: wv*10,),
+              Text(_mPackage!, style: TextStyle(fontSize: hv*5, fontWeight: FontWeight.w600, color: Colors.white), ),
             ],),
           ),
           SizedBox(height: 5,),
-          Align(child: Text(" "+S.of(context).niveau+" "+level, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
+          Align(child: Text(" "+S.of(context).niveau+" "+level!, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
           
           SizedBox(height: hv*2,),
           RichText(text: TextSpan(text: level == "0" ? "00" : _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: wv*15))),
@@ -194,7 +194,7 @@ class PackageCard extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(top: hv*4),
                     padding: EdgeInsets.symmetric(horizontal: wv*5),
-                    child: Text(content, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: wv*3.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                    child: Text(content!, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: wv*3.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                 ],
               ),
@@ -203,7 +203,7 @@ class PackageCard extends StatelessWidget {
           SizedBox(height: hv*1,),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: wv*3),
-            child: CustomTextButton(text: S.of(context).commencer, color: whiteColor, textColor: kPrimaryColor, action: action,),
+            child: CustomTextButton(text: S.of(context).commencer, color: whiteColor, textColor: kPrimaryColor, action: action!,),
           ),
           SizedBox(height: hv*1,)
         ],
@@ -214,18 +214,18 @@ class PackageCard extends StatelessWidget {
 
 class PackageWidget extends StatelessWidget {
   const PackageWidget({
-    Key key,
-    @required String mPackageContent,
+    Key? key,
+    @required String? mPackageContent,
   })  : _mPackageContent = mPackageContent,
         super(key: key);
 
-  final String _mPackageContent;
+  final String? _mPackageContent;
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
       child: Text(
-        _mPackageContent,
+        _mPackageContent!,
         softWrap: true,
         style: TextStyle(
             color: whiteColor,
@@ -240,23 +240,23 @@ class PackageWidget extends StatelessWidget {
 
 class PackageName extends StatelessWidget {
   const PackageName({
-    Key key,
-    @required String mPackage,
+    Key? key,
+    @required String? mPackage,
     this.size,
     this.strokeWidth,
   })  : _mPackage = mPackage,
         super(key: key);
 
-  final String _mPackage;
-  final double size;
-  final double strokeWidth;
+  final String? _mPackage;
+  final double? size;
+  final double? strokeWidth;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Text(
-          _mPackage.toUpperCase(),
+          _mPackage!.toUpperCase(),
           softWrap: true,
           style: TextStyle(
               fontSize: fontSize(size: size ?? 25),
@@ -272,7 +272,7 @@ class PackageName extends StatelessWidget {
               ]),
         ),
         Text(
-          _mPackage.toUpperCase(),
+          _mPackage!.toUpperCase(),
           softWrap: true,
           style: TextStyle(
               fontSize: fontSize(size: size ?? 25),

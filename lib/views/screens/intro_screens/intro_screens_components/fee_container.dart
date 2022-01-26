@@ -5,20 +5,20 @@ import 'package:google_fonts/google_fonts.dart';
 
 class FeeContainer extends StatelessWidget {
   const FeeContainer({
-    Key key, this.sizeLeft, this.sizeTop, this.feeBgColor,
+    Key? key, this.sizeLeft, this.sizeTop, this.feeBgColor,
   }) : super(key: key);
 
-  final double sizeLeft;
-  final double sizeTop;
-  final Color feeBgColor;
+  final double? sizeLeft;
+  final double? sizeTop;
+  final Color? feeBgColor;
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: top(size: sizeTop ?? defSize * 43),
-      left: left(size: sizeLeft ?? defSize * 4),
+      top: top(size: sizeTop ?? defSize! * 43),
+      left: left(size: sizeLeft ?? defSize! * 4),
       child: CircleAvatar(
-        radius: defSize * 6.2,
+        radius: defSize! * 6.2,
         backgroundColor: feeBgColor ?? Color(0xFF57CECA),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,7 +29,7 @@ class FeeContainer extends StatelessWidget {
                   color: Colors.white,
                   fontFamily: GoogleFonts.robotoCondensed().fontFamily,
                   fontWeight: FontWeight.w600,
-                  fontSize: fontSize(size: defSize * 1.5)),
+                  fontSize: fontSize(size: defSize! * 1.5)),
             ),
             Text(
               '70%',
@@ -37,7 +37,7 @@ class FeeContainer extends StatelessWidget {
                   color: Colors.white,
                   fontFamily: GoogleFonts.robotoCondensed().fontFamily,
                   fontWeight: FontWeight.w700,
-                  fontSize: fontSize(size: defSize * 3.7)),
+                  fontSize: fontSize(size: defSize! * 3.7)),
             ),
           ],
         ),

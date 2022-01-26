@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 
 class DefaultDrawer extends StatelessWidget {
 
-  final Function entraide, accueil, carnet, partenaire, famille;
+  final Function? entraide, accueil, carnet, partenaire, famille;
 
-  const DefaultDrawer({ Key key, this.entraide, this.accueil, this.carnet, this.partenaire, this.famille }) : super(key: key);
+  const DefaultDrawer({ Key? key, this.entraide, this.accueil, this.carnet, this.partenaire, this.famille }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class DefaultDrawer extends StatelessWidget {
                           title: Text(S.of(context).entraide, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(0);
-                            entraide();
+                            entraide!();
                           },
                         ),
                         ListTile(
@@ -53,7 +53,7 @@ class DefaultDrawer extends StatelessWidget {
                           title: Text(S.of(context).accueil, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(1);
-                            accueil();
+                            accueil!();
                           },
                         ),
                         ListTile(
@@ -61,7 +61,7 @@ class DefaultDrawer extends StatelessWidget {
                           title: Text(S.of(context).carnet, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(2);
-                            carnet();
+                            carnet!();
                           },
                         ),
                         ListTile(
@@ -69,7 +69,7 @@ class DefaultDrawer extends StatelessWidget {
                           title: Text(S.of(context).partenaires, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(3);
-                            partenaire();
+                            partenaire!();
                           },
                         ),
                         ListTile(
@@ -77,7 +77,7 @@ class DefaultDrawer extends StatelessWidget {
                           title: Text(userProvider.getProfileType == adherent ? S.of(context).famille : S.of(context).profile, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(4);
-                            famille();
+                            famille!();
                           },
                         ),
                         ListTile(

@@ -8,7 +8,7 @@ class DanaidAlerts {
   final NavigationService _navigationService =
       locator<NavigationService>();
 
-  showLoading(BuildContext context, {String title}) {
+  showLoading(BuildContext context, {String? title}) {
     showModalBottomSheet(
       isDismissible: false,
       isScrollControlled: false,
@@ -54,7 +54,7 @@ class DanaidAlerts {
   }
 
   showMessage(BuildContext context, String title,
-      {IconData iconData}) {
+      {IconData? iconData}) {
     showModalBottomSheet(
       // isDismissible: false,
       // isScrollControlled: false,
@@ -128,11 +128,11 @@ class DanaidAlerts {
   }
 
   ask(BuildContext context,
-      {String yesText,
-      String noText,
-      @required String title,
-      @required Function func,
-      @required Function cancelFunc}) {
+      {String? yesText,
+      String? noText,
+      @required String? title,
+      @required Function? func,
+      @required Function? cancelFunc}) {
     showModalBottomSheet(
       isDismissible: false,
       isScrollControlled: false,
@@ -161,12 +161,12 @@ class DanaidAlerts {
                   height: 10,
                 ),
                 Text(
-                  title,
+                  title!,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color:
-                        Theme.of(context).textTheme.headline1.color,
+                        Theme.of(context).textTheme.headline1!.color,
                     fontSize: 16,
                   ),
                 ),
@@ -190,13 +190,13 @@ class DanaidAlerts {
                                 color: kSecondaryColor,
                               ),
                             ),
-                            onPressed: () => cancelFunc(),
+                            onPressed: () => cancelFunc!(),
                             child: Text(
                               noText ?? 'No',
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
-                                      .headline1
+                                      .headline1!
                                       .color),
                             ),
                           ),
@@ -213,13 +213,13 @@ class DanaidAlerts {
                                 color: kSecondaryColor,
                               ),
                             ),
-                            onPressed: () => func(),
+                            onPressed: () => func!(),
                             child: Text(
                               yesText ?? 'Yes',
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .textTheme
-                                      .headline1
+                                      .headline1!
                                       .color),
                             ),
                           ),

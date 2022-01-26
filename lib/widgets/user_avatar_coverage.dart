@@ -40,8 +40,8 @@ class UserAvatarAndCoverage extends StatelessWidget {
               CircleAvatar(
                 radius: wv*8,
                 backgroundColor: Colors.blueGrey[100],
-                backgroundImage: adherentProvider.getAdherent.imgUrl != null ? CachedNetworkImageProvider(adherentProvider.getAdherent.imgUrl) : null,
-                child: adherentProvider.getAdherent.imgUrl == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)) : Container(),
+                backgroundImage: adherentProvider.getAdherent?.imgUrl != null ? CachedNetworkImageProvider(adherentProvider.getAdherent!.imgUrl!) : null,
+                child: adherentProvider.getAdherent?.imgUrl == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)) : Container(),
                 //backgroundImage: ((doctorProvider.getDoctor.avatarUrl == "") & (doctorProvider.getDoctor.avatarUrl == null))  ? null : CachedNetworkImageProvider(doctorProvider.getDoctor.avatarUrl),
             ) :
             userProvider.getProfileType == doctor ?
@@ -58,7 +58,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                     child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                     padding: EdgeInsets.all(20.0),
                   ),
-                  imageUrl: doctorProvider.getDoctor.avatarUrl),
+                  imageUrl: doctorProvider.getDoctor!.avatarUrl!),
               ),
             ) :
             userProvider.getProfileType == serviceProvider ?
@@ -75,7 +75,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                     child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                     padding: EdgeInsets.all(20.0),
                   ),
-                  imageUrl: serviceProviderMP.getServiceProvider != null ? serviceProviderMP.getServiceProvider.avatarUrl : null),
+                  imageUrl: serviceProviderMP.getServiceProvider != null ? serviceProviderMP.getServiceProvider!.avatarUrl! : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
               ),
             ) :
             userProvider.getProfileType == beneficiary ?
@@ -92,7 +92,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                     child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                     padding: EdgeInsets.all(20.0),
                   ),
-                  imageUrl: userProvider.getUserModel.imgUrl),
+                  imageUrl: userProvider.getUserModel!.imgUrl!),
               ),
             ) :
             CircleAvatar(
@@ -115,9 +115,9 @@ class UserAvatarAndCoverage extends StatelessWidget {
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).bonjour+" ${adherentProvider.getAdherent.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).bonjour+" ${adherentProvider.getAdherent?.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor?.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider?.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
-                userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan) : 
+                userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent?.adherentPlan) : 
                 userProvider.getProfileType == doctor ?   S.of(context).nousVousAttendions : S.of(context).nousVousAttendions
                 , style: TextStyle(fontSize: wv*2.8, color: kPrimaryColor)),
             ],

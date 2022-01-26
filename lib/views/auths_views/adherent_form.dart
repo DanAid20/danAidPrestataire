@@ -41,21 +41,21 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   TextEditingController _regionController = new TextEditingController();
   TextEditingController _townController = new TextEditingController();
   bool autovalidate = false;
-  String _gender = "H";
+  String? _gender = "H";
   String _region = "Centre";
   List<String> myCities = [];
-  String _city;
-  String _stateCode;
+  String? _city;
+  String? _stateCode;
   bool regionChosen = false;
   bool cityChosen = false;
   bool _serviceTermsAccepted = false;
   String termsAndConditions = S.current.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
-  DateTime selectedDate;
+  DateTime? selectedDate;
   DateTime initialDate = DateTime(1990);
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
@@ -64,7 +64,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     DateTime now = DateTime.now();
     DateTime start = now;
     DateTime end = now.add(Duration(days: 365));
-    PlanModel plan = planProvider.getPlan;
+    PlanModel? plan = planProvider.getPlan;
 
     return SafeArea(
       top: false,
@@ -83,7 +83,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                       backgroundColor: Colors.grey[300],
                       radius: wv*18,
                       child: imageFileAvatar == null ? Icon(LineIcons.user, color: Colors.white, size: wv*25,) : Container(),
-                      backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar),
+                      backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar!),
                     ),
                     Positioned(
                       bottom: 2,
@@ -112,14 +112,14 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                         label: S.of(context).nomDeFamille,
                         hintText: S.of(context).entrezVotreNomDeFamille,
                         controller: _familynameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*1.5,),
                       CustomTextField(
                         label: S.of(context).prnomS,
                         hintText: S.of(context).entrezVotrePrnom,
                         controller: _surnameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*1.5,),
                       Row(
@@ -138,7 +138,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                     borderRadius: BorderRadius.all(Radius.circular(20))
                                   ),
                                   child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
+                                    child: DropdownButton<String>(
                                       value: _gender,
                                       items: [
                                         DropdownMenuItem(
@@ -179,7 +179,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                     child: Row(children: [
                                       SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                                       VerticalDivider(),
-                                      Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                     ],),
                                   ),
                                 ),
@@ -208,22 +208,22 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
                                       alignedDropdown: true,
-                                      child: DropdownButton(
+                                      child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _stateCode,
                                         hint: Text(S.of(context).choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
-                                            child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                                            child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
                                             value: region["key"],
                                           );
                                         }).toList(),
                                         onChanged: (value) async {
                                           //List<String> reg = getTownNamesFromRegion(cities, value);
-                                          adherentProvider.setRegionOfOrigin(Algorithms.getRegionFromStateCode(regions, value));
+                                          adherentProvider.setRegionOfOrigin(Algorithms.getRegionFromStateCode(regions, value.toString())!);
                                           setState(() {
                                             _stateCode = value;
-                                            _region = Algorithms.getRegionFromStateCode(regions, value);
+                                            _region = Algorithms.getRegionFromStateCode(regions, value.toString())!;
                                             _city = null;
                                             cityChosen = false;
                                             //myCities = reg;
@@ -252,11 +252,11 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
                                       alignedDropdown: true,
-                                      child: DropdownButton(
+                                      child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _city,
                                         hint: Text(S.of(context).ville),
-                                        items: Algorithms.getTownNamesFromRegion(cities, _stateCode).map((city){
+                                        items: Algorithms.getTownNamesFromRegion(cities, _stateCode!).map((city){
                                           print("city: "+city);
                                           return DropdownMenuItem(
                                             child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
@@ -264,9 +264,9 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          adherentProvider.setTown(value);
+                                          adherentProvider.setTown(value.toString());
                                           setState(() {
-                                            _city = value;
+                                            _city = value.toString();
                                             cityChosen = true;
                                           });
                                         }),
@@ -336,45 +336,45 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                     action: () async {
                       Random random = new Random();
                       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                      adherentProvider.setAdherentId(userProvider.getUserId);
+                      adherentProvider.setAdherentId(userProvider.getUserId!);
                       setState(() {
                         autovalidate = true;
                       });
                       String fname = _familynameController.text;
                       String sname = _surnameController.text;
-                      if (_adherentFormKey.currentState.validate()){
+                      if (_adherentFormKey.currentState!.validate()){
                         setState(() {
                           buttonLoading = true;
                         });
                         AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
                         print("$fname, $sname, $selectedDate, $_gender, $avatarUrl");
-                        print("${Algorithms().getMatricule(selectedDate, "Centre", _gender)}");
-                        adherentProvider.setAdherentId(userProvider.getUserId);
+                        print("${Algorithms().getMatricule(selectedDate!, "Centre", _gender!)}");
+                        adherentProvider.setAdherentId(userProvider.getUserId!);
                         adherentProvider.setFamilyName(fname);
                         adherentProvider.setSurname(sname);
-                        adherentProvider.setBirthDate(selectedDate);
-                        adherentProvider.setImgUrl(avatarUrl);
+                        adherentProvider.setBirthDate(selectedDate!);
+                        adherentProvider.setImgUrl(avatarUrl!);
                         adherentProvider.setHavePaidBefore(false);
                         await FirebaseFirestore.instance.collection("USERS")
                           .doc(userProvider.getUserId)
                           .set({
-                            "authId": FirebaseAuth.instance.currentUser.uid,
+                            "authId": FirebaseAuth.instance.currentUser!.uid,
                             'createdDate': DateTime.now(),
                             'emailAdress': userProvider.getEmail,
                             'enabled': false,
                             "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                             "urlCNI": null,
                             "profilEnabled": false,
-                            "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                            "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
                             "userCountryName": userProvider.getCountryName,
                             'fullName': "$fname $sname",
                             "imageUrl" : avatarUrl,
                             "points": 500,
                             "visitPoints": 0,
-                            "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getAdherent.regionOfOrigin, _gender),
+                            "matricule": Algorithms().getMatricule(selectedDate!, adherentProvider.getAdherent!.regionOfOrigin!, _gender!),
                             "profil": "ADHERENT",
-                            "regionDorigione": adherentProvider.getAdherent.regionOfOrigin,
-                            "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                            "regionDorigione": adherentProvider.getAdherent?.regionOfOrigin,
+                            "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
                             "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                           }, SetOptions(merge: true))
                           .then((value) async {
@@ -382,14 +382,14 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               .doc(userProvider.getUserId)
                               .set({
                                 "createdDate": DateTime.now(),
-                                "havePaidBefore": adherentProvider.getAdherent.adherentPlan == 0 ? false : true,
+                                "havePaidBefore": adherentProvider.getAdherent?.adherentPlan == 0 ? false : true,
                                 "authPhoneNumber": userProvider.getUserId,
                                 "enabled": false,
                                 "dateNaissance": selectedDate,
-                                "authId": FirebaseAuth.instance.currentUser.uid,
+                                "authId": FirebaseAuth.instance.currentUser?.uid,
                                 "genre": _gender,
                                 "imageUrl" : avatarUrl,
-                                "matricule": Algorithms().getMatricule(selectedDate, adherentProvider.getAdherent.regionOfOrigin, _gender),
+                                "matricule": Algorithms().getMatricule(selectedDate!, adherentProvider.getAdherent!.regionOfOrigin!, _gender!),
                                 "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                                 "nbBeneficiare": 0,
                                 "nombreEnfant": 0,
@@ -397,29 +397,29 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                 "prenom": sname,
                                 "profil": "ADHERENT",
                                 "profilEnabled": false,
-                                "protectionLevel": adherentProvider.getAdherent.adherentPlan,
-                                "regionDorigione": adherentProvider.getAdherent.regionOfOrigin,
+                                "protectionLevel": adherentProvider.getAdherent!.adherentPlan,
+                                "regionDorigione": adherentProvider.getAdherent!.regionOfOrigin,
                                 "statuMatrimonialMarie": false,
-                                "ville": adherentProvider.getAdherent.town,
+                                "ville": adherentProvider.getAdherent!.town,
                                 "datDebutvalidite" : start,
                                 "datFinvalidite": end,
-                                "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                                "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
                                 "userCountryName": userProvider.getCountryName,
                                 "paid": false,
-                                "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                                "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                               }, SetOptions(merge: true))
                               .then((value) async {
                                 adherentProvider.setValidityEndDate(end);
                                 adherentProvider.setDateCreated(now);
-                                adherentProvider.setAdherentPlan(plan.planNumber);
+                                adherentProvider.setAdherentPlan(plan!.planNumber!);
 
                                 await HiveDatabase.setRegisterState(true);
-                                HiveDatabase.setAuthPhone(userProvider.getUserId);
+                                HiveDatabase.setAuthPhone(userProvider.getUserId!);
                                 HiveDatabase.setFamilyName(fname);
                                 HiveDatabase.setSurname(sname);
-                                HiveDatabase.setGender(_gender);
-                                HiveDatabase.setImgUrl(avatarUrl);
+                                HiveDatabase.setGender(_gender!);
+                                HiveDatabase.setImgUrl(avatarUrl!);
 
                                 setState(() {
                                   buttonLoading = false;
@@ -481,7 +481,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   }
 
   _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate, // Refer step 1
       firstDate: DateTime(1900),
@@ -535,7 +535,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
     setState(() {
       imageLoading = true;
     });
-    String fileName = userProvider.getUserId;
+    String? fileName = userProvider.getUserId;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_adherents/$fileName'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
@@ -550,7 +550,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
@@ -577,7 +577,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   Future getImageFromCamera() async {
@@ -590,7 +590,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   getImage(BuildContext context){

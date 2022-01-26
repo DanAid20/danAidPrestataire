@@ -4,24 +4,24 @@ import 'package:flutter/material.dart';
 
 class ImageContainer extends StatelessWidget {
   const ImageContainer({
-    Key key,
+    Key? key,
     this.image, this.bgColor,
   }) : super(key: key);
 
-  final String image;
-  final Color bgColor;
+  final String? image;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: defSize * 37,
-      width: defSize * 37,
+      height: defSize! * 37,
+      width: defSize! * 37,
       decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: bgColor.withOpacity(.1)
+          color: bgColor?.withOpacity(.1)
       ),
       child: CircleAvatar(
-        radius: defSize * 10,
+        radius: defSize! * 10,
         backgroundColor: Colors.transparent,
         child: Container(
           width: width(size: 375),
@@ -29,7 +29,7 @@ class ImageContainer extends StatelessWidget {
           decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                  image: AssetImage(image), fit: BoxFit.cover)),
+                  image: AssetImage(image!), fit: BoxFit.cover)),
         ),
       ),
     );

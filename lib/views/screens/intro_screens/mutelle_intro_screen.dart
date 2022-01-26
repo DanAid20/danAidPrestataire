@@ -22,8 +22,8 @@ class MutuelleIntroScreen extends StatelessWidget {
             children: [
               ImageBox(image: 'assets/images/image 7.png'),
               IconContainer(
-                sizeTop: defSize * 40,
-                sizeRight: defSize * 1.5,
+                sizeTop: defSize! * 40,
+                sizeRight: defSize! * 1.5,
                 icon: 'assets/icons/Bulk/Calling.svg',
                 containerBgColor: Colors.transparent,
                 iconColor: Color(0xFFFAD427),

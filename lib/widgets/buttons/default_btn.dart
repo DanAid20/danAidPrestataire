@@ -9,15 +9,15 @@ import '../../locator.dart';
 
 class DefaultBtn extends StatelessWidget {
   DefaultBtn({
-    Key key, this.formKey,
+    Key? key, this.formKey,
     this.signText, this.signRoute = '/login', this.onPress, this.bgColor,
   }) : super(key: key);
 
-  final GlobalKey<FormState> formKey;
-  final String signText;
-  final String signRoute;
-  final Function onPress;
-  final Color bgColor;
+  final GlobalKey<FormState>? formKey;
+  final String? signText;
+  final String? signRoute;
+  final Function? onPress;
+  final Color? bgColor;
 
   final NavigationService _navigationService = locator<NavigationService>();
 
@@ -25,7 +25,7 @@ class DefaultBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: height(size: 70),
-      width: SizeConfig.screenWidth * .9,
+      width: SizeConfig.screenWidth! * .9,
       margin: EdgeInsets.symmetric(
           horizontal: horizontal(size: 15),
           vertical: vertical(size: 25)),
@@ -42,7 +42,7 @@ class DefaultBtn extends StatelessWidget {
         color: bgColor ?? kPrimaryColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18)),
-        onPressed: onPress
+        onPressed: ()=> onPress
       ),
     );
   }

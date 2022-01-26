@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class DanAidDefaultHeader extends StatelessWidget {
   final bool showDanAidLogo;
-  final Widget title;
+  final Widget? title;
 
-  const DanAidDefaultHeader({Key key, this.showDanAidLogo = false, this.title}) : super(key: key);
+  const DanAidDefaultHeader({Key? key, this.showDanAidLogo = false, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class DanAidDefaultHeader extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: wv*10),
               child: Image.asset('assets/icons/DanaidLogo.png')
             ) :
-            title != null ? title : Container(),
+            title != null ? title! : Container(),
           ],
         ),
       )

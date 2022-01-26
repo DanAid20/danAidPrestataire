@@ -7,27 +7,27 @@ import 'image_container.dart';
 
 class ImageBox extends StatelessWidget {
   const ImageBox({
-    Key key, this.image, this.bgColor = kPrimaryColor,
+    Key? key, this.image, this.bgColor = kPrimaryColor,
   }) : super(key: key);
 
-  final String image;
-  final Color bgColor;
+  final String? image;
+  final Color? bgColor;
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-        top: top(size: defSize * 12),
-        left: left(size: defSize * 3),
+        top: top(size: defSize! * 12),
+        left: left(size: defSize! * 3),
         child: Container(
           child: Stack(
             children: [
-              ImageContainer(image: image, bgColor: bgColor,),
+              ImageContainer(image: image!, bgColor: bgColor!,),
               Container(
-                  height: defSize * 37,
-                  width: defSize * 37,
+                  height: defSize! * 37,
+                  width: defSize! * 37,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: bgColor.withAlpha(50)
+                      color: bgColor!.withAlpha(50)
                   )
               )
             ],

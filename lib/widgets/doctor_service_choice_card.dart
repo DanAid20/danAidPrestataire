@@ -5,30 +5,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DoctorServiceChoiceCard extends StatelessWidget {
-  final String service;
-  final String icon;
-  final bool chosen;
-  final Function action;
+  final String? service;
+  final String? icon;
+  final bool? chosen;
+  final Function? action;
 
-  const DoctorServiceChoiceCard({Key key, this.service, this.icon, this.chosen = false, this.action}) : super(key: key);
+  const DoctorServiceChoiceCard({Key? key, this.service, this.icon, this.chosen = false, this.action}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: wv*0.75),
       child: GestureDetector(
-        onTap: action,
+        onTap: ()=>action,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*0.8),
           decoration: BoxDecoration(
-            color: chosen ? kPrimaryColor : whiteColor,
+            color: chosen! ? kPrimaryColor : whiteColor,
             borderRadius: BorderRadius.circular(12),
-            boxShadow: [BoxShadow(color: !chosen ? Colors.grey[400].withOpacity(0.5) : whiteColor, blurRadius: 1.0, spreadRadius: 0.5)]
+            boxShadow: [BoxShadow(color: !chosen! ? Colors.grey[400]!.withOpacity(0.5) : whiteColor, blurRadius: 1.0, spreadRadius: 0.5)]
           ),
           child: Row(children: [
-            SvgPicture.asset(icon, color: !chosen ? kPrimaryColor : whiteColor, width: 20),
+            SvgPicture.asset(icon!, color: !chosen! ? kPrimaryColor : whiteColor, width: 20),
             SizedBox(width: wv*1),
-            Text(service, style: TextStyle(color: !chosen ? kPrimaryColor : whiteColor),)
+            Text(service!, style: TextStyle(color: !chosen! ? kPrimaryColor : whiteColor),)
           ], mainAxisAlignment: MainAxisAlignment.center,),
         ),
       ),

@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class SIgnInUpTag extends StatelessWidget {
   const SIgnInUpTag({
-    Key key, this.title, this.subTitle, this.signRoute = '/register',
+    Key? key, this.title, this.subTitle, this.signRoute = '/register',
   }) : super(key: key);
 
-  final String title;
-  final String subTitle;
-  final String signRoute;
+  final String? title;
+  final String? subTitle;
+  final String? signRoute;
 
   @override
   Widget build(BuildContext context) {

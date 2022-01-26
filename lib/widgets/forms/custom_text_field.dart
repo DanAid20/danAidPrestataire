@@ -5,32 +5,32 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String label, hintText, svgIcon;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final Function validator;
-  final Color fillColor, labelColor;
-  final Widget prefixIcon, suffixIcon;
-  final bool enabled;
-  final bool multiLine, noPadding, seal;
-  final int minLines, maxLines;
-  final Function editAction;
-  final Function onChanged;
-  final List<TextInputFormatter> inputFormatters;
+  final String? label, hintText, svgIcon;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final FormFieldValidator<String>? validator;
+  final Color? fillColor, labelColor;
+  final Widget? prefixIcon, suffixIcon;
+  final bool? enabled;
+  final bool? multiLine, noPadding, seal;
+  final int? minLines, maxLines;
+  final Function? editAction;
+  final Function? onChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
-  CustomTextField({Key key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.seal = false, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
+  CustomTextField({Key? key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.seal = false, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: !noPadding ? EdgeInsets.symmetric(horizontal: wv * 3) : EdgeInsets.zero,
+      margin: !noPadding! ? EdgeInsets.symmetric(horizontal: wv * 3) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           label != null ? Column(
             children: [
               Text(
-                label,
+                label!,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: labelColor ?? Colors.grey[600]),
                   ),
               SizedBox(
@@ -43,19 +43,19 @@ class CustomTextField extends StatelessWidget {
             alignment: AlignmentDirectional.center,
             children: [
               TextFormField(
-                minLines: multiLine ? minLines : 1,
-                maxLines: multiLine ? maxLines : 1,
-                enabled: enabled && !seal,
+                minLines: multiLine! ? minLines : 1,
+                maxLines: multiLine! ? maxLines : 1,
+                enabled: enabled! && !seal!,
                 keyboardType: keyboardType,
                 controller: controller,
-                validator: this.validator,
+                validator: validator,
                 inputFormatters: inputFormatters,
-                onChanged: onChanged,
+                onChanged: (string)=>onChanged,
                 style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                   prefixIcon: prefixIcon,
                   errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: Colors.red[300]),
+                      borderSide: BorderSide(width: 1, color: Colors.red[300]!),
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   fillColor: fillColor == null ? Colors.grey[100] : fillColor,
                   //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
@@ -72,14 +72,14 @@ class CustomTextField extends StatelessWidget {
                   hintStyle: TextStyle(color: Colors.grey),
                   suffixIcon: svgIcon != null
                       ? SvgPicture.asset(
-                          svgIcon,
+                          svgIcon!,
                           height: wv * 4,
                           color: Colors.teal,
                         )
                       : null,
                 ),
               ),
-              !enabled
+              !enabled!
                   ? Positioned(
                       right: wv * 0,
                       child: IconButton(
@@ -93,7 +93,7 @@ class CustomTextField extends StatelessWidget {
                             size: wv * 4,
                           ),
                         ),
-                        onPressed: editAction,
+                        onPressed: ()=>editAction,
                       ),
                     )
                   : Container()
@@ -105,16 +105,16 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-InputDecoration socialDefaultDecoration({String hintText, Color color}){
+InputDecoration socialDefaultDecoration({String? hintText, Color? color}){
   return InputDecoration(
     prefixIcon: SizedBox(width: wv*7,),
     errorBorder: OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.red[300]),
+        borderSide: BorderSide(width: 1, color: Colors.red[300]!),
         borderRadius: BorderRadius.all(Radius.circular(20))),
     fillColor: Colors.white.withOpacity(0.3),
     contentPadding: EdgeInsets.only(top: hv*1, bottom: hv*1, left: wv*3, right: wv*7),
     enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: color.withOpacity(0.0)),
+        borderSide: BorderSide(width: 1, color: color!.withOpacity(0.0)),
         borderRadius: BorderRadius.all(Radius.circular(20))),
     focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(width: 1, color: Colors.white.withOpacity(0.35)),
