@@ -702,12 +702,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     ),
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Container(
-                  padding: EdgeInsets.all(3),
+                  padding: const  EdgeInsets.all(3),
                   decoration: BoxDecoration(
                       color: kBlueForce.withOpacity(0.6),
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                      borderRadius: const  BorderRadius.all(Radius.circular(5))),
                   margin: EdgeInsets.only(
                       left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                   child: Text(

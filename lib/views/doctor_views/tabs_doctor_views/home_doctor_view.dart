@@ -22,7 +22,7 @@ import '../../../widgets/home_page_mini_components.dart';
 import '../../../widgets/notification_card.dart';
 
 class HomeDoctorView extends StatefulWidget {
-  HomeDoctorView({Key key}) : super(key: key);
+  HomeDoctorView({Key? key}) : super(key: key);
 
   @override
   _HomeDoctorViewState createState() => _HomeDoctorViewState();
@@ -46,11 +46,11 @@ Widget notificationWidget(BuildContext context){
         child: Row(
           children: [
             Text(
-              S.of(context).notifications,
+              S.of(context)!.notifications,
               style:
-                  TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                  const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
             ),
-            Text(S.of(context).voirPlus)
+            Text(S.of(context)!.voirPlus)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
@@ -61,7 +61,7 @@ Widget notificationWidget(BuildContext context){
           BoxShadow(
               color: Colors.grey.withOpacity(0.2),
               blurRadius: 20.0,
-              offset: Offset(0.0, 0.75),
+              offset: const Offset(0.0, 0.75),
               spreadRadius: -15.0)
         ]),
         child: Column(
@@ -70,14 +70,14 @@ Widget notificationWidget(BuildContext context){
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                  userProvider.isEnabled==false 
                   ? 
-                  NotificationCard(instruction: S.of(context).completer,islinkEnable: true, description:S.of(context).veuillezCompleterLesInformationsRelaifAVotreProfilPourNous,isprestataire: isPrestataire)
-                 :Center(child: Text(S.of(context).aucuneNotification),),
+                  NotificationCard(instruction: S.of(context)!.completer,islinkEnable: true, description:S.of(context)!.veuillezCompleterLesInformationsRelaifAVotreProfilPourNous,isprestataire: isPrestataire)
+                 :Center(child: Text(S.of(context)!.aucuneNotification),),
                   
 
                  ],
@@ -90,27 +90,27 @@ Widget notificationWidget(BuildContext context){
   );
 }
  /// this function get the details of user
- List<String> getRecapActivitieOfTheDay(BuildContext context){
+ List<String?> getRecapActivitieOfTheDay(BuildContext context){
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    List<String> avatarList;
+    List<String>? avatarList;
     if(userProvider.getProfileType== serviceProvider){
       /** get the details of userImageProfileList In firebase  */
     }else if(userProvider.getProfileType== doctor){
       /** get the details of userList In data base  */
     }
-    return avatarList;
+    return avatarList!;
  }
 
  ///  this function get the details interaction of userCount of the day 
  Map<String, int> getDetailsInteractionTheDay(BuildContext context){
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    Map<String, int> interActionCOunt;
+    Map<String, int>? interActionCOunt;
     if(userProvider.getProfileType== serviceProvider){
       /** get the details of userImageProfileList In firebase  */
     }else if(userProvider.getProfileType== doctor){
       /** get the details of userList In data base  */
     }
-    return interActionCOunt ;
+    return interActionCOunt! ;
  }
 
 Widget recapActivitieOfTheDay(BuildContext context) {
@@ -193,30 +193,30 @@ Widget recapActivitieOfTheDay(BuildContext context) {
   );
 }
 getDetailDocotor(){
-  return StreamBuilder(
+  return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("POSTS").where('post-type', isEqualTo: 0).orderBy("dateCreated", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
+        return snapshot.data!.docs.isNotEmpty ? ListView.builder(
           shrinkWrap: true,
           primary: false,
-          itemCount: snapshot.data.docs.length,
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data.docs[index];
+            DocumentSnapshot doc = snapshot.data!.docs[index];
             PostModel post = PostModel.fromDocument(doc);
             return PostContainer(post: post);
           },
         ) :
-        Container(
+        SizedBox(
           width: double.infinity,
           child: Column(
             children: <Widget>[
-              SizedBox(height: 50,),
+              const SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
-              SizedBox(height: 5,),
-              Text(S.of(context).aucuneDiscussionPourLeMoment, 
+              const SizedBox(height: 5,),
+              Text(S.of(context)!.aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -225,33 +225,33 @@ getDetailDocotor(){
       } 
     );
 }
- getDiscussionContainers({PostModel post}){
-    String time = Algorithms.getTimeElapsed(date: post.dateCreated.toDate());
+ getDiscussionContainers({PostModel? post}){
+    String? time = Algorithms.getTimeElapsed(date: post!.dateCreated!.toDate());
     List<String> tags = [];
-    for(int i = 0; i < post.tags.length; i++){
-      tags.add(post.tags[i]);
+    for(int i = 0; i < post.tags!.length; i++){
+      tags.add(post.tags![i]);
     }
 
     return Container(
           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: whiteColor,
           ),
           child: Row(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CircleAvatar(
                 backgroundColor: Colors.grey[300],
-                backgroundImage: post.userAvatar != null ? CachedNetworkImageProvider(post.userAvatar) : null,
-                child: post.userAvatar == null ? Icon(LineIcons.user, color: whiteColor,) : Container(),
+                backgroundImage: post.userAvatar != null ? CachedNetworkImageProvider(post.userAvatar!) : null,
+                child: post.userAvatar == null ?const Icon(LineIcons.user, color: whiteColor,) : Container(),
               ),
               SizedBox(width: wv*3,),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(post.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
-                    Text("Il ya "+time, style: TextStyle(fontSize: 12)),
+                    Text(post.userName!, style:const TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
+                    Text("Il ya "+time!, style:const TextStyle(fontSize: 12)),
                     SizedBox(height: hv*1.5,),
-                    Text(post.text, style: TextStyle(color: Colors.black87)),
+                    Text(post.text!, style: const TextStyle(color: Colors.black87)),
                     post.imgUrl != null ? Row(
                       children: [
                         Expanded(
@@ -261,22 +261,22 @@ getDetailDocotor(){
                             decoration: BoxDecoration(
                               color: Colors.grey[400],
                               borderRadius: BorderRadius.circular(15),
-                              boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
-                              image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl), fit: BoxFit.cover)
+                              boxShadow: [BoxShadow(color: (Colors.grey[500])!, blurRadius: 2.5, spreadRadius: 1.2, offset: const Offset(0, 1.5))],
+                              image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl!), fit: BoxFit.cover)
                             ),
                           ),
                         ),
                       ],
                     ) : Container(),
 
-                    post.postType == 1 && post.tags.length >= 1 ? Padding(
+                    post.postType == 1 && post.tags!.isNotEmpty ? Padding(
                       padding: EdgeInsets.only(top: hv*2),
                       child: SimpleTags(
                         content: tags,
                         wrapSpacing: 4,
                         wrapRunSpacing: 4,
-                        tagContainerPadding: EdgeInsets.all(6),
-                        tagTextStyle: TextStyle(color: kPrimaryColor),
+                        tagContainerPadding: const EdgeInsets.all(6),
+                        tagTextStyle: const TextStyle(color: kPrimaryColor),
                         tagContainerDecoration: BoxDecoration(
                           color: kSouthSeas.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
@@ -299,14 +299,14 @@ getDetailDocotor(){
                           child: Row(children: [
                             SvgPicture.asset('assets/icons/Bulk/Chat.svg'),
                             SizedBox(width: wv*1.5),
-                            Text("0")
+                            const Text("0")
                           ],),
                         ),
                         Expanded(
                           child: Row(children: [
                             SvgPicture.asset('assets/icons/Bulk/Send.svg'),
                             SizedBox(width: wv*1.5),
-                            Text("0")
+                            const Text("0")
                           ],),
                         ),
                         Expanded(
@@ -340,35 +340,35 @@ Widget questionDuDocteur() {
               child: Column(
                 children: [
                   Row(children: [
-                    Text(S.of(context).aujourdhui, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    Text(S.of(context)!.aujourdhui, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                     InkWell(
                       onTap: ()=>navController.setIndex(0),
-                      child: Text(S.of(context).voirPlus)
+                      child: Text(S.of(context)!.voirPlus)
                     )
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   
                   SizedBox(height: hv*2,),
                   
-                  StreamBuilder(
+                  StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel?.userId).snapshots(),
                     builder: (context, snapshot) {
                       if(!snapshot.hasData){
                         return Center(child: Loaders().buttonLoader(kPrimaryColor),);
                       }
                       return Row(children: [
-                        snapshot.data.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[0].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[1].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[2].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[3].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[4].data()["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0]["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1]["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2]["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3]["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4]["imageUrl"]) : Container(),
                         Expanded(child: Container()),
-                        snapshot.data.docs.length > 5 ? Container(
-                          padding: EdgeInsets.all(10),
+                        snapshot.data!.docs.length > 5 ? Container(
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.grey.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(100)
                           ),
-                          child: Text("+ ${snapshot.data.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
+                          child: Text("+ ${snapshot.data!.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
                         ) : Container()                       
                       ],);
                     }
@@ -376,13 +376,13 @@ Widget questionDuDocteur() {
 
                   SizedBox(height: hv*2,),
                   Row(children: [
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context)!.posts, occurence: userProvider.getUserModel!.posts == null ? 0 : userProvider.getUserModel!.posts),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: userProvider.getUserModel.comments == null ? 0 : userProvider.getUserModel.comments),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context)!.commentaires, occurence: userProvider.getUserModel!.comments == null ? 0 : userProvider.getUserModel!.comments),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: userProvider.getUserModel.friends == null ? 0 : userProvider.getUserModel.friends.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context)!.amis, occurence: userProvider.getUserModel!.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context).chats, occurence: userProvider.getUserModel.chats == null ? 0 : userProvider.getUserModel.chats.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context)!.chats, occurence: userProvider.getUserModel!.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   SizedBox(height: hv*2,) 
                 ],
@@ -397,11 +397,11 @@ Widget questionDuDocteur() {
         child: Row(
           children: [
             Text(
-              S.of(context).questionAuDocteur,
+              S.of(context)!.questionAuDocteur,
               style:
                   TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
             ),
-            Text(S.of(context).voirPlus)
+            Text(S.of(context)!.voirPlus)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
