@@ -48,7 +48,7 @@ import 'package:provider/provider.dart';
 
 
 
-Future<void> _showNotification({int id, String title, String body}) async {
+Future<void> _showNotification({required int id, required String title, String? body}) async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOS = new IOSInitializationSettings();
@@ -56,7 +56,8 @@ Future<void> _showNotification({int id, String title, String body}) async {
   flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
   print("showing..");
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.danaid.danaidmobile', 'DanAid', 'Mutuelle Santé 100% mobile',
+      'com.danaid.danaidmobile', 'DanAid',
+      channelDescription: 'Mutuelle Santé 100% mobile',
       importance: Importance.max,
       playSound: true,
       //sound: AndroidNotificationSound,
@@ -81,10 +82,10 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver {
   
-  double width = SizeConfig.screenWidth / 100;
-  double height = SizeConfig.screenHeight / 100;
-  double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;
-  AppLifecycleState _notifier; 
+  double width = SizeConfig.screenWidth! / 100;
+  double height = SizeConfig.screenHeight! / 100;
+  double inch = sqrt(SizeConfig.screenWidth! * SizeConfig.screenWidth! + SizeConfig.screenHeight! * SizeConfig.screenHeight!) / 100;
+  AppLifecycleState? _notifier; 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     NotificationModelProvider notifications = Provider.of<NotificationModelProvider>(context, listen: false);
@@ -105,7 +106,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     
     if(userProvider.getUserId != null || userProvider.getUserId != ""){
       if(adherentModelProvider.getAdherent != null){
-        adherentModel = adherentModelProvider.getAdherent;
+        adherentModel = adherentModelProvider.getAdherent!;
         //generateInvoice(adherentModel);
         }
         else {
@@ -120,8 +121,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                 "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
                 "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
               }).then((value) {
-                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit);
-                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit);
+                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit! : adherent.insuranceLimit!);
+                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount! : adherent.loanLimit!);
               });
             }
             //generateInvoice(adherentModel);
@@ -131,7 +132,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       String phone = await HiveDatabase.getAuthPhone();
       userProvider.setUserId(phone);
       if(adherentModelProvider.getAdherent != null){
-        adherentModel = adherentModelProvider.getAdherent;
+        adherentModel = adherentModelProvider.getAdherent!;
         //generateInvoice(adherentModel);
           //
         }
@@ -139,7 +140,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
           FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) async {
             AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
             adherentModelProvider.setAdherentModel(adherent);
-            userProvider.setUserId(adherent.adherentId);
+            userProvider.setUserId(adherent.adherentId!);
 
             if(adherent.insuranceLimit == null || adherent.loanLimit == null){
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
@@ -148,8 +149,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                 "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
                 "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
               }).then((value) {
-                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit);
-                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit);
+                adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit! : adherent.insuranceLimit!);
+                adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount! : adherent.loanLimit!);
               });
             }
           });
@@ -160,10 +161,10 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
   generateInvoice(AdherentModel adhr){
     DateTime now = DateTime.now();
     Random random = new Random();
-    if(now.isAfter(adhr.validityEndDate.toDate()) && adhr.adherentPlan != 0){
+    if(now.isAfter(adhr.validityEndDate!.toDate()) && adhr.adherentPlan != 0){
       FirebaseFirestore.instance.collection('FACTURATION_TRIMESTRIELLE').doc('facturation_en_cour').get().then((doc) {
-        int trimesterUnit = doc.data()["trimestre"];
-        int year = doc.data()["date"].toDate().year;
+        int trimesterUnit = doc.data()!["trimestre"];
+        int year = doc.data()!["date"].toDate().year;
         Map data = Algorithms.getAutomaticCoveragePeriod(trimesterUnit: trimesterUnit, year: year);
 
         FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adhr.adherentPlan.toString()).get().then((serviceDoc){
@@ -212,7 +213,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
           DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
           doctorModelProvider.setDoctorModel(doc);
         print("ok");
-          userProvider.setUserId(doc.id);
+          userProvider.setUserId(doc.id!);
         });
 
     } else {
@@ -227,7 +228,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
           FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get().then((docSnapshot) {
              DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
             doctorModelProvider.setDoctorModel(doc);
-            userProvider.setUserId(doc.id);
+            userProvider.setUserId(doc.id!);
           });
         }
     }
@@ -258,7 +259,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         FirebaseFirestore.instance.collection(serviceProvider).doc(phone).get().then((docSnapshot) {
           ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
           serviceProviderM.setServiceProviderModel(doc);
-          userProvider.setUserId(doc.id);
+          userProvider.setUserId(doc.id!);
         });
       }
     }
@@ -288,14 +289,14 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       FirebaseFirestore.instance.collection('USERS').doc(phone).get().then((userSnap) async {
         user = UserModel.fromDocument(userSnap);
         userProvider.setUserModel(user);
-        DocumentSnapshot benSnap = await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel.adherentId).collection('BENEFICIAIRES').doc(userProvider.getUserModel.matricule).get();
+        DocumentSnapshot benSnap = await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel!.adherentId).collection('BENEFICIAIRES').doc(userProvider.getUserModel!.matricule).get();
         BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(benSnap);
-        FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel.adherentId).get().then((adhSnap) async {
+        FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel!.adherentId).get().then((adhSnap) async {
           AdherentModel adherent = AdherentModel.fromDocument(adhSnap);
           adherentModelProvider.setAdherentModel(adherent);
-          adherentModelProvider.setSurname(beneficiary.surname);
-          adherentModelProvider.setFamilyName(beneficiary.familyName);
-          adherentModelProvider.setCniName(user.fullName);
+          adherentModelProvider.setSurname(beneficiary.surname!);
+          adherentModelProvider.setFamilyName(beneficiary.familyName!);
+          adherentModelProvider.setCniName(user.fullName!);
         });
       });
     }
@@ -327,8 +328,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
           userProvider.addPoints(25);
         }
       } else {
-        Timestamp serverLastDate = userProvider.getUserModel.lastDateVisited;
-        lastDateVisited = userProvider.getUserModel.lastDateVisited != null ? DateTime(serverLastDate.toDate().year, serverLastDate.toDate().month, serverLastDate.toDate().day).toString() : DateTime(2000).toString();
+        Timestamp? serverLastDate = userProvider.getUserModel?.lastDateVisited;
+        lastDateVisited = userProvider.getUserModel?.lastDateVisited != null ? DateTime(serverLastDate!.toDate().year, serverLastDate.toDate().month, serverLastDate.toDate().day).toString() : DateTime(2000).toString();
         if(date.toString() != lastDateVisited){
           FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).set({
             "visitPoints": FieldValue.increment(25),
@@ -386,8 +387,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     notifications.updateProvider();
     
     print("0");
-    await FirebaseMessaging.instance.subscribeToTopic(FirebaseAuth.instance.currentUser.uid);
-    await FirebaseMessaging.instance.subscribeToTopic(userProvider.getUserId.substring(1));
+    await FirebaseMessaging.instance.subscribeToTopic(FirebaseAuth.instance.currentUser!.uid);
+    await FirebaseMessaging.instance.subscribeToTopic(userProvider.getUserId!.substring(1));
     await FirebaseMessaging.instance.subscribeToTopic("DanAidAccount");
     print("1");
     
@@ -448,7 +449,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         await _showNotification(id: 3, title: "Nouveau message", body: message.data["contentMessage"]);
       }
       else if (message.data['type'] == "POST_COMMMENT"){
-        if(message.data["commentSendId"] != userProvider.getUserModel.userId){
+        if(message.data["commentSendId"] != userProvider.getUserModel!.userId){
           await _showNotification(id: 6, title: "New comment on your post by ${message.data['senderName']}", body: '"${message.data["content"]}"');
         }
         else {
@@ -459,10 +460,10 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         String name = "";
         String type = "adhérent";
         print(message.data["likerId"]);
-        if(message.data["likerId"] != userProvider.getUserModel.userId){
+        if(message.data["likerId"] != userProvider.getUserModel!.userId){
           FirebaseFirestore.instance.collection('USERS').doc(message.data["likerId"]).get().then((doc) async {
-            name = doc.data()['fullName'];
-            type = doc.data()['profil'] == adherent ? "l'adhérent" : doc.data()['profil'] == doctor ? "le médecin" : "le prestataire";
+            name = doc.get('fullName');
+            type = doc.get('profil') == adherent ? "l'adhérent" : doc.get('profil') == doctor ? "le médecin" : "le prestataire";
             await _showNotification(id: 4, title: "Nouveau like", body: "Votre commentaire a été liké par $type $name");
           });
         }
@@ -475,8 +476,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         String name = "";
         String type = "adhérent";
         FirebaseFirestore.instance.collection('USERS').doc(message.data["userWhoRquestFriendId"]).get().then((doc) async {
-          name = doc.data()['fullName'];
-          type = doc.data()['profil'] == adherent ? "de l'adhérent" : doc.data()['profil'] == doctor ? "du médecin" : "du prestataire";
+          name = doc.data()!['fullName'];
+          type = doc.data()!['profil'] == adherent ? "de l'adhérent" : doc.data()!['profil'] == doctor ? "du médecin" : "du prestataire";
           await _showNotification(id: 7, title: "Demande d'amitié", body: "Nouvelle demande d'amitié de la part $type $name");
           notifications.addNotification(NotificationModel(
             messageId: message.messageId,
@@ -485,7 +486,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
             type: message.data['type'],
             data: message.data,
             dateReceived: DateTime.now(),
-            profileImgUrl: doc.data()['imageUrl'],
+            profileImgUrl: doc.data()!['imageUrl'],
             seen: false
           ));
         });
@@ -494,8 +495,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         String name = "";
         String type = "adhérent";
         FirebaseFirestore.instance.collection('USERS').doc(message.data["friendWhoAddedId"]).get().then((doc) async {
-          name = doc.data()['fullName'];
-          type = doc.data()['profil'] == adherent ? "l'adhérent" : doc.data()['profil'] == doctor ? "le médecin" : "le prestataire";
+          name = doc.data()!['fullName'];
+          type = doc.data()!['profil'] == adherent ? "l'adhérent" : doc.data()!['profil'] == doctor ? "le médecin" : "le prestataire";
           await _showNotification(id: 7, title: "Demande d'amitié acceptée", body: "Vous et $type $name êtes désormais amis");
         });
       }
@@ -504,7 +505,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         String groupId = message.data['groupId'];
         if(message.data['groupId'] != null){
           FirebaseFirestore.instance.collection('GROUPS').doc(message.data['groupId']).get().then((doc) async {
-            String groupName = doc.data()['groupName'];
+            String groupName = doc.data()!['groupName'];
             await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like de votre publication dans le groupe $groupName");
           });
         }
@@ -531,8 +532,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance!.addObserver(this);
     handleNotifications();
     initializeDateFormatting();
     loadCommonUserProfile();
@@ -544,7 +545,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
   
@@ -656,9 +657,9 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     controller.setIndex(4);
   }
 
-  bottomIcon({String svgUrl, String title, Function onTap}){
+  bottomIcon({required String svgUrl, required String title, required Function onTap}){
     return GestureDetector(
-      onTap: onTap,
+      onTap: ()=>onTap,
       child: Container(
         color: Colors.transparent,
         child: Column(
@@ -672,7 +673,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     );
   }
 
-  iconActive({String svgUrl}){
+  iconActive({required String svgUrl}){
     UserProvider userProvider = Provider.of<UserProvider>(context);
     return CircleAvatar(
       radius: width*7.5,
@@ -705,7 +706,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       return  PartnersScreen();
     }
     else if(controller.getIndex == 4){
-      userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor) : print("waouu");
+      userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor!) : print("waouu");
       return userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ?  MyFamilyScreen() : userProvider.getProfileType == serviceProvider  ? PrestataireProfilePage(): DoctorProfilePage();
     }
   }

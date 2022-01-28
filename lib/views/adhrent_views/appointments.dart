@@ -20,8 +20,8 @@ import 'package:danaid/helpers/constants.dart' as constants;
 import 'package:http/http.dart' as http;
 
 class AppointmentsList extends StatefulWidget {
-  final DoctorModel doc;
-  const AppointmentsList({ Key key, this.doc }) : super(key: key);
+  final DoctorModel? doc;
+  const AppointmentsList({ Key? key, this.doc }) : super(key: key);
 
   @override
   _AppointmentsListState createState() => _AppointmentsListState();
@@ -39,8 +39,8 @@ class _AppointmentsListState extends State<AppointmentsList> {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
         title: Text("Liste de rendez-vous", style: TextStyle(color: whiteColor, fontSize: 18.5),),
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("APPOINTMENTS").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('start-time', descending: true).limit(limit).snapshots(),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("APPOINTMENTS").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).orderBy('start-time', descending: true).limit(limit).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -49,9 +49,9 @@ class _AppointmentsListState extends State<AppointmentsList> {
               ),
             );
           }
-          int lastIndex = snapshot.data.docs.length - 1;
+          int lastIndex = snapshot.data!.docs.length - 1;
 
-          return snapshot.data.docs.length >= 1
+          return snapshot.data!.docs.length >= 1
             ? NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
                   var metrics = scrollEnd.metrics;
@@ -65,22 +65,22 @@ class _AppointmentsListState extends State<AppointmentsList> {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot rdv = snapshot.data.docs[index];
+                    DocumentSnapshot rdv = snapshot.data!.docs[index];
                     AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
                     return Padding(
                       padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                       child: HomePageComponents().getMyDoctorAppointmentTile(
                         doctorName: "Dr. ${appointment.doctorName}"+S.of(context).mdcinDeFamille,
-                        date: appointment.startTime.toDate(),
+                        date: appointment.startTime!.toDate(),
                         state: appointment.status,
-                        type: Algorithms.getConsultationTypeLabel(appointment.consultationType),
-                        label: Algorithms.getAppointmentReasonLabel(appointment.title),
+                        type: Algorithms.getConsultationTypeLabel(appointment.consultationType!),
+                        label: Algorithms.getAppointmentReasonLabel(appointment.title!),
                         action: () async {
                           AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
                           appointmentProvider.setAppointmentModel(appointment);
-                          widget.doc != null ? doctorProvider.setDoctorModel(widget.doc) : print("nope");
+                          widget.doc != null ? doctorProvider.setDoctorModel(widget.doc!) : print("nope");
                           Navigator.pushNamed(context, '/appointment');
                         }
                       ),

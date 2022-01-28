@@ -112,7 +112,7 @@ class BeneficiaryModelProvider with ChangeNotifier {
   }
 
   void addAllergy(String val){
-    _beneficiary.allergies.add(val);
+    _beneficiary.allergies?.add(val);
     notifyListeners();
   }
 

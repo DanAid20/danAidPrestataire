@@ -51,8 +51,8 @@ class Algorithms {
     //print(target);
     return target;
   }
-  static String getRegionFromStateCode(List origin, String code){
-    String region;
+  static String? getRegionFromStateCode(List origin, String code){
+    String? region;
     for(int i=0; i<origin.length; i++){
       if (origin[i]["key"] == code){
        region = origin[i]["value"];
@@ -60,8 +60,8 @@ class Algorithms {
     }
     return region;
   }
-  static String getStateCodeFromRegion(List origin, String region){
-    String code;
+  static String? getStateCodeFromRegion(List origin, String region){
+    String? code;
     for(int i=0; i<origin.length; i++){
       if (origin[i]["value"] == region){
        code = origin[i]["key"];
@@ -126,7 +126,7 @@ class Algorithms {
     return results;
   }
 
-  static String getConversationId({String userId, String targetId}) {
+  static String getConversationId({String? userId, String? targetId}) {
     
     String conversationId;
     if (userId.hashCode <= targetId.hashCode) {
@@ -157,9 +157,9 @@ class Algorithms {
     return time;
   }
 
-  static String getTimeElapsed({DateTime date}){
+  static String? getTimeElapsed({DateTime? date}){
     DateTime now = DateTime.now();
-    int secondDiff = now.difference(date).inSeconds;
+    int secondDiff = now.difference(date!).inSeconds;
     int minuteDiff = now.difference(date).inMinutes;
     int hourDiff = now.difference(date).inHours;
     int dayDiff = now.difference(date).inDays;
@@ -183,17 +183,17 @@ class Algorithms {
     }
   }
 
-  static double getFixedMonthlyMortgageRate({num amount, num rate, int months}){
-    return amount*rate*(pow(1 + rate, months)/(pow(1 + rate, months) - 1));
+  static double getFixedMonthlyMortgageRate({num? amount, num? rate, int? months}){
+    return amount!*rate!*(pow(1 + rate, months!)/(pow(1 + rate, months) - 1));
   }
 
   static Map<String, dynamic> getCoverageTime(){
 
-    String trimester;
-    DateTime now = DateTime.now();
-    int months;
-    DateTime start;
-    DateTime end;
+    String? trimester;
+    DateTime? now = DateTime.now();
+    int? months;
+    DateTime? start;
+    DateTime? end;
 
     if(now.month >= 1 && now.month < 4){
       trimester = "Janvier à Mars " + DateTime.now().year.toString();
@@ -279,35 +279,35 @@ class Algorithms {
     };
   }
 
-  static Map<String, dynamic> getAutomaticCoveragePeriod({int trimesterUnit, int year}){
+  static Map<String, dynamic> getAutomaticCoveragePeriod({int? trimesterUnit, int? year}){
 
-    String trimester;
-    String year_s = year.toString();
-    int months = 3;
-    DateTime start;
-    DateTime end;
+    String? trimester;
+    String yearString = year.toString();
+    int? months = 3;
+    DateTime? start;
+    DateTime? end;
 
     if(trimesterUnit == 1){
-      trimester = "Janvier à Mars $year_s";
-      start = DateTime(year, 01, 01);
+      trimester = "Janvier à Mars $yearString";
+      start = DateTime(year!, 01, 01);
       end = DateTime(year, 03, 31);
     }
 
     else if(trimesterUnit == 2){
-      trimester = "Avril à Juin $year_s";
-      start = DateTime(year, 04, 01);
+      trimester = "Avril à Juin $yearString";
+      start = DateTime(year!, 04, 01);
       end = DateTime(year, 06, 30);
     }
 
     else if(trimesterUnit == 3){
-      trimester = "Juillet à Septembre $year_s";
-      start = DateTime(year, 07, 01);
+      trimester = "Juillet à Septembre $yearString";
+      start = DateTime(year!, 07, 01);
       end = DateTime(year, 09, 30);
     }
 
     else if(trimesterUnit == 4){
-      trimester = "Octobre à Décembre $year_s";
-      start = DateTime(year, 10, 01);
+      trimester = "Octobre à Décembre $yearString";
+      start = DateTime(year!, 10, 01);
       end = DateTime(year, 12, 31);
     }
 
@@ -319,7 +319,7 @@ class Algorithms {
     };
   }
 
-  static String getUseCaseServiceName({String type, BuildContext context}){
+  static String getUseCaseServiceName({String? type, BuildContext? context}){
     return type == consultation ? "Consultation" 
       :  type == pharmacy ? "Pharmacie" 
         : type == labo ? "Laboratoire" 
@@ -328,7 +328,7 @@ class Algorithms {
               : "Non spécifié";
   }
 
-  static String getUseCaseServiceIcon({String type, BuildContext context}){
+  static String getUseCaseServiceIcon({String? type, BuildContext? context}){
     return type == consultation ? 'assets/icons/Bulk/Consultation.svg' 
       :  type == pharmacy ? 'assets/icons/Bulk/Ordonance.svg' 
         : type == labo ? 'assets/icons/Bulk/Labo.svg'
@@ -337,7 +337,7 @@ class Algorithms {
               : 'assets/icons/Bulk/Activity.svg';
   }
 
-  static String getPlanDescriptionText({num plan}){
+  static String getPlanDescriptionText({num? plan}){
     return plan == 0 ? "Vous êtes au Niveau 0: Découverte"
       : plan == 1 ? "Vous êtes au Niveau I: Accès"
       : plan == 1.1 ? "Vous êtes au Niveau I.I: Academik"

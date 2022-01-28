@@ -8,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 class FamilyBadgePage extends StatefulWidget {
-  const FamilyBadgePage({ Key key }) : super(key: key);
+  const FamilyBadgePage({ Key? key }) : super(key: key);
 
   @override
   _FamilyBadgePageState createState() => _FamilyBadgePageState();
@@ -20,7 +20,7 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
 
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel.dateCreated.toDate() : DateTime.now();
+    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel!.dateCreated!.toDate() : DateTime.now();
     final date2 = DateTime.now();
     final yearsForBadget= date2.difference(birthday).inDays;
 
@@ -42,7 +42,7 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
                     color: kBrownCanyon,
                     label: S.of(context).couvert,
                     description: S.of(context).vousAvezUneCouvertureSantOptimaleAccsAssistOuSrnit,
-                    active: adherentProvider.getAdherent.adherentPlan != 0
+                    active: adherentProvider.getAdherent?.adherentPlan != 0
                   ),
                   Spacer(),
                   badgeBox(
@@ -68,7 +68,7 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
       ),
     );
   }
-  Widget badgeBox({String img, String label, String description, bool active = false, Color color}){
+  Widget badgeBox({String? img, String? label, String? description, bool active = false, required Color color}){
     return Container(
       width: wv*43,
       constraints: BoxConstraints(minHeight: wv*45),
@@ -80,11 +80,11 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
       ),
       child: Column(
         children: [
-          SvgPicture.asset(img, height: hv*9, color: color,),
+          SvgPicture.asset(img!, height: hv*9, color: color,),
           SizedBox(height: hv*1,),
-          Text(label, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18),),
+          Text(label!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18),),
           SizedBox(height: hv*1.5,),
-          Text(description, style: TextStyle(color: kPrimaryColor, fontSize: 14), textAlign: TextAlign.center,),
+          Text(description!, style: TextStyle(color: kPrimaryColor, fontSize: 14), textAlign: TextAlign.center,),
           SizedBox(height: hv*1,)
         ],
       ),

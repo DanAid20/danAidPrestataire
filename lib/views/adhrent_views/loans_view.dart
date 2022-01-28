@@ -28,14 +28,14 @@ class Loans extends StatefulWidget {
 class _LoansState extends State<Loans> with TickerProviderStateMixin {
   
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  TabController _loanTabController;
+  TabController? _loanTabController;
   TextEditingController _amountController = new TextEditingController();
   final currency = new NumberFormat("#,##0", "en_US");
 
   checkIfBeneficiary() async {
     await Future.delayed(Duration(seconds: 1));
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    if(userProvider.getUserModel.profileType == beneficiary){
+    if(userProvider.getUserModel?.profileType == beneficiary){
       Navigator.pop(context);
       showDialog(context: context,
         builder: (BuildContext context){
@@ -89,9 +89,9 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
-    AdherentModel adh = adherentProvider.getAdherent;
+    AdherentModel? adh = adherentProvider.getAdherent;
 
-    bool enable = userProvider.getUserModel.enable == null ? false : userProvider.getUserModel.enable;
+    bool enable = userProvider.getUserModel?.enable == null ? false : userProvider.getUserModel!.enable!;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -112,7 +112,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())
         ],
       ),
       endDrawer: DefaultDrawer(
@@ -144,7 +144,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                           color: kBrownCanyon.withOpacity(0.3),
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
                         ),
-                        child: HomePageComponents.header(title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl),
+                        child: HomePageComponents.header(title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl),
                       ),
                       Positioned(
                         top: hv*5.5,
@@ -227,8 +227,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                           text: S.of(context).dmanderUnCrdit,
                           action: (){
                             num amount = num.parse(_amountController.text);
-                            num maxAmount =  adh.loanLimit;
-                            if(amount > maxAmount){
+                            num? maxAmount =  adh.loanLimit;
+                            if(amount > maxAmount!){
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
                             }
                             else{
@@ -264,7 +264,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                 action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
               ),
             ) : Container(),
-            adherentProvider.getAdherent.adherentPlan == 0 ? Container(
+            adherentProvider.getAdherent?.adherentPlan == 0 ? Container(
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
                 title: S.of(context).vousTesAuNiveau0+S.of(context).dcouverte,
@@ -312,8 +312,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                           children: [
                             Container(
                               margin: EdgeInsets.symmetric(vertical: hv*2),
-                              child: StreamBuilder(
-                                stream: FirebaseFirestore.instance.collection("CREDITS").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).where('status', isEqualTo: 0).orderBy('createdDate', descending: true).snapshots(),
+                              child: StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance.collection("CREDITS").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).where('status', isEqualTo: 0).orderBy('createdDate', descending: true).snapshots(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Center(
@@ -322,15 +322,15 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                       ),
                                     );
                                   }
-                                  return snapshot.data.docs.length >= 1
+                                  return snapshot.data!.docs.length >= 1
                                     ? ListView.builder(
                                         physics: BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
-                                        itemCount: snapshot.data.docs.length,
+                                        itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
-                                          int lastIndex = snapshot.data.docs.length - 1;
-                                          DocumentSnapshot loanDoc = snapshot.data.docs[index];
+                                          int lastIndex = snapshot.data!.docs.length - 1;
+                                          DocumentSnapshot loanDoc = snapshot.data!.docs[index];
                                           LoanModel loan = LoanModel.fromDocument(loanDoc);
                                           print("name: ");
                                           return Padding(
@@ -338,10 +338,10 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                             child: HomePageComponents.getLoanTile(
                                               label: "hhgfhfghfh",
                                               subtitle: loan.purpose,
-                                              date: loan.dateCreated.toDate(),
-                                              firstDate: loan.firstPaymentDate.toDate(),
-                                              lastDate: loan.lastPaymentDate.toDate(),
-                                              mensuality: loan.amount.toInt(),
+                                              date: loan.dateCreated!.toDate(),
+                                              firstDate: loan.firstPaymentDate!.toDate(),
+                                              lastDate: loan.lastPaymentDate!.toDate(),
+                                              mensuality: loan.amount,
                                               type: "gfg",
                                               state: loan.status,
                                               action: (){

@@ -35,19 +35,19 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
   TextEditingController _contactNameController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
   bool autovalidate = false;
-  String _category = "Hôpital";
+  String? _category = "Hôpital";
   String _region = "Centre";
   List<String> myCities = [];
-  String _city;
-  String _stateCode;
+  String? _city;
+  String? _stateCode;
   bool regionChosen = false;
   bool cityChosen = false;
   bool _serviceTermsAccepted = false;
   String termsAndConditions = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\n\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la s";
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   @override
   Widget build(BuildContext context) {
     AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
@@ -69,7 +69,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                       backgroundColor: Colors.grey[300],
                       radius: wv*18,
                       child: imageFileAvatar == null ? Icon(LineIcons.building, color: Colors.white, size: wv*20,) : Container(),
-                      backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar),
+                      backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar!),
                     ),
                     Positioned(
                       bottom: 2,
@@ -97,7 +97,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                         label: S.of(context).nomDeLtablissement,
                         hintText: S.of(context).exHpialCentrale,
                         controller: _companyNameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
@@ -105,7 +105,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                         label: S.of(context).nomCompletDuContact,
                         hintText: S.of(context).entrezVotreNom,
                         controller: _contactNameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
@@ -133,7 +133,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                               child: DropdownButtonHideUnderline(
                                 child: ButtonTheme(
                                   alignedDropdown: true,
-                                  child: DropdownButton(
+                                  child: DropdownButton<String>(
                                     isExpanded: true,
                                     value: _category,
                                     items: [
@@ -180,13 +180,13 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
                                       alignedDropdown: true,
-                                      child: DropdownButton(
+                                      child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _stateCode,
                                         hint: Text(S.of(context).choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
-                                            child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                                            child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
                                             value: region["key"],
                                           );
                                         }).toList(),
@@ -224,7 +224,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
                                       alignedDropdown: true,
-                                      child: DropdownButton(
+                                      child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _city,
                                         hint: Text(S.of(context).ville),
@@ -236,7 +236,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          adherentProvider.setTown(value);
+                                          adherentProvider.setTown(value!);
                                           setState(() {
                                             _city = value;
                                             cityChosen = true;
@@ -272,7 +272,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                     activeColor: primaryColor,
                     onChanged: (newValue) {
                       setState(() {
-                        _serviceTermsAccepted = newValue;
+                        _serviceTermsAccepted = newValue!;
                       });
                     },
                     controlAffinity: ListTileControlAffinity.leading,
@@ -295,26 +295,26 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                     String companyName = _companyNameController.text;
                     String contactName = _contactNameController.text;
                     String email = _emailController.text;
-                    if (_adherentFormKey.currentState.validate()){
+                    if (_adherentFormKey.currentState!.validate()){
                       setState(() {
                         buttonLoading = true;
                       });
                       AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
                       print("$companyName, $_category, $avatarUrl");
-                      adherentProvider.setAdherentId(userProvider.getUserId);
-                      adherentProvider.setImgUrl(avatarUrl);
+                      adherentProvider.setAdherentId(userProvider.getUserId!);
+                      adherentProvider.setImgUrl(avatarUrl!);
                       //adherentProvider.setFamilyName(fname);
                       adherentProvider.setSurname(companyName);
                       await FirebaseFirestore.instance.collection("USERS")
                         .doc(userProvider.getUserId)
                         .set({
                           'createdDate': DateTime.now(),
-                          "authId": FirebaseAuth.instance.currentUser.uid,
+                          "authId": FirebaseAuth.instance.currentUser!.uid,
                           'emailAdress': userProvider.getEmail,
                           'enabled': userProvider.isEnabled,
                           "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
                           "urlCNI": "",
-                          "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                          "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
                           "userCountryName": userProvider.getCountryName,
                           'fullName': "$companyName",
                           "imageUrl" : avatarUrl,
@@ -322,7 +322,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                           "points": 500,
                           "visitPoints": 0,
                           "regionDorigione": adherentProvider.getRegionOfOrigin,
-                          "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                          "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
                           "nameKeywords": Algorithms.getKeyWords(companyName)
                         }, SetOptions(merge: true))
                         .then((value) async {
@@ -330,7 +330,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                             .doc(userProvider.getUserId)
                             .set({
                               "createdDate": DateTime.now(),
-                              "authId": FirebaseAuth.instance.currentUser.uid,
+                              "authId": FirebaseAuth.instance.currentUser!.uid,
                               "nomEtablissement": companyName,
                               "nomCompletPContact": contactName,
                               "emailPContact": email,
@@ -342,16 +342,16 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                               "profilEnabled": false,
                               "region": adherentProvider.getRegionOfOrigin,
                               "villeEtab": adherentProvider.getTown,
-                              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
                               "userCountryName": userProvider.getCountryName,
-                              "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                              "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
                               "nameKeywords": Algorithms.getKeyWords(companyName)
                             }, SetOptions(merge: true))
                             .then((value) async {
                               HiveDatabase.setRegisterState(true);
-                              HiveDatabase.setAuthPhone(userProvider.getUserId);
+                              HiveDatabase.setAuthPhone(userProvider.getUserId!);
                               HiveDatabase.setSurname(companyName);
-                              HiveDatabase.setImgUrl(avatarUrl);
+                              HiveDatabase.setImgUrl(avatarUrl!);
                               setState(() {
                                 buttonLoading = false;
                               });
@@ -430,7 +430,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
     setState(() {
       imageLoading = true;
     });
-    String fileName = userProvider.getUserId;
+    String fileName = userProvider.getUserId!;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_prestataires/$fileName'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
@@ -445,7 +445,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
@@ -470,7 +470,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   Future getImageFromCamera() async {
@@ -483,7 +483,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   getImage(BuildContext context){
@@ -517,7 +517,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
     );
   }
 
-  List<String> getTownNamesFromRegion(List origin, String region){
+  List<String> getTownNamesFromRegion(List origin, String? region){
     List<String> target = [];
     for(int i=0; i<origin.length; i++){
       if (origin[i]["state_code"] == region){
@@ -528,19 +528,19 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
     return target;
   }
 
-  String getRegionFromStateCode(List origin, String code){
-    String region;
+  String getRegionFromStateCode(List origin, String? code){
+    String? region;
     for(int i=0; i<origin.length; i++){
       if (origin[i]["key"] == code){
        region = origin[i]["value"];
       }
     }
-    return region;
+    return region!;
   }
-  String _emailFieldValidator(String value) {
+  String? _emailFieldValidator(String? value) {
     if (!RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(value)) {
+        .hasMatch(value!)) {
       return S.of(context).entrerUneAddresseEmailValide;
     }
   }

@@ -28,8 +28,8 @@ class HelloScreen extends StatefulWidget {
 }
 
 class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  List tabs = <Widget>[
+  TabController? _tabController;
+  List<Widget> tabs = <Widget>[
     Tab(
       child: Row(
         children: [
@@ -64,7 +64,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
       )
     ),
   ];
-  List tabsDoctor = <Widget>[
+  List<Widget> tabsDoctor = <Widget>[
     Tab(
       child: Row(
         children: [
@@ -112,9 +112,9 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context);
     NotificationModelProvider notifications = Provider.of<NotificationModelProvider>(context);
-    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel.dateCreated.toDate() : DateTime.now();
+    final birthday = userProvider.getUserModel != null ? userProvider.getUserModel?.dateCreated?.toDate() : DateTime.now();
     final date2 = DateTime.now();
-    final yearsForBadget= date2.difference(birthday).inDays;
+    final yearsForBadget= date2.difference(birthday!).inDays;
     return WillPopScope(
       onWillPop: () async {
         controller.toPreviousIndex();
@@ -183,7 +183,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
                                         child: Text(
-                                          userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
+                                          userProvider.getUserModel != null ? "${userProvider.getUserModel?.points != null ? userProvider.getUserModel!.points : 0} pts" : "0 pts",
                                           style: TextStyle(
                                               fontSize: inch * 1.3,
                                               fontWeight: FontWeight.w700,
@@ -194,7 +194,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                                     SizedBox(
                                       width: wv * 2,
                                     ),
-                                    adherentProvider.getAdherent != null ? adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset(
+                                    adherentProvider.getAdherent != null ? adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset(
                                       "assets/icons/Bulk/Shield Done.svg",
                                       width: 18,
                                     ): Container(): Container(),

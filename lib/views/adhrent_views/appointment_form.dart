@@ -47,26 +47,26 @@ class _AppointmentFormState extends State<AppointmentForm> {
   TextEditingController _otherInfoController = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
   PageController controller = PageController(initialPage: 0, keepPage: false);
-  String emergencyReason;
+  String? emergencyReason;
   int currentPageValue = 0;
-  String purpose;
-  List<Widget> pageList;
+  String? purpose;
+  List<Widget>? pageList;
 
   double tarif = 2000.0;
 
-  String consultationType;
-  String reason;
+  String? consultationType;
+  String? reason;
   bool consultationCabinetSelected = false;
   bool consultationVideoSelected = false;
   bool consultationDomicileSelected = false;
 
-  String _emergencyPurpose;
+  String? _emergencyPurpose;
 
   double calendarTextValue = 14.0;
   TextStyle defCalendartextStyle = TextStyle(color: whiteColor, fontWeight: FontWeight.w500, fontSize: 14.0);
-  DateTime focusedDay;
-  TimeOfDay timePicked;
-  DateTime timeSelected;
+  DateTime? focusedDay;
+  TimeOfDay? timePicked;
+  DateTime? timeSelected;
   bool buttonLoading = false;
   
   String currentSymptomText = "";
@@ -81,7 +81,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
   ];
   List<String> symptoms = [];
 
-  GoogleMapController mapController;
+  GoogleMapController? mapController;
 
   final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
 
@@ -97,8 +97,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
     if(doctorProvider.getDoctor == null){}
-    if(adherent.getAdherent.familyDoctorId != null){
-      FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent.familyDoctorId).get().then((doc) {
+    if(adherent.getAdherent?.familyDoctorId != null){
+      FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent?.familyDoctorId).get().then((doc) {
         DoctorModel doctorModel = DoctorModel.fromDocument(doc);
         doctorProvider.setDoctorModel(doctorModel);
         chosenDoctor = doctorModel;
@@ -126,12 +126,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
     };
   }
 
-  QuerySnapshot searchSnapshot;
-  Future<QuerySnapshot> futureSearchResults;
+  QuerySnapshot? searchSnapshot;
+  Future<QuerySnapshot>? futureSearchResults;
   TextEditingController _searchController = new TextEditingController();
   bool searchDoc = true;
-  ServiceProviderModel chosenSP;
-  DoctorModel chosenDoctor;
+  ServiceProviderModel? chosenSP;
+  DoctorModel? chosenDoctor;
 
   @override
   void initState() {
@@ -144,7 +144,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
     BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     BottomAppBarControllerProvider bottomController = Provider.of<BottomAppBarControllerProvider>(context);
-    DoctorModel doc = doctorProvider.getDoctor;
+    DoctorModel? doc = doctorProvider.getDoctor;
     
     pageList = <Widget>[
       formLayout(menu()),
@@ -164,7 +164,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
           controller.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
         }
         else {Navigator.pop(context);}
-        return null;
+        return false;
       },
       child: Scaffold(
         key: _scaffoldKey,
@@ -196,7 +196,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
           centerTitle: true,
           actions: [
             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())
           ],
         ),
         endDrawer: DefaultDrawer(
@@ -217,13 +217,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 child: PageView.builder(
                   pageSnapping: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: pageList.length,
+                  itemCount: pageList?.length,
                   onPageChanged: (int page) {
                     getChangedPageAndMoveBar(page);
                   },
                   controller: controller,
                   itemBuilder: (context, index) {
-                    return pageList[index];
+                    return pageList![index];
                   },
                 ),
               ),
@@ -233,7 +233,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    for (int i = 0; i < pageList.length; i++)
+                    for (int i = 0; i < pageList!.length; i++)
                       if (i == currentPageValue) ...[circleBar(true)] else
                         circleBar(false),
                   ],
@@ -242,7 +242,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    for (int i = 0; i < (pageList.length - 1); i++)
+                    for (int i = 0; i < (pageList!.length - 1); i++)
                       if (i == currentPageValue) ...[circleBar(true)] else
                         circleBar(false),
                   ],
@@ -250,7 +250,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    for (int i = 0; i < (pageList.length - 2); i++)
+                    for (int i = 0; i < (pageList!.length - 2); i++)
                       if (i == currentPageValue) ...[circleBar(true)] else
                         circleBar(false),
                   ],
@@ -390,7 +390,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                         decoration: BoxDecoration(
                                           color: whiteColor,
                                           shape: BoxShape.circle,
-                                          boxShadow: [BoxShadow(color: Colors.grey[600], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+                                          boxShadow: [BoxShadow(color: Colors.grey[600]!, blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0, 2))]
                                         ),
                                         child: SvgPicture.asset('assets/icons/Bulk/Calling.svg', color: primaryColor, width: 25,),
                                       ),
@@ -576,19 +576,19 @@ class _AppointmentFormState extends State<AppointmentForm> {
             setState((){buttonLoading = true;});
             AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
             DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-            DoctorModel doc = doctorProvider.getDoctor;
-            AdherentModel adherentModel = adherentProvider.getAdherent;
+            DoctorModel? doc = doctorProvider.getDoctor;
+            AdherentModel? adherentModel = adherentProvider.getAdherent;
             BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
             FirebaseFirestore.instance.collection("USECASES")
               .add({
-                "adherentId": adherentModel.getAdherentId,
+                "adherentId": adherentModel?.getAdherentId,
                 "beneficiaryId": beneficiary.getBeneficiary.matricule,
                 "otherInfo": _otherInfoController.text,
                 "establishment": _hospitalController.text,
                 "createdDate": DateTime.now(),
                 "title": _emergencyPurpose,
                 "type": purpose,
-                "beneficiaryName":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,
+                "beneficiaryName":  beneficiary.getBeneficiary.surname!+" "+beneficiary.getBeneficiary.familyName!,
                 "status" : 0 //En attente
               }).then((value) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).lurgenceABienTEnrgistre),));
@@ -640,20 +640,20 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         Container(
                           child: chosenDoctor != null ? DoctorInfoCard(
                             noPadding: true,
-                            avatarUrl: chosenDoctor.avatarUrl,
-                            name: chosenDoctor.cniName,
-                            title: S.of(context).medecinDeFamille + chosenDoctor.field,
-                            speciality: chosenDoctor.speciality,
-                            teleConsultation: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["tele-consultation"] : false,
-                            consultation: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["consultation"] : false,
-                            chat: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["chat"] : false,
-                            rdv: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["rdv"] : false,
-                            visiteDomicile: chosenDoctor.serviceList != null ? chosenDoctor.serviceList["visite-a-domicile"] : false,
-                            field: chosenDoctor.speciality,
-                            officeName: chosenDoctor.officeName,
+                            avatarUrl: chosenDoctor?.avatarUrl,
+                            name: chosenDoctor?.cniName,
+                            title: S.of(context).medecinDeFamille + chosenDoctor!.field!,
+                            speciality: chosenDoctor?.speciality,
+                            teleConsultation: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["tele-consultation"] : false,
+                            consultation: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["consultation"] : false,
+                            chat: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["chat"] : false,
+                            rdv: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["rdv"] : false,
+                            visiteDomicile: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["visite-a-domicile"] : false,
+                            field: chosenDoctor?.speciality,
+                            officeName: chosenDoctor?.officeName,
                             includeHospital: true,
-                            distance: adherentProvider.getAdherent.location["latitude"] != null && chosenDoctor.location["latitude"] != null
-                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], chosenDoctor.location["latitude"], chosenDoctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
+                            distance: adherentProvider.getAdherent?.location?["latitude"] != null && chosenDoctor?.location?["latitude"] != null
+                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location?["latitude"], adherentProvider.getAdherent?.location?["longitude"], chosenDoctor?.location?["latitude"], chosenDoctor?.location?["longitude"]).toStringAsFixed(2)).toString() : null,
                             onTap: () {
                               showModalBottomSheet(
                                 context: context, 
@@ -687,11 +687,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           : chosenSP != null ? 
                             DoctorInfoCard(
                               noPadding: true,
-                              avatarUrl: chosenSP.avatarUrl,
-                              name: chosenSP.contactName,
-                              title: S.of(context).medecinDeFamille + chosenSP.contactName,
+                              avatarUrl: chosenSP?.avatarUrl,
+                              name: chosenSP?.contactName,
+                              title: S.of(context).medecinDeFamille + chosenSP!.contactName!,
                               isServiceProvider: true,
-                              speciality: chosenSP.category,
+                              speciality: chosenSP?.category,
                               teleConsultation: false,
                               consultation: false,
                               chat: false,
@@ -700,8 +700,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               field: "",
                               officeName: "",
                               includeHospital: true,
-                              distance: adherentProvider.getAdherent.location["latitude"] != null && chosenSP.coordGps != null
-                                ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], chosenSP.coordGps["latitude"], chosenSP.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
+                              distance: adherentProvider.getAdherent?.location?["latitude"] != null && chosenSP?.coordGps != null
+                                ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location?["latitude"], adherentProvider.getAdherent?.location?["longitude"], chosenSP?.coordGps?["latitude"], chosenSP?.coordGps?["longitude"]).toStringAsFixed(2)).toString() : null,
                               onTap: () {
                                 showModalBottomSheet(
                                   context: context, 
@@ -751,12 +751,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 iconPath: 'assets/icons/Bulk/Profile.svg',
                                 title: S.of(context).consultation,
                                 type: S.of(context).enCabinet,
-                                price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
+                                price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
                                 selected: consultationType == "Cabinet",
                                 action: (){
                                   setState(() {
                                     consultationType = "Cabinet";
-                                    tarif = doc.rate != null ? doc.rate["public"] : 2000.0;
+                                    tarif = doc.rate != null ? doc.rate!["public"] : 2000.0;
                                   });
                                 }
                               ),
@@ -764,7 +764,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 iconPath: 'assets/icons/Bulk/Video.svg',
                                 title: "Consultation",
                                 type: "Vidéo",
-                                price: doc.rate != null ? doc.rate["public"].toString() : "2000.0",
+                                price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
                                 selected: consultationType == "Video",
                                 action: (){
                                   setState(() {
@@ -883,29 +883,29 @@ class _AppointmentFormState extends State<AppointmentForm> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     var query = isDoctor ? FirebaseFirestore.instance.collection("MEDECINS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).snapshots() : FirebaseFirestore.instance.collection("PRESTATAIRE").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).snapshots();
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: query,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        int lastIndex = snapshot.data.docs.length - 1;
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
+        int lastIndex = snapshot.data!.docs.length - 1;
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
           //shrinkWrap: true,
           physics: BouncingScrollPhysics(),
-          itemCount: snapshot.data.docs.length,
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data.docs[index];
-            DoctorModel doctor = isDoctor ? DoctorModel.fromDocument(doc) : null;
-            ServiceProviderModel sp = !isDoctor ? ServiceProviderModel.fromDocument(doc) : null;
+            DocumentSnapshot doc = snapshot.data!.docs[index];
+            DoctorModel? doctor = isDoctor ? DoctorModel.fromDocument(doc) : null;
+            ServiceProviderModel? sp = !isDoctor ? ServiceProviderModel.fromDocument(doc) : null;
 
             return Padding(
               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 10 : 0),
               child: isDoctor ? DoctorInfoCard(
                 actionText: "Choisir",
-                avatarUrl: doctor.avatarUrl,
-                name: doctor.cniName,
-                title: S.of(context).medecinDeFamille + doctor.field,
+                avatarUrl: doctor?.avatarUrl,
+                name: doctor?.cniName,
+                title: S.of(context).medecinDeFamille + doctor!.field!,
                 speciality: doctor.speciality,
                 teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                 consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -913,8 +913,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 rdv: doctor.serviceList != null ? doctor.serviceList["rdv"] : false,
                 visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
                 distance: 
-                  adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
-                    ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
+                  adherentProvider.getAdherent?.location?["latitude"] != null && doctor.location?["latitude"] != null
+                    ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location?["latitude"], adherentProvider.getAdherent?.location?["longitude"], doctor.location?["latitude"], doctor.location?["longitude"]).toStringAsFixed(2)).toString() : null
                 ,
                 onTap: () {
                   chosenSP = null;
@@ -927,18 +927,18 @@ class _AppointmentFormState extends State<AppointmentForm> {
               :
               DoctorInfoCard(
                 actionText: "Choisir",
-                avatarUrl: sp.avatarUrl,
+                avatarUrl: sp?.avatarUrl,
                 isServiceProvider: true,
-                name: sp.name.toString(),
-                title: sp.contactName.toString(),
-                speciality: sp.category.toString(),
+                name: sp?.name.toString(),
+                title: sp?.contactName.toString(),
+                speciality: sp?.category.toString(),
                 teleConsultation: false,
                 consultation: false,
                 chat: false,
                 rdv: false,
                 visiteDomicile: false,
-                distance: adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
-                    ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
+                distance: adherentProvider.getAdherent?.location?["latitude"] != null && sp?.coordGps != null
+                    ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location?["latitude"], adherentProvider.getAdherent?.location?["longitude"], sp?.coordGps?["latitude"], sp?.coordGps?["longitude"]).toStringAsFixed(2)).toString() : null,
                 onTap: () {
                   chosenSP = sp;
                   chosenDoctor = null;
@@ -992,11 +992,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
 
   Widget schedule(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    DoctorModel doc = doctorProvider.getDoctor;
+    DoctorModel? doc = doctorProvider.getDoctor;
     List<DateTime> dates = [];
-    if(doc.planning != null){
-      for(int i = 0; i < doc.planning.length; i++){
-        dates.add(doc.planning[i]['date'].toDate());
+    if(doc!.planning != null){
+      for(int i = 0; i < doc.planning!.length; i++){
+        dates.add(doc.planning?[i]['date'].toDate());
       }
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -1033,7 +1033,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             ),
                             child: CircleAvatar(
                                 backgroundColor: Colors.grey,
-                                backgroundImage: doc.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doc.avatarUrl),
+                                backgroundImage: doc.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doc.avatarUrl!) as ImageProvider,
                                 radius: 30,
                             ),
                           ),
@@ -1041,7 +1041,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Dr. ${doc.surname + doc.familyName}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
+                                Text("Dr. ${doc.surname! + doc.familyName!}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
                                 Text(S.of(context).mdecinDeFamille+" ${doc.field}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                 Column(crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -1065,13 +1065,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 decoration: BoxDecoration(
                   color: kSouthSeas,
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
-                  boxShadow: [BoxShadow(color: Colors.grey[400], blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1))]
+                  boxShadow: [BoxShadow(color: Colors.grey[400]!, blurRadius: 2.0, spreadRadius: 1.0, offset: Offset(0,1))]
                 ),
                 child: TableCalendar(
                   firstDay: DateTime.now(),
                   locale: 'fr_FR',
                   lastDay: DateTime(DateTime.now().year, DateTime.now().month + 3, DateTime.now().day),
-                  focusedDay: focusedDay != null ? focusedDay : DateTime.now(),
+                  focusedDay: focusedDay != null ? focusedDay! : DateTime.now(),
                   calendarFormat: CalendarFormat.week,
                   daysOfWeekVisible: true,
                   selectedDayPredicate: (date){
@@ -1098,7 +1098,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     }
                     setState(() {
                       focusedDay = date1;
-                      if(checkAvailability(DateFormat('EEEE', 'en_US').format(focusedDay)) == false){
+                      if(checkAvailability(DateFormat('EEEE', 'en_US').format(focusedDay!)) == false){
                         timeSelected = null;
                         timePicked = null;
                       }
@@ -1164,7 +1164,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
                     child: Text("Dr ${doc.familyName} "+S.of(context).nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
                   )*/
-                  checkAvailability(DateFormat('EEEE', 'en_US').format(focusedDay)) ? Column(
+                  checkAvailability(DateFormat('EEEE', 'en_US').format(focusedDay!)) ? Column(
                     children: [
                       SizedBox(height: hv*3,),
                       Row(
@@ -1174,14 +1174,14 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             time: TimeOfDay(hour: 8, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 8, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 8, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 8, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 8, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 8, 0); timeSelected = DateTime(2000, 1, 1, 8, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 8, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 8, 0); timeSelected = DateTime(2000, 1, 1, 8, 0); })
                           ),
                           SizedBox(width: wv*10,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 9, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 9, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 9, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 9, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 9, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 9, 0); timeSelected = DateTime(2000, 1, 1, 9, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 9, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 9, 0); timeSelected = DateTime(2000, 1, 1, 9, 0); })
                           )
                         ],
                       ),
@@ -1193,14 +1193,14 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             time: TimeOfDay(hour: 10, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 10, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 10, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 10, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 10, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 10, 0); timeSelected = DateTime(2000, 1, 1, 10, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 10, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 10, 0); timeSelected = DateTime(2000, 1, 1, 10, 0); })
                           ),
                           SizedBox(width: wv*10,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 11, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 11, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 11, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 11, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 11, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 11, 0); timeSelected = DateTime(2000, 1, 1, 11, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 11, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 11, 0); timeSelected = DateTime(2000, 1, 1, 11, 0); })
                           )
                         ],
                       ),
@@ -1212,14 +1212,14 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             time: TimeOfDay(hour: 12, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 12, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 12, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 12, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 12, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 12, 0); timeSelected = DateTime(2000, 1, 1, 12, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 12, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 12, 0); timeSelected = DateTime(2000, 1, 1, 12, 0); })
                           ),
                           SizedBox(width: wv*10,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 13, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 13, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 13, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 13, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 13, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 13, 0); timeSelected = DateTime(2000, 1, 1, 13, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 13, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 13, 0); timeSelected = DateTime(2000, 1, 1, 13, 0); })
                           )
                         ],
                       ),
@@ -1231,14 +1231,14 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             time: TimeOfDay(hour: 14, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 14, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 14, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 14, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 14, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 14, 0); timeSelected = DateTime(2000, 1, 1, 14, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 14, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 14, 0); timeSelected = DateTime(2000, 1, 1, 14, 0); })
                           ),
                           SizedBox(width: wv*10,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 15, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 15, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 15, minute: 0)),
                             selected: timePicked == TimeOfDay(hour: 15, minute: 0),
-                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 15, minute: 0); focusedDay = DateTime(focusedDay.year, focusedDay.month, focusedDay.day, 15, 0); timeSelected = DateTime(2000, 1, 1, 15, 0); })
+                            onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 15, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 15, 0); timeSelected = DateTime(2000, 1, 1, 15, 0); })
                           )
                         ],
                       ),
@@ -1246,7 +1246,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   ): 
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
-                    child: Text("Dr ${doc.familyName} "+S.of(context).nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
+                    child: Text("Dr ${doc.familyName} "+S.of(context).nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay!)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
                   )
                   : 
                   Container(
@@ -1269,8 +1269,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
   Widget finalize(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    AdherentModel adherentModel = adherentProvider.getAdherent;
-    DoctorModel doc = doctorProvider.getDoctor;
+    AdherentModel? adherentModel = adherentProvider.getAdherent;
+    DoctorModel? doc = doctorProvider.getDoctor;
     return Padding(
       padding: EdgeInsets.only(bottom: hv*2),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -1297,17 +1297,17 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 child: RichText(text: TextSpan(
                                   text: S.of(context).rendezvousn,
                                   children: [
-                                    TextSpan(text: "Dr ${doc.surname} ${doc.familyName}\n", style: TextStyle(fontSize: wv*3.8, fontWeight: FontWeight.w400)),
-                                    TextSpan(text: "${doc.field}"+S.of(context).mdecinDeFamille, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
+                                    TextSpan(text: "Dr ${doc?.surname} ${doc?.familyName}\n", style: TextStyle(fontSize: wv*3.8, fontWeight: FontWeight.w400)),
+                                    TextSpan(text: "${doc?.field}"+S.of(context).mdecinDeFamille, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
                                   ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
                                 ),
                               ),
                               Expanded(
                                 flex: 4,
                                 child: RichText(text: TextSpan(
-                                  text: DateFormat('EEEE', 'fr_FR').format(focusedDay)+", "+ focusedDay.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(focusedDay)+" "+ focusedDay.year.toString() +"\n",
+                                  text: DateFormat('EEEE', 'fr_FR').format(focusedDay!)+", "+ focusedDay!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(focusedDay!)+" "+ focusedDay!.year.toString() +"\n",
                                   children: [
-                                    TextSpan(text: timeSelected.hour.toString().padLeft(2, '0')+ "H:"+timeSelected.minute.toString().padLeft(2, '0')+ " à "+ (timeSelected.hour + ((purpose != "consult-today") ? 1 : 8)).toString().padLeft(2, '0') + "H:"+timeSelected.minute.toString().padLeft(2, '0'), style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
+                                    TextSpan(text: timeSelected!.hour.toString().padLeft(2, '0')+ "H:"+timeSelected!.minute.toString().padLeft(2, '0')+ " à "+ (timeSelected!.hour + ((purpose != "consult-today") ? 1 : 8)).toString().padLeft(2, '0') + "H:"+timeSelected!.minute.toString().padLeft(2, '0'), style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
                                   ], style: TextStyle(color: kPrimaryColor, fontSize: wv*3.6, fontWeight: FontWeight.w600)),
                                   textAlign: TextAlign.right,
                                 ),
@@ -1333,7 +1333,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           child: DropdownButtonHideUnderline(
                             child: ButtonTheme(
                               alignedDropdown: true,
-                              child: DropdownButton(
+                              child: DropdownButton<String>(
                                 icon: Icon(Icons.keyboard_arrow_down_rounded, size: wv*6, color: kPrimaryColor,),
                                 isExpanded: true,
                                 value: reason,
@@ -1444,15 +1444,15 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 setState(() {
                   buttonLoading = true;
                 });
-                DateTime consultationStartDate = purpose != "consult-today" ? focusedDay : DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
-                DateTime consultationEndDate = purpose != "consult-today" ? focusedDay.add(Duration(hours: 1)) : DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 16, 0);
+                DateTime? consultationStartDate = purpose != "consult-today" ? focusedDay : DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
+                DateTime consultationEndDate = purpose != "consult-today" ? focusedDay!.add(Duration(hours: 1)) : DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 16, 0);
                 BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
                 await FirebaseFirestore.instance.collection("APPOINTMENTS").add({
-                    "adherentId": adherentModel.getAdherentId,
+                    "adherentId": adherentModel?.getAdherentId,
                     "rdvPrestataire": chosenSP != null,
-                    "doctorId": chosenSP != null ? chosenSP.id : chosenDoctor.id,
+                    "doctorId": chosenSP != null ? chosenSP?.id : chosenDoctor?.id,
                     "beneficiaryId": beneficiary.getBeneficiary.matricule,
-                    "doctorName": chosenSP != null ? chosenSP.name : chosenDoctor.surname + " " + chosenDoctor.familyName,
+                    "doctorName": chosenSP != null ? chosenSP?.name : chosenDoctor!.surname! + " " + chosenDoctor!.familyName!,
                     "createdDate": DateTime.now(),
                     "enabled": false,
                     "symptoms": symptoms,
@@ -1465,12 +1465,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     "announced": purpose == "consult-today"? true : false,
                     "avatarUrl": beneficiary.getBeneficiary.avatarUrl,
                     "birthDate": beneficiary.getBeneficiary.birthDate,
-                    "username":  beneficiary.getBeneficiary.surname+" "+beneficiary.getBeneficiary.familyName,
+                    "username":  beneficiary.getBeneficiary.surname! +" "+ beneficiary.getBeneficiary.familyName!,
                     "status" : 0 //En attente
                   }).then((doc) async  {
                     if(purpose != "consult-today"){
                       print('adding planning');
-                      FirebaseFirestore.instance.collection("MEDECINS").doc(doctorProvider.getDoctor.id).update({"planning" : FieldValue.arrayUnion([{'idRdv': doc.id, 'date': focusedDay}])}).then((value) {
+                      FirebaseFirestore.instance.collection("MEDECINS").doc(doctorProvider.getDoctor?.id).update({"planning" : FieldValue.arrayUnion([{'idRdv': doc.id, 'date': focusedDay}])}).then((value) {
                         print("new planning added");
                       });
                     }
@@ -1497,11 +1497,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
   bool checkAvailability (String day){
     print(day);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    DoctorModel doc = doctorProvider.getDoctor;
-    if (doc.availability != null) {
-      bool weekAvail = doc.availability["monday to friday"]["available"];
-      bool saturdayAvail = doc.availability["saturday"]["available"];
-      bool sundayAvail = doc.availability["sunday"]["available"];
+    DoctorModel? doc = doctorProvider.getDoctor;
+    if (doc?.availability != null) {
+      bool weekAvail = doc?.availability?["monday to friday"]["available"];
+      bool saturdayAvail = doc?.availability?["saturday"]["available"];
+      bool sundayAvail = doc?.availability?["sunday"]["available"];
       List<String> weekDays = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
       if(weekDays.contains(day)){
         return weekAvail;
@@ -1519,34 +1519,35 @@ class _AppointmentFormState extends State<AppointmentForm> {
 
   Future<void> _selectTime(BuildContext context) async {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    DoctorModel doc = doctorProvider.getDoctor;
-    final TimeOfDay picked_s = await showTimePicker(
+    DoctorModel? doc = doctorProvider.getDoctor;
+    final TimeOfDay? picked_s = await showTimePicker(
         context: context,
-        initialTime: TimeOfDay(hour: doc.availability["monday to friday"]["start"].toDate().hour, minute: doc.availability["monday to friday"]["start"].toDate().minute), builder: (BuildContext context, Widget child) {
+        initialTime: TimeOfDay(hour: doc?.availability?["monday to friday"]["start"].toDate().hour, minute: doc?.availability?["monday to friday"]["start"].toDate().minute), 
+        builder: (BuildContext context, Widget? child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-            child: child,
+            child: child!,
           );});
 
-    if (picked_s != null && picked_s != TimeOfDay(hour: doc.availability["monday to friday"]["start"].toDate().hour, minute: doc.availability["monday to friday"]["start"].toDate().minute))
+    if (picked_s != null && picked_s != TimeOfDay(hour: doc?.availability?["monday to friday"]["start"].toDate().hour, minute: doc?.availability?["monday to friday"]["start"].toDate().minute))
       setState(() {
         timePicked = picked_s; //DateTime(2000, 1, 1, picked_s.hour, picked_s.minute);
       });
       print(picked_s.toString());
-      checkTimeRange(picked_s);
+      checkTimeRange(picked_s!);
   }
 
   checkTimeRange(TimeOfDay time){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    DoctorModel doc = doctorProvider.getDoctor;
+    DoctorModel? doc = doctorProvider.getDoctor;
 
-    if (doc.availability != null) {
-      String day = DateFormat('EEEE').format(focusedDay);
+    if (doc?.availability != null) {
+      String day = DateFormat('EEEE').format(focusedDay!);
       List<String> weekDays = ["lundi","mardi","mercredi","jeudi","vendredi"];
       List<String> weekDaysEnglish = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
       if(weekDays.contains(day)){
-        TimeOfDay start = TimeOfDay(hour: doc.availability["monday to friday"]["start"].toDate().hour, minute: doc.availability["monday to friday"]["start"].toDate().minute);
-        TimeOfDay end = TimeOfDay(hour: doc.availability["monday to friday"]["end"].toDate().hour, minute: doc.availability["monday to friday"]["end"].toDate().minute);
+        TimeOfDay start = TimeOfDay(hour: doc?.availability?["monday to friday"]["start"].toDate().hour, minute: doc?.availability?["monday to friday"]["start"].toDate().minute);
+        TimeOfDay end = TimeOfDay(hour: doc?.availability?["monday to friday"]["end"].toDate().hour, minute: doc?.availability?["monday to friday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
         double startN = start.hour + start.minute/60;
         double endN = end.hour + end.minute/60;
@@ -1562,8 +1563,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           });
         }
       } else if (day == "samedi"){
-        TimeOfDay start = TimeOfDay(hour: doc.availability["saturday"]["start"].toDate().hour, minute: doc.availability["saturday"]["start"].toDate().minute);
-        TimeOfDay end = TimeOfDay(hour: doc.availability["saturday"]["end"].toDate().hour, minute: doc.availability["saturday"]["end"].toDate().minute);
+        TimeOfDay start = TimeOfDay(hour: doc?.availability?["saturday"]["start"].toDate().hour, minute: doc?.availability?["saturday"]["start"].toDate().minute);
+        TimeOfDay end = TimeOfDay(hour: doc?.availability?["saturday"]["end"].toDate().hour, minute: doc?.availability?["saturday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
         double startN = start.hour + start.minute/60;
         double endN = end.hour + end.minute/60;
@@ -1578,8 +1579,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           });
         }
       } else if (day == "dimanche") {
-        TimeOfDay start = TimeOfDay(hour: doc.availability["sunday"]["start"].toDate().hour, minute: doc.availability["sunday"]["start"].toDate().minute);
-        TimeOfDay end = TimeOfDay(hour: doc.availability["sunday"]["end"].toDate().hour, minute: doc.availability["sunday"]["end"].toDate().minute);
+        TimeOfDay start = TimeOfDay(hour: doc?.availability?["sunday"]["start"].toDate().hour, minute: doc?.availability?["sunday"]["start"].toDate().minute);
+        TimeOfDay end = TimeOfDay(hour: doc?.availability?["sunday"]["end"].toDate().hour, minute: doc?.availability?["sunday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
         double startN = start.hour + start.minute/60;
         double endN = end.hour + end.minute/60;
@@ -1599,15 +1600,15 @@ class _AppointmentFormState extends State<AppointmentForm> {
 
   bool checkTimeAvailability(TimeOfDay time){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    DoctorModel doc = doctorProvider.getDoctor;
+    DoctorModel? doc = doctorProvider.getDoctor;
 
-    if (doc.availability != null) {
-      String day = DateFormat('EEEE').format(focusedDay);
+    if (doc?.availability != null) {
+      String day = DateFormat('EEEE').format(focusedDay!);
       List<String> weekDays = ["lundi","mardi","mercredi","jeudi","vendredi"];
       List<String> weekDaysEnglish = ["Monday","Tuesday","Wednesday","Thursday","Friday"];
       if(weekDays.contains(day)){
-        TimeOfDay start = TimeOfDay(hour: doc.availability["monday to friday"]["start"].toDate().hour, minute: doc.availability["monday to friday"]["start"].toDate().minute);
-        TimeOfDay end = TimeOfDay(hour: doc.availability["monday to friday"]["end"].toDate().hour, minute: doc.availability["monday to friday"]["end"].toDate().minute);
+        TimeOfDay start = TimeOfDay(hour: doc?.availability?["monday to friday"]["start"].toDate().hour, minute: doc?.availability?["monday to friday"]["start"].toDate().minute);
+        TimeOfDay end = TimeOfDay(hour: doc?.availability?["monday to friday"]["end"].toDate().hour, minute: doc?.availability?["monday to friday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
         double startN = start.hour + start.minute/60;
         double endN = end.hour + end.minute/60;
@@ -1617,8 +1618,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           return false;
         }
       } else if (day == "samedi"){
-        TimeOfDay start = TimeOfDay(hour: doc.availability["saturday"]["start"].toDate().hour, minute: doc.availability["saturday"]["start"].toDate().minute);
-        TimeOfDay end = TimeOfDay(hour: doc.availability["saturday"]["end"].toDate().hour, minute: doc.availability["saturday"]["end"].toDate().minute);
+        TimeOfDay start = TimeOfDay(hour: doc?.availability?["saturday"]["start"].toDate().hour, minute: doc?.availability?["saturday"]["start"].toDate().minute);
+        TimeOfDay end = TimeOfDay(hour: doc?.availability?["saturday"]["end"].toDate().hour, minute: doc?.availability?["saturday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
         double startN = start.hour + start.minute/60;
         double endN = end.hour + end.minute/60;
@@ -1628,8 +1629,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           return false;
         }
       } else if (day == "dimanche") {
-        TimeOfDay start = TimeOfDay(hour: doc.availability["sunday"]["start"].toDate().hour, minute: doc.availability["sunday"]["start"].toDate().minute);
-        TimeOfDay end = TimeOfDay(hour: doc.availability["sunday"]["end"].toDate().hour, minute: doc.availability["sunday"]["end"].toDate().minute);
+        TimeOfDay start = TimeOfDay(hour: doc?.availability?["sunday"]["start"].toDate().hour, minute: doc?.availability?["sunday"]["start"].toDate().minute);
+        TimeOfDay end = TimeOfDay(hour: doc?.availability?["sunday"]["end"].toDate().hour, minute: doc?.availability?["sunday"]["end"].toDate().minute);
         double timeN = time.hour + time.minute/60;
         double startN = start.hour + start.minute/60;
         double endN = end.hour + end.minute/60;
@@ -1655,7 +1656,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+        boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
       ),
       child: content,
     );
@@ -1677,7 +1678,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             SizedBox(height: hv*1,),
             Row(children: [
               CircleAvatar(
-                backgroundImage: beneficiaryProvider.getBeneficiary.avatarUrl != null ? CachedNetworkImageProvider(beneficiaryProvider.getBeneficiary.avatarUrl) : null,
+                backgroundImage: beneficiaryProvider.getBeneficiary.avatarUrl != null ? CachedNetworkImageProvider(beneficiaryProvider.getBeneficiary.avatarUrl!) : null,
                 backgroundColor: whiteColor,
                 radius: wv*6,
                 child: beneficiaryProvider.getBeneficiary.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
@@ -1685,9 +1686,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
               SizedBox(width: wv*3,),
               Expanded(
                 child: RichText(text: TextSpan(
-                  text: beneficiaryProvider.getBeneficiary.surname + " " +  beneficiaryProvider.getBeneficiary.familyName + "\n",
+                  text: beneficiaryProvider.getBeneficiary.surname! + " " +  beneficiaryProvider.getBeneficiary.familyName! + "\n",
                   children: [
-                    TextSpan(text: (DateTime.now().year - beneficiaryProvider.getBeneficiary.birthDate.toDate().year).toString() + S.of(context).ans, style: TextStyle(fontSize: wv*3.3)),
+                    TextSpan(text: (DateTime.now().year - beneficiaryProvider.getBeneficiary.birthDate!.toDate().year).toString() + S.of(context).ans, style: TextStyle(fontSize: wv*3.3)),
                   ], style: TextStyle(color: kDeepTeal, fontSize: wv*4.2)),
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
@@ -1701,9 +1702,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
     );
   }
 
-  Widget getTimeRangeBox({TimeOfDay time, bool selected = false, bool enable = true, Function onSelect}){
+  Widget getTimeRangeBox({required TimeOfDay time, bool selected = false, bool enable = true, Function? onSelect}){
     return GestureDetector(
-      onTap: enable ? onSelect : null,
+      onTap: enable ? ()=> onSelect : null,
       child: Container(
         width: wv*35,
         padding: EdgeInsets.symmetric(horizontal: wv*1, vertical: hv*1.5),

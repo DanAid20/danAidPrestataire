@@ -88,17 +88,17 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
 
 class ProfileTypeCard extends StatelessWidget {
   const ProfileTypeCard({
-    Key key,
-    @required NavigationService navigationService,
+    Key? key,
+    @required NavigationService? navigationService,
     this.title, this.description, this.image, this.route, this.action
   }) : _navigationService = navigationService, super(key: key);
 
-  final NavigationService _navigationService;
-  final String title;
-  final String description;
-  final String image;
-  final Function action;
-  final String route;
+  final NavigationService? _navigationService;
+  final String? title;
+  final String? description;
+  final String? image;
+  final Function? action;
+  final String? route;
 
 
   @override
@@ -132,7 +132,7 @@ class ProfileTypeCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        title,
+                        title!,
                         softWrap: true,
                         style: TextStyle(
                             color: kPrimaryColor,
@@ -143,7 +143,7 @@ class ProfileTypeCard extends StatelessWidget {
                       VerticalSpacing(of: 5),
                       Flexible(
                         child: Text(
-                          description,
+                          description!,
                           softWrap: true,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
@@ -159,12 +159,12 @@ class ProfileTypeCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SvgPicture.asset(image, width: wv*30,)
+              SvgPicture.asset(image!, width: wv*30,)
             ],
           ),
         ),
       ),
-      onTap: action,
+      onTap: () => action,
     );
   }
 }

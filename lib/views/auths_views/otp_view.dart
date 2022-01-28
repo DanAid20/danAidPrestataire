@@ -23,8 +23,8 @@ class OtpView extends StatefulWidget {
 }
 
 class _OtpViewState extends State<OtpView> {
-  FocusNode pin2FocusNode, pin3FocusNode, pin4FocusNode;
-  FocusNode pin5FocusNode, pin6FocusNode;
+  FocusNode? pin2FocusNode, pin3FocusNode, pin4FocusNode;
+  FocusNode? pin5FocusNode, pin6FocusNode;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
   TextEditingController pin1Controller = new TextEditingController();
@@ -53,11 +53,11 @@ class _OtpViewState extends State<OtpView> {
   @override
   void dispose() {
     super.dispose();
-    pin2FocusNode.dispose();
-    pin3FocusNode.dispose();
-    pin4FocusNode.dispose();
-    pin5FocusNode.dispose();
-    pin6FocusNode.dispose();
+    pin2FocusNode?.dispose();
+    pin3FocusNode?.dispose();
+    pin4FocusNode?.dispose();
+    pin5FocusNode?.dispose();
+    pin6FocusNode?.dispose();
   }
 
   void nextField(String value, FocusNode focusNode) {
@@ -81,23 +81,23 @@ class _OtpViewState extends State<OtpView> {
                 DanAidDefaultHeader(showDanAidLogo: true,),
                 Expanded(
                   child: Container(
-                    height: SizeConfig.screenHeight * .8,
+                    height: SizeConfig.screenHeight! * .8,
                     decoration: BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(defaultSize * 2.5),
-                            topRight: Radius.circular(defaultSize * 2.5)
+                            topLeft: Radius.circular(defaultSize! * 2.5),
+                            topRight: Radius.circular(defaultSize! * 2.5)
                         )
                     ),
                     child: ListView(
                       physics: BouncingScrollPhysics(),
                       children: [
-                        SizedBox(height: SizeConfig.screenHeight * 0.05),
+                        SizedBox(height: SizeConfig.screenHeight! * 0.05),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 25),
                           alignment: Alignment.center,
                           child: Text(
-                              S.of(context).unCodeDeValidationATEnvoyParSmsAu+userProvider.getUserId,
+                              S.of(context).unCodeDeValidationATEnvoyParSmsAu + userProvider.getUserId!,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: darkGreyColor,
@@ -122,7 +122,7 @@ class _OtpViewState extends State<OtpView> {
                                     signInWithPhoneNumber();
                                   },
                               ),
-                        SizedBox(height: SizeConfig.screenHeight * .01),
+                        SizedBox(height: SizeConfig.screenHeight! * .01),
                         GestureDetector(
                           onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
                           child: Text(
@@ -152,7 +152,7 @@ class _OtpViewState extends State<OtpView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(S.of(context).leCodeExpireDans, style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
-          TweenAnimationBuilder(
+          TweenAnimationBuilder<double>(
             tween: Tween(begin: 40.0, end: 0.0),
             duration: Duration(seconds: 120),
             builder: (_, value, child) => Text(
@@ -176,7 +176,7 @@ class _OtpViewState extends State<OtpView> {
         key: _mFormKey,
         child: Column(
           children: [
-            SizedBox(height: SizeConfig.screenHeight * .038),
+            SizedBox(height: SizeConfig.screenHeight! * .038),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -190,7 +190,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) {nextField(value, pin2FocusNode); setState((){});},
+                    onChanged: (value) {nextField(value, pin2FocusNode!); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -203,7 +203,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) {nextField(value, pin3FocusNode); setState((){});},
+                    onChanged: (value) {nextField(value, pin3FocusNode!); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -216,7 +216,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) {nextField(value, pin4FocusNode); setState((){});},
+                    onChanged: (value) {nextField(value, pin4FocusNode!); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -229,7 +229,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) {nextField(value, pin5FocusNode); setState((){});},
+                    onChanged: (value) {nextField(value, pin5FocusNode!); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -242,7 +242,7 @@ class _OtpViewState extends State<OtpView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     decoration: otpInputDecoration,
-                    onChanged: (value) {nextField(value, pin6FocusNode); setState((){});},
+                    onChanged: (value) {nextField(value, pin6FocusNode!); setState((){});},
                   ),
                 ),
                 SizedBox(
@@ -258,7 +258,7 @@ class _OtpViewState extends State<OtpView> {
                     onChanged: (value) {
                       setState((){});
                       if (value.length == 1) {
-                        pin6FocusNode.unfocus();
+                        pin6FocusNode!.unfocus();
                         // Then you need to check is the code is correct or not
                       }
                     },
@@ -266,7 +266,7 @@ class _OtpViewState extends State<OtpView> {
                 ),
               ],
             ),
-            SizedBox(height: SizeConfig.screenHeight * .05),
+            SizedBox(height: SizeConfig.screenHeight! * .05),
           ],
         ),
       ),
@@ -281,17 +281,17 @@ class _OtpViewState extends State<OtpView> {
     print(smsCode);
     try {
     final AuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: phoneVerificationProvider.getVerificationId,
+      verificationId: phoneVerificationProvider.getVerificationId!,
       smsCode: smsCode,
     );
 
     _auth.signInWithCredential(credential).then((val) async {
       
-      final User user = val.user;
+      final User user = val.user!;
       userProvider.setAuthId(user.uid);
       HiveDatabase.setSignInState(true);
-      HiveDatabase.setAuthPhone(userProvider.getUserId);
-      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId);
+      HiveDatabase.setAuthPhone(userProvider.getUserId!);
+      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
       bool registered = res["exists"];
       String profile = res["profile"];
       UserModel userModel = res["user"];
@@ -306,8 +306,8 @@ class _OtpViewState extends State<OtpView> {
         if(profile == beneficiary){
           if(userModel.authId == null){
             FirebaseFirestore.instance.collection("USERS").doc(userModel.userId).update({
-              "authId": _auth.currentUser.uid,
-              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+              "authId": _auth.currentUser!.uid,
+              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
               "userCountryName": userProvider.getCountryName,
             }).then((value) {
               showSnackbar("Profil bénéficiaire recupéré..");
@@ -343,12 +343,12 @@ class _OtpViewState extends State<OtpView> {
   }
 
   Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
-    String profile;
-    UserModel userProfile;
+    String? profile;
+    UserModel? userProfile;
     DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
     bool exists = (user.exists) ? true : false;
     if (exists) {
-      profile = user.data()["profil"];
+      profile = user.get("profil");
       userProfile = UserModel.fromDocument(user);
     }
     return {

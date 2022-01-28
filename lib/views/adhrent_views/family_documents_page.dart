@@ -14,7 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FamilyDocumentsPage extends StatefulWidget {
-  const FamilyDocumentsPage({ Key key }) : super(key: key);
+  const FamilyDocumentsPage({ Key? key }) : super(key: key);
 
   @override
   _FamilyDocumentsPageState createState() => _FamilyDocumentsPageState();
@@ -25,7 +25,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String description = "";
   String title = "";
-  String _localPath;
+  String? _localPath;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
         ),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kCardTextColor,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState!.openEndDrawer())
         ],
       ),
       endDrawer: DefaultDrawer(
@@ -49,20 +49,20 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
         partenaire: (){Navigator.pop(context); Navigator.pop(context);},
         famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("DOCUMENTS").snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
           List<Widget> documents = [];
-          for (int i = 0; i < snapshot.data.docs.length; i++){
-            DocumentSnapshot doc = snapshot.data.docs[i];
+          for (int i = 0; i < snapshot.data!.docs.length; i++){
+            DocumentSnapshot doc = snapshot.data!.docs[i];
             Widget content = getDocumentBox(
               switchColor: i.isEven,
-              title: doc.data()["nom"],
-              size: doc.data()["poids"],
-              url: doc.data()["url"]
+              title: doc.get("nom"),
+              size: doc.get("poids"),
+              url: doc.get("url")
             );
             documents.add(content);
             /*title = snapshot.data.docs[0].data()["nom"];
@@ -100,8 +100,8 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
                           enlargeCenterPage: false,
                           scrollDirection: Axis.horizontal,
                           onPageChanged: (j, reason){
-                            title = snapshot.data.docs[j].data()["nom"];
-                            description = snapshot.data.docs[j].data()["description"];
+                            title = snapshot.data!.docs[j].get("nom");
+                            description = snapshot.data!.docs[j].get("description");
                             setState((){});
                           }
                         ),
@@ -140,7 +140,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
     );
   }
 
-  Widget getDocumentBox({String title, String url, num size, bool switchColor}){
+  Widget getDocumentBox({required String title, String? url, num? size, required bool switchColor}){
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -178,7 +178,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
           top: 20,
           child: GestureDetector(
             onTap: () async {
-              launch(url);
+              launch(url!);
               /*print("yo");
               bool granted = await _checkPermission();
               if(granted){
@@ -213,7 +213,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
   Future<void> _prepareSaveDir() async {
     _localPath = (await _findLocalPath()) + Platform.pathSeparator + 'Download';
 
-    final savedDir = Directory(_localPath);
+    final savedDir = Directory(_localPath!);
     bool hasExisted = await savedDir.exists();
     if (!hasExisted) {
       savedDir.create();
@@ -224,7 +224,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
     final directory = Platform.isAndroid
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
-    return directory?.path;
+    return directory!.path;
   }
 
   Future<bool> _checkPermission() async {

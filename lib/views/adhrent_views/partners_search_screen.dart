@@ -16,15 +16,15 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 class PartnersSearchScreen extends StatefulWidget {
-  const PartnersSearchScreen({ Key key }) : super(key: key);
+  const PartnersSearchScreen({ Key? key }) : super(key: key);
 
   @override
   _PartnersSearchScreenState createState() => _PartnersSearchScreenState();
 }
 
 class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
-  QuerySnapshot searchSnapshot;
-  Future<QuerySnapshot> futureSearchResults;
+  QuerySnapshot? searchSnapshot;
+  Future<QuerySnapshot>? futureSearchResults;
   TextEditingController _searchController = new TextEditingController();
   bool searchDoc = true;
 
@@ -33,21 +33,21 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
     DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    var query = searchDoc ? doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+    var query = searchDoc ? doctorProvider.getDoctor != null ? FirebaseFirestore.instance.collection("MEDECINS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor!.id).snapshots()
       : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("profilEnabled", isEqualTo: true).snapshots() : FirebaseFirestore.instance.collection("PRESTATAIRES").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: query,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        int lastIndex = snapshot.data.docs.length - 1;
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
+        int lastIndex = snapshot.data!.docs.length - 1;
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
           //shrinkWrap: true,
           physics: BouncingScrollPhysics(),
-          itemCount: snapshot.data.docs.length,
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data.docs[index];
+            DocumentSnapshot doc = snapshot.data!.docs[index];
             DoctorModel doctor = DoctorModel.fromDocument(doc);
             print("name: ");
 
@@ -56,7 +56,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               child: DoctorInfoCard(
                 avatarUrl: doctor.avatarUrl,
                 name: doctor.cniName,
-                title: S.of(context).medecinDeFamille + doctor.field,
+                title: S.of(context).medecinDeFamille + doctor.field!,
                 speciality: doctor.speciality,
                 teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                 consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -65,11 +65,11 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
                 visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
                 distance: 
                   userProvider.getProfileType == adherent ?  
-                    adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
-                      ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
+                    adherentProvider.getAdherent?.location!["latitude"] != null && doctor.location!["latitude"] != null
+                      ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location!["latitude"], adherentProvider.getAdherent?.location!["longitude"], doctor.location!["latitude"], doctor.location!["longitude"]).toStringAsFixed(2)).toString() : null
                   :
-                  doctorProvider.getDoctor.location != null && doctor.location != null
-                      ? (Algorithms.calculateDistance(doctorProvider.getDoctor.location["latitude"], doctorProvider.getDoctor.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
+                  doctorProvider.getDoctor?.location != null && doctor.location != null
+                      ? (Algorithms.calculateDistance(doctorProvider.getDoctor?.location!["latitude"], doctorProvider.getDoctor?.location!["longitude"], doctor.location!["latitude"], doctor.location!["longitude"]).toStringAsFixed(2)).toString() : null,
                 onTap: () {
                   doctorTileProvider.setDoctorModel(doctor);
                   Navigator.pushNamed(context, "/doctor-profile");

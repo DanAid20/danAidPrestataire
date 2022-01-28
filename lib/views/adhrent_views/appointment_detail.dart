@@ -36,8 +36,8 @@ class _AppointmentState extends State<Appointment> {
   TextEditingController _symptomController = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
 
-  DoctorModel doc;
-  ServiceProviderModel sp;
+  DoctorModel? doc;
+  ServiceProviderModel? sp;
   String reason = "";
   List<String> symptoms = [];
 
@@ -62,8 +62,8 @@ class _AppointmentState extends State<Appointment> {
 
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    if(appointment.getAppointment.isNotWithDoctor == true){
-      FirebaseFirestore.instance.collection(serviceProvider).doc(appointment.getAppointment.doctorId).get().then((docSnapshot) {
+    if(appointment.getAppointment?.isNotWithDoctor == true){
+      FirebaseFirestore.instance.collection(serviceProvider).doc(appointment.getAppointment?.doctorId).get().then((docSnapshot) {
         ServiceProviderModel serviceP = ServiceProviderModel.fromDocument(docSnapshot);
         sp = serviceP;
         setState((){});
@@ -78,11 +78,11 @@ class _AppointmentState extends State<Appointment> {
     }
 
     setState(() {
-      for(int i = 0; i < appointment.getAppointment.symptoms.length; i++){
-        symptoms.add(appointment.getAppointment.symptoms[i]);
+      for(int i = 0; i < appointment.getAppointment!.symptoms!.length; i++){
+        symptoms.add(appointment.getAppointment!.symptoms![i]);
       }
 
-      reason = appointment.getAppointment.title;
+      reason = appointment.getAppointment!.title!;
     });
     
   }
@@ -96,8 +96,8 @@ class _AppointmentState extends State<Appointment> {
   Widget build(BuildContext context) {
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    DateTime startTime = appointment.getAppointment.startTime.toDate();
-    DateTime endTime = appointment.getAppointment.endTime.toDate();
+    DateTime startTime = appointment.getAppointment!.startTime!.toDate();
+    DateTime endTime = appointment.getAppointment!.endTime!.toDate();
     DateTime now = DateTime.now();
     return Scaffold(
         backgroundColor: Colors.grey[100],
@@ -126,7 +126,7 @@ class _AppointmentState extends State<Appointment> {
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+          boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
         ),
         child: Column(
           children: [
@@ -168,17 +168,17 @@ class _AppointmentState extends State<Appointment> {
                                         SizedBox(height: hv*1,),
                                         Row(children: [
                                           CircleAvatar(
-                                            backgroundImage: appointment.getAppointment.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment.avatarUrl) : null,
+                                            backgroundImage: appointment.getAppointment!.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment!.avatarUrl!) : null,
                                             backgroundColor: whiteColor,
                                             radius: wv*6,
-                                            child: appointment.getAppointment.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
+                                            child: appointment.getAppointment?.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
                                           ),
                                           SizedBox(width: wv*3,),
                                           Expanded(
                                             child: RichText(text: TextSpan(
-                                              text: appointment.getAppointment.username + "\n",
+                                              text: appointment.getAppointment!.username! + "\n",
                                               children: [
-                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment.birthDate.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment!.birthDate!.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
                                               ], style: TextStyle(color: kBlueDeep, fontSize: wv*4.2)),
                                               maxLines: 4,
                                               overflow: TextOverflow.ellipsis,
@@ -212,40 +212,40 @@ class _AppointmentState extends State<Appointment> {
                           SizedBox(height: hv*1.2,),
                           doc != null ? DoctorInfoCard(
                             noPadding: true,
-                            avatarUrl: doc.avatarUrl,
-                            name: doc.cniName,
-                            title: S.of(context).medecinDeFamille + doc.field,
-                            speciality: doc.speciality,
-                            teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
-                            consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
-                            chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
-                            rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
-                            visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
-                            field: doc.speciality,
-                            officeName: doc.officeName,
+                            avatarUrl: doc!.avatarUrl!,
+                            name: doc!.cniName!,
+                            title: S.of(context).medecinDeFamille + doc!.field!,
+                            speciality: doc!.speciality!,
+                            teleConsultation: doc!.serviceList! != null ? doc?.serviceList["tele-consultation"] : false,
+                            consultation: doc?.serviceList != null ? doc?.serviceList["consultation"] : false,
+                            chat: doc?.serviceList != null ? doc?.serviceList["chat"] : false,
+                            rdv: doc?.serviceList != null ? doc?.serviceList["rdv"] : false,
+                            visiteDomicile: doc?.serviceList != null ? doc?.serviceList["visite-a-domicile"] : false,
+                            field: doc!.speciality!,
+                            officeName: doc!.officeName!,
                             isInRdvDetail: true,
-                            appointmentState: appointment.getAppointment.status,
+                            appointmentState: appointment.getAppointment!.status!,
                             includeHospital: true,
-                            service: "Consultation - " + appointment.getAppointment.consultationType,
+                            service: "Consultation - " + appointment.getAppointment!.consultationType!,
                             onTap: () {
                             },
                           ) : 
                             sp != null ? DoctorInfoCard(
                               isServiceProvider: true,
                               noPadding: true,
-                              avatarUrl: sp.avatarUrl,
-                              name: sp.name,
-                              title: sp.category,
-                              speciality: sp.category,
-                              //teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
+                              avatarUrl: sp!.avatarUrl!,
+                              name: sp!.name!,
+                              title: sp!.category!,
+                              speciality: sp!.category!,
+                              //teleConsultation: doc?.serviceList != null ? doc.serviceList["tele-consultation"] : false,
                               //consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
                               //chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
                               //rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
                               //visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
-                              field: sp.contactEmail,
-                              officeName: sp.contactName,
+                              field: sp!.contactEmail!,
+                              officeName: sp!.contactName!,
                               isInRdvDetail: true,
-                              appointmentState: appointment.getAppointment.status,
+                              appointmentState: appointment.getAppointment!.status!,
                               includeHospital: true,
                               onTap: () {
                               },
@@ -346,28 +346,28 @@ class _AppointmentState extends State<Appointment> {
                     child: CustomTextButton(
                       noPadding: true,
                       isLoading: announceLoading,
-                      enable: appointment.getAppointment.announced == false,
+                      enable: appointment.getAppointment!.announced == false,
                       text: S.of(context).annoncerMaVenue,
                       action: (){
                         setState(() {
                           announceLoading = true;
                         });
                         try {
-                          FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                          FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment?.id).set({
                             "announced": true
                           },  SetOptions(merge: true)).then((value) async {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).leRendezVousATAnnonc),));
                             appointment.setAnnouncement(true);
-                            if(appointment.getAppointment.consultationType == "Video"){
-                              if(appointment.getAppointment.token != null){
+                            if(appointment.getAppointment?.consultationType == "Video"){
+                              if(appointment.getAppointment?.token != null){
                                 print("getting toke..");
                                 var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
-                                var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.getAppointment.id, "uid": "10000", "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
+                                var response = await http.post(url, body: {"appID": constants.agoraAppId, "appCertificate": constants.agoraAppCertificate, "channelName": appointment.getAppointment?.id, "uid": "10000", "roleApi" : "SUBSCRIBER"}).catchError((e){print(e.toString());});
                                 print(response.toString());
                                 var body = jsonDecode(response.body);
                                 print(body.toString());
                                 String token = body['data'];
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 10000,),),);
+                                Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment!.id!, uid: 10000,),),);
                               }
                               else {
                                 setState(() { announceLoading = false; });
@@ -399,14 +399,14 @@ class _AppointmentState extends State<Appointment> {
                       noPadding: true,
                       text: S.of(context).annuler,
                       isLoading: cancelLoading,
-                      enable: appointment.getAppointment.announced == true,
+                      enable: appointment.getAppointment?.announced == true,
                       color: kSouthSeas,
                       action: (){
                         setState(() {
                           cancelLoading = true;
                         });
                         try {
-                          FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                          FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment?.id).set({
                             "announced": false
                           },  SetOptions(merge: true)).then((value) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('L\'annonce a été annulée..'),));
@@ -440,7 +440,7 @@ class _AppointmentState extends State<Appointment> {
                     saveLoading = true;
                   });
                   try {
-                    FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                    FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment?.id).set({
                       "symptoms": symptoms
                     },  SetOptions(merge: true)).then((value) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).lesSymptmesOntTMisesJour),));

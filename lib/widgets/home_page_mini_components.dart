@@ -22,17 +22,17 @@ import '../widgets/readMoreText.dart';
 class HomePageComponents {
 
   Widget prestataireItemList({
-    String nom, 
-    String date,
-    String montant, 
-    int etat,
-    String iconesConsultationTypes,
-    Function redirectOncliked,
+    String? nom, 
+    String? date,
+    String? montant, 
+    int? etat,
+    String? iconesConsultationTypes,
+    Function? redirectOncliked,
   }){
     print(etat.runtimeType);
     return GestureDetector(
       onTap: (){
-        redirectOncliked();
+        redirectOncliked!();
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -46,7 +46,7 @@ class HomePageComponents {
                                            padding: EdgeInsets.all(5) ,
                                           decoration: BoxDecoration(color: kDeepTeal, boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),],borderRadius: BorderRadius.all(Radius.circular(10))),
                                          child: SvgPicture.asset(
-                                                iconesConsultationTypes,
+                                                iconesConsultationTypes!,
                                                 height: 28.h,
                                                 color: kSouthSeas,
                                                 width: wv * 12, 
@@ -63,7 +63,7 @@ class HomePageComponents {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Container(
-                                              child: Text(nom, overflow: TextOverflow.clip,  style: TextStyle(
+                                              child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
                                                 color: kBlueForce,
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -71,7 +71,7 @@ class HomePageComponents {
                                                 SizedBox(
                                   width: hv * 2.3,
                                 ),
-                                            Text(date,  style: TextStyle(
+                                            Text(date!,  style: TextStyle(
                                               color: kBlueForce,
                                               fontWeight: FontWeight.w500,
                                               fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -85,7 +85,7 @@ class HomePageComponents {
                                         Column(
                                            crossAxisAlignment: CrossAxisAlignment.end,
                                           children: [
-                                            Text(montant, style: TextStyle(
+                                            Text(montant!, style: TextStyle(
                                               color: kBlueForce,
                                               fontWeight: FontWeight.w500,
                                               fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -106,11 +106,11 @@ class HomePageComponents {
   
 
   Widget paienementDetailsListItem({
-    String nom, 
-    String date,
-    String montant, 
-    int etat,
-    String iconesConsultationTypes
+    String? nom, 
+    String? date,
+    String? montant, 
+    int? etat,
+    String? iconesConsultationTypes
   }){
     print(etat.runtimeType);
     return Container(
@@ -123,7 +123,7 @@ class HomePageComponents {
                                        padding: EdgeInsets.all(5) ,
                                       decoration: BoxDecoration(color: kDeepTeal, boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),],borderRadius: BorderRadius.all(Radius.circular(10))),
                                      child: SvgPicture.asset(
-                                            iconesConsultationTypes,
+                                            iconesConsultationTypes!,
                                             height: 28.h,
                                             color: kSouthSeas,
                                             width: wv * 12, 
@@ -140,7 +140,7 @@ class HomePageComponents {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Container(
-                                          child: Text(nom, overflow: TextOverflow.clip,  style: TextStyle(
+                                          child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
                                             color: kBlueForce,
                                             fontWeight: FontWeight.w600,
                                             fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -148,7 +148,7 @@ class HomePageComponents {
                                             SizedBox(
                               width: hv * 2.3,
                             ),
-                                        Text(date,  style: TextStyle(
+                                        Text(date!,  style: TextStyle(
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -162,7 +162,7 @@ class HomePageComponents {
                                     Column(
                                        crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        Text(montant, style: TextStyle(
+                                        Text(montant!, style: TextStyle(
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -180,18 +180,18 @@ class HomePageComponents {
   }
 
   Color getCOlor(etat){
-    Color couleurs; 
+    Color? couleurs; 
     if(etat==0) couleurs=Colors.yellow;
     else if( etat==1)  couleurs=Colors.teal;
     else if(etat==2)  couleurs=kMaron;
-    return couleurs;
+    return couleurs!;
   }
   Widget paiementItem({
-    String month, 
-    String prix,
-    String lastDatePaiement,
-    bool paidOrNot,
-    String paidAllReady,
+    String? month, 
+    String? prix,
+    String? lastDatePaiement,
+    bool? paidOrNot,
+    String? paidAllReady,
   }){
     return Container(
         margin: EdgeInsets.all( wv * 3),
@@ -214,7 +214,7 @@ class HomePageComponents {
                              mainAxisSize: MainAxisSize.min,
                              crossAxisAlignment: CrossAxisAlignment.start,
                              children: [
-                                   Container(alignment: Alignment.centerLeft, child: Text(month, style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Text(month!, style: TextStyle(
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
@@ -249,7 +249,7 @@ class HomePageComponents {
                                       fontWeight: FontWeight.w500,
                                       fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
                                         alignment: Alignment.centerRight,
-                                        child: Text(lastDatePaiement, style: TextStyle(
+                                        child: Text(lastDatePaiement!, style: TextStyle(
                                         color: kBlueForce,
                                         fontWeight: FontWeight.w600,
                                         fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -282,12 +282,12 @@ class HomePageComponents {
   }
  
    Widget paiementPrestaireItem({
-    String month, 
-    String prix,
-    String lastDatePaiement,
-    int paidOrNot,
-    String paidAllReady,
-    Function redirectOncliked,
+    String? month, 
+    String? prix,
+    String? lastDatePaiement,
+    int? paidOrNot,
+    String? paidAllReady,
+    Function? redirectOncliked,
   }){
     return 
     Container(
@@ -311,7 +311,7 @@ class HomePageComponents {
                              mainAxisSize: MainAxisSize.min,
                              crossAxisAlignment: CrossAxisAlignment.start,
                              children: [
-                                   Container(alignment: Alignment.centerLeft, child: Text(month, style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Text(month!, style: TextStyle(
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
@@ -344,7 +344,7 @@ class HomePageComponents {
                                       fontWeight: FontWeight.w500,
                                       fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
                                         alignment: Alignment.centerRight,
-                                        child: Text(lastDatePaiement, style: TextStyle(
+                                        child: Text(lastDatePaiement!, style: TextStyle(
                                         color: kBlueForce,
                                         fontWeight: FontWeight.w600,
                                         fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -353,7 +353,7 @@ class HomePageComponents {
                            ),
                           GestureDetector(
                              onTap: ()=>{
-                                redirectOncliked(),
+                                redirectOncliked!(),
                             },
                             child: Column(
                                mainAxisSize: MainAxisSize.min,
@@ -383,15 +383,15 @@ class HomePageComponents {
   }
  
   Widget patientsItem(
-      {String imgUrl,
-      String nom,
-      String subtitle,
-      String apointementDate,
-      int etat,
+      {String? imgUrl,
+      String? nom,
+      String? subtitle,
+      String? apointementDate,
+      int? etat,
       bool isSpontane = false}) {
     return ListTile(
       leading: HomePageComponents().getAvatar(
-          imgUrl: imgUrl,
+          imgUrl: imgUrl!,
           size: wv * 8,
           renoveIsConnectedButton: false),
       title: Text(
@@ -402,7 +402,7 @@ class HomePageComponents {
             color: kPrimaryColor),
       ),
       subtitle: Text(
-         subtitle,
+         subtitle!,
         overflow: TextOverflow.ellipsis,
          maxLines: 2,
          softWrap: false,
@@ -431,7 +431,7 @@ class HomePageComponents {
                     style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
-                        color:  etat==0?  Colors.red: etat==1?  Colors.green: etat==2? kblueSky : ''),
+                        color:  etat == 0 ?  Colors.red : etat==1 ? Colors.green: etat == 2 ? kblueSky : Colors.amber),
                   ),
                 ],
               ),
@@ -439,17 +439,17 @@ class HomePageComponents {
     );
   }
   Widget timeline({
-    String time,
-    String userImage,
-    String userName,
-    String consultationDetails,
-    String age,
-    String consultationType,
-    String videChatLink,
-    String detailsCOnsultationLink,
-    bool isPrestataire,
-    String consultationtype,
-    Function approuveAppointement,String adhrentId, String doctorId,
+    String? time,
+    String? userImage,
+    String? userName,
+    String? consultationDetails,
+    String? age,
+    String? consultationType,
+    String? videChatLink,
+    String? detailsCOnsultationLink,
+    bool? isPrestataire,
+    String? consultationtype,
+    Function? approuveAppointement,String? adhrentId, String? doctorId,
     bool isanounced=false
   }) {
     return Container(
@@ -466,7 +466,7 @@ class HomePageComponents {
               children: [
                 Container(
                   margin: EdgeInsets.only(top: wv * 1.5),
-                  child: Text(time,
+                  child: Text(time!,
                       style: TextStyle(
                           color: kTextColor,
                           fontWeight: FontWeight.w500,
@@ -501,7 +501,7 @@ class HomePageComponents {
                       height: hv * 12,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                            image:  NetworkImage(userImage),
+                            image:  NetworkImage(userImage!),
                             fit: BoxFit.cover,
                           ),
                           boxShadow: [
@@ -554,7 +554,7 @@ class HomePageComponents {
                           children: [
                             Expanded(
                               flex: 2,
-                              child: Text(userName,
+                              child: Text(userName!,
                                   overflow: TextOverflow.ellipsis,
                                   style:  TextStyle(
                                       color: kDateTextColor,
@@ -563,7 +563,7 @@ class HomePageComponents {
                             ),
                             Expanded(
                               flex: 1,
-                              child: Text(age,
+                              child: Text(age!,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       color: kCardTextColor,
@@ -581,7 +581,7 @@ class HomePageComponents {
                         children: [
                           Container(
                             margin: EdgeInsets.only(right: wv * 6),
-                            child: Text(consultationDetails,
+                            child: Text(consultationDetails!,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     color: kCardTextColor,
@@ -591,7 +591,7 @@ class HomePageComponents {
                           SizedBox(
                             height: MySize.getScaledSizeHeight(5),
                           ),
-                          Text(consultationType,
+                          Text(consultationType!,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   color: kDeepTeal,
@@ -613,7 +613,7 @@ class HomePageComponents {
                         width: MySize.getScaledSizeWidth(38.5), 
                         height: MySize.getScaledSizeHeight(40),
                         decoration: BoxDecoration(
-                            color: isPrestataire ? kGoldForIconesBg:kSouthSeas,
+                            color: isPrestataire! ? kGoldForIconesBg:kSouthSeas,
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -626,7 +626,7 @@ class HomePageComponents {
                     ),
                     InkWell(
                       onTap: () {
-                        approuveAppointement(adhrentId, doctorId);
+                        approuveAppointement!(adhrentId, doctorId);
                       },
                       child: Container(
                         padding: EdgeInsets.all(3),
@@ -651,9 +651,9 @@ class HomePageComponents {
     );
   }
   Widget waitingRoomListOfUser({
-    String userImage,
-    String nom,
-    String syntomes,
+    String? userImage,
+    String? nom,
+    String? syntomes,
     bool isanounced=false
   }) {
     return Container(
@@ -684,8 +684,12 @@ class HomePageComponents {
                 width: wv * 15,
                 height: double.infinity,
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image:userImage !=null ?  NetworkImage(userImage): AssetImage("assets/images/avatar-profile.jpg"),
+                    image: userImage !=null ? DecorationImage(
+                      image: NetworkImage(userImage),
+                      fit: BoxFit.cover,
+                    ) :
+                    DecorationImage(
+                      image: AssetImage("assets/images/avatar-profile.jpg"),
                       fit: BoxFit.cover,
                     ),
                     boxShadow: [
@@ -756,7 +760,7 @@ class HomePageComponents {
     );
   }
 
-  getAdherentsListForPrestataire({ String doctorName, BeneficiaryModel adherent, bool isAccountIsExists}) {
+  getAdherentsListForPrestataire({ String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists}) {
     return Container(
       width: wv * 78,
       height: hv*55,
@@ -786,7 +790,7 @@ class HomePageComponents {
                             fontWeight: FontWeight.w500))),
                 Container(
                     width: wv * 20,
-                    child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate.toDate()) : S.current.pasDefini ,
+                    child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                         style: TextStyle(
                             color: whiteColor,
                             fontSize: wv * 4.5,
@@ -818,7 +822,7 @@ class HomePageComponents {
                               Colors.red.withOpacity(0.5), BlendMode.dstATop),
                       image: adherent==null
                           ? AssetImage("assets/images/image 25.png")
-                          : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
+                          : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}") as ImageProvider,
                       fit: BoxFit.cover,
                     ),
                     color: Colors.red,
@@ -859,7 +863,7 @@ class HomePageComponents {
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
                         fontWeight: FontWeight.w500)),
-                Text((adherent!=null && adherent.cniName!=null) ? adherent.cniName : ''  ,
+                Text((adherent!=null && adherent.cniName!=null) ? adherent.cniName! : ''  ,
                     style: TextStyle(
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
@@ -879,7 +883,7 @@ class HomePageComponents {
                         fontWeight: FontWeight.w500)),
                 Text(
                   (adherent!=null &&  adherent.matricule!=null)
-                        ?  adherent.matricule
+                        ?  adherent.matricule!
                         : S.current.pasDefini,
                     style: TextStyle(
                         color: textWhiteColor,
@@ -920,16 +924,16 @@ class HomePageComponents {
     );
   }
  
-  getAdherentsList({int iSelected, String doctorName, BeneficiaryModel adherent, bool isAccountIsExists, int index, Function onclick}) {
+  getAdherentsList({int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}) {
     return GestureDetector(
       onTap: ()=>{
          
            if(iSelected==index){
-            onclick(index, adherent, 'remove')
+            onclick!(index, adherent, 'remove')
          }else{
            print(index),
            print(index),
-            onclick(index, adherent, 'add')
+            onclick!(index, adherent, 'add')
          }
       },
       child: Container(
@@ -960,7 +964,7 @@ class HomePageComponents {
                               fontWeight: FontWeight.w500))),
                   Container(
                       width: wv * 20,
-                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate.toDate()) : S.current.pasDefini ,
+                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                           style: TextStyle(
                               color: whiteColor,
                               fontSize: wv * 4.5,
@@ -992,7 +996,7 @@ class HomePageComponents {
                                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
                         image: adherent==null
                             ? AssetImage("assets/images/image 25.png")
-                            : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}"),
+                            : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}") as ImageProvider,
                         fit: BoxFit.cover,
                       ),
                       color: Colors.red,
@@ -1005,7 +1009,7 @@ class HomePageComponents {
                       child: Transform.rotate(
                         angle: -math.pi / 4,
                         child: Text(
-                          isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
+                          isAccountIsExists == true && (adherent!=null && adherent.enabled!) == true
                               ? ''
                               : S.current.compteInactif,
                           overflow: TextOverflow.clip,
@@ -1026,12 +1030,12 @@ class HomePageComponents {
                         width: wv * 10,
                         decoration: BoxDecoration(
                             color: isAccountIsExists == true &&
-                                    (adherent!=null && adherent.enabled) == true
+                                    (adherent!=null && adherent.enabled!) == true
                                 ? Colors.green
                                 : Colors.red,
                             shape: BoxShape.circle),
                         child:
-                            isAccountIsExists == true && (adherent!=null && adherent.enabled) == true
+                            isAccountIsExists == true && (adherent!=null && adherent.enabled!) == true
                                 ? SizedBox.shrink()
                                 : Icon(
                                     Icons.priority_high,
@@ -1054,7 +1058,7 @@ class HomePageComponents {
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
-                  Text((adherent!=null && adherent.cniName!=null) ? adherent.cniName : ''  ,
+                  Text((adherent!=null && adherent.cniName !=null) ? adherent.cniName! : ''  ,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -1074,7 +1078,7 @@ class HomePageComponents {
                           fontWeight: FontWeight.w500)),
                   Text(
                     (adherent!=null &&  adherent.matricule!=null)
-                          ?  adherent.matricule
+                          ?  adherent.matricule!
                           : S.current.pasDefini,
                       style: TextStyle(
                           color: textWhiteColor,
@@ -1117,13 +1121,13 @@ class HomePageComponents {
   }
 
   getDoctorQuestion(
-      {String imgUrl,
-      String userName,
-      String timeAgo,
-      String text,
-      int likeCount,
-      int commentCount,
-      int sendcountNumber}) {
+      {String? imgUrl,
+      String? userName,
+      String? timeAgo,
+      String? text,
+      int? likeCount,
+      int? commentCount,
+      int? sendcountNumber}) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1136,7 +1140,7 @@ class HomePageComponents {
                 Row(
                   children: [
                     getAvatar(
-                        imgUrl: imgUrl,
+                        imgUrl: imgUrl!,
                         size: wv * 8.3,
                         renoveIsConnectedButton: false),
                     Column(
@@ -1273,7 +1277,7 @@ class HomePageComponents {
     );
   }
 
-  getAvatar({String imgUrl, double size, bool renoveIsConnectedButton = true}) {
+  getAvatar({String? imgUrl, double? size, bool renoveIsConnectedButton = true}) {
       var stringToComparedev="https://firebasestorage.googleapis.com/v0/b/danaid-dev";
       var stringToCompareprod="https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com";
 
@@ -1308,12 +1312,12 @@ class HomePageComponents {
     );
   }
 
-  getProfileStat({String imgUrl, String title, int occurence, Color color = primaryColor}) {
+  getProfileStat({String? imgUrl, String? title, int? occurence, Color color = primaryColor}) {
     return Row(children: [
       Container(
         margin: EdgeInsets.only(right: wv * 1),
         child: SvgPicture.asset(
-          imgUrl,
+          imgUrl!,
           width: wv * 7,
           color: color,
         ),
@@ -1322,14 +1326,14 @@ class HomePageComponents {
         children: [
           Text("$occurence",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-          Text(title, style: TextStyle(fontSize: inch * 1.3))
+          Text(title!, style: TextStyle(fontSize: inch * 1.3))
         ],
       )
     ]);
   }
 
   Widget getMyCoverageOptionsCard(
-      {String imgUrl, String label, Color labelColor}) {
+      {String? imgUrl, String? label, Color? labelColor}) {
     return Container(
       width: wv * 35,
       height: hv * 17,
@@ -1337,9 +1341,9 @@ class HomePageComponents {
       margin: EdgeInsets.symmetric(horizontal: wv * 1.5),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(inch * 2.5)),
-          image: DecorationImage(image: AssetImage(imgUrl), fit: BoxFit.cover)),
+          image: DecorationImage(image: AssetImage(imgUrl!), fit: BoxFit.cover)),
       child: Align(
-        child: Text(label,
+        child: Text(label!,
             style: TextStyle(
                 color: labelColor, fontSize: 16, fontWeight: FontWeight.w800)),
         alignment: Alignment.bottomLeft,
@@ -1347,9 +1351,9 @@ class HomePageComponents {
     );
   }
 
-  Widget getMyCoverageHospitalsTiles({String initial, String name, DateTime date, double price, int state, Function action}) {
+  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function? action}) {
     return ListTile(
-      onTap: action,
+      onTap: () => action,
       leading: Container(
         width: wv * 13,
         padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
@@ -1357,21 +1361,21 @@ class HomePageComponents {
             color: Colors.teal,
             borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
         child: Center(
-            child: Text(initial,
+            child: Text(initial!,
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.7),
                     fontSize: inch * 2,
                     fontWeight: FontWeight.w700))),
       ),
       title: Text(
-        name,
+        name!,
         style: TextStyle(
             color: kPrimaryColor,
             fontWeight: FontWeight.bold,
             fontSize: inch * 1.6),
       ),
       subtitle: Text(
-        DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(),
+        DateFormat('EEEE', 'fr_FR').format(date!)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(),
         style: TextStyle(color: kPrimaryColor),
       ),
       trailing: Column(
@@ -1383,7 +1387,7 @@ class HomePageComponents {
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.5),
           ),
           Text(
-            getUseCaseStateText(state),
+            getUseCaseStateText(state!),
             style: TextStyle(
                 color: getUseCaseStateColor(state),
                 fontSize: inch * 1.5),
@@ -1393,7 +1397,7 @@ class HomePageComponents {
     );
   }
 
-  getMyDoctorAppointmentTile({String label, String doctorName, DateTime date, String type, int state, Function action}) {
+  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, Function? action}) {
     return ListTile(
       leading: Container(
         width: wv * 12,
@@ -1404,7 +1408,7 @@ class HomePageComponents {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(date.day.toString().padLeft(2, '0'),
+            Text(date!.day.toString().padLeft(2, '0'),
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
                     fontSize: inch * 1.7,
@@ -1420,7 +1424,7 @@ class HomePageComponents {
       title: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: Text(
-          label,
+          label!,
           style: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.w700,
@@ -1436,7 +1440,7 @@ class HomePageComponents {
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
           ),
           Text(
-            doctorName,
+            doctorName!,
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
           ),
         ],
@@ -1446,23 +1450,23 @@ class HomePageComponents {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text(
-            type,
+            type!,
             style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),
           ),
           Text(
-            getAppointmentStateText(state),
+            getAppointmentStateText(state!),
             style: TextStyle(
                 color: getAppointmentStateColor(state), fontSize: inch * 1.7),
           ),
         ],
       ),
-      onTap: action,
+      onTap: ()=>action,
     );
   }
 
-  static Widget getLoanTile({String label, String subtitle, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
-    String firstDateString = firstDate.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
-    String lastDateString = lastDate.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
+  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
+    String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
+    String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: wv*2),
       leading: Container(
@@ -1474,7 +1478,7 @@ class HomePageComponents {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(date.day.toString().padLeft(2, '0'),
+            Text(date!.day.toString().padLeft(2, '0'),
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
                     fontSize: inch * 1.7,
@@ -1495,7 +1499,7 @@ class HomePageComponents {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 14), overflow: TextOverflow.fade, maxLines: 1,)
+              Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 14), overflow: TextOverflow.fade, maxLines: 1,)
             ],
           ),
         ],
@@ -1524,11 +1528,11 @@ class HomePageComponents {
           ],
         ),
       ),
-      onTap: action,
+      onTap: ()=>action,
     );
   }
 
-  String getUseCaseStateText(int val) {
+  String getUseCaseStateText(num val) {
     if (val == 0)
       return S.current.enAttente;
     else if (val == 1)
@@ -1539,7 +1543,7 @@ class HomePageComponents {
       return S.current.cltur;
   }
 
-  Color getUseCaseStateColor(int val) {
+  Color getUseCaseStateColor(num val) {
     if (val == 0)
       return kBrownCanyon;
     else if (val == 1)
@@ -1580,19 +1584,19 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryCard({String name, String imgUrl, bool edit = true, Function action}){
+  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function? action}){
     return Container(
       width: wv*25,
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(name, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+          Text(name!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
           Stack(
             children: [
               Container(
                 margin: EdgeInsets.only(right: wv*2),
                 height: hv*18, width: wv*25,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
+                  image: DecorationImage(image: CachedNetworkImageProvider(imgUrl!), fit: BoxFit.cover),
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
@@ -1608,7 +1612,7 @@ class HomePageComponents {
                       boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                     ),
                     child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                  onPressed: action
+                  onPressed: () => action
                 ),
               ) : Container()
             ],
@@ -1618,21 +1622,21 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryChoiceCard({String name, String imgUrl, Function editAction, Function selectAction, bool isSelected = false}){
+  static beneficiaryChoiceCard({String? name, String? imgUrl, Function? editAction, Function? selectAction, bool isSelected = false}){
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
             children: [
               GestureDetector(
-                onTap: selectAction,
+                onTap: ()=>selectAction,
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   margin: EdgeInsets.symmetric(horizontal: wv*1),
                   height: isSelected ? hv*21 : hv*18,
                   width: isSelected ? wv*28 : wv*25,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
+                    image: DecorationImage(image: CachedNetworkImageProvider(imgUrl!), fit: BoxFit.cover),
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
@@ -1651,7 +1655,7 @@ class HomePageComponents {
                           boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                         ),
                         child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                      onPressed: editAction
+                      onPressed: () => editAction
                     ),
                   ],
                 ),
@@ -1664,33 +1668,33 @@ class HomePageComponents {
     );
   }
 
-  static appointmentPurpose({String iconPath, String title, bool enable = true, Function action}){
+  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function? action}){
     return Container(
       decoration: BoxDecoration(
         color: kSouthSeas,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+        boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
       ),
       child: Row(children: [
         SizedBox(width: wv*2.5,),
-        SvgPicture.asset(iconPath, width: wv*7, color: whiteColor,),
+        SvgPicture.asset(iconPath!, width: wv*7, color: whiteColor,),
         SizedBox(width: wv*3,),
         Expanded(child: 
           CustomTextButton(
             enable: enable,
-            text: title,
+            text: title!,
             color: kPrimaryColor,
             noPadding: true,
-            action: action,
+            action: action!,
           )
         )
       ],)
     );
   }
 
-  static consultationType({String iconPath, String title, String type, String price, bool selected = false, Function action}){
+  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function? action}){
     return  GestureDetector(
-      onTap: action,
+      onTap: () => action,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: hv*1.5),
         margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
@@ -1703,7 +1707,7 @@ class HomePageComponents {
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(width: wv*1.5),
-            SvgPicture.asset(iconPath, width: wv*9.5, color: kSouthSeas,),
+            SvgPicture.asset(iconPath!, width: wv*9.5, color: kSouthSeas,),
             SizedBox(width: wv*2),
             RichText(text: TextSpan(
               text: "$title\n",
@@ -1719,9 +1723,9 @@ class HomePageComponents {
     );
   }
   
-  static publicationType({IconData icon, String title, bool selected = false, Function action}){
+  static publicationType({IconData? icon, String? title, bool selected = false, Function? action}){
     return  GestureDetector(
-      onTap: action,
+      onTap: ()=>action,
       child: Container(
         height: 120,
         width: wv*28,
@@ -1735,7 +1739,7 @@ class HomePageComponents {
         ),
         child: Column(mainAxisSize: MainAxisSize.min,
           children: [
-            Text(title, style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,),
+            Text(title!, style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,),
             Spacer(),
             Icon(icon, size: 50, color: Colors.grey[400],),
           ],
@@ -1744,24 +1748,24 @@ class HomePageComponents {
     );
   }
 
-  static accountParameters({String title, String subtitle, String svgIcon, Function action}){
+  static accountParameters({String? title, String? subtitle, String? svgIcon, Function? action}){
     return Padding(
       padding: EdgeInsets.only(bottom: 5.0),
       child: ListTile(
         title: Padding(
           padding: EdgeInsets.only(bottom: 5.0),
-          child: Text(title, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17)),
+          child: Text(title!, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17)),
         ),
         subtitle: Row(children: [
-          SvgPicture.asset(svgIcon, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
-          Expanded(child: Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
+          SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
+          Expanded(child: Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
-        trailing: TextButton(onPressed: action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
+        trailing: TextButton(onPressed: ()=>action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
       ),
     );
   }
 
-  static termsAndConditionsTile({Function(bool) onChanged, bool value, Function action, Color activeColor, Color textColor}){
+  static termsAndConditionsTile({Function(bool)? onChanged, bool? value, Function? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1779,7 +1783,7 @@ class HomePageComponents {
                 TextSpan(
                   text: S.current.termesDesServices,
                   style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()..onTap = action,
+                  recognizer: TapGestureRecognizer()..onTap = () => action,
                 )
               ]
             ),
@@ -1789,12 +1793,12 @@ class HomePageComponents {
       ),
       value: value,
       activeColor: activeColor ?? primaryColor,
-      onChanged: onChanged,
+      onChanged: (bool)=>onChanged,
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
 
-  static confirmTermsTile({Function(bool) onChanged, bool value, Function action, Color activeColor, Color textColor}){
+  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1833,12 +1837,12 @@ class HomePageComponents {
       ),
       value: value,
       activeColor: activeColor ?? primaryColor,
-      onChanged: onChanged,
+      onChanged: (bool)=>onChanged,
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
 
-  static Widget head({String surname, String fname, String avatarUrl, Timestamp birthDate}){
+  static Widget head({String? surname, String? fname, String? avatarUrl, Timestamp? birthDate}){
     return Container(
       padding: EdgeInsets.only(left: wv*4),
       decoration: BoxDecoration(
@@ -1861,7 +1865,7 @@ class HomePageComponents {
                 SizedBox(width: wv*3,),
                 Expanded(
                   child: RichText(text: TextSpan(
-                    text: surname + " " +  fname + "\n",
+                    text: surname! + " " +  fname! + "\n",
                     children: birthDate != null ? [
                       TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: wv*3.3)),
                     ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
@@ -1876,7 +1880,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget header({String title, String subtitle, String avatarUrl, String label, Color titleColor = kPrimaryColor}){
+  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor}){
     return Container(
       padding: EdgeInsets.only(left: wv*4),
       decoration: BoxDecoration(
@@ -1898,7 +1902,7 @@ class HomePageComponents {
                 SizedBox(width: wv*3,),
                 Expanded(
                   child: RichText(text: TextSpan(
-                    text: title + "\n",
+                    text: title! + "\n",
                     children: [
                       TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
                     ], style: TextStyle(color: titleColor, fontSize: 16.5)),
@@ -1913,11 +1917,11 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInfoActionCard({Widget icon, String title, String subtitle, String actionLabel, bool noAction = false, Function action}){
+  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, Function? action}){
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
-        boxShadow: [BoxShadow(color: Colors.grey[350], spreadRadius: 0.5, blurRadius: 1.0)],
+        boxShadow: [BoxShadow(color: Colors.grey[350]!, spreadRadius: 0.5, blurRadius: 1.0)],
         borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
       ),
       margin: EdgeInsets.symmetric(horizontal: wv*3),
@@ -1936,9 +1940,9 @@ class HomePageComponents {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: hv*1,),
-                  Text(title, style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.bold)
+                  Text(title!, style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.bold)
                   ),
-                  Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 12)),
+                  Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 12)),
                   SizedBox(height: hv*1,),
                 ],
               ),
@@ -1946,7 +1950,7 @@ class HomePageComponents {
             !noAction ? Expanded(
               flex: 3,
               child: GestureDetector(
-                onTap: action,
+                onTap: ()=>action,
                 child: Container(
                   margin: EdgeInsets.only(left: 10),
                   padding: EdgeInsets.all(5),
@@ -1954,7 +1958,7 @@ class HomePageComponents {
                   borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
                     color: kPrimaryColor,
                   ),
-                  child: Center(child: Text(actionLabel, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                  child: Center(child: Text(actionLabel!, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
                 ),
               ),
             ): Container()
@@ -1964,7 +1968,7 @@ class HomePageComponents {
     );
   }
 
-  static getStatusIndicator({double size = 15, int status}){
+  static getStatusIndicator({double size = 15, num? status}){
     Color color = status == 0 ? Colors.red : status == 1 ? kDeepTeal : primaryColor;
     return Container(
       padding: EdgeInsets.all(6),
@@ -1976,29 +1980,29 @@ class HomePageComponents {
     );
   }  
   
-  static getIconBox({double size = 15, String iconPath, Color color, Function action}){
+  static getIconBox({double size = 15, String? iconPath, Color? color, Function? action}){
     return GestureDetector(
-      onTap: action,
+      onTap: ()=>action,
       child: Container(
         padding: EdgeInsets.all(6),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(7),
-          color: color.withOpacity(0.4)
+          color: color!.withOpacity(0.4)
         ),
-        child: SvgPicture.asset(iconPath, width: size, color: color,),
+        child: SvgPicture.asset(iconPath!, width: size, color: color,),
       ),
     );
   }
 
-  static Widget getPromotionTile({String title, String description, num amount, DateTime firstDate, DateTime lastDate, bool active, bool chosen, Function action}) {
-    String lastDateString = lastDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate.year.toString();
+  static Widget getPromotionTile({String? title, String? description, num? amount, DateTime? firstDate, DateTime? lastDate, bool? active, bool? chosen, Function? action}) {
+    String? lastDateString = lastDate!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate!.year.toString();
     return Container(
       margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
       padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.grey[200].withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
+        boxShadow: [BoxShadow(color: Colors.grey[200]!.withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2032,12 +2036,12 @@ class HomePageComponents {
                     SizedBox(width: wv*5,),
                     Container(
                       child: CustomTextButton(
-                        text: chosen ? " Annuler " : " Profiter ",
+                        text: chosen! ? " Annuler " : " Profiter ",
                         fontSize: 14,
                         color: chosen ? kSouthSeas : kDeepTeal,
                         noPadding: true,
                         expand: false,
-                        action: action,
+                        action: action!,
                       )
                     )
                   ],
@@ -2050,16 +2054,16 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInvoiceSegmentTile({String label, String subtitle, DateTime date, num mensuality, DateTime firstDate, DateTime lastDate, String type, int state, Function action}) {
-    String firstDateString = firstDate.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
-    String lastDateString = lastDate.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
+  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
+    String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
+    String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return Container(
       margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
       padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.grey[200].withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
+        boxShadow: [BoxShadow(color: Colors.grey[200]!.withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: wv*2),
@@ -2072,7 +2076,7 @@ class HomePageComponents {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(date.day.toString().padLeft(2, '0'),
+              Text(date!.day.toString().padLeft(2, '0'),
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.8),
                       fontSize: inch * 1.7,
@@ -2093,7 +2097,7 @@ class HomePageComponents {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(subtitle, style: TextStyle(color: Colors.grey[600], fontSize: 14), overflow: TextOverflow.fade, maxLines: 1,)
+                Text(subtitle!, style: TextStyle(color: Colors.grey[600], fontSize: 14), overflow: TextOverflow.fade, maxLines: 1,)
               ],
             ),
           ],
@@ -2122,7 +2126,7 @@ class HomePageComponents {
             ],
           ),
         ),
-        onTap: action,
+        onTap: () => action,
       ),
     );
   }

@@ -17,7 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class LoanDetails extends StatefulWidget {
-  const LoanDetails({ Key key }) : super(key: key);
+  const LoanDetails({ Key? key }) : super(key: key);
 
   @override
   _LoanDetailsState createState() => _LoanDetailsState();
@@ -25,7 +25,7 @@ class LoanDetails extends StatefulWidget {
 
 class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin {
 
-  TabController _loanDetailTabController;
+  TabController? _loanDetailTabController;
 
   @override
   void initState() {
@@ -39,8 +39,8 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
-    LoanModel loan = loanProvider.getLoan;
-    AdherentModel adh = adherentProvider.getAdherent;
+    LoanModel? loan = loanProvider.getLoan;
+    AdherentModel? adh = adherentProvider.getAdherent;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -72,7 +72,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
               decoration: BoxDecoration(
                 color: whiteColor,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
               ),
               child: Column(
                 children: [
@@ -92,7 +92,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                           ),
                           child: Column(
                             children: [
-                              HomePageComponents.header(label: S.of(context).demandeur, title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                              HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                               SizedBox(height: hv*2),
                               Row(
                                 children: [
@@ -101,7 +101,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Text(S.of(context).totalPayer, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
-                                      Text(loanProvider.getLoan.totalToPay.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
+                                      Text(loanProvider.getLoan!.totalToPay.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
                                     ],
                                   ),
                                   Spacer(),
@@ -116,7 +116,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                           color: kBrownCanyon.withOpacity(0.5),
                                           borderRadius: BorderRadius.circular(20)
                                         ),
-                                        child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan.amount, rate: adherentProvider.getAdherent.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: loan.duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
+                                        child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan!.amount, rate: adherentProvider.getAdherent?.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: loan!.duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
                                       ),
                                     ],
                                   ),
@@ -171,7 +171,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                 color: Colors.grey[100],
                                 borderRadius: BorderRadius.circular(15)
                               ),
-                              child: Text(loan.lastPaymentDate.toDate().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(loan.lastPaymentDate.toDate())+" "+ loan.lastPaymentDate.toDate().year.toString(), style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
+                              child: Text(loan.lastPaymentDate!.toDate().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(loan.lastPaymentDate!.toDate())+" "+ loan.lastPaymentDate!.toDate().year.toString(), style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
                             )
                           ],
                         ),
@@ -220,7 +220,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                           children: [
                             Container(
                               //margin: EdgeInsets.symmetric(vertical: hv*2),
-                              child: StreamBuilder(
+                              child: StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 0).orderBy('number').snapshots(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
@@ -230,14 +230,14 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                       ),
                                     );
                                   }
-                                  return snapshot.data.docs.length >= 1
+                                  return snapshot.data!.docs.length >= 1
                                     ? ListView.builder(
                                         scrollDirection: Axis.vertical,
                                         physics: BouncingScrollPhysics(),
-                                        itemCount: snapshot.data.docs.length,
+                                        itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
-                                          int lastIndex = snapshot.data.docs.length - 1;
-                                          DocumentSnapshot mensualityDoc = snapshot.data.docs[index];
+                                          int lastIndex = snapshot.data!.docs.length - 1;
+                                          DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
                                           MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
                                           print("name: ");
                                           return Padding(
@@ -245,13 +245,13 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                             child: HomePageComponents.getLoanTile(
                                               label: "hhgfhfghfh",
                                               subtitle: "",
-                                              date: mensuality.startDate.toDate(),
-                                              firstDate: mensuality.startDate.toDate(),
-                                              lastDate: mensuality.endDate.toDate(),
-                                              mensuality: mensuality.amount.toInt(),
+                                              date: mensuality.startDate?.toDate(),
+                                              firstDate: mensuality.startDate?.toDate(),
+                                              lastDate: mensuality.endDate?.toDate(),
+                                              mensuality: mensuality.amount?.toInt(),
                                               type: "gfg",
                                               state: mensuality.status,
-                                              action: (){pay(amount: mensuality.amount.toInt(), id: mensuality.id);}
+                                              action: (){pay(amount: mensuality.amount!, id: mensuality.id!);}
                                             ),
                                           );
                                         })
@@ -263,7 +263,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                             ),
                             Container(
                               //margin: EdgeInsets.symmetric(vertical: hv*2),
-                              child: StreamBuilder(
+                              child: StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 1).orderBy('number').snapshots(),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
@@ -276,10 +276,10 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                   return ListView.builder(
                                     scrollDirection: Axis.vertical,
                                     physics: BouncingScrollPhysics(),
-                                    itemCount: snapshot.data.docs.length,
+                                    itemCount: snapshot.data!.docs.length,
                                     itemBuilder: (context, index) {
-                                      int lastIndex = snapshot.data.docs.length - 1;
-                                      DocumentSnapshot mensualityDoc = snapshot.data.docs[index];
+                                      int lastIndex = snapshot.data!.docs.length - 1;
+                                      DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
                                       MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
                                       print("name: ");
                                       return Padding(
@@ -287,10 +287,10 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                         child: HomePageComponents.getLoanTile(
                                           label: "hhgfhfghfh",
                                           subtitle: "",
-                                          date: mensuality.startDate.toDate(),
-                                          firstDate: mensuality.startDate.toDate(),
-                                          lastDate: mensuality.endDate.toDate(),
-                                          mensuality: mensuality.amount.toInt(),
+                                          date: mensuality.startDate?.toDate(),
+                                          firstDate: mensuality.startDate?.toDate(),
+                                          lastDate: mensuality.endDate?.toDate(),
+                                          mensuality: mensuality.amount?.toInt(),
                                           type: "gfg",
                                           state: mensuality.status,
                                           action: (){}
@@ -318,7 +318,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
 
   static const platform = const MethodChannel('danaidproject.sendmoney');
 
-  Future<String> makePayment({int cost, bool isOrange}) async {
+  Future<String> makePayment({required num cost, required bool isOrange}) async {
     String amount = cost.toString();
     String operator = isOrange ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
     String phoneNumber = isOrange ? '658112605' : '673662062';
@@ -337,7 +337,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
     }
   }
 
-  pay({int amount, String id}){
+  pay({required num amount, required String id}){
     showModalBottomSheet(
       context: context, 
       builder: (BuildContext bc){
@@ -377,17 +377,17 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
     );
   }
 
-  processPayment({int amount, String id, bool isOrange}) async {
+  processPayment({required num amount, required String id, required bool isOrange}) async {
 
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
 
-    LoanModel loan = loanProvider.getLoan;
+    LoanModel? loan = loanProvider.getLoan;
 
     String res = await makePayment(cost: amount, isOrange: isOrange);
     if(res == "SUCCESS"){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
-      FirebaseFirestore.instance.collection("CREDITS").doc(loan.id).collection("MENSUALITES").doc(id).update({
+      FirebaseFirestore.instance.collection("CREDITS").doc(loan!.id).collection("MENSUALITES").doc(id).update({
         "paymentDate": DateTime.now(),
         "status": 1
       }).then((value) async {
@@ -396,14 +396,14 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
           "amountPaid": FieldValue.increment(amount)
         });
         loanProvider.addPaidAmount(amount);
-        if(loanProvider.getLoan.amountPaid >= loan.totalToPay){
+        if(loanProvider.getLoan!.amountPaid! >= loan.totalToPay!){
           await FirebaseFirestore.instance.collection('CREDITS').doc(loan.id).update({
             "status": 1,
           });
-          await FirebaseFirestore.instance.collection('ADHERENTS').doc(adherentProvider.getAdherent.adherentId).update({
-            "creditLimit": FieldValue.increment(loan.amount)
+          await FirebaseFirestore.instance.collection('ADHERENTS').doc(adherentProvider.getAdherent!.adherentId).update({
+            "creditLimit": FieldValue.increment(loan.amount!)
           });
-          adherentProvider.updateLoanLimit(loan.amount);
+          adherentProvider.updateLoanLimit(loan.amount!);
         }
        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mise à jour des statuts éffectué",)));
 

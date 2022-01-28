@@ -17,7 +17,7 @@ class PasswordResetView extends StatefulWidget{
 class _PasswordResetViewState extends State<PasswordResetView> {
   final defaultSize = SizeConfig.defaultSize;
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
-  TextEditingController _mPhoneController, _mPasswordController, _mEmailController;
+  TextEditingController? _mPhoneController, _mPasswordController, _mEmailController;
   bool _mIsPass = true;
 
   @override
@@ -39,14 +39,14 @@ class _PasswordResetViewState extends State<PasswordResetView> {
             child: Stack(
               children: [
                 Container(
-                  height: SizeConfig.screenHeight * .45,
+                  height: SizeConfig.screenHeight! * .45,
                   decoration: BoxDecoration(color: kPrimaryColor),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      height: SizeConfig.screenHeight * .3,
+                      height: SizeConfig.screenHeight! * .3,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -78,12 +78,12 @@ class _PasswordResetViewState extends State<PasswordResetView> {
                     ),
                     Expanded(
                       child: Container(
-                        height: SizeConfig.screenHeight * .8,
+                        height: SizeConfig.screenHeight! * .8,
                         decoration: BoxDecoration(
                             color: whiteColor,
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(defaultSize * 2.5),
-                                topRight: Radius.circular(defaultSize * 2.5)
+                                topLeft: Radius.circular(defaultSize! * 2.5),
+                                topRight: Radius.circular(defaultSize! * 2.5)
                             )
                         ),
                         child: ListView(
@@ -112,41 +112,41 @@ class _PasswordResetViewState extends State<PasswordResetView> {
         child: Column(
           children: [
             KTextFormField  (
-              controller: _mEmailController,
+              controller: _mEmailController!,
               labelText: 'Adresse E-mail',
               hintText: 'Entrez votre adresse email',
               prefixIcon:
               Icon(SimpleLineIcons.envelope),
-              validator: (String mail) {
-                return (mail.isEmpty)
+              validator: (String? mail) {
+                return (mail!.isEmpty)
                     ? kEmailNullErrorFr
                     : (!emailValidatorRegExp.hasMatch(mail))
                     ? kInvalidEmailError : null;
               },
             ),
             KTextFormField(
-              controller: _mPhoneController,
+              controller: _mPhoneController!,
               labelText: 'Téléphone',
               hintText:
               'Entrez votre numéro de téléphone',
               prefixIcon:
               Icon(SimpleLineIcons.phone),
-              validator: (String phone) {
-                return (phone.isEmpty)
+              validator: (String? phone) {
+                return (phone!.isEmpty)
                     ? kPhoneNumberNullError
                     : null;
               },
             ),
             KTextFormField(
-              controller: _mPasswordController,
+              controller: _mPasswordController!,
               isPassword: _mIsPass,
               labelText: 'Nouveau Mot de Passe',
               hintText:
               'Entrez votre nouveau mot de passe',
               prefixIcon:
               Icon(SimpleLineIcons.lock),
-              validator: (String pwd) {
-                return (pwd.isEmpty)
+              validator: (String? pwd) {
+                return (pwd!.isEmpty)
                     ? kPassNullErrorFr
                     : null;
               },

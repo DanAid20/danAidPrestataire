@@ -53,24 +53,24 @@ class _ProfileEditState extends State<ProfileEdit> {
   GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
 
   bool autovalidate = false;
-  String _region;
+  String? _region;
   List<String> myCities = [];
-  String _city;
-  String _stateCode;
+  String? _city;
+  String? _stateCode;
   bool regionChosen = false;
   bool cityChosen = false;
   DateTime selectedDate = DateTime(1990);
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   bool surnameEnabled = true;
   bool nameEnabled = true;
   bool emailEnabled = true;
   bool cniNameEnabled = true;
   bool professionEnabled = true;
   bool addressEnabled = true;
-  Map<String, dynamic> gpsCoords;
+  Map<String, dynamic>? gpsCoords;
   bool isMarried = false;
   bool askMarriageCertificate = false;
   bool marriageCertificateUploaded = false;
@@ -81,7 +81,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   bool otherFileSpinner = false;
   bool imageSpinner = false;
   bool positionSpinner = false;
-  String _bloodGroup;
+  String? _bloodGroup;
   List<String> allergies = [];
   String currentAllergyText = "";
   bool heightEnabled = true;
@@ -98,13 +98,13 @@ class _ProfileEditState extends State<ProfileEdit> {
   ];
 
   LatLng _initialcameraposition = LatLng(4.044656688777058, 9.695724531228858);
-  GoogleMapController _controller;
+  GoogleMapController? _controller;
   Location _location = Location();
   
   void _initializeMap(){
     _location.getLocation().then((loc) {
       setState(() {
-        _initialcameraposition = LatLng(loc.latitude, loc.longitude);
+        _initialcameraposition = LatLng(loc.latitude!, loc.longitude!);
       });
     });
   }
@@ -115,27 +115,27 @@ class _ProfileEditState extends State<ProfileEdit> {
       positionSpinner = true;
     });
     _location.getLocation().then((loc) {
-      _controller.animateCamera(
+      _controller!.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(loc.latitude, loc.longitude),zoom: 11)),
+          CameraPosition(target: LatLng(loc.latitude!, loc.longitude!),zoom: 11)),
 
       );
       setState(() {
         positionSpinner = false;
-        _initialcameraposition = LatLng(loc.latitude, loc.longitude);
+        _initialcameraposition = LatLng(loc.latitude!, loc.longitude!);
         gpsCoords = {
           "latitude": loc.latitude,
           "longitude": loc.longitude
         };
       });
-      adherentProvider.setLocation(gpsCoords);
+      adherentProvider.setLocation(gpsCoords!);
     });
   }
 
   void _onMapCreated(GoogleMapController _cntlr) async {
     _location.getLocation().then((loc) {
       setState(() {
-        _initialcameraposition = LatLng(loc.latitude, loc.longitude);
+        _initialcameraposition = LatLng(loc.latitude!, loc.longitude!);
       });
     });
     setState(() {
@@ -161,14 +161,14 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   initRegionDropdown(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    if(adherentProvider.getAdherent.havePaid != null){
+    if(adherentProvider.getAdherent?.havePaid != null){
       setState(() {
-        _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent.regionOfOrigin);
-        _region = adherentProvider.getAdherent.regionOfOrigin;
+        _stateCode = getStateCodeFromRegion(regions, adherentProvider.getAdherent!.regionOfOrigin!);
+        _region = adherentProvider.getAdherent?.regionOfOrigin;
         regionChosen = true;
       cityChosen = true;
       
-      _city = adherentProvider.getAdherent.town;
+      _city = adherentProvider.getAdherent?.town;
       });
     }
     
@@ -178,97 +178,97 @@ class _ProfileEditState extends State<ProfileEdit> {
 
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
 
-    if((adherentProvider.getAdherent.surname != null) & (adherentProvider.getAdherent.surname != "")){
+    if((adherentProvider.getAdherent?.surname != null) & (adherentProvider.getAdherent?.surname != "")){
       setState(() {
-        _surnameController.text = adherentProvider.getAdherent.surname;
+        _surnameController.text = adherentProvider.getAdherent!.surname!;
         surnameEnabled = false; 
       });
     }
-    if((adherentProvider.getAdherent.familyName != null) & (adherentProvider.getAdherent.familyName != "")){
+    if((adherentProvider.getAdherent?.familyName != null) & (adherentProvider.getAdherent?.familyName != "")){
       setState(() {
-        _familynameController.text = adherentProvider.getAdherent.familyName;
+        _familynameController.text = adherentProvider.getAdherent!.familyName!;
         nameEnabled = false;
       });
     }
-    if((adherentProvider.getAdherent.cniName != null) & (adherentProvider.getAdherent.cniName != "")){
+    if((adherentProvider.getAdherent?.cniName != null) & (adherentProvider.getAdherent?.cniName != "")){
       setState(() {
-        _cniNameController.text = adherentProvider.getAdherent.cniName;
+        _cniNameController.text = adherentProvider.getAdherent!.cniName!;
         cniNameEnabled = false;
       });
     }
-    if((adherentProvider.getAdherent.email != null) & (adherentProvider.getAdherent.email != "")){
+    if((adherentProvider.getAdherent?.email != null) & (adherentProvider.getAdherent?.email != "")){
       setState(() {
-        _emailController.text = adherentProvider.getAdherent.email;
+        _emailController.text = adherentProvider.getAdherent!.email!;
         emailEnabled = false;
       });
     }
-    if((adherentProvider.getAdherent.profession != null) & (adherentProvider.getAdherent.profession != "")){
+    if((adherentProvider.getAdherent?.profession != null) & (adherentProvider.getAdherent?.profession != "")){
       setState(() {
-        _professionController.text = adherentProvider.getAdherent.profession;
+        _professionController.text = adherentProvider.getAdherent!.profession!;
         professionEnabled = false;
       });
     }
-    if((adherentProvider.getAdherent.address != null) & (adherentProvider.getAdherent.address != "")){
+    if((adherentProvider.getAdherent?.address != null) & (adherentProvider.getAdherent?.address != "")){
       setState(() {
-        _addressController.text = adherentProvider.getAdherent.address;
+        _addressController.text = adherentProvider.getAdherent!.address!;
         addressEnabled = false;
       });
     }
-    if (adherentProvider.getAdherent.allergies != null){
+    if (adherentProvider.getAdherent?.allergies != null){
       setState(() {
-        for (int i = 0; i < adherentProvider.getAdherent.allergies.length; i++){
-          allergies.add(adherentProvider.getAdherent.allergies[i]);
+        for (int i = 0; i < adherentProvider.getAdherent!.allergies!.length; i++){
+          allergies.add(adherentProvider.getAdherent?.allergies?[i]);
         }
       });
     }
-    if (adherentProvider.getAdherent.height != null){
+    if (adherentProvider.getAdherent?.height != null){
       setState(() {
-        _heightController.text = adherentProvider.getAdherent.height.toString();
+        _heightController.text = adherentProvider.getAdherent!.height.toString();
         heightEnabled = false;
       });
     }
-    if (adherentProvider.getAdherent.weight != null){
+    if (adherentProvider.getAdherent?.weight != null){
       setState(() {
-        _weightController.text = adherentProvider.getAdherent.weight.toString();
+        _weightController.text = adherentProvider.getAdherent!.weight.toString();
         weightEnabled = false;
       });
     }
-    if (adherentProvider.getAdherent.bloodGroup != null){
+    if (adherentProvider.getAdherent?.bloodGroup != null){
       setState(() {
-        _bloodGroup = adherentProvider.getAdherent.bloodGroup;
+        _bloodGroup = adherentProvider.getAdherent?.bloodGroup;
       });
     }
     
     print("inside");
-    if (adherentProvider.getAdherent.location != null){
-      print(adherentProvider.getAdherent.location.toString() +"inside+");
-      if ((adherentProvider.getAdherent.location["latitude"] != null) | (adherentProvider.getAdherent.location["longitude"] != null) | true){
+    if (adherentProvider.getAdherent?.location != null){
+      print(adherentProvider.getAdherent!.location.toString() +"inside+");
+      if ((adherentProvider.getAdherent?.location?["latitude"] != null) | (adherentProvider.getAdherent!.location?["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
-          "latitude": adherentProvider.getAdherent.location["latitude"],
-          "longitude": adherentProvider.getAdherent.location["longitude"]
+          "latitude": adherentProvider.getAdherent?.location?["latitude"],
+          "longitude": adherentProvider.getAdherent?.location?["longitude"]
         };
         print(gpsCoords.toString());
         });
       }
     }
-    if(adherentProvider.getAdherent.isMarried != null){
+    if(adherentProvider.getAdherent?.isMarried != null){
       setState(() {
-        isMarried = adherentProvider.getAdherent.isMarried;
+        isMarried = adherentProvider.getAdherent!.isMarried!;
       });
     }
 
-    if((adherentProvider.getAdherent.marriageCertificateUrl != "") & (adherentProvider.getAdherent.marriageCertificateUrl != null)){
+    if((adherentProvider.getAdherent?.marriageCertificateUrl != "") & (adherentProvider.getAdherent?.marriageCertificateUrl != null)){
       setState(() {
         marriageCertificateUploaded = true;
       });
     }
-    if((adherentProvider.getAdherent.officialDocUrl != "") & (adherentProvider.getAdherent.officialDocUrl != null)){
+    if((adherentProvider.getAdherent?.officialDocUrl != "") & (adherentProvider.getAdherent?.officialDocUrl != null)){
       setState(() {
         cniUploaded = true;
       });
     }
-    if((adherentProvider.getAdherent.otherJustificativeDocsUrl != "") & (adherentProvider.getAdherent.otherJustificativeDocsUrl != null)){
+    if((adherentProvider.getAdherent?.otherJustificativeDocsUrl != "") & (adherentProvider.getAdherent?.otherJustificativeDocsUrl != null)){
       setState(() {
         otherFileUploaded = true;
       });
@@ -331,7 +331,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                                       padding: EdgeInsets.all(20.0),
                                     ),
-                                    imageUrl: adherentModelProvider.getAdherent.imgUrl,),
+                                    imageUrl: adherentModelProvider.getAdherent!.imgUrl!),
                                 ),
                                   //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                               ),
@@ -383,7 +383,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         label: S.of(context).nomDeFamille,
                         hintText: S.of(context).entrezVotreNomDeFamille,
                         controller: _familynameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         enabled: nameEnabled,
                         editAction: (){
                           setState(() {
@@ -397,7 +397,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         hintText: S.of(context).entrezVotrePrnom,
                         enabled: surnameEnabled,
                         controller: _surnameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             surnameEnabled = true;
@@ -411,7 +411,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         hintText: "ex: Eric_87",
                         enabled: cniNameEnabled,
                         controller: _cniNameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             cniNameEnabled = true;
@@ -426,8 +426,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                         enabled: emailEnabled,
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
-                        validator:  (String mail) {
-                          return (mail.isEmpty)
+                        validator:  (String? mail) {
+                          return (mail!.isEmpty)
                               ? kEmailNullErrorFr
                               : (!emailValidatorRegExp.hasMatch(mail))
                               ? kInvalidEmailError : null;
@@ -445,7 +445,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         hintText: S.of(context).exMchanicien,
                         enabled: professionEnabled,
                         controller: _professionController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             professionEnabled = true;
@@ -479,13 +479,13 @@ class _ProfileEditState extends State<ProfileEdit> {
                                         hint: Text(S.of(context).choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
-                                            child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                                            child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
                                             value: region["key"],
                                           );
                                         }).toList(),
-                                        onChanged: (value) async {
+                                        onChanged: (String? value) async {
                                           //List<String> reg = getTownNamesFromRegion(cities, value);
-                                          adherentModelProvider.setRegionOfOrigin(getRegionFromStateCode(regions, value));
+                                          adherentModelProvider.setRegionOfOrigin(getRegionFromStateCode(regions, value!));
                                           setState(() {
                                             _stateCode = value;
                                             _region = getRegionFromStateCode(regions, value);
@@ -520,15 +520,15 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text( (adherentModelProvider.getAdherent.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent.town : S.of(context).ville, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        hint: Text( (adherentModelProvider.getAdherent!.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent!.town! : S.of(context).ville, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                         items: getTownNamesFromRegion(cities, _stateCode).map((city){
                                           return DropdownMenuItem(
                                             child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                             value: city,
                                           );
                                         }).toList(),
-                                        onChanged: (value) {
-                                          adherentModelProvider.setTown(value);
+                                        onChanged: (String? value) {
+                                          adherentModelProvider.setTown(value!);
                                           setState(() {
                                             _city = value;
                                             cityChosen = true;
@@ -550,7 +550,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         hintText: S.of(context).exCarrefourObili,
                         enabled: addressEnabled,
                         controller: _addressController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             addressEnabled = true;
@@ -558,16 +558,16 @@ class _ProfileEditState extends State<ProfileEdit> {
                         },
                       ),
                       SizedBox(height: hv*4,),
-                      (gpsCoords != null) | (adherentModelProvider.getAdherent.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
+                      (gpsCoords != null) | (adherentModelProvider.getAdherent?.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("GPS:", style: TextStyle(fontWeight: FontWeight.w900),),
                             RichText(text: TextSpan(
                               text: "Lat: ",
                               children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords["latitude"].toString() : adherentModelProvider.getAdherent.location["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : adherentModelProvider.getAdherent?.location?["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
                                 TextSpan(text: "     Lng: "),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords["longitude"].toString() : adherentModelProvider.getAdherent.location["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : adherentModelProvider.getAdherent?.location?["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
                               ]
                             , style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
                             )
@@ -581,14 +581,14 @@ class _ProfileEditState extends State<ProfileEdit> {
                             height: hv*30,
                             margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
                             decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400])],
+                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400]!)],
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent.location["latitude"] != null ? adherentModelProvider.getAdherent.location["latitude"] : _initialcameraposition.latitude, adherentModelProvider.getAdherent.location["longitude"] != null ? adherentModelProvider.getAdherent.location["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent?.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent?.location?["latitude"] != null ? adherentModelProvider.getAdherent?.location!["latitude"] : _initialcameraposition.latitude, adherentModelProvider.getAdherent?.location?["longitude"] != null ? adherentModelProvider.getAdherent?.location!["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                 myLocationEnabled: true,
@@ -688,7 +688,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       DropdownMenuItem(child: Text("AB-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB-",),
                                       DropdownMenuItem(child: Text("AB+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB+",),
                                     ],
-                                    onChanged: (value) => setState(() {_bloodGroup = value;})
+                                    onChanged: (String? value) => setState(() {_bloodGroup = value;})
                                   ),
                                 ),
                               ),
@@ -796,9 +796,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                         value: true,
                                       ),
                                     ],
-                                    onChanged: (value) {
+                                    onChanged: (bool? value) {
                                       setState(() {
-                                        isMarried = value;
+                                        isMarried = value!;
                                       });
                                       if(value == true){
                                         setState(() {
@@ -868,7 +868,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                     String email = _emailController.text;
                     String address = _addressController.text;
                     String profession =_professionController.text;
-                    if (_adherentEditFormKey.currentState.validate()){
+                    if (_adherentEditFormKey.currentState!.validate()){
                       setState(() {
                         buttonLoading = true;
                       });
@@ -883,21 +883,21 @@ class _ProfileEditState extends State<ProfileEdit> {
                       adherentProvider.setCniName(cniName);
                       userProvider.enable(true);
                       await FirebaseFirestore.instance.collection("USERS")
-                        .doc(adherentProvider.getAdherent.getAdherentId)
+                        .doc(adherentProvider.getAdherent!.getAdherentId)
                         .set({
-                          "authId": FirebaseAuth.instance.currentUser.uid,
+                          "authId": FirebaseAuth.instance.currentUser?.uid,
                           'emailAdress': email,
                           'fullName': cniName,
                           "enable": true,
                           "regionDorigione": _region,
-                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
+                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent!.getAdherentId!),
                           "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                         }, SetOptions(merge: true))
                         .then((value) async {
                           await FirebaseFirestore.instance.collection("ADHERENTS")
-                            .doc(adherentProvider.getAdherent.getAdherentId)
+                            .doc(adherentProvider.getAdherent!.getAdherentId)
                             .set({
-                              "authId": FirebaseAuth.instance.currentUser.uid,
+                              "authId": FirebaseAuth.instance.currentUser!.uid,
                               "dateCreated": DateTime.now(),
                               "cniName": cniName,
                               "emailAdress": email,
@@ -913,29 +913,29 @@ class _ProfileEditState extends State<ProfileEdit> {
                               "bloodGroup": _bloodGroup,
                               "allergies": allergies,
                               "statuMatrimonialMarie": isMarried,
-                              "ville": _city == null ? adherentProvider.getAdherent.town : _city,
+                              "ville": _city == null ? adherentProvider.getAdherent!.town : _city,
                               "localisation": gpsCoords != null ? {
                                 "addresse": address,
-                                "latitude": gpsCoords["latitude"],
-                                "longitude": gpsCoords["longitude"],
+                                "latitude": gpsCoords!["latitude"],
+                                "longitude": gpsCoords!["longitude"],
                                 "altitude": 0
                               } : {
                                 "addresse": address,
                               },
-                                "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent.getAdherentId),
+                                "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent!.getAdherentId!),
                                 "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
                             }, SetOptions(merge: true))
                             .then((value) async {
                               adherentProvider.setEnableState(true);
                               adherentProvider.setHeight(_heightController.text);
                               adherentProvider.setWeight(_weightController.text);
-                              adherentProvider.setBloodGroup(_bloodGroup);
+                              adherentProvider.setBloodGroup(_bloodGroup!);
                               adherentProvider.setAllergies(allergies);
                               //textFieldsControl();
                               await HiveDatabase.setRegisterState(true);
                               HiveDatabase.setFamilyName(fname);
                               HiveDatabase.setSurname(sname);
-                              HiveDatabase.setImgUrl(avatarUrl);
+                              HiveDatabase.setImgUrl(avatarUrl!);
 
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
                               Navigator.pop(context);
@@ -983,9 +983,9 @@ class _ProfileEditState extends State<ProfileEdit> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -1005,7 +1005,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
+    String? adherentId = adherentModelProvider.getAdherent?.adherentId;
     Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_adherents/$adherentId/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -1031,7 +1031,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       if(name == "Acte_De_Marriage"){
         adherentModelProvider.setMarriageCertificateUrl(url);
         FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+        .doc(adherentModelProvider.getAdherent!.adherentId)
         .set({
           "urlActeMariage": url,
           "statuMatrimonialMarie": true,
@@ -1046,12 +1046,12 @@ class _ProfileEditState extends State<ProfileEdit> {
       else if (name == "CNI"){
         adherentModelProvider.setOfficialDocUrl(url);
         FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+        .doc(adherentModelProvider.getAdherent!.adherentId)
         .set({
           "urlDocOficiel": url,
         }, SetOptions(merge: true)).then((value) {
           FirebaseFirestore.instance.collection("USERS")
-            .doc(adherentModelProvider.getAdherent.adherentId)
+            .doc(adherentModelProvider.getAdherent!.adherentId)
             .update({
               "urlCNI": url,
             });
@@ -1065,7 +1065,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       else {
         adherentModelProvider.setOtherJustificativeDocsUrl(url);
         FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+        .doc(adherentModelProvider.getAdherent!.adherentId)
         .set({
           "urlAutrePiecesJustificatif": url,
         }, SetOptions(merge: true)).then((value) {
@@ -1097,7 +1097,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     setState(() {
       imageLoading = true;
     });
-    String fileName = userProvider.getUserId;
+    String? fileName = userProvider.getUserId;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_adherents/$fileName'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
@@ -1112,7 +1112,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
@@ -1124,12 +1124,12 @@ class _ProfileEditState extends State<ProfileEdit> {
       HiveDatabase.setImgUrl(url);
       adherentModelProvider.setImgUrl(url);
       userProvider.setImgUrl(url);
-      FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.getAdherentId)
+      FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent!.getAdherentId)
         .set({
           "imageUrl": url,
       }, SetOptions(merge: true));
       FirebaseFirestore.instance.collection("ADHERENTS")
-        .doc(adherentModelProvider.getAdherent.adherentId)
+        .doc(adherentModelProvider.getAdherent!.adherentId)
         .update({
           "imageUrl": url,
         }).then((value) {
@@ -1157,7 +1157,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   Future getImageFromCamera() async {
@@ -1171,7 +1171,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   getImage(BuildContext context){
@@ -1205,7 +1205,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     );
   }
 
-  List<String> getTownNamesFromRegion(List origin, String region){
+  List<String> getTownNamesFromRegion(List origin, String? region){
     List<String> target = [];
     for(int i=0; i<origin.length; i++){
       if (origin[i]["state_code"] == region){
@@ -1217,21 +1217,21 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   String getRegionFromStateCode(List origin, String code){
-    String region;
+    String? region;
     for(int i=0; i<origin.length; i++){
       if (origin[i]["key"] == code){
        region = origin[i]["value"];
       }
     }
-    return region;
+    return region!;
   }
   String getStateCodeFromRegion(List origin, String region){
-    String code;
+    String? code;
     for(int i=0; i<origin.length; i++){
       if (origin[i]["value"] == region){
        code = origin[i]["key"];
       }
     }
-    return code;
+    return code!;
   }
 }

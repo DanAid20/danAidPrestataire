@@ -10,8 +10,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class SubCoveragePayment extends StatefulWidget {
-  final InvoiceModel invoice;
-  const SubCoveragePayment({ Key key, this.invoice }) : super(key: key);
+  final InvoiceModel? invoice;
+  const SubCoveragePayment({ Key? key, this.invoice }) : super(key: key);
 
   @override
   _SubCoveragePaymentState createState() => _SubCoveragePaymentState();
@@ -21,7 +21,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
   int payments = 0;
 
   init(){
-    payments = widget.invoice.paymentDates.length;
+    payments = widget.invoice!.paymentDates!.length;
     setState(() {});
   }
 
@@ -37,15 +37,15 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, color: Colors.grey[700],), onPressed: ()=>Navigator.pop(context)),
-        title: Text("${widget.invoice.label}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
+        title: Text("${widget.invoice!.label}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
       ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
             children: [
               Text("Sous-factures: ", style: TextStyle(color: kTextBlue, fontSize: 18, fontWeight: FontWeight.bold)),
-              StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).collection('SOUS_FACTURATIONS_ADHERENT').snapshots(),
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice!.id).collection('SOUS_FACTURATIONS_ADHERENT').snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(
@@ -54,7 +54,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
                       ),
                     );
                   }
-                  if (!(snapshot.data.docs.length >= 1)) {
+                  if (!(snapshot.data!.docs.length >= 1)) {
                     return Center(
                       child: Container(padding: EdgeInsets.only(top: hv*4),child: Text("Aucune promotion disponible pour le moment", textAlign: TextAlign.center)),
                     );
@@ -62,26 +62,26 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
                   return ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: snapshot.data.docs.length,
+                    itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index){
-                      MiniInvoiceModel inv = MiniInvoiceModel.fromDocument(snapshot.data.docs[index]);
+                      MiniInvoiceModel inv = MiniInvoiceModel.fromDocument(snapshot.data!.docs[index]);
                       return HomePageComponents.getInvoiceSegmentTile(
                         label: inv.label,
-                        firstDate: inv.startDate.toDate(),
-                        lastDate: inv.endDate.toDate(),
-                        date: inv.startDate.toDate(),
+                        firstDate: inv.startDate?.toDate(),
+                        lastDate: inv.endDate?.toDate(),
+                        date: inv.startDate?.toDate(),
                         mensuality: inv.amount,
                         type: "0",
                         subtitle: "Segment ${inv.number}",
                         state: inv.status,
-                        action: (){pay(amount: inv.amount, mini: inv);}
+                        action: (){pay(amount: inv.amount!, mini: inv);}
                       );
                     }
                   );
                 }
               ),
               SizedBox(height: hv*3,),
-              Text(widget.invoice.segments != null && payments > 0 ? "$payments factures payées sur ${widget.invoice.segments} " : "Aucune sous facture payée..", style: TextStyle(color: kTextBlue, fontSize: 16)),
+              Text(widget.invoice?.segments != null && payments > 0 ? "$payments factures payées sur ${widget.invoice?.segments} " : "Aucune sous facture payée..", style: TextStyle(color: kTextBlue, fontSize: 16)),
               SizedBox(height: hv*3,),
             ],
           ),
@@ -92,7 +92,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
 
   static const platform = const MethodChannel('danaidproject.sendmoney');
 
-  Future<String> makePayment({int cost, bool isOrange}) async {
+  Future<String> makePayment({required num cost, required bool isOrange}) async {
     String amount = cost.toString();
     String operator = isOrange ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
     String phoneNumber = isOrange ? '658112605' : '673662062';
@@ -111,7 +111,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
     }
   }
 
-  pay({int amount, MiniInvoiceModel mini}){
+  pay({required num amount, required MiniInvoiceModel mini}){
     showModalBottomSheet(
       context: context, 
       builder: (BuildContext bc){
@@ -151,26 +151,26 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
     );
   }
 
-  processPayment({int amount, MiniInvoiceModel mini, bool isOrange}) async {
+  processPayment({required num amount, required MiniInvoiceModel mini, required bool isOrange}) async {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
 
     String res = await makePayment(cost: amount, isOrange: isOrange);
     if(res == "SUCCESS"){
       try {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
-        FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).collection('SOUS_FACTURATIONS_ADHERENT').doc(mini.id).update({
+        FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice!.id).collection('SOUS_FACTURATIONS_ADHERENT').doc(mini.id).update({
           "paymentDate": DateTime.now(),
           "status": 1
         }).then((value) async {
           payments = payments + 1;
           setState(() {});
-          await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).update({
+          await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice!.id).update({
             "paymentDates": FieldValue.arrayUnion([DateTime.now()]),
-            "paid": payments == widget.invoice.segments ? true : false,
-            "etatValider": payments == widget.invoice.segments ? true : false,
+            "paid": payments == widget.invoice?.segments ? true : false,
+            "etatValider": payments == widget.invoice?.segments ? true : false,
             "amountPaid": FieldValue.increment(amount)
           });
-          FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).update({
+          FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).update({
             "datDebutvalidite" : mini.startDate,
             "havePaidBefore": true,
             "paymentDate": DateTime.now(),

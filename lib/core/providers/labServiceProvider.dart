@@ -18,7 +18,7 @@ class LabServiceProvider with ChangeNotifier {
     if(_service.precriptionUrls == null){
       _service.precriptionUrls = [];
     }
-    _service.precriptionUrls.add(val);
+    _service.precriptionUrls!.add(val);
     notifyListeners();
   }
 
@@ -26,7 +26,7 @@ class LabServiceProvider with ChangeNotifier {
     if(_service.receiptUrls == null){
       _service.receiptUrls = [];
     }
-    _service.receiptUrls.add(val);
+    _service.receiptUrls!.add(val);
     notifyListeners();
   }
 
@@ -34,7 +34,7 @@ class LabServiceProvider with ChangeNotifier {
     if(_service.resultsUrls == null){
       _service.resultsUrls = [];
     }
-    _service.resultsUrls.add(val);
+    _service.resultsUrls!.add(val);
     notifyListeners();
   }
 

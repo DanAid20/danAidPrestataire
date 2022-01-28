@@ -22,7 +22,7 @@ class ClinicList extends StatefulWidget {
 }
 
 class _ClinicListState extends State<ClinicList> {
-  String filter;
+  String? filter;
 
   Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Hôpital").snapshots();
 
@@ -31,9 +31,9 @@ class _ClinicListState extends State<ClinicList> {
     ServiceProviderTileModelProvider spTileProvider = Provider.of<ServiceProviderTileModelProvider>(context);
     ServiceProviderModelProvider spProvider = Provider.of<ServiceProviderModelProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = spProvider.getServiceProvider != null ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Hôpital").where(FieldPath.documentId, isNotEqualTo: spProvider.getServiceProvider.id).snapshots()
+    query = spProvider.getServiceProvider != null ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Hôpital").where(FieldPath.documentId, isNotEqualTo: spProvider.getServiceProvider!.id).snapshots()
       : FirebaseFirestore.instance.collection("PRESTATAIRE").where("categorieEtablissement", isEqualTo: "Hôpital").where("profilEnabled", isEqualTo: true).snapshots();
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -43,13 +43,13 @@ class _ClinicListState extends State<ClinicList> {
               ),
             );
           }
-          int lastIndex = snapshot.data.docs.length - 1;
-          return snapshot.data.docs.length >= 1
+          int lastIndex = snapshot.data!.docs.length - 1;
+          return snapshot.data!.docs.length >= 1
               ? ListView.builder(
                   //shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     ServiceProviderModel sp = ServiceProviderModel.fromDocument(doc);
                     print("name: ");
 
@@ -69,11 +69,11 @@ class _ClinicListState extends State<ClinicList> {
                         visiteDomicile: sp.serviceList != null ? sp.serviceList["Consultation"] : false,
                         distance: 
                           userProvider.getProfileType == adherent ?  
-                             adherentProvider.getAdherent.location!=null&& adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
-                              ? sp.coordGps["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null : null
+                             adherentProvider.getAdherent?.location!=null&& adherentProvider.getAdherent?.location!["latitude"] != null && sp.coordGps != null
+                              ? sp.coordGps!["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location!["latitude"], adherentProvider.getAdherent?.location!["longitude"], sp.coordGps!["latitude"], sp.coordGps!["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
                           spProvider.getServiceProvider?.coordGps != null && sp.coordGps != null
-                              ? (Algorithms.calculateDistance(spProvider.getServiceProvider.coordGps["latitude"], spProvider.getServiceProvider.coordGps["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : '--',
+                              ? (Algorithms.calculateDistance(spProvider.getServiceProvider?.coordGps!["latitude"], spProvider.getServiceProvider?.coordGps!["longitude"], sp.coordGps!["latitude"], sp.coordGps!["longitude"]).toStringAsFixed(2)).toString() : '--',
                         onTap: () {
                           spTileProvider.setServiceProviderModel(sp);
                           spProvider.setServiceProviderModel(sp);
@@ -136,7 +136,7 @@ class _ClinicListState extends State<ClinicList> {
                           value: S.of(context).distance,
                         ),
                       ],
-                      onChanged: (value) {
+                      onChanged: (String? value) {
                         setState(() {
                           filter = value;
                         });

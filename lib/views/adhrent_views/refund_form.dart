@@ -41,13 +41,13 @@ class _RefundFormState extends State<RefundForm> {
   bool receiptSpinner = false;
   bool examResultSpinner = false;
   bool otherFileSpinner = false;
-  String examResultUrl;
-  String healthBookUrl;
-  String receiptUrl;
-  String otherFileUrl;
+  String? examResultUrl;
+  String? healthBookUrl;
+  String? receiptUrl;
+  String? otherFileUrl;
 
-  DateTime selectedDate;
-  String _circumstance;
+  DateTime? selectedDate;
+  String? _circumstance;
 
   bool buttonLoading = false;
 
@@ -73,7 +73,7 @@ class _RefundFormState extends State<RefundForm> {
         centerTitle: true,
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())
         ],
       ),
       endDrawer: DefaultDrawer(
@@ -137,7 +137,7 @@ class _RefundFormState extends State<RefundForm> {
                                       child: Row(children: [
                                         SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                                         VerticalDivider(),
-                                        Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        Text( selectedDate != null ? "${selectedDate?.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                       ],),
                                     ),
                                   ),
@@ -166,7 +166,7 @@ class _RefundFormState extends State<RefundForm> {
                                 DropdownMenuItem(child: Text(S.of(context).spcialiste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "SP",),
                                 DropdownMenuItem(child: Text(S.of(context).urgence, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "URGENCE",),
                               ],
-                              onChanged: (value) => setState(() {_circumstance = value;})
+                              onChanged: (String? value) => setState(() {_circumstance = value;})
                             ),
                           ),
                         ),
@@ -244,12 +244,12 @@ class _RefundFormState extends State<RefundForm> {
                   AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
                   FirebaseFirestore.instance.collection("USECASES")
                     .add({
-                      "adherentId": adherentModel.getAdherent.getAdherentId,
+                      "adherentId": adherentModel.getAdherent!.getAdherentId,
                       "beneficiaryId": beneficiary.getBeneficiary.matricule,
                       "idAppointement": null,
                       //"nomDFamille" : beneficiary.getBeneficiary.familyName,
-                      "beneficiaryName": beneficiary.getBeneficiary.surname + " " + beneficiary.getBeneficiary.familyName,
-                      "phoneNumber": beneficiary.getBeneficiary.phoneList[0]["number"],
+                      "beneficiaryName": beneficiary.getBeneficiary.surname! + " " + beneficiary.getBeneficiary.familyName!,
+                      "phoneNumber": beneficiary.getBeneficiary.phoneList![0]["number"],
                       "urlImage": beneficiary.getBeneficiary.avatarUrl,
                       "status": 0,
                       "enable": false,
@@ -370,13 +370,13 @@ class _RefundFormState extends State<RefundForm> {
   Future uploadDocumentToFirebase(File file, String name) async {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
-    String matricule = beneficiary.getBeneficiary.matricule;
+    String? matricule = beneficiary.getBeneficiary.matricule;
     if (file == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Aucune image selectionnée'),));
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
+    String? adherentId = adherentModelProvider.getAdherent?.adherentId;
     Reference storageReference = FirebaseStorage.instance.ref().child('demandes_de_remboursement/$adherentId/$matricule/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -447,9 +447,9 @@ class _RefundFormState extends State<RefundForm> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -466,7 +466,7 @@ class _RefundFormState extends State<RefundForm> {
     }
   }
   _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime(2021),
       firstDate: DateTime(2018),

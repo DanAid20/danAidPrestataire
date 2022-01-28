@@ -29,7 +29,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
     _controller = PageController(initialPage: initialPage);
     _controller.addListener(() {
       setState(() {
-        initialPage = _controller.page.round();
+        initialPage = _controller.page!.round();
       });
     });
 
@@ -73,8 +73,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   _appBar() {
     return Container(
-      margin: EdgeInsets.only(top: SizeConfig.defaultSize * 1.4),
-      padding: EdgeInsets.all(SizeConfig.defaultSize * 1.2),
+      margin: EdgeInsets.only(top: SizeConfig.defaultSize! * 1.4),
+      padding: EdgeInsets.all(SizeConfig.defaultSize! * 1.2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -86,8 +86,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
                     curve: Curves.easeIn);
             },
             child: Container(
-              width: SizeConfig.defaultSize * 5,
-              height: SizeConfig.defaultSize * 5,
+              width: SizeConfig.defaultSize! * 5,
+              height: SizeConfig.defaultSize! * 5,
               padding: EdgeInsets.symmetric(
                   horizontal: horizontal(size: 12)),
               decoration: BoxDecoration(
@@ -133,8 +133,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   _indicator() {
     return Container(
-      width: SizeConfig.defaultSize * 8,
-      height: SizeConfig.defaultSize * 8,
+      width: SizeConfig.defaultSize! * 8,
+      height: SizeConfig.defaultSize! * 8,
       margin: EdgeInsets.symmetric(vertical: vertical(size: 14)),
       child: Stack(
         children: <Widget>[
@@ -159,8 +159,8 @@ class _OnboardScreenState extends State<OnboardScreen> {
                       curve: Curves.easeIn);
               },
               child: Container(
-                width: SizeConfig.defaultSize * 5.8,
-                height: SizeConfig.defaultSize * 5.8,
+                width: SizeConfig.defaultSize! * 5.8,
+                height: SizeConfig.defaultSize! * 5.8,
                 decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.all(

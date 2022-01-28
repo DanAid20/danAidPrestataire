@@ -28,9 +28,9 @@ class _ComparePlansState extends State<ComparePlans> {
   num isAssist = 2;
   num isSerenity = 3;
   num isAcademik = 1.1;
-  num state;
+  num? state;
   Map<num, PlanModel> plans = {};
-  PlanModel currentPlan;
+  PlanModel? currentPlan;
 
   getPlans() async {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
@@ -39,11 +39,11 @@ class _ComparePlansState extends State<ComparePlans> {
       var docs = snap.docs;
       for(int i = 0; i < docs.length; i++){
         PlanModel docModel = PlanModel.fromDocument(docs[i]);
-        plans[docModel.planNumber] = docModel;
+        plans[docModel.planNumber!] = docModel;
       }
       setState(() {
-        currentPlan = plans[adherentProvider.getAdherent.adherentPlan];
-        state = adherentProvider.getAdherent.adherentPlan;
+        currentPlan = plans[adherentProvider.getAdherent!.adherentPlan!];
+        state = adherentProvider.getAdherent!.adherentPlan;
       });
     });
   }
@@ -51,7 +51,7 @@ class _ComparePlansState extends State<ComparePlans> {
   changePlan(num plan) async {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
-    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).set({
       "protectionLevel": plan,
       //"datDebutvalidite" : DateTime.now(),
       //"datFinvalidite": DateTime.now().add(Duration(days: 365)),
@@ -60,7 +60,7 @@ class _ComparePlansState extends State<ComparePlans> {
     setState(() {
       //spinner2 = false;
     });
-    planProvider.setPlanModel(plans[plan]);
+    planProvider.setPlanModel(plans[plan]!);
     adherentProvider.setAdherentPlan(plan);
     Navigator.of(context).pushNamed('/contributions');
   }
@@ -76,13 +76,13 @@ class _ComparePlansState extends State<ComparePlans> {
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    DateTime limit = adherentProvider.getAdherent.validityEndDate.toDate();
-    String limitString = limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString();
+    DateTime? limit = adherentProvider.getAdherent?.validityEndDate?.toDate();
+    String limitString = limit!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString();
 
     String yes = 'assets/icons/Bulk/TickSquare.svg';
     String no = 'assets/icons/Bulk/CloseSquare.svg';
 
-    Color good = Colors.teal[300];
+    Color good = Colors.teal[300]!;
     Color bad = Colors.red.withOpacity(0.4);
 
     return Scaffold(
@@ -112,7 +112,7 @@ class _ComparePlansState extends State<ComparePlans> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
               child: HomePageComponents.getInfoActionCard(
-                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan),
+                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan),
                 actionLabel: S.of(context).comparerLesServices,
                 subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
                 noAction: true
@@ -134,8 +134,8 @@ class _ComparePlansState extends State<ComparePlans> {
                             text: TextSpan(
                               style: TextStyle(color: kDeepTeal, fontSize: 16),
                               children: [
-                                TextSpan(text: plans[state].label+'\n', style: TextStyle(fontSize: 30)),
-                                TextSpan(text: plans[state].monthlyAmount.toString(), style: TextStyle(fontSize: 25)),
+                                TextSpan(text: plans[state]!.label! +'\n', style: TextStyle(fontSize: 30)),
+                                TextSpan(text: plans[state]!.monthlyAmount.toString(), style: TextStyle(fontSize: 25)),
                                 TextSpan(text: S.of(context).cfan),
                                 TextSpan(text: S.of(context).parFamilleMois),
                               ]
@@ -205,77 +205,77 @@ class _ComparePlansState extends State<ComparePlans> {
                         TableRow(
                           decoration: BoxDecoration(color: whiteColor),
                           children: [
-                            defaultCell(text: plans[0].coveragePercentage.toString()+"%", fontSize: 30, textColor: kDeepTeal, isActive: state == isDecouverte),
-                            defaultCell(text: plans[1].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcces),
-                            defaultCell(text: plans[1.1].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcademik),
-                            defaultCell(text: plans[2].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAssist),
-                            defaultCell(text: plans[3].coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isSerenity)
+                            defaultCell(text: plans[0]!.coveragePercentage.toString()+"%", fontSize: 30, textColor: kDeepTeal, isActive: state == isDecouverte),
+                            defaultCell(text: plans[1]!.coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcces),
+                            defaultCell(text: plans[1.1]!.coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAcademik),
+                            defaultCell(text: plans[2]!.coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isAssist),
+                            defaultCell(text: plans[3]!.coveragePercentage.toString()+" %", fontSize: 30, textColor: kDeepTeal, isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           decoration: BoxDecoration(color: whiteColor),
                           children: [
-                            defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
-                            defaultCell(text: plans[1].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
-                            defaultCell(text: plans[1.1].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcademik),
-                            defaultCell(text: plans[2].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
-                            defaultCell(text: plans[3].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
+                            defaultCell(text: plans[0]!.annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
+                            defaultCell(text: plans[1]!.annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: plans[1.1]!.annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAcademik),
+                            defaultCell(text: plans[2]!.annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
+                            defaultCell(text: plans[3]!.annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           decoration: BoxDecoration(color: whiteColor),
                           children: [
-                            defaultCell(text: plans[0].annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
-                            defaultCell(text: plans[1].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
-                            defaultCell(text: plans[1.1].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcademik),
-                            defaultCell(text: plans[2].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
-                            defaultCell(text: plans[3].maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
+                            defaultCell(text: plans[0]!.annualLimit.toString()+"Cfa", fontSize: 16, isActive: state == isDecouverte),
+                            defaultCell(text: plans[1]!.maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: plans[1.1]!.maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAcademik),
+                            defaultCell(text: plans[2]!.maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isAssist),
+                            defaultCell(text: plans[3]!.maxCreditAmount.toString()+"Cfa", fontSize: 16, isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           decoration: BoxDecoration(color: whiteColor),
                           children: [
-                            defaultCell(text: (plans[0].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isDecouverte),
-                            defaultCell(text: (plans[1].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAcces),
-                            defaultCell(text: (plans[1.1].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAcademik),
-                            defaultCell(text: (plans[2].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isAssist),
-                            defaultCell(text: (plans[3].creditRate*100).toString()+"%", fontSize: 16, isActive: state == isSerenity)
+                            defaultCell(text: (plans[0]!.creditRate!*100).toString()+"%", fontSize: 16, isActive: state == isDecouverte),
+                            defaultCell(text: (plans[1]!.creditRate!*100).toString()+"%", fontSize: 16, isActive: state == isAcces),
+                            defaultCell(text: (plans[1.1]!.creditRate!*100).toString()+"%", fontSize: 16, isActive: state == isAcademik),
+                            defaultCell(text: (plans[2]!.creditRate!*100).toString()+"%", fontSize: 16, isActive: state == isAssist),
+                            defaultCell(text: (plans[3]!.creditRate!*100).toString()+"%", fontSize: 16, isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           children: [
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[0].familyDoctorIsFree ? yes : no, height: 30, color: plans[0].familyDoctorIsFree ? good : bad)), isActive: state == isDecouverte),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[1].familyDoctorIsFree ? yes : no, height: 30, color: plans[1].familyDoctorIsFree ? good : bad)), isActive: state == isAcces),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1].familyDoctorIsFree ? yes : no, height: 30, color: plans[1.1].familyDoctorIsFree ? good : bad)), isActive: state == isAcademik),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[2].familyDoctorIsFree ? yes : no, height: 30, color: plans[2].familyDoctorIsFree ? good : bad)), isActive: state == isAssist),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[3].familyDoctorIsFree ? yes : no, height: 30, color: plans[3].familyDoctorIsFree ? good : bad)), isActive: state == isSerenity)
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[0]!.familyDoctorIsFree! ? yes : no, height: 30, color: plans[0]!.familyDoctorIsFree! ? good : bad)), isActive: state == isDecouverte),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1]!.familyDoctorIsFree! ? yes : no, height: 30, color: plans[1]!.familyDoctorIsFree! ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1]!.familyDoctorIsFree! ? yes : no, height: 30, color: plans[1.1]!.familyDoctorIsFree! ? good : bad)), isActive: state == isAcademik),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[2]!.familyDoctorIsFree! ? yes : no, height: 30, color: plans[2]!.familyDoctorIsFree! ? good : bad)), isActive: state == isAssist),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[3]!.familyDoctorIsFree! ? yes : no, height: 30, color: plans[3]!.familyDoctorIsFree! ? good : bad)), isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           children: [
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[0].socialNetworkEnable ? yes : no, height: 30, color: plans[0].socialNetworkEnable ? good : bad)), isActive: state == isDecouverte),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[1].socialNetworkEnable ? yes : no, height: 30, color: plans[1].socialNetworkEnable ? good : bad)), isActive: state == isAcces),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1].socialNetworkEnable ? yes : no, height: 30, color: plans[1.1].socialNetworkEnable ? good : bad)), isActive: state == isAcademik),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[2].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isAssist),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[3].socialNetworkEnable ? yes : no, height: 30, color: plans[3].socialNetworkEnable ? good : bad)), isActive: state == isSerenity)
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[0]!.socialNetworkEnable! ? yes : no, height: 30, color: plans[0]!.socialNetworkEnable! ? good : bad)), isActive: state == isDecouverte),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1]!.socialNetworkEnable! ? yes : no, height: 30, color: plans[1]!.socialNetworkEnable! ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1]!.socialNetworkEnable! ? yes : no, height: 30, color: plans[1.1]!.socialNetworkEnable! ? good : bad)), isActive: state == isAcademik),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[2]!.socialNetworkEnable! ? yes : no, height: 30, color: plans[3]!.socialNetworkEnable! ? good : bad)), isActive: state == isAssist),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[3]!.socialNetworkEnable! ? yes : no, height: 30, color: plans[3]!.socialNetworkEnable! ? good : bad)), isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           children: [
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[0].canWinPoints ? yes : no, height: 30, color: plans[0].canWinPoints ? good : bad)), isActive: state == isDecouverte),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[1].canWinPoints ? yes : no, height: 30, color: plans[1].canWinPoints ? good : bad)), isActive: state == isAcces),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1].canWinPoints ? yes : no, height: 30, color: plans[1.1].canWinPoints ? good : bad)), isActive: state == isAcademik),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[2].canWinPoints ? yes : no, height: 30, color: plans[2].canWinPoints ? good : bad)), isActive: state == isAssist),
-                            defaultCell(content: Center(child: SvgPicture.asset(plans[3].canWinPoints ? yes : no, height: 30, color: plans[3].canWinPoints ? good : bad)), isActive: state == isSerenity)
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[0]!.canWinPoints! ? yes : no, height: 30, color: plans[0]!.canWinPoints! ? good : bad)), isActive: state == isDecouverte),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1]!.canWinPoints! ? yes : no, height: 30, color: plans[1]!.canWinPoints! ? good : bad)), isActive: state == isAcces),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[1.1]!.canWinPoints! ? yes : no, height: 30, color: plans[1.1]!.canWinPoints! ? good : bad)), isActive: state == isAcademik),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[2]!.canWinPoints! ? yes : no, height: 30, color: plans[2]!.canWinPoints! ? good : bad)), isActive: state == isAssist),
+                            defaultCell(content: Center(child: SvgPicture.asset(plans[3]!.canWinPoints! ? yes : no, height: 30, color: plans[3]!.canWinPoints! ? good : bad)), isActive: state == isSerenity)
                           ]
                         ),
                         TableRow(
                           children: [
-                            bottomCell(content: Center(child: SvgPicture.asset(plans[0].familyCoverage ? yes : no, height: 30, color: plans[0].familyCoverage ? good : bad)), isActive: state == isDecouverte),
-                            bottomCell(content: Center(child: SvgPicture.asset(plans[1].familyCoverage ? yes : no, height: 30, color: plans[1].familyCoverage ? good : bad)), isActive: state == isAcces),
-                            bottomCell(content: Center(child: SvgPicture.asset(plans[1.1].familyCoverage ? yes : no, height: 30, color: plans[1.1].familyCoverage ? good : bad)), isActive: state == isAcademik),
-                            bottomCell(content: Center(child: SvgPicture.asset(plans[2].familyCoverage ? yes : no, height: 30, color: plans[2].familyCoverage ? good : bad)), isActive: state == isAssist),
-                            bottomCell(content: Center(child: SvgPicture.asset(plans[3].familyCoverage ? yes : no, height: 30, color: plans[3].familyCoverage ? good : bad)), isActive: state == isSerenity)
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[0]!.familyCoverage! ? yes : no, height: 30, color: plans[0]!.familyCoverage! ? good : bad)), isActive: state == isDecouverte),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[1]!.familyCoverage! ? yes : no, height: 30, color: plans[1]!.familyCoverage! ? good : bad)), isActive: state == isAcces),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[1.1]!.familyCoverage! ? yes : no, height: 30, color: plans[1.1]!.familyCoverage! ? good : bad)), isActive: state == isAcademik),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[2]!.familyCoverage! ? yes : no, height: 30, color: plans[2]!.familyCoverage! ? good : bad)), isActive: state == isAssist),
+                            bottomCell(content: Center(child: SvgPicture.asset(plans[3]!.familyCoverage! ? yes : no, height: 30, color: plans[3]!.familyCoverage! ? good : bad)), isActive: state == isSerenity)
                           ]
                         ),
                       ],
@@ -291,7 +291,7 @@ class _ComparePlansState extends State<ComparePlans> {
                 text: "Changer de niveau",
                 enable: currentPlan != null && state != null && userProvider.getUserModel?.profileType != beneficiary,
                 action: (){
-                  adherentProvider.getAdherent.adherentPlan == 0 ? showModalBottomSheet(
+                  adherentProvider.getAdherent?.adherentPlan == 0 ? showModalBottomSheet(
                     context: context, 
                     builder: (BuildContext bc){
                       return SafeArea(
@@ -348,7 +348,7 @@ class _ComparePlansState extends State<ComparePlans> {
     );
   }
 
-  Widget defaultCell({String text, Widget content, String subtitle, double fontSize = 16, bool isActive = false, bool center = true, Color textColor = kPrimaryColor}){
+  Widget defaultCell({String? text, Widget? content, String? subtitle, double fontSize = 16, bool isActive = false, bool center = true, Color textColor = kPrimaryColor}){
     return Container(
       height: 50,
       padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: 5),
@@ -356,14 +356,14 @@ class _ComparePlansState extends State<ComparePlans> {
       child: content == null ? Column(
         crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(text, style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis,),
+          Text(text!, style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis,),
           subtitle != null ? Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 12, fontWeight: FontWeight.w400), maxLines: 1, overflow: TextOverflow.ellipsis,) : Container(),
         ],
       ) : content,
     );
   }
 
-  Widget headerCell({Widget content, String text, String icon, double fontSize = 20, bool isActive = false}){
+  Widget headerCell({Widget? content, String? text, String? icon, double fontSize = 20, bool isActive = false}){
     return Container(
       height: 110,
       padding: EdgeInsets.only(top: 15, bottom: 5),
@@ -374,15 +374,15 @@ class _ComparePlansState extends State<ComparePlans> {
       child: content != null ? content : Column(
         mainAxisAlignment: isActive ? MainAxisAlignment.start : MainAxisAlignment.end,
         children: [
-          SvgPicture.asset(icon, height: 35, color: isActive ? whiteColor : kSouthSeas,),
+          SvgPicture.asset(icon!, height: 35, color: isActive ? whiteColor : kSouthSeas,),
           SizedBox(height: isActive ? 15 : 5,),
-          Text(text, style: TextStyle(color: kPrimaryColor, fontSize: fontSize, fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis)
+          Text(text!, style: TextStyle(color: kPrimaryColor, fontSize: fontSize, fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis)
         ],
       ),
     );
   }
 
-  Widget bottomCell({Widget content, double fontSize = 15, bool isActive = false}){
+  Widget bottomCell({Widget? content, double fontSize = 15, bool isActive = false}){
     return Container(
       constraints: BoxConstraints(minHeight: isActive ? 80 : 60),
       padding: EdgeInsets.only(top: 15, bottom: 5),

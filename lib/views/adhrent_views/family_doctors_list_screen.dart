@@ -20,7 +20,7 @@ class FamilyDoctorList extends StatefulWidget {
 }
 
 class _FamilyDoctorListState extends State<FamilyDoctorList> {
-  String filter;
+  String? filter;
 
   Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
 
@@ -29,10 +29,10 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
     DoctorTileModelProvider doctorTileProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = userProvider.getProfileType == doctor ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor.id).snapshots()
+    query = userProvider.getProfileType == doctor ? FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).where("id", isNotEqualTo: doctorProvider.getDoctor!.id).snapshots()
       : FirebaseFirestore.instance.collection("MEDECINS").where("domaine", isEqualTo: "Généraliste").where("profilEnabled", isEqualTo: true).snapshots();
     return (adherentProvider.getAdherent?.location != null && (userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary)) || (doctorProvider.getDoctor?.location != null && userProvider.getProfileType == doctor) 
-      ? StreamBuilder(
+      ? StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -42,13 +42,13 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
               ),
             );
           }
-          int lastIndex = snapshot.data.docs.length - 1;
-          return snapshot.data.docs.length >= 1
+          int lastIndex = snapshot.data!.docs.length - 1;
+          return snapshot.data!.docs.length >= 1
               ? ListView.builder(
                   //shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     DoctorModel doctor = DoctorModel.fromDocument(doc);
                     print("name: ");
 
@@ -57,7 +57,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                       child: DoctorInfoCard(
                         avatarUrl: doctor.avatarUrl,
                         name: doctor.cniName,
-                        title: S.of(context).medecinDeFamille + doctor.field,
+                        title: S.of(context).medecinDeFamille + doctor.field!,
                         speciality: doctor.speciality,
                         teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                         consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -66,11 +66,11 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         visiteDomicile: doctor.serviceList != null ? doctor.serviceList["visite-a-domicile"] : false,
                         distance: 
                           userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ?  
-                            adherentProvider.getAdherent.location["latitude"] != null && doctor.location["latitude"] != null
-                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null
+                            adherentProvider.getAdherent?.location!["latitude"] != null && doctor.location!["latitude"] != null
+                              ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location!["latitude"], adherentProvider.getAdherent?.location!["longitude"], doctor.location!["latitude"], doctor.location!["longitude"]).toStringAsFixed(2)).toString() : null
                           :
-                          doctorProvider.getDoctor.location != null && doctor.location != null
-                              ? (Algorithms.calculateDistance(doctorProvider.getDoctor.location["latitude"], doctorProvider.getDoctor.location["longitude"], doctor.location["latitude"], doctor.location["longitude"]).toStringAsFixed(2)).toString() : null,
+                          doctorProvider.getDoctor?.location != null && doctor.location != null
+                              ? (Algorithms.calculateDistance(doctorProvider.getDoctor?.location!["latitude"], doctorProvider.getDoctor?.location?["longitude"], doctor.location!["latitude"], doctor.location!["longitude"]).toStringAsFixed(2)).toString() : null,
                         onTap: () {
                           doctorTileProvider.setDoctorModel(doctor);
                           Navigator.pushNamed(context, "/doctor-profile");
@@ -137,7 +137,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                           value: S.of(context).distance,
                         ),
                       ],
-                      onChanged: (value) {
+                      onChanged: (String? value) {
                         setState(() {
                           filter = value;
                         });

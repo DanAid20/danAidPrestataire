@@ -141,14 +141,12 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                   ServiceProviderModelProvider sp = Provider.of<ServiceProviderModelProvider>(context, listen: false);
                   DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context, listen: false);
                   UserProvider user = Provider.of<UserProvider>(context, listen: false);
-                  await FirebaseMessaging.instance.unsubscribeFromTopic(FirebaseAuth.instance.currentUser.uid);
-                  await FirebaseMessaging.instance.unsubscribeFromTopic(user?.getUserId?.substring(1));
-                  user.setUserId(null);
-                  user.setProfileType(null);
-                  user.setUserModel(null);
-                  adherent.setAdherentModel(null);
-                  sp.setServiceProviderModel(null);
-                  doctor.setDoctorModel(null);
+                  await FirebaseMessaging.instance.unsubscribeFromTopic(FirebaseAuth.instance.currentUser!.uid);
+                  await FirebaseMessaging.instance.unsubscribeFromTopic(user.getUserId!.substring(1));
+                  user.destroyUserProfile();
+                  adherent.destroyAdherentProfile();
+                  sp.destroyServiceProviderProfile();
+                  doctor.destroyDoctorProfile();
                   HiveDatabase.setRegisterState(false);
                   FirebaseAuth.instance.signOut();
                   Navigator.pushReplacementNamed(context, '/login');
@@ -181,8 +179,8 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                                     );
                                   },
                                 ).toList(),
-                                  onChanged: (String newValue) async {
-                                  currentData.changeLocale(newValue);
+                                  onChanged: (String? newValue) async {
+                                  currentData.changeLocale(newValue!);
                                   // await HiveDatabase.setLanguage(LanguageHelper().convertLocaleToLangName(newValue));
                                   
                                   // context.read<LanguageProvider>().changeLocale(newValue);

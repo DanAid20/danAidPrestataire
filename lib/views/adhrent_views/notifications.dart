@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/notificationModelProvider.dart';
 
 class Notifications extends StatefulWidget {
-  const Notifications({ Key key }) : super(key: key);
+  const Notifications({ Key? key }) : super(key: key);
 
   @override
   _NotificationsState createState() => _NotificationsState();
@@ -58,12 +58,12 @@ class _NotificationsState extends State<Notifications> {
               child: ListTile(
                 leading: CircleAvatar(
                   backgroundColor: Colors.grey,
-                  backgroundImage: notifs[index].profileImgUrl != null ? CachedNetworkImageProvider(notifs[index].profileImgUrl) : null,
+                  backgroundImage: notifs[index].profileImgUrl != null ? CachedNetworkImageProvider(notifs[index].profileImgUrl!) : null,
                   child: notifs[index].profileImgUrl != null ? Container() : Icon(LineIcons.image, color: whiteColor,),
                 ),
-                title: Text(notifs[index].title),
-                subtitle: Text(notifs[index].description),
-                trailing: Text(notifs[index].dateReceived != null ? Algorithms.getTimeElapsed(date: notifs[index].dateReceived) : ""),
+                title: Text(notifs[index].title!),
+                subtitle: Text(notifs[index].description!),
+                trailing: Text(notifs[index].dateReceived != null ? Algorithms.getTimeElapsed(date: notifs[index].dateReceived)! : ""),
               ),
             );
           },

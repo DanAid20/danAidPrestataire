@@ -15,22 +15,22 @@ class BeneficiaryStream extends StatefulWidget {
   //static getBeneficiary({BuildContext context, bool standardUse}){
     final bool standardUse, noLabel;
 
-  BeneficiaryStream({Key key, this.standardUse = true, this.noLabel = false}) : super(key: key);
+  BeneficiaryStream({Key? key, this.standardUse = true, this.noLabel = false}) : super(key: key);
 
   @override
   _BeneficiaryStreamState createState() => _BeneficiaryStreamState();
 }
 
 class _BeneficiaryStreamState extends State<BeneficiaryStream> {
-    String selectedMatricule;
+    String? selectedMatricule;
 
     @override
     Widget build(BuildContext context){
       AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
       UserProvider userProvider = Provider.of<UserProvider>(context);
       BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
-      return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection("BENEFICIAIRES").snapshots(),
+      return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection("BENEFICIAIRES").snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData){
             return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
@@ -44,7 +44,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                     RichText(text: TextSpan(
                       text: widget.standardUse ? S.of(context).bnficiairesn : S.of(context).quiEstMaladen,
                       children: [
-                        TextSpan(text: widget.standardUse ? (snapshot.data.docs.length+1).toString()+S.of(context).personnes : S.of(context).slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
+                        TextSpan(text: widget.standardUse ? (snapshot.data!.docs.length+1).toString()+S.of(context).personnes : S.of(context).slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
                       ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
                     ),
                     SizedBox(height: hv*2,),
@@ -56,46 +56,46 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Row(
                   children: [
                     widget.standardUse ? HomePageComponents.beneficiaryCard(
-                      name: adherentProvider.getAdherent.cniName != null ? adherentProvider.getAdherent.cniName : adherentProvider.getAdherent.surname,
+                      name: adherentProvider.getAdherent?.cniName != null ? adherentProvider.getAdherent?.cniName : adherentProvider.getAdherent?.surname,
                       edit: userProvider.getUserModel?.profileType != CONST.beneficiary,
-                      imgUrl: adherentProvider.getAdherent.imgUrl, 
+                      imgUrl: adherentProvider.getAdherent?.imgUrl, 
                       action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
                     )
                     : userProvider.getUserModel?.profileType != CONST.beneficiary ? HomePageComponents.beneficiaryChoiceCard(
-                      name: adherentProvider.getAdherent.surname, 
-                      imgUrl: adherentProvider.getAdherent.imgUrl,
-                      isSelected: selectedMatricule == adherentProvider.getAdherent.adherentId,
+                      name: adherentProvider.getAdherent?.surname, 
+                      imgUrl: adherentProvider.getAdherent?.imgUrl,
+                      isSelected: selectedMatricule == adherentProvider.getAdherent?.adherentId,
                       selectAction: (){
-                        selectedMatricule = adherentProvider.getAdherent.adherentId;
+                        selectedMatricule = adherentProvider.getAdherent?.adherentId;
                         beneficiaryProvider.setBeneficiaryModel(
                           BeneficiaryModel(
-                            matricule: adherentProvider.getAdherent.adherentId,
-                            adherentId: adherentProvider.getAdherent.adherentId,
-                            surname: adherentProvider.getAdherent.surname,
-                            familyName: adherentProvider.getAdherent.familyName,
-                            avatarUrl: adherentProvider.getAdherent.imgUrl,
-                            birthDate: adherentProvider.getAdherent.birthDate,
-                            phoneList: adherentProvider.getAdherent.phoneList
+                            matricule: adherentProvider.getAdherent?.adherentId,
+                            adherentId: adherentProvider.getAdherent?.adherentId,
+                            surname: adherentProvider.getAdherent?.surname,
+                            familyName: adherentProvider.getAdherent?.familyName,
+                            avatarUrl: adherentProvider.getAdherent?.imgUrl,
+                            birthDate: adherentProvider.getAdherent?.birthDate,
+                            phoneList: adherentProvider.getAdherent?.phoneList
                           )
                         );
                         setState(() { });
                       },
                       editAction: (){
-                        selectedMatricule = adherentProvider.getAdherent.adherentId;
+                        selectedMatricule = adherentProvider.getAdherent?.adherentId;
                         setState(() { });
                         Navigator.pushNamed(context, '/adherent-profile-edit');
                       }
                     ) : Container(),
-                    snapshot.data.docs.length >= 1 ? Expanded(
+                    snapshot.data!.docs.length >= 1 ? Expanded(
                       child: ListView.builder(
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data.docs.length,
+                        itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index){
-                          if(snapshot.data.docs[index]['adherentId'] == null){
+                          if(snapshot.data!.docs[index]['adherentId'] == null){
                             return Container();
                           }
-                          DocumentSnapshot doc = snapshot.data.docs[index];
+                          DocumentSnapshot doc = snapshot.data!.docs[index];
                           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
                           print("name: ");
                           return widget.standardUse ? HomePageComponents.beneficiaryCard(

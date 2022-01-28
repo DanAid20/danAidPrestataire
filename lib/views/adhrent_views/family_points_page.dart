@@ -16,7 +16,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class FamilyPointsPage extends StatefulWidget {
-  const FamilyPointsPage({ Key key }) : super(key: key);
+  const FamilyPointsPage({ Key? key }) : super(key: key);
 
   @override
   _FamilyPointsPageState createState() => _FamilyPointsPageState();
@@ -56,7 +56,7 @@ class _FamilyPointsPageState extends State<FamilyPointsPage> {
             centerTitle: true,
             actions: [
               IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-              IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+              IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())
             ],
           ),
           endDrawer: DefaultDrawer(
@@ -101,7 +101,7 @@ class _FamilyPointsPageState extends State<FamilyPointsPage> {
     setState(() {});
   }
   
-  Widget circleBar({bool isActive, bool light}) {
+  Widget circleBar({required bool isActive, required bool light}) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 150),
       margin: EdgeInsets.symmetric(horizontal: 8),
@@ -116,7 +116,7 @@ class _FamilyPointsPageState extends State<FamilyPointsPage> {
 }
 
 class FamilyPoints extends StatefulWidget {
-  const FamilyPoints({ Key key }) : super(key: key);
+  const FamilyPoints({ Key? key }) : super(key: key);
 
   @override
   _FamilyPointsState createState() => _FamilyPointsState();
@@ -129,15 +129,15 @@ class _FamilyPointsState extends State<FamilyPoints> {
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
 
-    List visits = userProvider.getUserModel.visits == null ? [] : userProvider.getUserModel.visits;
+    List? visits = userProvider.getUserModel?.visits == null ? [] : userProvider.getUserModel!.visits;
 
-    int totalPoints = userProvider.getUserModel.points;
+    int? totalPoints = userProvider.getUserModel?.points;
 
     int points = 0;
     DateTime now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 0, 0, 0);
     int monday = now.subtract(Duration(days: DateTime.now().weekday-1)).millisecondsSinceEpoch;
     int sunday = now.add(Duration(days: 7-DateTime.now().weekday)).millisecondsSinceEpoch;
-    for(int i=0; i < visits.length; i++){
+    for(int i=0; i < visits!.length; i++){
       int date = visits[i].toDate().millisecondsSinceEpoch;
       if(date > monday && date <= sunday)
         points = points + 25;
@@ -255,7 +255,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
                           animation: true,
                           lineHeight: 27,
                           animationDuration: 1000,
-                          percent: totalPoints/9125,
+                          percent: totalPoints!/9125,
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           progressColor: kDeepTeal,
                           backgroundColor: whiteColor,
@@ -265,7 +265,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
                       
                       Container(
                         height: 180,
-                        child: StreamBuilder(
+                        child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance.collection("PRODUITS").snapshots(),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
@@ -275,19 +275,19 @@ class _FamilyPointsState extends State<FamilyPoints> {
                                 ),
                               );
                             }
-                            return snapshot.data.docs.length >= 1 ?
+                            return snapshot.data!.docs.length >= 1 ?
                               ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 physics: BouncingScrollPhysics(),
-                                itemCount: snapshot.data.docs.length,
+                                itemCount: snapshot.data!.docs.length,
                                 itemBuilder: (context, index) {
-                                  int lastIndex = snapshot.data.docs.length - 1;
-                                  DocumentSnapshot productDoc = snapshot.data.docs[index];
+                                  int lastIndex = snapshot.data!.docs.length - 1;
+                                  DocumentSnapshot productDoc = snapshot.data!.docs[index];
                                   ProductModel product = ProductModel.fromDocument(productDoc);
                                   print("name: ");
                                   return Padding(
                                     padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                                    child: getProduct(product: product, adherentPoints: userProvider.getUserModel.points)
+                                    child: getProduct(product: product, adherentPoints: userProvider.getUserModel!.points!)
                                   );
                                 })
                             : Center(
@@ -309,15 +309,15 @@ class _FamilyPointsState extends State<FamilyPoints> {
     );
   }
 
-  Widget getProduct({ProductModel product, int adherentPoints}){
+  Widget getProduct({required ProductModel product, int adherentPoints = 0}){
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
             onTap: (){
-              if(adherentPoints >= product.points){
-                if(product.qty > 0){
+              if(adherentPoints >= product.points!){
+                if(product.qty! > 0){
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductDetails(product: product,),),);
                 }
                 else {
@@ -337,7 +337,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
                 decoration: BoxDecoration(
                   color: kDeepTeal,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.6), blurRadius: 1.5, spreadRadius: 1, offset: Offset(0, 2.5))]
+                  boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.6), blurRadius: 1.5, spreadRadius: 1, offset: Offset(0, 2.5))]
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -347,7 +347,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(20),
-                          image: DecorationImage(image: CachedNetworkImageProvider(product.imgUrl), fit: BoxFit.cover)
+                          image: DecorationImage(image: CachedNetworkImageProvider(product.imgUrl!), fit: BoxFit.cover)
                         ),
                       ),
                     ),

@@ -46,26 +46,26 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   TextEditingController _weightController = TextEditingController();
   TextEditingController _allergyController = TextEditingController();
 
-  String matricule;
-  String _relation;
+  String? matricule;
+  String? _relation;
   List<String> allergies = [];
   String currentAllergyText = "";
-  String phone;
+  String? phone;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
 
   
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   
   PageController controller = PageController(initialPage: 0, keepPage: false);
   int currentPageValue = 0;
-  List<Widget> introWidgetsList;
+  List<Widget>? introWidgetsList;
 
-  String _gender;
-  String _bloodGroup;
+  String? _gender;
+  String? _bloodGroup;
   bool male = false;
   bool female = false;
 
@@ -100,13 +100,13 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     BeneficiaryModelProvider beneficiaryModel = Provider.of<BeneficiaryModelProvider>(context, listen: false);
     if (beneficiaryModel.getBeneficiary.familyName != null){
       setState(() {
-        _familynameController.text = beneficiaryModel.getBeneficiary.familyName;
+        _familynameController.text = beneficiaryModel.getBeneficiary.familyName!;
         nameEnabled = false;
       });
     }
     if (beneficiaryModel.getBeneficiary.surname != null){
       setState(() {
-        _surnameController.text = beneficiaryModel.getBeneficiary.surname;
+        _surnameController.text = beneficiaryModel.getBeneficiary.surname!;
         surnameEnabled = false;
       });
     }
@@ -122,9 +122,9 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         weightEnabled = false;
       });
     }
-    if (beneficiaryModel.getBeneficiary.phoneList[0] != null){
+    if (beneficiaryModel.getBeneficiary.phoneList?[0] != null){
       setState(() {
-        phone = beneficiaryModel.getBeneficiary.phoneList[0]["number"];
+        phone = beneficiaryModel.getBeneficiary.phoneList?[0]["number"];
       });
     }
     if (beneficiaryModel.getBeneficiary.relationShip != null){
@@ -159,8 +159,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     }
     if (beneficiaryModel.getBeneficiary.allergies != null){
       setState(() {
-        for (int i = 0; i < beneficiaryModel.getBeneficiary.allergies.length; i++){
-          allergies.add(beneficiaryModel.getBeneficiary.allergies[i]);
+        for (int i = 0; i < beneficiaryModel.getBeneficiary.allergies!.length; i++){
+          allergies.add(beneficiaryModel.getBeneficiary.allergies?[i]);
         }
       });
     }
@@ -201,7 +201,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                           padding: EdgeInsets.all(20.0),
                         ),
-                        imageUrl: beneficiary.getBeneficiary.avatarUrl,),
+                        imageUrl: beneficiary.getBeneficiary.avatarUrl!,),
                     ),
                       //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                   ),
@@ -241,7 +241,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                     label: "Nom de Famille *",
                     hintText: "Entrez votre nom de famille",
                     controller: _familynameController,
-                    validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                    validator: (String? val) => (val!.isEmpty) ? "Ce champ est obligatoire" : null,
                     enabled: nameEnabled,
                     editAction: (){
                       setState(() {
@@ -256,7 +256,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                     label: "Prénom *",
                     hintText: "Entrez votre prénom",
                     controller: _surnameController,
-                    validator: (String val) => (val.isEmpty) ? "Ce champ est obligatoire" : null,
+                    validator: (String? val) => (val!.isEmpty) ? "Ce champ est obligatoire" : null,
                     enabled: surnameEnabled,
                     editAction: (){
                       setState(() {
@@ -304,7 +304,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                                     value: "PARENT",
                                   ),
                                 ],
-                                onChanged: (value) {
+                                onChanged: (String? value) {
                                   setState(() {
                                     _relation = value;
                                   });
@@ -335,7 +335,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                                   DropdownMenuItem(child: Text("AB-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB-",),
                                   DropdownMenuItem(child: Text("AB+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB+",),
                                 ],
-                                onChanged: (value) => setState(() {_bloodGroup = value;})
+                                onChanged: (String? value) => setState(() {_bloodGroup = value;})
                               ),
                             ),
                           ),
@@ -397,14 +397,14 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                     decoration: BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
+                      boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 2.0, spreadRadius: 1.0)]
                     ),
                     child: ListTile(
                       contentPadding: EdgeInsets.only(left: wv*3),
                       title: Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
                       subtitle: Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text(phone == null ? S.of(context).aucunFourni : phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                        child: Text(phone == null ? S.of(context).aucunFourni : phone!, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                       ),
                       trailing: IconButton(
                         enableFeedback: false,
@@ -427,8 +427,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
                       SizedBox(height: hv*1,),
                       InternationalPhoneNumberInput(
-                        validator: (String phone) {
-                          return (phone.isEmpty)
+                        validator: (String? phone) {
+                          return (phone!.isEmpty)
                               ?  S.of(context).entrerUnNumeroDeTlphoneValide : null;
                         },
                         onInputChanged: (PhoneNumber nber) {
@@ -570,7 +570,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           activeColor: kDeepTeal,
                           tristate: false,
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          onChanged: (val)=> setState((){_confirmFamily = val;}),
+                          onChanged: (val)=> setState((){_confirmFamily = val!;}),
                           title: Text(S.of(context).jeConfirmeParLaPrsenteQueLaPersonneSusciteEst, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
                         ),
                         SizedBox(height: hv*3,),
@@ -587,17 +587,17 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
             ? !buttonLoading ? CustomTextButton(
               text: S.of(context).sauvegarder, 
               action: (){
-                if(_editBeneficiaryFormKey.currentState.validate()){
+                if(_editBeneficiaryFormKey.currentState!.validate()){
                     setState(() {
                     buttonLoading = true;
                   });
                   AdherentModelProvider adherentModel = Provider.of<AdherentModelProvider>(context, listen: false);
                   BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
                   FirebaseFirestore.instance.collection("ADHERENTS")
-                    .doc(adherentModel.getAdherent.getAdherentId)
+                    .doc(adherentModel.getAdherent!.getAdherentId)
                     .collection("BENEFICIAIRES").doc(beneficiary.getBeneficiary.matricule)
                     .set({
-                      "adherentId": adherentModel.getAdherent.getAdherentId,
+                      "adherentId": adherentModel.getAdherent!.getAdherentId,
                       "nomDFamille" : _familynameController.text,
                       "prenom": _surnameController.text,
                       "cniName": "${_familynameController.text} ${_surnameController.text}",
@@ -609,7 +609,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       "urlAutrPiece": beneficiary.getBeneficiary.otherDocUrl,
                       "urlCNI": beneficiary.getBeneficiary.cniUrl,
                       "urlActeNaissance": beneficiary.getBeneficiary.birthCertificateUrl,
-                      "datFinvalidite": adherentModel.getAdherent.validityEndDate,
+                      "datFinvalidite": adherentModel.getAdherent!.validityEndDate,
                       "enabled": false,
                       "ifVivreMemeDemeure": _confirmFamily,
                       "phoneList": [{"number": phone}],
@@ -621,7 +621,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       if(phone != null) {
                         await FirebaseFirestore.instance.collection("USERS").doc(phone).set({
                           "authId": null,
-                          "adherentId": adherentModel.getAdherent.getAdherentId,
+                          "adherentId": adherentModel.getAdherent!.getAdherentId,
                           'createdDate': beneficiary.getBeneficiary.dateCreated,
                           //'emailAdress': null,
                           'enabled': false,
@@ -634,8 +634,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           "imageUrl" : avatarUrl,
                           "matricule": beneficiary.getBeneficiary.matricule,
                           "profil": "BENEFICIAIRE",
-                          "regionDorigione": adherentModel.getAdherent.regionOfOrigin,
-                          "phoneKeywords": Algorithms.getKeyWords(phone),
+                          "regionDorigione": adherentModel.getAdherent!.regionOfOrigin,
+                          "phoneKeywords": Algorithms.getKeyWords(phone!),
                           "nameKeywords": Algorithms.getKeyWords(_familynameController.text + " "+ _surnameController.text)
                         }, SetOptions(merge: true));
                       }
@@ -667,7 +667,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
     setState(() {
       imageLoading = true;
     });
-    String folder = userProvider.getUserId;
+    String? folder = userProvider.getUserId;
     String date = DateTime.now().toString();
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_beneficiaires/$folder/Beneficiaire-$date'); //.child('photos/profils_adherents/$fileName');
@@ -683,7 +683,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
@@ -710,7 +710,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   Future getImageFromCamera() async {
@@ -723,7 +723,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   getImage(BuildContext context){
@@ -801,7 +801,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
+    String? adherentId = adherentModelProvider.getAdherent!.adherentId;
     Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_beneficiaires/$adherentId/$matricule/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -872,9 +872,9 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {

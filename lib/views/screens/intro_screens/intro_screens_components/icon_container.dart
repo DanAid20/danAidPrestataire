@@ -6,31 +6,31 @@ import 'package:flutter_svg/svg.dart';
 
 class IconContainer extends StatelessWidget {
   const IconContainer({
-    Key key, this.icon = 'assets/icons/Two-tone/Category.svg',
+    Key? key, this.icon = 'assets/icons/Two-tone/Category.svg',
     this.sizeTop, this.sizeRight,
     this.containerBgColor = const Color(0xFFFAD427),
     this.iconColor = kFirstIntroColor,
   }) : super(key: key);
 
-  final String icon ;
-  final Color containerBgColor;
-  final Color iconColor;
-  final double sizeTop;
-  final double sizeRight;
+  final String? icon ;
+  final Color? containerBgColor;
+  final Color? iconColor;
+  final double? sizeTop;
+  final double? sizeRight;
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: top(size: sizeTop ?? defSize * 47),
-      right: right(size: sizeRight ?? defSize * 10),
+      top: top(size: sizeTop ?? defSize! * 47),
+      right: right(size: sizeRight ?? defSize! * 10),
       child: CircleAvatar(
-        radius: defSize * 5,
+        radius: defSize! * 5,
         backgroundColor: containerBgColor,
         child: SvgPicture.asset(
-          icon,
+          icon!,
           color: iconColor,
-          height: defSize * 4.7,
-          width: defSize * 4.7,
+          height: defSize! * 4.7,
+          width: defSize! * 4.7,
         ),
       ),
     );

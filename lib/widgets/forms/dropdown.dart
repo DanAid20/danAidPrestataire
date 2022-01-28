@@ -3,17 +3,17 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropdownButton extends StatelessWidget {
-  final String value, label, hintText;
-  final List items;
-  final Function(Object) onChanged;
+  final String? value, label, hintText;
+  final List<DropdownMenuItem<String>>? items;
+  final Function(String)? onChanged;
 
-  const CustomDropdownButton({Key key, this.value, this.label, this.items, this.onChanged, this.hintText = "Choisir.."}) : super(key: key);
+  const CustomDropdownButton({Key? key, this.value, this.label, this.items, this.onChanged, this.hintText = "Choisir.."}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
+        Text(label!, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
         SizedBox(height: 5,),
         Container(
           constraints: BoxConstraints(minWidth: wv*45),
@@ -27,10 +27,10 @@ class CustomDropdownButton extends StatelessWidget {
             child: DropdownButtonHideUnderline(
               child: DropdownButton(
                 isExpanded: true,
-                hint: Text(hintText),
+                hint: Text(hintText!),
                 value: value,
                 items: items,
-                onChanged: onChanged
+                onChanged: (string)=>onChanged
               ),
             ),
           ),

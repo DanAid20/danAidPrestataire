@@ -17,7 +17,7 @@ class AmbulanceServiceProvider with ChangeNotifier {
     if(_service.precriptionUrls == null){
       _service.precriptionUrls = [];
     }
-    _service.precriptionUrls.add(val);
+    _service.precriptionUrls?.add(val);
     notifyListeners();
   }
 
@@ -25,7 +25,7 @@ class AmbulanceServiceProvider with ChangeNotifier {
     if(_service.receiptUrls == null){
       _service.receiptUrls = [];
     }
-    _service.receiptUrls.add(val);
+    _service.receiptUrls?.add(val);
     notifyListeners();
   }
 
@@ -33,7 +33,7 @@ class AmbulanceServiceProvider with ChangeNotifier {
     if(_service.drugsUrls == null){
       _service.drugsUrls = [];
     }
-    _service.drugsUrls.add(val);
+    _service.drugsUrls?.add(val);
     notifyListeners();
   }
 

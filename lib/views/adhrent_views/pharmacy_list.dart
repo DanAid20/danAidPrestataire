@@ -19,7 +19,7 @@ class PharmacyList extends StatefulWidget {
 }
 
 class _PharmacyListState extends State<PharmacyList> {
-  String filter;
+  String? filter;
 
   Stream<QuerySnapshot> query = FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Pharmacie").snapshots();
 
@@ -28,10 +28,10 @@ class _PharmacyListState extends State<PharmacyList> {
     ServiceProviderTileModelProvider spTileProvider = Provider.of<ServiceProviderTileModelProvider>(context);
     ServiceProviderModelProvider spProvider = Provider.of<ServiceProviderModelProvider>(context);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    query = spProvider.getServiceProvider != null ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Pharmacie").where(FieldPath.documentId, isNotEqualTo: spProvider.getServiceProvider.id).snapshots()
+    query = spProvider.getServiceProvider != null ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where("categorieEtablissement", isEqualTo: "Pharmacie").where(FieldPath.documentId, isNotEqualTo: spProvider.getServiceProvider?.id).snapshots()
       : FirebaseFirestore.instance.collection("PRESTATAIRE").where("categorieEtablissement", isEqualTo: "Pharmacie").where("profilEnabled", isEqualTo: true).snapshots();
     print(spProvider.getServiceProvider?.coordGps);
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -41,13 +41,13 @@ class _PharmacyListState extends State<PharmacyList> {
               ),
             );
           }
-          int lastIndex = snapshot.data.docs.length - 1;
-          return snapshot.data.docs.length >= 1
+          int lastIndex = snapshot.data!.docs.length - 1;
+          return snapshot.data!.docs.length >= 1
               ? ListView.builder(
                   //shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     ServiceProviderModel sp = ServiceProviderModel.fromDocument(doc);
                     print("name: ");
 
@@ -67,11 +67,11 @@ class _PharmacyListState extends State<PharmacyList> {
                         visiteDomicile: sp.serviceList != null ? sp.serviceList["Consultation"] : false,
                         distance: 
                          userProvider.getProfileType == adherent ?  
-                             adherentProvider.getAdherent.location!=null&& adherentProvider.getAdherent.location["latitude"] != null && sp.coordGps != null
-                              ? sp.coordGps["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null : null
+                             adherentProvider.getAdherent?.location!=null&& adherentProvider.getAdherent!.location!["latitude"] != null && sp.coordGps != null
+                              ? sp.coordGps!["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location?["latitude"], adherentProvider.getAdherent?.location?["longitude"], sp.coordGps?["latitude"], sp.coordGps?["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
                           spProvider.getServiceProvider?.coordGps != null && sp.coordGps != null
-                              ? (Algorithms.calculateDistance(spProvider.getServiceProvider.coordGps["latitude"], spProvider.getServiceProvider.coordGps["longitude"], sp.coordGps["latitude"], sp.coordGps["longitude"]).toStringAsFixed(2)).toString() : null,
+                              ? (Algorithms.calculateDistance(spProvider.getServiceProvider?.coordGps?["latitude"], spProvider.getServiceProvider?.coordGps?["longitude"], sp.coordGps?["latitude"], sp.coordGps?["longitude"]).toStringAsFixed(2)).toString() : null,
                         onTap: () {
                           spTileProvider.setServiceProviderModel(sp);
                           Navigator.pushNamed(context, "/serviceprovider-profile");
@@ -102,7 +102,7 @@ class _PharmacyListState extends State<PharmacyList> {
               child: DropdownButtonHideUnderline(
                 child: ButtonTheme(
                   alignedDropdown: true,
-                  child: DropdownButton(
+                  child: DropdownButton<String>(
                       isDense: true,
                       icon: Icon(
                         Icons.keyboard_arrow_down_rounded,

@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class VideoRoom extends StatefulWidget {
-  final String token, channelName;
-  final int uid;
+  final String? token, channelName;
+  final int? uid;
 
-  const VideoRoom({Key key, this.token, this.channelName, this.uid}) : super(key: key);
+  const VideoRoom({Key? key, this.token, this.channelName, this.uid}) : super(key: key);
 
   @override
   _VideoRoomState createState() => _VideoRoomState();
@@ -59,7 +59,7 @@ class _VideoRoomState extends State<VideoRoom> {
 
     await engine.enableVideo();
 
-    await engine.joinChannel(widget.token, widget.channelName, null, widget.uid);
+    await engine.joinChannel(widget.token, widget.channelName!, null, widget.uid!);
     await engine.enableLocalVideo(true);
     await engine.enableLocalAudio(true);
   }

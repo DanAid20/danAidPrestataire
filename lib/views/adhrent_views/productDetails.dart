@@ -12,8 +12,8 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class ProductDetails extends StatefulWidget {
-  final ProductModel product;
-  const ProductDetails({ Key key, this.product }) : super(key: key);
+  final ProductModel? product;
+  const ProductDetails({ Key? key, this.product }) : super(key: key);
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -29,20 +29,20 @@ class _ProductDetailsState extends State<ProductDetails> {
 
     UserProvider userProvider = Provider.of<UserProvider>(context);
     
-    int max = widget.product.qty;
+    int? max = widget.product?.qty;
     
     List<Widget> images = [];
-    if(widget.product.imgGroup.length >= 2) {
-      for (int i = 0; i < widget.product.imgGroup.length; i++){
-        Widget content = getImage(url: widget.product.imgGroup[i]);
+    if(widget.product!.imgGroup!.length >= 2) {
+      for (int i = 0; i < widget.product!.imgGroup!.length; i++){
+        Widget content = getImage(url: widget.product?.imgGroup?[i]);
         images.add(content);
       }
     }
     else {
-      images.add(getImage(url: widget.product.imgUrl));
+      images.add(getImage(url: widget.product!.imgUrl!));
     }
 
-    int adhrPts = userProvider.getUserModel.points;
+    int? adhrPts = userProvider.getUserModel?.points;
       
     return Scaffold(
       backgroundColor: kDeepTeal,
@@ -51,7 +51,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           icon: Icon(Icons.arrow_back_ios, color: whiteColor),
           onPressed: ()=>Navigator.pop(context)
         ),
-        title: Text(widget.product.name, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+        title: Text(widget.product!.name!, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
         centerTitle: true
       ),
       body: Column(
@@ -89,9 +89,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: hv*2.5,),
-                    Text(widget.product.name.toUpperCase(), style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.w900)),
+                    Text(widget.product!.name!.toUpperCase(), style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.w900)),
                     SizedBox(height: hv*1,),
-                    Text(widget.product.description, style: TextStyle(color: Colors.grey[600], fontSize: 16, fontWeight: FontWeight.w400)),
+                    Text(widget.product!.description!, style: TextStyle(color: Colors.grey[600], fontSize: 16, fontWeight: FontWeight.w400)),
                   ],
                 ),
               ),
@@ -105,7 +105,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   children: [
                     TableRow(
                       decoration: BoxDecoration(
-                        border: Border(bottom: BorderSide(color: Colors.grey[300]), top: BorderSide(color: Colors.grey[300]))
+                        border: Border(bottom: BorderSide(color: Colors.grey[300]!), top: BorderSide(color: Colors.grey[300]!))
                       ),
                       children: [
                         TableCell(child: Container(
@@ -140,14 +140,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                               SizedBox(width: 10,),
                               InkWell(
                                 onTap: (){
-                                  if((qty+1)*widget.product.points <= adhrPts){
-                                    if((qty+1) <= max){
+                                  if((qty+1)*widget.product!.points! <= adhrPts!){
+                                    if((qty+1) <= max!){
                                       setState(() {
                                         qty++;
                                       });
                                     }
                                     else {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La quantité de ${widget.product.name} disponible ne dépasse pas $max..",)));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La quantité de ${widget.product!.name} disponible ne dépasse pas $max..",)));
                                     }
                                   }
                                   else {
@@ -177,7 +177,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         )),
                         TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                          child: Text((widget.product.points * qty).toString() + " Pts", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,)
+                          child: Text((widget.product!.points! * qty).toString() + " Pts", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,)
                         )),
                       ]
                     ),
@@ -194,23 +194,23 @@ class _ProductDetailsState extends State<ProductDetails> {
                         buttonSpinner = true;
                       });
                       try {
-                        FirebaseFirestore.instance.collection("PRODUITS").doc(widget.product.id).set({
+                        FirebaseFirestore.instance.collection("PRODUITS").doc(widget.product!.id).set({
                           "quantity" : FieldValue.increment(-qty)
                         }, SetOptions(merge: true)).then((value){
-                          FirebaseFirestore.instance.collection("PRODUITS").doc(widget.product.id).collection("COMMANDES_PRODUITS").add({
-                            "userId": userProvider.getUserModel.userId,
-                            "productId": widget.product.id,
+                          FirebaseFirestore.instance.collection("PRODUITS").doc(widget.product!.id).collection("COMMANDES_PRODUITS").add({
+                            "userId": userProvider.getUserModel!.userId,
+                            "productId": widget.product!.id,
                             "dateCreated": DateTime.now(),
-                            "productName": widget.product.name,
+                            "productName": widget.product?.name,
                             "status": 0,
                             "quantity" : qty,
-                            "points": widget.product.points
+                            "points": widget.product?.points
                           });
                         });
-                        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).set({
-                          "points" : FieldValue.increment(-(widget.product.points * qty))
+                        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).set({
+                          "points" : FieldValue.increment(-(widget.product!.points! * qty))
                         }, SetOptions(merge: true));
-                        userProvider.modifyPoints(-(widget.product.points * qty));
+                        userProvider.modifyPoints(-(widget.product!.points! * qty));
                         setState(() {
                           buttonSpinner = false;
                         });
@@ -236,14 +236,14 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
     );
   }
-  Widget getImage({String url}){
+  Widget getImage({required String url}){
     return Container(
       margin: EdgeInsets.symmetric(vertical: hv*1),
       decoration: BoxDecoration(
         color: whiteColor,
         image: DecorationImage(image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey[800].withOpacity(0.5), spreadRadius: 1.2, blurRadius: 2.5, offset: Offset(0,3))]
+        boxShadow: [BoxShadow(color: Colors.grey[800]!.withOpacity(0.5), spreadRadius: 1.2, blurRadius: 2.5, offset: Offset(0,3))]
       ),
       child: url == "" || url == null ? Row(
         mainAxisAlignment: MainAxisAlignment.center,

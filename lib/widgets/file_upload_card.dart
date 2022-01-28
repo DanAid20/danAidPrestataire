@@ -6,13 +6,13 @@ import 'package:line_icons/line_icons.dart';
 
 class FileUploadCard extends StatelessWidget {
 
-  final String title;
-  final bool state;
-  final bool loading;
-  final bool isMultiple;
-  final Function action;
+  final String? title;
+  final bool? state;
+  final bool? loading;
+  final bool? isMultiple;
+  final Function? action;
 
-  const FileUploadCard({Key key, this.title, this.state, this.action, this.loading, this.isMultiple = false}) : super(key: key);
+  const FileUploadCard({Key? key, this.title, this.state, this.action, this.loading, this.isMultiple = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,31 +22,31 @@ class FileUploadCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         //borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(blurRadius: 2, spreadRadius: 1, color: Colors.grey[200])]
+        boxShadow: [BoxShadow(blurRadius: 2, spreadRadius: 1, color: Colors.grey[200]!)]
       ),
       child: Row(children: [
         Expanded(
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: state ? kDeepTeal : Colors.red[400],
+                backgroundColor: state! ? kDeepTeal : Colors.red[400],
                 child: Icon(
-                  state ? isMultiple ? LineIcons.medicalFile : LineIcons.file : LineIcons.times, 
+                  state! ? isMultiple! ? LineIcons.medicalFile : LineIcons.file : LineIcons.times, 
                   color: Colors.white,
               )),
               SizedBox(width: wv*3,),
-              Expanded(child: Container(child: Text(title, overflow: TextOverflow.fade,), constraints: BoxConstraints(maxWidth: wv*60), )),
+              Expanded(child: Container(child: Text(title!, overflow: TextOverflow.fade,), constraints: BoxConstraints(maxWidth: wv*60), )),
             ],
           ),
         ),
         Align(alignment: Alignment.centerRight,
-          child: !loading ? TextButton(
-            onPressed: action, 
+          child: !loading! ? TextButton(
+            onPressed: ()=>action, 
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(kPrimaryColor),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
             ),
-            child: Text(state && !isMultiple ? S.of(context).remplacer : S.of(context).ajouter, style: TextStyle(color: Colors.white),)) : 
+            child: Text(state! && !isMultiple! ? S.of(context).remplacer : S.of(context).ajouter, style: TextStyle(color: Colors.white),)) : 
             Padding(
               padding: EdgeInsets.all(4.0),
               child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),

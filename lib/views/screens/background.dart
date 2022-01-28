@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class AppBackground extends StatelessWidget {
   const AppBackground({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -18,8 +18,8 @@ class AppBackground extends StatelessWidget {
         ),
         Positioned(
           left: left(
-              size: -(SizeConfig.screenHeight * 0.5 -
-                  SizeConfig.screenWidth * 0.5)),
+              size: -(SizeConfig.screenHeight! * 0.5 -
+                  SizeConfig.screenWidth! * 0.5)),
           bottom: bottom(size: 130),
           child: Container(
             width: SizeConfig.screenHeight,
@@ -29,11 +29,11 @@ class AppBackground extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: top(size: -SizeConfig.screenHeight * 0.6),
-          left: left(size: -SizeConfig.screenWidth * 0.5),
+          top: top(size: -SizeConfig.screenHeight! * 0.6),
+          left: left(size: -SizeConfig.screenWidth! * 0.5),
           child: Container(
-            width: SizeConfig.screenHeight * 0.8,
-            height: SizeConfig.screenHeight * .8,
+            width: SizeConfig.screenHeight! * 0.8,
+            height: SizeConfig.screenHeight! * .8,
             decoration: BoxDecoration(
                 color: kPrimaryColor.withOpacity(.8),
                 shape: BoxShape.circle),

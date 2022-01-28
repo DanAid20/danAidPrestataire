@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UseCaseList extends StatefulWidget {
-  const UseCaseList({ Key key }) : super(key: key);
+  const UseCaseList({ Key? key }) : super(key: key);
 
   @override
   _UseCaseListState createState() => _UseCaseListState();
@@ -27,8 +27,8 @@ class _UseCaseListState extends State<UseCaseList> {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
         title: Text("Utilisation du service", style: TextStyle(color: whiteColor),),
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('createdDate', descending: true).limit(limit).snapshots(),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).orderBy('createdDate', descending: true).limit(limit).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -38,7 +38,7 @@ class _UseCaseListState extends State<UseCaseList> {
             );
           }
 
-          return snapshot.data.docs.length >= 1
+          return snapshot.data!.docs.length >= 1
             ? NotificationListener<ScrollEndNotification>(
                 onNotification: (scrollEnd) {
                   var metrics = scrollEnd.metrics;
@@ -51,18 +51,18 @@ class _UseCaseListState extends State<UseCaseList> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    int lastIndex = snapshot.data.docs.length - 1;
-                    DocumentSnapshot useCaseDoc = snapshot.data.docs[index];
+                    int lastIndex = snapshot.data!.docs.length - 1;
+                    DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
                     UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc);
                     print("name: ");
                     return Padding(
                       padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                       child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
-                        initial: useCase.establishment.toUpperCase().substring(0,3),
+                        initial: useCase.establishment!.toUpperCase().substring(0,3),
                         name: useCase.establishment,
-                        date: useCase.dateCreated.toDate(),
+                        date: useCase.dateCreated!.toDate(),
                         state: useCase.status,
                         price: useCase.amount != null ? useCase.amount : 0,
                         action: (){
