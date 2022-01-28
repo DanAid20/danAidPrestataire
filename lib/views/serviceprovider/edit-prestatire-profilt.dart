@@ -583,15 +583,15 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                 myLocationButtonEnabled: true,
                                 initialCameraPosition: CameraPosition(target: 
                                 serviceProvider.getServiceProvider!.coordGps == null ?
-                                   _initialcameraposition : 
+                                   _initialcameraposition! : 
                                 LatLng(
                                   serviceProvider.getServiceProvider!.coordGps!["latitude"] != null ? 
-                                    serviceProvider.getServiceProvider!.coordGps["latitude"] :
-                                     _initialcameraposition.latitude, 
+                                    serviceProvider.getServiceProvider!.coordGps!["latitude"] :
+                                     _initialcameraposition!.latitude, 
                                 
-                                serviceProvider.getServiceProvider!.coordGps["longitude"] != null ? 
-                                serviceProvider.getServiceProvider!.coordGps["longitude"] : 
-                                _initialcameraposition.longitude), zoom: 11.0),
+                                serviceProvider.getServiceProvider!.coordGps!["longitude"] != null ? 
+                                serviceProvider.getServiceProvider!.coordGps!["longitude"]! : 
+                                _initialcameraposition!.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                
@@ -1088,8 +1088,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
     }
     return code;
   }
-  Future<String> _emailFieldValidator(String? value) async {
-    return !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)?S.of(context)!.entrerUneAddresseEmailValide: '';
+  String? _emailFieldValidator(String? value) {
+    if (!RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(value!)) {
+      return S.of(context)!.entrerUneAddresseEmailValide;
     }
+  }
   
 }

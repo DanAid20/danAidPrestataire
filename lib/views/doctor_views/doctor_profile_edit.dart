@@ -556,7 +556,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 myLocationButtonEnabled: true,
                                 initialCameraPosition: CameraPosition(target: 
                                 doctorProvider.getDoctor!.location == null ? 
-                                  _initialcameraposition : 
+                                  _initialcameraposition! : 
                                 coords, 
                                 zoom: 11.0),
                                 mapType: MapType.normal,
@@ -1333,7 +1333,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
     WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
         imageSpinner = true;
     }));
-    String fileName = userProvider.getUserId;
+    String fileName = userProvider.getUserId!;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_Medecins/$fileName');
     final metadata = SettableMetadata(

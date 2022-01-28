@@ -72,7 +72,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
     LatLng coord=LatLng(prestataire.getServiceProvider!.coordGps!['latitude'], prestataire.getServiceProvider!.coordGps!['longitude']);
      Marker? f = Marker(
        markerId: const MarkerId('1'),
-       icon: customIcon1!, position: prestataire.getServiceProvider!.coordGps != null? _center : coord );
+       icon: customIcon1!, position: prestataire.getServiceProvider!.coordGps != null? _center! : coord );
     setState(() {
 
           markers!.add(f);
@@ -240,7 +240,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                         SizedBox(height: 3,),
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Text(prestatiaireObject.about ?? 'RAS' , textScaleFactor: 1.0,
+                          child: Text(prestatiaireObject!.about ?? 'RAS' , textScaleFactor: 1.0,
                            style: TextStyle(fontSize:14.sp ),),
                         ),
                         SizedBox(height: 2.h,),
@@ -413,7 +413,13 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                            zoomGesturesEnabled: true,
                            markers: markers!,  
                           onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center : LatLng(prestatiaireObject.coordGps!["latitude"] != null ? prestatiaireObject?.coordGps!["latitude"] : _center.latitude, prestatiaireObject?.coordGps!["longitude"] != null ? prestatiaireObject?.coordGps["longitude"] : _center.longitude), zoom: 11.0),
+                          initialCameraPosition: CameraPosition(target: prestatiaireObject.coordGps == null ? _center! : LatLng(
+                            prestatiaireObject.coordGps!["latitude"] != null ?
+                             prestatiaireObject.coordGps!["latitude"]! : 
+                            _center!.latitude, 
+                          prestatiaireObject.coordGps!["longitude"] != null ? 
+                          prestatiaireObject.coordGps!["longitude"]! :
+                           _center!.longitude), zoom: 11.0),
                           
                         ),
                             ),
@@ -436,7 +442,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                             child: InkWell(
                               onTap: ()=>{
                                 CameraPosition(
-                            target: prestatiaireObject.coordGps == null ? _center : LatLng(prestatiaireObject?.coordGps!["latitude"], prestatiaireObject?.coordGps!["longitude"]),
+                            target: prestatiaireObject.coordGps == null ? _center! : LatLng(prestatiaireObject.coordGps!["latitude"], prestatiaireObject.coordGps!["longitude"]),
                             zoom: 11.0,
                           )
                               },
