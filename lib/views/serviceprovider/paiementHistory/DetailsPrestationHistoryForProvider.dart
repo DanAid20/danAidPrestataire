@@ -1,18 +1,21 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/facture.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class DetailsPrestationHistoryForProvider extends StatefulWidget {
-  final List<Facture> facture;
-  final String month;
-  DetailsPrestationHistoryForProvider({Key key, this.facture, this.month})
+  final List<Facture>? facture;
+  final String? month;
+  DetailsPrestationHistoryForProvider({Key? key, this.facture, this.month})
       : super(key: key);
 
   @override
@@ -33,10 +36,12 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
       var newUseCase =
           FirebaseFirestore.instance.collection('ADHERENTS').doc(id).get();
       newUseCase.then((value) {
-        data = value.data()['cniName'].toString();
+        data = value.data()!['cniName'].toString();
         setState((){
-        print(data);
-        userName = value.data()['cniName'].toString();
+        if (kDebugMode) {
+          print(data);
+        }
+        userName = value.data()!['cniName'].toString();
 
         });
       });
@@ -54,18 +59,18 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
           backgroundColor: kBgTextColor,
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kDateTextColor,
                 ),
                 onPressed: () => Navigator.pop(context)),
             title: Align(
               alignment: Alignment.center,
-              child: Container(
+              child:  Container(
                 child: Column(
                   children: [
-                    Text(S.of(context).historiqueDesPrestations),
-                    Text(S.of(context).vosConsultationsPaiementDetaill)
+                    Text(S.of(context)!.historiqueDesPrestations),
+                    Text(S.of(context)!.vosConsultationsPaiementDetaill)
                   ],
                 ),
               ),
@@ -100,7 +105,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                       children: [
                         Column(
                           children: [
-                            Text(widget.month.toUpperCase(),
+                            Text(widget.month!.toUpperCase(),
                                 style: TextStyle(
                                     color: kFirstIntroColor,
                                     fontWeight: FontWeight.w700,
@@ -122,7 +127,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                             alignment: Alignment.centerLeft,
                             margin: EdgeInsets.only(left: 15.w, top: 2.h),
                             child: Text(
-                              S.of(context).statusDesPaiements,
+                              S.of(context)!.statusDesPaiements,
                               style: TextStyle(
                                   color: kFirstIntroColor,
                                   fontWeight: FontWeight.w500,
@@ -141,7 +146,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
                                     primary: false,
-                                    itemCount: widget.facture.length,
+                                    itemCount: widget.facture!.length,
                                     itemBuilder: (context, index) {
                                       // print( paiementHistory.elementAt(index)[key]);
                                       // print( paiementHistory.elementAt(index)[key]['month']);
@@ -150,49 +155,47 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                                       // String userNamem = 'a';
                                      
                                     
-                                      if (widget.facture[index].types!='REFERENCEMENT') {
+                                      if (widget.facture![index].types!='REFERENCEMENT') {
                                        return FutureBuilder<DocumentSnapshot>(
                                       future:  FirebaseFirestore.instance.collection('ADHERENTS').doc(widget
-                                          .facture[index].idAdherent).get(),
+                                          .facture![index].idAdherent).get(),
                                       builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
                                            if (snapshot.connectionState==ConnectionState.waiting) {
-                                              return Center(
+                                              return const Center(
                                                 child: CircularProgressIndicator(
                                                   valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
                                                 ),
                                               );
                                             }
                                           if (snapshot.hasError) {
-                                            return Text(S.of(context).somethingWentWrong);
+                                            return Text(S.of(context)!.somethingWentWrong);
                                           }
                                           if (snapshot.connectionState == ConnectionState.done) {
                                             return  HomePageComponents()
                                           .paienementDetailsListItem(
-                                              etat: widget.facture[index].canPay,
+                                              etat: widget.facture![index].canPay!.toInt(),
                                               montant:
-                                                  '${widget.facture[index].amountToPay}f',
+                                                  '${widget.facture![index].amountToPay}f',
                                               date: DateFormat("dd MMMM yyy ")
-                                                  .format(widget.facture[index]
-                                                      .createdAt),
-                                              nom: snapshot.data.data()['cniName'],
-                                              iconesConsultationTypes: widget.facture[index].types=='CONSULTATION' || widget.facture[index].types=='REFERENCEMENT' ?
-                                                  'assets/icons/Bulk/Profile.svg' : widget.facture[index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture[index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture[index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
+                                                  .format(widget.facture![index].createdAt!),
+                                              nom: snapshot.data!['cniName']! as String ,
+                                              iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
+                                                  'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
                                        }
-                                           return Text(S.of(context).loading);
+                                           return Text(S.of(context)!.loading);
                                       });
                                       } else {
-                                        userName = widget.facture[index].idFammillyMember;
+                                        userName = widget.facture![index].idFammillyMember!;
                                       return HomePageComponents()
                                           .paienementDetailsListItem( 
-                                              etat: widget.facture[index].canPay,
+                                              etat: widget.facture![index].canPay!.toInt(),
                                               montant:
-                                                  '${widget.facture[index].amountToPay}f',
+                                                  '${widget.facture![index].amountToPay!}f',
                                               date: DateFormat("dd MMMM yyy ")
-                                                  .format(widget.facture[index]
-                                                      .createdAt),
+                                                  .format(widget.facture![index].createdAt!),
                                               nom: userName,
-                                            iconesConsultationTypes: widget.facture[index].types=='CONSULTATION' || widget.facture[index].types=='REFERENCEMENT' ?
-                                                  'assets/icons/Bulk/Profile.svg' : widget.facture[index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture[index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture[index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
+                                            iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
+                                                  'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
                                       }
                                     }),
 

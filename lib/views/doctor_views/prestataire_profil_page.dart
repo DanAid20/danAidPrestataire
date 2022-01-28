@@ -25,12 +25,12 @@ class PrestataireProfilePage extends StatefulWidget {
 
 class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
   
-  GoogleMapController mapCardController;
-  final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
-  bool isExpanded = false;
-  BitmapDescriptor customIcon1;
-  Set<Marker> markers;
-  void _onMapCreated(GoogleMapController controller) {
+  GoogleMapController? mapCardController;
+  final LatLng? _center = const LatLng(4.044656688777058, 9.695724531228858);
+  bool? isExpanded = false;
+  BitmapDescriptor? customIcon1;
+  Set<Marker>? markers;
+  void _onMapCreated(GoogleMapController? controller) {
     mapCardController = controller;
   }
   @override
@@ -69,11 +69,10 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
   getMarkets(){
     //print(customIcon1.toJson());
     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
-     Marker f =
-
-        Marker(markerId: MarkerId('1'),
-        
-        icon: customIcon1, position: prestataire.getServiceProvider.coordGps==null? _center : LatLng(prestataire.getServiceProvider?.coordGps['latitude'], prestataire.getServiceProvider.coordGps['longitude']));
+    var coord=LatLng(prestataire.getServiceProvider.coordGps!['latitude'], prestataire.getServiceProvider.coordGps!['longitude']);
+     Marker? f = Marker(
+       markerId: const MarkerId('1'),
+       icon: customIcon1, position: prestataire.getServiceProvider.coordGps==null? _center : coord );
     setState(() {
 
           markers.add(f);
@@ -231,7 +230,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
               Column(
                 children: [              
                   DefaultTextStyle(
-                    style: TextStyle(color: kPrimaryColor),
+                    style:const TextStyle(color: kPrimaryColor),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
@@ -241,7 +240,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                         SizedBox(height: 3,),
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Text(prestatiaireObject.about==null? 'RAS': prestatiaireObject.about , textScaleFactor: 1.0,
+                          child: Text(prestatiaireObject.about ?? 'RAS' , textScaleFactor: 1.0,
                            style: TextStyle(fontSize:14.sp ),),
                         ),
                         SizedBox(height: 2.h,),
@@ -254,7 +253,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 padding: EdgeInsets.all(6.w),
                                  decoration: BoxDecoration(
                                   color: kblueSky.withOpacity(0.6),
-                                  borderRadius: BorderRadius.all(
+                                  borderRadius: const BorderRadius.all(
                                     Radius.circular(10),
                                   ),
                                 ),
@@ -278,7 +277,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 padding: EdgeInsets.all(6.w),
                                  decoration: BoxDecoration(
                                   color: kblueSky.withOpacity(0.6),
-                                  borderRadius: BorderRadius.all(
+                                  borderRadius: const BorderRadius.all(
                                     Radius.circular(10),
                                   ),
                                 ),
@@ -332,7 +331,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                    HomePageComponents().getAvatar(
-                            imgUrl: prestatiaireObject.avatarUrl ,
+                            imgUrl: prestatiaireObject.avatarUrl! ,
                             size: wv * 8.3,
                             renoveIsConnectedButton: false),
                                 ],
@@ -342,7 +341,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text( prestatiaireObject!=null ? 'Dr '+prestatiaireObject.contactName: 'pas defini',
+                                  Text( prestatiaireObject!=null ? 'Dr '+prestatiaireObject.contactName!: 'pas defini',
                                     textScaleFactor: 1.0,
                                    style: TextStyle(
                                     fontSize: 14.sp,
@@ -350,7 +349,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                     fontWeight: FontWeight.w500,
                                   ),),
                                   SizedBox(height: 4.h,),
-                                  Text( prestatiaireObject!=null  &&  prestatiaireObject.specialite!=null  ? prestatiaireObject.specialite : 'non defini' ,
+                                  Text( prestatiaireObject.specialite!=null ? prestatiaireObject.specialite.toString() : 'non defini' ,
                                     textScaleFactor: 1.0,
                                    style: TextStyle(
                                     fontSize: 14.sp,
@@ -378,7 +377,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                   fontWeight: FontWeight.w600,
                                 ) ),
                          
-                          Text(prestatiaireObject!=null  &&  prestatiaireObject.localisation!=null  ?prestatiaireObject.localisation: 'localisation non defini '  ,
+                          Text(prestatiaireObject.localisation ?? 'localisation non defini '  ,
                                 textScaleFactor: 1.0,
                                 style: TextStyle(
                                   fontSize: 12.sp,
@@ -400,7 +399,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                             height: hv*30,
                             margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
                             decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400])],
+                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: (Colors.grey[400])!)],
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: ClipRRect(
@@ -412,9 +411,9 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                            minMaxZoomPreference:MinMaxZoomPreference.unbounded ,
                            scrollGesturesEnabled: true,
                            zoomGesturesEnabled: true,
-                           markers: markers,  
+                           markers: markers!,  
                           onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center : LatLng(prestatiaireObject?.coordGps["latitude"] != null ? prestatiaireObject?.coordGps["latitude"] : _center.latitude,prestatiaireObject?.coordGps["longitude"] != null ? prestatiaireObject?.coordGps["longitude"] : _center.longitude), zoom: 11.0),
+                          initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center : LatLng(prestatiaireObject.coordGps!["latitude"] != null ? prestatiaireObject?.coordGps!["latitude"] : _center.latitude, prestatiaireObject?.coordGps!["longitude"] != null ? prestatiaireObject?.coordGps["longitude"] : _center.longitude), zoom: 11.0),
                           
                         ),
                             ),
@@ -428,16 +427,16 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               boxShadow: [BoxShadow(
-                                color: Colors.grey[400],
+                                color: (Colors.grey[400])!,
                                 spreadRadius: 1,
                                 blurRadius: 1.5,
-                                offset: Offset(0, 2)
+                                offset: const Offset(0, 2)
                               )]
                             ),
                             child: InkWell(
                               onTap: ()=>{
                                 CameraPosition(
-                            target: prestatiaireObject.coordGps == null ? _center : LatLng(prestatiaireObject.coordGps["latitude"], prestatiaireObject.coordGps["longitude"]),
+                            target: prestatiaireObject.coordGps == null ? _center : LatLng(prestatiaireObject?.coordGps!["latitude"], prestatiaireObject?.coordGps!["longitude"]),
                             zoom: 11.0,
                           )
                               },
@@ -464,15 +463,15 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
       ),
     );
   }
-  Widget getFeatureCard({String title, bool isActifService=false}){
+  Widget getFeatureCard({String? title, bool isActifService=false}){
     return Container(
-      margin: EdgeInsets.all(3),
-      padding: EdgeInsets.all(3),
+      margin: const EdgeInsets.all(3),
+      padding: const EdgeInsets.all(3),
       decoration: BoxDecoration(
         color: isActifService? Colors.transparent :  whiteColor.withOpacity(0.7),
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Text(title, textScaleFactor: 1.0, style: TextStyle(color:kPrimaryColor, fontWeight: FontWeight.w500, fontSize: 12.sp)),
+      child: Text(title!, textScaleFactor: 1.0, style: TextStyle(color:kPrimaryColor, fontWeight: FontWeight.w500, fontSize: 12.sp)),
     );
   }
 }

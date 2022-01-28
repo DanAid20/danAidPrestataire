@@ -28,46 +28,46 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
 class CreateQuote extends StatefulWidget {
-  CreateQuote({Key key}) : super(key: key);
+  CreateQuote({Key? key}) : super(key: key);
 
   @override
   _CreateQuoteState createState() => _CreateQuoteState();
 }
 
 class _CreateQuoteState extends State<CreateQuote> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _codeConsultationController = TextEditingController();
-  final TextEditingController _montantController = TextEditingController();
-  List<File> images=[];
-  List<String> ImgUrl=[];
-  bool imageSpinner, isUploadingImg=false;
-  bool ordonancesUPloaded=false;
-  bool ordonancesLoader = false;
-  ServiceProviderModel  prestataireInfos;
-  bool isAllOk=false;
-  bool buttonLoading = false;
-  String devisId;
-  String categoriesType=consultation;
-  String appontementId, userId, adherentId, beneficiaryId;
-  int numberOfImagesuploaded=0;
-   num danAidCov = 0;
-  bool doc1Spinner = false;
-  bool doc1Uploaded = false;
-  bool doc2Spinner = false;
-  bool doc2Uploaded = false;
-  bool doc3Spinner = false;
-  bool doc3Uploaded = false;
+  final GlobalKey<ScaffoldState>? _scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController? _codeConsultationController = TextEditingController();
+  final TextEditingController? _montantController = TextEditingController();
+  List<File>? images=[];
+  List<String>? ImgUrl=[];
+  bool? imageSpinner, isUploadingImg=false;
+  bool? ordonancesUPloaded=false;
+  bool? ordonancesLoader = false;
+  ServiceProviderModel?  prestataireInfos;
+  bool? isAllOk=false;
+  bool? buttonLoading = false;
+  String? devisId;
+  String? categoriesType=consultation;
+  String? appontementId, userId, adherentId, beneficiaryId;
+  int? numberOfImagesuploaded=0;
+   num? danAidCov = 0;
+  bool? doc1Spinner = false;
+  bool? doc1Uploaded = false;
+  bool? doc2Spinner = false;
+  bool? doc2Uploaded = false;
+  bool? doc3Spinner = false;
+  bool? doc3Uploaded = false;
 
-  bool confirmEnable = false;
-  bool confirmSpinner = false;
+  bool? confirmEnable = false;
+  bool? confirmSpinner = false;
 
-  int docs1Uploaded = 0;
-  int docs2Uploaded = 0;
-  int docs3Uploaded = 0;
+  int? docs1Uploaded = 0;
+  int? docs2Uploaded = 0;
+  int? docs3Uploaded = 0;
 
-  List docs1List = [];
-  List docs2List = [];
-  List docs3List = [];
+  List? docs1List = [];
+  List? docs2List = [];
+  List? docs3List = [];
   @override
     void initState() {
       initTextfields();
@@ -98,7 +98,7 @@ class _CreateQuoteState extends State<CreateQuote> {
     MySize().init(context);
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
-    String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc1 = categoriesType == consultation ? S.of(context)!.carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
 
@@ -116,7 +116,7 @@ class _CreateQuoteState extends State<CreateQuote> {
       appBar: AppBar(
           backgroundColor:  kDeepYellow,
           leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: kDateTextColor,
               ),
@@ -126,9 +126,8 @@ class _CreateQuoteState extends State<CreateQuote> {
             child: Container(
               child: Column(
                 children: [
-                  Text(S.of(context).emettreUnDvis, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
-                  Text(
-                      '${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}', style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), )
+                  Text(S.of(context)!.emettreUnDvis, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
+                  Text(DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now()), style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), )
                 ],
               ),
             ),
@@ -159,7 +158,7 @@ class _CreateQuoteState extends State<CreateQuote> {
               height: MySize.getScaledSizeHeight(90),
               width: double.infinity,
               padding: EdgeInsets.only(bottom: hv*1, left: wv*2),
-              decoration: BoxDecoration( color: kDeepYellow),
+              decoration: const BoxDecoration( color: kDeepYellow),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -167,7 +166,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                 children: [
                     Container(
                       margin: EdgeInsets.only(left: wv*1),
-                      child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
+                      child: Text(S.of(context)!.codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
                     SizedBox(height: hv*0.3,),
                     Container(
                        width: MySize.getScaledSizeWidth(153),
@@ -175,20 +174,20 @@ class _CreateQuoteState extends State<CreateQuote> {
                        child: TextFormField(
                          controller: _codeConsultationController,
                          keyboardType: TextInputType.text,
-                         style: TextStyle(fontSize: 25, color: kBlueForce, fontWeight: FontWeight.w400),
+                         style: const TextStyle(fontSize: 25, color: kBlueForce, fontWeight: FontWeight.w400),
                          decoration: InputDecoration(
                              fillColor: bgInputGray.withOpacity(0.6), 
                              hintText: ' Ex: AX11DEF',
-                               enabledBorder: OutlineInputBorder(
+                               enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 1, color: Colors.transparent),
                               borderRadius: BorderRadius.all(Radius.circular(20))),
                              hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-                             focusedBorder: OutlineInputBorder(
+                             focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 1, color: Colors.transparent),
                               borderRadius: BorderRadius.all(Radius.circular(20))),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                          ),
                        ),
                      ),
@@ -210,7 +209,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                     SizedBox(height: hv*1,),
                                     Container(
                                       margin: EdgeInsets.only(left: wv*1),
-                                      child: Text(S.of(context).montantTotal, style: TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
+                                      child: Text(S.of(context)!.montantTotal, style: const TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
                                     SizedBox(height: hv*1,),
                                     Container(
                                       width: double.infinity,
@@ -220,18 +219,18 @@ class _CreateQuoteState extends State<CreateQuote> {
                                         inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
                                           ],
-                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                         textAlign: TextAlign.end,
-                                        style: TextStyle(fontSize: 20, color: kBlueForce, fontWeight: FontWeight.w400),
+                                        style: const TextStyle(fontSize: 20, color: kBlueForce, fontWeight: FontWeight.w400),
                                         decoration: InputDecoration(
                                             fillColor: bgInputGray.withOpacity(0.6),
                                             hintText: ' Ex: 12000',
-                                              enabledBorder: OutlineInputBorder(
+                                              enabledBorder: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   width: 1, color: Colors.transparent),
                                               borderRadius: BorderRadius.all(Radius.circular(20))),
                                             hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-                                            focusedBorder: OutlineInputBorder(
+                                            focusedBorder: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   width: 1, color: Colors.transparent),
                                               borderRadius: BorderRadius.all(Radius.circular(20))),
@@ -256,14 +255,14 @@ class _CreateQuoteState extends State<CreateQuote> {
                                 SizedBox(height: 5,),
                                  Container(
                                       margin: EdgeInsets.only(left: wv*1),
-                                      child: Text(S.of(context).typeDeDevis, style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
+                                      child: Text(S.of(context)!.typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
                                     SizedBox(height: hv*1,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[100],
-                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                    borderRadius: const BorderRadius.all(Radius.circular(20))
                                   ),
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
@@ -271,17 +270,17 @@ class _CreateQuoteState extends State<CreateQuote> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: categoriesType,
-                                        hint: Text(S.of(context).typeDeDevis, style: TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
+                                        hint: Text(S.of(context)!.typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
                                         items: arrayOfServicesType.map((region){
                                           return DropdownMenuItem(
-                                            child: SizedBox(child: Text(region["value"], style: TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
+                                            child: SizedBox(child: Text(region["value"]!, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
                                             value: region["key"],
                                           );
                                         }).toList(),
                                         onChanged: (value) async {
                                           //List<String> reg = getTownNamesFromRegion(cities, value);
                                           setState(() {
-                                           categoriesType=value;
+                                           categoriesType=value.toString();
                                           });
                                         }),
                                     ),
@@ -299,7 +298,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                       decoration: BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.circular(20),
-                        boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                        boxShadow: [BoxShadow(color: (Colors.grey[700])!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: const Offset(0,4))]
                       ),
                       child:Column(
                         children: [
@@ -308,9 +307,9 @@ class _CreateQuoteState extends State<CreateQuote> {
                             child: Column(
                               children: [
                                 SizedBox(height: hv*0.5),
-                                Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                                Text(S.of(context)!.scannerDesJustificatifs, style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                                 SizedBox(height: hv*0.2),
-                                Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                                Text(S.of(context)!.unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: const TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                                 Center(
                                   child: InkWell(
                                     onTap: (){getDocument(context);},
@@ -322,33 +321,33 @@ class _CreateQuoteState extends State<CreateQuote> {
                                 ),
                                 FileUploadCard(
                                   title: doc1+" ($docs1Uploaded)",
-                                  state: doc1Uploaded,
+                                  state: doc1Uploaded!,
                                   isMultiple: true,
-                                  loading: doc1Spinner,
+                                  loading: doc1Spinner!,
                                   action: () async {await getDocFromGallery(doc1);}
                                 ),
                                 SizedBox(height: 5,),
                                 FileUploadCard(
                                   title: doc2+" ($docs2Uploaded)",
-                                  state: doc2Uploaded,
+                                  state: doc2Uploaded!,
                                   isMultiple: true,
-                                  loading: doc2Spinner,
+                                  loading: doc2Spinner!,
                                   action: () async {await getDocFromGallery(doc2);}
                                 ),
                                 SizedBox(height: 5,),
                                 FileUploadCard(
                                   title: doc3+" ($docs3Uploaded)",
-                                  state: doc3Uploaded,
+                                  state: doc3Uploaded!,
                                   isMultiple: true,
-                                  loading: doc3Spinner,
+                                  loading: doc3Spinner!,
                                   action: () async {await getDocFromGallery(doc3);}
                                 ),
 
                                 SizedBox(height: hv*1),
                               CustomTextButton(
-                                  text: S.of(context).crer,
+                                  text: S.of(context)!.crer,
                                   enable: true,
-                                  isLoading: confirmSpinner,
+                                  isLoading: confirmSpinner!,
                                   noPadding: true,
                                   action: () async {
                                   
@@ -376,9 +375,9 @@ class _CreateQuoteState extends State<CreateQuote> {
                                     //                 },
                                     //             ];
                                     
-                                        await checkIfDocExists( _codeConsultationController.text.toString()).then((value){
+                                        await checkIfDocExists( _codeConsultationController!.text.toString()).then((value){
                                           setState((){confirmSpinner = true;});
-                                      if(value!=null && _montantController.text.toString().isNotEmpty  &&  _codeConsultationController.text.toString().isNotEmpty){
+                                      if(value!=null && _montantController!.text.toString().isNotEmpty  &&  _codeConsultationController!.text.toString().isNotEmpty){
                                       if(categoriesType == pharmacy || categoriesType == labo){
                                        FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
                                           "usecaseId": value["id"],
@@ -390,36 +389,36 @@ class _CreateQuoteState extends State<CreateQuote> {
                                           "PaiementCode":null,
                                           "drugsList" : null,
                                           "appointementId": value["idAppointement"],
-                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType),
+                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
                                           "titleDuDEvis":devisId,
-                                          "consultationCode": _codeConsultationController.text.toString(),
-                                          "amountToPay":num.parse(_montantController.text.toString()),
-                                          "establishment": prestataireInfos.name,
-                                          "prestataireId":prestataireInfos.id,
+                                          "consultationCode": _codeConsultationController!.text.toString(),
+                                          "amountToPay":num.parse(_montantController!.text.toString()),
+                                          "establishment": prestataireInfos!.name,
+                                          "prestataireId":prestataireInfos!.id,
                                           "adminFeedback": null,
                                           "justifiedFees": null,
                                           "type": categoriesType,
                                           "createdDate": DateTime.now(),
                                           "serviceDate": null,
-                                          "precriptionUrls": FieldValue.arrayUnion(docs1List),
-                                          "receiptUrls": FieldValue.arrayUnion(docs2List),
-                                          "drugsUrls": categoriesType == pharmacy ? FieldValue.arrayUnion(docs3List) : [],
-                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
+                                          "precriptionUrls": FieldValue.arrayUnion(docs1List!),
+                                          "receiptUrls": FieldValue.arrayUnion(docs2List!),
+                                          "drugsUrls": categoriesType == pharmacy ? FieldValue.arrayUnion(docs3List!) : [],
+                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
                                           'closed': true,
                                           "precriptionIsValid": null,
                                           "receiptIsValid": null,
                                           "drugsIsValid": null,
                                           "resultsIsValid": null,
-                                          "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
-                                          "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
-                                          "drugsUploadDate": docs3List.length > 0 && categoriesType == pharmacy ? DateTime.now() : null,
-                                          "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
-                                          "executed": docs2List.length > 0 ? true : false,
-                                          "estimated": docs1List.length > 0 ? true : false
+                                          "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
+                                          "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
+                                          "drugsUploadDate": docs3List!.isNotEmpty && categoriesType == pharmacy ? DateTime.now() : null,
+                                          "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
+                                          "executed": docs2List!.isNotEmpty ? true : false,
+                                          "estimated": docs1List!.isNotEmpty ? true : false
                                         }).then((doc) {
                                           
                                           setState((){confirmSpinner = false;});
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouvelle prestation ajoutée'),));
+                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Nouvelle prestation ajoutée'),));
                                           Navigator.pop(context);
                                         }).onError((error, stackTrace) {
                                           setState((){confirmSpinner = false;});
@@ -436,37 +435,37 @@ class _CreateQuoteState extends State<CreateQuote> {
                                           "paid": false,
                                           "isConfirmDrugList": false,
                                           "appointementId": value["idAppointement"],
-                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType),
+                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
                                           "drugsList" :null,
                                           "titleDuDEvis":devisId,
-                                          "consultationCode": _codeConsultationController.text.toString(),
-                                          "amountToPay":num.parse(_montantController.text.toString()),
-                                          "establishment": prestataireInfos.name,
+                                          "consultationCode": _codeConsultationController!.text.toString(),
+                                          "amountToPay":num.parse(_montantController!.text.toString()),
+                                          "establishment": prestataireInfos!.name,
                                           "adminFeedback": null,
                                           "justifiedFees": 0,
                                           "type": categoriesType,
                                           "createdDate": DateTime.now(),
                                           "serviceDate": null,
-                                          "precriptionUrls": FieldValue.arrayUnion(docs1List),
-                                          "receiptUrls": FieldValue.arrayUnion(docs2List),
-                                          "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List) : [],
-                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List) : [],
+                                          "precriptionUrls": FieldValue.arrayUnion(docs1List!),
+                                          "receiptUrls": FieldValue.arrayUnion(docs2List!),
+                                          "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List!) : [],
+                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
                                           'closed': true,
                                           "precriptionIsValid": null,
                                           "receiptIsValid": null,
                                           "drugsIsValid": null,
                                           "resultsIsValid": null,
-                                          "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : null,
-                                          "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : null,
-                                          "drugsUploadDate": docs3List.length > 0 && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
-                                          "resultsUploadDate": docs3List.length > 0 && categoriesType == labo ? DateTime.now() : null,
-                                          "executed": docs2List.length > 0 ? true : false,
-                                          "estimated": docs1List.length > 0 ? true : false,
+                                          "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
+                                          "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
+                                          "drugsUploadDate": docs3List!.isNotEmpty && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
+                                          "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
+                                          "executed": docs2List!.isNotEmpty ? true : false,
+                                          "estimated": docs1List!.isNotEmpty ? true : false,
                                           "ongoing": true,
-                                          "requested": docs1List.length > 0 ? true : false,
+                                          "requested": docs1List!.length > 0 ? true : false,
                                         }).then((doc) {
                                           setState((){confirmSpinner = false;});
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).nouvellePrestationAjoute),));
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.nouvellePrestationAjoute),));
                                           Navigator.pop(context);
                                         }).onError((error, stackTrace) {
                                           setState((){confirmSpinner = false;});
@@ -474,14 +473,14 @@ class _CreateQuoteState extends State<CreateQuote> {
                                       } 
                                     
                                     }else if(categoriesType==null){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).choisissezLeTypeDeDevis)));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.choisissezLeTypeDeDevis)));
                                        setState((){confirmSpinner = false;});
                                     }else if(value==null){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.codeDeConsultationInvalide),));
                                        setState((){confirmSpinner = false;});
                                     }else{
                                        setState((){confirmSpinner = false;});
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez remplir le formulaire "),));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text("veuillez remplir le formulaire "),));
                                     }
                                   });
                                   
@@ -522,7 +521,7 @@ class _CreateQuoteState extends State<CreateQuote> {
            result= null;
         }
       }).onError((error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduite),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.uneErreurSestProduite),));
       });
     
     return result;
@@ -540,7 +539,7 @@ File changeFileNameOnlySync(File file, String newFileName) {
     setState(() {
       if (pickedFile != null) {
         imageSpinner = true;
-        images.add(File(pickedFile.path));
+        images!.add(File(pickedFile.path));
         //imageLoading = true;
       } else {
         print('No image selected.');
@@ -554,7 +553,7 @@ File changeFileNameOnlySync(File file, String newFileName) {
     setState(() {
       if (pickedFile != null) {
         imageSpinner = true;
-         images.add(File(pickedFile.path));
+         images!.add(File(pickedFile.path));
         //imageLoading = true;
       } else {
         print('No image selected.');
@@ -571,9 +570,9 @@ File changeFileNameOnlySync(File file, String newFileName) {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -586,15 +585,15 @@ File changeFileNameOnlySync(File file, String newFileName) {
 
 Future uploadDocumentToFirebase(File file, String name) async {
    
-    String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc1 =categoriesType == consultation ? S.of(context)!.carnet : "Devis";
     String doc2 = "Recu";
     String doc3 =categoriesType == consultation ? "Autre" :categoriesType == labo ? "Resultat" : "Medicamment";
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     Reference storageReference = FirebaseStorage.instance.ref()
-      .child('devis/PRESTATAIRES/${prestataireInfos.id}/$userId/Devis-${DateTime.now().millisecondsSinceEpoch.toString()}');//.child('photos/profils_adherents/$fileName');
+      .child('devis/PRESTATAIRES/${prestataireInfos?.id}/$userId/Devis-${DateTime.now().millisecondsSinceEpoch.toString()}');//.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
       customMetadata: {'picked-file-path': file.path}
@@ -610,44 +609,48 @@ Future uploadDocumentToFirebase(File file, String name) async {
     //storageUploadTask = storageReference.putFile(imageFileAvatar);
 
     storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context).ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context)!.ajoute)));
       String url = await storageReference.getDownloadURL();
       if (name == doc1){
         setState(() {
-          docs1Uploaded = docs1Uploaded + 1;
-          docs1List.add(url);
+          docs1Uploaded = docs1Uploaded! + 1;
+          docs1List!.add(url);
           doc1Uploaded = true;
           doc1Spinner = false;
         });
       } else if(name == doc2){
         setState(() {
-          docs2Uploaded = docs2Uploaded + 1;
-          docs2List.add(url);
+          docs2Uploaded = docs2Uploaded! + 1;
+          docs2List!.add(url);
           doc2Uploaded = true;
           doc2Spinner = false;
         });
 
       } else if(name == doc3) {
         setState(() {
-          docs3Uploaded = docs3Uploaded + 1;
-          docs3List.add(url);
+          docs3Uploaded = docs3Uploaded! + 1;
+          docs3List!.add(url);
           doc3Uploaded = true;
           doc3Spinner = false;
         });
 
       }
       
-      print("download url: $url");
+      if (kDebugMode) {
+        print("download url: $url");
+      }
     }).catchError((e){
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
   });
 }
   Future getDocFromGallery(String name) async {
 
-    String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc1 = categoriesType == consultation ? S.of(context)!.carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
 
@@ -661,9 +664,9 @@ Future uploadDocumentToFirebase(File file, String name) async {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -679,7 +682,7 @@ Future uploadDocumentToFirebase(File file, String name) async {
   }
   getDocument(BuildContext context){
 
-    String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
+    String doc1 =categoriesType == consultation ? S.of(context)!.carnet : "Devis";
     String doc2 = "Recu";
     String doc3 =categoriesType == consultation ? "Autre" : categoriesType== labo ? "Resultat" : "Medicamment";
 
@@ -688,26 +691,27 @@ Future uploadDocumentToFirebase(File file, String name) async {
       builder: (BuildContext bc){
         return SafeArea(
           child: Container(
-            child: new Wrap(
+            child:  Wrap(
               children: <Widget>[
-                new ListTile(
-                    leading: new Icon(LineIcons.certificate),
-                    title: new Text(doc1+" ($docs1Uploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                    onTap: () {
+                  ListTile(
+                    leading:  const Icon(LineIcons.certificate),
+                    title:  Text(doc1+" ($docs1Uploaded)", style: const TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    onTap: (){
                       getDocFromPhone(doc1);
                       Navigator.of(context).pop();
+                     
                     }),
-                new ListTile(
-                  leading: new Icon(LineIcons.certificate),
-                  title: new Text(doc2+" ($docs2Uploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                 ListTile(
+                  leading: const Icon(LineIcons.certificate),
+                  title:  Text(doc2+" ($docs2Uploaded)", style: const TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone(doc2);
                     Navigator.of(context).pop();
                   },
                 ),
-                new ListTile(
-                  leading: new Icon(LineIcons.certificate),
-                  title: new Text(doc3+" ($docs3Uploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                ListTile(
+                  leading: const Icon(LineIcons.certificate),
+                  title:  Text(doc3+" ($docs3Uploaded)", style: const TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone(doc3);
                     Navigator.of(context).pop();
