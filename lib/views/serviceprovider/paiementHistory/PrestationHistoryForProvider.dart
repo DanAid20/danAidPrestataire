@@ -77,9 +77,9 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
     
     // on get la listes 
     if (kDebugMode) {
-      print(prestataireProvider.getServiceProvider.id);
+      print(prestataireProvider.getServiceProvider!.id);
     }
-    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider.id).orderBy('createdAt', descending: true).get();
+    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider!.id).orderBy('createdAt', descending: true).get();
         facturation.then((querySnapshot){
         if (kDebugMode) {
           print( querySnapshot.docs.length);

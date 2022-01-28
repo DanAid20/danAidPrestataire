@@ -21,6 +21,7 @@ import 'package:danaid/helpers/utils.dart';
 import 'package:danaid/views/doctor_views/appointement_approuve.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +30,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RendezVousDoctorView extends StatefulWidget {
-  RendezVousDoctorView({Key key}) : super(key: key);
+  RendezVousDoctorView({Key? key}) : super(key: key);
 
   @override
   _RendezVousDoctorViewState createState() => _RendezVousDoctorViewState();
@@ -46,13 +47,13 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   var now = new DateTime.now();
   final df = new DateFormat('dd-MMM-yyyy');
   var isSelected = 'Days';
-  AdherentModelProvider adherentModelProvider;
-  ScrollController scrollController;
+  AdherentModelProvider? adherentModelProvider;
+  ScrollController? scrollController;
   int userSelected = -1;
-  BeneficiaryModel adherentUserSelected;
+  BeneficiaryModel? adherentUserSelected;
   bool isloading = false;
   bool isRequestLaunch = false;
-  UseCaseModelProvider userCaprovider;
+  UseCaseModelProvider? userCaprovider;
   @override
   void initState() {
     super.initState();
@@ -82,10 +83,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'beneficiaryName': adherent['username'],
       'otherInfo': '',
       'idAppointement': idAppointemnt,
-      'establishment': doctorProvider.getDoctor.officeName,
+      'establishment': doctorProvider.getDoctor!.officeName,
       'consultationCode': code,
       'type': 'RDV',
-      'amountToPay': doctorProvider.getDoctor.rate['public'],
+      'amountToPay': doctorProvider.getDoctor!.rate!['public'],
       'status': 0,
       'createdDate': DateTime.now(),
       'enable': false,
@@ -93,9 +94,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       setState(() {
         isloading = false;
       });
-      userCaprovider.getUseCase.consultationCode = code;
-      userCaprovider.getUseCase.dateCreated = Timestamp.fromDate(date);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      userCaprovider!.getUseCase!.consultationCode = code;
+      userCaprovider!.getUseCase!.dateCreated = Timestamp.fromDate(date);
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               "Le Code ce consultation creer avec succes comme médecin de famille..")));
     }).catchError((e) {
@@ -121,8 +122,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       'id': Utils.createCryptoRandomString(8),
       'idAdherent': adherent['adherentId'],
       'idBeneficiairy': adherent['beneficiaryId'],
-      'idMedecin': doctorProvider.getDoctor.id,
-      'amountToPay': doctorProvider.getDoctor.rate['public'],
+      'idMedecin': doctorProvider.getDoctor!.id,
+      'amountToPay': doctorProvider.getDoctor!.rate!['public'],
       'isSolve': false,
       'canPay': 0,
       'idAppointement': idAppointemnt,
@@ -133,7 +134,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         isloading = false;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text("La facture a bien ete generer avec succes ")));
     }).catchError((e) {
       ScaffoldMessenger.of(context)
@@ -147,10 +148,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   //******* cette function get la date d'aujourd'hui en parametre et get la listes rendez-vous pour ce jour */
   triggerGetPatient() {
     var dates = DateTime.now();
-    var start = new DateTime(dates.year, dates.month, dates.day, 00, 00);
-    var end = new DateTime(dates.year, dates.month, dates.day, 23, 59);
-    print(start);
-    print(end);
+    var start =  DateTime(dates.year, dates.month, dates.day, 00, 00);
+    var end =  DateTime(dates.year, dates.month, dates.day, 23, 59);
+    if (kDebugMode) {
+      print(start);
+      print(end);
+    }
     setState(() {
       _selectedDay = dates;
       startDays = start;
@@ -173,9 +176,11 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   triggerGetPatientForWeek() {
     var dates = DateTime.now();
 
-    var start = new DateTime(dates.year, dates.month, dates.day.toInt());
-    var end = new DateTime(dates.year, dates.month, dates.day.toInt() + 6);
-    print(start);
+    var start =  DateTime(dates.year, dates.month, dates.day.toInt());
+    var end =  DateTime(dates.year, dates.month, dates.day.toInt() + 6);
+    if (kDebugMode) {
+      print(start);
+    }
     print(end);
     setState(() {
       _selectedDay = dates;
@@ -194,34 +199,36 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
         .orderBy("start-time")
         .snapshots();
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
           }
-          print(snapshot.data.docs.length);
-          return snapshot.data.docs.length >= 1
+          if (kDebugMode) {
+            print(snapshot.data!.docs.length);
+          }
+          return snapshot.data!.docs.length >= 1
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
                   //shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     var component;
-                    if(doc.data()["adherentId"] != doc.data()["beneficiaryId"]){
+                    if(doc["adherentId"]! != doc["beneficiaryId"]!){
                        CollectionReference users =
-                        FirebaseFirestore.instance.collection("ADHERENTS/${doc.data()["adherentId"]}/BENEFICIAIRES");
+                        FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
                       component= FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc.data()["beneficiaryId"]).get(),
+                      future: users.doc(doc["beneficiaryId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.hasData == null) {
-                          return Center(
+                        if (snapshot.hasData) {
+                          return const Center(
                             child: CircularProgressIndicator(
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -230,18 +237,18 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         }
                         
                         if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
+                          return Text(S.of(context)!.somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data.data();
+                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                           return HomePageComponents().waitingRoomListOfUser(
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
-                              syntomes: '${doc.data()["title"]}', 
-                              isanounced: doc.data()["announced"]==true? true: false);
+                              syntomes: '${doc["title"]}', 
+                              isanounced: doc["announced"]==true? true: false);
                               
                         }
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -249,15 +256,15 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         );
                       },
                     );
-                    }else if(doc.data()["adherentId"] == doc.data()["beneficiaryId"]){
+                    }else if(doc["adherentId"] == doc["beneficiaryId"]){
                          CollectionReference users =
                         FirebaseFirestore.instance.collection('ADHERENTS');
                     component= FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc.data()["adherentId"]).get(),
+                      future: users.doc(doc["adherentId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.hasData == null) {
-                          return Center(
+                        if (snapshot.hasData) {
+                          return const Center(
                             child: CircularProgressIndicator(
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -266,18 +273,18 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         }
                         
                         if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
+                          return Text(S.of(context)!.somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data.data();
+                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic> ;
                           return HomePageComponents().waitingRoomListOfUser(
                               userImage: "${data["imageUrl"]}",
                               nom: "${data["prenom"]} ${data["nomFamille"]} ",
-                              syntomes: '${doc.data()["title"]}', 
-                              isanounced: doc.data()["announced"]==true? true: false);
+                              syntomes: '${doc["title"]}', 
+                              isanounced: doc["announced"]==true? true: false);
                               
                         }
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(
                             valueColor:
                                 AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -291,7 +298,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               : Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
-                    child: Text(S.of(context).aucunPatientEnSalleDattente),
+                    child: Text(S.of(context)!.aucunPatientEnSalleDattente),
                   ),
                 );
         });
@@ -299,27 +306,32 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
   showAlertDialog(adherentId, doctorId) {
     // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Sortir"),
-      onPressed: () {
+    Future<bool> _willpop() async{
         Navigator.pop(context);
-      },
+        return true;
+    }
+    Widget cancelButton =  TextButton(
+      child: const Text("Sortir"),
+      onPressed: _willpop,
     );
-    Widget continueButton = FlatButton(
-        child: Text(S.of(context).ouiJapprouve,
+    Widget continueButton = TextButton(
+        child: Text(S.of(context)!.ouiJapprouve,
             style: TextStyle(
               color: kBlueForce,
               fontWeight: FontWeight.w600,
               fontSize: fontSize(size: 19),
             )),
         onPressed: () async {
-          var data = await FirebaseFirestore.instance
+          var data = FirebaseFirestore.instance
               .collection("APPOINTMENTS")
               .where("doctorId", isEqualTo: "+237694160832")
               .where("adherentId", isEqualTo: adherentId);
           data.get().then((docSnapshot) => {
                 if (docSnapshot.docs.isEmpty)
-                  {print('fdfjsfjdsf')}
+                  {
+                    // ignore: avoid_print
+                    print('fdfjsfjdsf')
+                  }
                 else
                   {
                     FirebaseFirestore.instance
@@ -335,7 +347,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     }).then((value) {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(S.of(context).rendevousApprouver)));
+                          SnackBar(content: Text(S.of(context)!.rendevousApprouver)));
                     })
                   },
               });
@@ -343,14 +355,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text(S.of(context).infos,
+      title: Text(S.of(context)!.infos,
           style: TextStyle(
             color: kBlueForce,
             fontWeight: FontWeight.w700,
             fontSize: fontSize(size: 21),
           )),
       content: Text(
-          S.of(context).vousTesSurLePointDapprouverCeRendezvousTesvousSr,
+          S.of(context)!.vousTesSurLePointDapprouverCeRendezvousTesvousSr,
           style: TextStyle(
             color: kBlueForce,
             fontWeight: FontWeight.w400,
@@ -383,40 +395,40 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
      UserProvider userProvider = Provider.of<UserProvider>(context);
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     AppointmentModelProvider rendezVous = Provider.of<AppointmentModelProvider>(context);
-    AppointmentModel appointmentModel;
+    AppointmentModel? appointmentModel;
      adherentModelProvider = Provider.of<AdherentModelProvider>(context);
-    AdherentModel adherent = adherentModelProvider.getAdherent;
+    AdherentModel adherent = adherentModelProvider!.getAdherent!;
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
           }
-          print(snapshot.data.docs.length);
-          return snapshot.data.docs.length >= 1
+          print(snapshot.data!.docs.length);
+          return snapshot.data!.docs.length >= 1
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     var widget;
-                    // si doc.data()["adherentId"] === doc.data()["beneficiaryId"]
-                    if(doc.data()["adherentId"] == doc.data()["beneficiaryId"]){
+                    // si doc["adherentId"] === doc["beneficiaryId"]
+                    if(doc["adherentId"] == doc["beneficiaryId"]){
                     CollectionReference users = FirebaseFirestore.instance.collection('ADHERENTS');
                         widget = FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc.data()["adherentId"]).get(),
+                      future: users.doc(doc["adherentId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.hasData == null) {
-                          return Center(
+                        if (snapshot.hasData) {
+                          return const Center(
                             child: CircularProgressIndicator(
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -424,26 +436,26 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
+                          return Text(S.of(context)!.somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data.data();
+                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                           Timestamp t = data["dateNaissance"];
                           DateTime d = t.toDate();
                           DateTime dateTimeNow = DateTime.now();
                           final differenceInDays =
                               dateTimeNow.difference(d).inDays ~/ 365;
-                          Timestamp day = doc.data()["start-time"];
+                          Timestamp day = doc["start-time"];
                           DateTime dateTime = day.toDate();
                           String formattedTime =DateFormat.Hm().format(dateTime);
-                          return doc.data()["status"]==2? SizedBox.shrink() : GestureDetector(
+                          return doc["status"]==2? SizedBox.shrink() : GestureDetector(
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
-                                rendezVous.setAppointmentModel(appointmentModel),
-                                rendezVous.getAppointment.adherentId=snapshot.data.id,
-                                rendezVous.getAppointment.avatarUrl=data["imageUrl"],
-                                rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
-                                rendezVous.getAppointment.birthDate=data["dateNaissance"],
+                                rendezVous.setAppointmentModel(appointmentModel!),
+                                rendezVous.getAppointment!.adherentId=snapshot.data!.id,
+                                rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
+                                rendezVous.getAppointment!.username='${data["prenom"]} ${data["nomFamille"]} ',
+                                rendezVous.getAppointment!.birthDate=data["dateNaissance"],
                                 
                                 Navigator.push(
                                       context,
@@ -454,33 +466,33 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 },
                                 
                                 child: HomePageComponents().timeline(
-                                isanounced: doc.data()["announced"],
-                                adhrentId: doc.data()["adherentId"],
-                                doctorId: isPrestataire? prestataire.getServiceProvider.id: doctor.getDoctor.id,
-                                consultationtype: doc.data()["consultation-type"],
+                                isanounced: doc["announced"],
+                                adhrentId: doc["adherentId"],
+                                doctorId: isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
+                                consultationtype: doc["consultation-type"],
                                 isPrestataire: isPrestataire,
                                 age: "$differenceInDays ans",
-                                consultationDetails: '${doc.data()["title"]}',
+                                consultationDetails: '${doc["title"]}',
                                 consultationType:
-                                    "${doc.data()["appointment-type"]}",
+                                    "${doc["appointment-type"]}",
                                 time: "$formattedTime",
                                 userImage: '${data["imageUrl"]}',
                                 userName:
                                     '${data["prenom"]} ${data["nomFamille"]} '),
                           );
                         }
-                        return Text(" ");
+                        return const  Text(" ");
                       },
                     );
-                    }else if (doc.data()["adherentId"] != doc.data()["beneficiaryId"]){
+                    }else if (doc["adherentId"] != doc["beneficiaryId"]){
                           CollectionReference users =
-                        FirebaseFirestore.instance.collection("ADHERENTS/${doc.data()["adherentId"]}/BENEFICIAIRES");
+                        FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
                        widget= FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc.data()["beneficiaryId"]).get(),
+                      future: users.doc(doc["beneficiaryId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (snapshot.hasData == null) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -488,26 +500,26 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
+                          return Text(S.of(context)!.somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data.data();
+                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                           Timestamp t = data["dateNaissance"];
                           DateTime d = t.toDate();
                           DateTime dateTimeNow = DateTime.now();
                           final differenceInDays =
                               dateTimeNow.difference(d).inDays ~/ 365;
-                          Timestamp day = doc.data()["start-time"];
+                          Timestamp day = doc["start-time"];
                           DateTime dateTime = day.toDate();
                           String formattedTime =DateFormat.Hm().format(dateTime);
-                          return doc.data()["status"]==2? SizedBox.shrink() : GestureDetector(
+                          return doc["status"]==2? const SizedBox.shrink() : GestureDetector(
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
-                                rendezVous.setAppointmentModel(appointmentModel),
-                                rendezVous.getAppointment.adherentId=snapshot.data.id,
-                                rendezVous.getAppointment.avatarUrl=data["imageUrl"],
-                                rendezVous.getAppointment.username= '${data["prenom"]} ${data["nomDFamille"]} ',
-                                rendezVous.getAppointment.birthDate=data["dateNaissance"],
+                                rendezVous.setAppointmentModel(appointmentModel!),
+                                rendezVous.getAppointment!.adherentId=snapshot.data!.id,
+                                rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
+                                rendezVous.getAppointment!.username= '${data["prenom"]} ${data["nomDFamille"]} ',
+                                rendezVous.getAppointment!.birthDate=data["dateNaissance"],
                                 Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -516,15 +528,15 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                 },
                                 
                                 child: HomePageComponents().timeline(
-                                isanounced: doc.data()["announced"],
-                                adhrentId: doc.data()["adherentId"],
-                                doctorId:  isPrestataire? prestataire.getServiceProvider.id: doctor.getDoctor.id,
-                                consultationtype: doc.data()["consultation-type"],
+                                isanounced: doc["announced"],
+                                adhrentId: doc["adherentId"],
+                                doctorId:  isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
+                                consultationtype: doc["consultation-type"],
                                 isPrestataire: false,
                                 age: "$differenceInDays ans",
-                                consultationDetails: '${doc.data()["title"]}',
+                                consultationDetails: '${doc["title"]}',
                                 consultationType:
-                                    "${doc.data()["appointment-type"]}",
+                                    "${doc["appointment-type"]}",
                                 time: "$formattedTime",
                                 userImage: '${data["imageUrl"]}',
                                 userName:
@@ -541,22 +553,22 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     return widget;
                   })
               : Center(
-                  child: Text(S.of(context).aucunAdherentDisponiblePourLeMoment),
+                  child: Text(S.of(context)!.aucunAdherentDisponiblePourLeMoment),
                 );
         });
   }
 
-  Widget calendar({bool isPrestataire}) {
+  Widget calendar({bool? isPrestataire}) {
     return Column(children: [
       Container(
         width: wv * 100,
         height: 145,
         decoration: BoxDecoration(
-          color: isPrestataire ? kGoldlight : kThirdIntroColor,
-          boxShadow: [
-            BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+          color: isPrestataire! ? kGoldlight : kThirdIntroColor,
+          boxShadow:const [
+             BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
           ],
-          borderRadius: BorderRadius.only(
+          borderRadius:const BorderRadius.only(
             bottomLeft: Radius.circular(10),
             bottomRight: Radius.circular(10),
           ),
@@ -587,7 +599,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               calendarStyle: CalendarStyle(
                   todayDecoration: BoxDecoration(
                     color: isPrestataire ? kFirstIntroColor : kBlueForce,
-                    borderRadius: BorderRadius.all(
+                    borderRadius:const BorderRadius.all(
                       Radius.circular(10),
                     ),
                   ),
@@ -656,7 +668,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      S.of(context).aujourdhui,
+                      S.of(context)!.aujourdhui,
                       style: TextStyle(
                           color: isPrestataire ? kBlueForce : whiteColor,
                           fontWeight: isSelected == 'Days'
@@ -680,7 +692,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      S.of(context).semaine,
+                      S.of(context)!.semaine,
                       style: TextStyle(
                           color: isPrestataire ? kBlueForce : whiteColor,
                           fontWeight: isSelected == 'week'
@@ -738,14 +750,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   padding: EdgeInsets.only(left: 20.h, right: 20.h),
                   alignment: Alignment.topCenter,
                   child: userProvider.getProfileType == doctor &&
-                          doctorProvider.getDoctor.id != null &&
+                          doctorProvider.getDoctor!.id != null &&
                           startDays != null &&
                           endDay != null
                       ? getListOfUser(startDays, endDay, _selectedDay,
-                          doctorProvider.getDoctor.id)
+                          doctorProvider.getDoctor!.id)
                      
                       :  getListOfUser(startDays, endDay, _selectedDay,
-                          prestataire.getServiceProvider.id)
+                          prestataire.getServiceProvider!.id)
                         )
                         ),
           Container(
@@ -765,12 +777,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(S.of(context).salleDattente,
+                      Text(S.of(context)!.salleDattente,
                           style: TextStyle(
                               color: kBlueDeep,
                               fontWeight: FontWeight.w500,
                               fontSize: 17.sp)),
-                      Text(S.of(context).voirPlus,
+                      Text(S.of(context)!.voirPlus,
                           style: TextStyle(
                               color: kBrownCanyon,
                               fontWeight: FontWeight.w600,
@@ -782,13 +794,13 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   child: Container(
                       height: 90.h,
                       child: userProvider.getProfileType == doctor &&
-                              doctorProvider.getDoctor.id != null &&
+                              doctorProvider.getDoctor!.id != null &&
                               startDays != null &&
                               endDay != null
                           ? waitingRoomFuture(startDays, endDay, _selectedDay,
-                              doctorProvider.getDoctor.id)
+                              doctorProvider.getDoctor!.id)
                           :  waitingRoomFuture(startDays, endDay, _selectedDay,
-                               prestataire.getServiceProvider.id)
+                               prestataire.getServiceProvider!.id)
                             ),
                 ),
               ],

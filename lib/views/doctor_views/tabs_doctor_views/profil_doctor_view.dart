@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfilDoctorView extends StatefulWidget {
-  ProfilDoctorView({Key key}) : super(key: key);
+  ProfilDoctorView({Key? key}) : super(key: key);
 
   @override
   _ProfilDoctorViewState createState() => _ProfilDoctorViewState();

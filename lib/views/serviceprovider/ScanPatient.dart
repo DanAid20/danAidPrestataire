@@ -173,7 +173,7 @@ class _ScanPatientState extends State<ScanPatient> {
                                     top: inch * 1),
                                 child: GestureDetector(
                                   onTap: () {
-                                    _scan(context, prestatiaireObject.id!);
+                                    _scan(context, prestatiaireObject!.id!);
                                   },
                                   child: Align(
                                     alignment: Alignment.center,

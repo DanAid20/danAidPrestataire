@@ -156,12 +156,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
     ServiceProviderModelProvider servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
    
       setState(() {
-        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider.region!);
-        _region = servicetProvider.getServiceProvider.region;
+        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider!.region!);
+        _region = servicetProvider.getServiceProvider!.region;
         regionChosen = true;
       cityChosen = true;
       
-      _city = servicetProvider.getServiceProvider.town;
+      _city = servicetProvider.getServiceProvider!.town;
       });
    
     
@@ -170,72 +170,72 @@ class _EditPrestataireState extends State<EditPrestataire> {
   textFieldsControl (){
 
     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-    if((serviceProvider.getServiceProvider.about != null) & (serviceProvider.getServiceProvider.about != "")){
+    if((serviceProvider.getServiceProvider!.about != null) & (serviceProvider.getServiceProvider!.about != "")){
       setState(() {
-        _aboutController!.text = serviceProvider.getServiceProvider.about!;
+        _aboutController!.text = serviceProvider.getServiceProvider!.about!;
         aboutEnabled = false;
       });
     }
-    if((serviceProvider.getServiceProvider.name != null) & (serviceProvider.getServiceProvider.name != "")){
+    if((serviceProvider.getServiceProvider!.name != null) & (serviceProvider.getServiceProvider!.name != "")){
       setState(() {
-        _nameController!.text = serviceProvider.getServiceProvider.name!;
+        _nameController!.text = serviceProvider.getServiceProvider!.name!;
         nameEnabled = false; 
       });
     }
-    if((serviceProvider.getServiceProvider.avatarUrl != null) & (serviceProvider.getServiceProvider.avatarUrl != "")){
+    if((serviceProvider.getServiceProvider!.avatarUrl != null) & (serviceProvider.getServiceProvider!.avatarUrl != "")){
       setState(() {
-        avatarUrl= serviceProvider.getServiceProvider.avatarUrl;
+        avatarUrl= serviceProvider.getServiceProvider!.avatarUrl;
        
       });
     }
-    if((serviceProvider.getServiceProvider.contactName != null) & (serviceProvider.getServiceProvider.contactName  != "")){
+    if((serviceProvider.getServiceProvider!.contactName != null) & (serviceProvider.getServiceProvider!.contactName  != "")){
       setState(() {
-        _contactNameController!.text = serviceProvider.getServiceProvider.contactName!;
+        _contactNameController!.text = serviceProvider.getServiceProvider!.contactName!;
         contactEnabled = false;
       });
     }
-    if((serviceProvider.getServiceProvider.contactEmail  != null) & (serviceProvider.getServiceProvider.contactEmail  != "")){
+    if((serviceProvider.getServiceProvider!.contactEmail  != null) & (serviceProvider.getServiceProvider!.contactEmail  != "")){
       setState(() {
-        _contactEmailController!.text = serviceProvider.getServiceProvider.contactEmail! ;
+        _contactEmailController!.text = serviceProvider.getServiceProvider!.contactEmail! ;
         contactEmail = false;
       });
     }
-    if((serviceProvider.getServiceProvider.category  != null) & (serviceProvider.getServiceProvider.category  != "")){
+    if((serviceProvider.getServiceProvider!.category  != null) & (serviceProvider.getServiceProvider!.category  != "")){
       setState(() {
-       _category=serviceProvider.getServiceProvider.category;
+       _category=serviceProvider.getServiceProvider!.category;
       });
     }
-    if((serviceProvider.getServiceProvider.localisation  != null) & (serviceProvider.getServiceProvider.localisation != "")){
+    if((serviceProvider.getServiceProvider!.localisation  != null) & (serviceProvider.getServiceProvider!.localisation != "")){
       setState(() {
-        _localisationController!.text=serviceProvider.getServiceProvider.localisation!;
+        _localisationController!.text=serviceProvider.getServiceProvider!.localisation!;
         localisation=false;
       });
     }
-    if((serviceProvider.getServiceProvider.specialite  != null) & (serviceProvider.getServiceProvider.specialite != "")){
+    if((serviceProvider.getServiceProvider!.specialite  != null) & (serviceProvider.getServiceProvider!.specialite != "")){
       setState(() {
-       _specialityController!.text =serviceProvider.getServiceProvider.specialite!;
+       _specialityController!.text =serviceProvider.getServiceProvider!.specialite!;
       });
     }
-    if(( serviceProvider.getServiceProvider.serviceList != "") & ( serviceProvider.getServiceProvider.serviceList != null)){
+    if(( serviceProvider.getServiceProvider!.serviceList != "") & ( serviceProvider.getServiceProvider!.serviceList != null)){
      
       setState(() {
-          consultationChosen = serviceProvider.getServiceProvider.serviceList["Consultation"];
-          soinsAmbulances = serviceProvider.getServiceProvider.serviceList["SoinsAmbulances"];
-          pharmacie  = serviceProvider.getServiceProvider.serviceList["Pharmacie"];
-          labo = serviceProvider.getServiceProvider.serviceList["laboratoire"];
-          hospitalisation = serviceProvider.getServiceProvider.serviceList["Hospitalisation"];
+          consultationChosen = serviceProvider.getServiceProvider!.serviceList["Consultation"];
+          soinsAmbulances = serviceProvider.getServiceProvider!.serviceList["SoinsAmbulances"];
+          pharmacie  = serviceProvider.getServiceProvider!.serviceList["Pharmacie"];
+          labo = serviceProvider.getServiceProvider!.serviceList["laboratoire"];
+          hospitalisation = serviceProvider.getServiceProvider!.serviceList["Hospitalisation"];
       });
     }
     if (kDebugMode) {
       print("inside");
     }
-    if (serviceProvider.getServiceProvider.coordGps != null){
-      //print(serviceProvider.getServiceProvider.coordGps"inside+");
-      if ((serviceProvider.getServiceProvider.coordGps!["latitude"] != null) | (serviceProvider.getServiceProvider.coordGps!["longitude"] != null) | true){
+    if (serviceProvider.getServiceProvider!.coordGps != null){
+      //print(serviceProvider.getServiceProvider!.coordGps"inside+");
+      if ((serviceProvider.getServiceProvider!.coordGps!["latitude"] != null) | (serviceProvider.getServiceProvider!.coordGps!["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
-          "latitude": serviceProvider.getServiceProvider.coordGps!["latitude"],
-          "longitude": serviceProvider.getServiceProvider.coordGps!["longitude"]
+          "latitude": serviceProvider.getServiceProvider!.coordGps!["latitude"],
+          "longitude": serviceProvider.getServiceProvider!.coordGps!["longitude"]
         };
         if (kDebugMode) {
           print(gpsCoords.toString());
@@ -256,7 +256,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
   @override
   Widget build(BuildContext context) {
     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-    ServiceProviderModel prestataire= serviceProvider.getServiceProvider;
+    ServiceProviderModel prestataire= serviceProvider.getServiceProvider!;
     return SafeArea(
       top: false,
       child: Scaffold(
@@ -350,7 +350,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         label: S.of(context)!.nomDeLtablissement,
                         hintText: S.of(context)!.exHpialCentrale,
                         controller: _nameController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
@@ -358,7 +358,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         label: S.of(context)!.nomCompletDuContact,
                         hintText: S.of(context)!.entrezVotreNom,
                         controller: _contactNameController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
@@ -377,7 +377,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         enabled: aboutEnabled!,
                         multiLine: true,
                         controller: _aboutController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             aboutEnabled = true;
@@ -393,7 +393,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             hintText: S.of(context)!.pharmaciene,
                             enabled: specialityEnabled!,
                             controller: _specialityController!,
-                            validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                             editAction: (){
                               setState(() {
                                 specialityEnabled = true;
@@ -547,19 +547,19 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         label: S.of(context)!.preciserLemplacementDeLorganisation,
                         hintText: S.of(context)!.exfacePharmacieDuLac,
                         controller: _localisationController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null
                       ),
                       SizedBox(height: hv*4,),
-                      (gpsCoords != null) | (serviceProvider.getServiceProvider.coordGps != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
+                      (gpsCoords != null) | (serviceProvider.getServiceProvider!.coordGps != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("GPS:", style: const TextStyle(fontWeight: FontWeight.w900),),
                             RichText(text: TextSpan(
                               text: "Lat: ",
                               children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : serviceProvider.getServiceProvider.coordGps!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : serviceProvider.getServiceProvider!.coordGps!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
                                 TextSpan(text: "     Lng: "),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : serviceProvider.getServiceProvider.coordGps!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : serviceProvider.getServiceProvider!.coordGps!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
                               ]
                             , style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
                             )
@@ -581,7 +581,17 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: serviceProvider.getServiceProvider.coordGps == null ? _initialcameraposition : LatLng(serviceProvider.getServiceProvider!.coordGps!["latitude"] != null ? serviceProvider.getServiceProvider.coordGps["latitude"] : _initialcameraposition.latitude, serviceProvider.getServiceProvider.coordGps["longitude"] != null ? serviceProvider.getServiceProvider.coordGps["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: 
+                                serviceProvider.getServiceProvider!.coordGps == null ?
+                                   _initialcameraposition : 
+                                LatLng(
+                                  serviceProvider.getServiceProvider!.coordGps!["latitude"] != null ? 
+                                    serviceProvider.getServiceProvider!.coordGps["latitude"] :
+                                     _initialcameraposition.latitude, 
+                                
+                                serviceProvider.getServiceProvider!.coordGps["longitude"] != null ? 
+                                serviceProvider.getServiceProvider!.coordGps["longitude"] : 
+                                _initialcameraposition.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                
@@ -732,7 +742,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           'fullName': contactName,
                           "enable": true,
                           "regionDorigione": _region,
-                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getServiceProvider.id!),
+                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getServiceProvider!.id!),
                           "nameKeywords": Algorithms.getKeyWords(contactName)
                         }, SetOptions(merge: true))
                         .then((value) async {
@@ -761,16 +771,16 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                 "addresse": _localisationController!.text,
                               },
                               "serviceList": serviceList,
-                              "region": adherentProvider.getServiceProvider.region,
-                              "villeEtab": adherentProvider.getServiceProvider.town,
-                              "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+                              "region": adherentProvider.getServiceProvider!.region,
+                              "villeEtab": adherentProvider.getServiceProvider!.town,
+                              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
                               "userCountryName": userProvider.getCountryName,
-                              "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+                              "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
                               "nameKeywords": Algorithms.getKeyWords( _companyController!.text.toString().isEmpty? contactName: _companyController!.text.toString())
                             }, SetOptions(merge: true))
                             .then((value) async {
                               HiveDatabase.setRegisterState(true);
-                              HiveDatabase.setAuthPhone(userProvider.getUserId);
+                              HiveDatabase.setAuthPhone(userProvider.getUserId!);
                               HiveDatabase.setSurname( _companyController!.text.toString());
                               HiveDatabase.setImgUrl(avatarUrl!);
                               setState(() {
@@ -849,7 +859,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
       return null;
     }
     
-    String adherentId = PrestatireModelProvider.getServiceProvider.id!;
+    String adherentId = PrestatireModelProvider.getServiceProvider!.id!;
     Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_prestatires/$adherentId/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -876,12 +886,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
        if (name == "CNI"){
         PrestatireModelProvider.setCniUrl(url);
         FirebaseFirestore.instance.collection("PRESTATAIRE")
-        .doc(PrestatireModelProvider.getServiceProvider.id)
+        .doc(PrestatireModelProvider.getServiceProvider!.id)
         .set({
           "urlDocOficiel": url,
         }, SetOptions(merge: true)).then((value) {
           FirebaseFirestore.instance.collection("USERS")
-            .doc(PrestatireModelProvider.getServiceProvider.id)
+            .doc(PrestatireModelProvider.getServiceProvider!.id)
             .update({
               "urlCNI": url,
             });
@@ -895,12 +905,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
        else if (name == "CertificatEnregDor"){
         PrestatireModelProvider.setOrderRegistrationCertificateUrl(url);
         FirebaseFirestore.instance.collection("PRESTATAIRE")
-        .doc(PrestatireModelProvider.getServiceProvider.id)
+        .doc(PrestatireModelProvider.getServiceProvider!.id)
         .set({
           "urlDocOficiel": url,
         }, SetOptions(merge: true)).then((value) {
           FirebaseFirestore.instance.collection("USERS")
-            .doc(PrestatireModelProvider.getServiceProvider.id)
+            .doc(PrestatireModelProvider.getServiceProvider!.id)
             .update({
               "urlCNI": url,
             });
@@ -914,7 +924,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
       else {
          PrestatireModelProvider.setOtherDocUrl(url);
         FirebaseFirestore.instance.collection("PRESTATAIRE")
-        .doc(PrestatireModelProvider.getServiceProvider.id)
+        .doc(PrestatireModelProvider.getServiceProvider!.id)
         .set({
           "urlAutrePiecesJustificatif": url,
         }, SetOptions(merge: true)).then((value) {
@@ -1012,7 +1022,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
     setState(() {
       imageLoading = true;
     });
-    String fileName = userProvider.getUserId;
+    String fileName = userProvider.getUserId!;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_adherents/$fileName'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
@@ -1039,12 +1049,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
       HiveDatabase.setImgUrl(url);
       serviceProvider.setAvatarUrl(url);
       userProvider.setImgUrl(url);
-      FirebaseFirestore.instance.collection("USERS").doc(serviceProvider.getServiceProvider.id)
+      FirebaseFirestore.instance.collection("USERS").doc(serviceProvider.getServiceProvider!.id)
         .set({
           "imageUrl": url,
       }, SetOptions(merge: true));
       FirebaseFirestore.instance.collection("PRESTATAIRE")
-        .doc(serviceProvider.getServiceProvider.id)
+        .doc(serviceProvider.getServiceProvider!.id)
         .update({
           "imageUrl": url,
         }).then((value) {

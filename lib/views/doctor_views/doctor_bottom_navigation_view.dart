@@ -24,9 +24,9 @@ class DoctorBottomNavigationView extends StatefulWidget {
 
 class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView> {
 
-  double width = SizeConfig.screenWidth / 100;
-  double height = SizeConfig.screenHeight / 100;
-  double inch = sqrt(SizeConfig.screenWidth*SizeConfig.screenWidth + SizeConfig.screenHeight*SizeConfig.screenHeight) / 100;
+  double width = SizeConfig.screenWidth! / 100;
+  double height = SizeConfig.screenHeight! / 100;
+  double inch = sqrt(SizeConfig.screenWidth!*SizeConfig.screenWidth! + SizeConfig.screenHeight!*SizeConfig.screenHeight!) / 100;
 
   int index = 0;
   @override
@@ -140,7 +140,7 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
 
   bottomIcon({String? svgUrl, String? title, Function? onTap}){
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap!(),
       child: Container(
         color: Colors.transparent,
         child: Column(
