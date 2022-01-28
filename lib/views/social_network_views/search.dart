@@ -23,10 +23,10 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
 
-  QuerySnapshot searchSnapshot;
+  QuerySnapshot? searchSnapshot;
   TextEditingController _searchController = new TextEditingController();
-  Future<QuerySnapshot> futureSearchResults;
-  SharedPreferences preferences;
+  Future<QuerySnapshot>? futureSearchResults;
+  SharedPreferences? preferences;
 
 /*
   // ChatRoom Creation
@@ -51,17 +51,17 @@ class _SearchState extends State<Search> {
   searchResults() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
 
-    String userId;
+    String? userId;
     String userName;
     String avatarUrl;
-    return FutureBuilder(
+    return FutureBuilder<QuerySnapshot>(
       future: futureSearchResults,
       builder: (context, dataSnapshot) {
         if (!dataSnapshot.hasData) {
           return CircularProgressIndicator();
         }
         List<SearchResult> searchUserResult = [];
-        dataSnapshot.data.docs.forEach((document) {
+        dataSnapshot.data!.docs.forEach((document) {
           UserModel singleUser = UserModel.fromDocument(document);
           SearchResult userResult = SearchResult(user: singleUser);
 
@@ -79,23 +79,23 @@ class _SearchState extends State<Search> {
 
   searches() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    UserModel user = userProvider.getUserModel;
-    return StreamBuilder(
+    UserModel? user = userProvider.getUserModel;
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("USERS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot userSnapshot = snapshot.data.docs[index];
+            DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
             UserModel singleUser = UserModel.fromDocument(userSnapshot);
-            if (singleUser.userId == user.userId) {
+            if (singleUser.userId == user?.userId) {
               return Container();
             }
             return SearchResult(
-              user: user,
+              user: user!,
               target: singleUser,
               userId: user.userId,
               userAvatar: user.imgUrl,
@@ -261,18 +261,18 @@ class _SearchState extends State<Search> {
 
 class SearchResult extends StatelessWidget {
   final UserModel user;
-  final UserModel target;
-  final String userId;
-  final String userName;
-  final String userAvatar;
-  final String userEmail;
-  final Function onTap;
+  final UserModel? target;
+  final String? userId;
+  final String? userName;
+  final String? userAvatar;
+  final String? userEmail;
+  final Function? onTap;
 
-  const SearchResult({Key key, this.userName, this.userEmail, this.onTap, this.user, this.userId, this.userAvatar, this.target}) : super(key: key);
+  const SearchResult({Key? key, this.userName, this.userEmail, this.onTap, required this.user, this.userId, this.userAvatar, this.target}) : super(key: key);
 
   ConversationChatModel getConversation() {
     ConversationChatModel chatRoomModel = ConversationChatModel();
-    String conversationId = Algorithms.getConversationId(userId: user.authId, targetId: target.authId);
+    String conversationId = Algorithms.getConversationId(userId: user.authId, targetId: target!.authId!);
     FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((conversation) {
       ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation);
       chatRoomModel = chatRoom;
@@ -291,13 +291,13 @@ class SearchResult extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.grey,
-          backgroundImage: target.imgUrl != null
-              ? CachedNetworkImageProvider(target.imgUrl)
+          backgroundImage: target?.imgUrl != null
+              ? CachedNetworkImageProvider(target!.imgUrl!)
               : null,
-          child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
+          child: target?.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
-        title: Text(target.fullName),
-        subtitle: Text(target.phoneList[0]["number"].toString()),
+        title: Text(target!.fullName!),
+        subtitle: Text(target!.phoneList![0]["number"].toString()),
         //subtitle: Text("Joined: " + DateFormat("dd MMMM, yyyy - hh:mm:aa").format(DateTime.fromMillisecondsSinceEpoch((int.parse(user.createdAt))))),
         trailing: Icon(
           Icons.arrow_forward_ios,
@@ -311,7 +311,7 @@ class SearchResult extends StatelessWidget {
   }
 
   startConversation(BuildContext context, ConversationChatModel conversationData) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: target.userId),),);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: target!.userId),),);
     /*ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
     ConversationModel conversationModel = ConversationModel(
       conversationId: Algorithms.getConversationId(userId: user.authId, targetId: target.authId),

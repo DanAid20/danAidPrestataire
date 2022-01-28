@@ -15,7 +15,7 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class Friends extends StatefulWidget {
-  const Friends({ Key key }) : super(key: key);
+  const Friends({ Key? key }) : super(key: key);
 
   @override
   _FriendsState createState() => _FriendsState();
@@ -26,17 +26,17 @@ class _FriendsState extends State<Friends> {
 
   Widget getFriendsList(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    UserModel user = userProvider.getUserModel;
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: user.userId).snapshots(),
+    UserModel? user = userProvider.getUserModel;
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: user!.userId).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot userSnapshot = snapshot.data.docs[index];
+            DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
             UserModel singleUser = UserModel.fromDocument(userSnapshot);
             if (singleUser.userId == user.userId) {
               return Container();
@@ -70,11 +70,11 @@ class _FriendsState extends State<Friends> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(child: Container(child: getFriendsList())),
-          userProvider.getUserModel.isAmbassador != 1 ? CustomTextButton(
+          userProvider.getUserModel?.isAmbassador != 1 ? CustomTextButton(
             text: " Devenir ambassadeur DanAid  ",
             fontSize: 16,
             color: kSouthSeas,
-            enable: userProvider.getUserModel.isAmbassador == null,
+            enable: userProvider.getUserModel?.isAmbassador == null,
             expand: false,
             action: (){
               showDialog(context: context,
@@ -106,9 +106,9 @@ class _FriendsState extends State<Friends> {
                               isLoading: spinner,
                               action: (){
                                 setState(() { spinner = true; });
-                                FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).set({
+                                FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).set({
                                   "isAmbassador" : 0,
-                                  "couponCode": userProvider.getUserModel.matricule.replaceAll(new RegExp(r'[^0-9]'),'')
+                                  "couponCode": userProvider.getUserModel!.matricule!.replaceAll(new RegExp(r'[^0-9]'),'')
                                 }, SetOptions(merge: true)).then((value) {
                                   Navigator.pop(context);
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Votre demande est en cours d'examen",)));
@@ -143,7 +143,7 @@ class _FriendsState extends State<Friends> {
         backgroundColor: kDeepTeal,
         onPressed: () async {
           var link;
-          link = await DynamicLinkHandler.createFriendInviteDynamicLink(userId: userProvider.getUserModel.userId);
+          link = await DynamicLinkHandler.createFriendInviteDynamicLink(userId: userProvider.getUserModel!.userId);
           Share.share(link.toString(), subject: "Nouvelle demande d'ami sur DanAid").then((value) {
             print("Done !");
           });
@@ -152,7 +152,7 @@ class _FriendsState extends State<Friends> {
     );
   }
 
-  Widget userBox({UserModel user}){
+  Widget userBox({required UserModel user}){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -162,18 +162,18 @@ class _FriendsState extends State<Friends> {
         leading: CircleAvatar(
           backgroundColor: Colors.grey,
           backgroundImage: user.imgUrl != null
-              ? CachedNetworkImageProvider(user.imgUrl)
+              ? CachedNetworkImageProvider(user.imgUrl!)
               : null,
           child: user.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
-        title: Text(user.fullName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold),),
-        subtitle: Text(user.profileType),
+        title: Text(user.fullName!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold),),
+        subtitle: Text(user.profileType!),
         //subtitle: Text("Joined: " + DateFormat("dd MMMM, yyyy - hh:mm:aa").format(DateTime.fromMillisecondsSinceEpoch((int.parse(user.createdAt))))),
         trailing: Icon(
           Icons.arrow_forward_ios,
           size: 20,
         ),
-        onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: user.userId),),),
+        onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: user.userId!),),),
       ),
     );
   }

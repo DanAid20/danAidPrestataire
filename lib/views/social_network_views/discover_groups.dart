@@ -17,23 +17,23 @@ class DiscoverGroups extends StatefulWidget {
 class _DiscoverGroupsState extends State<DiscoverGroups> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("GROUPS").snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data.docs[index];
+            DocumentSnapshot doc = snapshot.data!.docs[index];
             GroupModel group = GroupModel.fromDocument(doc);
             return getGroupContainers(
-              name: group.groupName,
-              description: group.groupDescription,
-              imgUrl: group.imgUrl,
-              date: group.dateCreated.toDate(),
-              members: group.membersIds.length
+              name: group.groupName!,
+              description: group.groupDescription!,
+              imgUrl: group.imgUrl!,
+              date: group.dateCreated!.toDate(),
+              members: group.membersIds!.length
             );
           },
         ) :
@@ -54,8 +54,8 @@ class _DiscoverGroupsState extends State<DiscoverGroups> {
     );
   }
 
-  getGroupContainers({String name, int members, DateTime date, String description, String imgUrl}){
-    String time = Algorithms.getTimeElapsed(date: date);
+  getGroupContainers({String? name, int? members, DateTime? date, String? description, String? imgUrl}){
+    String? time = Algorithms.getTimeElapsed(date: date);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
       child: Row(crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +67,7 @@ class _DiscoverGroupsState extends State<DiscoverGroups> {
             decoration: BoxDecoration(
               color: Colors.grey[400],
               borderRadius: BorderRadius.circular(15),
-              boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
+              boxShadow: [BoxShadow(color: Colors.grey[500]!, blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
               image: imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover) : null
             ),
             child: imgUrl == null ? SvgPicture.asset('assets/icons/Bulk/Users.svg', color: Colors.grey[200],) : Container(),
@@ -89,11 +89,11 @@ class _DiscoverGroupsState extends State<DiscoverGroups> {
                         ),
                       ),
                     ),
-                    Expanded(flex: 3, child: Text(S.of(context).ilYa+time, style: TextStyle(fontSize: 12), textAlign: TextAlign.end,))
+                    Expanded(flex: 3, child: Text(S.of(context).ilYa+time!, style: TextStyle(fontSize: 12), textAlign: TextAlign.end,))
                   ],
                 ),
                 SizedBox(height: hv*2,),
-                Text(description, style: TextStyle(color: kTextBlue))
+                Text(description!, style: TextStyle(color: kTextBlue))
               ],
             ),
           )

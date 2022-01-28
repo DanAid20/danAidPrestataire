@@ -25,10 +25,10 @@ import 'package:simple_tags/simple_tags.dart';
 
 class EditPost extends StatefulWidget {
 
-  final PostModel post;
-  final String groupId;
+  final PostModel? post;
+  final String? groupId;
 
-  const EditPost({ Key key, this.post, this.groupId }) : super(key: key);
+  const EditPost({ Key? key, this.post, this.groupId }) : super(key: key);
 
   @override
   _EditPostState createState() => _EditPostState();
@@ -53,32 +53,32 @@ class _EditPostState extends State<EditPost> {
   ];
   List<String> tags = [];
 
-  File imageFileAvatar;
-  String imgUrl;
+  File? imageFileAvatar;
+  String? imgUrl;
   bool imageLoading = false;
   bool buttonLoading = false;
   bool imageSpinner = false;
 
   bool publishLoading = false;
 
-  int pubType;
+  int? pubType;
 
   initFields(){
-    if(widget.post.title != null){
-      titleController.text = widget.post.title;
+    if(widget.post?.title != null){
+      titleController.text = widget.post!.title!;
       setState((){});
     }
-    if(widget.post.text != null){
-      textController.text = widget.post.text;
+    if(widget.post?.text != null){
+      textController.text = widget.post!.text!;
       setState((){});
     }
-    if(widget.post.imgUrl != null){
-      this.imgUrl = widget.post.imgUrl;
+    if(widget.post?.imgUrl != null){
+      this.imgUrl = widget.post!.imgUrl;
       setState((){});
     }
-    if(widget.post.tags != null && widget.post.tags != []){
-      for(int i = 0; i < widget.post.tags.length; i++){
-        this.tags.add(widget.post.tags[i]);
+    if(widget.post?.tags != null && widget.post?.tags != []){
+      for(int i = 0; i < widget.post!.tags!.length; i++){
+        this.tags.add(widget.post!.tags![i]);
       }
       setState((){});
     }
@@ -95,7 +95,7 @@ class _EditPostState extends State<EditPost> {
   Widget build(BuildContext context) {
     
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    pubType = widget.post.postType;
+    pubType = widget.post!.postType;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -104,7 +104,7 @@ class _EditPostState extends State<EditPost> {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 25, color: Colors.grey[600],), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
         title: Text(S.of(context).editionDuPost, style: TextStyle(color: kDeepTeal, fontSize: 17),),
-        actions: [IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
+        actions: [IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState!.openEndDrawer())],
       ),
       endDrawer: DefaultDrawer(
         entraide: (){Navigator.pop(context); Navigator.pop(context);},
@@ -131,8 +131,8 @@ class _EditPostState extends State<EditPost> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        image: DecorationImage(image: imageFileAvatar != null ? FileImage(imageFileAvatar) : CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
-                        boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.7), blurRadius: 3.0, spreadRadius: 1.5, offset: Offset(0,2))]
+                        image: DecorationImage(image: imageFileAvatar != null ? FileImage(imageFileAvatar!) : CachedNetworkImageProvider(imgUrl!) as ImageProvider, fit: BoxFit.cover),
+                        boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.7), blurRadius: 3.0, spreadRadius: 1.5, offset: Offset(0,2))]
                       ),
                     ) : Container(),
 
@@ -155,7 +155,7 @@ class _EditPostState extends State<EditPost> {
                       style: TextStyle(color: kDeepTeal),
                       decoration: InputDecoration(
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.red[300]),
+                          borderSide: BorderSide(width: 1, color: Colors.red[300]!),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                         fillColor: Colors.grey[200],
                         contentPadding: EdgeInsets.only(top: hv*2, bottom: hv*2, left: wv*4, right: wv*4),
@@ -163,7 +163,7 @@ class _EditPostState extends State<EditPost> {
                           borderSide: BorderSide(width: 1, color: Colors.transparent), 
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.grey[300]),
+                          borderSide: BorderSide(width: 1, color: Colors.grey[300]!),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                         hintText: S.of(context).queVoulezVousDire,
                         hintStyle: TextStyle(color: kDeepTeal),
@@ -286,14 +286,14 @@ class _EditPostState extends State<EditPost> {
                   setState(() {
                     publishLoading = true;
                   });
-                  String url = widget.post.imgUrl;
+                  String? url = widget.post!.imgUrl!;
                   Map<String, dynamic> input = {
                     "lastDateModified": DateTime.now(),
-                    "userAuthId": userProvider.getUserModel.authId,
-                    "user": FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId),
-                    "userId": userProvider.getUserModel.userId,
-                    "userAvatar": userProvider.getUserModel.imgUrl,
-                    "userName": userProvider.getUserModel.fullName,
+                    "userAuthId": userProvider.getUserModel!.authId,
+                    "user": FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId),
+                    "userId": userProvider.getUserModel!.userId,
+                    "userAvatar": userProvider.getUserModel!.imgUrl,
+                    "userName": userProvider.getUserModel!.fullName,
                     "text": textController.text,
                     "tags": tags,
                     "imgUrl": url,
@@ -303,12 +303,12 @@ class _EditPostState extends State<EditPost> {
                     setState(() {
                       publishLoading = true;
                     });
-                    File file = imageFileAvatar;
+                    File? file = imageFileAvatar;
                     String name = (pubType == 0) ? "question-image" : (pubType == 1) ? "discussion-image" : "crowdfunding-image";
-                    String path = (pubType == 0) ? 'posts/${userProvider.getUserModel.userId}/question/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : (pubType == 1) ? 'posts/${userProvider.getUserModel.userId}/discussion/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : 'posts/${userProvider.getUserModel.userId}/crowdfunding/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString();
+                    String path = (pubType == 0) ? 'posts/${userProvider.getUserModel!.userId}/question/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : (pubType == 1) ? 'posts/${userProvider.getUserModel!.userId}/discussion/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : 'posts/${userProvider.getUserModel!.userId}/crowdfunding/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString();
                     Reference storageReference = FirebaseStorage.instance.ref().child(path);
                     final metadata = SettableMetadata(
-                      customMetadata: {'picked-file-path': file.path}
+                      customMetadata: {'picked-file-path': file!.path}
                     );
 
                     UploadTask storageUploadTask;
@@ -326,7 +326,7 @@ class _EditPostState extends State<EditPost> {
                       url = await storageReference.getDownloadURL();
                       input["imgUrl"] = url;
                       print("download url: $url");
-                      await publish(id: userProvider.getUserModel.authId, input: input);
+                      await publish(id: userProvider.getUserModel!.authId!, input: input);
                       setState(() {
                         publishLoading = false;
                       });
@@ -336,7 +336,7 @@ class _EditPostState extends State<EditPost> {
                       print(e.toString());
                     });
                   } else {
-                    await publish(id: userProvider.getUserModel.authId, input: input);
+                    await publish(id: userProvider.getUserModel!.authId!, input: input);
                     setState(() {
                       publishLoading = false;
                     });
@@ -353,9 +353,9 @@ class _EditPostState extends State<EditPost> {
     );
   }
 
-  publish({String id, Map input}) async {
-    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(widget.post.id);
-    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS").doc(widget.post.id);
+  publish({required String id, required Map input}) async {
+    DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc(widget.post!.id);
+    DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS").doc(widget.post!.id);
     DocumentReference docRef = widget.groupId == null ? normalRef : groupRef;
     try {
       await docRef.set(input, SetOptions(merge: true))

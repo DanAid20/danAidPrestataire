@@ -12,7 +12,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class FriendRequests extends StatefulWidget {
-  const FriendRequests({ Key key }) : super(key: key);
+  const FriendRequests({ Key? key }) : super(key: key);
 
   @override
   _FriendRequestsState createState() => _FriendRequestsState();
@@ -22,10 +22,10 @@ class _FriendRequestsState extends State<FriendRequests> {
 
   loadUserProfile() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel.userId).get().then((docSnapshot) {
+    FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel!.userId).get().then((docSnapshot) {
       UserModel user = UserModel.fromDocument(docSnapshot);
       userProvider.setUserModel(user);
-      print(userProvider.getUserModel.friendRequests.toString());
+      print(userProvider.getUserModel!.friendRequests.toString());
     });
   }
 
@@ -48,24 +48,24 @@ class _FriendRequestsState extends State<FriendRequests> {
         centerTitle: true,
         title: Text(S.of(context).demandesDamiti, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel.userId).snapshots(),
+      body: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel!.userId).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(kSouthSeas),));
           }
-          UserModel user = UserModel.fromDocument(snapshot.data);
+          UserModel user = UserModel.fromDocument(snapshot.data!);
 
-          return user.friendRequests != null && user.friendRequests.isNotEmpty ? StreamBuilder(
+          return user.friendRequests != null && user.friendRequests!.isNotEmpty ? StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection("USERS").where(FieldPath.documentId, whereIn: user.friendRequests).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(kSouthSeas),));
             }
-            return snapshot.data.docs.length >= 1 ? ListView.builder(
-              itemCount: snapshot.data.docs.length,
+            return snapshot.data!.docs.length >= 1 ? ListView.builder(
+              itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                DocumentSnapshot doc = snapshot.data.docs[index];
+                DocumentSnapshot doc = snapshot.data!.docs[index];
                 UserModel user = UserModel.fromDocument(doc);
                 return getRequestBox(user: user);
               },
@@ -107,7 +107,7 @@ class _FriendRequestsState extends State<FriendRequests> {
     );
   }
 
-  Widget getRequestBox({UserModel user, int index}){
+  Widget getRequestBox({required UserModel user, int? index}){
     UserProvider userProvider = Provider.of<UserProvider>(context);
     return Container(
       margin: EdgeInsets.only(bottom: hv*1.5, right: wv*3, left: wv*3),
@@ -121,7 +121,7 @@ class _FriendRequestsState extends State<FriendRequests> {
           CircleAvatar(
             radius: 30,
             backgroundColor: Colors.grey[200],
-            backgroundImage: user.imgUrl != null ? CachedNetworkImageProvider(user.imgUrl) : null,
+            backgroundImage: user.imgUrl != null ? CachedNetworkImageProvider(user.imgUrl!) : null,
             child: user.imgUrl == null ? Icon(LineIcons.user, color: whiteColor,) : null,
           ),
           SizedBox(width: wv*2),
@@ -130,7 +130,7 @@ class _FriendRequestsState extends State<FriendRequests> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user.fullName, style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold),),
+                Text(user.fullName!, style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold),),
                 Text(
                   user.profileType == adherent ? "Adhérent" : user.profileType == doctor ? "Médecin" : "Prestataire",
                   style: TextStyle(color: Colors.grey[700], fontSize: 13)
@@ -152,21 +152,21 @@ class _FriendRequestsState extends State<FriendRequests> {
                     noPadding: true,
                     action: (){
                       setState((){
-                        accept = index;
+                        accept = index!;
                       });
                       
-                      FirebaseFirestore.instance.collection("USERS").doc(user.userId).set({'friends': FieldValue.arrayUnion([userProvider.getUserModel.userId])}, SetOptions(merge: true)).then((doc){
+                      FirebaseFirestore.instance.collection("USERS").doc(user.userId).set({'friends': FieldValue.arrayUnion([userProvider.getUserModel!.userId])}, SetOptions(merge: true)).then((doc){
                         setState((){
                           accept = -1;
                         });
                       });
-                      FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).set({'friends': FieldValue.arrayUnion([user.userId])}, SetOptions(merge: true)).then((doc){
+                      FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).set({'friends': FieldValue.arrayUnion([user.userId])}, SetOptions(merge: true)).then((doc){
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous êtes désormais amis !")));
-                        userProvider.addFriend(user.userId);
+                        userProvider.addFriend(user.userId!);
                       });
 
-                      FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).set({'friendRequests': FieldValue.arrayRemove([user.userId])}, SetOptions(merge: true)).then((doc){
-                        userProvider.removeFriendRequest(user.userId);
+                      FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).set({'friendRequests': FieldValue.arrayRemove([user.userId])}, SetOptions(merge: true)).then((doc){
+                        userProvider.removeFriendRequest(user.userId!);
                         setState((){
                           accept = -1;
                         });
@@ -184,10 +184,10 @@ class _FriendRequestsState extends State<FriendRequests> {
                     noPadding: true,
                     action: (){
                       setState((){
-                        decline = index;
+                        decline = index!;
                       });
-                      FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).set({'friendRequests': FieldValue.arrayRemove([user.userId])}, SetOptions(merge: true)).then((doc){
-                        userProvider.removeFriendRequest(user.userId);
+                      FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).set({'friendRequests': FieldValue.arrayRemove([user.userId])}, SetOptions(merge: true)).then((doc){
+                        userProvider.removeFriendRequest(user.userId!);
                       });
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Demande refusée")));
                       setState((){

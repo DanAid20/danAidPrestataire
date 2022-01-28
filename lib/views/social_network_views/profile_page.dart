@@ -18,9 +18,9 @@ import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   
-  final String userId;
+  final String? userId;
 
-  const ProfilePage({ Key key, this.userId}) : super(key: key);
+  const ProfilePage({ Key? key, this.userId}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -28,7 +28,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  UserModel user;
+  UserModel? user;
   int publications = 0;
   int comments = 0;
   int friends = 0;
@@ -49,8 +49,8 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     });
     
-    targetFriends = user != null ? user.friends != null ? user.friends : [] : [];
-    targetFriendRequests = user != null ? user.friendRequests != null ? user.friendRequests : [] : [];
+    targetFriends = user != null ? user?.friends != null ? user!.friends! : [] : [];
+    targetFriendRequests = user != null ? user?.friendRequests != null ? user!.friendRequests! : [] : [];
   }
 
   @override
@@ -62,8 +62,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
-    friends = user != null ? user.friends != null ? user.friends.length : 0 : 0;
-    comments = user != null ? user.comments != null ? user.comments : 0 : 0;
+    friends = user != null ? user?.friends != null ? user!.friends!.length : 0 : 0;
+    comments = user != null ? user?.comments != null ? user!.comments! : 0 : 0;
     print(targetFriendRequests.toString());
     return Scaffold(
       backgroundColor: kDeepTeal,
@@ -86,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       decoration: BoxDecoration(
                         color: whiteColor,
                         borderRadius: BorderRadius.circular(20),
-                        boxShadow: [BoxShadow(color: Colors.grey[900].withOpacity(0.6), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
+                        boxShadow: [BoxShadow(color: Colors.grey[900]!.withOpacity(0.6), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
                       ),
                       child: Container(
                         height: 200,
@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("${user.points} Pts", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 17),)
+                            Text("${user?.points} Pts", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 17),)
                           ],
                         ),
                       ),
@@ -110,8 +110,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(user.fullName, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 18)),
-                          Text("${user.regionOfOrigin}, ${user.countryName}", style: TextStyle(color: whiteColor.withOpacity(0.5), fontWeight: FontWeight.bold, fontSize: 14))
+                          Text(user!.fullName!, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 18)),
+                          Text("${user!.regionOfOrigin}, ${user!.countryName}", style: TextStyle(color: whiteColor.withOpacity(0.5), fontWeight: FontWeight.bold, fontSize: 14))
                         ],
                       ),
                     ),
@@ -122,12 +122,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(color: Colors.grey[900].withOpacity(0.6), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
+                      boxShadow: [BoxShadow(color: Colors.grey[900]!.withOpacity(0.6), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
                     ),
                     child: CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.grey[200],
-                      backgroundImage: user.imgUrl != null ? CachedNetworkImageProvider(user.imgUrl) : null,
+                      backgroundImage: user!.imgUrl != null ? CachedNetworkImageProvider(user!.imgUrl!) : null,
                     ),
                   ),
                 )
@@ -168,10 +168,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                userProvider.getUserModel.userId != user.userId ? Column(
+                userProvider.getUserModel?.userId != user?.userId ? Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    user.isDanAIdAccount != true && userProvider.getUserModel.isDanAIdAccount != true  ? Row(
+                    user?.isDanAIdAccount != true && userProvider.getUserModel?.isDanAIdAccount != true  ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
@@ -179,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           decoration: BoxDecoration(
                             color: whiteColor,
                             shape: BoxShape.circle,
-                            boxShadow: [BoxShadow(color: Colors.grey[900].withOpacity(0.4), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
+                            boxShadow: [BoxShadow(color: Colors.grey[900]!.withOpacity(0.4), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
                           ),
                           child: SvgPicture.asset("assets/icons/Bulk/Send.svg", width: 30, color: kSouthSeas,),
                         ),
@@ -187,11 +187,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
-                            boxShadow: !friendSpinner ? [BoxShadow(color: Colors.grey[900].withOpacity(0.4), blurRadius: 2, spreadRadius: 1, offset: Offset(0,3))] : []
+                            boxShadow: !friendSpinner ? [BoxShadow(color: Colors.grey[900]!.withOpacity(0.4), blurRadius: 2, spreadRadius: 1, offset: Offset(0,3))] : []
                           ),
-                          child: user.profileType != doctor ? !friendSpinner ? TextButton(
+                          child: user?.profileType != doctor ? !friendSpinner ? TextButton(
                             child: Text(
-                              targetFriends.contains(userProvider.getUserModel.userId) ? S.of(context).rtirerLami : targetFriendRequests.contains(userProvider.getUserModel.userId) ? S.of(context).annulerLaDemande : S.of(context).ajouterUnAmi, 
+                              targetFriends.contains(userProvider.getUserModel?.userId) ? S.of(context).rtirerLami : targetFriendRequests.contains(userProvider.getUserModel!.userId) ? S.of(context).annulerLaDemande : S.of(context).ajouterUnAmi, 
                               style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 15.5)
                             ),
                             style: ButtonStyle(
@@ -204,39 +204,39 @@ class _ProfilePageState extends State<ProfilePage> {
                                 friendSpinner = true;
                               });
 
-                              if(targetFriendRequests.contains(userProvider.getUserModel.userId)){
-                                FirebaseFirestore.instance.collection("USERS").doc(user.userId).set({'friendRequests': FieldValue.arrayRemove([userProvider.getUserModel.userId])}, SetOptions(merge: true)).then((doc){
+                              if(targetFriendRequests.contains(userProvider.getUserModel!.userId)){
+                                FirebaseFirestore.instance.collection("USERS").doc(user!.userId).set({'friendRequests': FieldValue.arrayRemove([userProvider.getUserModel!.userId])}, SetOptions(merge: true)).then((doc){
                                   setState((){
                                     friendSpinner = false;
-                                    targetFriendRequests.remove(userProvider.getUserModel.userId);
+                                    targetFriendRequests.remove(userProvider.getUserModel!.userId);
                                   });
                                 });
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).demandeAnnule)));
                               }
                               else {
-                                FirebaseFirestore.instance.collection("USERS").doc(user.userId).set({'friendRequests': FieldValue.arrayUnion([userProvider.getUserModel.userId])}, SetOptions(merge: true)).then((doc){
+                                FirebaseFirestore.instance.collection("USERS").doc(user!.userId).set({'friendRequests': FieldValue.arrayUnion([userProvider.getUserModel!.userId])}, SetOptions(merge: true)).then((doc){
                                   setState((){
                                     friendSpinner = false;
-                                    targetFriendRequests.add(userProvider.getUserModel.userId);
+                                    targetFriendRequests.add(userProvider.getUserModel!.userId);
                                   });
                                   print(targetFriendRequests.toString());
                                 });
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).demandeEnvoye)));
                               }
 
-                              if(targetFriends.contains(userProvider.getUserModel.userId)){
-                                FirebaseFirestore.instance.collection("USERS").doc(user.userId).set({'friends': FieldValue.arrayRemove([userProvider.getUserModel.userId])}, SetOptions(merge: true)).then((doc){
+                              if(targetFriends.contains(userProvider.getUserModel!.userId)){
+                                FirebaseFirestore.instance.collection("USERS").doc(user!.userId).set({'friends': FieldValue.arrayRemove([userProvider.getUserModel!.userId])}, SetOptions(merge: true)).then((doc){
                                   setState((){
                                     friendSpinner = false;
-                                    targetFriends.remove(userProvider.getUserModel.userId);
-                                    targetFriendRequests.remove(userProvider.getUserModel.userId);
+                                    targetFriends.remove(userProvider.getUserModel!.userId);
+                                    targetFriendRequests.remove(userProvider.getUserModel!.userId);
                                   });
                                 });
-                                FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).set({'friends': FieldValue.arrayRemove([user.userId])}, SetOptions(merge: true)).then((doc){
+                                FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).set({'friends': FieldValue.arrayRemove([user!.userId])}, SetOptions(merge: true)).then((doc){
                                   setState((){
                                     friendSpinner = false;
                                   });
-                                  userProvider.removeFriend(user.userId);
+                                  userProvider.removeFriend(user!.userId!);
                                 });
                               }
                               
@@ -246,20 +246,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(width: 20,),
                         GestureDetector(
                           onTap: (){
-                            if(user.friends != null || userProvider.getUserModel.isDanAIdAccount == true){
-                              if(user.friends.contains(userProvider.getUserModel.userId) || userProvider.getUserModel.isDanAIdAccount == true){
+                            if(user?.friends != null || userProvider.getUserModel?.isDanAIdAccount == true){
+                              if(user!.friends!.contains(userProvider.getUserModel?.userId) || userProvider.getUserModel?.isDanAIdAccount == true){
                                 ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
                                 ConversationModel conversationModel = ConversationModel(
-                                  conversationId: Algorithms.getConversationId(userId: userProvider.getUserModel.authId, targetId: user.authId),
-                                  userId: userProvider.getUserModel.authId,
-                                  targetId: user.authId,
-                                  userName: userProvider.getUserModel.fullName,
-                                  targetName: user.fullName,
-                                  userAvatar: userProvider.getUserModel.imgUrl,
-                                  targetAvatar: user.imgUrl,
-                                  targetProfileType: user.profileType,
-                                  userPhoneId: userProvider.getUserModel.userId,
-                                  targetPhoneId: user.userId
+                                  conversationId: Algorithms.getConversationId(userId: userProvider.getUserModel!.authId, targetId: user!.authId),
+                                  userId: userProvider.getUserModel!.authId,
+                                  targetId: user!.authId,
+                                  userName: userProvider.getUserModel?.fullName,
+                                  targetName: user?.fullName,
+                                  userAvatar: userProvider.getUserModel?.imgUrl,
+                                  targetAvatar: user?.imgUrl,
+                                  targetProfileType: user?.profileType,
+                                  userPhoneId: userProvider.getUserModel?.userId,
+                                  targetPhoneId: user?.userId
                                 );
                                 conversation.setConversationModel(conversationModel);
                                 Navigator.pushNamed(context, '/conversation');
@@ -276,7 +276,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             decoration: BoxDecoration(
                               color: whiteColor,
                               shape: BoxShape.circle,
-                              boxShadow: [BoxShadow(color: Colors.grey[900].withOpacity(0.4), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
+                              boxShadow: [BoxShadow(color: Colors.grey[900]!.withOpacity(0.4), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
                             ),
                             child: SvgPicture.asset("assets/icons/chat.svg", width: 30, color: kSouthSeas,),
                           ),
@@ -287,23 +287,23 @@ class _ProfilePageState extends State<ProfilePage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: wv*10),
                       child: CustomTextButton(
-                        text: user.isDanAIdAccount == true ? "Ecrire au support DanAid" : "Ecrire à l'utilisateur",
+                        text: user?.isDanAIdAccount == true ? "Ecrire au support DanAid" : "Ecrire à l'utilisateur",
                         color: kSouthSeas,
                         noPadding: true,
                         action: (){
                           ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
                           ConversationModel conversationModel = ConversationModel(
-                            conversationId: Algorithms.getConversationId(userId: userProvider.getUserModel.authId, targetId: user.authId),
-                            userId: userProvider.getUserModel.authId,
-                            targetId: user.authId,
-                            userName: userProvider.getUserModel.fullName,
-                            targetName: user.fullName,
-                            userAvatar: userProvider.getUserModel.imgUrl,
-                            targetAvatar: user.imgUrl,
-                            targetProfileType: user.profileType,
-                            userPhoneId: userProvider.getUserModel.userId,
-                            targetIsSupport: user.isDanAIdAccount,
-                            targetPhoneId: user.userId
+                            conversationId: Algorithms.getConversationId(userId: userProvider.getUserModel!.authId, targetId: user?.authId),
+                            userId: userProvider.getUserModel?.authId,
+                            targetId: user?.authId,
+                            userName: userProvider.getUserModel?.fullName,
+                            targetName: user?.fullName,
+                            userAvatar: userProvider.getUserModel?.imgUrl,
+                            targetAvatar: user?.imgUrl,
+                            targetProfileType: user?.profileType,
+                            userPhoneId: userProvider.getUserModel?.userId,
+                            targetIsSupport: user?.isDanAIdAccount,
+                            targetPhoneId: user?.userId
                           );
                           conversation.setConversationModel(conversationModel);
                           Navigator.pushNamed(context, '/conversation');
@@ -321,7 +321,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             decoration: BoxDecoration(
                               color: whiteColor,
                               shape: BoxShape.circle,
-                              boxShadow: [BoxShadow(color: Colors.grey[900].withOpacity(0.4), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
+                              boxShadow: [BoxShadow(color: Colors.grey[900]!.withOpacity(0.4), blurRadius: 2.5, spreadRadius: 1.5, offset: Offset(0,3))]
                             ),
                             child: SvgPicture.asset("assets/icons/Bulk/Edit.svg", width: 30, color: kSouthSeas,),
                           ),

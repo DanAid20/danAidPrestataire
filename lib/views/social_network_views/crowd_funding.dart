@@ -18,16 +18,16 @@ class CrowdFunding extends StatefulWidget {
 class _CrowdFundingState extends State<CrowdFunding> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("POSTS").where('post-type', isEqualTo: 2).orderBy("dateCreated", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data.docs[index];
+            DocumentSnapshot doc = snapshot.data!.docs[index];
             PostModel post = PostModel.fromDocument(doc);
             return getContainers(post: post);
           },
@@ -49,11 +49,11 @@ class _CrowdFundingState extends State<CrowdFunding> {
     );
   }
 
-  getContainers({PostModel post}){
-    String time = Algorithms.getTimeElapsed(date: post.dateCreated.toDate());
+  getContainers({required PostModel post}){
+    String? time = Algorithms.getTimeElapsed(date: post.dateCreated!.toDate());
     List<String> tags = [];
-    for(int i = 0; i < post.tags.length; i++){
-      tags.add(post.tags[i]);
+    for(int i = 0; i < post.tags!.length; i++){
+      tags.add(post.tags![i]);
     }
 
     return Container(
@@ -65,17 +65,17 @@ class _CrowdFundingState extends State<CrowdFunding> {
             children: [
               CircleAvatar(
                 backgroundColor: Colors.grey[300],
-                backgroundImage: post.userAvatar != null ? CachedNetworkImageProvider(post.userAvatar) : null,
+                backgroundImage: post.userAvatar != null ? CachedNetworkImageProvider(post.userAvatar!) : null,
                 child: post.userAvatar == null ? Icon(LineIcons.user, color: whiteColor,) : Container(),
               ),
               SizedBox(width: wv*3,),
               Expanded(
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(post.userName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
-                    Text(time+S.of(context).ilYa, style: TextStyle(fontSize: 12)),
+                    Text(post.userName!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
+                    Text(time!+S.of(context).ilYa, style: TextStyle(fontSize: 12)),
                     SizedBox(height: hv*1.5,),
-                    Text(post.text, style: TextStyle(color: Colors.black87)),
+                    Text(post.text!, style: TextStyle(color: Colors.black87)),
                     post.imgUrl != null ? Row(
                       children: [
                         Expanded(
@@ -85,15 +85,15 @@ class _CrowdFundingState extends State<CrowdFunding> {
                             decoration: BoxDecoration(
                               color: Colors.grey[400],
                               borderRadius: BorderRadius.circular(15),
-                              boxShadow: [BoxShadow(color: Colors.grey[500], blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
-                              image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl), fit: BoxFit.cover)
+                              boxShadow: [BoxShadow(color: Colors.grey[500]!, blurRadius: 2.5, spreadRadius: 1.2, offset: Offset(0, 1.5))],
+                              image: DecorationImage(image: CachedNetworkImageProvider(post.imgUrl!), fit: BoxFit.cover)
                             ),
                           ),
                         ),
                       ],
                     ) : Container(),
 
-                    post.postType == 1 && post.tags.length >= 1 ? Padding(
+                    post.postType == 1 && post.tags!.length >= 1 ? Padding(
                       padding: EdgeInsets.only(top: hv*2),
                       child: SimpleTags(
                         content: tags,
@@ -114,12 +114,12 @@ class _CrowdFundingState extends State<CrowdFunding> {
                       children: [
                         Row(
                           children: [
-                            Text(((post.amountCollected/post.amount)*100).toString()+" %", style: TextStyle(color: kSouthSeas),),
+                            Text(((post.amountCollected! / post.amount!) * 100).toString()+" %", style: TextStyle(color: kSouthSeas),),
                             Spacer(),
                             Text(post.amount.toString()+ " f.", style: TextStyle(fontWeight: FontWeight.bold))
                           ],
                         ),
-                        LinearProgressIndicator(value: post.amountCollected/post.amount, backgroundColor: Colors.grey[200], minHeight: 8, valueColor: AlwaysStoppedAnimation<Color>(kSouthSeas),),
+                        LinearProgressIndicator(value: post.amountCollected! / post.amount!, backgroundColor: Colors.grey[200], minHeight: 8, valueColor: AlwaysStoppedAnimation<Color>(kSouthSeas),),
                       ],
                     ),
 

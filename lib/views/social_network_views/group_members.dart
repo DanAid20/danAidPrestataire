@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
 class GroupMembers extends StatefulWidget {
-  final String groupId;
-  final List groupMembers;
-  const GroupMembers({ Key key, this.groupId, this.groupMembers }) : super(key: key);
+  final String? groupId;
+  final List? groupMembers;
+  const GroupMembers({ Key? key, this.groupId, this.groupMembers }) : super(key: key);
 
   @override
   _GroupMembersState createState() => _GroupMembersState();
@@ -19,16 +19,16 @@ class GroupMembers extends StatefulWidget {
 
 class _GroupMembersState extends State<GroupMembers> {
   Widget getFriendsList(){
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("USERS").where(FieldPath.documentId, whereIn: widget.groupMembers).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot userSnapshot = snapshot.data.docs[index];
+            DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
             UserModel singleUser = UserModel.fromDocument(userSnapshot);
             return userBox(
               user: singleUser
@@ -59,7 +59,7 @@ class _GroupMembersState extends State<GroupMembers> {
     );
   }
 
-  Widget userBox({UserModel user}){
+  Widget userBox({required UserModel user}){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -69,14 +69,14 @@ class _GroupMembersState extends State<GroupMembers> {
         leading: CircleAvatar(
           backgroundColor: Colors.grey,
           backgroundImage: user.imgUrl != null
-              ? CachedNetworkImageProvider(user.imgUrl)
+              ? CachedNetworkImageProvider(user.imgUrl!)
               : null,
           child: user.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
-        title: Text(user.fullName, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold),),
-        subtitle: Text(user.profileType),
+        title: Text(user.fullName!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold),),
+        subtitle: Text(user.profileType!),
         //subtitle: Text("Joined: " + DateFormat("dd MMMM, yyyy - hh:mm:aa").format(DateTime.fromMillisecondsSinceEpoch((int.parse(user.createdAt))))),
-        onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: user.userId),),),
+        onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfilePage(userId: user.userId!),),),
       ),
     );
   }

@@ -24,7 +24,7 @@ class SocialMediaHomePage extends StatefulWidget {
 
 class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _socialHomeScaffoldKey = GlobalKey<ScaffoldState>();
-  TabController controller;
+  TabController? controller;
 
   loadUserProfile() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -80,7 +80,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                                   onPressed: ()=>Navigator.pop(context)),
                                   Spacer(),
                                 IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
-                                IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState.openEndDrawer(),)
+                                IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState!.openEndDrawer(),)
                               ],),
                               SizedBox(height: hv*1,),
                               Row(
@@ -89,7 +89,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(S.of(context).bonjour+"${userProvider.getUserModel.fullName}!", style: TextStyle(color: whiteColor, fontSize: 23),),
+                                      Text(S.of(context).bonjour+"${userProvider.getUserModel!.fullName}!", style: TextStyle(color: whiteColor, fontSize: 23),),
                                       Text(S.of(context).bienvenueAuRseauDentraideDanaid, style: TextStyle(color: whiteColor.withOpacity(0.5), fontSize: 12),),
                                     ],
                                   ),

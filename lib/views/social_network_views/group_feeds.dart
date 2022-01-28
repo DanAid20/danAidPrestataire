@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
 class GroupFeeds extends StatefulWidget {
-  final GroupModel group;
-  const GroupFeeds({ Key key, this.group }) : super(key: key);
+  final GroupModel? group;
+  const GroupFeeds({ Key? key, this.group }) : super(key: key);
 
   @override
   _GroupFeedsState createState() => _GroupFeedsState();
@@ -17,18 +17,18 @@ class GroupFeeds extends StatefulWidget {
 class _GroupFeedsState extends State<GroupFeeds> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("GROUPS").doc(widget.group.groupId).collection("POSTS_GROUPS").orderBy("dateCreated", descending: true).snapshots(),
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection("GROUPS").doc(widget.group!.groupId).collection("POSTS_GROUPS").orderBy("dateCreated", descending: true).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot doc = snapshot.data.docs[index];
+            DocumentSnapshot doc = snapshot.data!.docs[index];
             PostModel post = PostModel.fromDocument(doc);
-            return PostContainer(post: post, groupId: widget.group.groupId);
+            return PostContainer(post: post, groupId: widget.group!.groupId);
           },
         ) :
         Container(

@@ -11,7 +11,7 @@ class Groups extends StatefulWidget {
 }
 
 class _GroupsState extends State<Groups> with SingleTickerProviderStateMixin {
-  TabController groupsController;
+  TabController? groupsController;
 
   @override
   void initState() {

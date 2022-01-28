@@ -13,8 +13,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 
 class Group extends StatefulWidget {
-  final GroupModel group;
-  const Group({ Key key, this.group }) : super(key: key);
+  final GroupModel? group;
+  const Group({ Key? key, this.group }) : super(key: key);
 
   @override
   _GroupState createState() => _GroupState();
@@ -22,7 +22,7 @@ class Group extends StatefulWidget {
 
 class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _socialHomeScaffoldKey = GlobalKey<ScaffoldState>();
-  TabController groupController;
+  TabController? groupController;
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
               flexibleSpace: Container(
                 decoration: BoxDecoration(
                   color: kDeepTeal,
-                  image: widget.group.imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(widget.group.imgUrl), fit: BoxFit.cover) : null
+                  image: widget.group?.imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(widget.group!.imgUrl!), fit: BoxFit.cover) : null
                 ),
                 child: Column(
                   children: [
@@ -62,7 +62,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
                         onPressed: ()=>Navigator.pop(context)),
                         Spacer(),
                       IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: whiteColor,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
-                      IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: whiteColor), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState.openEndDrawer(),)
+                      IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: whiteColor), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _socialHomeScaffoldKey.currentState?.openEndDrawer(),)
                     ],),
                   ],
                 )
@@ -87,17 +87,17 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(widget.group.groupName, style: TextStyle(color: kDeepTeal, fontSize: 22, fontWeight: FontWeight.w600),),
+                            Text(widget.group!.groupName!, style: TextStyle(color: kDeepTeal, fontSize: 22, fontWeight: FontWeight.w600),),
                             SizedBox(height: hv*0.5,),
                             Row(
                               children: [
                                 Stack(children: [
                                   SizedBox(height: 40, width: wv*20,),
-                                  SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group.creatorAvatar, size: 8),
-                                  widget.group.membersIds.length >= 2 ? Positioned(left: wv*5, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group.membersAvatarsUrls != null ? widget.group.membersAvatarsUrls[0] : null, size: 8)) : Container(),
-                                  widget.group.membersIds.length >= 3 ? Positioned(left: wv*10, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group.membersAvatarsUrls != null ? widget.group.membersAvatarsUrls[1] : null, size: 8)) : Container(),
+                                  SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group!.creatorAvatar, size: 8),
+                                  widget.group!.membersIds!.length >= 2 ? Positioned(left: wv*5, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group?.membersAvatarsUrls != null ? widget.group!.membersAvatarsUrls![0] : null, size: 8)) : Container(),
+                                  widget.group!.membersIds!.length >= 3 ? Positioned(left: wv*10, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group?.membersAvatarsUrls != null ? widget.group!.membersAvatarsUrls![1] : null, size: 8)) : Container(),
                                 ]),
-                                Text(" ${widget.group.membersIds.length} "+S.of(context).membres, style: TextStyle(color: kTextBlue))
+                                Text(" ${widget.group!.membersIds!.length} "+S.of(context).membres, style: TextStyle(color: kTextBlue))
                               ],
                             ),
                           ],
@@ -135,8 +135,8 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
           controller: groupController,
           children: <Widget>[
             GroupFeeds(group: widget.group,),
-            GroupMembers(groupMembers: widget.group.membersIds,),
-            Center(child: Text(widget.group.groupDescription != null ? widget.group.groupDescription : S.of(context).aucuneDescriptionFournie))
+            GroupMembers(groupMembers: widget.group!.membersIds,),
+            Center(child: Text(widget.group?.groupDescription != null ? widget.group!.groupDescription! : S.of(context).aucuneDescriptionFournie))
           ],
         )
       ),
@@ -150,7 +150,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         child: Icon(LineIcons.plus),
         backgroundColor: kDeepTeal,
-        onPressed: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreatePublication(groupId: widget.group.groupId),),),
+        onPressed: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreatePublication(groupId: widget.group?.groupId),),),
       ),
     );
   }

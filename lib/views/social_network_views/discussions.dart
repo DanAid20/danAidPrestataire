@@ -14,13 +14,13 @@ class _DiscussionsState extends State<Discussions> {
   int limit = 10;
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("POSTS").where('post-type', isEqualTo: 1).orderBy("dateCreated", descending: true).limit(limit).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        return snapshot.data.docs.length >= 1 ? NotificationListener<ScrollEndNotification>(
+        return snapshot.data!.docs.length >= 1 ? NotificationListener<ScrollEndNotification>(
           onNotification: (scrollEnd) {
             var metrics = scrollEnd.metrics;
             if (metrics.atEdge) {
@@ -30,9 +30,9 @@ class _DiscussionsState extends State<Discussions> {
             return true;
           },
           child: ListView.builder(
-            itemCount: snapshot.data.docs.length,
+            itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              DocumentSnapshot doc = snapshot.data.docs[index];
+              DocumentSnapshot doc = snapshot.data!.docs[index];
               PostModel post = PostModel.fromDocument(doc);
               return PostContainer(post: post);
             },

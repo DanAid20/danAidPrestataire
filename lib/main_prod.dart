@@ -14,7 +14,7 @@ import 'helpers/constants.dart';
 import 'locator.dart';
 
 
-Future<void> _showNotification({int id, String title, String body}) async {
+Future<void> _showNotification({required int id, required String title, String? body}) async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOS = new IOSInitializationSettings();
@@ -22,7 +22,8 @@ Future<void> _showNotification({int id, String title, String body}) async {
   flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
   print("showing..");
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.danaid.danaidmobile', 'DanAid', 'Mutuelle Santé 100% mobile',
+      'com.danaid.danaidmobile', 'DanAid',
+      channelDescription: 'Mutuelle Santé 100% mobile',
       importance: Importance.max,
       playSound: true,
       //sound: AndroidNotificationSound,
@@ -50,7 +51,7 @@ Future<void> _messageHandler(RemoteMessage message) async {
     String groupId = message.data['groupId'];
     if(message.data['groupId'] != null){
       FirebaseFirestore.instance.collection('GROUPS').doc(message.data['groupId']).get().then((doc) async {
-        String groupName = doc.data()['groupName'];
+        String groupName = doc.data()!['groupName'];
         await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like de votre publication dans le groupe $groupName");
       });
     }
@@ -75,8 +76,8 @@ Future<void> _messageHandler(RemoteMessage message) async {
     String type = "adhérent";
     print(message.data["likerId"]);
     FirebaseFirestore.instance.collection('USERS').doc(message.data["likerId"]).get().then((doc) async {
-      name = doc.data()['fullName'];
-      type = doc.data()['profil'] == adherent ? "l'adhérent" : doc.data()['profil'] == doctor ? "le médecin" : "le prestataire";
+      name = doc.data()!['fullName'];
+      type = doc.data()!['profil'] == adherent ? "l'adhérent" : doc.data()!['profil'] == doctor ? "le médecin" : "le prestataire";
       await _showNotification(id: 4, title: "Nouveau like", body: "Votre commentaire a été liké par $type $name");
     });
   }
@@ -84,8 +85,8 @@ Future<void> _messageHandler(RemoteMessage message) async {
     String name = "";
     String type = "adhérent";
     FirebaseFirestore.instance.collection('USERS').doc(message.data["userWhoRquestFriendId"]).get().then((doc) async {
-      name = doc.data()['fullName'];
-      type = doc.data()['profil'] == adherent ? "de l'adhérent" : doc.data()['profil'] == doctor ? "du médecin" : "du prestataire";
+      name = doc.data()!['fullName'];
+      type = doc.data()!['profil'] == adherent ? "de l'adhérent" : doc.data()!['profil'] == doctor ? "du médecin" : "du prestataire";
       await _showNotification(id: 7, title: "Demande d'amitié", body: "Nouvelle demande d'amitié de la part $type $name");
       print('Adding notif in background...');
       HiveDatabase.addNotification(NotificationModel(
@@ -103,8 +104,8 @@ Future<void> _messageHandler(RemoteMessage message) async {
     String name = "";
     String type = "adhérent";
     FirebaseFirestore.instance.collection('USERS').doc(message.data["friendWhoAddedId"]).get().then((doc) async {
-      name = doc.data()['fullName'];
-      type = doc.data()['profil'] == adherent ? "l'adhérent" : doc.data()['profil'] == doctor ? "le médecin" : "le prestataire";
+      name = doc.data()!['fullName'];
+      type = doc.data()!['profil'] == adherent ? "l'adhérent" : doc.data()!['profil'] == doctor ? "le médecin" : "le prestataire";
       await _showNotification(id: 7, title: "Demande d'amitié acceptée", body: "Vous et $type $name êtes désormais amis");
     });
   }

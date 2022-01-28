@@ -29,15 +29,15 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
           SizedBox(height: hv*2,),
           Stack(alignment: Alignment.centerLeft,
             children: [
-              StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("GROUPS").where("membersIds", arrayContains: userProvider.getUserModel.userId).snapshots(),
+              StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("GROUPS").where("membersIds", arrayContains: userProvider.getUserModel!.userId).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   }
                   List<Widget> groups = [];
-                  for (int i = 0; i < snapshot.data.docs.length; i++){
-                    DocumentSnapshot doc = snapshot.data.docs[i];
+                  for (int i = 0; i < snapshot.data!.docs.length; i++){
+                    DocumentSnapshot doc = snapshot.data!.docs[i];
                     GroupModel group = GroupModel.fromDocument(doc);
                     Widget content = getContent(
                       switchColor: i.isEven,
@@ -111,7 +111,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
     );
   }
 
-  Widget getContent({bool switchColor = true, GroupModel group}){
+  Widget getContent({bool switchColor = true, required GroupModel group}){
     return GestureDetector(
       onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => Group(group: group),),),
       child: Container(
@@ -128,9 +128,9 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
               padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(group.groupName, style: TextStyle(color: whiteColor, fontSize: 22, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
+                  Text(group.groupName!, style: TextStyle(color: whiteColor, fontSize: 22, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
                   SizedBox(height: hv*0.8,),
-                  Text(group.membersIds.length.toString()+S.of(context).membres, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: !switchColor ? kDeepTeal : kSouthSeas)),
+                  Text(group.membersIds!.length.toString()+S.of(context).membres, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: !switchColor ? kDeepTeal : kSouthSeas)),
                   SizedBox(height: hv*0.7,),
                 ],
               ),
@@ -155,8 +155,8 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
-                              boxShadow: [BoxShadow(color: Colors.grey[800], blurRadius: 2.5, spreadRadius: 1, offset: Offset(0, 2))],
-                              image: group.imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(group.imgUrl), fit: BoxFit.cover) : null,
+                              boxShadow: [BoxShadow(color: Colors.grey[800]!, blurRadius: 2.5, spreadRadius: 1, offset: Offset(0, 2))],
+                              image: group.imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(group.imgUrl!), fit: BoxFit.cover) : null,
                             ),
                             child: group.imgUrl == null ? SvgPicture.asset('assets/icons/Bulk/Users.svg', width: wv*15, color: Colors.grey[300],) : Container(),
                           ),
@@ -205,8 +205,8 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
               padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: Row(children: [
                 SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: group.creatorAvatar),
-                group.membersIds.length >= 2 ? SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: group.membersAvatarsUrls != null ? group.membersAvatarsUrls[0] : null) : Container(),
-                group.membersIds.length >= 3 ? SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: group.membersAvatarsUrls != null ? group.membersAvatarsUrls[1] : null) : Container(),
+                group.membersIds!.length >= 2 ? SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: group.membersAvatarsUrls != null ? group.membersAvatarsUrls![0] : null) : Container(),
+                group.membersIds!.length >= 3 ? SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: group.membersAvatarsUrls != null ? group.membersAvatarsUrls![1] : null) : Container(),
               ], mainAxisAlignment: MainAxisAlignment.end,),
             )
           ],

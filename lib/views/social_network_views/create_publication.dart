@@ -26,9 +26,9 @@ import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
 class CreatePublication extends StatefulWidget {
-  final String groupId;
+  final String? groupId;
 
-  const CreatePublication({Key key, this.groupId}) : super(key: key);
+  const CreatePublication({Key? key, this.groupId}) : super(key: key);
 
   @override
   _CreatePublicationState createState() => _CreatePublicationState();
@@ -41,12 +41,12 @@ class _CreatePublicationState extends State<CreatePublication> {
   TextEditingController textController = new TextEditingController();
   TextEditingController tagController = new TextEditingController();
   TextEditingController amountController = new TextEditingController();
-  int pubType;
+  int? pubType;
   int docQuestionChoosed = 0;
   int discussionChoosed = 1;
   int fundRaisingChoosed = 2;
 
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
   bool imageSpinner = false;
@@ -65,7 +65,7 @@ class _CreatePublicationState extends State<CreatePublication> {
 
   bool publishLoading = false;
 
-  DateTime selectedDate;
+  DateTime? selectedDate;
   DateTime initialDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _CreatePublicationState extends State<CreatePublication> {
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 25, color: Colors.grey,), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
         title: Text(S.of(context).crerUnePublication, style: TextStyle(color: kDeepTeal, fontSize: 17),),
-        actions: [IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
+        actions: [IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())],
       ),
       endDrawer: DefaultDrawer(
         entraide: (){Navigator.pop(context); Navigator.pop(context);},
@@ -108,11 +108,11 @@ class _CreatePublicationState extends State<CreatePublication> {
                                 child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)),
                                 padding: EdgeInsets.all(20.0),
                               ),
-                              imageUrl: userProvider.getUserModel.imgUrl),
+                              imageUrl: userProvider.getUserModel!.imgUrl!),
                           ),
                         ),
                         SizedBox(width: wv*2.5,),
-                        Text(S.of(context).bonjour+userProvider.getUserModel.fullName+",", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w600, fontSize: 15),)
+                        Text(S.of(context).bonjour+userProvider.getUserModel!.fullName!+",", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w600, fontSize: 15),)
                       ],
                     ),
                     SingleChildScrollView(
@@ -162,7 +162,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           height: imageFileAvatar != null ? hv*20 : 0,
                           decoration: imageFileAvatar != null ? BoxDecoration(
                             color: Colors.grey[200],
-                            image: DecorationImage(image: FileImage(imageFileAvatar), fit: BoxFit.cover),
+                            image: DecorationImage(image: FileImage(imageFileAvatar!), fit: BoxFit.cover),
                             borderRadius: BorderRadius.circular(15)
                           ) : null,
                         ),
@@ -201,7 +201,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                                       child: Row(children: [
                                         SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                                         VerticalDivider(),
-                                        Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : "Choisir", style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                       ],),
                                     ),
                                   ),
@@ -232,7 +232,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                       style: TextStyle(color: kDeepTeal),
                       decoration: InputDecoration(
                         errorBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.red[300]),
+                          borderSide: BorderSide(width: 1, color: Colors.red[300]!),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                         fillColor: Colors.grey[200],
                         contentPadding: EdgeInsets.only(top: hv*2, bottom: hv*2, left: wv*4, right: wv*4),
@@ -240,7 +240,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                           borderSide: BorderSide(width: 1, color: Colors.transparent), 
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.grey[300]),
+                          borderSide: BorderSide(width: 1, color: Colors.grey[300]!),
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                         hintText: S.of(context).queVoulezVousDire,
                         hintStyle: TextStyle(color: kDeepTeal),
@@ -368,15 +368,15 @@ class _CreatePublicationState extends State<CreatePublication> {
                             setState(() {
                               publishLoading = true;
                             });
-                            String url;
+                            String? url;
                             Map<String, dynamic> input = {
                               "dateCreated": DateTime.now(),
-                              "userAuthId": userProvider.getUserModel.authId,
-                              "user": FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId),
-                              "userId": userProvider.getUserModel.userId,
-                              "userAvatar": userProvider.getUserModel.imgUrl,
-                              "userName": userProvider.getUserModel.fullName,
-                              "isFromDanAid": userProvider.getUserModel.isDanAIdAccount,
+                              "userAuthId": userProvider.getUserModel!.authId,
+                              "user": FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId),
+                              "userId": userProvider.getUserModel!.userId,
+                              "userAvatar": userProvider.getUserModel!.imgUrl,
+                              "userName": userProvider.getUserModel!.fullName,
+                              "isFromDanAid": userProvider.getUserModel!.isDanAIdAccount,
                               "text": textController.text,
                               "post-type": pubType,
                               "likes": 0,
@@ -392,12 +392,12 @@ class _CreatePublicationState extends State<CreatePublication> {
                               setState(() {
                                 publishLoading = true;
                               });
-                              File file = imageFileAvatar;
+                              File? file = imageFileAvatar;
                               String name = (pubType == 0) ? "question-image" : (pubType == 1) ? "discussion-image" : "crowdfunding-image";
-                              String path = (pubType == 0) ? 'posts/${userProvider.getUserModel.userId}/question/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : (pubType == 1) ? 'posts/${userProvider.getUserModel.userId}/discussion/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : 'posts/${userProvider.getUserModel.userId}/crowdfunding/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString();
+                              String path = (pubType == 0) ? 'posts/${userProvider.getUserModel!.userId}/question/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : (pubType == 1) ? 'posts/${userProvider.getUserModel!.userId}/discussion/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString() : 'posts/${userProvider.getUserModel!.userId}/crowdfunding/$name'+'_'+DateTime.now().millisecondsSinceEpoch.toString();
                               Reference storageReference = FirebaseStorage.instance.ref().child(path);
                               final metadata = SettableMetadata(
-                                customMetadata: {'picked-file-path': file.path}
+                                customMetadata: {'picked-file-path': file!.path}
                               );
 
                               UploadTask storageUploadTask;
@@ -415,7 +415,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                                 url = await storageReference.getDownloadURL();
                                 input["imgUrl"] = url;
                                 print("download url: $url");
-                                await publish(id: userProvider.getUserModel.authId, input: input);
+                                await publish(id: userProvider.getUserModel!.authId!, input: input);
                                 setState(() {
                                   publishLoading = false;
                                 });
@@ -426,7 +426,7 @@ class _CreatePublicationState extends State<CreatePublication> {
                                 print(e.toString());
                               });
                             } else {
-                              await publish(id: userProvider.getUserModel.authId, input: input);
+                              await publish(id: userProvider.getUserModel!.authId!, input: input);
                               setState(() {
                                 publishLoading = false;
                               });
@@ -464,7 +464,7 @@ class _CreatePublicationState extends State<CreatePublication> {
     );
   }
 
-  publish({String id, Map input}) async {
+  publish({required String id, required Map input}) async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     DocumentReference normalRef = FirebaseFirestore.instance.collection("POSTS").doc();
     DocumentReference groupRef = FirebaseFirestore.instance.collection("GROUPS").doc(widget.groupId).collection("POSTS_GROUPS").doc();
@@ -473,7 +473,7 @@ class _CreatePublicationState extends State<CreatePublication> {
       await docRef.set(input, SetOptions(merge: true)).then((doc) async {
         print(docRef.id);
         FirebaseMessaging.instance.subscribeToTopic(docRef.id).whenComplete(() { print("subscribed");});
-        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel.userId).update({"posts": FieldValue.increment(1), "points": FieldValue.increment(15)}).then((value){
+        FirebaseFirestore.instance.collection("USERS").doc(userProvider.getUserModel!.userId).update({"posts": FieldValue.increment(1), "points": FieldValue.increment(15)}).then((value){
           userProvider.modifyPoints(15);
           userProvider.newPost();
         });
@@ -539,7 +539,7 @@ class _CreatePublicationState extends State<CreatePublication> {
   }
 
   _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
       firstDate: DateTime.now(),
@@ -551,17 +551,17 @@ class _CreatePublicationState extends State<CreatePublication> {
       });
   }
 
-  getPublicationIconButton({String heroTag, String iconPath, String title, Function action}){
+  getPublicationIconButton({String? heroTag, String? iconPath, String? title, Function? action}){
     return InkWell(
-      onTap: action,
+      onTap: ()=>action,
       child: Container(
         padding: EdgeInsets.all(0),
         margin: EdgeInsets.symmetric(horizontal: wv*1),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(
           children: [
-            Hero(tag: heroTag, child: SvgPicture.asset(iconPath, color: kDeepTeal, width: 30)),
-            Text(title, style: TextStyle(color: kDeepTeal, fontSize: 10))
+            Hero(tag: heroTag!, child: SvgPicture.asset(iconPath!, color: kDeepTeal, width: 30)),
+            Text(title!, style: TextStyle(color: kDeepTeal, fontSize: 10))
           ],
         ),
       ),

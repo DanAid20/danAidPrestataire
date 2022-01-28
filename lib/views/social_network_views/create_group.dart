@@ -23,28 +23,28 @@ class CreateGroup extends StatefulWidget {
 
 class _CreateGroupState extends State<CreateGroup> {
 
-  QuerySnapshot searchSnapshot;
+  QuerySnapshot? searchSnapshot;
   TextEditingController _searchController = new TextEditingController();
-  Future<QuerySnapshot> futureSearchResults;
-  SharedPreferences preferences;
+  Future<QuerySnapshot>? futureSearchResults;
+  SharedPreferences? preferences;
 
   searches() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     UsersListProvider usersListProvider = Provider.of<UsersListProvider>(context, listen: false);
-    UserModel user = userProvider.getUserModel;
-    return StreamBuilder(
+    UserModel? user = userProvider.getUserModel;
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("USERS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         }
-        List<bool> _checked = List<bool>.filled(snapshot.data.docs.length, false);
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        List<bool> _checked = List<bool>.filled(snapshot.data!.docs.length, false);
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot userSnapshot = snapshot.data.docs[index];
+            DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
             UserModel singleUser = UserModel.fromDocument(userSnapshot);
-            if (singleUser.userId == user.userId) {
+            if (singleUser.userId == user?.userId) {
               return Container();
             }
             return StatefulBuilder(
@@ -54,11 +54,11 @@ class _CreateGroupState extends State<CreateGroup> {
                     Checkbox(
                       value: _checked[index],
                       fillColor: MaterialStateProperty.all(kDeepTeal),
-                      onChanged: (val){
+                      onChanged: (bool? val){
                         print(_checked[index].toString());
                         print(val.toString());
                         setState(() {
-                          _checked[index] = val;
+                          _checked[index] = val!;
                         });
                         _checked[index] ? usersListProvider.addUser(singleUser) : usersListProvider.removeUser(singleUser);
                         print(usersListProvider.getUsers.length.toString());
@@ -67,7 +67,7 @@ class _CreateGroupState extends State<CreateGroup> {
                     ),
                     Expanded(
                       child: SearchResult(
-                        user: user,
+                        user: user!,
                         target: singleUser,
                         onTap: (){
                           setState(() {
@@ -226,15 +226,15 @@ class _CreateGroupState extends State<CreateGroup> {
 }
 
 class SearchResult extends StatelessWidget {
-  final UserModel user;
-  final UserModel target;
-  final Function onTap;
+  final UserModel? user;
+  final UserModel? target;
+  final Function? onTap;
 
-  const SearchResult({Key key, this.onTap, this.user, this.target}) : super(key: key);
+  const SearchResult({Key? key, this.onTap, this.user, this.target}) : super(key: key);
 
   ConversationChatModel getConversation() {
     ConversationChatModel chatRoomModel = ConversationChatModel();
-    String conversationId = Algorithms.getConversationId(userId: user.authId, targetId: target.authId);
+    String conversationId = Algorithms.getConversationId(userId: user?.authId, targetId: target?.authId);
     FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((conversation) {
       ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation);
       chatRoomModel = chatRoom;
@@ -250,19 +250,19 @@ class SearchResult extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.grey,
-          backgroundImage: target.imgUrl != null
-              ? CachedNetworkImageProvider(target.imgUrl)
+          backgroundImage: target?.imgUrl != null
+              ? CachedNetworkImageProvider(target!.imgUrl!)
               : null,
-          child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
+          child: target!.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
-        title: Text(target.fullName),
-        subtitle: Text(target.profileType == doctor ? S.of(context).mdecin : target.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
+        title: Text(target!.fullName!),
+        subtitle: Text(target!.profileType == doctor ? S.of(context).mdecin : target!.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: kDeepTeal,
           size: 20,
         ),
-        onTap: onTap,
+        onTap: ()=>onTap,
       ),
     );
   }
