@@ -83,17 +83,17 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       });
     }else if(isPrestataire==true){
       setState((){
-        presta = prestataire.getServiceProvider;
+        presta = prestataire.getServiceProvider!;
       });
 
     }
 
     setState(() {
-      for(int i = 0; i < appointment.getAppointment.symptoms!.length; i++){
-        symptoms!.add(appointment.getAppointment.symptoms![i]);
+      for(int i = 0; i < appointment.getAppointment!.symptoms!.length; i++){
+        symptoms!.add(appointment.getAppointment!.symptoms![i]);
       }
 
-      reason = appointment.getAppointment.title;
+      reason = appointment.getAppointment!.title;
     });
     
   }
@@ -127,11 +127,11 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'beneficiaryId': adherent['beneficiaryId'],
       'beneficiaryName': adherent['username'],
       'otherInfo': '',
-      'establishment': isPrestataire!? prestataire.getServiceProvider.id: doctorProvider.getDoctor.officeName,
+      'establishment': isPrestataire!? prestataire.getServiceProvider!.id: doctorProvider.getDoctor!.officeName,
       'consultationCode': code,
       'type': 'RDV',
-      'amountToPay':  isPrestataire!? null : doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate!["public"] : null,
-      "consultationCost": isPrestataire!? null :  doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate!["public"] : null,
+      'amountToPay':  isPrestataire!? null : doctorProvider.getDoctor!.rate != null ? doctorProvider.getDoctor!.rate!["public"] : null,
+      "consultationCost": isPrestataire!? null :  doctorProvider.getDoctor!.rate != null ? doctorProvider.getDoctor!.rate!["public"] : null,
       'status': 0,
       'canPay': 0,
       'createdDate': DateTime.now(),
@@ -175,7 +175,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'idAppointement':idAppointement,
       'idAdherent': adherent['adherentId'],
       'idBeneficiairy': adherent['beneficiaryId'],
-      'idMedecin':isPrestataire!?prestataire.getServiceProvider.id: doctorProvider.getDoctor.id,
+      'idMedecin':isPrestataire!?prestataire.getServiceProvider!.id: doctorProvider.getDoctor!.id,
       'amountToPay':null,
       'isSolve': false,
       'Type': adherent['appointment-type'],
@@ -199,8 +199,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   Widget build(BuildContext context) {
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    DateTime startTime = appointment.getAppointment.startTime!.toDate();
-    DateTime endTime = appointment.getAppointment.endTime!.toDate();
+    DateTime startTime = appointment.getAppointment!.startTime!.toDate();
+    DateTime endTime = appointment.getAppointment!.endTime!.toDate();
     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
     var options = BaseOptions(
@@ -252,7 +252,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             SizedBox(height: hv*2,),
             Expanded(
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     Container(
@@ -280,17 +280,17 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                         SizedBox(height: hv*1,),
                                         Row(children: [
                                           CircleAvatar(
-                                            backgroundImage: appointment.getAppointment.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment.avatarUrl!) : null,
+                                            backgroundImage: appointment.getAppointment!.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment!.avatarUrl!) : null,
                                             backgroundColor: whiteColor,
                                             radius: wv*6,
-                                            child: appointment.getAppointment.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
+                                            child: appointment.getAppointment!.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
                                           ),
                                           SizedBox(width: wv*3,),
                                           Expanded(
                                             child: RichText(text: TextSpan(
-                                              text: appointment.getAppointment.username! + "\n",
+                                              text: appointment.getAppointment!.username! + "\n",
                                               children: [
-                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment.birthDate!.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment!.birthDate!.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
                                               ], style: TextStyle(color: kBlueDeep, fontSize: wv*4.2)),
                                               maxLines: 4,
                                               overflow: TextOverflow.ellipsis,
@@ -336,7 +336,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             field: doc!.speciality!,
                             officeName: doc!.officeName!,
                             isInRdvDetail: true,
-                            appointmentState: appointment.getAppointment.status!,
+                            appointmentState: appointment.getAppointment!.status!,
                             includeHospital: true,
                             onTap: () {
                             },
@@ -354,7 +354,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             field: presta!.specialite!,
                             officeName: presta!.contactName!,
                             isInRdvDetail: true,
-                            appointmentState: appointment.getAppointment.status!,
+                            appointmentState: appointment.getAppointment!.status!,
                             includeHospital: true,
                             onTap: () {
                             },
@@ -408,7 +408,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             !edit! ? Row(
               children: [
                 SizedBox(width: wv*4,),
-                appointment.getAppointment.status==1 ?Expanded(
+                appointment.getAppointment!.status==1 ?Expanded(
                   flex: 7,
                   child: CustomTextButton(
                     noPadding: true,
@@ -420,7 +420,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                      //DateTime.now().isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? : false,
                          await FirebaseFirestore.instance
                                   .collection('ADHERENTS')
-                                  .doc('${appointment.getAppointment.adherentId ?? appointment.getAppointment.beneficiaryId}')
+                                  .doc('${appointment.getAppointment!.adherentId ?? appointment.getAppointment!.beneficiaryId}')
                                   .get()
                                   .then((doc) {
                                 if (doc.exists) {
@@ -443,10 +443,10 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccount(
                                           data: adherent,
-                                          phoneNumber:'${appointment.getAppointment.adherentId ?? appointment.getAppointment.beneficiaryId}',
+                                          phoneNumber:'${appointment.getAppointment!.adherentId ?? appointment.getAppointment!.beneficiaryId}',
                                           isAccountIsExists: true,
                                           consultationType:
-                                              appointment.getAppointment.appointmentType,
+                                              appointment.getAppointment!.appointmentType,
                                         ),
                                       ),
                                     );
@@ -460,7 +460,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     isLoading: announceLoading!,
-                    enable:  appointment.getAppointment.status==1 ? false: true,
+                    enable:  appointment.getAppointment!.status==1 ? false: true,
                     text: S.of(context)!.approuver,
                     action: () async {
                       setState(() {
@@ -469,9 +469,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       try {
                         String? token;
 
-                        if(appointment.getAppointment.consultationType == "Video"){
+                        if(appointment.getAppointment!.consultationType == "Video"){
                           var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
-                          var response = await http.post(url, body: {"appID": agoraAppId, "appCertificate": agoraAppCertificate, "channelName": appointment.getAppointment.id, "uid": "20000", "roleApi" : "AUTHOR"}).catchError((e){print(e.toString());});
+                          var response = await http.post(url, body: {"appID": agoraAppId, "appCertificate": agoraAppCertificate, "channelName": appointment.getAppointment!.id, "uid": "20000", "roleApi" : "AUTHOR"}).catchError((e){print(e.toString());});
                           if (kDebugMode) {
                             print(response.toString());
                           }
@@ -480,7 +480,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             print(body.toString());
                           }
                           token = body['data'];
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token!, channelName: appointment.getAppointment.id!, uid: 20000,),),);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token!, channelName: appointment.getAppointment!.id!, uid: 20000,),),);
                         }
                         
                          final Map<String, dynamic> codes = {
@@ -488,14 +488,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                           'createdDate': DateTime.now()
                          };
                       
-                        if(appointment.getAppointment.adherentId == appointment.getAppointment.beneficiaryId){
+                        if(appointment.getAppointment!.adherentId == appointment.getAppointment!.beneficiaryId){
                           if (kDebugMode) {
                             print("---------------------------------------------------------");
                           }
                                var query= FirebaseFirestore.instance
                         .collection("APPOINTMENTS")
-                        .where("doctorId", isEqualTo: isPrestataire!? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
-                        .where("beneficiaryId", isEqualTo:appointment.getAppointment.adherentId);
+                        .where("doctorId", isEqualTo: isPrestataire!? prestataire.getServiceProvider!.id: doctorProvider.getDoctor!.id)
+                        .where("beneficiaryId", isEqualTo:appointment.getAppointment!.adherentId);
                         query.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
                             { // il  existe pas mais
@@ -506,17 +506,17 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               print("55555555555555555555555555"),
                               FirebaseFirestore.instance
                                   .collection("APPOINTMENTS")
-                                  .doc(appointment.getAppointment.id)
+                                  .doc(appointment.getAppointment!.id)
                                   .set({
                                 "status": 1,
                                 "agoraToken": token
                               },  SetOptions(merge: true)).then((value) async {
                                  print('ok33333333333333333333333333333');
                                   var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                .where("idAppointement", isEqualTo: appointment.getAppointment.id).get(); 
+                                .where("idAppointement", isEqualTo: appointment.getAppointment!.id).get(); 
                                 usecase.then((value) async {
                                       if(value.docs.isEmpty){   
-                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
+                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment!.adherentId).get();
                                         adherent.then((value) async {
                                           if(value.exists && value.data()!['CurrentcodeConsultation']!=null){
                                               
@@ -528,14 +528,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                                   final difference = date2.difference(d).inDays;
                                                   print(difference);
                                                   if( difference>14){
-                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
-                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment!.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment!.id);
                                                     await addCodeToAdherent(codes, docSnapshot.docs[0].id);
                                                     });
                                                   }
                                           }else{
-                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
-                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment!.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment!.id);
                                                     await addCodeToAdherent(codes, docSnapshot.docs[0].id);
                                               });
                                           }
@@ -552,7 +552,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               setState(() {
                                 announceLoading = false;
                                 edit=false;
-                                 appointment.getAppointment.status=1;
+                                 appointment.getAppointment!.status=1;
                               });
                               }).then((value) {
                                 // Navigator.pop(context);
@@ -561,12 +561,12 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             },
                         });
 
-                        }else if(appointment.getAppointment.adherentId!=appointment.getAppointment.beneficiaryId){
+                        }else if(appointment.getAppointment!.adherentId!=appointment.getAppointment!.beneficiaryId){
                            print("**********************************************************");
                            var query= FirebaseFirestore.instance
                         .collection("APPOINTMENTS")
-                        .where("doctorId", isEqualTo: isPrestataire!? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
-                        .where("beneficiaryId", isEqualTo:appointment.getAppointment.beneficiaryId);
+                        .where("doctorId", isEqualTo: isPrestataire!? prestataire.getServiceProvider!.id: doctorProvider.getDoctor!.id)
+                        .where("beneficiaryId", isEqualTo:appointment.getAppointment!.beneficiaryId);
                         query.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
                             { // il  existe pas mais
@@ -577,17 +577,17 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               print("55555555555555555555555555"),
                               FirebaseFirestore.instance
                                   .collection("APPOINTMENTS")
-                                  .doc(appointment.getAppointment.id)
+                                  .doc(appointment.getAppointment!.id)
                                   .set({
                                 "status": 1,
                                 "agoraToken": token
                               },  SetOptions(merge: true)).then((value) async {
                                  print('ok33333333333333333333333333333');
                                   var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                .where("idAppointement", isEqualTo: appointment.getAppointment.id).get(); 
+                                .where("idAppointement", isEqualTo: appointment.getAppointment!.id).get(); 
                                 usecase.then((value) async {
                                       if(value.docs.isEmpty){   
-                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
+                                        var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment!.adherentId).get();
                                         adherent.then((value) async {
                                           if(value.data()!['CurrentcodeConsultation']!=null){
                                               
@@ -603,14 +603,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                                     print(difference);
                                                   }
                                                   if( difference>14){
-                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
-                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                                    await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment!.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment!.id);
                                                     await addCodeToAdherent(codes, docSnapshot.docs[0].id);
                                                     });
                                                   }
                                           }else{
-                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
-                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
+                                              await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment!.id).then((value) async {
+                                                    await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment!.id);
                                                     await addCodeToAdherent(codes, docSnapshot.docs[0].id);
                                               });
                                           }
@@ -627,7 +627,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               setState(() {
                                 announceLoading = false;
                                 edit=false;
-                                 appointment.getAppointment.status=1;
+                                 appointment.getAppointment!.status=1;
                               });
                               }).then((value) {
                                 // Navigator.pop(context);
@@ -638,7 +638,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
                         }
                       
-                        // FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                        // FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment!.id).set({
                         //   "status": 1
                         // },  SetOptions(merge: true)).then((value) async {
                         //    await createConsultationCode(widget.adherent)
@@ -650,7 +650,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         //    setState(() {
                         //     announceLoading = false;
                         //     edit=false;
-                        //     appointment.getAppointment.status=1;
+                        //     appointment.getAppointment!.status=1;
                         //   });
                         // });
                       }
@@ -669,7 +669,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     text: S.of(context)!.rejeter,
-                    enable:  appointment.getAppointment.status==2 ? false: true,
+                    enable:  appointment.getAppointment!.status==2 ? false: true,
                     isLoading: cancelLoading!,
                     color: kSouthSeas,
                     action: (){
@@ -677,7 +677,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         cancelLoading = true;
                       });
                       try {
-                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                        FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment!.id).set({
                           "status": 2
                         },  SetOptions(merge: true)).then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.lannonceATRejeter),));
@@ -685,7 +685,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                            setState(() {
                             cancelLoading = false;
                             edit=false;
-                            appointment.getAppointment.status=2;
+                            appointment.getAppointment!.status=2;
                           });
                         });
                         
@@ -714,14 +714,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     saveLoading = true;
                   });
                   try {
-                    FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
+                    FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment!.id).set({
                       "status": 0
                     },  SetOptions(merge: true)).then((value) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.ceRendezvousATMisEnAttente),));
                       setState(() {
                             announceLoading = false;
                             edit=false;
-                            appointment.getAppointment.status=0;
+                            appointment.getAppointment!.status=0;
                           });
                     });
                   }

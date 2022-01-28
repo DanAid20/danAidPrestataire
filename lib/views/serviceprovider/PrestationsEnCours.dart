@@ -49,11 +49,11 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
     if (kDebugMode) {
-      print(prestatiaireObject.id);
+      print(prestatiaireObject!.id);
       print(userId.toString());
     }
-     Stream<QuerySnapshot> query = widget.isbeneficiare==false? FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("adherentId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots():
-     FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("beneficiaryId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots();
+     Stream<QuerySnapshot> query = widget.isbeneficiare==false? FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("adherentId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject!.id).snapshots():
+     FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("beneficiaryId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject!.id).snapshots();
 
     return  WillPopScope(
       onWillPop:()async{

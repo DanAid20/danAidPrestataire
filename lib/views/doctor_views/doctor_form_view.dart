@@ -118,7 +118,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               ),
               Expanded(
                 child: Container(
-                  height: SizeConfig.screenHeight * 1.1,
+                  height: SizeConfig.screenHeight! * 1.1,
                   decoration: const BoxDecoration(
                       color: whiteColor,
                   ),
@@ -193,14 +193,14 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               label: S.of(context)!.nomDeFamille,
               hintText: S.of(context)!.entrezVotreNomDeFamille,
               controller: _mNameController!,
-              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+              validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             CustomTextField(
               label: S.of(context)!.prnomS,
               hintText: S.of(context)!.entrezVotrePrnom,
               controller: _mSurnameController!,
-              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+              validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             CustomTextField(
@@ -208,8 +208,8 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               hintText: S.of(context)!.entrezVotreAddresseEmail,
               controller: _mEmailController!,
               keyboardType: TextInputType.emailAddress,
-              validator:  (String mail) {
-                return (mail.isEmpty)
+              validator:  (String? mail) {
+                return (mail!.isEmpty)
                     ? kEmailNullErrorFr
                     : (!emailValidatorRegExp.hasMatch(mail))
                     ? kInvalidEmailError : null;
@@ -410,7 +410,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   label: S.of(context)!.spcialit,
                   hintText: S.of(context)!.exPdiatre,
                   controller: _mSpecController!,
-                  validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                  validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                 ),
               ],
             )
@@ -420,7 +420,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               label: S.of(context)!.nomDeLhpital,
               hintText: S.of(context)!.exHpitaleGnrale,
               controller: _mOfficeNameController!,
-              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+              validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             Padding(
@@ -534,7 +534,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         'enabled': false,
         "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
         "urlCNI": "",
-        "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
+        "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
         "userCountryName": userProvider.getCountryName,
         'fullName': cni,
         "profil": "MEDECIN",
@@ -542,7 +542,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         "visitPoints": 0,
         "regionDorigione": region,
         "imageUrl": avatarUrl,
-        "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+        "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
         "nameKeywords": Algorithms.getKeyWords(name + " "+ surname)
       }, SetOptions(merge: true))
       .then((value) async {
@@ -572,12 +572,12 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             "statuMatrimonialMarie": false,
             "ville": city,
             "urlImage": avatarUrl,
-            "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
+            "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId!),
             "nameKeywords": Algorithms.getKeyWords(name + " "+ surname)
           }, SetOptions(merge: true))
           .then((value) async {
             HiveDatabase.setRegisterState(true);
-            HiveDatabase.setAuthPhone(userProvider.getUserId);
+            HiveDatabase.setAuthPhone(userProvider.getUserId!);
             HiveDatabase.setProfileType(doctor);
             Navigator.pushNamed(context, '/home');
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.profilMdcinCre)));
@@ -603,7 +603,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
     setState(() {
       imageLoading = true;
     });
-    String fileName = userProvider.getUserId;
+    String fileName = userProvider.getUserId!;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_Medecins/$fileName'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(

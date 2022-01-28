@@ -58,7 +58,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   UseCaseModelProvider? userCaprovider;
   String? famillyDoctorNAme;
   CarouselController? beneficiaryCarouselController = CarouselController();
-  TextEditingController? _patientController = new TextEditingController();
+  TextEditingController _patientController = new TextEditingController();
     final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
 
   List<Widget>? beneficiaries;
@@ -99,7 +99,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'beneficiaryName':exists==false&& name!.isNotEmpty ? name:adherentUserSelected!.familyName,
       'otherInfo':'',
       'consultationCode': code,
-      'idMedecin' : doctorProvider.getDoctor.id,
+      'idMedecin' : doctorProvider.getDoctor!.id,
       'idAppointement': id,
       'type': widget.consultationType,
       'amountToPay': 2000 ,
@@ -110,8 +110,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
         setState(() {
           isloading = false;
         });
-    userCaprovider!.getUseCase.consultationCode=code;
-    userCaprovider!.getUseCase.dateCreated= Timestamp.fromDate(date);
+    userCaprovider!.getUseCase!.consultationCode=code;
+    userCaprovider!.getUseCase!.dateCreated= Timestamp.fromDate(date);
        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
         
       }).catchError((e){
@@ -144,7 +144,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
       'idAdherent': widget.isAccountIsExists==false && phone!.isNotEmpty?phone: adherentUserSelected!.adherentId,
       'idFammillyMember': widget.isAccountIsExists==false && phone!.isNotEmpty ? widget.phoneNumber : phone,
       'idBeneficiairy': widget.isAccountIsExists==false && phone!.isNotEmpty ? phone: adherentUserSelected!.matricule,
-      'idMedecin':doctorProvider.getDoctor.id,
+      'idMedecin':doctorProvider.getDoctor!.id,
       'amountToPay': 2000,
       'isSolve':false,
       'idAppointement': id,
@@ -220,8 +220,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
         print(adherentProvider.getAdherent);
         print("------------");
       }
-      if(adherentProvider.getAdherent.familyDoctorId != null){
-        FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent.familyDoctorId).get().then((doc){
+      if(adherentProvider.getAdherent!.familyDoctorId != null){
+        FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent!.familyDoctorId).get().then((doc){
            var result= doc.data() as Map<String, dynamic>;
           String name = result["nomDefamille"];
             medecin = "Dr $name";
@@ -446,7 +446,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         hintText:"Jean MArie Nkah",
                         enabled: true,
                         controller: _patientController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       ] )
                       )
@@ -487,7 +487,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                }
                                DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
                                  var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                .where('adherentId', isEqualTo: widget.phoneNumber ).where('idMedecin',isEqualTo:doctorProvider.getDoctor.id).orderBy('createdDate').limit(1).get(); 
+                                .where('adherentId', isEqualTo: widget.phoneNumber ).where('idMedecin',isEqualTo:doctorProvider.getDoctor!.id).orderBy('createdDate').limit(1).get(); 
                                 usecase.then((value) async {
                                   if(value.size>0){
                                       if (kDebugMode) {
@@ -496,8 +496,10 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                     var useCase= value.docs[0].data();
                                      Timestamp t = useCase['createdDate'].runtimeType==DateTime?Timestamp.fromDate( useCase['createdDate']): useCase['createdDate'];
                                                     DateTime d = t.toDate();
-                                                   print(t);
-                                       print(d);
+                                       if (kDebugMode) {
+                                         print(t);
+                                         print(d);
+                                       }
                                     final date2 = DateTime.now(); 
                                     final difference = date2.difference(d).inDays;
                                      if( difference>14 &&  useCase['consultationCode']!=null ){
@@ -518,7 +520,9 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                   }
                                     
                                 }).catchError((onError){
-                                  print(onError);
+                                  if (kDebugMode) {
+                                    print(onError);
+                                  }
                                   saveSucces(context,string:S.of(context)!.uneErreurEstSurvenuVeuillezContacterLeService);
                                 });
 
@@ -694,11 +698,11 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                        
                                        if(userSelected!=-1){
                                          if (kDebugMode) {
-                                           print(adherentModelProvider?.getAdherent.adherentId);
-                                           print(doctorProvider.getDoctor.id);
+                                           print(adherentModelProvider!.getAdherent!.adherentId);
+                                           print(doctorProvider.getDoctor!.id);
                                          }
                                              var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                              .where('adherentId', isEqualTo: adherentModelProvider?.getAdherent.adherentId ).where('idMedecin',isEqualTo:doctorProvider.getDoctor.id).orderBy('createdDate').get(); 
+                                              .where('adherentId', isEqualTo: adherentModelProvider!.getAdherent!.adherentId ).where('idMedecin',isEqualTo:doctorProvider.getDoctor!.id).orderBy('createdDate').get(); 
                                               usecase.then((value) async {
                                                 if (kDebugMode) {
                                                   print(value.docs.isEmpty);
@@ -711,10 +715,10 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                       //   final difference = date2.difference(d).inDays;
                                                       //    adherentModelProvider.getAdherent.codeConsult['createdDate']
                                                        if (kDebugMode) {
-                                                         print("-------nnnnnnn--------${adherentModelProvider?.getAdherent.codeConsult}");
+                                                         print("-------nnnnnnn--------${adherentModelProvider!.getAdherent!.codeConsult}");
                                                        }
                                                       // print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
-                                                      if(adherentModelProvider?.getAdherent.codeConsult==null){
+                                                      if(adherentModelProvider!.getAdherent!.codeConsult==null){
                                                         if (kDebugMode) {
                                                           print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
                                                         }
@@ -724,7 +728,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                           await createConsultationCode(exists: widget.isAccountIsExists!, id: null).then((value) async {
                                                               await facturationCode(value);
                                                               await addCodeToAdherent(userData);
-                                                              adherentModelProvider?.getAdherent.codeConsult=userData;
+                                                              adherentModelProvider?.getAdherent!.codeConsult=userData;
                                                               setState(() {
                                                               isRequestLaunch=false;
                                                             });
@@ -738,7 +742,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                         idOfAdherent:
                                                                             widget.phoneNumber!,
                                                                         beneficiare: adherentUserSelected!,
-                                                                        consultationCode:  adherentModelProvider?.getAdherent.codeConsult!['codeConsultation'],
+                                                                        consultationCode:  adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
                                                                         createdAt:  DateTime.now(),
                                                                       )),
                                                             ); 
@@ -754,14 +758,14 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                         idOfAdherent:
                                                                             widget.phoneNumber!,
                                                                         beneficiare: adherentUserSelected!,
-                                                                        consultationCode:  adherentModelProvider?.getAdherent.codeConsult!['codeConsultation'],
+                                                                        consultationCode:  adherentModelProvider?.getAdherent!.codeConsult!['codeConsultation'],
                                                                         createdAt:  DateTime.now(),
                                                                       )),
                                                             ); 
                                                       }
                                                           
                                                     }else if(value.docs.isNotEmpty){
-                                                    Timestamp t = adherentModelProvider?.getAdherent.codeConsult!['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider?.getAdherent.codeConsult!['createdDate']):adherentModelProvider?.getAdherent.codeConsult!['createdDate'];
+                                                    Timestamp t = adherentModelProvider?.getAdherent!.codeConsult!['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider?.getAdherent!.codeConsult!['createdDate']):adherentModelProvider?.getAdherent!.codeConsult!['createdDate'];
                                                     DateTime d = t.toDate();
                                                    if (kDebugMode) {
                                                      print(t);
@@ -772,7 +776,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                   if (kDebugMode) {
                                                     print(difference);
                                                   }
-                                                        if( difference>14 && adherentModelProvider?.getAdherent.codeConsult!=null ){
+                                                        if( difference>14 && adherentModelProvider?.getAdherent!.codeConsult!=null ){
                                                                 if (kDebugMode) {
                                                                   print('jfhsdkfhdjksf');
                                                                 }
@@ -782,7 +786,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                 await createConsultationCode(exists: widget.isAccountIsExists!, id: null).then((value) async {
                                                                     await facturationCode(value);
                                                                     await addCodeToAdherent(userData);
-                                                                    adherentModelProvider?.getAdherent.codeConsult=userData;
+                                                                    adherentModelProvider?.getAdherent!.codeConsult=userData;
                                                                     setState(() {
                                                                     isRequestLaunch=false;
                                                                   });
@@ -796,7 +800,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                               idOfAdherent:
                                                                                   widget.phoneNumber!,
                                                                               beneficiare: adherentUserSelected!,
-                                                                              consultationCode: adherentModelProvider!.getAdherent.codeConsult!['codeConsultation'],
+                                                                              consultationCode: adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 
@@ -812,7 +816,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                               idOfAdherent:
                                                                                   widget.phoneNumber!,
                                                                               beneficiare: adherentUserSelected!,
-                                                                              consultationCode:  adherentModelProvider?.getAdherent.codeConsult!['codeConsultation'],
+                                                                              consultationCode:  adherentModelProvider?.getAdherent!.codeConsult!['codeConsultation'],
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 

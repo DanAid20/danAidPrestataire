@@ -77,15 +77,13 @@ class _PrestationHistoryState extends State<PrestationHistory> {
         Provider.of<DoctorModelProvider>(context, listen: false);
     
     // on get la listes 
-    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: doctorProvider.getDoctor.id).orderBy('createdAt', descending: true).get();
+    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: doctorProvider.getDoctor!.id).orderBy('createdAt', descending: true).get();
         facturation.then((querySnapshot){
         print( querySnapshot.docs.length);
         // ont get la list des ffacture ici
         for (var doc in querySnapshot.docs) {
-
-           Facture facturesList= Facture.fromDocument(doc);
+          Facture facturesList= Facture.fromDocument(doc);
           print(facturesList.amountToPay);
-          
            setState(() {
               facture.add(facturesList);
            });

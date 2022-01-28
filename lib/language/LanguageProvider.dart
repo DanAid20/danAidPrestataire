@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class LanguageProvider with ChangeNotifier {
-  String currentLanguage;
-  Locale locale;
+  String? currentLanguage;
+  Locale? locale;
 
   LanguageHelper languageHelper = LanguageHelper();
  
@@ -42,7 +42,7 @@ class LanguageProvider with ChangeNotifier {
     String definedCurrentLanguage;
 
     if (currentLanguage != null)
-      definedCurrentLanguage = currentLanguage;
+      definedCurrentLanguage = currentLanguage!;
     else {
       print(
           "locale from currentData: ${Localizations.localeOf(context).toString()}");

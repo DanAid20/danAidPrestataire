@@ -31,14 +31,14 @@ import '../../../locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorPatientView extends StatefulWidget {
-  DoctorPatientView({Key key}) : super(key: key);
+  DoctorPatientView({Key? key}) : super(key: key);
 
   @override
   _DoctorPatientViewState createState() => _DoctorPatientViewState();
 }
 
 class _DoctorPatientViewState extends State<DoctorPatientView> {
-  final NavigationService _navigationService = locator<NavigationService>();
+  final NavigationService? _navigationService = locator<NavigationService>();
   var startDays;
   var endDay;
   var currrentDaysOfPrestatire;
@@ -77,7 +77,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
       margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: Column(
@@ -106,11 +106,11 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 height: 140.h,
                 decoration: BoxDecoration(
                   color: isPrestataire ? kGold : kThirdIntroColor,
-                  boxShadow: [
-                    BoxShadow(
+                  boxShadow: const[
+                     BoxShadow(
                         color: Colors.grey, spreadRadius: 0.5, blurRadius: 4),
                   ],
-                  borderRadius: BorderRadius.all(
+                  borderRadius: const  BorderRadius.all(
                     Radius.circular(17),
                   ),
                 ),
@@ -138,8 +138,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             flex: 1,
                             child: Text(
                               isPrestataire
-                                  ? S.of(context).complterUnePriseEnCharge
-                                  : S.of(context).dmarrerUneConsultation,
+                                  ? S.of(context)!.complterUnePriseEnCharge
+                                  : S.of(context)!.dmarrerUneConsultation,
                               textScaleFactor: 1.0,
                               style: TextStyle(
                                   color: kCardTextColor,
@@ -160,8 +160,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             flex: 1,
                             child: Text(
                               isPrestataire
-                                  ? S.of(context).vrifierLeStatutDesPaiementsAvantDeRaliserLesServices
-                                  : S.of(context).accdezAuCarnetDeSantDigitalDeVosPatientsEt,
+                                  ? S.of(context)!.vrifierLeStatutDesPaiementsAvantDeRaliserLesServices
+                                  : S.of(context)!.accdezAuCarnetDeSantDigitalDeVosPatientsEt,
                               textScaleFactor: 0.8,
                               style: TextStyle(
                                   color: kCardTextColor,
@@ -203,8 +203,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         ? 'assets/icons/Bulk/Discount.svg'
                         : 'assets/icons/Bulk/Add User.svg',
                     title: isPrestataire
-                        ? S.of(context).emettreUnDevis
-                        : S.of(context).ajouterUnPatient,
+                        ? S.of(context)!.emettreUnDevis
+                        : S.of(context)!.ajouterUnPatient,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -220,7 +220,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Two-tone/3User.svg',
-                    title:S.of(context).prendreRendezvous,
+                    title:S.of(context)!.prendreRendezvous,
                     isPrestataire: isPrestataire,
                   ),
                 ): SizedBox.shrink(),
@@ -238,7 +238,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
-                    title: S.of(context).suivreMesPaiements,
+                    title: S.of(context)!.suivreMesPaiements,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -253,7 +253,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
-                    title: S.of(context).mesMessages,
+                    title: S.of(context)!.mesMessages,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -266,7 +266,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   }
 
   displsOtherServices(
-      {String iconesUrl, String title, bool isPrestataire = false}) {
+      {String? iconesUrl, String? title, bool? isPrestataire = false}) {
     return Column(
       children: [
         Container(
@@ -276,10 +276,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
             height: 85.r,
             decoration: BoxDecoration(
               color: isPrestataire == true ? kGoldlight : kThirdIntroColor,
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
               ],
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(10),
               ),
             ),
@@ -291,9 +291,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   child: Container(
                     margin: EdgeInsets.only(left: 10.w, top: 4.h),
                     child: SvgPicture.asset(
-                        iconesUrl != null
-                            ? iconesUrl
-                            : 'assets/icons/Bulk/Bookmark.svg',
+                        iconesUrl ?? 'assets/icons/Bulk/Bookmark.svg',
                         width: wv * 6,
                         color: isPrestataire == true ? kBlueForce : kDeepTeal),
                   ),
@@ -303,10 +301,10 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                       EdgeInsets.only(left: 10.w, right: wv * 1.5, top: 1.h),
                   child: Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 90.r,
                         child: Text(
-                          title != null ? title : S.of(context).ajouterUnPatient,
+                          title ?? S.of(context)!.ajouterUnPatient,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
@@ -355,7 +353,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   //                 padding: const EdgeInsets.all(20.0),
   //                 child: Center(
   //                   child:
-  //                       Text(S.of(context).vousNavezAucunRendezvousPourLeMoment),
+  //                       Text(S.of(context)!.vousNavezAucunRendezvousPourLeMoment),
   //                 ),
   //               );
   //     });
@@ -371,36 +369,36 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         .snapshots();
         AppointmentModelProvider rendezVous = Provider.of<AppointmentModelProvider>(context);
     AppointmentModel appointmentModel;
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
           //print(snapshot.data.docs.length);
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
           }
-          if (snapshot.data == null) return CircularProgressIndicator();
-          return snapshot.data.docs.length >= 1
+          if (snapshot.data == null) return const  CircularProgressIndicator();
+          return snapshot.hasData
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     var componenent;
-                    DocumentSnapshot doc = snapshot.data.docs[index];
-                     if(doc.data()["adherentId"] != doc.data()["beneficiaryId"]){
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
+                     if(doc["adherentId"] != doc["beneficiaryId"]){
                             CollectionReference users =
-                              FirebaseFirestore.instance.collection("ADHERENTS/${doc.data()["adherentId"]}/BENEFICIAIRES");
+                              FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
                           componenent= FutureBuilder<DocumentSnapshot>(
-                            future: users.doc(doc.data()["beneficiaryId"]).get(),
+                            future: users.doc(doc["beneficiaryId"]).get(),
                             builder: (BuildContext context,
                                 AsyncSnapshot<DocumentSnapshot> snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Center(
+                                return const  Center(
                                   child: CircularProgressIndicator(
                                     valueColor:
                                         AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -408,15 +406,15 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                 );
                               }
                               if (snapshot.hasError) {
-                                return Text(S.of(context).somethingWentWrong);
+                                return Text(S.of(context)!.somethingWentWrong);
                               }
                               if (snapshot.connectionState == ConnectionState.done) {
-                                Map<String, dynamic> data = snapshot.data.data();
+                                Map<String, dynamic> data = snapshot.data!.data()  as Map<String, dynamic> ;
                                 Timestamp t = data["dateNaissance"];
-                                DateTime d = t.toDate();
+                                DateTime? d = t.toDate();
                                 DateTime dateTimeNow = DateTime.now();
 
-                                Timestamp day = doc.data()["start-time"];
+                                Timestamp day = doc["start-time"];
                                 DateTime dateTime = day.toDate();
                                 String formattedTime =
                                     DateFormat.Hm().format(dateTime);
@@ -425,34 +423,34 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                       onTap: ()=>{
                                       appointmentModel=AppointmentModel.fromDocument(doc),
                                       rendezVous.setAppointmentModel(appointmentModel),
-                                      rendezVous.getAppointment.adherentId=snapshot.data.id,
-                                      rendezVous.getAppointment.avatarUrl=data["imageUrl"],
-                                      rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
-                                      rendezVous.getAppointment.birthDate=data["dateNaissance"],
+                                      rendezVous.getAppointment!.adherentId=snapshot.data!.id,
+                                      rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
+                                      rendezVous.getAppointment!.username='${data["prenom"]} ${data["nomFamille"]} ',
+                                      rendezVous.getAppointment!.birthDate=data["dateNaissance"],
                                       
                                         Navigator.of(context).pushNamed('/appointment-apointement')
                                         
                                       },
                                       child: HomePageComponents().patientsItem(
                                     apointementDate: "$formattedTime",
-                                    etat:doc.data()["status"],
+                                    etat:doc["status"],
                                     imgUrl: '${data["imageUrl"]}',
                                     nom: '${data["prenom"]} ${data["nomFamille"]}',
-                                    subtitle: '${doc.data()["title"]}'));
+                                    subtitle: '${doc["title"]}'));
                               }
-                              return Text(S.of(context).loading);
+                              return Text(S.of(context)!.loading);
                             },
                           );
-                     }else if(doc.data()["adherentId"] == doc.data()["beneficiaryId"]){
+                     }else if(doc["adherentId"] == doc["beneficiaryId"]){
                         CollectionReference users =
                         FirebaseFirestore.instance.collection('ADHERENTS');
                       componenent= FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc.data()["adherentId"]).get(),
+                      future: users.doc(doc["adherentId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(
+                          return const Center(
                             child: CircularProgressIndicator(
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(kPrimaryColor),
@@ -460,15 +458,15 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
+                          return Text(S.of(context)!.somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data.data();
+                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                           Timestamp t = data["dateNaissance"];
                           DateTime d = t.toDate();
                           DateTime dateTimeNow = DateTime.now();
 
-                          Timestamp day = doc.data()["start-time"];
+                          Timestamp day = doc["start-time"];
                           DateTime dateTime = day.toDate();
                           String formattedTime =
                               DateFormat.Hm().format(dateTime);
@@ -477,22 +475,22 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                 onTap: ()=>{
                                 appointmentModel=AppointmentModel.fromDocument(doc),
                                 rendezVous.setAppointmentModel(appointmentModel),
-                                rendezVous.getAppointment.adherentId=snapshot.data.id,
-                                rendezVous.getAppointment.avatarUrl=data["imageUrl"],
-                                rendezVous.getAppointment.username='${data["prenom"]} ${data["nomFamille"]} ',
-                                rendezVous.getAppointment.birthDate=data["dateNaissance"],
+                                rendezVous.getAppointment!.adherentId=snapshot.data!.id,
+                                rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
+                                rendezVous.getAppointment!.username='${data["prenom"]} ${data["nomFamille"]} ',
+                                rendezVous.getAppointment!.birthDate=data["dateNaissance"],
                                 
                                    Navigator.of(context).pushNamed('/appointment-apointement')
                                   
                                 },
                                 child: HomePageComponents().patientsItem(
                               apointementDate: "$formattedTime",
-                              etat:doc.data()["status"],
+                              etat:doc["status"],
                               imgUrl: '${data["imageUrl"]}',
                               nom: '${data["prenom"]} ${data["nomFamille"]}',
-                              subtitle: '${doc.data()["title"]}'));
+                              subtitle: '${doc["title"]}'));
                         }
-                        return Text(S.of(context).loading);
+                        return Text(S.of(context)!.loading);
                       },
                     );
                      }
@@ -503,7 +501,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
                     child:
-                        Text(S.of(context).vousNavezAucunRendezvousPourLeMoment),
+                        Text(S.of(context)!.vousNavezAucunRendezvousPourLeMoment),
                   ),
                 );
         });
@@ -539,9 +537,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         UseCaseServiceModel devis= UseCaseServiceModel.fromDocument(doc);
                         return HomePageComponents()
                          .prestataireItemList(
-                            etat: devis.paid? 1:0,
+                            etat: devis.paid!? 1:0,
                             montant: DateFormat("dd MMMM yyy ")
-                                .format(devis.dateCreated.toDate()),
+                                .format(devis.dateCreated!.toDate()),
                             date:"${devis.title}- ${devis.amount}.f" ,
                             nom: "${devis.titleDuDEvis}",
                             iconesConsultationTypes:Algorithms.getUseCaseServiceIcon(type: devis.type), 
@@ -552,7 +550,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             });
                       
                      }
-                  ): Center(
+                  ): const Center(
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Text("aucun devis en attente aujourd'hui "),
@@ -568,25 +566,25 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
-          decoration: BoxDecoration(
+          decoration:const BoxDecoration(
             color: Colors.white,
           ),
           padding: EdgeInsets.only(top: hv * 2, left: wv * 5, right: wv * 5),
           child: Row(
             children: [
               Text(
-                S.of(context).demandesDeRdv,
+                S.of(context)!.demandesDeRdv,
                 style: TextStyle(
                     color: kFirstIntroColor,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w500),
               ),
-              Text(S.of(context).voirPlus,
+              Text(S.of(context)!.voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
                       fontSize: 15.sp,
@@ -596,22 +594,22 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           ),
         ),
         Container(
-            margin: EdgeInsets.symmetric(vertical: 2.0),
+            margin: const  EdgeInsets.symmetric(vertical: 2.0),
             color: Colors.white,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 userProvider.getProfileType == doctor &&
-                        doctorProvider.getDoctor.id != null &&
+                        doctorProvider.getDoctor!.id != null &&
                         startDays != null &&
                         endDay != null
                     ? getListOfUser(
-                        startDays, endDay, null, doctorProvider.getDoctor.id)
+                        startDays, endDay, null, doctorProvider.getDoctor!.id)
                     : Padding(
                         padding: const EdgeInsets.all(10),
                         child: Center(
                             child:
-                                Text(S.of(context).aucunRendezvousPourLinstant)),
+                                Text(S.of(context)!.aucunRendezvousPourLinstant)),
                       )
               ],
             ))
@@ -629,25 +627,25 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         userProvider.getProfileType == serviceProvider ? true : false;
 
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
           ),
           padding: EdgeInsets.only(top: hv * 2, left: wv * 5, right: wv * 5),
           child: Row(
             children: [
               Text(
-               isPrestataire? S.of(context).derniresPrestations: S.of(context).derniresRendezvous,
+               isPrestataire? S.of(context)!.derniresPrestations: S.of(context)!.derniresRendezvous,
                 style: TextStyle(
                     color: kFirstIntroColor,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w500),
               ),
-              Text(S.of(context).voirPlus,
+              Text(S.of(context)!.voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
                       fontSize: 15.sp,
@@ -657,13 +655,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           ),
         ),
         Container(
-            margin: EdgeInsets.symmetric(vertical: 2.0),
+            margin: const EdgeInsets.symmetric(vertical: 2.0),
             color: Colors.white,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                    getPrestataireList(
-                        prestataire.getServiceProvider.id)
+                        prestataire.getServiceProvider!.id)
                     
               ],
             ))
@@ -678,9 +676,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         userProvider.getProfileType == serviceProvider ? true : false;
     
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: kBgTextColor,
         ),
         child: Column(

@@ -114,7 +114,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
    */
   "/doctor-home": (context) => DoctorBottomNavigationView(),
   "/doctor-profile-edit": (context) => DoctorProfileEdit(),
-  "/doctor-add-patient": (context) => AddPatientView(),
+  "/doctor-add-patient": (context) => AddPatientView(isLaunchConsultation: true,),
   "/inactive-account-patient": (context) => InactiveAccount(),
   "/ownerList-patient": (context) => OwnerUserListView(),
   "/history-prestation-doctor": (context) => PrestationHistory(),

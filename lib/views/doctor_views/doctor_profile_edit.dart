@@ -53,6 +53,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   final TextEditingController? _aboutController =  TextEditingController();
 
   LatLng? _initialcameraposition = const LatLng(4.044656688777058, 9.695724531228858);
+  
   GoogleMapController? _controller;
   final Location? _location = Location();
   Map<String, dynamic>? gpsCoords;
@@ -163,11 +164,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   initRegionDropdown(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     setState(() {
-      _stateCode = Algorithms.getStateCodeFromRegion(regions, doctorProvider.getDoctor.region!);
-      _region = doctorProvider.getDoctor.region;
+      _stateCode = Algorithms.getStateCodeFromRegion(regions, doctorProvider.getDoctor!.region!);
+      _region = doctorProvider.getDoctor!.region;
       regionChosen = true;
       cityChosen = true;
-      _city = doctorProvider.getDoctor.town;
+      _city = doctorProvider.getDoctor!.town;
     });
     
   }
@@ -175,11 +176,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   initOfficeRegionDropdown(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     setState(() {
-      _officeStateCode = Algorithms.getStateCodeFromRegion(regions, doctorProvider.getDoctor.hospitalRegion!);
-      _officeRegion = doctorProvider.getDoctor.hospitalRegion;
+      _officeStateCode = Algorithms.getStateCodeFromRegion(regions, doctorProvider.getDoctor!.hospitalRegion!);
+      _officeRegion = doctorProvider.getDoctor!.hospitalRegion;
       _officeRegionChosen = true;
       _officeCityChosen = true;
-      _officeCity = doctorProvider.getDoctor.hospitalTown;
+      _officeCity = doctorProvider.getDoctor!.hospitalTown;
     });
     
   }
@@ -187,112 +188,112 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   textFieldsControl (){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
 
-    if((doctorProvider.getDoctor.surname != null) & (doctorProvider.getDoctor.surname != "")){
+    if((doctorProvider.getDoctor!.surname != null) & (doctorProvider.getDoctor!.surname != "")){
       setState(() {
-        _surnameController!.text = doctorProvider.getDoctor.surname!;
+        _surnameController!.text = doctorProvider.getDoctor!.surname!;
         surnameEnabled = false; 
       });
     }
-    if((doctorProvider.getDoctor.familyName != null) & (doctorProvider.getDoctor.familyName != "")){
+    if((doctorProvider.getDoctor!.familyName != null) & (doctorProvider.getDoctor!.familyName != "")){
       setState(() {
-        _familynameController!.text = doctorProvider.getDoctor.familyName!;
+        _familynameController!.text = doctorProvider.getDoctor!.familyName!;
         nameEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.cniName != null) & (doctorProvider.getDoctor.cniName != "")){
+    if((doctorProvider.getDoctor!.cniName != null) & (doctorProvider.getDoctor!.cniName != "")){
       setState(() {
-        _cniNameController!.text = doctorProvider.getDoctor.cniName!;
+        _cniNameController!.text = doctorProvider.getDoctor!.cniName!;
         cniNameEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.email != null) & (doctorProvider.getDoctor.email != "")){
+    if((doctorProvider.getDoctor!.email != null) & (doctorProvider.getDoctor!.email != "")){
       setState(() {
-        _emailController!.text = doctorProvider.getDoctor.email!;
+        _emailController!.text = doctorProvider.getDoctor!.email!;
         emailEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.about != null) & (doctorProvider.getDoctor.about != "")){
+    if((doctorProvider.getDoctor!.about != null) & (doctorProvider.getDoctor!.about != "")){
       setState(() {
-        _aboutController!.text = doctorProvider.getDoctor.about!;
+        _aboutController!.text = doctorProvider.getDoctor!.about!;
         aboutEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.orderRegistrationCertificate != null) & (doctorProvider.getDoctor.orderRegistrationCertificate != "")){
+    if((doctorProvider.getDoctor!.orderRegistrationCertificate != null) & (doctorProvider.getDoctor!.orderRegistrationCertificate != "")){
       setState(() {
-        _orderRegistrationNberController!.text = doctorProvider.getDoctor.orderRegistrationCertificate!;
+        _orderRegistrationNberController!.text = doctorProvider.getDoctor!.orderRegistrationCertificate!;
         orderRegNberEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.speciality != null) & (doctorProvider.getDoctor.speciality != "")){
+    if((doctorProvider.getDoctor!.speciality != null) & (doctorProvider.getDoctor!.speciality != "")){
       setState(() {
-        _specialityController!.text = doctorProvider.getDoctor.speciality!;
+        _specialityController!.text = doctorProvider.getDoctor!.speciality!;
         specialityEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.rate != null)){
+    if((doctorProvider.getDoctor!.rate != null)){
       setState(() {
-        _rateController!.text = doctorProvider.getDoctor.rate!["public"].toString();
+        _rateController!.text = doctorProvider.getDoctor!.rate!["public"].toString();
         rateEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.address != null) & (doctorProvider.getDoctor.address != "")){
+    if((doctorProvider.getDoctor!.address != null) & (doctorProvider.getDoctor!.address != "")){
       setState(() {
-        _addressController!.text = doctorProvider.getDoctor.address!;
+        _addressController!.text = doctorProvider.getDoctor!.address!;
         addressEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.officeName != null) & (doctorProvider.getDoctor.officeName != "")){
+    if((doctorProvider.getDoctor!.officeName != null) & (doctorProvider.getDoctor!.officeName != "")){
       setState(() {
-        _officeNameController!.text = doctorProvider.getDoctor.officeName!;
+        _officeNameController!.text = doctorProvider.getDoctor!.officeName!;
         officeNameEnabled = false;
       });
     }
-    if((doctorProvider.getDoctor.officeCategory != null) & (doctorProvider.getDoctor.officeCategory != "")){
+    if((doctorProvider.getDoctor!.officeCategory != null) & (doctorProvider.getDoctor!.officeCategory != "")){
       setState(() {
-        _category = doctorProvider.getDoctor.officeCategory;
+        _category = doctorProvider.getDoctor!.officeCategory;
       });
     }
-    if((doctorProvider.getDoctor.field != null) & (doctorProvider.getDoctor.field != "")){
+    if((doctorProvider.getDoctor!.field != null) & (doctorProvider.getDoctor!.field != "")){
       setState(() {
-        _type = doctorProvider.getDoctor.field;
+        _type = doctorProvider.getDoctor!.field;
       });
     }
     
-    if (doctorProvider.getDoctor.location != null){
+    if (doctorProvider.getDoctor!.location != null){
       if (kDebugMode) {
-        print(doctorProvider.getDoctor.location.toString() +"inside+");
+        print(doctorProvider.getDoctor!.location.toString() +"inside+");
       }
-      if ((doctorProvider.getDoctor.location!["latitude"] != null) | (doctorProvider.getDoctor.location!["longitude"] != null) | true){
+      if ((doctorProvider.getDoctor!.location!["latitude"] != null) | (doctorProvider.getDoctor!.location!["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
-          "latitude": doctorProvider.getDoctor.location!["latitude"],
-          "longitude": doctorProvider.getDoctor.location!["longitude"]
+          "latitude": doctorProvider.getDoctor!.location!["latitude"],
+          "longitude": doctorProvider.getDoctor!.location!["longitude"]
         };
         });
       }
     }
     
-    if((doctorProvider.getDoctor.cniUrl != "") & (doctorProvider.getDoctor.cniUrl != null)){
+    if((doctorProvider.getDoctor!.cniUrl != "") & (doctorProvider.getDoctor!.cniUrl != null)){
       setState(() {
         cniUploaded = true;
       });
     }
-    if((doctorProvider.getDoctor.orderRegistrationCertificateUrl != "") & (doctorProvider.getDoctor.orderRegistrationCertificateUrl != null)){
+    if((doctorProvider.getDoctor!.orderRegistrationCertificateUrl != "") & (doctorProvider.getDoctor!.orderRegistrationCertificateUrl != null)){
       setState(() {
         otherFileUploaded = true;
       });
     }
-    if((doctorProvider.getDoctor.serviceList != "") & (doctorProvider.getDoctor.serviceList != null)){
+    if((doctorProvider.getDoctor!.serviceList != "") & (doctorProvider.getDoctor!.serviceList != null)){
       setState(() {
-          chatChosen = doctorProvider.getDoctor.serviceList["chat"];
-          consultationChosen = doctorProvider.getDoctor.serviceList["consultation"];
-          teleConsultationChosen = doctorProvider.getDoctor.serviceList["tele-consultation"];
-          rdvChosen = doctorProvider.getDoctor.serviceList["rdv"];
-          visiteDomicileChosen = doctorProvider.getDoctor.serviceList["visite-a-domicile"];
+          chatChosen = doctorProvider.getDoctor!.serviceList["chat"];
+          consultationChosen = doctorProvider.getDoctor!.serviceList["consultation"];
+          teleConsultationChosen = doctorProvider.getDoctor!.serviceList["tele-consultation"];
+          rdvChosen = doctorProvider.getDoctor!.serviceList["rdv"];
+          visiteDomicileChosen = doctorProvider.getDoctor!.serviceList["visite-a-domicile"];
       });
     }
-    if(doctorProvider.getDoctor.availability != null){
-      Map avail = doctorProvider.getDoctor.availability!;
+    if(doctorProvider.getDoctor!.availability != null){
+      Map avail = doctorProvider.getDoctor!.availability!;
       if(avail["monday to friday"]["start"] is Timestamp){
         setState(() {
           availability = {
@@ -349,6 +350,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   @override
   Widget build(BuildContext context) {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
+    LatLng coords= LatLng(doctorProvider.getDoctor!.location!["latitude"]!,  doctorProvider.getDoctor!.location!["longitude"]);
     return SafeArea(
       top: false,
       bottom: false,
@@ -373,7 +375,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                           padding: const EdgeInsets.all(20.0),
                         ),
-                        imageUrl: doctorProvider.getDoctor.avatarUrl!,),
+                        imageUrl: doctorProvider.getDoctor!.avatarUrl!,),
                     ),
                       //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                   ),
@@ -412,7 +414,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         label: S.of(context)!.nomDeFamille,
                         hintText: S.of(context)!.entrezVotreNomDeFamille,
                         controller: _familynameController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         enabled: nameEnabled!,
                         editAction: (){
                           setState(() {
@@ -426,7 +428,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         hintText: S.of(context)!.entrezVotrePrnom,
                         enabled: surnameEnabled!,
                         controller: _surnameController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             surnameEnabled = true;
@@ -440,7 +442,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         hintText: S.of(context)!.nomCni,
                         enabled: cniNameEnabled!,
                         controller: _cniNameController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             cniNameEnabled = true;
@@ -455,7 +457,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         enabled: aboutEnabled!,
                         multiLine: true,
                         controller: _aboutController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             aboutEnabled = true;
@@ -470,8 +472,8 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         enabled: emailEnabled!,
                         controller: _emailController!,
                         keyboardType: TextInputType.emailAddress,
-                        validator:  (String mail) {
-                          return (mail.isEmpty)
+                        validator:  (String? mail) {
+                          return (mail!.isEmpty)
                               ? kEmailNullErrorFr
                               : (!emailValidatorRegExp.hasMatch(mail))
                               ? kInvalidEmailError : null;
@@ -514,7 +516,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         hintText: S.of(context)!.exCarrefourTkcBiyemassi,
                         enabled: addressEnabled!,
                         controller: _addressController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             addressEnabled = true;
@@ -522,16 +524,16 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         },
                       ),
                       SizedBox(height: hv*3.5,),
-                      (gpsCoords != null) | (doctorProvider.getDoctor.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
+                      (gpsCoords != null) | (doctorProvider.getDoctor!.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(S.of(context)!.gps, style: const TextStyle(fontWeight: FontWeight.w900),),
                             RichText(text: TextSpan(
                               text: S.of(context)!.lat,
                               children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : doctorProvider.getDoctor.location!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : doctorProvider.getDoctor!.location!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
                                 TextSpan(text: S.of(context)!.lng),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : doctorProvider.getDoctor.location!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : doctorProvider.getDoctor!.location!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
                               ]
                             , style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
                             )
@@ -552,7 +554,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: doctorProvider.getDoctor.location == null ? _initialcameraposition : LatLng(doctorProvider.getDoctor.location!["latitude"], doctorProvider.getDoctor.location!["longitude"]), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: 
+                                doctorProvider.getDoctor!.location == null ? 
+                                  _initialcameraposition! : 
+                                coords, 
+                                zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                 myLocationEnabled: true,
@@ -629,7 +635,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             hintText: S.of(context)!.exChirurgien,
                             enabled: specialityEnabled!,
                             controller: _specialityController!,
-                            validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                             editAction: (){
                               setState(() {
                                 specialityEnabled = true;
@@ -646,7 +652,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         hintText: S.of(context)!.votreMatricule,
                         enabled: orderRegNberEnabled!,
                         controller: _orderRegistrationNberController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             orderRegNberEnabled = true;
@@ -666,7 +672,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
                         ],
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             rateEnabled = true;
@@ -681,7 +687,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         hintText: S.of(context)!.exHpitalDeDistrictDeLimb,
                         enabled: officeNameEnabled!,
                         controller: _officeNameController!,
-                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             officeNameEnabled = true;
@@ -949,7 +955,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       ),
                       SizedBox(height: hv*2,),
                       Container(
-                        child: cityChosen! && _officeCityChosen! && _rateController!.text.isNotEmpty && (gpsCoords != null || doctorProvider.getDoctor.location != null) ?  
+                        child: cityChosen! && _officeCityChosen! && _rateController!.text.isNotEmpty && (gpsCoords != null || doctorProvider.getDoctor!.location != null) ?  
                           !buttonLoading! ? CustomTextButton(
                             text: S.of(context)!.mettreJour,
                             color: kPrimaryColor,
@@ -1030,14 +1036,14 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 (gpsCoords!["latitude"] == null) || (gpsCoords!["longitude"] == null) ? doctorProvider.setLocation(location) : print("No data");
                                 doctorProvider.setAvailability(availability!);
                                 await FirebaseFirestore.instance.collection("USERS")
-                                  .doc(doctorProvider.getDoctor.id)
+                                  .doc(doctorProvider.getDoctor!.id)
                                   .set({
                                     "authId": FirebaseAuth.instance.currentUser?.uid,
                                     'emailAdress': email,
                                     'fullName': cniName,
                                     "regionDorigione": _region,
                                     "enable": true,
-                                    "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor.id!),
+                                    "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor!.id!),
                                     "nameKeywords": Algorithms.getKeyWords(fname.toLowerCase() + " "+ sname.toLowerCase())
                                   }, SetOptions(merge: true))
                                   .then((value) async {
@@ -1045,7 +1051,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                       print(gpsCoords!["latitude"].toString()+ "Laaaaaaat");
                                     }
                                     await FirebaseFirestore.instance.collection("MEDECINS")
-                                      .doc(doctorProvider.getDoctor.id)
+                                      .doc(doctorProvider.getDoctor!.id)
                                       .set({
                                         "authId": FirebaseAuth.instance.currentUser?.uid,
                                         "cniName": cniName,
@@ -1057,7 +1063,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                         "specialite": speciality,
                                         "regionDorigione": _region,
                                         "certificatDenregistrmDordre": orderReg,
-                                        "ville": _city ?? doctorProvider.getDoctor.town,
+                                        "ville": _city ?? doctorProvider.getDoctor!.town,
                                         "communeHospital": _officeCity,
                                         "nomEtablissement": officeName,
                                         "categorieEtablissement": _category,
@@ -1067,7 +1073,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                         "addresse": address,
                                         "availability": availability,
                                         "serviceList": serviceList,
-                                        "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor.id!),
+                                        "phoneKeywords": Algorithms.getKeyWords(doctorProvider.getDoctor!.id!),
                                         "nameKeywords": Algorithms.getKeyWords(fname.toLowerCase() + " "+ sname.toLowerCase())
                                       }, SetOptions(merge: true))
                                       .then((value) async {
@@ -1253,7 +1259,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       return null;
     }
     
-    String doctorId = doctorProvider.getDoctor.id!;
+    String doctorId = doctorProvider.getDoctor!.id!;
     Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/pieces_medecins/$doctorId/$name');
     final metadata = SettableMetadata(
       customMetadata: {'picked-file-path': file.path}
@@ -1327,7 +1333,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
     WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
         imageSpinner = true;
     }));
-    String fileName = userProvider.getUserId;
+    String fileName = userProvider.getUserId!;
 
     Reference storageReference = FirebaseStorage.instance.ref().child('photos/profils_Medecins/$fileName');
     final metadata = SettableMetadata(
@@ -1351,12 +1357,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       String url = await storageReference.getDownloadURL();
       doctorProvider.setImgUrl(url);
       FirebaseFirestore.instance.collection(doctor+"S")
-        .doc(doctorProvider.getDoctor.id)
+        .doc(doctorProvider.getDoctor!.id)
         .update({
           "urlImage": url,
         }).then((value) {
           FirebaseFirestore.instance.collection("USERS")
-            .doc(doctorProvider.getDoctor.id)
+            .doc(doctorProvider.getDoctor!.id)
             .update({
               "imageUrl": url,
             });
