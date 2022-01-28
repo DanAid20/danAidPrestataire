@@ -37,7 +37,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text(S.current.bienvenue)
+          Text(S.current!.bienvenue)
         ],
       )
     ),
@@ -48,7 +48,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text(S.current.maCouverture)
+          Text(S.current!.maCouverture)
         ],
       )
     ),
@@ -59,7 +59,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text(S.current.monDocteur)
+          Text(S.current!.monDocteur)
         ],
       )
     ),
@@ -72,7 +72,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text(S.current.bienvenue)
+          Text(S.current!.bienvenue)
         ],
       ),
     ),
@@ -83,7 +83,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text(S.current.mesServices)
+          Text(S.current!.mesServices)
         ],
       ),
     ),
@@ -94,7 +94,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           SizedBox(
             width: wv * 2,
           ),
-          Text(S.current.mesRendezvous)
+          Text(S.current!.mesRendezvous)
         ],
       ),
     )

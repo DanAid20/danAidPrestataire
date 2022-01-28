@@ -109,7 +109,7 @@ class _SearchState extends State<Search> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context).aucunUtilisateurAvecPourNom+":\n \"${_searchController.text}\"", 
+              Text(S.of(context)!.aucunUtilisateurAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -190,7 +190,7 @@ class _SearchState extends State<Search> {
                         borderSide:
                             BorderSide(color: Colors.grey.withOpacity(0.0)),
                         borderRadius: BorderRadius.circular(10)),
-                    hintText: S.of(context).entrezLeNom,
+                    hintText: S.of(context)!.entrezLeNom,
                     filled: true,
                     contentPadding:
                         EdgeInsets.only(bottom: 12, left: 15, right: 15),
@@ -249,7 +249,7 @@ class _SearchState extends State<Search> {
             ),
           ),
           Text(
-            S.of(context).cherchezDautresUtilisateurs,
+            S.of(context)!.cherchezDautresUtilisateurs,
             style: TextStyle(
                 fontSize: 20, color: Colors.grey, fontWeight: FontWeight.w900),
           )

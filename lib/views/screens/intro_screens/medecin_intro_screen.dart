@@ -36,7 +36,7 @@ class MedecinIntroScreen extends StatelessWidget {
                 sizeTop: defSize! * 12,
                 feeBgColor: kPrimaryColor,
               ),
-              IntroText(title: S.of(context).unMdecinDeFamilleMeSuit, rank: 3,)
+              IntroText(title: S.of(context)!.unMdecinDeFamilleMeSuit, rank: 3,)
             ],
           ),
         ),

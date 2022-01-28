@@ -38,10 +38,10 @@ class _ActualityPageState extends State<ActualityPage> with SingleTickerProvider
           unselectedLabelColor: Colors.grey[300],
           labelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 25),
           tabs: <Widget>[
-            Tab(text: S.of(context).posts),
-            Tab(text: S.of(context).qr),
-            Tab(text: S.of(context).entraide),
-            Tab(text:S.of(context).discussions)
+            Tab(text: S.of(context)!.posts),
+            Tab(text: S.of(context)!.qr),
+            Tab(text: S.of(context)!.entraide),
+            Tab(text:S.of(context)!.discussions)
           ],
           controller: actualityController,
         ),

@@ -193,7 +193,7 @@ class _ConversationState extends State<Conversation> {
                                   children: <Widget>[
                                     Text(
                                       replyIsLocal
-                                          ? S.of(context).you
+                                          ? S.of(context)!.you
                                           : conversation.getConversation!.targetName!,
                                       style: TextStyle(
                                           fontSize: 17,
@@ -298,7 +298,7 @@ class _ConversationState extends State<Conversation> {
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(width: 1, color: Colors.white.withOpacity(0.35)),
                                   borderRadius: BorderRadius.all(Radius.circular(20))),
-                              hintText: S.of(context).ecrireVotreCommentaire,
+                              hintText: S.of(context)!.ecrireVotreCommentaire,
                               hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                             ),
                           ),
@@ -808,7 +808,7 @@ class MessageBox extends StatelessWidget {
                                       Text(
                                         message?.replierId == conversation.getConversation!.targetId!
                                             ? conversation.getConversation!.targetName!
-                                            : S.of(context).you,
+                                            : S.of(context)!.you,
                                         style: TextStyle(
                                             color: messageIsLocal ? kDeepTeal : kPrimaryColor,
                                             fontWeight: FontWeight.bold),
@@ -826,10 +826,10 @@ class MessageBox extends StatelessWidget {
                                             message?.replyType == 0
                                                 ? message!.replyContent!
                                                 : message?.replyType == 1
-                                                    ? S.of(context).image
+                                                    ? S.of(context)!.image
                                                     : message?.replyType == 2
-                                                        ? S.of(context).sticker
-                                                        : S.of(context).content,
+                                                        ? S.of(context)!.sticker
+                                                        : S.of(context)!.content,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: Colors.grey[700]),

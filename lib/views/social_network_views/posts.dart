@@ -51,7 +51,7 @@ class _PostsState extends State<Posts> {
               SizedBox(height: 50,),
               Icon(LineIcons.userShield, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context).aucunGroupePourLeMoment, 
+              Text(S.of(context)!.aucunGroupePourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

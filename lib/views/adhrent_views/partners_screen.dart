@@ -133,7 +133,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                   noShadow: true,
                   avatarUrl: doc.avatarUrl,
                   name: doc.cniName,
-                  title: S.of(context).medecinDeFamille + doc.field!,
+                  title: S.of(context)!.medecinDeFamille + doc.field!,
                   speciality: doc.speciality,
                   teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
                   consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
@@ -160,7 +160,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                     noShadow: true,
                     avatarUrl: prestataire.avatarUrl,
                     name: prestataire.contactName,
-                    title: S.of(context).medecinDeFamille + prestataire.contactName!,
+                    title: S.of(context)!.medecinDeFamille + prestataire.contactName!,
                     isServiceProvider: true,
                     speciality: prestataire.category,
                     teleConsultation: false,
@@ -344,7 +344,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 }
                 ),
               ),
-              Text(S.of(context).trouverUnPrestataireDeSant, style: TextStyle(color: whiteColor),),
+              Text(S.of(context)!.trouverUnPrestataireDeSant, style: TextStyle(color: whiteColor),),
             ],
           ),
           actions: [
@@ -411,7 +411,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                                         borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
                                         borderRadius: BorderRadius.all(Radius.circular(15))
                                       ),
-                                      hintText: S.of(context).rechercher,
+                                      hintText: S.of(context)!.rechercher,
                                       hintStyle: TextStyle(color: kBrownCanyon)
                                     ),
                                   ),
@@ -419,7 +419,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ),
                               SizedBox(width: 5,),
                               TextButton(onPressed: ()=>controller.toPreviousIndex(),
-                                child: Text(S.of(context).annuler, style: TextStyle(color: kBrownCanyon),)
+                                child: Text(S.of(context)!.annuler, style: TextStyle(color: kBrownCanyon),)
                               ),
                               //IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})
 
@@ -447,12 +447,12 @@ class _PartnersScreenState extends State<PartnersScreen> {
         child: Column(children: [
           SizedBox(height: hv*1,),
           SvgPicture.asset("assets/icons/Bulk/ArrowUp.svg"),
-          Text(S.of(context).recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
+          Text(S.of(context)!.recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
           
           SizedBox(height: hv*4,),
 
           getDragSheetTiles(
-            title: S.of(context).mdcinDeFamille,
+            title: S.of(context)!.mdcinDeFamille,
             markerColor: kBrownCanyon,
             onTap: (){
               setState(() {
@@ -465,7 +465,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context).autresSpcialistes,
+            title: S.of(context)!.autresSpcialistes,
             markerColor: kPrimaryColor,
             onTap: (){
               setState(() {
@@ -474,7 +474,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context).hpitalOuClinique,
+            title: S.of(context)!.hpitalOuClinique,
             markerColor: kSouthSeas,
             onTap: (){
               setState(() {
@@ -483,7 +483,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context).laboratoire,
+            title: S.of(context)!.laboratoire,
             markerColor: primaryColor,
             onTap: (){
               setState(() {
@@ -492,7 +492,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context).pharmacie,
+            title: S.of(context)!.pharmacie,
             markerColor: Colors.teal,
             onTap: (){
               setState(() {

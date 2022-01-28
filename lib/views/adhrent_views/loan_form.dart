@@ -114,8 +114,8 @@ class _LoanFormState extends State<LoanForm> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
+              Text(S.of(context)!.aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(S.of(context)!.ajouterModifierOuEnvoyerLesPices, 
                 style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
               ),
             ],
@@ -193,7 +193,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context)!.demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -201,7 +201,7 @@ class _LoanFormState extends State<LoanForm> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(S.of(context).montantDuCrdit, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Text(S.of(context)!.montantDuCrdit, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
                                 Text(loanProvider.getLoan!.amount.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
                               ],
                             ),
@@ -209,7 +209,7 @@ class _LoanFormState extends State<LoanForm> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(S.of(context).vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Text(S.of(context)!.vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
                                 Container(
                                   margin: EdgeInsets.only(top: hv*0.2),
                                   padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*0.25),
@@ -232,7 +232,7 @@ class _LoanFormState extends State<LoanForm> {
                       SizedBox(width: wv*5),
                       SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
                       SizedBox(width: wv*2),
-                      Expanded(child: Text(S.of(context).rembourserTempsAugmenteVotreNiveauDeCrdit, style: TextStyle(fontSize: 15, color: kTextBlue))),
+                      Expanded(child: Text(S.of(context)!.rembourserTempsAugmenteVotreNiveauDeCrdit, style: TextStyle(fontSize: 15, color: kTextBlue))),
                       SizedBox(width: wv*5)
                     ],
                   )
@@ -248,7 +248,7 @@ class _LoanFormState extends State<LoanForm> {
 
                   Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(S.of(context).dure, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
+                      Text(S.of(context)!.dure, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
                       SizedBox(height: 5,),
                       Container(
                         constraints: BoxConstraints(minWidth: wv*45),
@@ -262,47 +262,47 @@ class _LoanFormState extends State<LoanForm> {
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton(
                               isExpanded: true,
-                              hint: Text(S.of(context).choisir),
+                              hint: Text(S.of(context)!.choisir),
                               value: _duration,
                               items: [
                                 DropdownMenuItem(
-                                  child: Text("3"+S.of(context).mois+" (3"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("3"+S.of(context)!.mois+" (3"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 3,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("4"+S.of(context).mois+"(4 "+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("4"+S.of(context)!.mois+"(4 "+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 4,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("5"+S.of(context).mois+"(5 "+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("5"+S.of(context)!.mois+"(5 "+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 5,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("6"+S.of(context).mois+"(6"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("6"+S.of(context)!.mois+"(6"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 6,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("7"+S.of(context).mois+"(7"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("7"+S.of(context)!.mois+"(7"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 7,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("8"+S.of(context).mois+"(8"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("8"+S.of(context)!.mois+"(8"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 8,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("9"+S.of(context).mois+"(9"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("9"+S.of(context)!.mois+"(9"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 9,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("10"+S.of(context).mois+"(10"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("10"+S.of(context)!.mois+"(10"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 10,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("11"+S.of(context).mois+"(11"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                  child: Text("11"+S.of(context)!.mois+"(11"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                   value: 11,
                                 ),
                                 DropdownMenuItem(
-                                  child: Text("12"+S.of(context).mois+"(12"+S.of(context).paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                  child: Text("12"+S.of(context)!.mois+"(12"+S.of(context)!.paiements+")", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                   value: 12,
                                 ),
                               ],
@@ -325,12 +325,12 @@ class _LoanFormState extends State<LoanForm> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: wv*1),
               child: CustomTextField(
-                label: S.of(context).quelleEnEstLaRaison,
+                label: S.of(context)!.quelleEnEstLaRaison,
                 labelColor: kTextBlue,
-                hintText: S.of(context).raisonDuPrt,
+                hintText: S.of(context)!.raisonDuPrt,
                 controller: _purposeController,
                 onChanged: (val)=>setState((){}),
-                validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null
+                validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null
               ),
             ),
 
@@ -341,9 +341,9 @@ class _LoanFormState extends State<LoanForm> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*3,),
-                  Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text(S.of(context)!.scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                   SizedBox(height: hv*0.5,),
-                  Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                  Text(S.of(context)!.unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                   Center(
                     child: InkWell(
                       onTap: (){getDocument(context);},
@@ -354,23 +354,23 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                   ),
                   FileUploadCard(
-                    title: S.of(context).carnet,
+                    title: S.of(context)!.carnet,
                     state: carnetUploaded,
                     loading: carnetSpinner,
                     action: () async {await getDocFromGallery('Carnet');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
-                    title: S.of(context).autrePiceJustificative,
+                    title: S.of(context)!.autrePiceJustificative,
                     state: otherFileUploaded,
                     loading: otherFileSpinner,
                     action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
                   SizedBox(height: hv*4,),
-                  Text(S.of(context).picesSupplmentairesMultiples, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text(S.of(context)!.picesSupplmentairesMultiples, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                   SizedBox(height: hv*1.5,),
                   FileUploadCard(
-                    title: S.of(context).documentsMultiples+"($docsUploaded)",
+                    title: S.of(context)!.documentsMultiples+"($docsUploaded)",
                     state: docUploaded,
                     isMultiple: true,
                     loading: docSpinner,
@@ -388,7 +388,7 @@ class _LoanFormState extends State<LoanForm> {
           children: [
             Expanded(
               child: CustomTextButton(
-                text: S.of(context).suivant,
+                text: S.of(context)!.suivant,
                 enable: _purposeController.text.isNotEmpty,
                 action: (){
                     controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
@@ -397,7 +397,7 @@ class _LoanFormState extends State<LoanForm> {
             ),
             Expanded(
               child: CustomTextButton(
-                text: S.of(context).annuler,
+                text: S.of(context)!.annuler,
                 color: kSouthSeas,
                 action: (){
                     Navigator.pop(context);
@@ -430,7 +430,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context)!.demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                       ],
                   )),
                   Container(
@@ -439,14 +439,14 @@ class _LoanFormState extends State<LoanForm> {
                       children: [
                         Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context).sourceDeRevenues, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+                            Text(S.of(context)!.sourceDeRevenues, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
                             SizedBox(height: hv*2,),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Expanded(
                                   child: CustomTextField(
-                                    label: S.of(context).revenueMensuel,
+                                    label: S.of(context)!.revenueMensuel,
                                     labelColor: kTextBlue,
                                     noPadding: true,
                                     controller: _salaryController,
@@ -461,15 +461,15 @@ class _LoanFormState extends State<LoanForm> {
                                 SizedBox(width: wv*3,),
                                 Expanded(
                                   child: CustomDropDownButton(
-                                    label: S.of(context).etesVousSalari,
+                                    label: S.of(context)!.etesVousSalari,
                                     value: _isSalaryMan,
                                     items: [
                                           DropdownMenuItem(
-                                            child: Text(S.of(context).oui, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                            child: Text(S.of(context)!.oui, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                             value: true,
                                           ),
                                           DropdownMenuItem(
-                                            child: Text(S.of(context).non, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                            child: Text(S.of(context)!.non, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                             value: false,
                                           ),
                                     ],
@@ -480,7 +480,7 @@ class _LoanFormState extends State<LoanForm> {
                             ),
                             SizedBox(height: hv*2,),
                             CustomTextField(
-                              label: S.of(context).employeur,
+                              label: S.of(context)!.employeur,
                               labelColor: kTextBlue,
                               noPadding: true,
                               controller: _employerController,
@@ -490,7 +490,7 @@ class _LoanFormState extends State<LoanForm> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).tlphone, style: TextStyle(fontSize: 16, color: kTextBlue)),
+                                Text(S.of(context)!.tlphone, style: TextStyle(fontSize: 16, color: kTextBlue)),
                                 SizedBox(height: 5,),
                                 InternationalPhoneNumberInput(
                                   validator: (String? phone) {
@@ -523,8 +523,8 @@ class _LoanFormState extends State<LoanForm> {
                             ),
                             SizedBox(height: hv*2,),
                             CheckboxListTile(
-                              title: Text(S.of(context).souhaitezVousAvoirUnAvaliste, style: TextStyle(fontSize: 16, color: kBlueDeep)),
-                              subtitle: Text(S.of(context).votrePouxseEstDeFactoSolidaireDeVotreCrditVous, style: TextStyle(fontSize: 13, color: kTextBlue)),
+                              title: Text(S.of(context)!.souhaitezVousAvoirUnAvaliste, style: TextStyle(fontSize: 16, color: kBlueDeep)),
+                              subtitle: Text(S.of(context)!.votrePouxseEstDeFactoSolidaireDeVotreCrditVous, style: TextStyle(fontSize: 13, color: kTextBlue)),
                               activeColor: kSouthSeas,
                               value: _avalist, 
                               onChanged: (bool? val)=>setState((){_avalist = val!;})
@@ -536,7 +536,7 @@ class _LoanFormState extends State<LoanForm> {
                                 SizedBox(height: hv*2,),
                                 CustomTextField(
                                   labelColor: kTextBlue,
-                                  label: S.of(context).nomDeLavaliste,
+                                  label: S.of(context)!.nomDeLavaliste,
                                   noPadding: true,
                                   controller: _avalistNameController,
                                   onChanged: (val)=>setState((){}),
@@ -544,7 +544,7 @@ class _LoanFormState extends State<LoanForm> {
 
                                 SizedBox(height: hv*2,),
 
-                                Text(S.of(context).tlphone, style: TextStyle(fontSize: 16, color: kTextBlue),),
+                                Text(S.of(context)!.tlphone, style: TextStyle(fontSize: 16, color: kTextBlue),),
                                 SizedBox(height: hv*1,),
                                 InternationalPhoneNumberInput(
                                   validator: (String? phone) {
@@ -585,7 +585,7 @@ class _LoanFormState extends State<LoanForm> {
           children: [
             Expanded(
               child: CustomTextButton(
-                text: S.of(context).suivant,
+                text: S.of(context)!.suivant,
                 enable: !_avalist ? _salaryController.text.isNotEmpty && _isSalaryMan != null && _employerController.text.isNotEmpty && _phoneController.text.isNotEmpty : _salaryController.text.isNotEmpty && _isSalaryMan != null && _employerController.text.isNotEmpty && _phoneController.text.isNotEmpty && _avalistNameController.text.isNotEmpty && _avalistPhoneController.text.isNotEmpty,
                 action: (){
                     controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
@@ -594,7 +594,7 @@ class _LoanFormState extends State<LoanForm> {
             ),
             Expanded(
               child: CustomTextButton(
-                text: S.of(context).annuler,
+                text: S.of(context)!.annuler,
                 color: kSouthSeas,
                 action: (){
                     controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
@@ -640,7 +640,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context)!.demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -648,7 +648,7 @@ class _LoanFormState extends State<LoanForm> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(S.of(context).montantDuCrdit, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Text(S.of(context)!.montantDuCrdit, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
                                 Text(loan!.amount.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
                               ],
                             ),
@@ -656,7 +656,7 @@ class _LoanFormState extends State<LoanForm> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Text(S.of(context).vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                Text(S.of(context)!.vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
                                 Container(
                                   margin: EdgeInsets.only(top: hv*0.2),
                                   padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*0.25),
@@ -679,7 +679,7 @@ class _LoanFormState extends State<LoanForm> {
                       SizedBox(width: wv*5),
                       SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
                       SizedBox(width: wv*2),
-                      Expanded(child: Text(S.of(context).rembourserTempsAugmenteVotreNiveauDeCrdit, style: TextStyle(fontSize: 15, color: kTextBlue))),
+                      Expanded(child: Text(S.of(context)!.rembourserTempsAugmenteVotreNiveauDeCrdit, style: TextStyle(fontSize: 15, color: kTextBlue))),
                       SizedBox(width: wv*5)
                     ],
                   )
@@ -693,13 +693,13 @@ class _LoanFormState extends State<LoanForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context).informationsSurLeRemboursement, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.w600),),
+                  Text(S.of(context)!.informationsSurLeRemboursement, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.w600),),
                   SizedBox(height: hv*2,),
-                  getTableRow(input: S.of(context).frquence, output: "$_duration Mensualités"),
-                  getTableRow(input: S.of(context).tauxDintrtEffectif, output: adh.adherentPlan == 0 ? "16%" : "5%"),
-                  getTableRow(input: S.of(context).montantTotalRembourser, output: "$totalToPay f."),
-                  getTableRow(input: S.of(context).premierVersement, output: firstPaymentDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(firstPaymentDate)+" "+ firstPaymentDate.year.toString()),
-                  getTableRow(input: S.of(context).dernierVersement, output: lastPaymentDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastPaymentDate)+" "+ lastPaymentDate.year.toString()),
+                  getTableRow(input: S.of(context)!.frquence, output: "$_duration Mensualités"),
+                  getTableRow(input: S.of(context)!.tauxDintrtEffectif, output: adh.adherentPlan == 0 ? "16%" : "5%"),
+                  getTableRow(input: S.of(context)!.montantTotalRembourser, output: "$totalToPay f."),
+                  getTableRow(input: S.of(context)!.premierVersement, output: firstPaymentDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(firstPaymentDate)+" "+ firstPaymentDate.year.toString()),
+                  getTableRow(input: S.of(context)!.dernierVersement, output: lastPaymentDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastPaymentDate)+" "+ lastPaymentDate.year.toString()),
                 ],
               ),
             ),
@@ -738,7 +738,7 @@ class _LoanFormState extends State<LoanForm> {
           children: [
             Expanded(
               child: CustomTextButton(
-                  text: S.of(context).suivant, 
+                  text: S.of(context)!.suivant, 
                   enable: _serviceTermsAccepted && _trustConditionAccepted,
                   isLoading: buttonLoading,
                   action: (){
@@ -811,7 +811,7 @@ class _LoanFormState extends State<LoanForm> {
             ),
             Expanded(
               child: CustomTextButton(
-                text: S.of(context).annuler,
+                text: S.of(context)!.annuler,
                 color: kSouthSeas,
                 action: (){
                     controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
@@ -878,7 +878,7 @@ class _LoanFormState extends State<LoanForm> {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     
@@ -902,7 +902,7 @@ class _LoanFormState extends State<LoanForm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context).ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context)!.ajoute)));
       String url = await storageReference.getDownloadURL();
       if (name == "Carnet"){
         loanProvider.setCarnetUrl(url);
@@ -977,14 +977,14 @@ class _LoanFormState extends State<LoanForm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(LineIcons.identificationCard),
-                    title: new Text(S.of(context).carnet, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    title: new Text(S.of(context)!.carnet, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                     onTap: () {
                       getDocFromPhone("Carnet");
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(LineIcons.certificate),
-                  title: new Text(S.of(context).autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context)!.autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Pièce_Justificative_Supplémentaire");
                     Navigator.of(context).pop();
@@ -992,7 +992,7 @@ class _LoanFormState extends State<LoanForm> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.certificate),
-                  title: new Text(S.of(context).documentsMultiples+"($docsUploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context)!.documentsMultiples+"($docsUploaded)", style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("doc");
                     Navigator.of(context).pop();

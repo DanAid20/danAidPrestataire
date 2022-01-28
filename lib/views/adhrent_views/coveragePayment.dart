@@ -190,7 +190,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context).important, style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text(S.of(context)!.important, style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
                         SizedBox(height: hv*1,),
                         Text("Obtenez $removedAmount FCFA de réduction pour l'achat de ce plan de service", style: TextStyle(color: kTextBlue, fontSize: 15)),
                         SizedBox(height: hv*1,),
@@ -271,7 +271,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                         children: [
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text(S.of(context).fraisDinscription)
+                            child: Text(S.of(context)!.fraisDinscription)
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -298,7 +298,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                         children: [
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text(S.of(context).totalPayer)
+                            child: Text(S.of(context)!.totalPayer)
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -326,7 +326,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
           Container(
             child: CustomTextButton(
               isLoading: spinner2,
-              text: S.of(context).confirmer,
+              text: S.of(context)!.confirmer,
               enable: choice != null,
               action: () async {
                 setState(() {spinner2 = true;});
@@ -397,14 +397,14 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                 ),
                 child: Column(children: [
                   SizedBox(height: hv*4),
-                  RichText(text: TextSpan(children: [TextSpan(text: S.of(context).avezvousDjFfectuLeVirementMobile, style: TextStyle(fontWeight: FontWeight.w700)),], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
+                  RichText(text: TextSpan(children: [TextSpan(text: S.of(context)!.avezvousDjFfectuLeVirementMobile, style: TextStyle(fontWeight: FontWeight.w700)),], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
                   SizedBox(height: hv*2,),
-                  Text(S.of(context).aprsConfirmationUnAgentReviendraVersVousSous24hPour, style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
+                  Text(S.of(context)!.aprsConfirmationUnAgentReviendraVersVousSous24hPour, style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
                   Row(children: [
                     Expanded(
                       child: CustomTextButton(
                         expand: false,
-                        text: S.of(context).confirmer,
+                        text: S.of(context)!.confirmer,
                         isLoading: spinner2,
                         color: kPrimaryColor,
                         action: (){},
@@ -413,7 +413,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     Expanded(
                       child: CustomTextButton(
                         expand: false,
-                        text: S.of(context).annuler,
+                        text: S.of(context)!.annuler,
                         color: kSouthSeas,
                         action: () => Navigator.pop(context), //{setState((){spinner2 = !spinner2;});}
                       ),

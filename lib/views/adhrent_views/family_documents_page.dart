@@ -82,8 +82,8 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context).documents, style: TextStyle(fontSize: 45, color: kCardTextColor),),
-                            Text(S.of(context).aperuTlchargementDesDocumentsAdministratifsDanaid, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kCardTextColor),),
+                            Text(S.of(context)!.documents, style: TextStyle(fontSize: 45, color: kCardTextColor),),
+                            Text(S.of(context)!.aperuTlchargementDesDocumentsAdministratifsDanaid, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kCardTextColor),),
                           ],
                       )),
                       SizedBox(height: hv*5,),
@@ -128,7 +128,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
                   children: [
                     SizedBox(height: hv*3,),
                     SvgPicture.asset('assets/icons/Two-tone/Paper.svg', color: kDeepTeal.withOpacity(0.4), width: wv*30,),
-                    Text(S.of(context).dfilezPourAvoirnleRsum, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kDeepTeal.withOpacity(0.5)), textAlign: TextAlign.center),
+                    Text(S.of(context)!.dfilezPourAvoirnleRsum, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kDeepTeal.withOpacity(0.5)), textAlign: TextAlign.center),
                     SizedBox(height: hv*3,)
                   ],
                 )),

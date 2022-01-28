@@ -46,7 +46,7 @@ class _FriendRequestsState extends State<FriendRequests> {
         backgroundColor: kDeepTeal,
         leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
-        title: Text(S.of(context).demandesDamiti, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
+        title: Text(S.of(context)!.demandesDamiti, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel!.userId).snapshots(),
@@ -77,7 +77,7 @@ class _FriendRequestsState extends State<FriendRequests> {
                   SizedBox(height: 50,),
                   Icon(LineIcons.comment, color: whiteColor, size: 85,),
                   SizedBox(height: 5,),
-                  Text(S.of(context).aucuneDmandeDamiti, 
+                  Text(S.of(context)!.aucuneDmandeDamiti, 
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: whiteColor )
                   , textAlign: TextAlign.center,),
                 ],
@@ -94,7 +94,7 @@ class _FriendRequestsState extends State<FriendRequests> {
                         SizedBox(height: 50,),
                         Icon(LineIcons.comment, color: whiteColor, size: 85,),
                         SizedBox(height: 5,),
-                        Text(S.of(context).aucuneDmandeDamiti, 
+                        Text(S.of(context)!.aucuneDmandeDamiti, 
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: whiteColor )
                         , textAlign: TextAlign.center,),
                       ],

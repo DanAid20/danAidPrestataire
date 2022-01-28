@@ -45,7 +45,7 @@ class _DiscussionsState extends State<Discussions> {
               SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context).aucuneDiscussionPourLeMoment, 
+              Text(S.of(context)!.aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

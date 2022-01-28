@@ -105,11 +105,11 @@ class _LoginViewState extends State<LoginView> {
                 titlePadding: EdgeInsets.all(15.0),
                 searchCursorColor: Colors.pinkAccent,
                 searchInputDecoration: InputDecoration(
-                    hintText: S.of(context).chercher,
+                    hintText: S.of(context)!.chercher,
                     contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
                 ),
                 isSearchable: true,
-                title: Text(S.of(context).selectionnezVotrePays),
+                title: Text(S.of(context)!.selectionnezVotrePays),
                 onValuePicked: (Country country) {
                   print(country.isoCode);
                   print(country.name);
@@ -163,7 +163,7 @@ class _LoginViewState extends State<LoginView> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    child: Text(S.of(context).slectionnezVotrePays, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                    child: Text(S.of(context)!.slectionnezVotrePays, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                   ListTile(
                     onTap: _openCountryPickerDialog,
@@ -185,7 +185,7 @@ class _LoginViewState extends State<LoginView> {
                     return (phone!.isEmpty)
                         ? kPhoneNumberNullError
                         : (!digitValidatorRegExp.hasMatch(phone))
-                        ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
+                        ? S.of(context)!.entrerUnNumeroDeTlphoneValide : null;
                   },
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
@@ -207,7 +207,7 @@ class _LoginViewState extends State<LoginView> {
                       borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.2)),
                       borderRadius: BorderRadius.all(Radius.circular(20))
                     ),
-                    hintText: S.of(context).numroDeTlphone,
+                    hintText: S.of(context)!.numroDeTlphone,
                     hintStyle: TextStyle(color: Colors.grey, fontSize: wv*4),
                   ),
                 ),
@@ -217,7 +217,7 @@ class _LoginViewState extends State<LoginView> {
             loader ?
             Loaders().buttonLoader(kPrimaryColor)
                 : CustomTextButton(
-              text: S.of(context).continuer,
+              text: S.of(context)!.continuer,
               color: kPrimaryColor,
               action: () async {
                 setState(() {
@@ -275,7 +275,7 @@ class _LoginViewState extends State<LoginView> {
 
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
+      showSnackbar(S.of(context)!.phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
       userProvider.setAuthId(_auth.currentUser!.uid);
       setState((){
         loader = false;
@@ -317,18 +317,18 @@ class _LoginViewState extends State<LoginView> {
       setState((){
         loader = false;
       });
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message + authException.message!);
+      showSnackbar(S.of(context)!.phoneNumberVerificationFailedCode+authException.code+S.of(context)!.message + authException.message!);
     };
 
     PhoneCodeSent codeSent = (String? verificationId, [int? forceResendingToken]) async {
-      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
+      showSnackbar(S.of(context)!.pleaseCheckYourPhoneForTheVerificationCode);
       if(verificationId != null){
         _verificationId = verificationId;
         /*setState((){
           loader = false;
         });*/
         //_navigationService.navigateTo('/otp');
-        showSnackbar(S.of(context).leCodeViensDarriverPatientezEncoreUnpeu );
+        showSnackbar(S.of(context)!.leCodeViensDarriverPatientezEncoreUnpeu );
       }else{
         setState((){
           loader = false;
@@ -338,7 +338,7 @@ class _LoginViewState extends State<LoginView> {
 
     PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
       phoneVerificationProvider.setVerificationId(verificationId);
-      showSnackbar(S.of(context).verificationCode + verificationId);
+      showSnackbar(S.of(context)!.verificationCode + verificationId);
       _navigationService.navigateTo('/otp');
       _verificationId = verificationId;
       setState((){
@@ -355,7 +355,7 @@ class _LoginViewState extends State<LoginView> {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
+      showSnackbar(S.of(context)!.phoneNumberVerificationFailedCode+e.toString());
     }
   }
 

@@ -85,7 +85,7 @@ class _RegisterViewState extends State<RegisterView> {
                             margin: EdgeInsets.only(top: top(size: 14)),
                             padding: EdgeInsets.symmetric(
                                 horizontal: horizontal(size: 45)),
-                            child: Text(S.of(context).entrezVosInformationsAfinDeCrerVotreCompteEt,
+                            child: Text(S.of(context)!.entrezVosInformationsAfinDeCrerVotreCompteEt,
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -113,7 +113,7 @@ class _RegisterViewState extends State<RegisterView> {
                             loginForm(),
                             //DefaultBtn(formKey: _mFormKey, signText: "S'inscrire", signRoute: '/otp',),
                             
-                            SIgnInUpTag(title: S.of(context).djMembre, subTitle: S.of(context).seConnecter, signRoute: '/login',),
+                            SIgnInUpTag(title: S.of(context)!.djMembre, subTitle: S.of(context)!.seConnecter, signRoute: '/login',),
                             SizedBox(height: height(size: 25),)
                           ],
                         ),
@@ -137,11 +137,11 @@ class _RegisterViewState extends State<RegisterView> {
           titlePadding: EdgeInsets.all(15.0),
           searchCursorColor: Colors.pinkAccent,
           searchInputDecoration: InputDecoration(
-            hintText: S.of(context).chercher,
+            hintText: S.of(context)!.chercher,
             contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
           ),
           isSearchable: true,
-          title: Text(S.of(context).selectionnezVotrePays),
+          title: Text(S.of(context)!.selectionnezVotrePays),
           onValuePicked: (Country country) {
             print(country.isoCode);
             print(country.name);
@@ -199,7 +199,7 @@ class _RegisterViewState extends State<RegisterView> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    child: Text(S.of(context).slectionnezVotrePays, style: TextStyle(color: kPrimaryColor, fontSize: wv*4, fontWeight: FontWeight.w600), textAlign: TextAlign.right,),
+                    child: Text(S.of(context)!.slectionnezVotrePays, style: TextStyle(color: kPrimaryColor, fontSize: wv*4, fontWeight: FontWeight.w600), textAlign: TextAlign.right,),
                   ),
                   ListTile(
                     onTap: _openCountryPickerDialog,
@@ -214,8 +214,8 @@ class _RegisterViewState extends State<RegisterView> {
             
             KTextFormField(
               controller: _mPhoneController!,
-              labelText: S.of(context).tlphone,
-              hintText: S.of(context).entrezVotreNumroDeTlphone,
+              labelText: S.of(context)!.tlphone,
+              hintText: S.of(context)!.entrezVotreNumroDeTlphone,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
@@ -226,7 +226,7 @@ class _RegisterViewState extends State<RegisterView> {
                 return (phone!.isEmpty)
                     ? kPhoneNumberNullError
                     : (!digitValidatorRegExp.hasMatch(phone))
-                    ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
+                    ? S.of(context)!.entrerUnNumeroDeTlphoneValide : null;
               },
             ),
 
@@ -245,8 +245,8 @@ class _RegisterViewState extends State<RegisterView> {
 
             KTextFormField(
               controller: _mNameController!,
-              labelText: S.of(context).nom,
-              hintText: S.of(context).entrezVotreNom,
+              labelText: S.of(context)!.nom,
+              hintText: S.of(context)!.entrezVotreNom,
               prefixIcon:
               Icon(SimpleLineIcons.flag),
               validator: (String? name) {
@@ -258,8 +258,8 @@ class _RegisterViewState extends State<RegisterView> {
 
             KTextFormField  (
               controller: _mEmailController!,
-              labelText: S.of(context).adresseEmail,
-              hintText: S.of(context).entrezVotreAdresseEmail,
+              labelText: S.of(context)!.adresseEmail,
+              hintText: S.of(context)!.entrezVotreAdresseEmail,
               keyboardType: TextInputType.emailAddress,
               prefixIcon:
               Icon(SimpleLineIcons.envelope),
@@ -298,7 +298,7 @@ class _RegisterViewState extends State<RegisterView> {
             ),*/
 
             CustomTextButton(
-              text: S.of(context).sinscrire,
+              text: S.of(context)!.sinscrire,
               color: kPrimaryColor,
               action: () async {
                 setState(() {
@@ -335,23 +335,23 @@ class _RegisterViewState extends State<RegisterView> {
 
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn +_auth.currentUser!.uid);
+      showSnackbar(S.of(context)!.phoneNumberAutomaticallyVerifiedAndUserSignedIn +_auth.currentUser!.uid);
       _navigationService.navigateTo('/home');
     };
 
     //Listens for errors with verification, such as too many attempts
     PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message+authException.message!);
+      showSnackbar(S.of(context)!.phoneNumberVerificationFailedCode+authException.code+S.of(context)!.message+authException.message!);
     };
 
     PhoneCodeSent codeSent = (String verificationId, [int? forceResendingToken]) async {
-      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode); 
+      showSnackbar(S.of(context)!.pleaseCheckYourPhoneForTheVerificationCode); 
       _verificationId = verificationId;
     };
 
     PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
       phoneVerificationProvider.setVerificationId(verificationId);
-      showSnackbar(S.of(context).verificationCode + verificationId);
+      showSnackbar(S.of(context)!.verificationCode + verificationId);
       _verificationId = verificationId;
     };
     
@@ -367,7 +367,7 @@ class _RegisterViewState extends State<RegisterView> {
             _navigationService.navigateTo('/otp')
           });
     } catch (e) {
-      showSnackbar(S.of(context).failedToVerifyPhoneNumber+e.toString());
+      showSnackbar(S.of(context)!.failedToVerifyPhoneNumber+e.toString());
     }
   }
 

@@ -380,10 +380,10 @@ class _ProfileEditState extends State<ProfileEdit> {
 
                       CustomTextField(
                         prefixIcon: Icon(LineIcons.users, color: kPrimaryColor),
-                        label: S.of(context).nomDeFamille,
-                        hintText: S.of(context).entrezVotreNomDeFamille,
+                        label: S.of(context)!.nomDeFamille,
+                        hintText: S.of(context)!.entrezVotreNomDeFamille,
                         controller: _familynameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         enabled: nameEnabled,
                         editAction: (){
                           setState(() {
@@ -393,11 +393,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
-                        label: S.of(context).prnomS,
-                        hintText: S.of(context).entrezVotrePrnom,
+                        label: S.of(context)!.prnomS,
+                        hintText: S.of(context)!.entrezVotrePrnom,
                         enabled: surnameEnabled,
                         controller: _surnameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             surnameEnabled = true;
@@ -407,11 +407,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: S.of(context).nomSurLeRseauSocial,
+                        label: S.of(context)!.nomSurLeRseauSocial,
                         hintText: "ex: Eric_87",
                         enabled: cniNameEnabled,
                         controller: _cniNameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             cniNameEnabled = true;
@@ -421,8 +421,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.emailOutline, color: kPrimaryColor),
-                        label: S.of(context).email,
-                        hintText: S.of(context).entrezVotreAddresseEmail,
+                        label: S.of(context)!.email,
+                        hintText: S.of(context)!.entrezVotreAddresseEmail,
                         enabled: emailEnabled,
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -441,11 +441,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
-                        label: S.of(context).profession,
-                        hintText: S.of(context).exMchanicien,
+                        label: S.of(context)!.profession,
+                        hintText: S.of(context)!.exMchanicien,
                         enabled: professionEnabled,
                         controller: _professionController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             professionEnabled = true;
@@ -461,7 +461,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context)!.region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -476,7 +476,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _stateCode,
-                                        hint: Text(S.of(context).choisirUneRegion),
+                                        hint: Text(S.of(context)!.choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
@@ -520,7 +520,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text( (adherentModelProvider.getAdherent!.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent!.town! : S.of(context).ville, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        hint: Text( (adherentModelProvider.getAdherent!.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent!.town! : S.of(context)!.ville, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                         items: getTownNamesFromRegion(cities, _stateCode).map((city){
                                           return DropdownMenuItem(
                                             child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
@@ -546,11 +546,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.homeCityOutline, color: kPrimaryColor),
-                        label: S.of(context).addresse,
-                        hintText: S.of(context).exCarrefourObili,
+                        label: S.of(context)!.addresse,
+                        hintText: S.of(context)!.exCarrefourObili,
                         enabled: addressEnabled,
                         controller: _addressController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             addressEnabled = true;
@@ -639,7 +639,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                             ],),
 
                             Column(children: [
-                              Text(S.of(context).poids, style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
+                              Text(S.of(context)!.poids, style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
                               Row(children: [
                                 Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', color: kDeepTeal, width: wv*8,)),
                                 SizedBox(width: wv*2,),
@@ -703,7 +703,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           child: Column(
                             children: [
                               Row(children: [
-                                Text(S.of(context).allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
+                                Text(S.of(context)!.allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
                                 Expanded(
                                   child: Stack(
                                     children: [
@@ -770,7 +770,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context).statutMatrimoniale, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w500),),
+                            Text(S.of(context)!.statutMatrimoniale, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w500),),
                             SizedBox(height: 5,),
                             Container(
                               constraints: BoxConstraints(minWidth: wv*45),
@@ -784,15 +784,15 @@ class _ProfileEditState extends State<ProfileEdit> {
                                   alignedDropdown: true,
                                   child: DropdownButton(
                                     isExpanded: true,
-                                    hint: Text(S.of(context).choisir),
+                                    hint: Text(S.of(context)!.choisir),
                                     value: isMarried,
                                     items: [
                                       DropdownMenuItem(
-                                        child: Text(S.of(context).clibataire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        child: Text(S.of(context)!.clibataire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                         value: false,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text(S.of(context).marriE, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        child: Text(S.of(context)!.marriE, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                         value: true,
                                       ),
                                     ],
@@ -819,24 +819,24 @@ class _ProfileEditState extends State<ProfileEdit> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context).picesJustificatives, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
+                            Text(S.of(context)!.picesJustificatives, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
                             SizedBox(height: hv*2,),
                             Column(
                               children: [
                                 isMarried ? FileUploadCard(
-                                  title: S.of(context).acteDeMarriage,
+                                  title: S.of(context)!.acteDeMarriage,
                                   state: marriageCertificateUploaded,
                                   loading: marriageCertificateSpinner,
                                   action: () async {await getDocFromPhone('Acte_De_Marriage');}
                                 ) : Container(),
                                 FileUploadCard(
-                                  title: S.of(context).scanDeLaCni,
+                                  title: S.of(context)!.scanDeLaCni,
                                   state: cniUploaded,
                                   loading: cniSpinner,
                                   action: () async {await getDocFromPhone('CNI');}
                                 ),
                                 FileUploadCard(
-                                  title: S.of(context).autrePiceJustificative,
+                                  title: S.of(context)!.autrePiceJustificative,
                                   state: otherFileUploaded,
                                   loading: otherFileSpinner,
                                   action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
@@ -856,7 +856,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             Container(
               child: (cityChosen) ?  
                 !buttonLoading ? CustomTextButton(
-                  text: S.of(context).mettreJour,
+                  text: S.of(context)!.mettreJour,
                   color: kPrimaryColor,
                   action: () async {
                     setState(() {
@@ -964,7 +964,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                   },
                 ) : Loaders().buttonLoader(kPrimaryColor) :
                 CustomDisabledTextButton(
-                  text: S.of(context).mettreJour,
+                  text: S.of(context)!.mettreJour,
                 )
             ,)
           ],
@@ -1001,7 +1001,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   Future uploadDocumentToFirebase(File file, String name) async {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     
@@ -1025,7 +1025,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+ S.of(context).ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+ S.of(context)!.ajoute)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       if(name == "Acte_De_Marriage"){
@@ -1036,7 +1036,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           "urlActeMariage": url,
           "statuMatrimonialMarie": true,
         }, SetOptions(merge: true)).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
           setState(() {
             marriageCertificateUploaded = true;
             marriageCertificateSpinner = false;
@@ -1055,7 +1055,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             .update({
               "urlCNI": url,
             });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
           setState(() {
             cniUploaded = true;
             cniSpinner = false;
@@ -1069,7 +1069,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         .set({
           "urlAutrePiecesJustificatif": url,
         }, SetOptions(merge: true)).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
           setState(() {
             otherFileUploaded = true;
             otherFileSpinner = false;
@@ -1090,7 +1090,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -1118,7 +1118,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).finalisation)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.finalisation)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       HiveDatabase.setImgUrl(url);
@@ -1133,7 +1133,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         .update({
           "imageUrl": url,
         }).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.photoDeProfilAjoute)));
           setState(() {
             imageSpinner = false;
           });
@@ -1184,14 +1184,14 @@ class _ProfileEditState extends State<ProfileEdit> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(Icons.photo_library),
-                    title: new Text(S.of(context).gallerie),
+                    title: new Text(S.of(context)!.gallerie),
                     onTap: () {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(Icons.photo_camera),
-                  title: new Text(S.of(context).camera),
+                  title: new Text(S.of(context)!.camera),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();

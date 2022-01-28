@@ -126,7 +126,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
             }
           ),
-          title: Text(S.of(context).ajouterUnBnficiaire, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w500),),
+          title: Text(S.of(context)!.ajouterUnBnficiaire, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w500),),
           centerTitle: true,
           actions: [
             //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), onPressed: (){}),
@@ -216,20 +216,20 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
               CustomTextField(
                 prefixIcon: Icon(LineIcons.userFriends, color: kPrimaryColor),
-                label: S.of(context).nomDeFamille,
-                hintText: S.of(context).entrezVotreNomDeFamille,
+                label: S.of(context)!.nomDeFamille,
+                hintText: S.of(context)!.entrezVotreNomDeFamille,
                 controller: _familynameController,
-                validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
               ),
 
               SizedBox(height: hv*2,),
 
               CustomTextField(
                 prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
-                label: S.of(context).prnom,
-                hintText: S.of(context).entrezVotrePrnom,
+                label: S.of(context)!.prnom,
+                hintText: S.of(context)!.entrezVotrePrnom,
                 controller: _surnameController,
-                validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null
+                validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null
               ),
 
               SizedBox(height: hv*2,),
@@ -238,7 +238,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 padding: EdgeInsets.symmetric(horizontal: wv*2),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
+                    Text(S.of(context)!.numroMobile, style: TextStyle(fontSize: wv*4),),
                     SizedBox(height: hv*1,),
                     InternationalPhoneNumberInput(
                       validator: (String? phone) {
@@ -273,7 +273,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
                     Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context).relationAvecLadhrent, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                        Text(S.of(context)!.relationAvecLadhrent, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                         SizedBox(height: 5,),
                         Container(
                           constraints: BoxConstraints(minWidth: wv*45),
@@ -287,24 +287,24 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 isExpanded: true,
-                                hint: Text(S.of(context).choisir),
+                                hint: Text(S.of(context)!.choisir),
                                 value: _relation,
                                 items: [
                                   DropdownMenuItem(
-                                    child: Text(S.of(context).enfant, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                    value: S.of(context).child,
+                                    child: Text(S.of(context)!.enfant, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                    value: S.of(context)!.child,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text(S.of(context).conjointe, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: S.of(context).spouse,
+                                    child: Text(S.of(context)!.conjointe, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: S.of(context)!.spouse,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text(S.of(context).frresoeur, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: S.of(context).sibling,
+                                    child: Text(S.of(context)!.frresoeur, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: S.of(context)!.sibling,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text(S.of(context).parent, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: S.of(context).parent,
+                                    child: Text(S.of(context)!.parent, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: S.of(context)!.parent,
                                   ),
                                 ],
                                 onChanged: (value) {
@@ -322,7 +322,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
                     Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                        Text(S.of(context)!.dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                         SizedBox(height: 5,),
                         GestureDetector(
                           onTap: () => _selectDate(context),
@@ -336,7 +336,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             child: Row(children: [
                               SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                               VerticalDivider(),
-                              Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context)!.choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                             ],),
                           ),
                         ),
@@ -352,13 +352,13 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
             ],),
           ),
           ((selectedDate != null) & (_relation != null)) ? CustomTextButton(
-            text: S.of(context).suivant,
+            text: S.of(context)!.suivant,
             action: (){
               if (_form1Key.currentState!.validate()){
                 controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
               }
             },
-          ) : CustomDisabledTextButton(text: S.of(context).suivant,)
+          ) : CustomDisabledTextButton(text: S.of(context)!.suivant,)
         ],
       ),
     );
@@ -374,7 +374,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*2.5,),
-                  Center(child: Text(S.of(context).genre, style: TextStyle(fontSize: 18, color: kTextBlue))),
+                  Center(child: Text(S.of(context)!.genre, style: TextStyle(fontSize: 18, color: kTextBlue))),
                   SizedBox(height: hv*1,),
                   Row(mainAxisAlignment: MainAxisAlignment.center,children: [
                     GestureDetector(
@@ -412,7 +412,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     )
                   ],),
                   Divider(height: hv*4,),
-                  Text(S.of(context).groupeSanguin, style: TextStyle(fontSize: 18, color: kTextBlue),),
+                  Text(S.of(context)!.groupeSanguin, style: TextStyle(fontSize: 18, color: kTextBlue),),
                   SizedBox(height: hv*1,),
                   Container(
                     constraints: BoxConstraints(minWidth: wv*45),
@@ -423,7 +423,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     ),
                     child: ButtonTheme(alignedDropdown: true,
                       child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(isExpanded: true, hint: Text(S.of(context).choisir), value: _bloodGroup,
+                        child: DropdownButton<String>(isExpanded: true, hint: Text(S.of(context)!.choisir), value: _bloodGroup,
                           items: [
                             DropdownMenuItem(child: Text("A+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A+",),
                             DropdownMenuItem(child: Text("B+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B+",),
@@ -444,7 +444,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
                   Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
                     Column(children: [
-                      Text(S.of(context).taille, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(height: hv*0.5,),
+                      Text(S.of(context)!.taille, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(height: hv*0.5,),
                       Row(children: [
                         Container(child: SvgPicture.asset('assets/icons/Bulk/row-height.svg', width: wv*8,)),
                         SizedBox(width: wv*2,),
@@ -465,7 +465,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     ],),
 
                     Column(children: [
-                      Text(S.of(context).poids, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(height: hv*0.5,),
+                      Text(S.of(context)!.poids, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(height: hv*0.5,),
                       Row(children: [
                         Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', width: wv*8,)),
                         SizedBox(width: wv*2,),
@@ -488,7 +488,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                   Divider(height: hv*4,),
 
                   Row(children: [
-                    Text(S.of(context).allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
+                    Text(S.of(context)!.allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
                     Expanded(
                       child: Stack(
                         children: [
@@ -555,8 +555,8 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
                 matricule = Algorithms().getMatricule(selectedDate!, adherentModelProvider.getAdherent!.regionOfOrigin!, _gender!);
                 controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);
-                }, text: S.of(context).suivant,) 
-              : CustomDisabledTextButton(text: S.of(context).suivant,),
+                }, text: S.of(context)!.suivant,) 
+              : CustomDisabledTextButton(text: S.of(context)!.suivant,),
           )
         ],
       ),
@@ -573,9 +573,9 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*3,),
-                  Text(S.of(context).tlchargerLesPicesJustificatives, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text(S.of(context)!.tlchargerLesPicesJustificatives, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                   SizedBox(height: hv*1,),
-                  Text(S.of(context).scannerLesDocumentsJustificatifsCniActesDeNaissancesEtc, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                  Text(S.of(context)!.scannerLesDocumentsJustificatifsCniActesDeNaissancesEtc, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                   Center(
                     child: InkWell(
                       onTap: (){getDocument(context);},
@@ -586,37 +586,37 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     ),
                   ),
                   FileUploadCard(
-                    title: S.of(context).scanDeLaCni,
+                    title: S.of(context)!.scanDeLaCni,
                     state: cniUploaded,
                     loading: cniSpinner,
                     action: () async {await getDocFromGallery('CNI');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
-                    title: S.of(context).acteDeNaissance,
+                    title: S.of(context)!.acteDeNaissance,
                     state: birthCertificateUploaded,
                     loading: birthCertificateSpinner,
                     action: () async {await getDocFromGallery('Acte_De_Naissance');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
-                    title: S.of(context).acteDeMarriage,
+                    title: S.of(context)!.acteDeMarriage,
                     state: marriageCertificateUploaded,
                     loading: marriageCertificateSpinner,
                     action: () async {await getDocFromGallery('Acte_De_Marriage');}
                   ),
                   SizedBox(height: hv*1,),
                   FileUploadCard(
-                    title: S.of(context).autrePiceJustificative,
+                    title: S.of(context)!.autrePiceJustificative,
                     state: otherFileUploaded,
                     loading: otherFileSpinner,
                     action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
                   SizedBox(height: hv*2,),
 
-                  Text(S.of(context).dclaration, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text(S.of(context)!.dclaration, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold),),
                   SizedBox(height: hv*0.5,),
-                  Text(S.of(context).pourLesBnficiairesSansFiliationDirecte, style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.w400)),
+                  Text(S.of(context)!.pourLesBnficiairesSansFiliationDirecte, style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.w400)),
                   SizedBox(height: hv*2,),
                   CheckboxListTile(
                     value: _confirmFamily,
@@ -625,7 +625,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     tristate: false,
                     contentPadding: EdgeInsets.symmetric(horizontal: 0),
                     onChanged: (val)=> setState((){_confirmFamily = val!;}),
-                    title: Text(S.of(context).jeConfirmeParLaPrsenteQueLaPersonneSusciteEst, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
+                    title: Text(S.of(context)!.jeConfirmeParLaPrsenteQueLaPersonneSusciteEst, style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.w400)),
                   ),
                   SizedBox(height: hv*3,),
                 ],
@@ -635,7 +635,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
         ),
         ((_confirmFamily == true) && (birthCertificateUploaded == true) && _gender != null)
           ? CustomTextButton(
-            text: S.of(context).suivant, 
+            text: S.of(context)!.suivant, 
             isLoading: buttonLoading,
             action: (){
               setState(() {
@@ -709,19 +709,19 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 });
             },
           )
-          : CustomDisabledTextButton(text: S.of(context).suivant,)
+          : CustomDisabledTextButton(text: S.of(context)!.suivant,)
       ],
     );
   }
 
   List<String> suggestions = [
-    S.current.lactose,
-    S.current.pnicilline,
-    S.current.pollen,
-    S.current.abeille,
-    S.current.feu,
-    S.current.herbes,
-    S.current.plastique
+    S.current!.lactose,
+    S.current!.pnicilline,
+    S.current!.pollen,
+    S.current!.abeille,
+    S.current!.feu,
+    S.current!.herbes,
+    S.current!.plastique
   ];
 
   void getChangedPageAndMoveBar(int page) {
@@ -745,7 +745,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   Future uploadImageToFirebase(PickedFile file) async {
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -822,14 +822,14 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(Icons.photo_library),
-                    title: new Text(S.of(context).gallerie),
+                    title: new Text(S.of(context)!.gallerie),
                     onTap: () {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(Icons.photo_camera),
-                  title: new Text(S.of(context).camera),
+                  title: new Text(S.of(context)!.camera),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();
@@ -883,7 +883,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     
@@ -907,7 +907,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context).ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context)!.ajoute)));
       String url = await storageReference.getDownloadURL();
       if(name == "Acte_De_Marriage"){
         beneficiary.setMarriageCertificateUrl(url);
@@ -987,14 +987,14 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(LineIcons.identificationCard),
-                    title: new Text(S.of(context).cniOuPasseport, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    title: new Text(S.of(context)!.cniOuPasseport, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                     onTap: () {
                       getDocFromPhone("CNI");
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(MdiIcons.babyFaceOutline),
-                  title: new Text(S.of(context).acteDeNaissance, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context)!.acteDeNaissance, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Acte_De_Naissance");
                     Navigator.of(context).pop();
@@ -1002,7 +1002,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.ring),
-                  title: new Text(S.of(context).acteDeMarriage, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context)!.acteDeMarriage, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Acte_De_Marriage");
                     Navigator.of(context).pop();
@@ -1010,7 +1010,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.certificate),
-                  title: new Text(S.of(context).autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context)!.autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Pièce_Justificative_Supplémentaire");
                     Navigator.of(context).pop();

@@ -46,7 +46,7 @@ class FileUploadCard extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(kPrimaryColor),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
             ),
-            child: Text(state! && !isMultiple! ? S.of(context).remplacer : S.of(context).ajouter, style: TextStyle(color: Colors.white),)) : 
+            child: Text(state! && !isMultiple! ? S.of(context)!.remplacer : S.of(context)!.ajouter, style: TextStyle(color: Colors.white),)) : 
             Padding(
               padding: EdgeInsets.all(4.0),
               child: CircularProgressIndicator(strokeWidth: 2, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),

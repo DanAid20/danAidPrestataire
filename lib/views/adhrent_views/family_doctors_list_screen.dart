@@ -57,7 +57,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                       child: DoctorInfoCard(
                         avatarUrl: doctor.avatarUrl,
                         name: doctor.cniName,
-                        title: S.of(context).medecinDeFamille + doctor.field!,
+                        title: S.of(context)!.medecinDeFamille + doctor.field!,
                         speciality: doctor.speciality,
                         teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                         consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -79,11 +79,11 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                     );
                   })
               : Center(
-                  child: Text(S.of(context).aucunMedecinDisponiblePourLeMoment),
+                  child: Text(S.of(context)!.aucunMedecinDisponiblePourLeMoment),
                 );
         }) : Center(
           child: CustomTextButton(
-            text: S.of(context).mettezJourVotreProfilAinsiQueVotreLocationGps,
+            text: S.of(context)!.mettezJourVotreProfilAinsiQueVotreLocationGps,
             action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit'),
             ),
         );
@@ -95,7 +95,7 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
       child: Column(children: [
         Row(
           children: [
-            Text(S.of(context).ordonnerPar),
+            Text(S.of(context)!.ordonnerPar),
             Container(
               margin: EdgeInsets.symmetric(vertical: hv * 1),
               padding:
@@ -114,27 +114,27 @@ class _FamilyDoctorListState extends State<FamilyDoctorList> {
                         color: kPrimaryColor,
                       ),
                       hint: Text(
-                        S.of(context).choisir,
+                        S.of(context)!.choisir,
                         style: TextStyle(
                             color: kPrimaryColor, fontWeight: FontWeight.w600),
                       ),
                       value: filter,
                       items: [
                         DropdownMenuItem(
-                          child: Text(S.of(context).nom,
+                          child: Text(S.of(context)!.nom,
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.bold)),
-                          value: S.of(context).name,
+                          value: S.of(context)!.name,
                         ),
                         DropdownMenuItem(
                           child: Text(
-                            S.of(context).distance,
+                            S.of(context)!.distance,
                             style: TextStyle(
                                 color: kPrimaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          value: S.of(context).distance,
+                          value: S.of(context)!.distance,
                         ),
                       ],
                       onChanged: (String? value) {

@@ -49,7 +49,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   bool regionChosen = false;
   bool cityChosen = false;
   bool _serviceTermsAccepted = false;
-  String termsAndConditions = S.current.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
+  String termsAndConditions = S.current!.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
   DateTime? selectedDate;
   DateTime initialDate = DateTime(1990);
   File? imageFileAvatar;
@@ -109,17 +109,17 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                       SizedBox(height: hv*3,),
 
                       CustomTextField(
-                        label: S.of(context).nomDeFamille,
-                        hintText: S.of(context).entrezVotreNomDeFamille,
+                        label: S.of(context)!.nomDeFamille,
+                        hintText: S.of(context)!.entrezVotreNomDeFamille,
                         controller: _familynameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*1.5,),
                       CustomTextField(
-                        label: S.of(context).prnomS,
-                        hintText: S.of(context).entrezVotrePrnom,
+                        label: S.of(context)!.prnomS,
+                        hintText: S.of(context)!.entrezVotrePrnom,
                         controller: _surnameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*1.5,),
                       Row(
@@ -128,7 +128,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).genre, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context)!.genre, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -142,12 +142,12 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                       value: _gender,
                                       items: [
                                         DropdownMenuItem(
-                                          child: Text(S.of(context).masculin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                          value: S.of(context).h,
+                                          child: Text(S.of(context)!.masculin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                          value: S.of(context)!.h,
                                         ),
                                         DropdownMenuItem(
-                                          child: Text(S.of(context).fminin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                          value: S.of(context).f,
+                                          child: Text(S.of(context)!.fminin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                          value: S.of(context)!.f,
                                         ),
                                       ],
                                       onChanged: (value) {
@@ -166,7 +166,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context)!.dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 GestureDetector(
                                   onTap: () => _selectDate(context),
@@ -196,7 +196,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context)!.region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -211,7 +211,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                       child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _stateCode,
-                                        hint: Text(S.of(context).choisirUneRegion),
+                                        hint: Text(S.of(context)!.choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
@@ -240,7 +240,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                           regionChosen ? Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context)!.choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -255,7 +255,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                                       child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text(S.of(context).ville),
+                                        hint: Text(S.of(context)!.ville),
                                         items: Algorithms.getTownNamesFromRegion(cities, _stateCode!).map((city){
                                           print("city: "+city);
                                           return DropdownMenuItem(
@@ -288,7 +288,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               label: "Region",
                               hintText: "ex: Centre",
                               controller: _regionController,
-                              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                               //svgIcon: "assets/icons/Bulk/Discovery.svg",
                             ),
                           ),
@@ -298,7 +298,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                               label: "Ville",
                               hintText: "ex: Yaoundé",
                               controller: _townController,
-                              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                             ),
                           ),
                         ],
@@ -331,7 +331,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                   imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
                   (_serviceTermsAccepted & cityChosen & (selectedDate != null)) ?  
                   !buttonLoading ? CustomTextButton(
-                    text: S.of(context).envoyer,
+                    text: S.of(context)!.envoyer,
                     color: kPrimaryColor,
                     action: () async {
                       Random random = new Random();
@@ -508,7 +508,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
               child: Column(
                 children: [
                   SizedBox(height: hv*2,),
-                  Text(S.of(context).termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
+                  Text(S.of(context)!.termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                   SizedBox(height: hv*2,),
                   Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: BouncingScrollPhysics(),)),
                 ],
@@ -528,7 +528,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
   Future uploadImageToFirebase(PickedFile file) async {
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -556,7 +556,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.photoDeProfilAjoute)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       print("download url: $url");
@@ -603,14 +603,14 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(Icons.photo_library),
-                    title: new Text(S.of(context).gallerie),
+                    title: new Text(S.of(context)!.gallerie),
                     onTap: () {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(Icons.photo_camera),
-                  title: new Text(S.of(context).camera),
+                  title: new Text(S.of(context)!.camera),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();

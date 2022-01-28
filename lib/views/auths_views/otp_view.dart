@@ -97,7 +97,7 @@ class _OtpViewState extends State<OtpView> {
                           padding: EdgeInsets.symmetric(horizontal: 25),
                           alignment: Alignment.center,
                           child: Text(
-                              S.of(context).unCodeDeValidationATEnvoyParSmsAu + userProvider.getUserId!,
+                              S.of(context)!.unCodeDeValidationATEnvoyParSmsAu + userProvider.getUserId!,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: darkGreyColor,
@@ -109,10 +109,10 @@ class _OtpViewState extends State<OtpView> {
                         otpForm(),
                         //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
                         !(pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty)
-                          ? CustomDisabledTextButton(text: S.of(context).validezLeCode,)
+                          ? CustomDisabledTextButton(text: S.of(context)!.validezLeCode,)
                           : load ? Center(child: Loaders().buttonLoader(kPrimaryColor))
                             : CustomTextButton(
-                                text: S.of(context).validezLeCode, 
+                                text: S.of(context)!.validezLeCode, 
                                 color: kPrimaryColor, 
                                 action: 
                                   () async {
@@ -126,7 +126,7 @@ class _OtpViewState extends State<OtpView> {
                         GestureDetector(
                           onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
                           child: Text(
-                            S.of(context).renvoyezLeCodeDeValidation,
+                            S.of(context)!.renvoyezLeCodeDeValidation,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
@@ -151,7 +151,7 @@ class _OtpViewState extends State<OtpView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(S.of(context).leCodeExpireDans, style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
+          Text(S.of(context)!.leCodeExpireDans, style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 40.0, end: 0.0),
             duration: Duration(seconds: 120),
@@ -325,12 +325,12 @@ class _OtpViewState extends State<OtpView> {
         userProvider.setAuthId(user.uid);
         Navigator.pushReplacementNamed(context, '/home');
       }
-      showSnackbar(S.of(context).successfullySignedInUid+user.uid);
+      showSnackbar(S.of(context)!.successfullySignedInUid+user.uid);
     }).catchError((e){
       setState(() {
         load = false;
       });
-      showSnackbar(S.of(context).failedToSignIn + e.message.toString());
+      showSnackbar(S.of(context)!.failedToSignIn + e.message.toString());
     });
 
     
@@ -338,7 +338,7 @@ class _OtpViewState extends State<OtpView> {
       setState(() {
         load = false;
       });
-      showSnackbar(S.of(context).failedToSignIn + e.message.toString());
+      showSnackbar(S.of(context)!.failedToSignIn + e.message.toString());
     }
   }
 

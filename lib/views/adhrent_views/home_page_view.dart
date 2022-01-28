@@ -616,14 +616,14 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context).entraide, onTap: entraideTapped),
-                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context).accueil, onTap: accueilTapped),
-                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context).carnet, onTap: carnetTapped),
-                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context).partenaire, onTap: partenaireTapped),
+                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context)!.entraide, onTap: entraideTapped),
+                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context)!.accueil, onTap: accueilTapped),
+                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context)!.carnet, onTap: carnetTapped),
+                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context)!.partenaire, onTap: partenaireTapped),
                       index == 4 ? SizedBox(width: width*13,) 
                         : bottomIcon(
                           svgUrl: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", 
-                          title: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).famille : S.of(context).profile, 
+                          title: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context)!.famille : S.of(context)!.profile, 
                           onTap: familleTapped
                         ),
                     ],
