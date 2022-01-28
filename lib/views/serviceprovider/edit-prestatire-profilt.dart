@@ -170,6 +170,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
   textFieldsControl (){
 
     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+    
     if((serviceProvider.getServiceProvider!.about != null) & (serviceProvider.getServiceProvider!.about != "")){
       setState(() {
         _aboutController!.text = serviceProvider.getServiceProvider!.about!;
