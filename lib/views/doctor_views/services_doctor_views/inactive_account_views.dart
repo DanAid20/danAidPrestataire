@@ -445,7 +445,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         label:"Nom du patient",
                         hintText:"Jean MArie Nkah",
                         enabled: true,
-                        controller: _patientController!,
+                        controller: _patientController,
                         validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       ] )
@@ -482,7 +482,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                           onPressed: () async {
                             if (_FormKey.currentState!.validate()){
                                if (kDebugMode) {
-                                 print(_patientController?.text);
+                                 print(_patientController.text);
                                   print(widget.phoneNumber);
                                }
                                DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
@@ -503,18 +503,18 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                     final date2 = DateTime.now(); 
                                     final difference = date2.difference(d).inDays;
                                      if( difference>14 &&  useCase['consultationCode']!=null ){
-                                         saveDataForUnknow(_patientController?.text,widget.phoneNumber).then((value){
+                                         saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
                                           saveSucces(context,string:S.of(context)!.lePatientABienTAjouter);
-                                          _patientController?.clear();
+                                          _patientController.clear();
                                             setState(() {issaveInknowUserLoading=false;});
                                         });
                                      }else{
                                         saveSucces(context,string:S.of(context)!.uneConsultationEnCoursTDtecterPourCePatientDonc);
                                      }
                                   }else{
-                                     saveDataForUnknow(_patientController?.text,widget.phoneNumber).then((value){
+                                     saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
                                           saveSucces(context,string:S.of(context)!.lePatientABienTAjouterAuSysteme);
-                                          _patientController?.clear();
+                                          _patientController.clear();
                                            setState(() {issaveInknowUserLoading=false;});
                                         });
                                   }
