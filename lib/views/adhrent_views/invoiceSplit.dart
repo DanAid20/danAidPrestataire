@@ -13,21 +13,21 @@ import 'package:provider/provider.dart';
 
 class InvoiceSplit extends StatefulWidget {
   final InvoiceModel invoice;
-  const InvoiceSplit({ Key key, this.invoice }) : super(key: key);
+  const InvoiceSplit({ Key? key, required this.invoice }) : super(key: key);
 
   @override
   _InvoiceSplitState createState() => _InvoiceSplitState();
 }
 
 class _InvoiceSplitState extends State<InvoiceSplit> {
-  num totalAmount;
-  int _segments;
+  num? totalAmount;
+  int? _segments;
   List campaignsChosen = [];
 
   bool spinner = false;
 
   init(){
-    totalAmount = widget.invoice.inscriptionId == null ? widget.invoice.amount : widget.invoice.amount+10000;
+    totalAmount = widget.invoice.inscriptionId == null ? widget.invoice.amount : widget.invoice.amount! + 10000;
     setState(() {});
   }
   @override
@@ -39,10 +39,10 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     
-    DateTime covStart = widget.invoice.coverageStartDate.toDate();
-    DateTime covEnd = widget.invoice.coverageEndDate.toDate();
+    DateTime covStart = widget.invoice.coverageStartDate!.toDate();
+    DateTime covEnd = widget.invoice.coverageEndDate!.toDate();
     Duration covPeriod = covEnd.difference(covStart);
-    Duration segPeriod = Duration(days: _segments != null ? (covPeriod.inDays/_segments).round() : 0);
+    Duration segPeriod = Duration(days: _segments != null ? (covPeriod.inDays/_segments!).round() : 0);
     print(segPeriod.inDays);
 
 
@@ -64,10 +64,10 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                 height: 220,
                 margin: EdgeInsets.symmetric(vertical: hv*1.5),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey[200]),
+                  border: Border.all(color: Colors.grey[200]!),
                   borderRadius: BorderRadius.circular(10)
                 ),
-                child: StreamBuilder(
+                child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance.collection('CAMPAGNES').where('active', isEqualTo: true).snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
@@ -77,31 +77,31 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                         ),
                       );
                     }
-                    if (!(snapshot.data.docs.length >= 1)) {
+                    if (!(snapshot.data!.docs.length >= 1)) {
                       return Center(
                         child: Container(padding: EdgeInsets.only(top: hv*4),child: Text("Aucune promotion disponible pour le moment", textAlign: TextAlign.center)),
                       );
                     }
                     return ListView.builder(
                       physics: BouncingScrollPhysics(),
-                      itemCount: snapshot.data.docs.length,
+                      itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index){
-                        CampaignModel camp = CampaignModel.fromDocument(snapshot.data.docs[index]);
+                        CampaignModel camp = CampaignModel.fromDocument(snapshot.data!.docs[index]);
                         return HomePageComponents.getPromotionTile(
                           title: camp.name,
                           description: camp.description,
-                          firstDate: camp.startDate.toDate(),
-                          lastDate: camp.endDate.toDate(),
+                          firstDate: camp.startDate!.toDate(),
+                          lastDate: camp.endDate!.toDate(),
                           amount: camp.amount,
                           active: camp.active,
                           chosen: campaignsChosen.contains(camp.id),
                           action: (){
                             if(campaignsChosen.contains(camp.id)){
                               campaignsChosen.remove(camp.id);
-                              totalAmount = totalAmount + camp.amount;
+                              totalAmount = totalAmount! + camp.amount!;
                             } else {
                               campaignsChosen.add(camp.id);
-                              totalAmount = totalAmount - camp.amount;
+                              totalAmount = totalAmount! - camp.amount!;
                             }
                             setState(() {});
                           }
@@ -169,7 +169,7 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                               value: 10,
                             )
                           ],
-                          onChanged: (value) {
+                          onChanged: (int? value) {
                             setState(() {
                               _segments = value;
                             });
@@ -185,13 +185,13 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
               :
                 Column(
                   children: [
-                    for (int i = 0; i<_segments; i++)
+                    for (int i = 0; i < _segments!; i++)
                       HomePageComponents.getInvoiceSegmentTile(
                         label: "Segment $i",
                         firstDate: covStart.add(Duration(days: segPeriod.inDays*i)),
-                        lastDate: i == (_segments-1) ? covEnd : covStart.add(Duration(days: segPeriod.inDays*(i+1))),
+                        lastDate: i == (_segments! - 1) ? covEnd : covStart.add(Duration(days: segPeriod.inDays*(i+1))),
                         date: covStart.add(Duration(days: segPeriod.inDays*i)),
-                        mensuality: ((totalAmount/_segments)+250).round(),
+                        mensuality: ((totalAmount! / _segments!) + 250).round(),
                         type: "0",
                         subtitle: "Segment ${i+1}",
                         state: 0 
@@ -208,20 +208,20 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                 action: (){
                   setState(() { spinner = true;});
                   try {
-                    for (int i = 0; i < _segments; i++){
-                      FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).collection('SOUS_FACTURATIONS_ADHERENT').doc((i+1).toString()).set({
+                    for (int i = 0; i < _segments!; i++){
+                      FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).collection('SOUS_FACTURATIONS_ADHERENT').doc((i+1).toString()).set({
                         "label": "Segment ${i+1}",
                         "number": i+1,
-                        "amount": ((totalAmount/_segments)+250).round(),
+                        "amount": ((totalAmount! / _segments!)+250).round(),
                         "startDate" : covStart.add(Duration(days: segPeriod.inDays*i)),
-                        "endDate": i == (_segments-1) ? covEnd : covStart.add(Duration(days: segPeriod.inDays*(i+1))),
+                        "endDate": i == (_segments! - 1) ? covEnd : covStart.add(Duration(days: segPeriod.inDays*(i+1))),
                         "paymentDate": null,
                         "status": 0
                       }).then((value) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Sous-facture numéro ${i+1} crée")));
                       });
                     }
-                    FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).update({
+                    FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).update({
                       "invoiceIsSplitted": true,
                       "segments": _segments,
                       "promos": campaignsChosen,

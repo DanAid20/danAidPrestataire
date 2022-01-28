@@ -33,8 +33,8 @@ class MyDoctorTabView extends StatefulWidget {
 class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
   String text = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\n\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.";
-  GoogleMapController mapCardController;
-  DoctorModel _doc;
+  GoogleMapController? mapCardController;
+  DoctorModel? _doc;
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
 
@@ -45,11 +45,11 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
   loadDoctor(){
     AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
-    if(adherent.getAdherent.familyDoctorId != null){
-      if(adherent.getAdherent.familyDoctor != null){
+    if(adherent.getAdherent?.familyDoctorId != null){
+      if(adherent.getAdherent?.familyDoctor != null){
         //
       } else {
-        FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent.familyDoctorId).get()
+        FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId).get()
           .then((doc) {
             DoctorModel myDoctor = DoctorModel.fromDocument(doc);
             adherent.setFamilyDoctor(myDoctor);
@@ -82,13 +82,13 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
   initAvailability(){
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-    if(doctorProvider.getDoctor.availability != null){
-      Map avail = doctorProvider.getDoctor.availability;
-      if(avail["monday to friday"]["start"] is Timestamp){
+    if(doctorProvider.getDoctor?.availability != null){
+      Map? avail = doctorProvider.getDoctor?.availability;
+      if(avail?["monday to friday"]["start"] is Timestamp){
         setState(() {
           availability = {
               "monday to friday": {
-                "available": avail["monday to friday"]["available"],
+                "available": avail!["monday to friday"]["available"],
                 "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].toDate().hour, avail["monday to friday"]["start"].toDate().minute),
                 "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].toDate().hour, avail["monday to friday"]["end"].toDate().minute)
               },
@@ -108,7 +108,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
         setState(() {
           availability = {
             "monday to friday": {
-              "available": avail["monday to friday"]["available"],
+              "available": avail!["monday to friday"]["available"],
               "start": DateTime(2000, 1, 1, avail["monday to friday"]["start"].hour, avail["monday to friday"]["start"].minute),
               "end": DateTime(2000, 1, 1, avail["monday to friday"]["end"].hour, avail["monday to friday"]["end"].minute)
             },
@@ -146,22 +146,22 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
       child: Column(
         children: [
           Expanded(
-            child: adherent.getAdherent.familyDoctorId != null ? ListView(children: [
-              StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent.familyDoctorId).snapshots(),
+            child: adherent.getAdherent?.familyDoctorId != null ? ListView(children: [
+              StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData){
                     return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
                   }
-                  DoctorModel doctor = DoctorModel.fromDocument(snapshot.data);
+                  DoctorModel? doctor = DoctorModel.fromDocument(snapshot.data!);
                   _doc = doctor;
-                  Map availability = doctor.availability;
+                  Map? availability = doctor.availability;
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*3),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       boxShadow: [BoxShadow(
-                        color: Colors.grey[300],
+                        color: Colors.grey[300]!,
                         spreadRadius: 1.5,
                         blurRadius: 3,
                         offset: Offset(0, 2)
@@ -196,7 +196,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       },
                                       child: CircleAvatar(
                                           backgroundColor: Colors.grey,
-                                          backgroundImage: doctor.avatarUrl != null ? CachedNetworkImageProvider(doctor.avatarUrl) :AssetImage("assets/images/avatar-profile.jpg",),
+                                          backgroundImage: doctor.avatarUrl != null ? CachedNetworkImageProvider(doctor.avatarUrl!) : AssetImage("assets/images/avatar-profile.jpg",) as ImageProvider,
                                           radius: 35,
                                       ),
                                     ),
@@ -210,10 +210,10 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               doctorProvider.setDoctorModel(doctor);
                                               Navigator.pushNamed(context, "/doctor-profile");
                                             },
-                                          child: Text(doctor == null ? "Nom" : "Dr. "+doctor.cniName, style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),)),
-                                        Text(S.of(context).medecinDeFamille+ doctor.field, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                          child: Text(doctor == null ? "Nom" : "Dr. "+doctor.cniName!, style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),)),
+                                        Text(S.of(context).medecinDeFamille+ doctor.field!, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                         SizedBox(height: hv*1.3,),
-                                        Text(doctor.officeName == null ? "A SON COMPTE" : doctor.officeName, style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
+                                        Text(doctor.officeName == null ? "A SON COMPTE" : doctor.officeName!, style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
                                         Text("Service - ${doctor.speciality.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
 
                                       ],
@@ -342,17 +342,17 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                             SizedBox(width: 5,),
                                             TextButton.icon(
                                               onPressed: (){
-                                                String userId = FirebaseAuth.instance.currentUser.uid;
+                                                String userId = FirebaseAuth.instance.currentUser!.uid;
                                                 ConversationModel conversationModel = ConversationModel(
                                                   conversationId: Algorithms.getConversationId(userId: userId, targetId: doctor.authId),
                                                   userId: userId,
                                                   targetId: doctor.authId,
-                                                  userName: adherent.getAdherent.cniName,
+                                                  userName: adherent.getAdherent?.cniName,
                                                   targetName: doctor.familyName,
-                                                  userAvatar: adherent.getAdherent.imgUrl,
+                                                  userAvatar: adherent.getAdherent?.imgUrl,
                                                   targetAvatar: doctor.avatarUrl,
                                                   targetProfileType: constants.doctor,
-                                                  userPhoneId: adherent.getAdherent.adherentId,
+                                                  userPhoneId: adherent.getAdherent?.adherentId,
                                                   targetPhoneId: doctor.id
                                                 );
                                                 conversation.setConversationModel(conversationModel);
@@ -398,30 +398,30 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(S.of(context).horaire, style: TextStyle(fontWeight: FontWeight.w800)),
-                                                  availability["monday to friday"]["available"] ? Container(
+                                                  availability?["monday to friday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Expanded(child: Text(S.of(context).lundiVendredi)),
-                                                        Text("${availability["monday to friday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["monday to friday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["monday to friday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
+                                                        Text("${availability?["monday to friday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability?["monday to friday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability?["monday to friday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability?["monday to friday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
                                                   ) : Container(),
-                                                  availability["saturday"]["available"] ? Container(
+                                                  availability?["saturday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Text(S.of(context).samedi),
-                                                        Text("${availability["saturday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["saturday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["saturday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["saturday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
+                                                        Text("${availability?["saturday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability?["saturday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability?["saturday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability?["saturday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
                                                   ) : Container(),
-                                                  availability["sunday"]["available"] ? Container(
+                                                  availability?["sunday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Text(S.of(context).dimanche),
-                                                        Text("${availability["sunday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability["sunday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability["sunday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability["sunday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
+                                                        Text("${availability?["sunday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability?["sunday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability?["sunday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability?["sunday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
                                                   ) : Container(),
@@ -429,7 +429,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                   SizedBox(height: 10,),
 
                                                   Text(S.of(context).adresse, style: TextStyle(fontWeight: FontWeight.w800)),
-                                                  Text(doctor.address == null ? S.of(context).cameroon : doctor.address+S.of(context).cameroun)
+                                                  Text(doctor.address == null ? S.of(context).cameroon : doctor.address! + S.of(context).cameroun)
                                                 ],
                                               ),
                                             ),
@@ -443,7 +443,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
                                                   Text(S.of(context).tarifPublique, style: TextStyle(fontWeight: FontWeight.w800)),
-                                                  Text("${doctor.rate["public"]} f."),
+                                                  Text("${doctor.rate?["public"]} f."),
                                                   SizedBox(height: 10,),
                                                   Text(S.of(context).couvertureDanaid, style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                                   Row(
@@ -476,7 +476,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                           child: GoogleMap(
                                             onMapCreated: _onMapCreated,
                                             initialCameraPosition: CameraPosition(
-                                              target: doctor.location == null ? _center : LatLng(doctor.location["latitude"], doctor.location["longitude"]),
+                                              target: doctor.location == null ? _center : LatLng(doctor.location?["latitude"], doctor.location?["longitude"]),
                                               zoom: 11.0,
                                             ),
                                           ),
@@ -520,8 +520,8 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                     SingleChildScrollView(
                       child: Column(
                         children: [
-                          StreamBuilder(
-                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").where('adherentId', isEqualTo: adherent.getAdherent.adherentId).orderBy('start-time', descending: true).snapshots(),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance.collection("APPOINTMENTS").where('adherentId', isEqualTo: adherent.getAdherent!.adherentId).orderBy('start-time', descending: true).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Center(
@@ -530,28 +530,28 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                   ),
                                 );
                               }
-                              int lastIndex = snapshot.data.docs.length - 1;
-                              return snapshot.data.docs.length >= 1
+                              int lastIndex = snapshot.data!.docs.length - 1;
+                              return snapshot.data!.docs.length >= 1
                                   ? ListView.builder(
                                       physics: NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
-                                      itemCount: snapshot.data.docs.length,
+                                      itemCount: snapshot.data!.docs.length,
                                       itemBuilder: (context, index) {
-                                        DocumentSnapshot rdv = snapshot.data.docs[index];
+                                        DocumentSnapshot rdv = snapshot.data!.docs[index];
                                         AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
                                         return Padding(
                                           padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
                                             doctorName: "Dr. ${appointment.doctorName}"+S.of(context).mdcinDeFamille,
-                                            date: appointment.startTime.toDate(),
+                                            date: appointment.startTime?.toDate(),
                                             state: appointment.status,
-                                            type: Algorithms.getConsultationTypeLabel(appointment.consultationType),
-                                            label: Algorithms.getAppointmentReasonLabel(appointment.title),
+                                            type: Algorithms.getConsultationTypeLabel(appointment.consultationType!),
+                                            label: Algorithms.getAppointmentReasonLabel(appointment.title!),
                                             action: () async {
                                               AppointmentModelProvider appointmentProvider = Provider.of<AppointmentModelProvider>(context, listen: false);
                                               appointmentProvider.setAppointmentModel(appointment);
-                                              _doc != null ? doctorProvider.setDoctorModel(_doc) : print("nope");
+                                              _doc != null ? doctorProvider.setDoctorModel(_doc!) : print("nope");
                                               Navigator.pushNamed(context, '/appointment');
                                               
                                               
@@ -609,7 +609,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
-                  boxShadow: [BoxShadow(blurRadius: 3, spreadRadius: 2, color: Colors.grey[300]), ]
+                  boxShadow: [BoxShadow(blurRadius: 3, spreadRadius: 2, color: Colors.grey[300]!), ]
                 ),
                 child: Column(
                   children: [
@@ -617,7 +617,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: wv*10),
                         decoration: BoxDecoration(
-                          boxShadow: [BoxShadow(blurRadius: 10, spreadRadius: -10, color: Colors.grey[50])]
+                          boxShadow: [BoxShadow(blurRadius: 10, spreadRadius: -10, color: Colors.grey[50]!)]
                         ),
                         child: ListView(children: [
                           SizedBox(height: hv*3,),
@@ -647,7 +647,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
       ),
     );
   }
-  Widget getFeatureCard({String title}){
+  Widget getFeatureCard({required String title}){
     return Container(
       margin: EdgeInsets.all(3),
       padding: EdgeInsets.all(3),

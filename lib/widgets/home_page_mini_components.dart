@@ -1351,7 +1351,7 @@ class HomePageComponents {
     );
   }
 
-  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, double? price, int? state, Function? action}) {
+  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function? action}) {
     return ListTile(
       onTap: () => action,
       leading: Container(
@@ -1464,7 +1464,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, int? state, Function? action}) {
+  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
@@ -1532,7 +1532,7 @@ class HomePageComponents {
     );
   }
 
-  String getUseCaseStateText(int val) {
+  String getUseCaseStateText(num val) {
     if (val == 0)
       return S.current.enAttente;
     else if (val == 1)
@@ -1543,7 +1543,7 @@ class HomePageComponents {
       return S.current.cltur;
   }
 
-  Color getUseCaseStateColor(int val) {
+  Color getUseCaseStateColor(num val) {
     if (val == 0)
       return kBrownCanyon;
     else if (val == 1)
@@ -1968,7 +1968,7 @@ class HomePageComponents {
     );
   }
 
-  static getStatusIndicator({double size = 15, int? status}){
+  static getStatusIndicator({double size = 15, num? status}){
     Color color = status == 0 ? Colors.red : status == 1 ? kDeepTeal : primaryColor;
     return Container(
       padding: EdgeInsets.all(6),
@@ -2054,7 +2054,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, int? state, Function? action}) {
+  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return Container(

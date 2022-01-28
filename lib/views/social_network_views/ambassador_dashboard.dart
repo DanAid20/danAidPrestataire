@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class AmbassadorDashboard extends StatefulWidget {
-  const AmbassadorDashboard({ Key key }) : super(key: key);
+  const AmbassadorDashboard({ Key? key }) : super(key: key);
 
   @override
   _AmbassadorDashboardState createState() => _AmbassadorDashboardState();
@@ -29,8 +29,8 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
   bool spinner = false;
   init(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    UserModel user = userProvider.getUserModel;
-    FirebaseFirestore.instance.collection("COMPTES_CREER_VIA_INVITATION").where("senderId", isEqualTo: user.userId).get().then((query) {
+    UserModel? user = userProvider.getUserModel;
+    FirebaseFirestore.instance.collection("COMPTES_CREER_VIA_INVITATION").where("senderId", isEqualTo: user!.userId).get().then((query) {
       print(query.docs.length);
       for (int i = 0; i < query.docs.length; i++){
         var doc = query.docs[i];
@@ -68,7 +68,7 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
   Widget build(BuildContext context) {
     print(users.toString());
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    UserModel user = userProvider.getUserModel;
+    UserModel? user = userProvider.getUserModel;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -79,19 +79,19 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
         children: [
           Expanded(
             child: Container(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance.collection("ADHERENTS").where("invitedBy", isEqualTo: user.userId).snapshots(),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance.collection("ADHERENTS").where("invitedBy", isEqualTo: user?.userId).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
                     return Center(child: CircularProgressIndicator());
                   }
-                  return snapshot.data.docs.length >= 1 ? ListView.builder(
-                    itemCount: snapshot.data.docs.length,
+                  return snapshot.data!.docs.length >= 1 ? ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
-                      DocumentSnapshot userSnapshot = snapshot.data.docs[index];
+                      DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
                       AdherentModel singleUser = AdherentModel.fromDocument(userSnapshot);
-                      if (singleUser.adherentId == user.userId) {
+                      if (singleUser.adherentId == user?.userId) {
                         return Container();
                       }
                       return userBox(
@@ -126,7 +126,7 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                   Text("Coupon :  ", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold)),
-                  SelectableText("${userProvider.getUserModel.couponCode}", style: TextStyle(letterSpacing: 3,color: kDeepTeal, fontSize: 22, fontWeight: FontWeight.bold),)
+                  SelectableText("${userProvider.getUserModel?.couponCode}", style: TextStyle(letterSpacing: 3,color: kDeepTeal, fontSize: 22, fontWeight: FontWeight.bold),)
                 ],),
                 SizedBox(height: hv*2.5),
                 Row(children: [
@@ -146,8 +146,8 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
           backgroundColor: kDeepTeal,
           onPressed: () async {
             var link;
-            String couponCode = userProvider.getUserModel.matricule.replaceAll(new RegExp(r'[^0-9]'),'');
-            link = await DynamicLinkHandler.createAmbassadorDynamicLink(userId: userProvider.getUserModel.userId, couponCode: couponCode);
+            String couponCode = userProvider.getUserModel!.matricule!.replaceAll(new RegExp(r'[^0-9]'),'');
+            link = await DynamicLinkHandler.createAmbassadorDynamicLink(userId: userProvider.getUserModel?.userId, couponCode: couponCode);
             Share.share(link.toString(), subject: "Nouvelle demande d'ami d'ambassadeur").then((value) {
               print("Done !");
             });
@@ -157,8 +157,8 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
     );
   }
 
-  Widget userBox({AdherentModel user, bool paid = false, bool paymentRequested = false}){
-    DateTime delay = user.dateCreated.toDate().add(Duration(days: 90));
+  Widget userBox({required AdherentModel user, bool paid = false, bool paymentRequested = false}){
+    DateTime delay = user.dateCreated!.toDate().add(Duration(days: 90));
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
@@ -170,11 +170,11 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
           radius: wv*6,
           backgroundColor: Colors.grey,
           backgroundImage: user.imgUrl != null
-              ? CachedNetworkImageProvider(user.imgUrl)
+              ? CachedNetworkImageProvider(user.imgUrl!)
               : null,
           child: user.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
-        title: Text(user.surname, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 17),),
+        title: Text(user.surname!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 17),),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -32,9 +32,9 @@ import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class UseCaseServiceDetails extends StatefulWidget {
-  final UseCaseServiceModel service;
-  final String type;
-  const UseCaseServiceDetails({ Key key, this.service, this.type }) : super(key: key);
+  final UseCaseServiceModel? service;
+  final String? type;
+  const UseCaseServiceDetails({ Key? key, this.service, this.type }) : super(key: key);
 
   @override
   _UseCaseServiceDetailsState createState() => _UseCaseServiceDetailsState();
@@ -46,7 +46,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
   TextEditingController _consultationCodeController = new TextEditingController();
   TextEditingController _costController = new TextEditingController();
 
-  DateTime selectedDate;
+  DateTime? selectedDate;
 
   bool doc1Spinner = false;
   bool doc1Uploaded = false;
@@ -78,55 +78,55 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
       edit = true;
       setState((){});
     }
-    if(usecaseProvider.getUseCase.consultationCode != null){
-      _consultationCodeController.text = usecaseProvider.getUseCase.consultationCode;
+    if(usecaseProvider.getUseCase?.consultationCode != null){
+      _consultationCodeController.text = usecaseProvider.getUseCase!.consultationCode!;
       setState((){});
     }
-    if(usecaseProvider.getUseCase.doctorName != null){
-      _doctorNameController.text = usecaseProvider.getUseCase.doctorName;
+    if(usecaseProvider.getUseCase?.doctorName != null){
+      _doctorNameController.text = usecaseProvider.getUseCase!.doctorName!;
       setState((){});
     }
-    if(widget.service.date != null){
-      selectedDate = widget.service.date.toDate();
+    if(widget.service?.date != null){
+      selectedDate = widget.service?.date?.toDate();
       setState((){});
     }
-    if(usecaseProvider.getUseCase.establishment != null){
-      _establishmentController.text = widget.service.establishment == null ? usecaseProvider.getUseCase.establishment : widget.service.establishment;
+    if(usecaseProvider.getUseCase?.establishment != null){
+      _establishmentController.text = widget.service?.establishment == null ? usecaseProvider.getUseCase!.establishment! : widget.service!.establishment!;
       setState((){});
     }
     if(widget.service != null){
-      _costController.text = widget.service.amount != null ? "${widget.service.amount}" : '0';
+      _costController.text = widget.service?.amount != null ? "${widget.service!.amount}" : '0';
       setState((){});
     }
     if(widget.type == pharmacy){
-      _consultationCodeController.text = usecaseProvider.getUseCase.consultationCode;
+      _consultationCodeController.text = usecaseProvider.getUseCase!.consultationCode!;
       setState((){});
     }
     if(widget.type == consultation){
       print('hey');
-      docs1Uploaded = usecaseProvider.getUseCase.bookletUrls != null ? usecaseProvider.getUseCase.bookletUrls.length : 0;
-      docs2Uploaded = usecaseProvider.getUseCase.receiptUrls != null ? usecaseProvider.getUseCase.receiptUrls.length : 0;
-      docs3Uploaded = usecaseProvider.getUseCase.otherDocUrls != null ? usecaseProvider.getUseCase.otherDocUrls.length : 0;
+      docs1Uploaded = usecaseProvider.getUseCase?.bookletUrls != null ? usecaseProvider.getUseCase!.bookletUrls!.length : 0;
+      docs2Uploaded = usecaseProvider.getUseCase?.receiptUrls != null ? usecaseProvider.getUseCase!.receiptUrls!.length : 0;
+      docs3Uploaded = usecaseProvider.getUseCase?.otherDocUrls != null ? usecaseProvider.getUseCase!.otherDocUrls!.length : 0;
       setState(() {});
     } else if(widget.type == ambulance && widget.service != null) {
-      docs1Uploaded = widget.service.bookletUrls != null ? widget.service.bookletUrls.length : 0;
-      docs2Uploaded = widget.service.receiptUrls != null ? widget.service.receiptUrls.length : 0;
-      docs3Uploaded = widget.service.drugsUrls != null ? widget.service.drugsUrls.length : 0;
+      docs1Uploaded = widget.service?.bookletUrls != null ? widget.service!.bookletUrls!.length : 0;
+      docs2Uploaded = widget.service?.receiptUrls != null ? widget.service!.receiptUrls!.length : 0;
+      docs3Uploaded = widget.service?.drugsUrls != null ? widget.service!.drugsUrls!.length : 0;
       setState(() {});
     } else if(widget.type == hospitalization && widget.service != null) {
-      docs1Uploaded = widget.service.bookletUrls != null ? widget.service.precriptionUrls.length : 0;
-      docs2Uploaded = widget.service.receiptUrls != null ?  widget.service.receiptUrls.length : 0;
-      docs3Uploaded = widget.service.drugsUrls != null ? widget.service.drugsUrls.length : 0;
+      docs1Uploaded = widget.service?.bookletUrls != null ? widget.service!.precriptionUrls!.length : 0;
+      docs2Uploaded = widget.service?.receiptUrls != null ?  widget.service!.receiptUrls!.length : 0;
+      docs3Uploaded = widget.service?.drugsUrls != null ? widget.service!.drugsUrls!.length : 0;
       setState(() {});
     } else if(widget.type == pharmacy && widget.service != null) {
-      docs1Uploaded = widget.service.precriptionUrls != null ? widget.service.precriptionUrls.length : 0;
-      docs2Uploaded = widget.service.receiptUrls != null ? widget.service.receiptUrls.length : 0;
-      docs3Uploaded = widget.service.drugsUrls != null ? widget.service.drugsUrls.length : 0;
+      docs1Uploaded = widget.service?.precriptionUrls != null ? widget.service!.precriptionUrls!.length : 0;
+      docs2Uploaded = widget.service?.receiptUrls != null ? widget.service!.receiptUrls!.length : 0;
+      docs3Uploaded = widget.service?.drugsUrls != null ? widget.service!.drugsUrls!.length : 0;
       setState(() {});
     } else if(widget.type == labo && widget.service != null) {
-      docs1Uploaded = widget.service.precriptionUrls != null ? widget.service.precriptionUrls.length : 0;
-      docs2Uploaded = widget.service.receiptUrls != null ?  widget.service.receiptUrls.length : 0;
-      docs3Uploaded = widget.service.resultsUrls != null ? widget.service.resultsUrls.length : 0;
+      docs1Uploaded = widget.service?.precriptionUrls != null ? widget.service!.precriptionUrls!.length : 0;
+      docs2Uploaded = widget.service?.receiptUrls != null ?  widget.service!.receiptUrls!.length : 0;
+      docs3Uploaded = widget.service?.resultsUrls != null ? widget.service!.resultsUrls!.length : 0;
       setState(() {});
     }
   }
@@ -141,8 +141,8 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
 
     UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    AdherentModel adh = adherentProvider.getAdherent;
-    UseCaseModel usecase = usecaseProvider.getUseCase;
+    AdherentModel? adh = adherentProvider.getAdherent;
+    UseCaseModel? usecase = usecaseProvider.getUseCase;
     String title = Algorithms.getUseCaseServiceName(type: widget.type, context: context);
     String doc1 = widget.type == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
@@ -159,14 +159,14 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
     num danAidCov = 0;
 
     if(widget.service != null){
-      if(adh.adherentPlan != 0){
-        danAidCov = (widget.service.amount * 0.7).round();
+      if(adh?.adherentPlan != 0){
+        danAidCov = (widget.service!.amount! * 0.7).round();
       } else {
-        danAidCov = (widget.service.amount * 0.05).round();
+        danAidCov = (widget.service!.amount! * 0.05).round();
       }
     }
 
-    bool closed = widget.service != null ? widget.service.closed : false;
+    bool? closed = widget.service != null ? widget.service!.closed : false;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -211,7 +211,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                     decoration: BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                      boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
                     ),
                     child: Column(
                       children: [
@@ -225,7 +225,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                             children: [
                               Row(
                                 children: [
-                                  Expanded(child: HomePageComponents.header(label: "Pour le patient", title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue)),
+                                  Expanded(child: HomePageComponents.header(label: "Pour le patient", title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue)),
                                   widget.service != null ? HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: primaryColor, size: 25, action: ()=>setState((){edit = !edit;})) : Container(),
                                   SizedBox(width: wv*4,)
                                 ],
@@ -241,7 +241,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text("Médecin", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                                          Text(usecase.doctorName != null && usecase.doctorName != "" ? usecase.doctorName : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 17)),
+                                          Text(usecase?.doctorName != null && usecase?.doctorName != "" ? usecase!.doctorName! : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 17)),
                                           Text("Médecin de famille", style: TextStyle(color: kTextBlue, fontSize: 14))
                                         ],
                                       ) : CustomTextField(
@@ -256,9 +256,9 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                       child: !edit ? Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("Suite à : ${usecase.consultationCode != null ? "Rendez-vous" : "Urgence"}", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
+                                          Text("Suite à : ${usecase?.consultationCode != null ? "Rendez-vous" : "Urgence"}", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
                                           Text("Etablissement", style: TextStyle(color: kTextBlue, fontSize: 14)),
-                                          Text(widget.service.establishment != null && widget.service.establishment != "" ? widget.service.establishment : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 17)),
+                                          Text(widget.service?.establishment != null && widget.service?.establishment != "" ? widget.service!.establishment! : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 17)),
                                         ],
                                       ) : CustomTextField(
                                         label: "Etablissement",
@@ -275,9 +275,9 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                       child: !edit ? Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("${usecase.dateCreated.toDate().day}/${usecase.dateCreated.toDate().month.toString().padLeft(2, '0')}/${usecase.dateCreated.toDate().year}", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
+                                          Text("${usecase!.dateCreated!.toDate().day}/${usecase.dateCreated!.toDate().month.toString().padLeft(2, '0')}/${usecase.dateCreated!.toDate().year}", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
                                           Text("Etablissement", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                                          Text(usecase.establishment != null && usecase.establishment != "" ? usecase.establishment : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 15)),
+                                          Text(usecase.establishment != null && usecase.establishment != "" ? usecase.establishment! : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 15)),
                                         ],
                                       ) : CustomTextField(
                                         label: "Etablissement",
@@ -290,10 +290,10 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                     ) : Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text("${usecase.dateCreated.toDate().day}/${usecase.dateCreated.toDate().month.toString().padLeft(2, '0')}/${usecase.dateCreated.toDate().year}", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
+                                        Text("${usecase!.dateCreated!.toDate().day}/${usecase.dateCreated!.toDate().month.toString().padLeft(2, '0')}/${usecase.dateCreated!.toDate().year}", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold)),
                                         SizedBox(height: 5,),
                                         Text("Code de consultation", style: TextStyle(color: kTextBlue, fontSize: 15)),
-                                        Text(usecase.consultationCode != null ? usecase.consultationCode : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold))
+                                        Text(usecase.consultationCode != null ? usecase.consultationCode! : "Non spécifié", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.bold))
                                       ],
                                     ),
                                   ],
@@ -323,7 +323,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         child: Row(children: [
                                           SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                                           VerticalDivider(),
-                                          Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                          Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                         ],),
                                       ),
                                     ),
@@ -333,7 +333,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                       label: 'Code de consultation',
                                       hintText: 'Pas obligatoire',
                                       labelColor: kTextBlue,
-                                      seal: !edit || usecase.consultationCode != null,
+                                      seal: !edit || usecase?.consultationCode != null,
                                       onChanged: (val)=>setState((){}),
                                       noPadding: true,
                                     ),
@@ -389,7 +389,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                               child: Row(
                                 children: [
                                   Spacer(),
-                                  Text("${widget.service.amount - danAidCov} f.", style: TextStyle(color: kCardTextColor, fontSize: 17,))
+                                  Text("${widget.service!.amount! - danAidCov} f.", style: TextStyle(color: kCardTextColor, fontSize: 17,))
                                 ],
                               ),
                             ),
@@ -398,7 +398,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                               decoration: BoxDecoration(
                                 color: whiteColor,
                                 borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                                boxShadow: [BoxShadow(color: Colors.grey[500].withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: Offset(0,4))]
+                                boxShadow: [BoxShadow(color: Colors.grey[500]!.withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: Offset(0,4))]
                               ),
                               child: Column(
                                 children: [
@@ -423,15 +423,15 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         Row(children: [
                                           Expanded(
                                             child: Text(
-                                               widget.service.status == 2 ? 'Fournir les documents et patienter' : widget.service.status == 0 ? 'Démande rejetée': widget.service.status == 1 ? "Payé" : "Statut inconnu",
-                                               style: TextStyle(color: widget.service.status == 0 ? Colors.red : widget.service.status == 1 ? kDeepTeal : primaryColor),
+                                               widget.service!.status == 2 ? 'Fournir les documents et patienter' : widget.service?.status == 0 ? 'Démande rejetée': widget.service?.status == 1 ? "Payé" : "Statut inconnu",
+                                               style: TextStyle(color: widget.service?.status == 0 ? Colors.red : widget.service?.status == 1 ? kDeepTeal : primaryColor),
                                                textAlign: TextAlign.right,
                                             ),
                                           ),
                                           SizedBox(width: wv*1.5,),
-                                          HomePageComponents.getStatusIndicator(status: widget.service.status, size: 12)
+                                          HomePageComponents.getStatusIndicator(status: widget.service!.status, size: 12)
                                         ],),
-                                        widget.service.adminFeedback != null ? Text(widget.service.adminFeedback, style: TextStyle(color: kPrimaryColor, fontSize: 15),) : Container()
+                                        widget.service?.adminFeedback != null ? Text(widget.service!.adminFeedback!, style: TextStyle(color: kPrimaryColor, fontSize: 15),) : Container()
                                       ],
                                     ),
                                   )
@@ -448,11 +448,11 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                     decoration: BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.circular(20),
-                      boxShadow: [BoxShadow(color: Colors.grey[700].withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
+                      boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
                     ),
                     child: Column(
                       children: [
-                        widget.service != null ? widget.service.type == hospitalization || widget.service.type == ambulance ? Container(
+                        widget.service != null ? widget.service?.type == hospitalization || widget.service?.type == ambulance ? Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2.5),
                           decoration: BoxDecoration(
                             color: kSouthSeas.withOpacity(0.3),
@@ -464,7 +464,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                 children: [
                                   Expanded(child: Text("Avance versée par DanAid", style: TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold), textAlign: TextAlign.left,)),
                                   SizedBox(width: wv*3,),
-                                  Text(widget.service.advance.toString()+" f.", style: TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold), textAlign: TextAlign.right,)
+                                  Text(widget.service!.advance.toString()+" f.", style: TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold), textAlign: TextAlign.right,)
                                 ],
                               ),
                               SizedBox(height: hv*1.5,),
@@ -472,7 +472,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                 children: [
                                   Expanded(child: Text("Frais justifiés", style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.left,)),
                                   SizedBox(width: wv*3,),
-                                  Text(widget.service.justifiedFees.toString()+" f.", style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.right,)
+                                  Text(widget.service!.justifiedFees.toString()+" f.", style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.right,)
                                 ],
                               ),
                               SizedBox(height: hv*1.5,),
@@ -488,7 +488,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                     ],
                                   )),
                                   SizedBox(width: wv*2,),
-                                  Text("${widget.service.advance - widget.service.justifiedFees} f.", style: TextStyle(color: kCardTextColor, fontSize: 17), textAlign: TextAlign.right,)
+                                  Text("${widget.service!.advance! - widget.service!.justifiedFees!} f.", style: TextStyle(color: kCardTextColor, fontSize: 17), textAlign: TextAlign.right,)
                                 ],
                               ),
                             ],
@@ -547,7 +547,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                   print("aaa");
                                   if(widget.type == pharmacy || widget.type == labo){
                                     if(widget.service == null){
-                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').add({
+                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase!.id).collection('PRESTATIONS').add({
                                         "usecaseId": usecase.id,
                                         "adherentId": usecase.adherentId,
                                         "status": 2,
@@ -586,7 +586,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         setState((){confirmSpinner = false;});
                                       });
                                     } else {
-                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').doc(widget.service.id).update({
+                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase!.id).collection('PRESTATIONS').doc(widget.service!.id).update({
                                         "amountToPay": num.parse(_costController.text),
                                         "establishment": _establishmentController.text,
                                         "serviceDate": selectedDate,
@@ -594,17 +594,17 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         "receiptUrls": FieldValue.arrayUnion(docs2List),
                                         "drugsUrls": widget.type == pharmacy ? FieldValue.arrayUnion(docs3List) : FieldValue.arrayUnion([]),
                                         "resultsUrls": widget.type == labo ? FieldValue.arrayUnion(docs3List) : FieldValue.arrayUnion([]),
-                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : widget.service.precriptionUploadDate,
-                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : widget.service.receiptUploadDate,
-                                        "drugsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service.drugsUploadDate,
-                                        "resultsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service.resultsUploadDate,
-                                        "executed": docs2List.length > 0 || widget.service.receiptUrls.length > 0 ? true : false,
-                                        "estimated": docs1List.length > 0 || widget.service.precriptionUrls.length > 0 ? true : false
+                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : widget.service!.precriptionUploadDate,
+                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : widget.service!.receiptUploadDate,
+                                        "drugsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service!.drugsUploadDate,
+                                        "resultsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service!.resultsUploadDate,
+                                        "executed": docs2List.length > 0 || widget.service!.receiptUrls!.length > 0 ? true : false,
+                                        "estimated": docs1List.length > 0 || widget.service!.precriptionUrls!.length > 0 ? true : false
                                       }).then((doc) {
-                                        widget.service.amount != num.parse(_costController.text) ? FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
-                                          "amountToPay": FieldValue.increment((num.parse(_costController.text) - widget.service.amount)),
+                                        widget.service?.amount != num.parse(_costController.text) ? FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
+                                          "amountToPay": FieldValue.increment((num.parse(_costController.text) - widget.service!.amount!)),
                                         }) : print("Dont update usecase amount");
-                                        usecaseProvider.modifyServiceCost(oldVal: widget.service.amount, newVal: num.parse(_costController.text));
+                                        usecaseProvider.modifyServiceCost(oldVal: widget.service!.amount, newVal: num.parse(_costController.text));
                                         setState((){confirmSpinner = false;});
                                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Mise à jour des informations de la prestation éfféctuée..'),));
                                         Navigator.pop(context); 
@@ -613,7 +613,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                   }
                                   if(widget.type == hospitalization || widget.type == ambulance){
                                     if(widget.service == null){
-                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').add({
+                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase!.id).collection('PRESTATIONS').add({
                                         "usecaseId": usecase.id,
                                         "adherentId": usecase.adherentId,
                                         "advance": 0,
@@ -659,21 +659,21 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         setState((){confirmSpinner = false;});
                                       });
                                     } else {
-                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').doc(widget.service.id).update({
+                                      FirebaseFirestore.instance.collection('USECASES').doc(usecase!.id).collection('PRESTATIONS').doc(widget.service!.id).update({
                                         "establishment": _establishmentController.text,
                                         "serviceDate": selectedDate,
                                         "precriptionUrls": FieldValue.arrayUnion(docs1List),
                                         "receiptUrls": FieldValue.arrayUnion(docs2List),
                                         "drugsUrls": widget.type == pharmacy || widget.type == hospitalization || widget.type == ambulance ? FieldValue.arrayUnion(docs3List) : [],
                                         "resultsUrls": widget.type == labo ? FieldValue.arrayUnion(docs3List) : [],
-                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : widget.service.precriptionUploadDate,
-                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : widget.service.receiptUploadDate,
-                                        "drugsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service.drugsUploadDate,
-                                        "resultsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service.resultsUploadDate,
-                                        "requested": docs1List.length > 0 || widget.service.precriptionUrls.length > 0 ? true : false
+                                        "precriptionUploadDate": docs1List.length > 0 ? DateTime.now() : widget.service!.precriptionUploadDate,
+                                        "receiptUploadDate": docs2List.length > 0 ? DateTime.now() : widget.service!.receiptUploadDate,
+                                        "drugsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service!.drugsUploadDate,
+                                        "resultsUploadDate": docs3List.length > 0 ? DateTime.now() : widget.service!.resultsUploadDate,
+                                        "requested": docs1List.length > 0 || widget.service!.precriptionUrls!.length > 0 ? true : false
                                       }).then((doc) {
-                                        widget.service.amount != num.parse(_costController.text) ? FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
-                                          "amountToPay": FieldValue.increment((num.parse(_costController.text) - widget.service.amount)),
+                                        widget.service!.amount != num.parse(_costController.text) ? FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
+                                          "amountToPay": FieldValue.increment((num.parse(_costController.text) - widget.service!.amount!)),
                                         }) : print("Dont update usecase amount");
                                         
                                         setState((){confirmSpinner = false;});
@@ -685,12 +685,12 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                   }
                                   else if(widget.type == consultation) {
                                     print("ffff");
-                                    await FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
+                                    await FirebaseFirestore.instance.collection('USECASES').doc(usecase!.id).update({
                                       "consultationCode" : _consultationCodeController.text,
                                       "consultationCost" : num.parse(_costController.text),
                                       "consultationId": usecase.id,
                                       "consultationStatus": 2,
-                                      "amountToPay": usecase.consultationCost == null ? FieldValue.increment(num.parse(_costController.text)) : usecase.amount - usecase.consultationCost + num.parse(_costController.text),
+                                      "amountToPay": usecase.consultationCost == null ? FieldValue.increment(num.parse(_costController.text)) : usecase.amount! - usecase.consultationCost! + num.parse(_costController.text),
                                       "establishment": _establishmentController.text,
                                       "doctorName": _doctorNameController.text,
                                       "bookletUrls": FieldValue.arrayUnion(docs1List),
@@ -706,7 +706,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                       print("d1");
                                       usecaseProvider.setConsultationCost(num.parse(_costController.text));
                                       print("2");
-                                      usecaseProvider.setConsultationId(usecase.id);
+                                      usecaseProvider.setConsultationId(usecase.id!);
                                       print("3");
                                       usecaseProvider.setEstablishment(_establishmentController.text);
                                       print("4");
@@ -760,9 +760,9 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -827,7 +827,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
+    String? adherentId = adherentModelProvider.getAdherent?.adherentId;
     Reference storageReference = FirebaseStorage.instance.ref().child('demande_de_prise_en_charge/$adherentId/$name-'+DateTime.now().millisecondsSinceEpoch.toString()); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -959,7 +959,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
     );
   }
   _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2021),

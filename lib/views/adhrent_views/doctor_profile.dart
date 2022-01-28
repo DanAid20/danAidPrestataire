@@ -26,7 +26,7 @@ class DoctorProfilePage extends StatefulWidget {
 
 class _DoctorProfilePageState extends State<DoctorProfilePage> {
   
-  GoogleMapController mapCardController;
+  GoogleMapController? mapCardController;
   final LatLng _center = const LatLng(45.521563, -122.677433);
   bool isExpanded = false;
   void _onMapCreated(GoogleMapController controller) {
@@ -53,9 +53,9 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   initAvailability(){
     DoctorTileModelProvider doctorProvider = Provider.of<DoctorTileModelProvider>(context, listen: false);
-    if(doctorProvider.getDoctor.availability != null){
-      Map avail = doctorProvider.getDoctor.availability;
-      if(avail["monday to friday"]["start"] is Timestamp){
+    if(doctorProvider.getDoctor?.availability != null){
+      Map? avail = doctorProvider.getDoctor?.availability;
+      if(avail!["monday to friday"]["start"] is Timestamp){
         setState(() {
           availability = {
               "monday to friday": {
@@ -119,14 +119,14 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
     return WillPopScope(
       onWillPop: () async {
-        userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor.id == doctor.getDoctor.id ? controller.setIndex(1) : Navigator.pop(context);
+        userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor?.id == doctor.getDoctor!.id ? controller.setIndex(1) : Navigator.pop(context);
         //(adherentModelProvider.getAdherent != null) ? (adherentModelProvider.getAdherent.adherentId == userProvider.getUserId) ? Navigator.pop(context) : controller.setIndex(1) : controller.setIndex(1);
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: isPrestataire? kGold:kPrimaryColor,
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor.id == doctor.getDoctor.id ? controller.setIndex(1) : Navigator.pop(context),),
+          leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor?.id == doctor.getDoctor!.id ? controller.setIndex(1) : Navigator.pop(context),),
           actions: [
             IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
           ],
@@ -222,7 +222,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   boxShadow: [BoxShadow(
-                    color: Colors.grey[300],
+                    color: Colors.grey[300]!,
                     spreadRadius: 1.5,
                     blurRadius: 3,
                     offset: Offset(0, 2)
@@ -252,7 +252,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 ),
                                 child: CircleAvatar(
                                     //backgroundColor: Colors.grey,
-                                    backgroundImage: doctor.getDoctor.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor.avatarUrl) ,
+                                    backgroundImage: doctor.getDoctor!.avatarUrl == null ? AssetImage("assets/images/avatar-profile.jpg",) : CachedNetworkImageProvider(doctor.getDoctor!.avatarUrl!) as ImageProvider,
                                     child: ClipOval(
                                       child: CachedNetworkImage(
                                         height: wv*16,
@@ -262,7 +262,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                           child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                                           padding: EdgeInsets.all(20.0),
                                         ),
-                                        imageUrl: doctor.getDoctor.avatarUrl,),
+                                        imageUrl: doctor.getDoctor!.avatarUrl!,),
                                     ),
                                     radius: wv*8,
                                 ),
@@ -271,11 +271,11 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               Expanded(
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text("Dr. ${doctor.getDoctor.cniName}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
-                                    Text(S.of(context).medecinDeFamille+doctor.getDoctor.field, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                    Text("Dr. ${doctor.getDoctor!.cniName}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
+                                    Text(S.of(context).medecinDeFamille+doctor.getDoctor!.field!, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                     SizedBox(height: hv*1.3,),
-                                    Text(doctor.getDoctor.officeName, style: TextStyle(color: whiteColor, fontSize: 15, fontWeight: FontWeight.w600),),
-                                    Text("Service - ${doctor.getDoctor.speciality}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                    Text(doctor.getDoctor!.officeName!, style: TextStyle(color: whiteColor, fontSize: 15, fontWeight: FontWeight.w600),),
+                                    Text("Service - ${doctor.getDoctor!.speciality!}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
 
                                   ],
                                 ),
@@ -305,9 +305,9 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               right: wv*3,
                               bottom: -hv*0,
                               child: userProvider.getProfileType == profile.adherent ? 
-                                adherentModelProvider.getAdherent.familyDoctorId == null ? 
+                                adherentModelProvider.getAdherent?.familyDoctorId == null ? 
                                   TextButton(
-                                    onPressed: () => _chooseDoctor(doctor.getDoctor), 
+                                    onPressed: () => _chooseDoctor(doctor.getDoctor!), 
                                     child: Text(S.of(context).monMdecin, style: TextStyle(color: kPrimaryColor),),
                                     style: ButtonStyle(
                                       padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
@@ -351,7 +351,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                           ],
                         ),
 
-                        doctor.getDoctor.serviceList != null ? Row(crossAxisAlignment: CrossAxisAlignment.start,
+                        doctor.getDoctor!.serviceList != null ? Row(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
                               child: ListTile(
@@ -361,17 +361,17 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                 ),
                                 subtitle: Row(
                                   children: [
-                                    SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: doctor.getDoctor.serviceList["tele-consultation"] ? kSouthSeas : whiteColor),
+                                    SvgPicture.asset("assets/icons/Bulk/Video.svg", width: 20, color: doctor.getDoctor?.serviceList["tele-consultation"] ? kSouthSeas : whiteColor),
                                     SizedBox(width: 10,),
-                                    SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20, color: doctor.getDoctor.serviceList["chat"] ? kSouthSeas : whiteColor),
+                                    SvgPicture.asset("assets/icons/Bulk/Chat.svg", width: 20, color: doctor.getDoctor?.serviceList["chat"] ? kSouthSeas : whiteColor),
                                     SizedBox(width: 10,),
-                                    SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: doctor.getDoctor.serviceList["consultation"] ? kSouthSeas : whiteColor),
+                                    SvgPicture.asset("assets/icons/Bulk/Calling.svg", width: 20, color: doctor.getDoctor?.serviceList["consultation"] ? kSouthSeas : whiteColor),
                                     SizedBox(width: 10,),
-                                    SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: doctor.getDoctor.serviceList["visite-a-domicile"] ? kSouthSeas : whiteColor,),
+                                    SvgPicture.asset("assets/icons/Bulk/Home.svg", width: 20, color: doctor.getDoctor?.serviceList["visite-a-domicile"] ? kSouthSeas : whiteColor,),
                                     SizedBox(width: 10,),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 8.0),
-                                      child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: doctor.getDoctor.serviceList["rdv"] ? kSouthSeas : whiteColor),
+                                      child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", width: 25, color: doctor.getDoctor?.serviceList["rdv"] ? kSouthSeas : whiteColor),
                                     ),
                                     //SizedBox(width: 10,),
                                     //SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: doctor.getDoctor.serviceList["consultation"] ? kDeepTeal : whiteColor),
@@ -384,7 +384,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         SizedBox(height: 5,),
                       ],),
                     ),
-                    doctor.getDoctor.serviceList != null ? Container(
+                    doctor.getDoctor?.serviceList != null ? Container(
                       decoration: BoxDecoration(
                         color: isPrestataire? kGold: kSouthSeas,
                         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
@@ -394,15 +394,15 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               SizedBox(height: hv*1),
                               Row(mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  doctor.getDoctor.serviceList["consultation"] ? getFeatureCard(title: S.of(context).consultations) : Container(),
-                                  doctor.getDoctor.serviceList["tele-consultation"] ? getFeatureCard(title: S.of(context).tlconsultations) : Container(),
-                                  doctor.getDoctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: S.of(context).visiteDomicile) : Container(),
+                                  doctor.getDoctor?.serviceList["consultation"] ? getFeatureCard(title: S.of(context).consultations) : Container(),
+                                  doctor.getDoctor?.serviceList["tele-consultation"] ? getFeatureCard(title: S.of(context).tlconsultations) : Container(),
+                                  doctor.getDoctor?.serviceList["visite-a-domicile"] ? getFeatureCard(title: S.of(context).visiteDomicile) : Container(),
                                 ],
                               ),
                               Row(mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  doctor.getDoctor.serviceList["chat"] ? getFeatureCard(title: S.of(context).chat) : Container(),
-                                  doctor.getDoctor.serviceList["rdv"] ? getFeatureCard(title: S.of(context).rendezvous) : Container(),
+                                  doctor.getDoctor?.serviceList["chat"] ? getFeatureCard(title: S.of(context).chat) : Container(),
+                                  doctor.getDoctor?.serviceList["rdv"] ? getFeatureCard(title: S.of(context).rendezvous) : Container(),
                                 ],
                               ),
                               SizedBox(height: hv*1),
@@ -458,7 +458,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         SizedBox(height: 3,),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0),
-                          child: Text(doctor.getDoctor.about == null ? S.of(context).ras : doctor.getDoctor.about),
+                          child: Text(doctor.getDoctor?.about == null ? S.of(context).ras : doctor.getDoctor!.about!),
                         ),
                         SizedBox(height: 10.h,),
                         isPrestataire? Padding(
@@ -526,11 +526,11 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         Row(
                           children: [
                             SizedBox(width: wv*2,),
-                            doctor.getDoctor.availability != null ? Expanded(
+                            doctor.getDoctor?.availability != null ? Expanded(
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(S.of(context).horaire, style: TextStyle(fontWeight: FontWeight.w800)),
-                                  doctor.getDoctor.availability["monday to friday"]["available"] ? Container(
+                                  doctor.getDoctor?.availability?["monday to friday"]["available"] ? Container(
                                     margin: EdgeInsets.only(right: 10),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -539,7 +539,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                       ]
                                     ),
                                   ) : Container(),
-                                  doctor.getDoctor.availability["saturday"]["available"] ? Container(
+                                  doctor.getDoctor?.availability?["saturday"]["available"] ? Container(
                                     margin: EdgeInsets.only(right: 10),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -548,7 +548,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                       ]
                                     ),
                                   ) : Container(),
-                                  doctor.getDoctor.availability["sunday"]["available"] ? Container(
+                                  doctor.getDoctor?.availability?["sunday"]["available"] ? Container(
                                     margin: EdgeInsets.only(right: 10),
                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
@@ -561,12 +561,12 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                   SizedBox(height: 10,),
 
                                   Text(S.of(context).adresse, style: TextStyle(fontWeight: FontWeight.w800)),
-                                  Text(doctor.getDoctor.address == null ? S.of(context).cameroon :"${doctor.getDoctor.address}, "+S.of(context).cameroun)
+                                  Text(doctor.getDoctor?.address == null ? S.of(context).cameroon :"${doctor.getDoctor?.address}, "+S.of(context).cameroun)
                                 ],
                               ),
                             )  :  Container(),
                             SizedBox(width: wv*2,),
-                            doctor.getDoctor.rate != null ? Container(
+                            doctor.getDoctor?.rate != null ? Container(
                               padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 color: kSouthSeas.withOpacity(0.7),
@@ -575,7 +575,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(S.of(context).tarifPublique, style: TextStyle(fontWeight: FontWeight.w800)),
-                                  Text("${doctor.getDoctor.rate["public"]} f."),
+                                  Text("${doctor.getDoctor?.rate?["public"]} f."),
                                   SizedBox(height: 10,),
                                   Text(S.of(context).couvertureDanaid, style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                   Row(
@@ -611,7 +611,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                         child: GoogleMap(
                           onMapCreated: _onMapCreated,
                           initialCameraPosition: CameraPosition(
-                            target: doctor.getDoctor.location == null ? _center : LatLng(doctor.getDoctor.location["latitude"], doctor.getDoctor.location["longitude"]),
+                            target: doctor.getDoctor?.location == null ? _center : LatLng(doctor.getDoctor?.location?["latitude"], doctor.getDoctor?.location?["longitude"]),
                             zoom: 11.0,
                           ),
                         ),
@@ -623,7 +623,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             boxShadow: [BoxShadow(
-                              color: Colors.grey[400],
+                              color: Colors.grey[400]!,
                               spreadRadius: 1,
                               blurRadius: 1.5,
                               offset: Offset(0, 2)
@@ -668,7 +668,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                 ),
                 child: Column(children: [
                   SizedBox(height: hv*4),
-                  RichText(text: TextSpan(text: S.of(context).voulezVousChoisirLe, children: [TextSpan(text: "Dr. "+doctor.cniName, style: TextStyle(fontWeight: FontWeight.w700)), TextSpan(text: " comme medecin de Famille ?")], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
+                  RichText(text: TextSpan(text: S.of(context).voulezVousChoisirLe, children: [TextSpan(text: "Dr. "+doctor.cniName!, style: TextStyle(fontWeight: FontWeight.w700)), TextSpan(text: " comme medecin de Famille ?")], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5),), textAlign: TextAlign.center,),
                   SizedBox(height: hv*2,),
                   Text(S.of(context).nbAprsConfirmationVousNePourrezPlusModifierCeParamtre, style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
                   Row(children: [
@@ -708,19 +708,19 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     FirebaseFirestore.instance.collection("ADHERENTS")
-      .doc(adherentModelProvider.getAdherent.adherentId)
+      .doc(adherentModelProvider.getAdherent!.adherentId)
       .set({
-        "familyDoctorId": doctor.getDoctor.id,
+        "familyDoctorId": doctor.getDoctor!.id,
       }, SetOptions(merge: true)).then((value) {
-        FirebaseFirestore.instance.collection("USERS").doc(doctor.getDoctor.id).set({'friends': FieldValue.arrayUnion([adherentModelProvider.getAdherent.adherentId])}, SetOptions(merge: true));
-        FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent.adherentId).set({'friends': FieldValue.arrayUnion([doctor.getDoctor.id])}, SetOptions(merge: true));
-        userProvider.addFriend(doctor.getDoctor.id);
+        FirebaseFirestore.instance.collection("USERS").doc(doctor.getDoctor!.id).set({'friends': FieldValue.arrayUnion([adherentModelProvider.getAdherent!.adherentId])}, SetOptions(merge: true));
+        FirebaseFirestore.instance.collection("USERS").doc(adherentModelProvider.getAdherent!.adherentId).set({'friends': FieldValue.arrayUnion([doctor.getDoctor!.id])}, SetOptions(merge: true));
+        userProvider.addFriend(doctor.getDoctor!.id!);
         setState(() {
           confirmSpinner = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Dr "+doctor.getDoctor.cniName+" a été ajouté(e) comme médecin de famille..")));
-        adherentModelProvider.setFamilyDoctorId(doctor.getDoctor.id);
-        adherentModelProvider.setFamilyDoctor(doctor.getDoctor);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le Dr "+doctor.getDoctor!.cniName!+" a été ajouté(e) comme médecin de famille..")));
+        adherentModelProvider.setFamilyDoctorId(doctor.getDoctor!.id!);
+        adherentModelProvider.setFamilyDoctor(doctor.getDoctor!);
         setState(() {});
         controller.toPreviousIndex();
         Navigator.pop(context);
@@ -734,7 +734,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
       });
   }
 
-  Widget getFeatureCard({String title}){
+  Widget getFeatureCard({required String title}){
     return Container(
       margin: EdgeInsets.all(3),
       padding: EdgeInsets.all(3),

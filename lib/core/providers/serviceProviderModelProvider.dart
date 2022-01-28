@@ -13,6 +13,11 @@ class ServiceProviderModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void destroyServiceProviderProfile(){
+    _serviceProvider = null;
+    notifyListeners();
+  }
+
   void setServiceProviderId(String val){
     _serviceProvider?.id = val;
     notifyListeners();

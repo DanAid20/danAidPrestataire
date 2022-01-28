@@ -27,16 +27,16 @@ class Contributions extends StatefulWidget {
 class _ContributionsState extends State<Contributions> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  InvoiceModel latestInvoice;
+  InvoiceModel? latestInvoice;
 
   init() async {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').where('categoriePaiement', isEqualTo: "COTISATION_ANNUELLE").get().then((query) {
+    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').where('categoriePaiement', isEqualTo: "COTISATION_ANNUELLE").get().then((query) {
       DateTime witness = DateTime(2000);
       for(int i = 0; i < query.docs.length; i++){
         InvoiceModel model = InvoiceModel.fromDocument(query.docs[i]);
-        if(model.coverageStartDate.toDate().isAfter(witness)){
-          witness = model.coverageStartDate.toDate();
+        if(model.coverageStartDate!.toDate().isAfter(witness)){
+          witness = model.coverageStartDate!.toDate();
           latestInvoice = model;
           setState(() { });
         }
@@ -55,9 +55,9 @@ class _ContributionsState extends State<Contributions> {
     InvoiceModelProvider invoiceProvider = Provider.of<InvoiceModelProvider>(context);
     PlanModelProvider planProvider = Provider.of<PlanModelProvider>(context, listen: false);
 
-    DateTime limit = adherentProvider.getAdherent.validityEndDate != null ? adherentProvider.getAdherent.validityEndDate.toDate() : null;
-    String limitString = limit != null ? limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString() : null;
-    String inscriptionId;
+    DateTime? limit = adherentProvider.getAdherent?.validityEndDate != null ? adherentProvider.getAdherent?.validityEndDate?.toDate() : null;
+    String? limitString = limit != null ? limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString() : null;
+    String? inscriptionId;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -71,7 +71,7 @@ class _ContributionsState extends State<Contributions> {
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())
         ],
       ),
       endDrawer: DefaultDrawer(
@@ -85,7 +85,7 @@ class _ContributionsState extends State<Contributions> {
         children: [
           SizedBox(height: hv*2.5,),
           HomePageComponents.getInfoActionCard(
-            title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan),
+            title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent?.adherentPlan),
             actionLabel: S.of(context).comparerLesServices,
             subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
             action: ()=>Navigator.pushNamed(context, '/compare-plans')
@@ -109,14 +109,14 @@ class _ContributionsState extends State<Contributions> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("1 X ${latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                          Text("1 X ${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
                           Text("Famille", style: TextStyle(color: kCardTextColor, fontSize: 13)),
                           Text("(1 à 5 personnes)", style: TextStyle(color: kCardTextColor, fontSize: 13)),
                         ],
                       ),
                     ),
                     SizedBox(width: wv*2,),
-                    Text("${latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text("${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 SizedBox(height: hv*1.5),
@@ -145,7 +145,7 @@ class _ContributionsState extends State<Contributions> {
                   children: [
                     Text("Total annuel", style: TextStyle(color: kCardTextColor, fontSize: 16)),
                     Spacer(),
-                    Text("${latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16))
+                    Text("${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16))
                   ],
                 ),
                 SizedBox(height: hv*0.5),
@@ -153,7 +153,7 @@ class _ContributionsState extends State<Contributions> {
                   children: [
                     Text("Payé", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold)),
                     Spacer(),
-                    Text("${latestInvoice.amountPaid != null ? latestInvoice.amountPaid : 0} f.", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold))
+                    Text("${latestInvoice?.amountPaid != null ? latestInvoice?.amountPaid : 0} f.", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold))
                   ],
                 ),
                 SizedBox(height: hv*1.5),
@@ -161,7 +161,7 @@ class _ContributionsState extends State<Contributions> {
                   children: [
                     Text("Reste à payer", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold)),
                     Spacer(),
-                    Text("${latestInvoice.amountPaid != null ? latestInvoice.amount - latestInvoice.amountPaid < 0 ? 0 : latestInvoice.amount - latestInvoice.amountPaid : latestInvoice.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold))
+                    Text("${latestInvoice?.amountPaid != null ? latestInvoice!.amount! - latestInvoice!.amountPaid! < 0 ? 0 : latestInvoice!.amount! - latestInvoice!.amountPaid! : latestInvoice!.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold))
                   ],
                 ),
               ],
@@ -178,8 +178,8 @@ class _ContributionsState extends State<Contributions> {
                 children: [
                   Text(S.of(context).mesDerniresFactures, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
                   SizedBox(height: hv*2,),
-                  StreamBuilder(
-                    stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return Center(
@@ -189,17 +189,17 @@ class _ContributionsState extends State<Contributions> {
                         );
                       }
 
-                      return snapshot.data.docs.length >= 1
+                      return snapshot.data!.docs.length >= 1
                       ? Expanded(
                         child: ListView.builder(
                             physics: BouncingScrollPhysics(),
                             scrollDirection: Axis.vertical,
-                            itemCount: snapshot.data.docs.length,
+                            itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              DocumentSnapshot useCaseDoc = snapshot.data.docs[index];
+                              DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
                               InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc);
                               if(invoice.type == "INSCRIPTION"){
-                                inscriptionId = invoice.id;
+                                inscriptionId = invoice.id!;
                               }
                               print("name: ");
                               return getContributionTile(
@@ -207,12 +207,12 @@ class _ContributionsState extends State<Contributions> {
                                 doctorName : "bdbd", 
                                 date : DateTime.now(), 
                                 amount: invoice.amount, 
-                                firstDate : invoice.type == "INSCRIPTION" ? invoice.dateCreated.toDate() : invoice.coverageStartDate.toDate(), 
-                                lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate() : invoice.coverageEndDate.toDate(),
-                                paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
+                                firstDate : invoice.type == "INSCRIPTION" ? invoice.dateCreated!.toDate() : invoice.coverageStartDate!.toDate(), 
+                                lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate!.toDate() : invoice.coverageEndDate!.toDate(),
+                                paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate!.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
                                 type : invoice.type, state : 0, 
                                 action : () async {
-                                  int regFee = 10000;
+                                  num regFee = 10000;
                                   if(invoice.type == "INSCRIPTION"){
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
                                   }
@@ -220,9 +220,9 @@ class _ContributionsState extends State<Contributions> {
                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Côtisation éffectuée",)));
                                   }
                                   else {
-                                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
+                                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
                                       InvoiceModel regInvoice = InvoiceModel.fromDocument(doc);
-                                      regFee = regInvoice.amount;
+                                      regFee = regInvoice.amount != null ? regInvoice.amount! : regFee;
                                     });
                                     if(invoice.invoiceIsSplitted == true){
                                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee,),),);
@@ -286,17 +286,17 @@ class _ContributionsState extends State<Contributions> {
     );
   }
 
-  Widget getContributionTile({String label, String doctorName, DateTime date, num amount, DateTime firstDate, DateTime lastDate, String type, int state, int paid, Function action}) {
-    String lastDateString = lastDate.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate.year.toString();
+  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function? action}) {
+    String lastDateString = lastDate!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate!.year.toString();
     return GestureDetector(
-      onTap: action,
+      onTap: ()=>action,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(15),
-          boxShadow: [BoxShadow(color: Colors.grey[200].withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
+          boxShadow: [BoxShadow(color: Colors.grey[200]!.withOpacity(0.8), blurRadius: 20.0, spreadRadius: 7.0, offset: Offset(0, 7))]
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -305,7 +305,7 @@ class _ContributionsState extends State<Contributions> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(type == "INSCRIPTION" ? S.of(context).inscription : S.of(context).ctisation, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold)),
-                Text(label, style: TextStyle(color: kDeepTeal, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
+                Text(label!, style: TextStyle(color: kDeepTeal, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
                 SizedBox(height: hv*2,),
                 Text(S.of(context).montant, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
                 Text("$amount f.", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),

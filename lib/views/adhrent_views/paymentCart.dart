@@ -244,24 +244,24 @@ class _PaymentCartState extends State<PaymentCart> {
                               return HomePageComponents.getPromotionTile(
                                 title: camp.name,
                                 description: camp.description,
-                                firstDate: camp.startDate.toDate(),
-                                lastDate: camp.endDate.toDate(),
-                                amount: camp.scope == "INSCRIPTION" ? widget.regFee < 10000 ? widget.regFee : camp.amount : camp.amount,
+                                firstDate: camp.startDate?.toDate(),
+                                lastDate: camp.endDate?.toDate(),
+                                amount: camp.scope == "INSCRIPTION" ? widget.regFee! < 10000 ? widget.regFee : camp.amount : camp.amount,
                                 active: camp.active,
                                 chosen: campaignsChosen.contains(camp.id),
                                 action: (){
-                                  num amount = camp.amount;
+                                  num amount = camp.amount!;
                                   if(camp.scope == "INSCRIPTION"){
-                                    if(widget.regFee < 10000){
-                                      amount = widget.regFee;
+                                    if(widget.regFee! < 10000){
+                                      amount = widget.regFee!;
                                       setState(() {});
                                     }
                                   }
                                   if(camp.requireCoupon == true){
-                                    if(adherentProvider.getAdherent.couponCodeUsed != null){
+                                    if(adherentProvider.getAdherent?.couponCodeUsed != null){
                                       if(campaignsChosen.contains(camp.id)){
                                         campaignsChosen.remove(camp.id);
-                                        registrationFee = registrationFee + amount;
+                                        registrationFee = registrationFee! + amount;
                                         promoRegistrationSum = promoRegistrationSum + amount;
                                       }
                                       else {
@@ -300,10 +300,10 @@ class _PaymentCartState extends State<PaymentCart> {
                                                             enable: _codeController.text.isNotEmpty,
                                                             isLoading: spinner,
                                                             action: (){
-                                                              if(_codeController.text == adherentProvider.getAdherent.couponCodeUsed) {
-                                                                if(adherentProvider.getAdherent.dateCreated.toDate().add(Duration(days: 30)).isBefore(DateTime.now())){
+                                                              if(_codeController.text == adherentProvider.getAdherent?.couponCodeUsed) {
+                                                                if(adherentProvider.getAdherent!.dateCreated!.toDate().add(Duration(days: 30)).isBefore(DateTime.now())){
                                                                   campaignsChosen.add(camp.id);
-                                                                  registrationFee = registrationFee - amount;
+                                                                  registrationFee = registrationFee! - amount;
                                                                   promoRegistrationSum = promoRegistrationSum + amount;
                                                                   print("promo somme: $promoRegistrationSum,\n regFee: $registrationFee \n campagnes: $campaignsChosen");
                                                                   setState(() {});
@@ -339,11 +339,11 @@ class _PaymentCartState extends State<PaymentCart> {
                                   else {
                                     if(campaignsChosen.contains(camp.id)){
                                       campaignsChosen.remove(camp.id);
-                                      totalAmount = totalAmount + amount;
+                                      totalAmount = totalAmount! + amount;
                                       promoSum = promoSum + amount;
                                     } else {
                                       campaignsChosen.add(camp.id);
-                                      totalAmount = totalAmount - amount;
+                                      totalAmount = totalAmount! - amount;
                                       promoSum = promoSum - amount;
                                     }
                                   }
@@ -381,18 +381,18 @@ class _PaymentCartState extends State<PaymentCart> {
                     Text("$amountToPay FCFA", style: TextStyle(color: kTextBlue, fontSize: 16))
                   ],
                 ),
-                payInscription && widget.invoice.registrationPaid != true ? Row(
+                payInscription && widget.invoice?.registrationPaid != true ? Row(
                   children: [
                     Expanded(child: Text("Montant de l'inscription", style: TextStyle(color: kTextBlue, fontSize: 16),)),
                     SizedBox(width: wv*2,),
-                    Text(widget.invoice.inscriptionId != null ? "$registrationFee FCFA" : "Déjà payée", style: TextStyle(color: kTextBlue, fontSize: 16))
+                    Text(widget.invoice?.inscriptionId != null ? "$registrationFee FCFA" : "Déjà payée", style: TextStyle(color: kTextBlue, fontSize: 16))
                   ],
                 ) : Container(),
                 Row(
                   children: [
                     Text("Montant à payer", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.bold),),
                     Spacer(),
-                    Text("${amountToPay + registrationFee + 250} FCFA", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.bold))
+                    Text("${amountToPay + registrationFee! + 250} FCFA", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.bold))
                   ],
                 ),
                 SizedBox(height: hv*2,),
@@ -402,11 +402,11 @@ class _PaymentCartState extends State<PaymentCart> {
                   isLoading: spinner,
                   action: (){
                     print("Montant à payer $amountToPay \n");
-                    print("startCov ${start.toLocal()} \n");
+                    print("startCov ${start?.toLocal()} \n");
                     print("endCov ${end.toLocal()} \n");
                     print("months covered $months \n");
                     print(campaignsChosen);
-                    pay(amount: amountToPay+registrationFee+250, invoice: widget.invoice);
+                    pay(amount: amountToPay + registrationFee! + 250, invoice: widget.invoice);
                   },
                 )
               ],
@@ -419,9 +419,9 @@ class _PaymentCartState extends State<PaymentCart> {
 
   static const platform = const MethodChannel('danaidproject.sendmoney');
 
-  Future<String> makePayment({int cost, bool isOrange}) async {
+  Future<String> makePayment({num? cost, bool? isOrange}) async {
     String amount = cost.toString();
-    String operator = isOrange ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
+    String operator = isOrange! ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
     String phoneNumber = isOrange ? '658112605' : '673662062';
 
     try {
@@ -438,7 +438,7 @@ class _PaymentCartState extends State<PaymentCart> {
     }
   }
 
-  pay({int amount, InvoiceModel invoice}){
+  pay({num? amount, InvoiceModel? invoice}){
     showModalBottomSheet(
       context: context, 
       builder: (BuildContext bc){
@@ -456,7 +456,7 @@ class _PaymentCartState extends State<PaymentCart> {
                       ),
                     ),
                     title: Text("ORANGE MONEY"),
-                    onTap: (){processPayment(amount: amount, invoice: invoice, isOrange: true);}
+                    onTap: (){processPayment(amount: amount!, invoice: invoice!, isOrange: true);}
                     ),
                 ListTile(
                   leading: Container(
@@ -468,7 +468,7 @@ class _PaymentCartState extends State<PaymentCart> {
                     ),
                   ),
                   title: Text("MTN MOBILE MONEY"),
-                  onTap: () {processPayment(amount: amount, invoice: invoice, isOrange: false);},
+                  onTap: () {processPayment(amount: amount!, invoice: invoice!, isOrange: false);},
                 ),
               ],
             ),
@@ -478,28 +478,28 @@ class _PaymentCartState extends State<PaymentCart> {
     );
   }
 
-  processPayment({int amount, InvoiceModel invoice, bool isOrange}) async {
-    DateTime invStart = widget.invoice.coverageStartDate?.toDate();
-    DateTime invEnd = widget.invoice.coverageEndDate?.toDate();
-    DateTime invPaidStart = widget.invoice.currentPaidStartDate?.toDate();
-    DateTime invPaidEnd = widget.invoice.currentPaidEndDate?.toDate();
-    amountPerMonth = totalAmount/12;
-    num amountToPay = (months*amountPerMonth).round();
-    DateTime start = invPaidEnd == null ? invStart : invPaidEnd.add(Duration(days: 1));
-    DateTime end = invPaidEnd == null ? invStart.add(Duration(days: months*30)) : invPaidEnd.add(Duration(days: months*30));
+  processPayment({num? amount, InvoiceModel? invoice, bool? isOrange}) async {
+    DateTime? invStart = widget.invoice?.coverageStartDate?.toDate();
+    DateTime? invEnd = widget.invoice?.coverageEndDate?.toDate();
+    DateTime? invPaidStart = widget.invoice?.currentPaidStartDate?.toDate();
+    DateTime? invPaidEnd = widget.invoice?.currentPaidEndDate?.toDate();
+    amountPerMonth = totalAmount!/12;
+    num amountToPay = (months! * amountPerMonth!).round();
+    DateTime? start = invPaidEnd == null ? invStart : invPaidEnd.add(Duration(days: 1));
+    DateTime? end = invPaidEnd == null ? invStart?.add(Duration(days: months!*30)) : invPaidEnd.add(Duration(days: months!*30));
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
 
-    int monthPaid = widget.invoice.monthsPaid == null ? 0 : widget.invoice.monthsPaid;
+    int? monthPaid = widget.?invoice?.monthsPaid == null ? 0 : widget.invoice?.monthsPaid;
 
-    bool campOn = widget.invoice.campaignsChosen == null ? false : widget.invoice.campaignsChosen.isEmpty ? false : true;
+    bool campOn = widget.invoice?.campaignsChosen == null ? false : widget.invoice!.campaignsChosen!.isEmpty ? false : true;
 
     String res = await makePayment(cost: amount, isOrange: isOrange);
     if(res == "SUCCESS"){
       try {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
-        if(widget.invoice.inscriptionId != null){
+        if(widget.invoice?.inscriptionId != null){
           if(payInscription){
-            FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.inscriptionId).update({
+            FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent?.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice?.inscriptionId).update({
               "paymentDate": DateTime.now(),
               "montantPayee": registrationFee,
               "promos": FieldValue.arrayUnion(campaignsChosen),
@@ -508,22 +508,22 @@ class _PaymentCartState extends State<PaymentCart> {
             });
           }
         }
-        FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice.id).update({
+        FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent?.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice?.id).update({
           "paymentDate": DateTime.now(),
-          "montantPayee": FieldValue.increment(amount-registrationFee),
-          "moisPayee": FieldValue.increment(months),
-          "registrationPaid": payInscription && widget.invoice.inscriptionId != null ? true : false,
+          "montantPayee": FieldValue.increment(amount!-registrationFee!),
+          "moisPayee": FieldValue.increment(months!),
+          "registrationPaid": payInscription && widget.invoice?.inscriptionId != null ? true : false,
           "currentPaidStartDate": start,
           "currentPaidEndDate": end,
           "promos": FieldValue.arrayUnion(campaignsChosen),
           "invoiceIsSplitted": true,
-          "paid": monthPaid + months == 12 ? true : false,
-          "etatValider": monthPaid + months == 12 ? true : false,
-          "montant": campOn ? widget.invoice.amount : widget.invoice.amount - promoSum,
-          "paymentDates": FieldValue.arrayUnion([{"date" : DateTime.now(), "amount": amount-registrationFee}]),
+          "paid": monthPaid! + months! == 12 ? true : false,
+          "etatValider": monthPaid + months! == 12 ? true : false,
+          "montant": campOn ? widget.invoice?.amount : widget.invoice!.amount! - promoSum,
+          "paymentDates": FieldValue.arrayUnion([{"date" : DateTime.now(), "amount": amount-registrationFee!}]),
         }).then((value) async {
           setState(() {});
-          FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).update({
+          FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent?.adherentId).update({
             //"datDebutvalidite" : start,
             "havePaidBefore": true,
             "paymentDate": DateTime.now(),

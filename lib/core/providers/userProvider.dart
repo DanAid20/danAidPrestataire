@@ -29,6 +29,15 @@ class UserProvider with ChangeNotifier {
     _user = val;
     notifyListeners();
   }
+
+  void destroyUserProfile(){
+    _user = null;
+    _authId = null;
+    _userId = null;
+    _profileType = null;
+    notifyListeners();
+  }
+
   void setAuthId(String val) {
     _authId = val;
     notifyListeners();

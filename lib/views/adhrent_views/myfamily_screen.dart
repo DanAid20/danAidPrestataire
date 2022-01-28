@@ -40,10 +40,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
         Provider.of<BottomAppBarControllerProvider>(context);
 
     final birthday = userProvider.getUserModel != null
-        ? userProvider.getUserModel.dateCreated.toDate()
+        ? userProvider.getUserModel?.dateCreated?.toDate()
         : DateTime.now();
     final date2 = DateTime.now();
-    final yearsForBadget = date2.difference(birthday).inDays;
+    final yearsForBadget = date2.difference(birthday!).inDays;
 
     return WillPopScope(
       onWillPop: () async {
@@ -73,13 +73,13 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                         onTap: ()=>Navigator.pushNamed(context, '/family-points-page'),
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
-                          child: Text(userProvider.getUserModel != null ? userProvider.getUserModel.points.toString()+" pts" ?? "0 pts" : "0 pts",
+                          child: Text(userProvider.getUserModel != null ? "${userProvider.getUserModel!.points == null ? 0 : userProvider.getUserModel!.points} pts" : "0 pts",
                             style: TextStyle(fontSize: inch*1.3, fontWeight: FontWeight.w700, color: Colors.teal[400]),
                           ),
                         ),
                       ),
                       SizedBox(width: wv*2,),
-                      adherentProvider.getAdherent.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
+                      adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: 18,) : Container(),
                      yearsForBadget>=365 ? SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink(),
                      SizedBox(width: wv*1),
                     ],
@@ -113,14 +113,14 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(
-                          color: Colors.grey[300],
+                          color: Colors.grey[300]!,
                           blurRadius: 2.0,
                           spreadRadius: 1.0,
                           offset: Offset(0, 1))
                     ]),
                 child: Column(
                   children: [
-                    adherentProvider.getAdherent.adherentPlan == 0 ? Container(
+                    adherentProvider.getAdherent?.adherentPlan == 0 ? Container(
                       padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -133,7 +133,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                           , style: TextStyle(color: kBlueDeep, fontSize: wv*3.5)),
                           ),
                           TextButton(onPressed: ()=>Navigator.pushNamed(context, '/compare-plans'),
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50].withOpacity(0.5))),
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50]!.withOpacity(0.5))),
                             child: Text(S.of(context).obtenezUneCouvertureComplte70, style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
                         ],
                       ),
@@ -151,7 +151,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                               borderRadius: BorderRadius.circular(15)),
                           child: BeneficiaryStream(standardUse: true),
                         ),
-                        userProvider.getUserModel?.profileType != beneficiary && adherentProvider.getAdherent.adherentPlan != 1.1 ? Positioned(
+                        userProvider.getUserModel?.profileType != beneficiary && adherentProvider.getAdherent?.adherentPlan != 1.1 ? Positioned(
                           right: wv * 0,
                           bottom: hv * 8,
                           child: IconButton(
@@ -178,7 +178,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
               Container(
                 decoration: BoxDecoration(color: whiteColor, boxShadow: [
                   BoxShadow(
-                      color: Colors.grey[200],
+                      color: Colors.grey[200]!,
                       spreadRadius: 3.0,
                       blurRadius: 5.0)
                 ]),
@@ -192,7 +192,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                     SizedBox(height: hv*2,),
                     adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
                       title: S.of(context).domicilePrincipale, 
-                      subtitle: adherentProvider.getAdherent.address != null ? adherentProvider.getAdherent.address : "Non configurée", 
+                      subtitle: adherentProvider.getAdherent?.address != null ? adherentProvider.getAdherent?.address : "Non configurée", 
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
                       action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
                     ) : Container(),

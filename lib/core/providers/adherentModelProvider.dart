@@ -15,6 +15,10 @@ class AdherentModelProvider with ChangeNotifier {
     _adherent = val;
     notifyListeners();
   }
+  void destroyAdherentProfile(){
+    _adherent = null;
+    notifyListeners();
+  }
   void setFamilyDoctor(DoctorModel val){
     _adherent?.familyDoctor = val;
     notifyListeners();

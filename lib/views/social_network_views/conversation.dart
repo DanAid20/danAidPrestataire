@@ -40,29 +40,29 @@ class _ConversationState extends State<Conversation> {
   bool replyImgIsSticker = false;
   bool replyIsImage = false;
   String replyMsg = "...";
-  String replyImgUrl = "";
+  String? replyImgUrl = "";
   String replyStickerName = "";
   bool replyIsLocal = false;
 
   String replierName = "Yoo";
 
-  Stream chatMessageStream;
+  Stream? chatMessageStream;
 
   String lastMsgFrom = "";
 
   initialization() async {
     ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: false);
     ConversationChatModelProvider conversationChat = Provider.of<ConversationChatModelProvider>(context, listen: false);
-    String targetId = conversation.getConversation.targetId;
-    String id = conversation.getConversation.userId;
-    String conversationId = conversation.getConversation.conversationId;
-    await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation.userPhoneId).set({'chattingWith': targetId, 'chat-users': FieldValue.arrayUnion([targetId])}, SetOptions(merge: true));
-    await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation.targetPhoneId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
+    String? targetId = conversation.getConversation?.targetId;
+    String? id = conversation.getConversation?.userId;
+    String? conversationId = conversation.getConversation?.conversationId;
+    await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation!.userPhoneId).set({'chattingWith': targetId, 'chat-users': FieldValue.arrayUnion([targetId])}, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation!.targetPhoneId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).set({"users": FieldValue.arrayUnion([id, targetId])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((doc) {
       ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc);
       conversationChat.setConversationModel(conversationModel);
-      print(conversationChat.getConversation.conversationId);
+      print(conversationChat.getConversation!.conversationId);
     });
   }
 
@@ -127,7 +127,7 @@ class _ConversationState extends State<Conversation> {
                             child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                             padding: EdgeInsets.all(20.0),
                           ),
-                          imageUrl: conversation.getConversation.targetAvatar),
+                          imageUrl: conversation.getConversation!.targetAvatar!),
                       ),
                     ),
                   ),
@@ -135,10 +135,10 @@ class _ConversationState extends State<Conversation> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text((conversation.getConversation.targetProfileType != doctor ? "" : "Dr. ") + conversation.getConversation.targetName, overflow: TextOverflow.fade, style: TextStyle( color: Colors.white),),
+                      Text((conversation.getConversation?.targetProfileType != doctor ? "" : "Dr. ") + conversation.getConversation!.targetName!, overflow: TextOverflow.fade, style: TextStyle( color: Colors.white),),
                       SizedBox(height: 1),
                       Text(
-                        conversation.getConversation.targetIsSupport == true ? "Support DandAid" : conversation.getConversation.targetProfileType == doctor ? "Médecin" : conversation.getConversation.targetProfileType == serviceProvider ? "Prestataire" : "Adhérent",
+                        conversation.getConversation?.targetIsSupport == true ? "Support DandAid" : conversation.getConversation?.targetProfileType == doctor ? "Médecin" : conversation.getConversation?.targetProfileType == serviceProvider ? "Prestataire" : "Adhérent",
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
@@ -194,7 +194,7 @@ class _ConversationState extends State<Conversation> {
                                     Text(
                                       replyIsLocal
                                           ? S.of(context).you
-                                          : conversation.getConversation.targetName,
+                                          : conversation.getConversation!.targetName!,
                                       style: TextStyle(
                                           fontSize: 17,
                                           color: kDeepTeal,
@@ -287,7 +287,7 @@ class _ConversationState extends State<Conversation> {
                             decoration: InputDecoration(
                               prefixIcon: SizedBox(width: wv*7,),
                               errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1, color: Colors.red[300]),
+                                  borderSide: BorderSide(width: 1, color: Colors.red[300]!),
                                   borderRadius: BorderRadius.all(Radius.circular(20))),
                               fillColor: Colors.white.withOpacity(0.3),
                               //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
@@ -366,31 +366,31 @@ class _ConversationState extends State<Conversation> {
     if (msg != "") {
       _textController.clear();
       var docRef = FirebaseFirestore.instance.collection("CONVERSATIONS")
-          .doc(conversation.getConversation.conversationId)
+          .doc(conversation.getConversation!.conversationId)
           .collection("MESSAGES")
           .doc(DateTime.now().millisecondsSinceEpoch.toString());
       setState(() {
-        lastMsgFrom = conversation.getConversation.userId;
+        lastMsgFrom = conversation.getConversation!.userId!;
       });
       FirebaseFirestore.instance.runTransaction((transaction) async {
         await FirebaseFirestore.instance
             .collection("CONVERSATIONS")
-            .doc(conversation.getConversation.conversationId)
+            .doc(conversation.getConversation!.conversationId)
             .set({
-              "users": [conversation.getConversation.userId, conversation.getConversation.targetId],
-              "phoneIds": {conversation.getConversation.userId : conversation.getConversation.userPhoneId, conversation.getConversation.targetId: conversation.getConversation.targetPhoneId},
+              "users": [conversation.getConversation!.userId, conversation.getConversation!.targetId],
+              "phoneIds": {conversation.getConversation!.userId : conversation.getConversation!.userPhoneId, conversation.getConversation!.targetId: conversation.getConversation!.targetPhoneId},
               'lastMessage': msg,
               "lastMessageType": type,
               "lastMessageTime": DateTime.now().millisecondsSinceEpoch.toString(),
               "lastMessageSeen": false,
-              "lastMessageFrom": conversation.getConversation.userId,
+              "lastMessageFrom": conversation.getConversation!.userId,
               "unseenMessages": FieldValue.increment(1)
             }, SetOptions(merge: true));
         if (replyIsText) {
           transaction.set(docRef, {
-            "idFrom": conversation.getConversation.userId,
-            "idTo": conversation.getConversation.targetId,
-            "replierId": replyIsLocal ? conversation.getConversation.userId : conversation.getConversation.targetId,
+            "idFrom": conversation.getConversation!.userId,
+            "idTo": conversation.getConversation!.targetId,
+            "replierId": replyIsLocal ? conversation.getConversation!.userId : conversation.getConversation!.targetId,
             "timeStamp": DateTime.now().millisecondsSinceEpoch.toString(),
             "content": msg,
             "type": type,
@@ -401,9 +401,9 @@ class _ConversationState extends State<Conversation> {
           });
         } else if (replyIsImage || replyImgIsSticker) {
           transaction.set(docRef, {
-            "idFrom": conversation.getConversation.userId,
-            "idTo": conversation.getConversation.targetId,
-            "replierId": replyIsLocal ? conversation.getConversation.userId : conversation.getConversation.targetId,
+            "idFrom": conversation.getConversation!.userId,
+            "idTo": conversation.getConversation!.targetId,
+            "replierId": replyIsLocal ? conversation.getConversation!.userId : conversation.getConversation!.targetId,
             "timeStamp": DateTime.now().millisecondsSinceEpoch.toString(),
             "content": msg,
             "type": type,
@@ -415,8 +415,8 @@ class _ConversationState extends State<Conversation> {
         } 
         else {
           transaction.set(docRef, {
-            "idFrom": conversation.getConversation.userId,
-            "idTo": conversation.getConversation.targetId,
+            "idFrom": conversation.getConversation!.userId,
+            "idTo": conversation.getConversation!.targetId,
             "timeStamp": DateTime.now().millisecondsSinceEpoch.toString(),
             "content": msg,
             "type": type,
@@ -441,12 +441,12 @@ class _ConversationState extends State<Conversation> {
   void markMessagesAsSeen() {
     ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: true);
     ConversationChatModelProvider conversationChat = Provider.of<ConversationChatModelProvider>(context, listen: true);
-    String targetId = conversation.getConversation.targetId;
-    String userId = conversation.getConversation.userId;
-    String conversationId = conversation.getConversation.conversationId;
+    String? targetId = conversation.getConversation?.targetId;
+    String? userId = conversation.getConversation?.userId;
+    String? conversationId = conversation.getConversation?.conversationId;
     if (conversationChat.getConversation != null){
-      print("userId: $userId\n lastMsgFrom: ${conversationChat.getConversation.lastMessageFrom}");
-      if ((conversationChat.getConversation.lastMessageFrom == targetId) && (conversationChat.getConversation.lastMessageFrom != userId)) {
+      print("userId: $userId\n lastMsgFrom: ${conversationChat.getConversation?.lastMessageFrom}");
+      if ((conversationChat.getConversation?.lastMessageFrom == targetId) && (conversationChat.getConversation?.lastMessageFrom != userId)) {
         FirebaseFirestore.instance
             .collection("CONVERSATIONS")
             .doc(conversationId)
@@ -459,8 +459,8 @@ class _ConversationState extends State<Conversation> {
   chatMsgList() {
     ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context);
     return Flexible(
-        child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversation.getConversation.conversationId).collection("MESSAGES").orderBy("timeStamp", descending: true).snapshots(),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversation.getConversation!.conversationId).collection("MESSAGES").orderBy("timeStamp", descending: true).snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Center(
@@ -473,14 +473,14 @@ class _ConversationState extends State<Conversation> {
                   physics: BouncingScrollPhysics(),
                   controller: listScrollController,
                   padding: EdgeInsets.only(bottom: 100),
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   reverse: true,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     MessageModel msg = MessageModel.fromDocument(doc);
                     return Column(
                       children: <Widget>[
-                        createMsgBox(index, msg, conversation.getConversation),
+                        createMsgBox(index, msg, conversation.getConversation!),
                         index == 0 ?  SizedBox(height: hv*5,) : Container()
                       ],
                     );
@@ -501,7 +501,7 @@ class _ConversationState extends State<Conversation> {
               threshold: 50.0,
               onSwipeEnd: () {
                 setState(() {
-                  replyMsg = msg.content;
+                  replyMsg = msg.content!;
                   showReplyTxt = true;
                   showReplyImg = false;
                   showReplySticker = false;
@@ -529,7 +529,7 @@ class _ConversationState extends State<Conversation> {
               onSwipeEnd: () {
                 print("replyIsText: $replyIsText replyImgIsSticker: $replyImgIsSticker replyIsImage: $replyIsImage");
                 setState(() {
-                  replyMsg = msg.content;
+                  replyMsg = msg.content!;
                   showReplyTxt = true;
                   replyIsText = true;
                   replyImgIsSticker = false;
@@ -567,7 +567,7 @@ class _ConversationState extends State<Conversation> {
                 });
           print("this is $replyIsLocal");
           setState(() {
-            replyImgUrl = msg.content;
+            replyImgUrl = msg.content!;
             showReplyImg = true;
             showReplyTxt = false;
             showReplySticker = false;
@@ -611,7 +611,7 @@ class _ConversationState extends State<Conversation> {
                           child: Image.asset("assets/images/not_found.jpeg",
                               width: 200.0, height: 200.0, fit: BoxFit.cover),
                         ),
-                        imageUrl: msg.content,
+                        imageUrl: msg.content!,
                         width: 200.0,
                         height: 200.0,
                         fit: BoxFit.cover,
@@ -686,16 +686,16 @@ class _ConversationState extends State<Conversation> {
 
 class MessageBox extends StatelessWidget {
   
-  final MessageModel message;
-  final String userAvatar, targetAvatar, userName, targetName, userId;
-  final bool seen;
+  final MessageModel? message;
+  final String? userAvatar, targetAvatar, userName, targetName, userId;
+  final bool? seen;
 
-  const MessageBox({Key key, this.message, this.userAvatar, this.targetAvatar, this.userName, this.targetName, this.userId, this.seen}) : super(key: key);
+  const MessageBox({Key? key, this.message, this.userAvatar, this.targetAvatar, this.userName, this.targetName, this.userId, this.seen}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context, listen: true);
-    bool messageIsLocal = message.idFrom == conversation.getConversation.userId;
+    bool messageIsLocal = message?.idFrom == conversation.getConversation?.userId;
     return StatefulWrapper(
       onInit: () {
         _markAsSeen(context).then((value) {
@@ -715,7 +715,7 @@ class MessageBox extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.grey[400],
               shape: BoxShape.circle,
-              image: userAvatar != null ? DecorationImage(image: CachedNetworkImageProvider(targetAvatar), fit: BoxFit.cover) : null,
+              image: userAvatar != null ? DecorationImage(image: CachedNetworkImageProvider(targetAvatar!), fit: BoxFit.cover) : null,
             ),
             child: userAvatar != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
           ) : Container(),
@@ -726,7 +726,7 @@ class MessageBox extends StatelessWidget {
                 margin: EdgeInsets.only(left: wv*3, right: wv*1.5),
                 padding: EdgeInsets.only(left: wv * 2.5, bottom: hv * 3.7, right: wv * 2, top: hv * 1),
                 decoration: BoxDecoration(
-                    boxShadow: messageIsLocal ? [] : [BoxShadow(color: Colors.grey[200], offset: new Offset(1.0, 2.0), blurRadius: 1.0, spreadRadius: 0.5),],
+                    boxShadow: messageIsLocal ? [] : [BoxShadow(color: Colors.grey[200]!, offset: new Offset(1.0, 2.0), blurRadius: 1.0, spreadRadius: 0.5),],
                     color: messageIsLocal ? Colors.teal[50] : Colors.grey[50],
                     borderRadius: messageIsLocal
                         ? BorderRadius.only(topLeft: Radius.circular(15), bottomRight: Radius.circular(15), bottomLeft: Radius.circular(15),)
@@ -734,7 +734,7 @@ class MessageBox extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    message.replying
+                    message!.replying!
                         ? GestureDetector(
                             onTap: () {
                               print("reply tapped");
@@ -758,13 +758,13 @@ class MessageBox extends StatelessWidget {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  (message.replyType == 1)||(message.replyType == 2)
+                                  (message?.replyType == 1)||(message?.replyType == 2)
                                       ? Container(
                                           width: wv * 15,
                                           height: wv * 15,
                                           padding: EdgeInsets.only(
                                               top: 5, bottom: 5, right: 10),
-                                          child: (message.replyType == 1)
+                                          child: (message?.replyType == 1)
                                               ? CachedNetworkImage(
                                                   placeholder: (context, url) =>
                                                       Container(
@@ -793,11 +793,11 @@ class MessageBox extends StatelessWidget {
                                                         "assets/images/not_found.jpeg",
                                                         fit: BoxFit.cover),
                                                   ),
-                                                  imageUrl: message.replyContent,
+                                                  imageUrl: message!.replyContent!,
                                                   fit: BoxFit.cover,
                                                 )
                                               : Image.asset(
-                                                  "assets/images/${message.replyContent}.gif",
+                                                  "assets/images/${message?.replyContent}.gif",
                                                   fit: BoxFit.cover,
                                                 ),
                                         )
@@ -806,8 +806,8 @@ class MessageBox extends StatelessWidget {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        message.replierId == conversation.getConversation.targetId
-                                            ? conversation.getConversation.targetName
+                                        message?.replierId == conversation.getConversation!.targetId!
+                                            ? conversation.getConversation!.targetName!
                                             : S.of(context).you,
                                         style: TextStyle(
                                             color: messageIsLocal ? kDeepTeal : kPrimaryColor,
@@ -823,11 +823,11 @@ class MessageBox extends StatelessWidget {
                                           constraints: BoxConstraints(
                                               maxWidth: wv * 50, maxHeight: hv * 5),
                                           child: Text(
-                                            message.replyType == 0
-                                                ? message.replyContent
-                                                : message.replyType == 1
+                                            message?.replyType == 0
+                                                ? message!.replyContent!
+                                                : message?.replyType == 1
                                                     ? S.of(context).image
-                                                    : message.replyType == 2
+                                                    : message?.replyType == 2
                                                         ? S.of(context).sticker
                                                         : S.of(context).content,
                                             overflow: TextOverflow.ellipsis,
@@ -844,7 +844,7 @@ class MessageBox extends StatelessWidget {
                             width: 1,
                           ),
                     Text(
-                      message.content,
+                      message!.content!,
                       style: TextStyle(
                           color: Colors.black54,
                           fontSize: 17,
@@ -860,7 +860,7 @@ class MessageBox extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         Algorithms.getDateFromTimestamp(
-                          int.parse(message.timeStamp),
+                          int.parse(message!.timeStamp!),
                         ),
                         style: TextStyle(
                           fontSize: 12,
@@ -871,7 +871,7 @@ class MessageBox extends StatelessWidget {
                       messageIsLocal
                           ? Icon(
                               MdiIcons.checkAll,
-                              color: message.seen == true
+                              color: message!.seen == true
                                   ? kDeepTeal
                                   : Colors.grey[500],
                               size: wv * 5,
@@ -887,7 +887,7 @@ class MessageBox extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.grey[400],
               shape: BoxShape.circle,
-              image: userAvatar != null ? DecorationImage(image: CachedNetworkImageProvider(userAvatar), fit: BoxFit.cover) : null,
+              image: userAvatar != null ? DecorationImage(image: CachedNetworkImageProvider(userAvatar!), fit: BoxFit.cover) : null,
             ),
             child: userAvatar != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
           ) : Container()
@@ -899,12 +899,12 @@ class MessageBox extends StatelessWidget {
   }
     Future _markAsSeen(BuildContext context) async {
       print("dedans");
-      String conversationId = Algorithms.getConversationId(userId: message.idFrom, targetId: message.idTo);
-      print(message.idFrom);
+      String conversationId = Algorithms.getConversationId(userId: message!.idFrom, targetId: message!.idTo);
+      print(message!.idFrom);
       print("seen" +seen.toString());
       print(conversationId);
-      if ((message.idFrom != FirebaseAuth.instance.currentUser.uid && seen == false)) {
-        FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).collection("MESSAGES").doc(message.id).update({"seen": true}).then((value) {
+      if ((message!.idFrom != FirebaseAuth.instance.currentUser!.uid && seen == false)) {
+        FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).collection("MESSAGES").doc(message!.id).update({"seen": true}).then((value) {
           print("c bon");
         }).catchError((e){
           print(e.toString());

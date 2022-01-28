@@ -20,7 +20,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class FamilyStatsPage extends StatefulWidget {
-  const FamilyStatsPage({ Key key }) : super(key: key);
+  const FamilyStatsPage({ Key? key }) : super(key: key);
 
   @override
   _FamilyStatsPageState createState() => _FamilyStatsPageState();
@@ -43,7 +43,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
   init() {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     try {
-      FirebaseFirestore.instance.collection("BENEFICIAIRES").where("adherentId", isEqualTo: adherentProvider.getAdherent.adherentId).get().then((doc){
+      FirebaseFirestore.instance.collection("BENEFICIAIRES").where("adherentId", isEqualTo: adherentProvider.getAdherent!.adherentId).get().then((doc){
         setState(() {
                 members = members + doc.docs.length;
         });
@@ -64,10 +64,10 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
 
-    AdherentModel adhr = adherentProvider.getAdherent;
+    AdherentModel? adhr = adherentProvider.getAdherent;
 
-    num coverage = adhr.adherentPlan == 0 ? 25000 : adhr.adherentPlan == 1 ? 350000 : adhr.adherentPlan == 2 ? 650000 : adhr.adherentPlan == 3 ? 1000000 : 0;
-    num expense = coverage - adhr.insuranceLimit;
+    num coverage = adhr?.adherentPlan == 0 ? 25000 : adhr?.adherentPlan == 1 ? 350000 : adhr?.adherentPlan == 2 ? 650000 : adhr?.adherentPlan == 3 ? 1000000 : 0;
+    num expense = coverage - adhr!.insuranceLimit!;
     
     return Scaffold(
       key: _scaffoldKey,
@@ -79,7 +79,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
         ),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kCardTextColor,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kCardTextColor), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState!.openEndDrawer())
         ],
       ),
       endDrawer: DefaultDrawer(
@@ -89,17 +89,17 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
         partenaire: (){Navigator.pop(context); Navigator.pop(context);},
         famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('DANAID_DATA').doc('STATISTIQUES').snapshots(),
         builder: (context, snapshot) {
           if(!snapshot.hasData){
             return Center(child: Loaders().buttonLoader(kDeepTeal));
           }
           if(snapshot.hasData){
-            discovery = snapshot.data["discovery_share"];
-            access = snapshot.data["acces_share"];
-            assist = snapshot.data["assist_share"];
-            serenity = snapshot.data["serenity_share"];
+            discovery = snapshot.data!.get("discovery_share");
+            access = snapshot.data!.get("acces_share");
+            assist = snapshot.data!.get("assist_share");
+            serenity = snapshot.data!.get("serenity_share");
             print(discovery);
           }
 
@@ -114,7 +114,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: hv*3,),
-                      Container(child: Text(S.of(context).famille+adhr.familyName, style: TextStyle(fontSize: 35, color: kCardTextColor),)),
+                      Container(child: Text(S.of(context).famille+adhr.familyName!, style: TextStyle(fontSize: 35, color: kCardTextColor),)),
                       Text(
                         adhr.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
                         : adhr.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
@@ -129,7 +129,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(S.of(context).adhrentDepuis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlueDeep), textAlign: TextAlign.end,),
-                            Text(Algorithms.getTimeElapsed(date: adhr.dateCreated.toDate()), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlueDeep))
+                            Text(Algorithms.getTimeElapsed(date: adhr.dateCreated!.toDate())!, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: kBlueDeep))
                           ],
                         ),
                       ),
@@ -225,8 +225,8 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                                 lineWidth: wv*2,
                                                 animation: true,
                                                 animationDuration: 500,
-                                                percent: adhr.insuranceLimit >= coverage ? 1 : adhr.insuranceLimit/coverage,
-                                                center: Text("${((adhr.insuranceLimit/coverage)*100).round()}%", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kDeepTeal)),
+                                                percent: adhr.insuranceLimit! >= coverage ? 1 : adhr.insuranceLimit!/coverage,
+                                                center: Text("${((adhr.insuranceLimit!/coverage)*100).round()}%", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: kDeepTeal)),
                                                 progressColor: kDeepTeal,
                                                 backgroundColor: kSouthSeas,
                                               ),
@@ -270,11 +270,11 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                           children: [
                                             Text("Notre Communauté", style: TextStyle(color: kPrimaryColor, fontSize: 12)),
                                             SizedBox(height: hv*1,),
-                                            Text(snapshot.data["families"].toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18)),
+                                            Text(snapshot.data!["families"].toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18)),
                                             Text("Familles", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 12)),
-                                            Text(snapshot.data["beneficiaries"].toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18)),
+                                            Text(snapshot.data!["beneficiaries"].toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18)),
                                             Text("Bénéficiaires", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 12)),
-                                            Text(snapshot.data["service_providers"].toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18)),
+                                            Text(snapshot.data!["service_providers"].toString(), style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 18)),
                                             Text("Prestataires", style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold, fontSize: 12)),
                                           ],
                                         ),
@@ -319,7 +319,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                               child: Column(
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [ 
-                                                  Text("${(coverage - adhr.insuranceLimit)}Cfa", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: kDeepTeal), textAlign: TextAlign.center,),
+                                                  Text("${(coverage - adhr.insuranceLimit!)}Cfa", style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: kDeepTeal), textAlign: TextAlign.center,),
                                                   Text(S.of(context).deFraisSant, style: TextStyle(fontSize: 11, color: kDeepTeal), textAlign: TextAlign.center),
                                                 ],
                                               ),
@@ -331,7 +331,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
                                                       final desiredTouch = pieTouchResponse.touchInput is! PointerExitEvent &&
                                                           pieTouchResponse.touchInput is! PointerUpEvent;
                                                       if (desiredTouch && pieTouchResponse.touchedSection != null) {
-                                                        touchedIndex = pieTouchResponse.touchedSection.touchedSectionIndex;
+                                                        touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
                                                       } else {
                                                         touchedIndex = -1;
                                                       }
@@ -562,7 +562,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
             if (barTouchResponse.spot != null &&
                 barTouchResponse.touchInput is! PointerUpEvent &&
                 barTouchResponse.touchInput is! PointerExitEvent) {
-              touchedIndex = barTouchResponse.spot.touchedBarGroupIndex;
+              touchedIndex = barTouchResponse.spot!.touchedBarGroupIndex;
             } else {
               touchedIndex = -1;
             }
@@ -656,7 +656,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
     });
   }
 
-  Widget getIndicator({num percentage, Color color, String label}){
+  Widget getIndicator({required num percentage, required Color color, required String label}){
     return Row(
       children: [
         SizedBox(width: 2.5,),
@@ -672,7 +672,7 @@ class _FamilyStatsPageState extends State<FamilyStatsPage> {
       ],
     );
   }
-  Widget getHistogram({String title, Color color, num value}){
+  Widget getHistogram({required String title, required Color color, required num value}){
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

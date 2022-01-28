@@ -50,26 +50,26 @@ class _LoanFormState extends State<LoanForm> {
   final TextEditingController _employerController = TextEditingController();
   final TextEditingController _avalistNameController = TextEditingController();
 
-  String matricule;
+  String? matricule;
   int _duration = 6;
-  bool _isSalaryMan;
+  bool? _isSalaryMan;
   bool _avalist = false;
   bool _trustConditionAccepted = false;
   bool _serviceTermsAccepted = false;
-  String phone;
-  String avalistPhone;
+  String? phone;
+  String? avalistPhone;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
 
   
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   
   PageController controller = PageController(initialPage: 0, keepPage: false);
   int currentPageValue = 0;
-  List<Widget> pageList;
+  List<Widget>? pageList;
 
   bool carnetUploaded = false;
   bool otherFileUploaded = false;
@@ -98,7 +98,7 @@ class _LoanFormState extends State<LoanForm> {
           Navigator.pop(context);
         else
           controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
-        return null;
+        return false;
       },
       child: Scaffold(
         backgroundColor: Colors.grey[100],
@@ -138,13 +138,13 @@ class _LoanFormState extends State<LoanForm> {
                   child: PageView.builder(
                     pageSnapping: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: pageList.length,
+                    itemCount: pageList!.length,
                     onPageChanged: (int page) {
                       getChangedPageAndMoveBar(page);
                     },
                     controller: controller,
                     itemBuilder: (context, index) {
-                      return pageList[index];
+                      return pageList![index];
                     },
                   ),
                 ),
@@ -154,7 +154,7 @@ class _LoanFormState extends State<LoanForm> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      for (int i = 0; i < pageList.length; i++)
+                      for (int i = 0; i < pageList!.length; i++)
                         if (i == currentPageValue) ...[circleBar(true)] else
                           circleBar(false),
                     ],
@@ -171,7 +171,7 @@ class _LoanFormState extends State<LoanForm> {
   Widget getForm1(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
-    AdherentModel adh = adherentProvider.getAdherent;
+    AdherentModel? adh = adherentProvider.getAdherent;
     return Column(
       children: [
         Expanded(
@@ -193,7 +193,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -202,7 +202,7 @@ class _LoanFormState extends State<LoanForm> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(S.of(context).montantDuCrdit, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
-                                Text(loanProvider.getLoan.amount.toInt().toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
+                                Text(loanProvider.getLoan!.amount.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
                               ],
                             ),
                             Spacer(),
@@ -217,7 +217,7 @@ class _LoanFormState extends State<LoanForm> {
                                     color: kBrownCanyon.withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(20)
                                   ),
-                                  child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan.amount, rate: adherentProvider.getAdherent.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
+                                  child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan!.amount, rate: adherentProvider.getAdherent?.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
                                 ),
                               ],
                             ),
@@ -306,9 +306,9 @@ class _LoanFormState extends State<LoanForm> {
                                   value: 12,
                                 ),
                               ],
-                              onChanged: (value) {
+                              onChanged: (int? value) {
                                 setState(() {
-                                  _duration = value;
+                                  _duration = value!;
                                 });
                               }),
                           ),
@@ -330,7 +330,7 @@ class _LoanFormState extends State<LoanForm> {
                 hintText: S.of(context).raisonDuPrt,
                 controller: _purposeController,
                 onChanged: (val)=>setState((){}),
-                validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null
+                validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null
               ),
             ),
 
@@ -413,7 +413,7 @@ class _LoanFormState extends State<LoanForm> {
   Widget getForm2(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
-    AdherentModel adh = adherentProvider.getAdherent;
+    AdherentModel? adh = adherentProvider.getAdherent;
     return Container(
       child: Column(
         children: [
@@ -430,7 +430,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                       ],
                   )),
                   Container(
@@ -493,7 +493,7 @@ class _LoanFormState extends State<LoanForm> {
                                 Text(S.of(context).tlphone, style: TextStyle(fontSize: 16, color: kTextBlue)),
                                 SizedBox(height: 5,),
                                 InternationalPhoneNumberInput(
-                                  validator: (String phone) {
+                                  validator: (String? phone) {
                                     return null;
                                   },
                                   onInputChanged: (PhoneNumber number) {
@@ -527,7 +527,7 @@ class _LoanFormState extends State<LoanForm> {
                               subtitle: Text(S.of(context).votrePouxseEstDeFactoSolidaireDeVotreCrditVous, style: TextStyle(fontSize: 13, color: kTextBlue)),
                               activeColor: kSouthSeas,
                               value: _avalist, 
-                              onChanged: (val)=>setState((){_avalist = val;})
+                              onChanged: (bool? val)=>setState((){_avalist = val!;})
                             ),
 
                             _avalist ? Column(
@@ -547,7 +547,7 @@ class _LoanFormState extends State<LoanForm> {
                                 Text(S.of(context).tlphone, style: TextStyle(fontSize: 16, color: kTextBlue),),
                                 SizedBox(height: hv*1,),
                                 InternationalPhoneNumberInput(
-                                  validator: (String phone) {
+                                  validator: (String? phone) {
                                     return null;
                                   },
                                   onInputChanged: (PhoneNumber number) {
@@ -613,9 +613,9 @@ class _LoanFormState extends State<LoanForm> {
     DateTime nextMonth = DateTime(DateTime.now().year, DateTime.now().month+1, 1);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context);
-    LoanModel loan = loanProvider.getLoan;
-    AdherentModel adh = adherentProvider.getAdherent;
-    int mensuality = Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan.amount, rate: adherentProvider.getAdherent.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt();
+    LoanModel? loan = loanProvider.getLoan;
+    AdherentModel? adh = adherentProvider.getAdherent;
+    int mensuality = Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan!.amount, rate: adherentProvider.getAdherent?.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: _duration).toInt();
     num totalToPay = mensuality * _duration;
     DateTime firstPaymentDate = DateTime(nextMonth.year, nextMonth.month + 1, nextMonth.day);
     DateTime lastPaymentDate = DateTime(nextMonth.year, nextMonth.month + _duration, nextMonth.day);
@@ -640,7 +640,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh.surname + " " + adh.familyName, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -649,7 +649,7 @@ class _LoanFormState extends State<LoanForm> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(S.of(context).montantDuCrdit, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
-                                Text(loan.amount.toInt().toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
+                                Text(loan!.amount.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
                               ],
                             ),
                             Spacer(),
@@ -785,11 +785,11 @@ class _LoanFormState extends State<LoanForm> {
                         }
 
                         await FirebaseFirestore.instance.collection('ADHERENTS').doc(adh.adherentId).update({
-                          "creditLimit": FieldValue.increment(-loan.amount),
-                          "plafond": FieldValue.increment(loan.amount)
+                          "creditLimit": FieldValue.increment(-loan.amount!),
+                          "plafond": FieldValue.increment(loan.amount!)
                         }).then((value) {
-                          adherentProvider.updateLoanLimit(-loan.amount);
-                          adherentProvider.updateInsuranceLimit(loan.amount);
+                          adherentProvider.updateLoanLimit(-loan.amount!);
+                          adherentProvider.updateInsuranceLimit(loan.amount!);
                         });
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Votre demande de crédit a été enrégistrée'),));
@@ -835,7 +835,7 @@ class _LoanFormState extends State<LoanForm> {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0)]
+        boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0)]
       ),
       child: content,
     );
@@ -874,7 +874,7 @@ class _LoanFormState extends State<LoanForm> {
     });
   }
 
-  Future uploadDocumentToFirebase(File file, String name) async {
+  Future uploadDocumentToFirebase(File? file, String name) async {
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
     if (file == null) {
@@ -882,7 +882,7 @@ class _LoanFormState extends State<LoanForm> {
       return null;
     }
     
-    String adherentId = adherentModelProvider.getAdherent.adherentId;
+    String? adherentId = adherentModelProvider.getAdherent?.adherentId;
     Reference storageReference = FirebaseStorage.instance.ref().child('demandes_de_credit/$adherentId/$name-'+DateTime.now().millisecondsSinceEpoch.toString()); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -912,11 +912,11 @@ class _LoanFormState extends State<LoanForm> {
         });
       } else if(name == "doc"){
 
-        if(loanProvider.getLoan.docsUrls != null){
+        if(loanProvider.getLoan?.docsUrls != null){
           loanProvider.addDocUrl(url);
         }
         else {
-          loanProvider.getLoan.docsUrls = [];
+          loanProvider.getLoan?.docsUrls = [];
           loanProvider.addDocUrl(url);
         }
 
@@ -950,9 +950,9 @@ class _LoanFormState extends State<LoanForm> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -1006,7 +1006,7 @@ class _LoanFormState extends State<LoanForm> {
     );
   }
 
-  Widget getTableRow({String input, String output}){
+  Widget getTableRow({required String input, required String output}){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: hv*0.5),
       child: Row(

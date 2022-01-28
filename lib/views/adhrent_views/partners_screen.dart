@@ -38,21 +38,21 @@ class PartnersScreen extends StatefulWidget {
 class _PartnersScreenState extends State<PartnersScreen> {
   
   int contentIndex = 0;
-  BuildContext sheetContext;
+  BuildContext? sheetContext;
   double minSheetHeight = 0.4;
   double maxSheetHeight = 1.0;
   double initialSheetHeight = 0.8;
   ScrollController _scrollController = new ScrollController();
-  GoogleMapController mapController;
+  GoogleMapController? mapController;
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   List markerIds = [];
 
   final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
-  LatLng _userCoords;
+  LatLng? _userCoords;
 
-  BitmapDescriptor getMarkerIcon({String userType, String prestataireType, bool isSpecialist}){
+  BitmapDescriptor getMarkerIcon({required String userType, String? prestataireType, required bool isSpecialist}){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    BitmapDescriptor descriptor;
+    BitmapDescriptor? descriptor;
     if (prestataireType == null){
       if(userType == adherent || userType == beneficiary){
         descriptor = BitmapDescriptor.defaultMarker;
@@ -81,10 +81,10 @@ class _PartnersScreenState extends State<PartnersScreen> {
       }
 
     }
-    return descriptor;
+    return descriptor!;
   }
 
-  void _addMarker(String id, String userType, double lat, double lng, String spType, bool isSpecialist, AdherentModel adherent, DoctorModel doctor, ServiceProviderModel sp) async {
+  void _addMarker(String id, String userType, double lat, double lng, String? spType, bool? isSpecialist, AdherentModel? adherent, DoctorModel? doctor, ServiceProviderModel? sp) async {
     var markerIdVal = id;
     final MarkerId markerId = MarkerId(markerIdVal);
     markerIds.add(markerId);
@@ -94,7 +94,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
       markerId: markerId,
       position: LatLng(lat, lng),
       infoWindow: InfoWindow(title: markerIdVal, snippet: userType, onTap: (){_onMarkerTapped(markerId: markerId, userType: userType, doc: doctor, prestataire: sp);}),
-      icon: getMarkerIcon(userType: userType, prestataireType: spType, isSpecialist: isSpecialist),
+      icon: getMarkerIcon(userType: userType, prestataireType: spType, isSpecialist: isSpecialist!),
       onTap: () {
         //_onMarkerTapped(markerId);
       },
@@ -108,7 +108,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
     });
   }
 
-  _onMarkerTapped({MarkerId markerId, String userType, DoctorModel doc, ServiceProviderModel prestataire}){
+  _onMarkerTapped({required MarkerId markerId, required String userType, DoctorModel? doc, ServiceProviderModel? prestataire}){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     ServiceProviderTileModelProvider spTileProvider = Provider.of<ServiceProviderTileModelProvider>(context, listen: false);
@@ -133,7 +133,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                   noShadow: true,
                   avatarUrl: doc.avatarUrl,
                   name: doc.cniName,
-                  title: S.of(context).medecinDeFamille + doc.field,
+                  title: S.of(context).medecinDeFamille + doc.field!,
                   speciality: doc.speciality,
                   teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
                   consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
@@ -145,9 +145,9 @@ class _PartnersScreenState extends State<PartnersScreen> {
                   includeHospital: true,
                   actionText: "Details..",
                   distance: (adherentProvider.getAdherent?.location != null && (userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary)) ?
-                      adherentProvider.getAdherent.location["latitude"] != null && doc.location["latitude"] != null ? (Algorithms.calculateDistance(adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], doc.location["latitude"], doc.location["longitude"]).toStringAsFixed(2)).toString() : null
+                      adherentProvider.getAdherent?.location!["latitude"] != null && doc.location!["latitude"] != null ? (Algorithms.calculateDistance(adherentProvider.getAdherent?.location!["latitude"], adherentProvider.getAdherent?.location!["longitude"], doc.location!["latitude"], doc.location!["longitude"]).toStringAsFixed(2)).toString() : null
                     :(doctorProvider.getDoctor?.location != null && userProvider.getProfileType == doctor) ?
-                      doctorProvider.getDoctor.location["latitude"] != null && doc.location["latitude"] != null ? (Algorithms.calculateDistance(doctorProvider.getDoctor.location["latitude"], doctorProvider.getDoctor.location["longitude"], doc.location["latitude"], doc.location["longitude"]).toStringAsFixed(2)).toString() : null
+                      doctorProvider.getDoctor?.location!["latitude"] != null && doc.location!["latitude"] != null ? (Algorithms.calculateDistance(doctorProvider.getDoctor?.location!["latitude"], doctorProvider.getDoctor?.location!["longitude"], doc.location!["latitude"], doc.location!["longitude"]).toStringAsFixed(2)).toString() : null
                     : null,
                   onTap: () {
                     doctorTileProvider.setDoctorModel(doc);
@@ -160,7 +160,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                     noShadow: true,
                     avatarUrl: prestataire.avatarUrl,
                     name: prestataire.contactName,
-                    title: S.of(context).medecinDeFamille + prestataire.contactName,
+                    title: S.of(context).medecinDeFamille + prestataire.contactName!,
                     isServiceProvider: true,
                     speciality: prestataire.category,
                     teleConsultation: false,
@@ -173,9 +173,9 @@ class _PartnersScreenState extends State<PartnersScreen> {
                     actionText: "Details..",
                     includeHospital: true,
                     distance: (adherentProvider.getAdherent?.location != null && (userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary)) ?
-                        adherentProvider.getAdherent.location["latitude"] != null && prestataire.coordGps != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent.location["latitude"], adherentProvider.getAdherent.location["longitude"], prestataire.coordGps["latitude"], prestataire.coordGps["longitude"]).toStringAsFixed(2)).toString() : null
+                        adherentProvider.getAdherent?.location!["latitude"] != null && prestataire.coordGps != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location!["latitude"], adherentProvider.getAdherent?.location!["longitude"], prestataire.coordGps!["latitude"], prestataire.coordGps!["longitude"]).toStringAsFixed(2)).toString() : null
                       :(doctorProvider.getDoctor?.location != null && userProvider.getProfileType == doctor) ?
-                         doctorProvider.getDoctor.location["latitude"] != null && prestataire.coordGps != null ? (Algorithms.calculateDistance(doctorProvider.getDoctor.location["latitude"],  doctorProvider.getDoctor.location["longitude"], prestataire.coordGps["latitude"], prestataire.coordGps["longitude"]).toStringAsFixed(2)).toString() : null
+                         doctorProvider.getDoctor?.location!["latitude"] != null && prestataire.coordGps != null ? (Algorithms.calculateDistance(doctorProvider.getDoctor?.location!["latitude"],  doctorProvider.getDoctor?.location!["longitude"], prestataire.coordGps!["latitude"], prestataire.coordGps!["longitude"]).toStringAsFixed(2)).toString() : null
                         : null,
                     onTap: () {
                       spTileProvider.setServiceProviderModel(prestataire);
@@ -222,28 +222,28 @@ class _PartnersScreenState extends State<PartnersScreen> {
     DoctorModelProvider doctorModelProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     AdherentModelProvider adherentModelProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     ServiceProviderModelProvider serviceProviderM = Provider.of<ServiceProviderModelProvider>(context, listen: false);
-    Map coords;
+    Map? coords;
     if (userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary){
-      if(adherentModelProvider.getAdherent.location != null){
-        if(adherentModelProvider.getAdherent.location["latitude"] != null){
-          coords = adherentModelProvider.getAdherent.location;
-          _addMarker("YOU", userProvider.getProfileType, adherentModelProvider.getAdherent.location["latitude"], adherentModelProvider.getAdherent.location["longitude"], null, null, null, null, null);
+      if(adherentModelProvider.getAdherent?.location != null){
+        if(adherentModelProvider.getAdherent?.location!["latitude"] != null){
+          coords = adherentModelProvider.getAdherent?.location;
+          _addMarker("YOU", userProvider.getProfileType!, adherentModelProvider.getAdherent?.location!["latitude"], adherentModelProvider.getAdherent?.location!["longitude"], null, null, null, null, null);
         }
       }
     }
     else if (userProvider.getProfileType == doctor){
-      if(doctorModelProvider.getDoctor.location != null){
-        if(doctorModelProvider.getDoctor.location["latitude"] != null){
-          coords = doctorModelProvider.getDoctor.location;
-          _addMarker("YOU", userProvider.getProfileType, doctorModelProvider.getDoctor.location["latitude"], doctorModelProvider.getDoctor.location["longitude"], null, doctorModelProvider.getDoctor.field != "Généraliste", null, doctorModelProvider.getDoctor, null);
+      if(doctorModelProvider.getDoctor?.location != null){
+        if(doctorModelProvider.getDoctor?.location!["latitude"] != null){
+          coords = doctorModelProvider.getDoctor?.location;
+          _addMarker("YOU", userProvider.getProfileType!, doctorModelProvider.getDoctor!.location!["latitude"], doctorModelProvider.getDoctor!.location!["longitude"], null, doctorModelProvider.getDoctor!.field != "Généraliste", null, doctorModelProvider.getDoctor, null);
         }
       }
     }
     else if (userProvider.getProfileType == serviceProvider){
-      if(serviceProviderM.getServiceProvider.coordGps != null){
-        if(serviceProviderM.getServiceProvider.coordGps["latitude"] != null){
-          coords = serviceProviderM.getServiceProvider.coordGps;
-          _addMarker("YOU", userProvider.getProfileType, serviceProviderM.getServiceProvider.coordGps["latitude"], serviceProviderM.getServiceProvider.coordGps["longitude"], serviceProviderM.getServiceProvider.category, null,  null, null, serviceProviderM.getServiceProvider);
+      if(serviceProviderM.getServiceProvider?.coordGps != null){
+        if(serviceProviderM.getServiceProvider?.coordGps!["latitude"] != null){
+          coords = serviceProviderM.getServiceProvider?.coordGps;
+          _addMarker("YOU", userProvider.getProfileType!, serviceProviderM.getServiceProvider?.coordGps!["latitude"], serviceProviderM.getServiceProvider?.coordGps!["longitude"], serviceProviderM.getServiceProvider!.category, null,  null, null, serviceProviderM.getServiceProvider);
         }
       }
     }
@@ -264,8 +264,8 @@ class _PartnersScreenState extends State<PartnersScreen> {
       for(int i = 0; i < snap.docs.length; i++){
         DoctorModel doc = DoctorModel.fromDocument(snap.docs[i]);
         if(doc.location != null){
-          if(doc.location["latitude"] != null){
-            _addMarker("Dr. " + doc.cniName, doctor, doc.location["latitude"], doc.location["longitude"], null, doc.field != "Généraliste", null, doc, null);
+          if(doc.location!["latitude"] != null){
+            _addMarker("Dr. " + doc.cniName!, doctor, doc.location!["latitude"], doc.location!["longitude"], null, doc.field != "Généraliste", null, doc, null);
           }
         }
       }
@@ -274,8 +274,8 @@ class _PartnersScreenState extends State<PartnersScreen> {
       for(int i = 0; i < snap.docs.length; i++){
         ServiceProviderModel sp = ServiceProviderModel.fromDocument(snap.docs[i]);
         if(sp.coordGps != null){
-          if(sp.coordGps["latitude"] != null){
-            _addMarker(sp.name, serviceProvider, sp.coordGps["latitude"], sp.coordGps["longitude"], sp.category, null, null, null, sp);
+          if(sp.coordGps!["latitude"] != null){
+            _addMarker(sp.name!, serviceProvider, sp.coordGps!["latitude"], sp.coordGps!["longitude"], sp.category, null, null, null, sp);
           }
         }
       }
@@ -306,7 +306,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
 
     if(mapController != null){
       if(markerIds[0] != null){
-        mapController.showMarkerInfoWindow(markerIds[0]);
+        mapController!.showMarkerInfoWindow(markerIds[0]);
       }
     }
     
@@ -357,7 +357,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             child: GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: _userCoords != null ? _userCoords : _center,
+              target: _userCoords != null ? _userCoords! : _center,
               zoom: 8.0,
             ),
             markers: Set<Marker>.of(markers.values),
@@ -385,7 +385,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               color: Colors.grey.shade100.withOpacity(0.4),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey[300],
+                                  color: Colors.grey[300]!,
                                   blurRadius: 2.0,
                                   spreadRadius: 1.0,
                                   offset: Offset(0, 1)
@@ -521,7 +521,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
     }
   }
 
-  Widget getDragSheetTiles({String title, Color markerColor, Function onTap}){
+  Widget getDragSheetTiles({required String title, required Color markerColor, Function? onTap}){
     return Padding(
       padding: EdgeInsets.only(right: 35.0, top: 3, bottom: 3, left: 20),
       child: Row(
@@ -535,7 +535,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 color: kSmoothBrown.withOpacity(0.4),
               ),
               child: ListTile(
-                onTap: onTap,
+                onTap: ()=>onTap,
                 dense: true,
                 title: Text(title, style: TextStyle(color: kBlueForce, fontSize: inch*1.9, fontWeight: FontWeight.w600),),
                 trailing: Icon(Icons.arrow_forward_ios_rounded, color: kBrownCanyon,)

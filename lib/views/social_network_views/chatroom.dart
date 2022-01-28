@@ -25,20 +25,20 @@ class _ChatRoomState extends State<ChatRoom> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   chatRoomList() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    var chatRoomStream = FirebaseFirestore.instance.collection("CONVERSATIONS").where("users", arrayContains: userProvider.getUserModel.authId).orderBy("lastMessageTime", descending: true).snapshots();
-    return StreamBuilder(
+    var chatRoomStream = FirebaseFirestore.instance.collection("CONVERSATIONS").where("users", arrayContains: userProvider.getUserModel!.authId).orderBy("lastMessageTime", descending: true).snapshots();
+    return StreamBuilder<QuerySnapshot>(
         stream: chatRoomStream,
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? snapshot.data.docs.length >= 1 ? Expanded(
+              ? snapshot.data!.docs.length >= 1 ? Expanded(
                   child: ListView.builder(
                       shrinkWrap: true,
                       physics: BouncingScrollPhysics(),
-                      itemCount: snapshot.data.docs.length,
+                      itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                        DocumentSnapshot doc = snapshot.data.docs[index];
-                        ConversationChatModel conversation = ConversationChatModel.fromDocument(doc);
-                        String targetId = (conversation.users[0] == userProvider.getUserModel.authId) ? conversation.users[1] : conversation.users[0];
+                        DocumentSnapshot? doc = snapshot.data?.docs[index];
+                        ConversationChatModel conversation = ConversationChatModel.fromDocument(doc!);
+                        String targetId = (conversation.users![0] == userProvider.getUserModel?.authId) ? conversation.users![1] : conversation.users![0];
 
                         return doc != null
                             ? ChatRoomTile(conversation: conversation, targetId: targetId)
@@ -70,7 +70,7 @@ class _ChatRoomState extends State<ChatRoom> {
         title: Text(S.of(context).crerUnGroupe, style: TextStyle(color: whiteColor),),
         actions: [
           IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: ()=>Navigator.pushNamed(context, '/search')),
-          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState.openEndDrawer())],
+          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(5), constraints: BoxConstraints(), onPressed: () => _scaffoldKey.currentState?.openEndDrawer())],
       ),
       endDrawer: DefaultDrawer(
         entraide: (){Navigator.pop(context); Navigator.pop(context);},
@@ -93,10 +93,10 @@ class _ChatRoomState extends State<ChatRoom> {
 
 
 class ChatRoomTile extends StatefulWidget {
-  final String targetId;
-  final ConversationChatModel conversation;
+  final String? targetId;
+  final ConversationChatModel? conversation;
 
-  const ChatRoomTile({Key key, this.targetId, this.conversation}) : super(key: key);
+  const ChatRoomTile({Key? key, this.targetId, this.conversation}) : super(key: key);
 
   @override
   _ChatRoomTileState createState() => _ChatRoomTileState();
@@ -106,14 +106,14 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
   @override
   Widget build(BuildContext context) {
     ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context);
-    bool isLocal = widget.conversation.lastMessageFrom != widget.targetId;
+    bool isLocal = widget.conversation!.lastMessageFrom != widget.targetId;
     return StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance.collection("USERS").doc(widget.conversation.phoneIds[widget.targetId]).snapshots(),
+        stream: FirebaseFirestore.instance.collection("USERS").doc(widget.conversation!.phoneIds![widget.targetId]).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return LinearProgressIndicator();
           }
-          UserModel chatBuddy = UserModel.fromDocument(snapshot.data);
+          UserModel chatBuddy = UserModel.fromDocument(snapshot.data!);
           print(chatBuddy.authId);
           print(widget.targetId);
           return Column(
@@ -129,28 +129,28 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                     child: CircleAvatar(
                       backgroundColor: Colors.grey,
                       backgroundImage: chatBuddy.imgUrl != null
-                          ? CachedNetworkImageProvider(chatBuddy.imgUrl)
+                          ? CachedNetworkImageProvider(chatBuddy.imgUrl!)
                           : null,
                       child: chatBuddy.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
                     ),
                   ),
-                  title: Text(chatBuddy.fullName != null ? chatBuddy.fullName : "wait"),
-                  subtitle: widget.conversation.lastMessageType == 0
+                  title: Text(chatBuddy.fullName != null ? chatBuddy.fullName! : "wait"),
+                  subtitle: widget.conversation?.lastMessageType == 0
                       ? Row(
                           children: <Widget>[
                             isLocal ? Padding(
                               padding: const EdgeInsets.only(right: 3),
                               child: Icon(
                                 MdiIcons.checkAll,
-                                color: widget.conversation.lastMessageSeen ? kDeepTeal : Colors.grey[400],
+                                color: widget.conversation!.lastMessageSeen! ? kDeepTeal : Colors.grey[400],
                                 size: 17,
                               ),
                             ) : Container(),
                             SizedBox(width: 3),
                             Expanded(
                               child: Text(
-                                widget.conversation.lastMessage != null
-                                    ? widget.conversation.lastMessage
+                                widget.conversation?.lastMessage != null
+                                    ? widget.conversation!.lastMessage!
                                     : S.of(context).wait,
                                 style: TextStyle(),
                                 overflow: TextOverflow.ellipsis,
@@ -158,7 +158,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                             ),
                           ],
                         )
-                      : widget.conversation.lastMessageType == 1
+                      : widget.conversation?.lastMessageType == 1
                           ? Padding(
                               padding: const EdgeInsets.only(top: 3.0),
                               child: Row(
@@ -210,20 +210,20 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                   trailing: Column(mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                     Text(
-                        widget.conversation.lastMessageTime != null
+                        widget.conversation?.lastMessageTime != null
                             ? Algorithms.getDateFromTimestamp(
-                                int.parse(widget.conversation.lastMessageTime),
+                                int.parse(widget.conversation!.lastMessageTime!),
                               )
                             : S.of(context).wait,
                         style: TextStyle(fontSize: 13, color: Colors.grey),),
                     SizedBox(height: 5,),
                     !isLocal ? 
-                    widget.conversation.unseenMessages != null ?
-                      widget.conversation.unseenMessages > 0 ?
+                    widget.conversation?.unseenMessages != null ?
+                      widget.conversation!.unseenMessages! > 0 ?
                       CircleAvatar(
                         radius: 10,
                         backgroundColor: kDeepTeal,
-                        child: Text(widget.conversation.unseenMessages.toString(),
+                        child: Text(widget.conversation!.unseenMessages.toString(),
                           style: TextStyle(fontSize: 12, color: Colors.white))
                       )
                       : Text("") : Text("") : Text(""),
@@ -233,15 +233,15 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
                     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
 
                     ConversationModel conversationModel = ConversationModel(
-                      conversationId: widget.conversation.conversationId,
-                      userId: userProvider.getUserModel.authId,
+                      conversationId: widget.conversation?.conversationId,
+                      userId: userProvider.getUserModel?.authId,
                       targetId: widget.targetId,
-                      userName: userProvider.getUserModel.fullName,
+                      userName: userProvider.getUserModel?.fullName,
                       targetName: chatBuddy.fullName,
-                      userAvatar: userProvider.getUserModel.imgUrl,
+                      userAvatar: userProvider.getUserModel?.imgUrl,
                       targetAvatar: chatBuddy.imgUrl,
                       targetProfileType: chatBuddy.profileType,
-                      userPhoneId: userProvider.getUserModel.userId,
+                      userPhoneId: userProvider.getUserModel?.userId,
                       targetPhoneId: chatBuddy.userId
                     );
                     conversation.setConversationModel(conversationModel);

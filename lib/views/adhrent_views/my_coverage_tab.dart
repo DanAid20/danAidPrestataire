@@ -17,8 +17,8 @@ class MyCoverageTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    DateTime limit = adherentProvider.getAdherent.validityEndDate != null ? adherentProvider.getAdherent.validityEndDate.toDate() : null;
-    String limitString = limit != null ? limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString() : null;
+    DateTime? limit = adherentProvider.getAdherent?.validityEndDate != null ? adherentProvider.getAdherent?.validityEndDate?.toDate() : null;
+    String? limitString = limit != null ? limit.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(limit)+" "+ limit.year.toString() : null;
     return Column(
       children: [
         Expanded(
@@ -26,7 +26,7 @@ class MyCoverageTabView extends StatelessWidget {
             children: [
               SizedBox(height: hv*2,),
               adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
-                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent.adherentPlan)
+                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan)
                 /*adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
                   : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
                     : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
@@ -79,7 +79,7 @@ class MyCoverageTabView extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
                       boxShadow: [
-                        BoxShadow(blurRadius: 5.0, color: Colors.grey[400], spreadRadius: 1.0, offset: Offset(0, 5))
+                        BoxShadow(blurRadius: 5.0, color: Colors.grey[400]!, spreadRadius: 1.0, offset: Offset(0, 5))
                       ],
                       image: DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
                     ),
@@ -147,8 +147,8 @@ class MyCoverageTabView extends StatelessWidget {
               ),
               Container(
                 color: whiteColor,
-                child: StreamBuilder(
-                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return Center(
@@ -158,23 +158,23 @@ class MyCoverageTabView extends StatelessWidget {
                       );
                     }
 
-                    return snapshot.data.docs.length >= 1
+                    return snapshot.data!.docs.length >= 1
                       ? ListView.builder(
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
-                          itemCount: snapshot.data.docs.length,
+                          itemCount: snapshot.data!.docs.length,
                           itemBuilder: (context, index) {
-                            int lastIndex = snapshot.data.docs.length - 1;
-                            DocumentSnapshot useCaseDoc = snapshot.data.docs[index];
+                            int lastIndex = snapshot.data!.docs.length - 1;
+                            DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
                             UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc);
                             print("name: ");
                             return Padding(
                               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                               child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
-                                initial: useCase.establishment.toUpperCase().substring(0,3),
+                                initial: useCase.establishment!.toUpperCase().substring(0,3),
                                 name: useCase.establishment,
-                                date: useCase.dateCreated.toDate(),
+                                date: useCase.dateCreated!.toDate(),
                                 state: useCase.status,
                                 price: useCase.amount != null ? useCase.amount : 0,
                                 action: (){

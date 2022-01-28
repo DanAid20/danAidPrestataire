@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 import 'package:danaid/core/models/usecaseModel.dart';
@@ -35,9 +35,9 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
 
   init() async {
     UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
-    UseCaseModel usecase = usecaseProvider.getUseCase;
-    if(usecase.otherInfo != null )
-      setState((){_commentController.text =  usecase.otherInfo;});
+    UseCaseModel? usecase = usecaseProvider.getUseCase;
+    if(usecase!.otherInfo != null )
+      setState((){_commentController.text =  usecase.otherInfo!;});
     
     if(usecase.doctorId != null){
       if(usecase.doctorName == null){
@@ -47,7 +47,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
             'doctorName' : doctorModel.surname.toString() + ' ' + doctorModel.familyName.toString(), 
             'establishment' : doctorModel.officeName != '' ? doctorModel.officeName : null}).then((value){
               usecaseProvider.setDoctorName(doctorModel.surname.toString() + ' ' + doctorModel.familyName.toString());
-              usecaseProvider.setEstablishment(doctorModel.officeName);
+              usecaseProvider.setEstablishment(doctorModel.officeName!);
             });
         });
       }
@@ -65,10 +65,10 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
   Widget build(BuildContext context) {
     UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
-    AdherentModel adh = adherentProvider.getAdherent;
-    DateTime startTime = usecaseProvider.getUseCase.dateCreated.toDate();
-    UseCaseModel usecase = usecaseProvider.getUseCase;
-    print(usecase.doctorId.toString());
+    AdherentModel? adh = adherentProvider.getAdherent;
+    DateTime startTime = usecaseProvider.getUseCase!.dateCreated!.toDate();
+    UseCaseModel? usecase = usecaseProvider.getUseCase;
+    print(usecase!.doctorId.toString());
     int status = 2;
     UseCaseServiceModel consultationService = UseCaseServiceModel(
       date: usecase.dateCreated,
@@ -84,8 +84,8 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
       type: consultation,
       amount: usecase.consultationCost == null ? 0 : usecase.consultationCost
     );
-    num amount = usecase.amount != null ? usecase.amount : 0;
-    num danAidCov = adh.adherentPlan != 0 ? (amount*0.7).round() : (amount*0.05).round();
+    num? amount = usecase.amount != null ? usecase.amount : 0;
+    num danAidCov = adh?.adherentPlan != 0 ? (amount!*0.7).round() : (amount!*0.05).round();
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -122,7 +122,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase.beneficiaryName, fname: "")),
+                      Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase?.beneficiaryName, fname: "")),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
@@ -194,7 +194,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Médecin", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                            Text(usecase.doctorName, style: TextStyle(color: kTextBlue, fontSize: 17)),
+                            Text(usecase.doctorName!, style: TextStyle(color: kTextBlue, fontSize: 17)),
                             Text("Médecin de famille", style: TextStyle(color: kTextBlue, fontSize: 14))
                           ],
                         ) : Container(),
@@ -203,7 +203,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Etablissement", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                            Text(usecase.establishment, style: TextStyle(color: kTextBlue, fontSize: 15)),
+                            Text(usecase.establishment!, style: TextStyle(color: kTextBlue, fontSize: 15)),
                           ],
                         ) : Container(),
                       ],
@@ -231,7 +231,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                             children: [
                               Text("Code de consultation", style: TextStyle(color: kTextBlue, fontSize: 17),),
                               SizedBox(height: hv*1,),
-                              Text(usecase.consultationCode != null ? usecase.consultationCode : "Non spécifié", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
+                              Text(usecase.consultationCode != null ? usecase.consultationCode! : "Non spécifié", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
                             ],
                           )
                         ),
@@ -353,7 +353,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                               children: [
                                 usecase.consultationCode != null || usecase.consultationId != null ? SizedBox(height: 85,) : Container(),
                                 Expanded(
-                                  child: StreamBuilder(
+                                  child: StreamBuilder<QuerySnapshot>(
                                     stream: FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').snapshots(),
                                     builder: (context, snapshot) {
                                       if (!snapshot.hasData) {
@@ -364,19 +364,19 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                                         );
                                       }
 
-                                      return snapshot.data.docs.length >= 1
+                                      return snapshot.data!.docs.length >= 1
                                         ? ListView.builder(
                                             physics: BouncingScrollPhysics(),
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
-                                            itemCount: snapshot.data.docs.length,
+                                            itemCount: snapshot.data!.docs.length,
                                             itemBuilder: (context, index) {
-                                              DocumentSnapshot useCaseDoc = snapshot.data.docs[index];
+                                              DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
                                               UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc);
                                               print("name: ");
                                               return getServiceTile(
                                                 service: service,
-                                                action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: service.type, service: service,),),)
+                                                action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: service.type!, service: service,),),)
                                               );
                                             })
                                         : Center(
@@ -505,19 +505,19 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
     );
   }
 
-  Widget getServiceTile({UseCaseServiceModel service, Function action}){
-    bool executed = service.executed != null ? service.executed : false;
-    bool estimate = service.estimate != null ? service.estimate : false;
-    bool ongoing = service.ongoing != null ? service.ongoing : false;
-    bool requested = service.requested != null ? service.requested : false;
+  Widget getServiceTile({required UseCaseServiceModel service, Function? action}){
+    bool executed = service.executed != null ? service.executed! : false;
+    bool estimate = service.estimate != null ? service.estimate! : false;
+    bool ongoing = service.ongoing != null ? service.ongoing! : false;
+    bool requested = service.requested != null ? service.requested! : false;
     return GestureDetector(
-      onTap: action,
+      onTap: ()=> action,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1.5),
         margin: EdgeInsets.only(bottom: hv*1),
         decoration: BoxDecoration(
         color: whiteColor,
-        boxShadow: [BoxShadow(color: Colors.grey[200], spreadRadius: 1.5, blurRadius: 3.0, offset: Offset(0,3))],
+        boxShadow: [BoxShadow(color: Colors.grey[200]!, spreadRadius: 1.5, blurRadius: 3.0, offset: Offset(0,3))],
         borderRadius: BorderRadius.circular(20)
         ),
         child: Row(
@@ -549,7 +549,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
           Spacer(),
           Column(
             children: [
-              Text(service.date != null ? "${service.date.toDate().day}/${service.date.toDate().month.toString().padLeft(2, '0')}/${service.date.toDate().year}" : "--/--/--", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
+              Text(service.date != null ? "${service.date?.toDate().day}/${service.date?.toDate().month.toString().padLeft(2, '0')}/${service.date?.toDate().year}" : "--/--/--", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
               SizedBox(height: hv*2,),
               Text(service.amount != null ? "${service.amount} f." : "-- f.", style: TextStyle(color: kTextBlue, fontSize: 17),),
             ],
@@ -561,9 +561,9 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
       ),
     );
   }
-Widget getServiceMenuItem({String title, String label, String icon, Color color, Function action}){
+Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, Function? action}){
   return GestureDetector(
-    onTap: action,
+    onTap: ()=> action,
     child: Container(
       margin: EdgeInsets.only(bottom: 0),
       child: Stack(
@@ -582,8 +582,8 @@ Widget getServiceMenuItem({String title, String label, String icon, Color color,
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: TextStyle(color: kCardTextColor, fontSize: 15.5)),
-                    Text(label, style: TextStyle(color: kCardTextColor, fontSize: 18.5, fontWeight: FontWeight.bold))
+                    Text(title!, style: TextStyle(color: kCardTextColor, fontSize: 15.5)),
+                    Text(label!, style: TextStyle(color: kCardTextColor, fontSize: 18.5, fontWeight: FontWeight.bold))
                   ],
                 ),
                 Spacer()
@@ -594,7 +594,7 @@ Widget getServiceMenuItem({String title, String label, String icon, Color color,
             child: Container(
               width: 70, height: 70,
               child: FittedBox(
-                child: FloatingActionButton(heroTag: 'hero_$label', child: SvgPicture.asset(icon, width: 25, color: whiteColor,), backgroundColor: color, onPressed: action)),
+                child: FloatingActionButton(heroTag: 'hero_$label', child: SvgPicture.asset(icon!, width: 25, color: whiteColor,), backgroundColor: color, onPressed: ()=> action)),
             ), 
             right: 0,
             top: 4,

@@ -34,34 +34,34 @@ class CreateGroupFinalStep extends StatefulWidget {
 
 class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
 
-  QuerySnapshot searchSnapshot;
+  QuerySnapshot? searchSnapshot;
   TextEditingController _searchController = new TextEditingController();
   TextEditingController _groupNameController = new TextEditingController();
   TextEditingController _groupDescriptionController = new TextEditingController();
   TextEditingController _organizationNameController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
   TextEditingController _contactNameController = new TextEditingController();
-  Future<QuerySnapshot> futureSearchResults;
-  SharedPreferences preferences;
+  Future<QuerySnapshot>? futureSearchResults;
+  SharedPreferences? preferences;
   
   PageController controller = PageController(initialPage: 0, keepPage: false);
   int currentPageValue = 0;
-  List<Widget> pageList;
+  List<Widget>? pageList;
   bool confirm = false;
 
   List<UserModel> _users = [];
   
-  File imageFileAvatar;
+  File? imageFileAvatar;
   bool imageLoading = false;
   bool buttonLoading = false;
-  String avatarUrl;
+  String? avatarUrl;
   bool imageSpinner = false;
 
   bool publicGroup = false;
   bool privateGroup = false;
-  String groupType;
-  String _type;
-  String phone;
+  String? groupType;
+  String? _type;
+  String? phone;
   bool phoneEnabled = false;
   String initialCountry = 'CM';
   PhoneNumber number = PhoneNumber(isoCode: 'CM');
@@ -71,14 +71,14 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
 
   initTextFields(){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    if((userProvider.getUserModel.fullName != null) & (userProvider.getUserModel.fullName != "")){
+    if((userProvider.getUserModel?.fullName != null) & (userProvider.getUserModel?.fullName != "")){
       setState(() {
-        _contactNameController.text = userProvider.getUserModel.fullName;
+        _contactNameController.text = userProvider.getUserModel!.fullName!;
       });
     }
-    if (userProvider.getUserModel.phoneList[0] != null){
+    if (userProvider.getUserModel!.phoneList![0] != null){
       setState(() {
-        phone = userProvider.getUserModel.phoneList[0]["number"];
+        phone = userProvider.getUserModel!.phoneList![0]["number"];
       });
     }
   }
@@ -86,8 +86,8 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
   searches() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     UsersListProvider usersListProvider = Provider.of<UsersListProvider>(context, listen: false);
-    UserModel user = userProvider.getUserModel;
-    return StreamBuilder(
+    UserModel? user = userProvider.getUserModel;
+    return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("USERS").where("nameKeywords", arrayContains: _searchController.text.toLowerCase()).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
@@ -96,13 +96,13 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
 
         //_users = [];
 
-        List<bool> _checked = List<bool>.filled(snapshot.data.docs.length, false);
-        return snapshot.data.docs.length >= 1 ? ListView.builder(
-          itemCount: snapshot.data.docs.length,
+        List<bool> _checked = List<bool>.filled(snapshot.data!.docs.length, false);
+        return snapshot.data!.docs.length >= 1 ? ListView.builder(
+          itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot userSnapshot = snapshot.data.docs[index];
+            DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
             UserModel singleUser = UserModel.fromDocument(userSnapshot);
-            if (singleUser.userId == user.userId) {
+            if (singleUser.userId == user?.userId) {
               return Container();
             }
             return StatefulBuilder(
@@ -112,9 +112,9 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                     Checkbox(
                       value: _checked[index],
                       fillColor: MaterialStateProperty.all(kDeepTeal),
-                      onChanged: (val){
+                      onChanged: (bool? val){
                         setState(() {
-                          _checked[index] = val;
+                          _checked[index] = val!;
                         });
                         if(_checked[index] == true){
                           if (!_users.contains(singleUser)){
@@ -127,7 +127,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                     ),
                     Expanded(
                       child: SearchResult(
-                        user: user,
+                        user: user!,
                         target: singleUser,
                         onTap: (){
                           setState(() {
@@ -186,7 +186,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
           Navigator.pop(context);
         else
           controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
-        return null;
+        return false;
       },
       child: Scaffold(
         backgroundColor: Colors.grey[100],
@@ -213,11 +213,11 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
               child: PageView.builder(
                 pageSnapping: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: pageList.length,
+                itemCount: pageList!.length,
                 onPageChanged: (int page) => getChangedPageAndMoveBar(page),
                 controller: controller,
                 itemBuilder: (context, index) {
-                  return pageList[index];
+                  return pageList![index];
                 },
               ),
             ),
@@ -227,7 +227,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  for (int i = 0; i < pageList.length; i++)
+                  for (int i = 0; i < pageList!.length; i++)
                     if (i == currentPageValue) ...[circleBar(true)] else
                       circleBar(false),
                 ],
@@ -299,7 +299,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 padding: EdgeInsets.symmetric(vertical: hv*3),
                 decoration: BoxDecoration(
                   color: kSouthSeas.withOpacity(0.4),
-                  image: imageFileAvatar != null ? DecorationImage(image: FileImage(imageFileAvatar), fit: BoxFit.cover) : null,
+                  image: imageFileAvatar != null ? DecorationImage(image: FileImage(imageFileAvatar!), fit: BoxFit.cover) : null,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
                 ),
                 child: Column(children: [
@@ -332,10 +332,10 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                                     CircleAvatar(
                                       radius: wv*5,
                                       backgroundColor: kSouthSeas.withOpacity(0.4),
-                                      backgroundImage: user.imgUrl != null ? CachedNetworkImageProvider(user.imgUrl) : null,
+                                      backgroundImage: user.imgUrl != null ? CachedNetworkImageProvider(user.imgUrl!) : null,
                                       child: user.imgUrl == null ? Icon(LineIcons.user, color: whiteColor,) : Container(),
                                     ),
-                                    SizedBox(child: Text(user.fullName, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,), width: wv*16,)
+                                    SizedBox(child: Text(user.fullName!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,), width: wv*16,)
                                   ],
                                 );
                               }).toList(),
@@ -371,7 +371,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                               child: CheckboxListTile(
                                 value: publicGroup,
                                 dense: true,
-                                onChanged: (val)=>setState((){publicGroup = val; privateGroup = !val; groupType = "PUBLIC";}),
+                                onChanged: (val)=>setState((){publicGroup = val!; privateGroup = !val; groupType = "PUBLIC";}),
                                 activeColor: primaryColor,
                                 title: Text(S.of(context).publique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16)),
                                 subtitle: Text(S.of(context).toutLeMondePeutVoirChaqueIntitPeutAjouterDes),
@@ -390,7 +390,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                               child: CheckboxListTile(
                                 value: privateGroup,
                                 dense: true,
-                                onChanged: (val)=>setState((){privateGroup = val; publicGroup = !val; groupType = "PRIVATE";}),
+                                onChanged: (val)=>setState((){privateGroup = val!; publicGroup = !val; groupType = "PRIVATE";}),
                                 activeColor: primaryColor,
                                 title: Text(S.of(context).priv, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16)),
                                 subtitle: Text(S.of(context).seulsLesInvitsPeuventVoirSeulLadminPeutAjouterDes),
@@ -443,7 +443,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 padding: EdgeInsets.symmetric(vertical: hv*3),
                 decoration: BoxDecoration(
                   color: kSouthSeas.withOpacity(0.4),
-                  image: imageFileAvatar != null ? DecorationImage(image: FileImage(imageFileAvatar), fit: BoxFit.cover) : null,
+                  image: imageFileAvatar != null ? DecorationImage(image: FileImage(imageFileAvatar!), fit: BoxFit.cover) : null,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
                 ),
                 child: Column(children: [
@@ -501,7 +501,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                                         value: S.of(context).sponsor,
                                       ),
                                     ],
-                                    onChanged: (value) {
+                                    onChanged: (String? value) {
                                       setState(() {
                                         _type = value;
                                       });
@@ -534,14 +534,14 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                           decoration: BoxDecoration(
                             color: whiteColor,
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
+                            boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 2.0, spreadRadius: 1.0)]
                           ),
                           child: ListTile(
                             contentPadding: EdgeInsets.only(left: wv*3),
                             title: Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4, color: Colors.grey[600]),),
                             subtitle: Padding(
                               padding: const EdgeInsets.all(5.0),
-                              child: Text(phone, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              child: Text(phone!, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                             ),
                             trailing: IconButton(
                               enableFeedback: false,
@@ -564,8 +564,8 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                             Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
                             SizedBox(height: hv*1,),
                             InternationalPhoneNumberInput(
-                              validator: (String phone) {
-                                return (phone.isEmpty)
+                              validator: (String? phone) {
+                                return (phone!.isEmpty)
                                     ?  S.of(context).entrerUnNumeroDeTlphoneValide : null;
                               },
                               onInputChanged: (PhoneNumber number) {
@@ -637,7 +637,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                 padding: EdgeInsets.symmetric(vertical: hv*3),
                 decoration: BoxDecoration(
                   color: kSouthSeas.withOpacity(0.4),
-                  image: imageFileAvatar != null ? DecorationImage(image: FileImage(imageFileAvatar), fit: BoxFit.cover) : null,
+                  image: imageFileAvatar != null ? DecorationImage(image: FileImage(imageFileAvatar!), fit: BoxFit.cover) : null,
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
                 ),
                 child: Column(children: [
@@ -709,22 +709,22 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                   List<String> members = []; List<String> membersImgUrls = []; //List<String> membersAuths = [];
 
                   for(int i = 0; i < usersListProvider.getUsers.length; i++){
-                    members.add(usersListProvider.getUsers[i].userId);
+                    members.add(usersListProvider.getUsers[i].userId!);
                     if(usersListProvider.getUsers[i].imgUrl != null){
-                      membersImgUrls.add(usersListProvider.getUsers[i].imgUrl);
+                      membersImgUrls.add(usersListProvider.getUsers[i].imgUrl!);
                     }
                   }
                   
-                  members.add(userProvider.getUserModel.userId);
+                  members.add(userProvider.getUserModel!.userId!);
                   //usersListProvider.getUsers.map((UserModel user) => members.add(user.userId));
                   print(members.toString());
-                  String url;
+                  String? url;
                   Map<String, dynamic> input = {
                     "dateCreated": DateTime.now(),
-                    "creatorAuthId": userProvider.getUserModel.authId,
-                    "creatorId": userProvider.getUserModel.userId,
-                    "adminsIds": [userProvider.getUserModel.userId],
-                    "creatorAvatar": userProvider.getUserModel.imgUrl,
+                    "creatorAuthId": userProvider.getUserModel!.authId,
+                    "creatorId": userProvider.getUserModel!.userId,
+                    "adminsIds": [userProvider.getUserModel!.userId],
+                    "creatorAvatar": userProvider.getUserModel!.imgUrl,
                     "groupName": _groupNameController.text,
                     "groupDescription": _groupDescriptionController.text,
                     "contactName": _contactNameController.text,
@@ -737,8 +737,8 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                     "imgUrl": url
                   };
                   if (imageFileAvatar != null) {
-                    File file = imageFileAvatar;
-                    String path = 'groups/${userProvider.getUserModel.userId}/'+_groupNameController.text;
+                    File file = imageFileAvatar!;
+                    String path = 'groups/${userProvider.getUserModel!.userId}/'+_groupNameController.text;
                     Reference storageReference = FirebaseStorage.instance.ref().child(path);
                     final metadata = SettableMetadata(
                       customMetadata: {'picked-file-path': file.path}
@@ -759,7 +759,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                       url = await storageReference.getDownloadURL();
                       input["imgUrl"] = url;
                       print("download url: $url");
-                      await createGroup(id: userProvider.getUserModel.authId, input: input);
+                      await createGroup(id: userProvider.getUserModel!.authId!, input: input);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Groupe ajouté")));
                       usersListProvider.setUsers([]);
                       Navigator.pop(context);
@@ -767,7 +767,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                       print(e.toString());
                     });
                   } else {
-                    await createGroup(id: userProvider.getUserModel.authId, input: input);
+                    await createGroup(id: userProvider.getUserModel!.authId!, input: input);
                     setState(() {
                       buttonLoading = false;
                     });
@@ -797,7 +797,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
     );
   }
 
-  createGroup({String id, Map input}) async {
+  createGroup({required String id, required Map<String, dynamic> input}) async {
     try {
       print("inside");
       await FirebaseFirestore.instance.collection("GROUPS")
@@ -833,7 +833,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
       decoration: BoxDecoration(
         color: whiteColor,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0)]
+        boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0)]
       ),
       child: content,
     );
@@ -853,15 +853,15 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
 }
 
 class SearchResult extends StatelessWidget {
-  final UserModel user;
-  final UserModel target;
-  final Function onTap;
+  final UserModel? user;
+  final UserModel? target;
+  final Function? onTap;
 
-  const SearchResult({Key key, this.onTap, this.user, this.target}) : super(key: key);
+  const SearchResult({Key? key, this.onTap, this.user, this.target}) : super(key: key);
 
   ConversationChatModel getConversation() {
     ConversationChatModel chatRoomModel = ConversationChatModel();
-    String conversationId = Algorithms.getConversationId(userId: user.authId, targetId: target.authId);
+    String conversationId = Algorithms.getConversationId(userId: user!.authId, targetId: target!.authId);
     FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((conversation) {
       ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation);
       chatRoomModel = chatRoom;
@@ -877,19 +877,19 @@ class SearchResult extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.grey,
-          backgroundImage: target.imgUrl != null
-              ? CachedNetworkImageProvider(target.imgUrl)
+          backgroundImage: target?.imgUrl != null
+              ? CachedNetworkImageProvider(target!.imgUrl!)
               : null,
-          child: target.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
+          child: target?.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
-        title: Text(target.fullName),
-        subtitle: Text(target.profileType == doctor ? S.of(context).mdecin : target.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
+        title: Text(target!.fullName!),
+        subtitle: Text(target?.profileType == doctor ? S.of(context).mdecin : target?.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: kDeepTeal,
           size: 20,
         ),
-        onTap: onTap,
+        onTap: ()=>onTap,
       ),
     );
   }

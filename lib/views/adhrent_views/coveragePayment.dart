@@ -28,7 +28,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
 
   int om = 1;
   int momo = 2;
-  int choice;
+  int? choice;
 
   bool spinner2 = false;
 
@@ -37,7 +37,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
   static const platform = const MethodChannel('danaidproject.sendmoney');
   String receivedString = "";
 
-  Future<String> makePayment({int cost, bool isOrange}) async {
+  Future<String> makePayment({required num cost, required bool isOrange}) async {
     //String amount = "60", data = "", phoneNumber = "650913861";
     String amount = cost.toString();
     String operator = isOrange ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
@@ -67,8 +67,8 @@ class _CoveragePaymentState extends State<CoveragePayment> {
   init() async {
     DocumentSnapshot doc = await FirebaseFirestore.instance.collection('DANAID_DATA').doc('CAMPAGNE').get();
     setState(() {
-      campaignOn = doc.data()["active"];
-      removedAmount = doc.data()["amount"];
+      campaignOn = doc.get("active");
+      removedAmount = doc.get("amount");
     });
   }
 
@@ -88,7 +88,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     InvoiceModelProvider invoiceProvider = Provider.of<InvoiceModelProvider>(context);
     InvoiceModel invoice = invoiceProvider.getInvoice;
-    PlanModel plan = planProvider.getPlan;
+    PlanModel? plan = planProvider.getPlan;
 
     if(invoiceProvider.getInvoice.paid != null){}
 
@@ -100,14 +100,14 @@ class _CoveragePaymentState extends State<CoveragePayment> {
     DateTime end;
 
 
-    num registrationFee = (invoice.paid == false || invoice.stateValidate == false) && invoice.inscriptionId != null ? plan.registrationFee : 0;
-    num total = !reduction ? invoice.amount + registrationFee : (invoice.amount + registrationFee - removedAmount);
+    num? registrationFee = (invoice.paid == false || invoice.stateValidate == false) && invoice.inscriptionId != null ? plan!.registrationFee : 0;
+    num total = !reduction ? invoice.amount! + registrationFee! : (invoice.amount! + registrationFee! - removedAmount);
     total = total.toInt();
     
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded), color: kPrimaryColor, onPressed: ()=>Navigator.pop(context),),
-        title: Text(invoice.paid == false ? invoice.label : plan.text["titreNiveau"].toString(), style: TextStyle(color: kPrimaryColor, fontSize: 20),),
+        title: Text(invoice.paid == false ? invoice.label! : plan!.text!["titreNiveau"]!.toString(), style: TextStyle(color: kPrimaryColor, fontSize: 20),),
         centerTitle: true,
       ),
       body: Column(
@@ -184,7 +184,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     margin: EdgeInsets.symmetric(horizontal: wv*4),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
-                      boxShadow: [BoxShadow(color: Colors.grey[400], spreadRadius: 0.5, blurRadius: 1.0)],
+                      boxShadow: [BoxShadow(color: Colors.grey[400]!, spreadRadius: 0.5, blurRadius: 1.0)],
                       borderRadius: BorderRadius.circular(20)
                     ),
                     child: Column(
@@ -209,7 +209,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     children: [
                       TableRow(
                         decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]))
+                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
                         ),
                         children: [
                           TableCell(child: Container(
@@ -238,7 +238,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                       ),
                       TableRow(
                         decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]))
+                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
                         ),
                         children: [
                           TableCell(child: Container(
@@ -266,7 +266,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                       ),
                       TableRow(
                         decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]))
+                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
                         ),
                         children: [
                           TableCell(child: Container(
@@ -281,7 +281,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                       ),
                       TableRow(
                         decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]))
+                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
                         ),
                         children: [
                           TableCell(child: Container(
@@ -290,7 +290,7 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                           )),
                           TableCell(child: Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text((invoice.amount/12).toString()+" X 12", textAlign: TextAlign.end,)
+                            child: Text((invoice.amount!/12).toString()+" X 12", textAlign: TextAlign.end,)
                           )),
                         ]
                       ),
@@ -334,21 +334,21 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                 String result = await makePayment(cost: total, isOrange: choice == om);
                 if(result == "SUCCESS"){
                   print("Paiement effectué");
-                  if(!adherentProvider.getAdherent.havePaid && invoice.inscriptionId != null){
-                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).update({
+                  if(!adherentProvider.getAdherent!.havePaid! && invoice.inscriptionId != null){
+                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).update({
                       "paymentDate": DateTime.now(),
                       "etatValider": true,
                       "paid": true
                     });
                   }
-                  FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
+                  FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
                     "paymentDate": DateTime.now(),
                     "etatValider": true,
                     "amountPaid": (total - registrationFee),
                     "reduction": reduction,
                     "paid": true
                   }).then((value) async {
-                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent.adherentId).set({
+                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).set({
                       "datDebutvalidite" : invoice.coverageStartDate,
                       "havePaidBefore": true,
                       "paymentDate": DateTime.now(),
@@ -357,8 +357,8 @@ class _CoveragePaymentState extends State<CoveragePayment> {
                     }, SetOptions(merge: true));
                   
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
-                    adherentProvider.setAdherentPlan(invoice.planNumber);
-                    adherentProvider.setValidityEndDate(invoice.coverageEndDate.toDate());
+                    adherentProvider.setAdherentPlan(invoice.planNumber!);
+                    adherentProvider.setValidityEndDate(invoice.coverageEndDate!.toDate());
                     setState(() {spinner2 = false;});
                     setState(() {
                       spinner2 = false;

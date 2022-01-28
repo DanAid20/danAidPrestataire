@@ -8,14 +8,14 @@ import 'package:danaid/views/social_network_views/crowd_funding.dart';
 import 'package:danaid/views/social_network_views/questions.dart';
 
 class ActualityPage extends StatefulWidget {
-  ActualityPage({Key key}) : super(key: key);
+  ActualityPage({Key? key}) : super(key: key);
 
   @override
   _ActualityPageState createState() => _ActualityPageState();
 }
 
 class _ActualityPageState extends State<ActualityPage> with SingleTickerProviderStateMixin {
-  TabController actualityController;
+  TabController? actualityController;
 
   @override
   void initState() {

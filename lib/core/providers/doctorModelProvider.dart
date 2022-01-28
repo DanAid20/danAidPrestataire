@@ -15,6 +15,10 @@ class DoctorModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void destroyDoctorProfile(){
+    _doctor = null;
+  }
+
   void setDoctorId(String val){
     _doctor?.id = val;
     notifyListeners();

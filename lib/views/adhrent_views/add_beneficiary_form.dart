@@ -219,7 +219,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 label: S.of(context).nomDeFamille,
                 hintText: S.of(context).entrezVotreNomDeFamille,
                 controller: _familynameController,
-                validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
               ),
 
               SizedBox(height: hv*2,),
@@ -229,7 +229,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 label: S.of(context).prnom,
                 hintText: S.of(context).entrezVotrePrnom,
                 controller: _surnameController,
-                validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null
+                validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null
               ),
 
               SizedBox(height: hv*2,),

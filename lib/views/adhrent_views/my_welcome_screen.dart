@@ -33,7 +33,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
     BottomAppBarControllerProvider navController = Provider.of<BottomAppBarControllerProvider>(context);
 
-    bool enable = adherentProvider.getAdherent.enable != null ? adherentProvider.getAdherent.enable : false;
+    bool enable = adherentProvider.getAdherent?.enable != null ? adherentProvider.getAdherent!.enable! : false;
 
     return userProvider.getUserModel != null && adherentProvider.getAdherent != null ? Column(
       children: [
@@ -63,7 +63,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                           AdvantageCard(
                             label: S.of(context).fondDeSoin,
                             state: S.of(context).disponible,
-                            price: adherentProvider.getAdherent.insuranceLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent.insuranceLimit)} f.",
+                            price: adherentProvider.getAdherent?.insuranceLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.insuranceLimit)} f.",
                             color: Colors.teal[500],
                             onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
                           ),
@@ -83,7 +83,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             child: AdvantageCard(
                               label: S.of(context).prtDeSant,
                               state: S.of(context).disponible,
-                              price: adherentProvider.getAdherent.loanLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent.loanLimit)} f.",
+                              price: adherentProvider.getAdherent?.loanLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.loanLimit)} f.",
                               color: Colors.brown.withOpacity(0.7),
                               onTap: ()=>Navigator.pushNamed(context, '/loans'),
                             ),
@@ -145,7 +145,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 ),
                               ) : Container(),
 
-                              adherentProvider.getAdherent.familyDoctorId == null ? GestureDetector(
+                              adherentProvider.getAdherent?.familyDoctorId == null ? GestureDetector(
                                 onTap: ()=>navController.setIndex(3),
                                 child: NotificationCard(
                                   isprestataire: false,
@@ -154,7 +154,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 ),
                               ) : Container(),
 
-                              adherentProvider.getAdherent.paid != true && adherentProvider.getAdherent.adherentPlan != 0 ? GestureDetector(
+                              adherentProvider.getAdherent?.paid != true && adherentProvider.getAdherent?.adherentPlan != 0 ? GestureDetector(
                                 onTap: ()=>Navigator.pushNamed(context, '/contributions'),
                                 child: NotificationCard(
                                   isprestataire: false,
@@ -163,7 +163,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 ),
                               ) : Container(),
 
-                              enable && adherentProvider.getAdherent.familyDoctorId != null && !(adherentProvider.getAdherent.paid != true && adherentProvider.getAdherent.adherentPlan != 0) ?  NotificationCard(
+                              enable && adherentProvider.getAdherent?.familyDoctorId != null && !(adherentProvider.getAdherent?.paid != true && adherentProvider.getAdherent?.adherentPlan != 0) ?  NotificationCard(
                                   isprestataire: false,
                                   instruction: "",
                                   description: S.of(context).aucuneNotificationsPourLeMoment,
@@ -204,26 +204,26 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                   
                   SizedBox(height: hv*2,),
 
-                  StreamBuilder(
-                    stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel.userId).snapshots(),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel!.userId).snapshots(),
                     builder: (context, snapshot) {
                       if(!snapshot.hasData){
                         return Center(child: Loaders().buttonLoader(kPrimaryColor),);
                       }
                       return Row(children: [
-                        snapshot.data.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[0].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[1].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[2].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[3].data()["imageUrl"]) : Container(),
-                        snapshot.data.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data.docs[4].data()["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0].get("imageUrl")) : Container(),
+                        snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1].get("imageUrl")) : Container(),
+                        snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2].get("imageUrl")) : Container(),
+                        snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3].get("imageUrl")) : Container(),
+                        snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4].get("imageUrl")) : Container(),
                         Expanded(child: Container()),
-                        snapshot.data.docs.length > 5 ? Container(
+                        snapshot.data!.docs.length > 5 ? Container(
                           padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.grey.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(100)
                           ),
-                          child: Text("+ ${snapshot.data.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
+                          child: Text("+ ${snapshot.data!.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
                         ) : Container()                       
                       ],);
                     }
@@ -232,13 +232,13 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                   SizedBox(height: hv*2,),
                   
                   Row(children: [
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel.posts == null ? 0 : userProvider.getUserModel.posts),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel.comments == null ? 0 : userProvider.getUserModel.comments),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel.friends == null ? 0 : userProvider.getUserModel.friends.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel.chats == null ? 0 : userProvider.getUserModel.chats.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   SizedBox(height: hv*7,)
                 ],
