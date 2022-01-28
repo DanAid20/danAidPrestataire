@@ -35,32 +35,32 @@ class DoctorFormView extends StatefulWidget {
 class _DoctorFormViewState extends State<DoctorFormView> {
   final GlobalKey<FormState> _mFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _mFormKey2 = GlobalKey<FormState>();
-  TextEditingController _mSurnameController, _mNameController, _mEmailController, _mRegionController, _mIdNumberController;
-  TextEditingController _mOfficeNameController, _mOfficeCategoryController, _mSpecController,
+  TextEditingController? _mSurnameController, _mNameController, _mEmailController, _mRegionController, _mIdNumberController;
+  TextEditingController? _mOfficeNameController, _mOfficeCategoryController, _mSpecController,
       _mRegisterOrder, _mHospitalCommuneController, _mCityController;
-  String _mGender;
-  String _type;
-  bool _isPersonal = false;
-  File imageFileAvatar;
-  bool imageLoading = false;
-  bool buttonLoading = false;
-  String avatarUrl;
-  String _gender = "H";
-  String _category;
-  DateTime selectedDate;
-  DateTime initialDate = DateTime(1990);
-  String _city;
-  String _stateCode;
-  String _region = "Centre";
-  bool regionChosen = false;
-  bool cityChosen = false;
-  String _officeCity;
-  String _officeRegion;
-  String _officeStateCode;
-  bool _officeCityChosen = false;
-  bool _officeRegionChosen = false;
-  bool _serviceTermsAccepted = false;
-  String termsAndConditions = S.current.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
+  String? _mGender;
+  String? _type;
+  bool? _isPersonal = false;
+  File? imageFileAvatar;
+  bool? imageLoading = false;
+  bool? buttonLoading = false;
+  String? avatarUrl;
+  String? _gender = "H";
+  String? _category;
+  DateTime? selectedDate;
+  DateTime? initialDate = DateTime(1990);
+  String? _city;
+  String? _stateCode;
+  String? _region = "Centre";
+  bool? regionChosen = false;
+  bool? cityChosen = false;
+  String? _officeCity;
+  String? _officeRegion;
+  String? _officeStateCode;
+  bool? _officeCityChosen = false;
+  bool? _officeRegionChosen = false;
+  bool? _serviceTermsAccepted = false;
+  String? termsAndConditions = S.current!.leMdecinDeFamilleDanaidAssureLeSuiviLongTerme;
 
   @override
   void initState() {
@@ -97,7 +97,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                         backgroundColor: Colors.grey[300],
                         radius: wv*18,
                         child: imageFileAvatar == null ? Icon(LineIcons.user, color: Colors.white, size: wv*25,) : Container(),
-                        backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar),
+                        backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar!),
                       ),
                       Positioned(
                         bottom: 2,
@@ -106,7 +106,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                           backgroundColor: kDeepTeal,
                           radius: wv*5,
                           child: IconButton(
-                            icon: Icon(Icons.add, color: whiteColor,), 
+                            icon: const Icon(Icons.add, color: whiteColor,), 
                             color: kPrimaryColor, 
                             onPressed: (){FunctionWidgets.chooseImageProvider(context: context, gallery: getImageFromGallery, camera: getImageFromCamera);}
                           ),
@@ -119,13 +119,13 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               Expanded(
                 child: Container(
                   height: SizeConfig.screenHeight * 1.1,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: whiteColor,
                   ),
                   child: ListView(
                     physics: BouncingScrollPhysics(),
                     children: [
-                      (!_isPersonal) ?
+                      (!_isPersonal!) ?
                        personalInfosForm()
                        : professionalInfosForm()
                     ],
@@ -133,27 +133,27 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 ),
               ),
               Container(
-                child: (!_isPersonal) ? 
-                  (cityChosen & (selectedDate != null)) ? CustomTextButton(
-                    text: S.of(context).continuer,
+                child: (!_isPersonal!) ? 
+                  (cityChosen! & (selectedDate != null)) ? CustomTextButton(
+                    text: S.of(context)!.continuer,
                     action: (){
-                      if(_mFormKey.currentState.validate()){
+                      if(_mFormKey.currentState!.validate()){
                         setState(() {
                           _isPersonal = true;
-                          debugPrint(_mSurnameController.text,);
-                          debugPrint(_mRegionController.text,);
-                          debugPrint(_mCityController.text,);
-                          debugPrint(_mIdNumberController.text,);
+                          debugPrint(_mSurnameController!.text,);
+                          debugPrint(_mRegionController!.text,);
+                          debugPrint(_mCityController!.text,);
+                          debugPrint(_mIdNumberController!.text,);
                         });
                       }
                     },
                   )
-                  : CustomDisabledTextButton(text: S.of(context).continuer,)
+                  : CustomDisabledTextButton(text: S.of(context)!.continuer,)
                 :  Row(
                   children: [
                     Expanded(
                       child: CustomTextButton(
-                        text: S.of(context).retour,
+                        text: S.of(context)!.retour,
                         color: kDeepTeal,
                         expand: false,
                         action: (){
@@ -164,15 +164,15 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                       ),
                     ),
                     Expanded(
-                      child: (_officeCityChosen & _serviceTermsAccepted & (_category != null) & (_type != null)) ? 
-                        !buttonLoading ? CustomTextButton(
-                          text: S.of(context).envoyer,
+                      child: (_officeCityChosen! & _serviceTermsAccepted! & (_category != null) & (_type != null)) ? 
+                        !buttonLoading! ? CustomTextButton(
+                          text: S.of(context)!.envoyer,
                           expand: false,
                           action: () async {
                             registerDoctor();
                           },
                         ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
-                      : CustomDisabledTextButton(text: S.of(context).envoyer, expand: false,),
+                      : CustomDisabledTextButton(text: S.of(context)!.envoyer, expand: false,),
                     ),
                   ],
                 )
@@ -190,23 +190,23 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         child: Column(
           children: [
             CustomTextField(
-              label: S.of(context).nomDeFamille,
-              hintText: S.of(context).entrezVotreNomDeFamille,
-              controller: _mNameController,
-              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+              label: S.of(context)!.nomDeFamille,
+              hintText: S.of(context)!.entrezVotreNomDeFamille,
+              controller: _mNameController!,
+              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             CustomTextField(
-              label: S.of(context).prnomS,
-              hintText: S.of(context).entrezVotrePrnom,
-              controller: _mSurnameController,
-              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+              label: S.of(context)!.prnomS,
+              hintText: S.of(context)!.entrezVotrePrnom,
+              controller: _mSurnameController!,
+              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             CustomTextField(
-              label: S.of(context).email,
-              hintText: S.of(context).entrezVotreAddresseEmail,
-              controller: _mEmailController,
+              label: S.of(context)!.email,
+              hintText: S.of(context)!.entrezVotreAddresseEmail,
+              controller: _mEmailController!,
               keyboardType: TextInputType.emailAddress,
               validator:  (String mail) {
                 return (mail.isEmpty)
@@ -222,31 +222,31 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(S.of(context).genre, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                      SizedBox(height: 5,),
+                      Text(S.of(context)!.genre, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                      const SizedBox(height: 5,),
                       Container(
                         constraints: BoxConstraints(minWidth: wv*45),
-                        padding: EdgeInsets.symmetric(horizontal: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
                           color: Colors.grey[100],
-                          borderRadius: BorderRadius.all(Radius.circular(20))
+                          borderRadius: const BorderRadius.all(Radius.circular(20))
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
                             value: _gender,
                             items: [
                               DropdownMenuItem(
-                                child: Text(S.of(context).masculin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                child: Text(S.of(context)!.masculin, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                 value: "H",
                               ),
                               DropdownMenuItem(
-                                child: Text(S.of(context).fminin, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                child: Text(S.of(context)!.fminin, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                 value: "F",
                               ),
                             ],
                             onChanged: (value) {
                               setState(() {
-                                _gender = value;
+                                _gender = value.toString();
                               });
                             }),
                         ),
@@ -260,20 +260,20 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 Expanded(
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                      SizedBox(height: 5,),
+                      Text(S.of(context)!.dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                      const SizedBox(height: 5,),
                       GestureDetector(
                         onTap: () => _selectDate(context),
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                           decoration: BoxDecoration(
                             color: Colors.grey[100],
-                            borderRadius: BorderRadius.all(Radius.circular(20))
+                            borderRadius: const BorderRadius.all(Radius.circular(20))
                           ),
                           child: Row(children: [
                             SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
-                            VerticalDivider(),
-                            Text( selectedDate != null ? "${selectedDate.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                            const VerticalDivider(),
+                            Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context)!.choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                           ],),
                         ),
                       ),
@@ -316,10 +316,10 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: LocationDropdown(
-                city: _city,
-                stateCode: _stateCode,
-                cityChosen: cityChosen,
-                regionChosen: regionChosen,
+                city: _city!,
+                stateCode: _stateCode!,
+                cityChosen: cityChosen!,
+                regionChosen: regionChosen!,
                 regionOnChanged: (value) async {
                   setState(() {
                     _stateCode = value;
@@ -369,33 +369,33 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context).tesVousGnralisteOuSpcialiste, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                  SizedBox(height: 5,),
+                  Text(S.of(context)!.tesVousGnralisteOuSpcialiste, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                  const SizedBox(height: 5,),
                   Container(
                     constraints: BoxConstraints(minWidth: wv*45),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding:const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: const BorderRadius.all(Radius.circular(20))
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
-                        hint: Text(S.of(context).choisir),
+                        hint: Text(S.of(context)!.choisir),
                         isExpanded: true,
                         value: _type,
                         items: [
                           DropdownMenuItem(
-                            child: Text(S.of(context).gnraliste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                            value: S.of(context).gnraliste,
+                            child:  Text(S.of(context)!.gnraliste, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                            value: S.of(context)!.gnraliste,
                           ),
                           DropdownMenuItem(
-                            child: Text(S.of(context).spcialiste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                            value: S.of(context).spcialiste,
+                            child: Text(S.of(context)!.spcialiste, style:const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                            value: S.of(context)!.spcialiste,
                           ),
                         ],
                         onChanged: (value) {
                           setState(() {
-                            _type = value;
+                            _type = value.toString();
                           });
                         }),
                     ),
@@ -403,33 +403,33 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                 ],
               ),
             ),
-            _type == S.of(context).spcialiste ? Column(
+            _type == S.of(context)!.spcialiste ? Column(
               children: [
                 SizedBox(height: hv*1.5,),
                 CustomTextField(
-                  label: S.of(context).spcialit,
-                  hintText: S.of(context).exPdiatre,
-                  controller: _mSpecController,
-                  validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                  label: S.of(context)!.spcialit,
+                  hintText: S.of(context)!.exPdiatre,
+                  controller: _mSpecController!,
+                  validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                 ),
               ],
             )
             : Container(),
             SizedBox(height: hv*1.5,),
             CustomTextField(
-              label: S.of(context).nomDeLhpital,
-              hintText: S.of(context).exHpitaleGnrale,
-              controller: _mOfficeNameController,
-              validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+              label: S.of(context)!.nomDeLhpital,
+              hintText: S.of(context)!.exHpitaleGnrale,
+              controller: _mOfficeNameController!,
+              validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
             ),
             SizedBox(height: hv*1.5,),
             Padding(
               padding: EdgeInsets.all(wv*3),
               child: LocationDropdown(
-                city: _officeCity,
-                stateCode: _officeStateCode,
-                cityChosen: _officeCityChosen,
-                regionChosen: _officeRegionChosen,
+                city: _officeCity!,
+                stateCode: _officeStateCode!,
+                cityChosen: _officeCityChosen!,
+                regionChosen: _officeRegionChosen!,
                 regionOnChanged: (value) async {
                   setState(() {
                     _officeStateCode = value;
@@ -452,14 +452,14 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context).typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                  SizedBox(height: 5,),
+                  Text(S.of(context)!.typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                  const SizedBox(height: 5,),
                   Container(
                     constraints: BoxConstraints(minWidth: wv*45),
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: const BorderRadius.all(Radius.circular(20))
                     ),
                     child: DropdownButtonHideUnderline(
                       child: ButtonTheme(
@@ -467,24 +467,24 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                         child: DropdownButton(
                           isExpanded: true,
                           value: _category,
-                          hint: Text(S.of(context).choisir),
+                          hint: Text(S.of(context)!.choisir),
                           items: [
                             DropdownMenuItem(
-                              child: Text(S.of(context).publique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                              value: S.of(context).public,
+                              child: Text(S.of(context)!.publique, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                              value: S.of(context)!.public,
                             ),
                             DropdownMenuItem(
-                              child: Text(S.of(context).confessionel, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              value: S.of(context).confessionel,
+                              child: Text(S.of(context)!.confessionel, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              value: S.of(context)!.confessionel,
                             ),
                             DropdownMenuItem(
-                              child: Text(S.of(context).priv, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                              value: S.of(context).private,
+                              child: Text(S.of(context)!.priv, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              value: S.of(context)!.private,
                             ),
                           ],
                           onChanged: (value) {
                             setState(() {
-                              _category = value;
+                              _category = value.toString();
                             });
                           }),
                       ),
@@ -493,7 +493,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                   SizedBox(height: hv*1,),
                   HomePageComponents.termsAndConditionsTile(
                     action: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
-                    value: _serviceTermsAccepted,
+                    value: _serviceTermsAccepted!,
                     activeColor: primaryColor,
                     onChanged: (newValue) {
                       setState(() {
@@ -511,25 +511,25 @@ class _DoctorFormViewState extends State<DoctorFormView> {
   }
 
   registerDoctor() async {
-    if(_mFormKey2.currentState.validate()){
+    if(_mFormKey2.currentState!.validate()){
       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    String hcommune = _officeCity;
-    String hregion = _officeRegion;
-    String region = _region;
-    String cni = _mNameController.text + " " + _mSurnameController.text;
-    String officeName = _mOfficeNameController.text;
-    String surname = _mSurnameController.text;
-    String name = _mNameController.text;
-    String officeCategory = _category;
-    String spec = _mSpecController.text;
-    String city = _city;
-    String email = _mEmailController.text;
+    String hcommune = _officeCity!;
+    String hregion = _officeRegion!;
+    String region = _region!;
+    String cni = _mNameController!.text + " " + _mSurnameController!.text;
+    String officeName = _mOfficeNameController!.text;
+    String surname = _mSurnameController!.text;
+    String name = _mNameController!.text;
+    String officeCategory = _category!;
+    String spec = _mSpecController!.text;
+    String city = _city!;
+    String email = _mEmailController!.text;
 
     await FirebaseFirestore.instance.collection("USERS")
       .doc(userProvider.getUserId)
       .set({
         'emailAdress': email,
-        "authId": FirebaseAuth.instance.currentUser.uid,
+        "authId": FirebaseAuth.instance.currentUser!.uid,
         'createdDate': DateTime.now(),
         'enabled': false,
         "phoneList": FieldValue.arrayUnion([{"number": userProvider.getUserId}]),
@@ -552,7 +552,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             //"certificatDenregistrmDordre": registerOrder,
             "categorieEtablissement": officeCategory,
             "communeHospital": hcommune,
-            "authId": FirebaseAuth.instance.currentUser.uid,
+            "authId": FirebaseAuth.instance.currentUser!.uid,
             "regionEtablissement": hregion,
             "nomEtablissement": officeName,
             "email": email,
@@ -580,10 +580,12 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             HiveDatabase.setAuthPhone(userProvider.getUserId);
             HiveDatabase.setProfileType(doctor);
             Navigator.pushNamed(context, '/home');
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).profilMdcinCre)));
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.profilMdcinCre)));
           })
           .catchError((e) {
-            print(e.toString());
+            if (kDebugMode) {
+              print(e.toString());
+            }
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
           });
         });
@@ -594,7 +596,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucuneImageSelectionne)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne)));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -616,17 +618,19 @@ class _DoctorFormViewState extends State<DoctorFormView> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.photoDeProfilAjoute)));
       String url = await storageReference.getDownloadURL();
       doctorProvider.setImgUrl(url);
       avatarUrl = url;
-      print("download url: $url");
+      if (kDebugMode) {
+        print("download url: $url");
+      }
       //ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("download url: $url")));
     });
     setState(() {
@@ -641,10 +645,12 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         imageFileAvatar = File(pickedFile.path);
         //imageLoading = true;
       } else {
-        print('No image selected.');
+        if (kDebugMode) {
+          print('No image selected.');
+        }
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
 
   Future getImageFromCamera() async {
@@ -657,17 +663,17 @@ class _DoctorFormViewState extends State<DoctorFormView> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
   _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
+    final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: initialDate, // Refer step 1
+      initialDate: initialDate!, // Refer step 1
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    if (picked != null && picked != selectedDate)
-      setState(() {
+    if (picked != selectedDate)
+      setState((){
         selectedDate = picked;
       });
   }
@@ -686,14 +692,14 @@ class _DoctorFormViewState extends State<DoctorFormView> {
               child: Column(
                 children: [
                   SizedBox(height: hv*2,),
-                  Text(S.of(context).termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
+                  Text(S.of(context)!.termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                   SizedBox(height: hv*2,),
-                  Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: BouncingScrollPhysics(),)),
+                  Expanded(child: SingleChildScrollView(child: Text(termsAndConditions!), physics: const BouncingScrollPhysics(),)),
                 ],
               ),
             ),
             CustomTextButton(
-              text: S.of(context).fermer,
+              text: S.of(context)!.fermer,
               color: kPrimaryColor,
               action: () => Navigator.pop(context),
             )

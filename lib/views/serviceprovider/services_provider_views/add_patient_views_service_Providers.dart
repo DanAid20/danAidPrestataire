@@ -13,6 +13,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/services_doctor_views/inactive_account_views.dart';
 import 'package:danaid/views/serviceprovider/services_provider_views/inactive_account_views_Providers.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -25,8 +26,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../helpers/constants.dart';
 
 class AddPatientViewServiceProvider extends StatefulWidget {
-  bool isLaunchConsultation;
-  AddPatientViewServiceProvider({Key key, this.isLaunchConsultation}) : super(key: key);
+  bool? isLaunchConsultation;
+  AddPatientViewServiceProvider({Key? key, this.isLaunchConsultation}) : super(key: key);
   @override
   _AddPatientViewServiceProviderState createState() => _AddPatientViewServiceProviderState();
 }
@@ -56,22 +57,22 @@ class AddPatientViewServiceProvider extends StatefulWidget {
 // }
 
 class _AddPatientViewServiceProviderState extends State<AddPatientViewServiceProvider> {
-  bool confirmSpinner = false;
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  String textForQrCode;
-  String initialCountry = 'CM';
-  PhoneNumber number = PhoneNumber(isoCode: 'CM');
-  TextEditingController adherentNumber = new TextEditingController();
-  Country _selectedDialogCountry =CountryPickerUtils.getCountryByPhoneCode('237');
-  String phoneCode = "237";
+  bool? confirmSpinner = false;
+  final GlobalKey? qrKey = GlobalKey(debugLabel: 'QR');
+  String? textForQrCode;
+  String? initialCountry = 'CM';
+  PhoneNumber? number = PhoneNumber(isoCode: 'CM');
+  TextEditingController? adherentNumber =  TextEditingController();
+  Country? _selectedDialogCountry =CountryPickerUtils.getCountryByPhoneCode('237');
+  String? phoneCode = "237";
   //only for choose type of consultaion
-  int currentItemSelect = 0;
-  int price = 0;
-  String consultationTypeData;
-  String encabinet = S.current.encabinet;
-  String videos = S.current.video;
-  String message = S.current.message;
-  String phone;
+  int? currentItemSelect = 0;
+  int? price = 0;
+  String? consultationTypeData;
+  String? encabinet = S.current!.encabinet;
+  String? videos = S.current!.video;
+  String? message = S.current!.message;
+  String? phone;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -81,27 +82,33 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
 
   Future _scan() async {
     await Permission.camera.request();
-    String barcode = await scanner.scan();
+    String? barcode = await scanner.scan();
     if (barcode == null) {
-      print('nothing return.');
+      if (kDebugMode) {
+        print('nothing return.');
+      }
       setState(() {
-        textForQrCode = barcode == null ? S.of(context).codebarvide : barcode;
+        textForQrCode = barcode ?? S.of(context)!.codebarvide;
       });
     } else {
       setState(() {
         textForQrCode = barcode;
       });
-      if (validateMobile(textForQrCode) == true) {
-        print(textForQrCode);
+      if (validateMobile(textForQrCode!) == true) {
+        if (kDebugMode) {
+          print(textForQrCode);
+        }
         setState(() {
           confirmSpinner = true;
         });
         await FirebaseFirestore.instance
             .collection('ADHERENTS')
-            .doc('${barcode}')
+            .doc(barcode)
             .get()
             .then((doc) {
-          print(doc.exists);
+          if (kDebugMode) {
+            print(doc.exists);
+          }
           if (consultationTypeData != null) {
             setState(() {
               confirmSpinner = false;
@@ -121,7 +128,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                     data: adherent,
                     phoneNumber: barcode,
                     isAccountIsExists: true,
-                    consultationType: consultationTypeData,
+                    consultationType: consultationTypeData!,
                   ),
                 ),
               );
@@ -130,15 +137,17 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                 confirmSpinner = false;
               });
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(S.of(context).cetAdherentNexistePas)));
+                  SnackBar(content: Text(S.of(context)!.cetAdherentNexistePas)));
+              AdherentModel? obj= AdherentModel();
+              String? consultationType= '';
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => InactiveAccountProvider(
                     isAccountIsExists: false,
-                    data: null,
-                    phoneNumber: phone,
-                    consultationType: null,
+                    data: obj,
+                    phoneNumber: phone!,
+                    consultationType: consultationType,
                   ),
                 ),
               );
@@ -148,13 +157,13 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
               confirmSpinner = false;
             });
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(S.of(context).veuillezPreciserLeTypeDeConsultation)));
+                content: Text(S.of(context)!.veuillezPreciserLeTypeDeConsultation)));
           }
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
-                Text(S.of(context).veuillezScannerUnnumeroDeTlphoneValideSvp)));
+                Text(S.of(context)!.veuillezScannerUnnumeroDeTlphoneValideSvp)));
       }
       setState(() {
         confirmSpinner = false;
@@ -166,7 +175,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
 
   @override
   void dispose() {
-    adherentNumber.dispose();
+    adherentNumber?.dispose();
     super.dispose();
   }
 
@@ -175,16 +184,18 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
       consultationTypeData = consultation;
       currentItemSelect = index;
     });
-    print(consultationTypeData);
-    print(currentItemSelect);
+    if (kDebugMode) {
+      print(consultationTypeData);
+      print(currentItemSelect);
+    }
   }
 
   Widget offerPart(
-      {int index,
-      String consultation,
-      String consultationType,
-      String price,
-      String typedeConsultation}) {
+      {int? index,
+      String? consultation,
+      String? consultationType,
+      String? price,
+      String? typedeConsultation}) {
     return GestureDetector(
       onTap: () {
         setconsultationType(typedeConsultation,  index);
@@ -205,7 +216,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                       spreadRadius: 0.5,
                       blurRadius: 4),
                 ],
-                borderRadius: BorderRadius.all(
+                borderRadius: const BorderRadius.all(
                   Radius.circular(10),
                 ),
               ),
@@ -217,9 +228,9 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                     alignment: Alignment.topLeft,
                     child: Container(
                       child: SvgPicture.asset(
-                        consultationType == S.of(context).vidos
+                        consultationType == S.of(context)!.vidos
                             ? 'assets/icons/Bulk/VideoTeal.svg'
-                            : consultationType == S.of(context).message
+                            : consultationType == S.of(context)!.message
                                 ? 'assets/icons/Bulk/Message.svg'
                                 : 'assets/icons/Bulk/Profile-color.svg',
                         width: wv * 10,
@@ -233,14 +244,14 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          consultation,
+                          consultation!,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w500,
                               fontSize: fontSize(size: wv * 4)),
                         ),
                         Text(
-                          consultationType,
+                          consultationType!,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
@@ -254,7 +265,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                           child: Container(
                             margin: EdgeInsets.only(top: hv * 0.5, bottom: 8.h),
                             child: Text(
-                              price,
+                              price!,
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
@@ -274,7 +285,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
 
   bool validateMobile(String value) {
     String pattern = r'^(?:[+0][1-9])?[0-9]{10,12}$';
-    RegExp regExp = new RegExp(pattern);
+    RegExp regExp =  RegExp(pattern);
 
     return regExp.hasMatch(value);
   }
@@ -287,19 +298,20 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
         return Theme(
             data: Theme.of(context).copyWith(primaryColor: Colors.pink),
             child: CountryPickerDialog(
-                titlePadding: EdgeInsets.all(10.0),
+                titlePadding: const EdgeInsets.all(10.0),
                 searchCursorColor: Colors.pinkAccent,
                 searchInputDecoration: InputDecoration(
-                    hintText: S.of(context).chercher,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 10, vertical: 0)),
+                    hintText: S.of(context)!.chercher,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0)),
                 isSearchable: true,
-                title: Text(S.of(context).selectionnezVotrePays),
+                title: Text(S.of(context)!.selectionnezVotrePays),
                 onValuePicked: (Country country) {
-                  print(country.isoCode);
-                  print(country.name);
-                  print(country.phoneCode);
-                  print(country.iso3Code);
+                  if (kDebugMode) {
+                    print(country.isoCode);
+                    print(country.name);
+                    print(country.phoneCode);
+                    print(country.iso3Code);
+                  }
                   userProvider.setCountryCode(country.isoCode);
                   userProvider.setCountryName(country.name);
                   setState(() => _selectedDialogCountry = country);
@@ -317,13 +329,13 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
     return Row(
       children: <Widget>[
         CountryPickerUtils.getDefaultFlagImage(country),
-        SizedBox(width: 5.0),
+        const SizedBox(width: 5.0),
         Text("+${country.phoneCode}",
             style: TextStyle(
                 color: kCardTextColor,
                 fontWeight: FontWeight.w500,
                 fontSize: fontSize(size: wv * 4))),
-        SizedBox(width: 5.0),
+        const SizedBox(width: 5.0),
         Flexible(
             child: Text(country.name,
                 style: TextStyle(
@@ -345,7 +357,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
           backgroundColor:  kDeepYellow,
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kDateTextColor,
                 ),
@@ -355,9 +367,8 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
               child: Container(
                 child: Column(
                   children: [
-                    Text(S.of(context).dmarrer),
-                    Text(
-                        '${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}')
+                    Text(S.of(context)!.dmarrer),
+                    Text(DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now()))
                   ],
                 ),
               ),
@@ -384,7 +395,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
           body: Container(
             
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 children: [
                   widget.isLaunchConsultation == true
@@ -395,8 +406,9 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius:  BorderRadius.circular(10),
+                                // ignore: prefer_const_literals_to_create_immutables
                                 boxShadow: [
-                                  BoxShadow(
+                                  const BoxShadow(
                                       color: Colors.grey,
                                       spreadRadius: 0.5,
                                       blurRadius: 2),
@@ -411,7 +423,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                     margin: EdgeInsets.only(
                                         left: wv * 5, top: hv * 1),
                                     child: Text(
-                                        S.of(context).choisirLeTypeDeConsultation,
+                                        S.of(context)!.choisirLeTypeDeConsultation,
                                         style: TextStyle(
                                             fontSize: fontSize(size: wv * 4),
                                             fontWeight: FontWeight.w700,
@@ -419,22 +431,22 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(vertical: 2.0),
+                                  margin: const EdgeInsets.symmetric(vertical: 2.0),
                                   height: hv * 17,
                                  
-                                  child: new ListView(
+                                  child:  ListView(
                                     scrollDirection: Axis.horizontal,
                                     children: <Widget>[
                                       offerPart(
                                           index: 1,
-                                          consultation: S.of(context).consultation,
-                                          consultationType: S.of(context).enCabinet,
+                                          consultation: S.of(context)!.consultation,
+                                          consultationType: S.of(context)!.enCabinet,
                                           price: '2000 FCFA',
                                           typedeConsultation: encabinet),
                                       offerPart(
                                           index: 2,
-                                          consultation: S.of(context).consultation,
-                                          consultationType: S.of(context).vidos,
+                                          consultation: S.of(context)!.consultation,
+                                          consultationType: S.of(context)!.vidos,
                                           price: '2000 FCFA',
                                           typedeConsultation: videos),
                                     ],
@@ -444,7 +456,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                             ),
                           ),
                       )
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   SizedBox(
                     height: hv * 5,
                   ),
@@ -461,9 +473,9 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                         children: [
                           Container(
                             width: wv * 68,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: kDeepTealClair,
-                              borderRadius: BorderRadius.only(
+                              borderRadius:  BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 bottomRight: Radius.circular(10),
                               ),
@@ -486,7 +498,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                   width: wv * 2,
                                 ),
                                 Text(
-                                  S.of(context).selectionnerOuAjouterLePatient,
+                                  S.of(context)!.selectionnerOuAjouterLePatient,
                                   style: TextStyle(
                                       fontSize: fontSize(size: wv * 4),
                                       fontWeight: FontWeight.w500,
@@ -514,7 +526,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              S.of(context).rechercherParNumeroDeTlphone,
+                                              S.of(context)!.rechercherParNumeroDeTlphone,
                                               style: TextStyle(
                                                   fontSize: wv * 4,
                                                   color: kBlueForce),
@@ -523,28 +535,32 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                               height: hv * 1,
                                             ),
                                             InternationalPhoneNumberInput(
-                                              validator: (String phone) {
-                                                return (phone.isEmpty)
-                                                    ? S.of(context).entrerUnNumeroDeTlphoneValide
+                                              validator: (String? phone) {
+                                                return (phone!.isEmpty)
+                                                    ? S.of(context)!.entrerUnNumeroDeTlphoneValide
                                                     : null;
                                               },
                                               onInputChanged:
                                                   (PhoneNumber number) {
                                                 phone = number.phoneNumber;
-                                                print(number.phoneNumber);
+                                                if (kDebugMode) {
+                                                  print(number.phoneNumber);
+                                                }
                                               },
                                               onInputValidated: (bool value) {
-                                                print(value);
+                                                if (kDebugMode) {
+                                                  print(value);
+                                                }
                                               },
-                                              hintText: S.of(context).numeroDeTelephone,
+                                              hintText: S.of(context)!.numeroDeTelephone,
                                               spaceBetweenSelectorAndTextField: 0,
-                                              selectorConfig: SelectorConfig(
-                                                selectorType:
+                                              selectorConfig:const SelectorConfig(
+                                                selectorType: 
                                                     PhoneInputSelectorType
                                                         .BOTTOM_SHEET,
                                               ),
                                               ignoreBlank: false,
-                                              textStyle: TextStyle(
+                                              textStyle: const TextStyle(
                                                   color: kPrimaryColor,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 18),
@@ -555,7 +571,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                               initialValue: number,
                                               textFieldController: adherentNumber,
                                               formatInput: true,
-                                              keyboardType:
+                                              keyboardType: const
                                                   TextInputType.numberWithOptions(
                                                       signed: true,
                                                       decimal: true),
@@ -563,13 +579,13 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                                 errorBorder: OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         width: 1,
-                                                        color: Colors.red[300]),
-                                                    borderRadius:
+                                                        color: (Colors.red[300])!),
+                                                    borderRadius:const
                                                         BorderRadius.all(
                                                             Radius.circular(20))),
                                                 fillColor: kBgTextColor,
                                                 //prefixIcon: Icon(Icons.search, color: kBrownCanyon,),
-                                                contentPadding:
+                                                contentPadding:const
                                                     EdgeInsets.symmetric(
                                                         horizontal: 15,
                                                         vertical: 5),
@@ -578,10 +594,10 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                                         width: 1,
                                                         color: kPrimaryColor
                                                             .withOpacity(0.0)),
-                                                    borderRadius:
+                                                    borderRadius:const
                                                         BorderRadius.all(
                                                             Radius.circular(20))),
-                                                focusedBorder: OutlineInputBorder(
+                                                focusedBorder: const OutlineInputBorder(
                                                     borderSide: BorderSide(
                                                         width: 1,
                                                         color: kBgTextColor),
@@ -590,7 +606,9 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                                             Radius.circular(20))),
                                               ),
                                               onSaved: (PhoneNumber number) {
-                                                print('On Saved: $number');
+                                                if (kDebugMode) {
+                                                  print('On Saved: $number');
+                                                }
                                               },
                                             ),
                                           ])),
@@ -599,12 +617,12 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                   height: hv * 2,
                                 ),
                                 widget.isLaunchConsultation == true
-                                    ? Text(S.of(context).ouScannerUneCarteDadherent,
+                                    ? Text(S.of(context)!.ouScannerUneCarteDadherent,
                                         style: TextStyle(
                                             fontSize: fontSize(size: wv * 4),
                                             fontWeight: FontWeight.w500,
                                             color: kFirstIntroColor))
-                                    : SizedBox.shrink(),
+                                    : const SizedBox.shrink(),
                                 widget.isLaunchConsultation == true
                                     ? Container(
                                         margin: EdgeInsets.only(
@@ -630,15 +648,13 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                 widget.isLaunchConsultation == true
                                     ? Center(
                                         child: Text(
-                                            textForQrCode == null
-                                                ? ''
-                                                : textForQrCode,
+                                            textForQrCode ?? '',
                                             style: TextStyle(
                                                 fontSize: fontSize(size: wv * 4),
                                                 fontWeight: FontWeight.w500,
                                                 color: kFirstIntroColor)),
                                       )
-                                    : SizedBox.shrink()
+                                    : const SizedBox.shrink()
                               ],
                             ),
                           ),
@@ -649,7 +665,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                   SizedBox(
                     height: hv * 2,
                   ),
-                  confirmSpinner
+                  confirmSpinner!
                       ? Loaders().buttonLoader(kPrimaryColor)
                       : Container(
                           width: wv * 50,
@@ -657,16 +673,20 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                               horizontal: wv * 3.2, vertical: hv * 2),
                           child: TextButton(
                             onPressed: () async {
-                              print('${phone}');
+                              if (kDebugMode) {
+                                print(phone);
+                              }
                               setState(() {
                                 confirmSpinner = true;
                               });
                               await FirebaseFirestore.instance
                                   .collection('ADHERENTS')
-                                  .doc('${phone}')
+                                  .doc(phone)
                                   .get()
                                   .then((doc) {
-                                print(doc.exists);
+                                if (kDebugMode) {
+                                  print(doc.exists);
+                                }
                                 if ( widget.isLaunchConsultation == true) {
                                   setState(() {
                                     confirmSpinner = false;
@@ -691,10 +711,10 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccountProvider(
                                           data: adherent,
-                                          phoneNumber: phone,
+                                          phoneNumber: phone!,
                                           isAccountIsExists: true,
                                           consultationType:
-                                              consultationTypeData,
+                                              consultationTypeData!,
                                         ),
                                       ),
                                     );
@@ -703,16 +723,16 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                       confirmSpinner = false;
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text(S.of(context).existePas)));
-
+                                        SnackBar(content: Text(S.of(context)!.existePas)));
+                                    AdherentModel? data= AdherentModel();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccountProvider(
                                           isAccountIsExists: false,
-                                          data: null,
-                                          phoneNumber: phone,
-                                          consultationType: S.of(context).referencement,
+                                          data: data,
+                                          phoneNumber: phone!,
+                                          consultationType: S.of(context)!.referencement,
                                         ),
                                       ),
                                     );
@@ -742,9 +762,9 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccountProvider(
                                           data: adherent,
-                                          phoneNumber: phone,
+                                          phoneNumber: phone!,
                                           isAccountIsExists: true,
-                                          consultationType: S.of(context).consultation.toString()                                        ),
+                                          consultationType: S.of(context)!.consultation.toString()                                        ),
                                       ),
                                     );
                                   } else {
@@ -752,16 +772,16 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                       confirmSpinner = false;
                                     });
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("existe pas ")));
-
+                                        const SnackBar(content: Text("existe pas ")));
+                                    AdherentModel? data= AdherentModel();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccountProvider(
                                           isAccountIsExists: false,
-                                          data: null,
-                                          phoneNumber: phone,
-                                          consultationType: S.of(context).referencement,
+                                          data: data,
+                                          phoneNumber: phone!,
+                                          consultationType: S.of(context)!.referencement,
                                         ),
                                       ),
                                     );
@@ -773,12 +793,12 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                           content: Text(
-                                              S.of(context).veuillezPreciserLeTypeDeConsultation)));
+                                              S.of(context)!.veuillezPreciserLeTypeDeConsultation)));
                                 }
                               });
                             },
                             child: Text(
-                              S.of(context).rechercher,
+                              S.of(context)!.rechercher,
                               style: TextStyle(
                                   color: textColor,
                                   fontSize: wv * 4.5,
@@ -790,8 +810,8 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                 backgroundColor:
                                     MaterialStateProperty.all(kFirstIntroColor),
                                 shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
+                                   const RoundedRectangleBorder(
+                                        borderRadius:   BorderRadius.all(
                                             Radius.circular(25))))),
                           ),
                         ),

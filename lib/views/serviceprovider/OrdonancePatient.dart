@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/models/devisModel.dart';
@@ -13,14 +15,15 @@ import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 
 class  OrdonanceDuPatient extends StatefulWidget {
-   UseCaseServiceModel devis;
-  OrdonanceDuPatient({Key key, this.devis}) : super(key: key);
+   UseCaseServiceModel? devis;
+  OrdonanceDuPatient({Key? key, this.devis}) : super(key: key);
 
 
   @override
@@ -28,25 +31,25 @@ class  OrdonanceDuPatient extends StatefulWidget {
 }
 
 class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
-   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-   final GlobalKey<ExpansionTileCardState> cardA = new GlobalKey();
-  final GlobalKey<ExpansionTileCardState> cardB = new GlobalKey();
-  final GlobalKey<ExpansionTileCardState> cardC = new GlobalKey();
-  final GlobalKey<ExpansionTileCardState> cardD = new GlobalKey();
-   bool isGetdevis=false, buttonLoading=false;
-   Timestamp dateNaiss;
-   num prixDAnaid, prixpatient;
-   String userId, urlImage, username, codeDeconsultation;
-   List<String> urlImg;
-   List deletedData=[];
-   List<DevisModel> devis=[];
-  bool visibilityDrugs = false;
-  bool visibilityReceipt = false;
-  bool visibilityResult = false;
-  bool visibilityPrescription = false;
-  bool isDeleteddrugsItems= false, isuserHasAccepteddrugsItems= false;
-  bool isUpdatatingDrugs= false, isconfirmgDrugs= false;
-  int currentIndex=0;
+   final GlobalKey<ScaffoldState>? _scaffoldKey = GlobalKey<ScaffoldState>();
+   final GlobalKey<ExpansionTileCardState>? cardA = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState>? cardB = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState>? cardC = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState>? cardD = new GlobalKey();
+   bool? isGetdevis=false, buttonLoading=false;
+   Timestamp? dateNaiss;
+   num? prixDAnaid, prixpatient;
+   String? userId, urlImage, username, codeDeconsultation;
+   List<String>? urlImg;
+   List? deletedData=[];
+   List<DevisModel>? devis=[];
+  bool? visibilityDrugs = false;
+  bool? visibilityReceipt = false;
+  bool? visibilityResult = false;
+  bool? visibilityPrescription = false;
+  bool? isDeleteddrugsItems= false, isuserHasAccepteddrugsItems= false;
+  bool? isUpdatatingDrugs= false, isconfirmgDrugs= false;
+  int? currentIndex=0;
  
    final ButtonStyle flatButtonStyle = TextButton.styleFrom(
       shape: const RoundedRectangleBorder(
@@ -67,13 +70,13 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
    @override
    void initState() {
      setState(() {
-          prixDAnaid= (widget.devis.amount*70/100);
-          prixpatient= widget.devis.amount-prixDAnaid;
+          prixDAnaid= (widget.devis!.amount!*70/100);
+          prixpatient= widget.devis!.amount!-prixDAnaid!;
         
     });
      super.initState();
-      WidgetsBinding.instance.addPostFrameCallback((_){
-        getAdhenents(widget.devis.idAppointement);
+      WidgetsBinding.instance?.addPostFrameCallback((_){
+        getAdhenents(widget.devis!.idAppointement!);
     });
    }
    
@@ -81,7 +84,9 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
 
 
     Future<void> getAdhenents(String code)  async {
-     print("--------------------------------");
+     if (kDebugMode) {
+       print("--------------------------------");
+     }
      print(code);
      setState(() {
             isGetdevis=true;
@@ -89,21 +94,23 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
      await FirebaseFirestore.instance
           .collection('APPOINTMENTS').doc(code).get()
           .then((value) {
-          print(value.id);
-          print(value.data());
-        print("--------------------------------");   
-          print( value.data().toString());
-        print("--------------------------------");   
+          if (kDebugMode) {
+            print(value.id);
+            print(value.data());
+            print("--------------------------------");   
+            print( value.data().toString());
+            print("--------------------------------");   
+          }
         if (value.data()!=null) {
           setState(() {
            userId= code;  
-           dateNaiss= value.data()['birthDate'];
-           urlImage= value.data()['avatarUrl'];
-           username= value.data()['username'];
+           dateNaiss= value.data()!['birthDate'];
+           urlImage= value.data()!['avatarUrl'];
+           username= value.data()!['username'];
            
           });
         }else {
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("cet utilisateur n'existe pas "),));
+           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:  Text("cet utilisateur n'existe pas "),));
            setState(() {
             isGetdevis=false;
           });
@@ -123,13 +130,13 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
 
   // set up the buttons
   Widget cancelButton = TextButton(
-    child: Text(S.of(context).cancel),
+    child: Text(S.of(context)!.cancel),
     onPressed:  () {
       Navigator.of(context).pop();
     },
   );
   Widget continueButton = TextButton(
-    child: Text(S.of(context).supprimer),
+    child: Text(S.of(context)!.supprimer),
     onPressed:  () {
       function();
       setState(()=> {
@@ -162,20 +169,21 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
-     String doc1 =widget.devis.type == consultation ? "Carnet" : "Devis";
+     String doc1 =widget.devis!.type == consultation ? "Carnet" : "Devis";
     String doc2 = "Recu";
-    String doc3 =widget.devis.type == consultation ? "Autre" :widget.devis.type == labo ? "Resultat" : "Medicamment";
+    String doc3 =widget.devis!.type == consultation ? "Autre" :widget.devis!.type == labo ? "Resultat" : "Medicamment";
    
     return WillPopScope(
       onWillPop:()async{
          Navigator.pop(context);
+         return true;
       },
       child: Scaffold(
       key: _scaffoldKey,  
       appBar: AppBar(
           backgroundColor:  kGoldlightYellow,
           leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: kDateTextColor,
               ),
@@ -185,8 +193,8 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             child: Container(
               child: Column(
                 children: [
-                  Text("${widget.devis.title}", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w500), ),
-                  Text("${widget.devis.titleDuDEvis}", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w300), ),
+                  Text("${widget.devis!.title}", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w500), ),
+                  Text("${widget.devis!.titleDuDEvis}", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w300), ),
                  
                 ],
               ),
@@ -213,10 +221,10 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
         ),
       body:  SafeArea(
       child: StreamBuilder(
-       stream:   FirebaseFirestore.instance.collection('USECASES').doc(widget.devis.usecaseId).collection('PRESTATIONS').doc(widget.devis.id).snapshots(),
+       stream:   FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Container(
+          return SizedBox(
             //child: Text("Splash Screen Temporaire !!!\n${devEnv.getEnv}", textAlign: TextAlign.center,)
               width: double.infinity,
             child: Column(
@@ -225,7 +233,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
               children: [
                 SizedBox(height: hv*2,),
                 SizedBox(height: hv*5,),
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ),
                 Text('Chargement', style: TextStyle(color: Colors.grey[600], fontSize: 25, fontWeight: FontWeight.bold),),
@@ -233,7 +241,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             )
           ,);
         }
-        var userDocument = snapshot.data;
+        var userDocument = snapshot.data as DocumentSnapshot<Object?>;
         widget.devis= UseCaseServiceModel.fromDocument(userDocument);
           return Container(
             child: 
@@ -252,7 +260,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                   height: MySize.getScaledSizeHeight(130),
                   width: double.infinity,
                   padding: EdgeInsets.only(bottom: hv*1, left: wv*2),
-                  decoration: BoxDecoration( color: kGoldlightYellow),
+                  decoration: const BoxDecoration( color: kGoldlightYellow),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -260,7 +268,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     children: [
                         Container(
                           margin: EdgeInsets.only(left: wv*1),
-                          child: Text(S.of(context).pourLePatient, style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w500),)),
+                          child: Text(S.of(context)!.pourLePatient, style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w500),)),
                         SizedBox(height: hv*0.3,),
                          Container(
                           margin: EdgeInsets.only(left: wv*1),
@@ -268,11 +276,11 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                          SizedBox(height: hv*0.3,),
                            Container(
                           margin: EdgeInsets.only(left: wv*1),
-                          child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w400),)),
+                          child: Text(S.of(context)!.codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w400),)),
                          SizedBox(height: hv*0.3,),
                            Container(
                           margin: EdgeInsets.only(left: wv*1),
-                          child: Text('${widget.devis.consultationCode}', style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w800),)),
+                          child: Text('${widget.devis!.consultationCode}', style: TextStyle( color: kSimpleForce, fontSize: wv*5, fontWeight: FontWeight.w800),)),
                     
                     ],
                   )
@@ -287,9 +295,9 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                             SizedBox(height: hv*2,),
                             Row(
                               children: [
-                                Text(S.of(context).couvertureDanaid, style: TextStyle(color: kCardTextColor, fontSize: 16,)),
-                                Spacer(),
-                                Text(S.of(context).copaiement, style: TextStyle(color: kCardTextColor, fontSize: 16,))
+                                Text(S.of(context)!.couvertureDanaid, style: const  TextStyle(color: kCardTextColor, fontSize: 16,)),
+                                const Spacer(),
+                                Text(S.of(context)!.copaiement, style: const TextStyle(color: kCardTextColor, fontSize: 16,))
                               ],
                             ),
                             SizedBox(height: hv*1,),
@@ -304,7 +312,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                   child: Row(
                                     children: [
                                       Spacer(),
-                                      Text("${widget.devis.amount.toDouble().round()}.f", style: TextStyle(color: kCardTextColor, fontSize: 17,))
+                                      Text("${widget.devis!.amount!.toDouble().round()}.f", style: const TextStyle(color: kCardTextColor, fontSize: 17,))
                                     ],
                                   ),
                                 ),
@@ -312,8 +320,8 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                   width: wv*60,
                                   decoration: BoxDecoration(
                                     color: whiteColor,
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                                    boxShadow: [BoxShadow(color: Colors.grey[500].withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: Offset(0,4))]
+                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                    boxShadow: [BoxShadow(color: (Colors.grey[500])!.withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: const Offset(0,4))]
                                   ),
                                   child: Column(
                                     children: [
@@ -321,12 +329,12 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                         padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
                                         decoration: BoxDecoration(
                                           color: kDeepYellow.withOpacity(0.65),
-                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
                                         ),
                                         child: Row(
                                           children: [
-                                            Spacer(),
-                                            Text('$prixDAnaid.f', style: TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold))
+                                            const Spacer(),
+                                            Text('$prixDAnaid.f', style: const TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold))
                                           ],
                                         ),
                                       ),
@@ -338,8 +346,8 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                             Row(children: [
                                               Expanded(
                                                 child: Text(
-                                                   widget.devis.status==0? S.of(context).enAttente : widget.devis.status==1? S.of(context).pay: S.of(context).tatInconue ,
-                                                      style: TextStyle(color:  widget.devis.status==0? kBlueForce: widget.devis.status==1? kDeepTeal: kDeepDarkTeal, fontWeight: FontWeight.bold),
+                                                   widget.devis!.status==0? S.of(context)!.enAttente : widget.devis!.status==1? S.of(context)!.pay: S.of(context)!.tatInconue ,
+                                                      style: TextStyle(color:  widget.devis!.status==0? kBlueForce: widget.devis!.status==1? kDeepTeal: kDeepDarkTeal, fontWeight: FontWeight.bold),
                                                    textAlign: TextAlign.right,
                                                 ),
                                               ),
@@ -369,7 +377,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                       children: [
                         Row(
                           children: [
-                            Text(S.of(context).suivieDesPrestations, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
+                            Text(S.of(context)!.suivieDesPrestations, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
                           ],
                         ),
                         SizedBox(height: hv*1,),
@@ -381,44 +389,44 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                 children: [
                                   Column(
                                     children: [
-                                      widget.devis.drugsUrls.length>0?  Padding(
+                                      widget.devis!.drugsUrls!.isNotEmpty?  Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Expanded(
                                           child: getDetailOrdonanceDevis(
                                             title: doc1,
-                                            service: widget.devis,
-                                            cardA: cardA,
+                                            service: widget.devis!,
+                                            cardA: cardA!,
                                            )
                                           ),
                                       ): Container(),
                                       
-                                      widget.devis.receiptUrls.length>0?  Padding(
+                                      widget.devis!.receiptUrls!.isNotEmpty?  Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Expanded(
                                           child: getDetailReceipt(
                                             title: doc2,
-                                            service: widget.devis,
-                                            cardA: cardB,
+                                            service: widget.devis!,
+                                            cardA: cardB!,
                                            )
                                           ),
                                       ): Container(),
-                                      widget.devis.resultsUrls.length>0?  Padding(
+                                      widget.devis!.resultsUrls!.isNotEmpty?  Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Expanded(
                                           child: getDetailReultExamens(
                                             title: doc3,
-                                            service: widget.devis,
-                                            cardA: cardC,
+                                            service: widget.devis!,
+                                            cardA: cardC!,
                                            )
                                           ),
                                       ): Container(),
-                                      widget.devis.precriptionUrls.length>0?  Padding(
+                                      widget.devis!.precriptionUrls!.isNotEmpty?  Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Expanded(
                                           child: getDetailPrescription(
                                             title: doc3,
-                                            service: widget.devis,
-                                            cardA: cardD,
+                                            service: widget.devis!,
+                                            cardA: cardD!,
                                            )
                                           ),
                                       ): Container(),
@@ -451,11 +459,11 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                   begin: Alignment.bottomLeft,
                                   end: Alignment.topRight,
                                   colors: [
-                                    Colors.grey[200],
+                                    (Colors.grey[200])!,
                                     Colors.white,
                                   ],
                                 )),
-                              child: SizedBox.shrink(),
+                              child: const SizedBox.shrink(),
                                 ),
                             Container(
                               width: double.infinity,
@@ -466,7 +474,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                   Column(
                                      mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Container(
+                                      SizedBox(
                                         width: wv*65,
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -478,7 +486,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.3,
                                       color: kBlueForce)),
-                                              Text("${widget.devis.amount.toDouble().round().toString()}.f",style: TextStyle(
+                                              Text("${widget.devis!.amount!.toDouble().round().toString()}.f",style: TextStyle(
                                       fontSize: fontSize(size: wv * 5),
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0.2,
@@ -488,7 +496,7 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                         ),
                                       ),
                                      
-                                      Container(
+                                      SizedBox(
                                         width: wv*65,
                                         child: Padding(
                                           padding: const EdgeInsets.all(3.0),
@@ -498,19 +506,19 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                               Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(S.of(context).couvertParDanaid,style: TextStyle(
+                                                  Text(S.of(context)!.couvertParDanaid,style: TextStyle(
                                       fontSize: fontSize(size: wv * 4),
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.2,
                                       color: kMaron)),
-                                                   Text(S.of(context).niveauIDecouverte,style: TextStyle(
+                                                   Text(S.of(context)!.niveauIDecouverte,style: TextStyle(
                                       fontSize: fontSize(size: wv * 4),
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0.2,
                                       color: kMaron)),
                                                 ],
                                               ),
-                                              Text("${prixDAnaid.toDouble().round().toString()}.f",style: TextStyle(
+                                              Text("${prixDAnaid!.toDouble().round().toString()}.f",style: TextStyle(
                                       fontSize: fontSize(size: wv * 5),
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.2,
@@ -520,20 +528,20 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                                         ),
                                       ),
                                      
-                                      Container(
+                                      SizedBox(
                                         width: wv*65,
                                         child: Padding(
-                                          padding:  EdgeInsets.all(5.0),
+                                          padding: const EdgeInsets.all(5.0),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                             children: [
-                                              Text(S.of(context).copaiement,style: TextStyle(
+                                              Text(S.of(context)!.copaiement,style: TextStyle(
                                       fontSize: fontSize(size: wv * 4),
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.2,
                                       color: kBlueForce)),
                                              
-                                              Text("${prixpatient.toDouble().round().toString()}.f",style: TextStyle(
+                                              Text("${prixpatient!.toDouble().round().toString()}.f",style: TextStyle(
                                       fontSize: fontSize(size: wv * 4),
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.2,
@@ -554,20 +562,20 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                   buttonLoading==true? Center(child: Loaders().buttonLoader(kCardTextColor)) :
                CustomTextButton(
                   borderRadius:60,
-                  text: S.of(context).validerLaPrestation,
+                  text: S.of(context)!.validerLaPrestation,
                   color: kBlueDeep,
                   action: () =>{
                     setState(() {
                            buttonLoading = true;
                     }),
-                    print(widget.devis.receiptUrls.length),
+                    print(widget.devis!.receiptUrls!.length),
                      
-                     FirebaseFirestore.instance.collection('USECASES').doc(widget.devis.usecaseId).collection('PRESTATIONS').doc(widget.devis.id).update(
+                     FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
                        {
                          "closed":true,
                          "paid": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Prestation Clôturer'),));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Prestation Clôturer'),));
                       setState(() {
                            buttonLoading = false;
                            deletedData=[];
@@ -601,22 +609,22 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
 
  
  
-   Widget getDetailOrdonanceDevis({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
-  var state= service.drugsList==null? S.of(context).enCoursDeTraitement :"${Algorithms.getUseCaseServiceName(type: service.type)}- ${service.drugsUrls.length} images";
+   Widget getDetailOrdonanceDevis({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function ?action}){
+  var state= service!.drugsList==null? S.of(context)!.enCoursDeTraitement :"${Algorithms.getUseCaseServiceName(type: service.type!)}- ${service.drugsUrls!.length} images";
   print(service.drugsList);
   print("333333333333333333333333333333333333333333333333333333");
  
-  return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  Colors.grey[200],expandedTextColor: Colors.red,
-            leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: service.type), color: kDeepTeal, width: wv*8,),
-            title:Text(title, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
+  return ExpansionTileCard(duration:const Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
+            leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: service.type!), color: kDeepTeal, width: wv*8,),
+            title:Text(title!, style:const TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
             subtitle: Text(state),
             children: <Widget>[
-              Container(width: double.infinity, height:hv*30,decoration: BoxDecoration(color: Colors.white, ),
-            child: Expanded(child: service.drugsList!=null && service.drugsUrls!=null && service.drugsList.isNotEmpty && service.drugsUrls.isNotEmpty?
+              Container(width: double.infinity, height:hv*30,decoration: const BoxDecoration(color: Colors.white, ),
+            child: Expanded(child: service.drugsList!=null && service.drugsUrls!=null && service.drugsList!.isNotEmpty && service.drugsUrls!.isNotEmpty?
             ListView.builder(
-                 itemCount:  service.drugsList.length,
+                 itemCount:  service.drugsList!.length,
                  itemBuilder: (BuildContext context, int index) {
-                  var  item=  service.drugsList[0];
+                  var  item=  service.drugsList![0];
                   print(item['Prix']);
                   print("66666666666666666666666666666666666666666");
                    return Dismissible(
@@ -628,33 +636,33 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                           return StatefulBuilder(
                           builder: (context, setState) {
                             return AlertDialog(
-                            title:  Text(S.of(context).confirmation),
-                            content: Text(S.of(context).tesvousSurDffectuerCetteAction),
+                            title:  Text(S.of(context)!.confirmation),
+                            content: Text(S.of(context)!.tesvousSurDffectuerCetteAction),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: (){
                                   
-                                    widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
-                                    prixDAnaid= (widget.devis.amount*70/100);
-                                    prixpatient= widget.devis.amount-prixDAnaid;
-                                    deletedData.add(widget.devis.drugsList[index]);
+                                    widget.devis!.amount= widget.devis!.amount!-widget.devis!.drugsList![index]['Prix'];
+                                    prixDAnaid= (widget.devis!.amount!*70/100);
+                                    prixpatient= widget.devis!.amount!-prixDAnaid!;
+                                    deletedData?.add(widget.devis!.drugsList![index]);
                                     isDeleteddrugsItems=true; 
-                                    var set1 = Set.from(deletedData);
-                                    var set2 = Set.from(service.drugsList);
+                                    var set1 = Set.from(deletedData!);
+                                    var set2 = Set.from(service.drugsList!);
                                     service.drugsList=List.from(set2.difference(set1));
-                                    widget.devis.drugsList= service.drugsList;    
-                                    print(widget.devis.drugsList.length);
-                                    print(service.drugsList.length);
+                                    widget.devis!.drugsList= service.drugsList;    
+                                    print(widget.devis!.drugsList!.length);
+                                    print(service.drugsList!.length);
                                 
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsSupprimer)));
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.medicamentsSupprimer)));
                                    Navigator.of(context).pop(true);
                                   
                                 },
-                                child: Text(S.of(context).delete)
+                                child: Text(S.of(context)!.delete)
                               ),
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(false),
-                                child: Text(S.of(context).cancel),
+                                child: Text(S.of(context)!.cancel),
                               ),
                             ],
                           );
@@ -665,35 +673,35 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                       },
                      direction: DismissDirection.endToStart,
                      background: Container(color: Colors.red, child: 
-                     Row(mainAxisAlignment: MainAxisAlignment.end,children: [ Icon(Icons.delete,color: Colors.white,), SizedBox(width: wv*3,),],), ),
-                     child: ListTile(title: Text(item['NomMedicaments'], style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
-                     subtitle: Text(widget.devis.drugsList[index]['NonScientifique'], style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce),),
+                     Row(mainAxisAlignment: MainAxisAlignment.end,children: [ const Icon(Icons.delete,color: Colors.white,), SizedBox(width: wv*3,),],), ),
+                     child: ListTile(title: Text(item['NomMedicaments'], style: const TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
+                     subtitle: Text(widget.devis!.drugsList![index]['NonScientifique'], style: const TextStyle(fontWeight: FontWeight.normal, color: kBlueForce),),
                        trailing: Column(mainAxisAlignment: MainAxisAlignment.center,
                          children: [
-                           Text("${item['Prix'].toString()}.f", style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
-                           Text("-${item['PrixCOuvert'].toString()}.f", style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
+                           Text("${item['Prix'].toString()}.f", style: const TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
+                           Text("-${item['PrixCOuvert'].toString()}.f", style: const TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
                          ],
                        ),
                      ),
                    );
-                 },) :ListView.builder(itemCount: service.drugsUrls.length,itemBuilder: (BuildContext ctx, int index) {
-                   return Padding(padding: EdgeInsets.all(10),child: 
+                 },) :ListView.builder(itemCount: service.drugsUrls!.length,itemBuilder: (BuildContext ctx, int index) {
+                   return Padding(padding:const EdgeInsets.all(10),child: 
                    Card(shape:Border.all(width: 1, ),elevation: 3,color: Colors.black,
-                     child: Column( children: <Widget>[Image.network(service.drugsUrls[index]),],),),
+                     child: Column( children: <Widget>[Image.network(service.drugsUrls![index]),],),),
                    );
                  },
                ),)  
          ),
-         ButtonBar(alignment: widget.devis.drugsList!=null?  MainAxisAlignment.center: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
+         ButtonBar(alignment: widget.devis!.drugsList!=null?  MainAxisAlignment.center: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
-         widget.devis.drugsList!=null? 
-           Container( alignment: Alignment.center, child: Center(child: TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),)))
+         widget.devis!.drugsList!=null? 
+           Container( alignment: Alignment.center, child: Center(child: TextButton( style: flatButtonStyle,onPressed: () { cardA?.currentState?.collapse();}, child: Column(children: const <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding:  EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),)))
            :
-          TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
-         widget.devis.drugsList!=null? Container() :TextButton(
+          TextButton( style: flatButtonStyle,onPressed: () { cardA?.currentState?.collapse();}, child: Column(children: const <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding:  EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
+         widget.devis!.drugsList!=null? Container() :TextButton(
             style: flatButtonStyle,
             onPressed: () { 
-              if(widget.devis.drugsList!=null){
+              if(widget.devis!.drugsList!=null){
                 print(deletedData.toString());
                   if(isDeleteddrugsItems==true  && deletedData!=null){
                       // setState(() {
@@ -702,12 +710,12 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                       print("ffdsfdsfdsfdsf-----------------------");
                       print(deletedData);
                       
-                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis.usecaseId).collection('PRESTATIONS').doc(widget.devis.id).update(
+                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
                        {
-                         "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData) :FieldValue.arrayUnion(widget.devis.drugsList),
-                         "amountToPay":widget.devis.amount,
+                         "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData!) :FieldValue.arrayUnion(widget.devis!.drugsList!),
+                         "amountToPay":widget.devis!.amount,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsMiseJour),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.medicamentsMiseJour),));
                       setState(() {
                            deletedData=[];
                          isUpdatatingDrugs=false;
@@ -715,32 +723,32 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isUpdatatingDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.uneErreurEstSurvenu),));
                       });
                     });
                     }else if(deletedData==[]){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).veuillezSelectionnerUnMdicamentAuPralable),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.veuillezSelectionnerUnMdicamentAuPralable),));
                     }
                     // else if(isDeleteddrugsItems==true && isuserHasAccepteddrugsItems==false){
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez confirmer la liste des médicaments auprès du client du client"),));
                     // }
                     else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
                     }
               }else{
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
               }
                 
             },
-            child: isUpdatatingDrugs? CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
+            child: isUpdatatingDrugs!? const CircularProgressIndicator(
+                  valueColor:  AlwaysStoppedAnimation<Color>(kTextBlue),
                 ) : Column( children: <Widget>[Icon(Icons.save, color: isDeleteddrugsItems==true? kBlueForce: Colors.grey),
-                Padding( padding: const EdgeInsets.symmetric(vertical: 2.0),),
-                Text(S.of(context).enregistrer, style: TextStyle(color: isDeleteddrugsItems==true? kBlueForce: Colors.grey )),
+                const Padding( padding:  EdgeInsets.symmetric(vertical: 2.0),),
+                Text(S.of(context)!.enregistrer, style: TextStyle(color: isDeleteddrugsItems==true? kBlueForce: Colors.grey )),
               ],
             ),
           ),
-         widget.devis.drugsList!=null? Container() : TextButton(
+         widget.devis!.drugsList!=null? Container() : TextButton(
             style: flatButtonStyle,
             onPressed: () {
                 if(isDeleteddrugsItems==true){
@@ -749,13 +757,13 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     setState(() {
                          isconfirmgDrugs=true;
                       });
-                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis.usecaseId).collection('PRESTATIONS').doc(widget.devis.id).update(
+                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
                        {
                          "isConfirmDrugList": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.prestationClturer),));
                       setState(() {
-                           widget.devis.isConfirmDrugList=true;
+                           widget.devis!.isConfirmDrugList=true;
                            buttonLoading = false;
                            deletedData=[];
                           isconfirmgDrugs=false;
@@ -764,21 +772,21 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isconfirmgDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.uneErreurEstSurvenu),));
                       });
                     });
                 
                 }else{
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
                 }
             },
-            child: isconfirmgDrugs? CircularProgressIndicator(
+            child: isconfirmgDrugs!? const  CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ) : Column(
               children: <Widget>[
-                Icon(Icons.thumb_up, color: kDeepTeal),
-                Padding(  padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-                Text(S.of(context).confirmerLaListe, style: TextStyle(color:kDeepTeal )),
+                const Icon(Icons.thumb_up, color: kDeepTeal),
+                const Padding(  padding:  EdgeInsets.symmetric(vertical: 2.0), ),
+                 Text(S.of(context)!.confirmerLaListe, style:const TextStyle(color:kDeepTeal )),
               ],
             ),
           )
@@ -787,29 +795,29 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             ]
   );
 }
-  Widget getDetailReceipt({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
-  return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  Colors.grey[200],expandedTextColor: Colors.red,
+  Widget getDetailReceipt({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+  return ExpansionTileCard(duration:const Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(), color: kDeepTeal, width: wv*8,),
-            title:Text(title, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
-            subtitle: Text(" ${service.receiptUrls.length} images"),
+            title:Text(title!, style: const TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
+            subtitle: Text(" ${service!.receiptUrls!.length} images"),
             children: <Widget>[
-              Container(width: double.infinity, height:hv*50,decoration: BoxDecoration(color: Colors.white, ),
-            child:ListView.builder(itemCount: service.receiptUrls.length,itemBuilder: (BuildContext ctx, int index) {
-                    return Padding(padding: EdgeInsets.all(10),child: 
+              Container(width: double.infinity, height:hv*50,decoration: const BoxDecoration(color: Colors.white, ),
+            child:ListView.builder(itemCount: service.receiptUrls!.length,itemBuilder: (BuildContext ctx, int index) {
+                    return Padding(padding: const EdgeInsets.all(10),child: 
                     Card(shape:Border.all(width: 1, ),elevation: 3,color: Colors.black,
-                      child: Column( children: <Widget>[Image.network(service.receiptUrls[index]),],),),
+                      child: Column( children: <Widget>[Image.network(service.receiptUrls![index]),],),),
                     );
                   },
                 ),
          ),
          ButtonBar(alignment: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
-          TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();},
+          TextButton( style: flatButtonStyle,onPressed: () { cardA?.currentState?.collapse();},
           child: Column(
             children: <Widget>[
-              Icon(Icons.arrow_upward),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-              Text(S.of(context).close),
+              const Icon(Icons.arrow_upward),
+              const Padding(padding:  EdgeInsets.symmetric(vertical: 2.0), ),
+              Text(S.of(context)!.close),
             ],
           ),
         ),
@@ -818,28 +826,28 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             ]
   );
   }
-  Widget getDetailReultExamens({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
-  return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  Colors.grey[200],expandedTextColor: Colors.red,
+  Widget getDetailReultExamens({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+  return ExpansionTileCard(duration: const Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: consultation), color: kDeepTeal, width: wv*8,),
-            title:Text(title, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
-            subtitle: Text(" ${service.resultsUrls.length} images"),
+            title:Text(title!, style:const TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
+            subtitle: Text(" ${service!.resultsUrls!.length} images"),
             children: <Widget>[
-              Container(width: double.infinity, height:hv*50,decoration: BoxDecoration(color: Colors.white, ),
-            child:ListView.builder(itemCount: service.resultsUrls.length,itemBuilder: (BuildContext ctx, int index) {
-                    return Padding(padding: EdgeInsets.all(10),child: 
+              Container(width: double.infinity, height:hv*50,decoration: const BoxDecoration(color: Colors.white, ),
+            child:ListView.builder(itemCount: service.resultsUrls!.length,itemBuilder: (BuildContext ctx, int index) {
+                    return Padding(padding: const EdgeInsets.all(10),child: 
                     Card(shape:Border.all(width: 1, ),elevation: 3,color: Colors.black,
-                      child: Column( children: <Widget>[Image.network(service.resultsUrls[index]),],),),
+                      child: Column( children: <Widget>[Image.network(service.resultsUrls![index]),],),),
                     );
                   },
                 ),
          ),
          ButtonBar(alignment: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
-          TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();},
+          TextButton( style: flatButtonStyle,onPressed: () { cardA?.currentState?.collapse();},
           child: Column(
-            children: <Widget>[
-              Icon(Icons.arrow_upward),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ),
+            children: const <Widget>[
+               Icon(Icons.arrow_upward),
+               Padding(padding:  EdgeInsets.symmetric(vertical: 2.0), ),
               Text('Close'),
             ],
           ),
@@ -849,17 +857,17 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
             ]
   );
   }
-  Widget getDetailPrescription({String title, UseCaseServiceModel service, List<dynamic> array, GlobalKey<ExpansionTileCardState> cardA, int index,  Function action}){
-  return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  Colors.grey[200],expandedTextColor: Colors.red,
+  Widget getDetailPrescription({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+  return ExpansionTileCard(duration:const Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: consultation), color: kDeepTeal, width: wv*8,),
-            title:Text(title, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
-            subtitle: Text(" ${service.precriptionUrls.length} images"),
+            title:Text(title!, style: const TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
+            subtitle: Text(" ${service!.precriptionUrls!.length} images"),
             children: <Widget>[
-              Container(width: double.infinity, height:hv*50,decoration: BoxDecoration(color: Colors.white, ),
+              Container(width: double.infinity, height:hv*50,decoration: const BoxDecoration(color: Colors.white, ),
             child:Expanded(
               child: service.drugsList!=null && service.precriptionUrls !=null?
               ListView.builder(
-                 itemCount:  service.drugsList.length,
+                 itemCount:  service.drugsList!.length,
                  itemBuilder: (BuildContext context, int index) {
                    return Dismissible(
                      key:  UniqueKey(), 
@@ -867,21 +875,21 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                        if(direction== DismissDirection.endToStart){
                          showAlertDialog(
                          context,
-                         S.of(context).tesvousSur,
+                         S.of(context)!.tesvousSur,
                          (){
                            setState(() {
                            print("66666666666666666666666666666");
                            print(index);
-                           print(service.precriptionUrls[index]);
-                           widget.devis.amount= widget.devis.amount-widget.devis.drugsList[index]['Prix'];
-                           prixDAnaid= (widget.devis.amount*70/100);
-                           prixpatient= widget.devis.amount-prixDAnaid;
+                           print(service.precriptionUrls![index]);
+                           widget.devis!.amount= widget.devis!.amount!-widget.devis!.drugsList![index]['Prix'];
+                           prixDAnaid= (widget.devis!.amount!*70/100);
+                           prixpatient= widget.devis!.amount!-prixDAnaid!;
                             print("++++++++++++++++PRix du patient : "+prixpatient.toString());
-                           deletedData.add(widget.devis.drugsList[index]);
-                           widget.devis.precriptionUrls.removeAt(index);
+                           deletedData!.add(widget.devis!.drugsList![index]);
+                           widget.devis!.precriptionUrls!.removeAt(index);
                            print(deletedData);
                            });
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsSupprimer)));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.medicamentsSupprimer)));
                            Navigator.of(context).pop();
                          }
                          );
@@ -890,21 +898,21 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                      },
                      direction: DismissDirection.endToStart,
                      background: Container(color: Colors.red, child: 
-                     Row(mainAxisAlignment: MainAxisAlignment.end,children: [ Icon(Icons.delete,color: Colors.white,), SizedBox(width: wv*3,),],), ),
-                     child: ListTile(title: Text(widget.devis.drugsList[index]['NomMedicaments'], style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
-                     subtitle: Text(widget.devis.drugsList[index]['NonScientifique'], style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce),),
+                     Row(mainAxisAlignment: MainAxisAlignment.end,children: [ const Icon(Icons.delete,color: Colors.white,), SizedBox(width: wv*3,),],), ),
+                     child: ListTile(title: Text(widget.devis!.drugsList![index]['NomMedicaments'], style: const TextStyle(fontWeight: FontWeight.bold, color: kBlueForce),),
+                     subtitle: Text(widget.devis!.drugsList![index]['NonScientifique'], style: const TextStyle(fontWeight: FontWeight.normal, color: kBlueForce),),
                        trailing: Column(mainAxisAlignment: MainAxisAlignment.center,
                          children: [
-                           Text("${service.drugsList[index]['Prix'].toString()}.f", style: TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
-                           Text("-${service.drugsList[index]['PrixCOuvert'].toString()}.f", style: TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
+                           Text("${service.drugsList![index]['Prix'].toString()}.f", style: const TextStyle(fontWeight: FontWeight.bold, color: kBlueForce)),
+                           Text("-${service.drugsList![index]['PrixCOuvert'].toString()}.f", style: const TextStyle(fontWeight: FontWeight.normal, color: kBlueForce))
                          ],
                        ),
                      ),
                    );
-                 },) : ListView.builder(itemCount: service.precriptionUrls.length,itemBuilder: (BuildContext ctx, int index) {
-                      return Padding(padding: EdgeInsets.all(10),child: 
+                 },) : ListView.builder(itemCount: service.precriptionUrls!.length,itemBuilder: (BuildContext ctx, int index) {
+                      return Padding(padding: const EdgeInsets.all(10),child: 
                       Card(shape:Border.all(width: 1, ),elevation: 3,color: Colors.black,
-                        child: Column( children: <Widget>[Image.network(service.precriptionUrls[index]),],),),
+                        child: Column( children: <Widget>[Image.network(service.precriptionUrls![index]),],),),
                       );
                     },
                   ),
@@ -912,11 +920,11 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
          ),
          ButtonBar(alignment: MainAxisAlignment.spaceAround, buttonHeight: 52.0,buttonMinWidth: 90.0,
         children: <Widget>[ 
-          TextButton( style: flatButtonStyle,onPressed: () { cardA.currentState?.collapse();}, child: Column(children: <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding: const EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
+          TextButton( style: flatButtonStyle,onPressed: () { cardA?.currentState?.collapse();}, child: Column(children: const <Widget>[ Icon(Icons.arrow_upward, color: Colors.red), Padding(padding:  EdgeInsets.symmetric(vertical: 2.0), ), Text('fermer', style: TextStyle(color:  Colors.red)),], ),),
            TextButton(
             style: flatButtonStyle,
             onPressed: () {
-              if(widget.devis.drugsList!=null){
+              if(widget.devis!.drugsList!=null){
                 print(deletedData.toString());
                   if(isDeleteddrugsItems==true  && deletedData!=null){
                       // setState(() {
@@ -925,12 +933,12 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                       print("ffdsfdsfdsfdsf-----------------------");
                       print(deletedData);
                       
-                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis.usecaseId).collection('PRESTATIONS').doc(widget.devis.id).update(
+                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
                        {
-                         "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData) :FieldValue.arrayUnion(widget.devis.drugsList),
-                         "amountToPay":widget.devis.amount,
+                         "drugsList": deletedData!=null ? FieldValue.arrayRemove(deletedData!) :FieldValue.arrayUnion(widget.devis!.drugsList!),
+                         "amountToPay":widget.devis!.amount,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).medicamentsMiseJour),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.medicamentsMiseJour),));
                       setState(() {
                            deletedData=[];
                          isUpdatatingDrugs=false;
@@ -938,27 +946,27 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isUpdatatingDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.uneErreurEstSurvenu),));
                       });
                     });
                     }else if(deletedData==[]){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).veuillezSelectionnerUnMdicamentAuPralable),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.veuillezSelectionnerUnMdicamentAuPralable),));
                     }
                     // else if(isDeleteddrugsItems==true && isuserHasAccepteddrugsItems==false){
                     // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("veuillez confirmer la liste des médicaments auprès du client du client"),));
                     // }
                     else{
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinsElement),));
                     }
               }else{
-               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
+               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.ceButtonNeSeraActifQuaprsValidationDesImagesPar),));
               }
                 
             },
-            child: isUpdatatingDrugs? CircularProgressIndicator(
+            child: isUpdatatingDrugs!? const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ) : Column( children: <Widget>[Icon(Icons.save, color: isDeleteddrugsItems==true? kBlueForce: Colors.grey),
-                Padding( padding: const EdgeInsets.symmetric(vertical: 2.0),),
+                const Padding( padding:  EdgeInsets.symmetric(vertical: 2.0),),
                 Text('enregistrer', style: TextStyle(color: isDeleteddrugsItems==true? kBlueForce: Colors.grey )),
               ],
             ),
@@ -970,13 +978,13 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     setState(() {
                          isconfirmgDrugs=true;
                       });
-                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis.usecaseId).collection('PRESTATIONS').doc(widget.devis.id).update(
+                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
                        {
                          "isConfirmDrugList": true,
                        }).then((value) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.prestationClturer),));
                       setState(() {
-                           widget.devis.isConfirmDrugList=true;
+                           widget.devis!.isConfirmDrugList=true;
                            buttonLoading = false;
                            deletedData=[];
                           isconfirmgDrugs=false;
@@ -985,20 +993,20 @@ class _OrdonanceDuPatientState extends State<OrdonanceDuPatient> {
                     }).catchError((onError){
                       setState(() {
                          isconfirmgDrugs=false;
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurEstSurvenu),));
+                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.uneErreurEstSurvenu),));
                       });
                     });
                 }else{
-                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
+                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.laSauvegardeNestPossibleQuapresAvoirSupprimerAuMoinUn),));
                 }
             },
-            child: isconfirmgDrugs? CircularProgressIndicator(
+            child: isconfirmgDrugs!? const CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(kTextBlue),
                 ) : Column(
-              children: <Widget>[
-                Icon(Icons.thumb_up, color: kDeepTeal),
-                Padding(  padding: const EdgeInsets.symmetric(vertical: 2.0), ),
-                Text(S.of(context).confirmerLaListe, style: TextStyle(color:kDeepTeal )),
+              children:  <Widget>[
+                const Icon(Icons.thumb_up, color: kDeepTeal),
+                const Padding(  padding:  EdgeInsets.symmetric(vertical: 2.0), ),
+                Text(S.of(context)!.confirmerLaListe, style: const TextStyle(color:kDeepTeal )),
               ],
             ),
           )

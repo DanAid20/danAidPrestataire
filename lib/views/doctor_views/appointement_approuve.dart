@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'dart:convert';
 import 'dart:math';
 
@@ -22,6 +24,7 @@ import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:danaid/widgets/doctor_info_cards.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -32,24 +35,24 @@ import 'package:simple_tags/simple_tags.dart';
 import 'package:http/http.dart' as http;
 
 class AppointmentDetails extends StatefulWidget {
-  final AdherentModel adherent;
-  AppointmentDetails({Key key, this.adherent}):super(key:key);
+  final AdherentModel? adherent;
+  AppointmentDetails({Key? key, this.adherent}):super(key:key);
   @override
   _AppointmentDetailsState createState() => _AppointmentDetailsState();
 }
 
 class _AppointmentDetailsState extends State<AppointmentDetails> {
 
-  TextEditingController _symptomController = new TextEditingController();
-  GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey = new GlobalKey();
 
-  DoctorModel doc;
-  ServiceProviderModel  presta;
-  String reason = "";
-  List<String> symptoms = [];
+  GlobalKey<AutoCompleteTextFieldState<String>>? autoCompleteKey =  GlobalKey();
 
-  String currentSymptomText = "";
-  List<String> suggestions = [
+  DoctorModel? doc;
+  ServiceProviderModel?  presta;
+  String? reason = "";
+  List<String>? symptoms = [];
+
+  String? currentSymptomText = "";
+  List<String>? suggestions = [
     "Migraines",
     "Fatigue",
     "Diarrhée",
@@ -59,12 +62,12 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     "Maux de ventre"
   ];
 
-  bool saveLoading = false;
-  bool announceLoading = false;
-  bool cancelLoading = false;
+  bool? saveLoading = false;
+  bool? announceLoading = false;
+  bool? cancelLoading = false;
   var code;
-  bool edit = false;
-  bool isPrestataire =false;
+  bool? edit = false;
+  bool? isPrestataire =false;
   initialization(){
      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context, listen: false);
@@ -86,8 +89,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
     }
 
     setState(() {
-      for(int i = 0; i < appointment.getAppointment.symptoms.length; i++){
-        symptoms.add(appointment.getAppointment.symptoms[i]);
+      for(int i = 0; i < appointment.getAppointment.symptoms!.length; i++){
+        symptoms!.add(appointment.getAppointment.symptoms![i]);
       }
 
       reason = appointment.getAppointment.title;
@@ -124,11 +127,11 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'beneficiaryId': adherent['beneficiaryId'],
       'beneficiaryName': adherent['username'],
       'otherInfo': '',
-      'establishment': isPrestataire? prestataire.getServiceProvider.id: doctorProvider.getDoctor.officeName,
+      'establishment': isPrestataire!? prestataire.getServiceProvider.id: doctorProvider.getDoctor.officeName,
       'consultationCode': code,
       'type': 'RDV',
-      'amountToPay':  isPrestataire? null : doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
-      "consultationCost": isPrestataire? null :  doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate["public"] : null,
+      'amountToPay':  isPrestataire!? null : doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate!["public"] : null,
+      "consultationCost": isPrestataire!? null :  doctorProvider.getDoctor.rate != null ? doctorProvider.getDoctor.rate!["public"] : null,
       'status': 0,
       'canPay': 0,
       'createdDate': DateTime.now(),
@@ -139,7 +142,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-              S.of(context).leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
+              S.of(context)!.leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
     }).catchError((e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -172,7 +175,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       'idAppointement':idAppointement,
       'idAdherent': adherent['adherentId'],
       'idBeneficiairy': adherent['beneficiaryId'],
-      'idMedecin':isPrestataire?prestataire.getServiceProvider.id: doctorProvider.getDoctor.id,
+      'idMedecin':isPrestataire!?prestataire.getServiceProvider.id: doctorProvider.getDoctor.id,
       'amountToPay':null,
       'isSolve': false,
       'Type': adherent['appointment-type'],
@@ -183,7 +186,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(S.of(context).laFactureABienEteGenererAvecSucces)));
+          content: Text(S.of(context)!.laFactureABienEteGenererAvecSucces)));
     }).catchError((e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -196,8 +199,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   Widget build(BuildContext context) {
     AppointmentModelProvider appointment = Provider.of<AppointmentModelProvider>(context);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    DateTime startTime = appointment.getAppointment.startTime.toDate();
-    DateTime endTime = appointment.getAppointment.endTime.toDate();
+    DateTime startTime = appointment.getAppointment.startTime!.toDate();
+    DateTime endTime = appointment.getAppointment.endTime!.toDate();
     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
     var options = BaseOptions(
@@ -207,27 +210,26 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       connectTimeout: 5000,
       receiveTimeout: 3000,
     );
-    Dio dio = Dio(options);
-
+   
     return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
+            icon: const Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
             onPressed: ()=>Navigator.pop(context)
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(S.of(context).dmandeDePriseEnCharge, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text(S.of(context).rendezvous, 
+              Text(S.of(context)!.dmandeDePriseEnCharge, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(S.of(context)!.rendezvous, 
                 style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
               ),
             ],
           ),
           centerTitle: true,
           actions: [
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: const EdgeInsets.all(4), constraints: const BoxConstraints(), onPressed: (){}),
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: const EdgeInsets.all(8), constraints: const BoxConstraints(), onPressed: (){})
           ],
         ),
       body: Container(
@@ -236,15 +238,15 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
+          boxShadow: [BoxShadow(color: (Colors.grey[300])!, blurRadius: 3.0, spreadRadius: 1.0, offset: const Offset(0, 2))]
         ),
         child: Column(
           children: [
             Row(children: [
               SizedBox(width: wv*4,),
-              Text(DateFormat('EEEE', 'fr_FR').format(startTime)+", "+ startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: TextStyle(color: kBlueDeep, fontSize: 16.5, fontWeight: FontWeight.w600)),
-              Spacer(),
-              Text(startTime.hour.toString().padLeft(2, '0')+ "H:"+startTime.minute.toString().padLeft(2, '0')+ " à "+ endTime.hour.toString().padLeft(2, '0') + "H:"+endTime.minute.toString().padLeft(2, '0'), style: TextStyle(color: kBlueDeep, fontSize: 14, fontWeight: FontWeight.w400)),
+              Text(DateFormat('EEEE', 'fr_FR').format(startTime)+", "+ startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: const TextStyle(color: kBlueDeep, fontSize: 16.5, fontWeight: FontWeight.w600)),
+              const Spacer(),
+              Text(startTime.hour.toString().padLeft(2, '0')+ "H:"+startTime.minute.toString().padLeft(2, '0')+ " à "+ endTime.hour.toString().padLeft(2, '0') + "H:"+endTime.minute.toString().padLeft(2, '0'), style: const TextStyle(color: kBlueDeep, fontSize: 14, fontWeight: FontWeight.w400)),
               SizedBox(width: wv*4,)
             ],),
             SizedBox(height: hv*2,),
@@ -266,7 +268,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               Expanded(
                                 child: Container(
                                   padding: EdgeInsets.only(left: wv*4),
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     //color: kSouthSeas.withOpacity(0.3),
                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                                   ),
@@ -274,11 +276,11 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                     padding: EdgeInsets.only(top: hv*1),
                                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(S.of(context).pourLePatient, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                                        Text(S.of(context)!.pourLePatient, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                                         SizedBox(height: hv*1,),
                                         Row(children: [
                                           CircleAvatar(
-                                            backgroundImage: appointment.getAppointment.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment.avatarUrl) : null,
+                                            backgroundImage: appointment.getAppointment.avatarUrl != null ? CachedNetworkImageProvider(appointment.getAppointment.avatarUrl!) : null,
                                             backgroundColor: whiteColor,
                                             radius: wv*6,
                                             child: appointment.getAppointment.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
@@ -286,9 +288,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                           SizedBox(width: wv*3,),
                                           Expanded(
                                             child: RichText(text: TextSpan(
-                                              text: appointment.getAppointment.username + "\n",
+                                              text: appointment.getAppointment.username! + "\n",
                                               children: [
-                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment.birthDate.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
+                                                TextSpan(text: (DateTime.now().year - appointment.getAppointment.birthDate!.toDate().year).toString() + " ans", style: TextStyle(fontSize: wv*3.3)),
                                               ], style: TextStyle(color: kBlueDeep, fontSize: wv*4.2)),
                                               maxLines: 4,
                                               overflow: TextOverflow.ellipsis,
@@ -303,7 +305,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               ),
                               
                               GestureDetector(
-                                onTap: ()=>setState((){edit = !edit;}),
+                                onTap: ()=>setState((){edit = !edit!;}),
                                 child: Container(
                                   padding: EdgeInsets.all(wv*1.5),
                                   decoration: BoxDecoration(
@@ -318,41 +320,41 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             ],
                           ),
                           SizedBox(height: hv*2.5,),
-                          Text(S.of(context).rendezvousChez, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                          Text(S.of(context)!.rendezvousChez, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                           SizedBox(height: hv*1.2,),
                           isPrestataire==false && doc != null ? DoctorInfoCard(
                             noPadding: true,
-                            avatarUrl: doc.avatarUrl,
-                            name: doc.cniName,
-                            title: S.of(context).medecinDeFamille + doc.field,
-                            speciality: doc.speciality,
-                            teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
-                            consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
-                            chat: doc.serviceList != null ? doc.serviceList["chat"] : false,
-                            rdv: doc.serviceList != null ? doc.serviceList["rdv"] : false,
-                            visiteDomicile: doc.serviceList != null ? doc.serviceList["visite-a-domicile"] : false,
-                            field: doc.speciality,
-                            officeName: doc.officeName,
+                            avatarUrl: doc!.avatarUrl!,
+                            name: doc!.cniName!,
+                            title: S.of(context)!.medecinDeFamille + doc!.field!,
+                            speciality: doc!.speciality!,
+                            teleConsultation: doc!.serviceList != null ? doc!.serviceList["tele-consultation"] : false,
+                            consultation: doc!.serviceList != null ? doc!.serviceList["consultation"] : false,
+                            chat: doc!.serviceList != null ? doc!.serviceList["chat"] : false,
+                            rdv: doc!.serviceList != null ? doc!.serviceList["rdv"] : false,
+                            visiteDomicile: doc!.serviceList != null ? doc!.serviceList["visite-a-domicile"] : false,
+                            field: doc!.speciality!,
+                            officeName: doc!.officeName!,
                             isInRdvDetail: true,
-                            appointmentState: appointment.getAppointment.status,
+                            appointmentState: appointment.getAppointment.status!,
                             includeHospital: true,
                             onTap: () {
                             },
-                          ) : isPrestataire && presta != null ?  DoctorInfoCard(
+                          ) : isPrestataire! && presta != null ?  DoctorInfoCard(
                             noPadding: true,
-                            avatarUrl: presta.avatarUrl,
-                            name: presta.name,
-                            title: "Prestataire" + presta.contactName,
-                            speciality: presta.specialite,
-                            teleConsultation: presta.serviceList != null ? presta.serviceList["tele-consultation"] : false,
-                            consultation: presta.serviceList != null ? presta.serviceList["consultation"] : false,
-                            chat: presta.serviceList != null ? presta.serviceList["chat"] : false,
-                            rdv: presta.serviceList != null ? presta.serviceList["rdv"] : false,
-                            visiteDomicile: presta.serviceList != null ? presta.serviceList["visite-a-domicile"] : false,
-                            field: presta.specialite,
-                            officeName: presta.contactName,
+                            avatarUrl: presta!.avatarUrl!,
+                            name: presta!.name!,
+                            title: "Prestataire" + presta!.contactName!,
+                            speciality: presta!.specialite!,
+                            teleConsultation: presta!.serviceList != null ? presta!.serviceList["tele-consultation"] : false,
+                            consultation: presta!.serviceList != null ? presta!.serviceList["consultation"] : false,
+                            chat: presta!.serviceList != null ? presta!.serviceList["chat"] : false,
+                            rdv: presta!.serviceList != null ? presta!.serviceList["rdv"] : false,
+                            visiteDomicile: presta!.serviceList != null ? presta!.serviceList["visite-a-domicile"] : false,
+                            field: presta!.specialite!,
+                            officeName: presta!.contactName!,
                             isInRdvDetail: true,
-                            appointmentState: appointment.getAppointment.status,
+                            appointmentState: appointment.getAppointment.status!,
                             includeHospital: true,
                             onTap: () {
                             },
@@ -366,7 +368,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(S.of(context).quelEnEstLaRaison, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                          Text(S.of(context)!.quelEnEstLaRaison, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
                           Container(
                             width: double.infinity,
                             margin: EdgeInsets.symmetric(vertical: hv*0.5),
@@ -375,27 +377,27 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               color: Colors.grey[100],
                               borderRadius: BorderRadius.circular(20)
                             ),
-                            child: Text(reason, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                            child: Text(reason!, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                           ),
 
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: hv*2),
-                            child: Text(S.of(context).symptmes, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                            child: Text(S.of(context)!.symptmes, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
                           ),
 
                           
-                          symptoms.isNotEmpty ? SimpleTags(
-                            content: symptoms,
+                          symptoms!.isNotEmpty ? SimpleTags(
+                            content: symptoms!,
                             wrapSpacing: 4,
                             wrapRunSpacing: 4,
-                            tagContainerPadding: EdgeInsets.all(6),
-                            tagTextStyle: TextStyle(color: textWhiteColor, fontWeight: FontWeight.bold),
+                            tagContainerPadding: const EdgeInsets.all(6),
+                            tagTextStyle: const TextStyle(color: textWhiteColor, fontWeight: FontWeight.bold),
                             tagContainerDecoration: BoxDecoration(
                               color: lightGreyColor.withOpacity(0.6),
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ) :
-                          Text(S.of(context).aucunSymptmesMentions)
+                          Text(S.of(context)!.aucunSymptmesMentions)
                         ],
                       ),
                     ),
@@ -403,7 +405,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                 ),),
             ),
             SizedBox(height: hv*1.5,),
-            !edit ? Row(
+            !edit! ? Row(
               children: [
                 SizedBox(width: wv*4,),
                 appointment.getAppointment.status==1 ?Expanded(
@@ -411,14 +413,14 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   child: CustomTextButton(
                     noPadding: true,
                     color: kDeepTealCAdress,
-                    isLoading: announceLoading,
+                    isLoading: announceLoading!,
                     enable:  DateTime.now().isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? true: false,
                     text: 'consulter directememt',
                     action: () async =>{ 
                      //DateTime.now().isAfter(DateTime(startTime.year, startTime.month, startTime.day)) ? : false,
                          await FirebaseFirestore.instance
                                   .collection('ADHERENTS')
-                                  .doc('${appointment.getAppointment?.adherentId!=null? appointment.getAppointment?.adherentId: appointment.getAppointment?.beneficiaryId}')
+                                  .doc('${appointment.getAppointment.adherentId ?? appointment.getAppointment.beneficiaryId}')
                                   .get()
                                   .then((doc) {
                                 if (doc.exists) {
@@ -441,7 +443,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccount(
                                           data: adherent,
-                                          phoneNumber:'${appointment.getAppointment?.adherentId!=null? appointment.getAppointment?.adherentId: appointment.getAppointment?.beneficiaryId}',
+                                          phoneNumber:'${appointment.getAppointment.adherentId ?? appointment.getAppointment.beneficiaryId}',
                                           isAccountIsExists: true,
                                           consultationType:
                                               appointment.getAppointment.appointmentType,
@@ -457,24 +459,28 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   flex: 7,
                   child: CustomTextButton(
                     noPadding: true,
-                    isLoading: announceLoading,
+                    isLoading: announceLoading!,
                     enable:  appointment.getAppointment.status==1 ? false: true,
-                    text: S.of(context).approuver,
+                    text: S.of(context)!.approuver,
                     action: () async {
                       setState(() {
                         announceLoading = true;
                       });
                       try {
-                        String token;
+                        String? token;
 
                         if(appointment.getAppointment.consultationType == "Video"){
                           var url = Uri.parse('http://admin.danaid.org:3000/api/v1/getToken');
                           var response = await http.post(url, body: {"appID": agoraAppId, "appCertificate": agoraAppCertificate, "channelName": appointment.getAppointment.id, "uid": "20000", "roleApi" : "AUTHOR"}).catchError((e){print(e.toString());});
-                          print(response.toString());
+                          if (kDebugMode) {
+                            print(response.toString());
+                          }
                           var body = jsonDecode(response.body);
-                          print(body.toString());
+                          if (kDebugMode) {
+                            print(body.toString());
+                          }
                           token = body['data'];
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token, channelName: appointment.getAppointment.id, uid: 20000,),),);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => VideoRoom(token: token!, channelName: appointment.getAppointment.id!, uid: 20000,),),);
                         }
                         
                          final Map<String, dynamic> codes = {
@@ -483,10 +489,12 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                          };
                       
                         if(appointment.getAppointment.adherentId == appointment.getAppointment.beneficiaryId){
-                          print("---------------------------------------------------------");
+                          if (kDebugMode) {
+                            print("---------------------------------------------------------");
+                          }
                                var query= FirebaseFirestore.instance
                         .collection("APPOINTMENTS")
-                        .where("doctorId", isEqualTo: isPrestataire? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
+                        .where("doctorId", isEqualTo: isPrestataire!? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
                         .where("beneficiaryId", isEqualTo:appointment.getAppointment.adherentId);
                         query.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
@@ -510,9 +518,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                       if(value.docs.isEmpty){   
                                         var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
                                         adherent.then((value) async {
-                                          if(value.exists && value.data()['CurrentcodeConsultation']!=null){
+                                          if(value.exists && value.data()!['CurrentcodeConsultation']!=null){
                                               
-                                                Timestamp t = value.data()['CurrentcodeConsultation']['createdDate'];
+                                                Timestamp t = value.data()!['CurrentcodeConsultation']['createdDate'];
                                                     DateTime d = t.toDate();
                                                    print(t);
                                                    print(d);
@@ -536,7 +544,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                        appointment.setAnnouncement(true);
                                       }else{
                                          ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(S.of(context).uneFactureADejaTGnererPourCetteConstultation)));
+                                    SnackBar(content: Text(S.of(context)!.uneFactureADejaTGnererPourCetteConstultation)));
                                       }
                                 });
                             
@@ -557,7 +565,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                            print("**********************************************************");
                            var query= FirebaseFirestore.instance
                         .collection("APPOINTMENTS")
-                        .where("doctorId", isEqualTo: isPrestataire? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
+                        .where("doctorId", isEqualTo: isPrestataire!? prestataire.getServiceProvider.id: doctorProvider.getDoctor.id)
                         .where("beneficiaryId", isEqualTo:appointment.getAppointment.beneficiaryId);
                         query.get().then((docSnapshot) async => {
                           if (docSnapshot.docs.isEmpty)
@@ -581,15 +589,19 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                       if(value.docs.isEmpty){   
                                         var adherent=FirebaseFirestore.instance.collection('ADHERENTS').doc(appointment.getAppointment.adherentId).get();
                                         adherent.then((value) async {
-                                          if(value.data()['CurrentcodeConsultation']!=null){
+                                          if(value.data()!['CurrentcodeConsultation']!=null){
                                               
-                                                Timestamp t = value.data()['CurrentcodeConsultation']['createdDate'];
+                                                Timestamp t = value.data()!['CurrentcodeConsultation']['createdDate'];
                                                     DateTime d = t.toDate();
-                                                   print(t);
-                                                   print(d);
+                                                   if (kDebugMode) {
+                                                     print(t);
+                                                     print(d);
+                                                   }
                                                   final date2 = DateTime.now(); 
                                                   final difference = date2.difference(d).inDays;
-                                                  print(difference);
+                                                  if (kDebugMode) {
+                                                    print(difference);
+                                                  }
                                                   if( difference>14){
                                                     await createConsultationCode(docSnapshot.docs[0], appointment.getAppointment.id).then((value) async {
                                                     await facturationCode(value, docSnapshot.docs[0],  appointment.getAppointment.id);
@@ -607,7 +619,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                        appointment.setAnnouncement(true);
                                       }else{
                                          ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(S.of(context).uneFactureADejaTGnererPourCetteConstultation)));
+                                    SnackBar(content: Text(S.of(context)!.uneFactureADejaTGnererPourCetteConstultation)));
                                       }
                                 });
                             
@@ -656,9 +668,9 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   flex: 3,
                   child: CustomTextButton(
                     noPadding: true,
-                    text: S.of(context).rejeter,
+                    text: S.of(context)!.rejeter,
                     enable:  appointment.getAppointment.status==2 ? false: true,
-                    isLoading: cancelLoading,
+                    isLoading: cancelLoading!,
                     color: kSouthSeas,
                     action: (){
                       setState(() {
@@ -668,7 +680,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                           "status": 2
                         },  SetOptions(merge: true)).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).lannonceATRejeter),));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.lannonceATRejeter),));
                           appointment.setAnnouncement(false);
                            setState(() {
                             cancelLoading = false;
@@ -693,8 +705,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: CustomTextButton(
-                text: S.of(context).mettreEnAttente,
-                isLoading: saveLoading,
+                text: S.of(context)!.mettreEnAttente,
+                isLoading: saveLoading!,
                 
                 noPadding: true,
                 action: (){
@@ -705,7 +717,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment.id).set({
                       "status": 0
                     },  SetOptions(merge: true)).then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceRendezvousATMisEnAttente),));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.ceRendezvousATMisEnAttente),));
                       setState(() {
                             announceLoading = false;
                             edit=false;

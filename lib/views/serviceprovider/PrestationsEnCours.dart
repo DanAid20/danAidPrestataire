@@ -1,4 +1,6 @@
 
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/models/devisModel.dart';
@@ -11,15 +13,16 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 class PrestationEnCours extends StatefulWidget {
-  final bool isbeneficiare;
-  final String userId;
-  final BeneficiaryModel data;
-  PrestationEnCours({Key key, this.userId, this.isbeneficiare, this.data}) : super(key: key);
+  final bool? isbeneficiare;
+  final String? userId;
+  final BeneficiaryModel? data;
+  PrestationEnCours({Key? key, this.userId, this.isbeneficiare, this.data}) : super(key: key);
 
   @override
   _PrestationEnCoursState createState() => _PrestationEnCoursState();
@@ -27,13 +30,13 @@ class PrestationEnCours extends StatefulWidget {
 
 class _PrestationEnCoursState extends State<PrestationEnCours> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isGetdevis=false;
-   Timestamp dateNaiss;
-   num prixDAnaid, prixpatient;
-   String userId, urlImage, username;
-   List<String> urlImg;
-   List deletedData=[];
-   List<DevisModel> devis=[];
+  bool? isGetdevis=false;
+   Timestamp? dateNaiss;
+   num? prixDAnaid, prixpatient;
+   String? userId, urlImage, username;
+   List<String>? urlImg;
+   List? deletedData=[];
+   List<DevisModel>? devis=[];
    @override
    void initState() {
      super.initState();
@@ -45,21 +48,24 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
   Widget build(BuildContext context) {
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
-    print(prestatiaireObject.id);
-    print(userId.toString());
+    if (kDebugMode) {
+      print(prestatiaireObject.id);
+      print(userId.toString());
+    }
      Stream<QuerySnapshot> query = widget.isbeneficiare==false? FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("adherentId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots():
      FirebaseFirestore.instance.collectionGroup('PRESTATIONS').where("beneficiaryId", isEqualTo: widget.userId).where('prestataireId', isEqualTo: prestatiaireObject.id).snapshots();
 
     return  WillPopScope(
       onWillPop:()async{
          Navigator.pop(context);
+         return true;
       },
       child: Scaffold(
       key: _scaffoldKey,  
       appBar: AppBar(
           backgroundColor:  kGoldlightYellow,
           leading: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios,
                 color: kDateTextColor,
               ),
@@ -150,12 +156,12 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
                         UseCaseServiceModel service = UseCaseServiceModel.fromDocument(doc);
 
                         return  HomePageComponents().prestataireItemList(
-                            etat: service.paid? 1:0,
+                            etat: service.paid!? 1:0,
                             montant: DateFormat("dd MMMM yyy ")
-                                .format(service.dateCreated.toDate()),
+                                .format(service.dateCreated!.toDate()),
                             date:"${service.title}- ${service.amount}.f" ,
                             nom: "${service.titleDuDEvis}",
-                            iconesConsultationTypes:Algorithms.getUseCaseServiceIcon(type: service.type), 
+                            iconesConsultationTypes:Algorithms.getUseCaseServiceIcon(type: service.type!), 
                             redirectOncliked: (){
                                 Navigator.push(context,MaterialPageRoute(builder: (context) =>
                                 OrdonanceDuPatient(devis: service))
@@ -164,12 +170,12 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
                         );
 
                      }
-                  ): Container(
+                  ): SizedBox(
                     width: double.infinity,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                      child: Text(S.of(context).aucunDevisNeCorrespondACePatient),
+                      child: Text(S.of(context)!.aucunDevisNeCorrespondACePatient),
                 ),
                     ),
                   );

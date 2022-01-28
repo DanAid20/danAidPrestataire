@@ -33,7 +33,7 @@ import 'package:location/location.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 class EditPrestataire extends StatefulWidget {
-  EditPrestataire({Key key}) : super(key: key);
+  EditPrestataire({Key? key}) : super(key: key);
 
   @override
   _EditPrestataireState createState() => _EditPrestataireState();
@@ -41,94 +41,94 @@ class EditPrestataire extends StatefulWidget {
 
 class _EditPrestataireState extends State<EditPrestataire> {
   final GlobalKey<FormState> _presptataireEditFormKey = GlobalKey<FormState>();
-  TextEditingController _nameController = new TextEditingController();
-  TextEditingController _surnameController = new TextEditingController();
-  TextEditingController _specialityController = new TextEditingController();
-  TextEditingController _cniNameController = new TextEditingController();
-  TextEditingController _localisationController = new TextEditingController();
-  TextEditingController _companyController = new TextEditingController();
-  TextEditingController _contactNameController = new TextEditingController();
-  TextEditingController _contactEmailController = new TextEditingController();
-   TextEditingController _aboutController = new TextEditingController();
+  TextEditingController? _nameController = new TextEditingController();
+  TextEditingController? _surnameController = new TextEditingController();
+  TextEditingController? _specialityController = new TextEditingController();
+  TextEditingController? _cniNameController = new TextEditingController();
+  TextEditingController? _localisationController = new TextEditingController();
+  TextEditingController? _companyController = new TextEditingController();
+  TextEditingController? _contactNameController = new TextEditingController();
+  TextEditingController? _contactEmailController = new TextEditingController();
+   TextEditingController? _aboutController = new TextEditingController();
   ////////////////////////////
-  String _region;
-  String _city;
-  String _stateCode;
-  String _category="fdfdf";
-  String _localisation;
-  String avatarUrl;
-  String cniUpload;
-  String _type;
+  String? _region;
+  String? _city;
+  String? _stateCode;
+  String? _category="fdfdf";
+  String? _localisation;
+  String? avatarUrl;
+  String? cniUpload;
+  String? _type;
   ////////////////////////////////
-  bool nameEnabled = true;
-  bool contactEnabled= true;
-  bool contactEmail= true;
-  bool autovalidate = false;
-  bool localisation=false;
+  bool? nameEnabled = true;
+  bool? contactEnabled= true;
+  bool? contactEmail= true;
+  bool? autovalidate = false;
+  bool? localisation=false;
   //////////////////
    /** services  */
-   bool consultationChosen = false;
-  bool soinsAmbulances = false;
-  bool pharmacie = false;
-  bool labo = false;
-  bool hospitalisation = false;
+   bool? consultationChosen = false;
+  bool? soinsAmbulances = false;
+  bool? pharmacie = false;
+  bool? labo = false;
+  bool? hospitalisation = false;
   //////////////////
-  bool aboutEnabled = true;
-  bool regionChosen = false;
-  bool specialityEnabled = false;
-  bool cityChosen = false;
-  File imageFileAvatar;
-  bool imageLoading = false;
-  bool buttonLoading = false;
-  bool surnameEnabled = true;
-  bool emailEnabled = true;
-  bool cniNameEnabled = true;
-  bool cniUploaded = false;
-  bool otherFileUploaded = false;
-  bool cniSpinner = false;
-  bool ortherScanSpinner = false;
-  bool otherFileSpinner = false;
-  bool imageSpinner = false;
-  bool positionSpinner = false;
-  LatLng _initialcameraposition = LatLng(4.044656688777058, 9.695724531228858);
-  GoogleMapController _controller;
-  Location _location = Location();
-  Map<String, dynamic> gpsCoords;
+  bool? aboutEnabled = true;
+  bool? regionChosen = false;
+  bool? specialityEnabled = false;
+  bool? cityChosen = false;
+  File? imageFileAvatar;
+  bool? imageLoading = false;
+  bool? buttonLoading = false;
+  bool? surnameEnabled = true;
+  bool? emailEnabled = true;
+  bool? cniNameEnabled = true;
+  bool? cniUploaded = false;
+  bool? otherFileUploaded = false;
+  bool? cniSpinner = false;
+  bool? ortherScanSpinner = false;
+  bool? otherFileSpinner = false;
+  bool? imageSpinner = false;
+  bool? positionSpinner = false;
+  LatLng? _initialcameraposition = const LatLng(4.044656688777058, 9.695724531228858);
+  GoogleMapController? _controller;
+  Location? _location = Location();
+  Map<String, dynamic>? gpsCoords;
   void _initializeMap(){
-    _location.getLocation().then((loc) {
+    _location?.getLocation().then((loc) {
       setState(() {
-        _initialcameraposition = LatLng(loc.latitude, loc.longitude);
+        _initialcameraposition = LatLng(loc.latitude!, loc.longitude!);
       });
     });
   }
 
   void _saveLocation(){
-    ServiceProviderModelProvider servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
+    ServiceProviderModelProvider? servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     setState(() {
       positionSpinner = true;
     });
-    _location.getLocation().then((loc) {
-      _controller.animateCamera(
+    _location?.getLocation().then((loc) {
+      _controller?.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(loc.latitude, loc.longitude),zoom: 11)),
+          CameraPosition(target: LatLng(loc.latitude!, loc.longitude!),zoom: 11)),
 
       );
       setState(() {
         positionSpinner = false;
-        _initialcameraposition = LatLng(loc.latitude, loc.longitude);
+        _initialcameraposition = LatLng(loc.latitude!, loc.longitude!);
         gpsCoords = {
           "latitude": loc.latitude,
           "longitude": loc.longitude
         };
       });
-      servicetProvider.setcoordGps(gpsCoords);
+      servicetProvider.setcoordGps(gpsCoords!);
     });
   }
 
   void _onMapCreated(GoogleMapController _cntlr) async {
-    _location.getLocation().then((loc) {
+    _location!.getLocation().then((loc) {
       setState(() {
-        _initialcameraposition = LatLng(loc.latitude, loc.longitude);
+        _initialcameraposition = LatLng(loc.latitude!, loc.longitude!);
       });
     });
     setState(() {
@@ -140,7 +140,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
           CameraPosition(target: LatLng(l.latitude, l.longitude),zoom: 18)),
 
     );});*/
-    _location.onLocationChanged.listen((loc) { 
+    _location!.onLocationChanged.listen((loc) { 
         /*setState(() {
           _initialcameraposition = LatLng(loc.latitude, loc.longitude);
         });*/
@@ -156,7 +156,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
     ServiceProviderModelProvider servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
    
       setState(() {
-        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider.region);
+        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider.region!);
         _region = servicetProvider.getServiceProvider.region;
         regionChosen = true;
       cityChosen = true;
@@ -172,13 +172,13 @@ class _EditPrestataireState extends State<EditPrestataire> {
     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     if((serviceProvider.getServiceProvider.about != null) & (serviceProvider.getServiceProvider.about != "")){
       setState(() {
-        _aboutController.text = serviceProvider.getServiceProvider.about;
+        _aboutController!.text = serviceProvider.getServiceProvider.about!;
         aboutEnabled = false;
       });
     }
     if((serviceProvider.getServiceProvider.name != null) & (serviceProvider.getServiceProvider.name != "")){
       setState(() {
-        _nameController.text = serviceProvider.getServiceProvider.name;
+        _nameController!.text = serviceProvider.getServiceProvider.name!;
         nameEnabled = false; 
       });
     }
@@ -190,13 +190,13 @@ class _EditPrestataireState extends State<EditPrestataire> {
     }
     if((serviceProvider.getServiceProvider.contactName != null) & (serviceProvider.getServiceProvider.contactName  != "")){
       setState(() {
-        _contactNameController.text = serviceProvider.getServiceProvider.contactName;
+        _contactNameController!.text = serviceProvider.getServiceProvider.contactName!;
         contactEnabled = false;
       });
     }
     if((serviceProvider.getServiceProvider.contactEmail  != null) & (serviceProvider.getServiceProvider.contactEmail  != "")){
       setState(() {
-        _contactEmailController.text = serviceProvider.getServiceProvider.contactEmail ;
+        _contactEmailController!.text = serviceProvider.getServiceProvider.contactEmail! ;
         contactEmail = false;
       });
     }
@@ -207,13 +207,13 @@ class _EditPrestataireState extends State<EditPrestataire> {
     }
     if((serviceProvider.getServiceProvider.localisation  != null) & (serviceProvider.getServiceProvider.localisation != "")){
       setState(() {
-        _localisationController.text=serviceProvider.getServiceProvider.localisation;
+        _localisationController!.text=serviceProvider.getServiceProvider.localisation!;
         localisation=false;
       });
     }
     if((serviceProvider.getServiceProvider.specialite  != null) & (serviceProvider.getServiceProvider.specialite != "")){
       setState(() {
-       _specialityController.text =serviceProvider.getServiceProvider.specialite;
+       _specialityController!.text =serviceProvider.getServiceProvider.specialite!;
       });
     }
     if(( serviceProvider.getServiceProvider.serviceList != "") & ( serviceProvider.getServiceProvider.serviceList != null)){
@@ -226,16 +226,20 @@ class _EditPrestataireState extends State<EditPrestataire> {
           hospitalisation = serviceProvider.getServiceProvider.serviceList["Hospitalisation"];
       });
     }
-    print("inside");
+    if (kDebugMode) {
+      print("inside");
+    }
     if (serviceProvider.getServiceProvider.coordGps != null){
       //print(serviceProvider.getServiceProvider.coordGps"inside+");
-      if ((serviceProvider.getServiceProvider.coordGps["latitude"] != null) | (serviceProvider.getServiceProvider.coordGps["longitude"] != null) | true){
+      if ((serviceProvider.getServiceProvider.coordGps!["latitude"] != null) | (serviceProvider.getServiceProvider.coordGps!["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
-          "latitude": serviceProvider.getServiceProvider.coordGps["latitude"],
-          "longitude": serviceProvider.getServiceProvider.coordGps["longitude"]
+          "latitude": serviceProvider.getServiceProvider.coordGps!["latitude"],
+          "longitude": serviceProvider.getServiceProvider.coordGps!["longitude"]
         };
-        print(gpsCoords.toString());
+        if (kDebugMode) {
+          print(gpsCoords.toString());
+        }
         });
       }
     }
@@ -294,17 +298,17 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => Container(
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
-                                      padding: EdgeInsets.all(20.0),
+                                      padding: const EdgeInsets.all(20.0),
                                     ),
-                                    imageUrl:prestataire.avatarUrl,),
+                                    imageUrl:prestataire.avatarUrl!,),
                                 ),
                                   //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                               ),
 
-                              imageSpinner ? Positioned(
+                              imageSpinner! ? Positioned(
                                 top: hv*7,
                                 right: wv*13,
-                                child: CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
+                                child: const CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
                               ) : Container(),
 
                               Positioned(
@@ -313,7 +317,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                 child: CircleAvatar(
                                   backgroundColor: kDeepTeal,
                                   radius: wv*5,
-                                  child: IconButton(icon: Icon(Icons.add, color: whiteColor,), color: kPrimaryColor, onPressed: (){getImage(context);}),
+                                  child: IconButton(icon: const Icon(Icons.add, color: whiteColor,), color: kPrimaryColor, onPressed: (){getImage(context);}),
                                 ),
                               )
                             ],),
@@ -329,51 +333,51 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                   color: Colors.white.withOpacity(0.6),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                                child: Icon(Icons.arrow_back_ios_rounded),
+                                child: const Icon(Icons.arrow_back_ios_rounded),
                               ),
                             ),
                           )
                         ], alignment: AlignmentDirectional.topCenter,),
                           Form(
                     key: _presptataireEditFormKey,
-                                        autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
+                                        autovalidateMode: autovalidate! ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
 
                     child: Column(children: [
                        SizedBox(height: hv*6,),
                      
                       CustomTextField(
-                        prefixIcon: Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
-                        label: S.of(context).nomDeLtablissement,
-                        hintText: S.of(context).exHpialCentrale,
-                        controller: _nameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        prefixIcon: const Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
+                        label: S.of(context)!.nomDeLtablissement,
+                        hintText: S.of(context)!.exHpialCentrale,
+                        controller: _nameController!,
+                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
-                        prefixIcon: Icon(Icons.account_circle_outlined, color: kDeepTeal,),
-                        label: S.of(context).nomCompletDuContact,
-                        hintText: S.of(context).entrezVotreNom,
-                        controller: _contactNameController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        prefixIcon: const Icon(Icons.account_circle_outlined, color: kDeepTeal,),
+                        label: S.of(context)!.nomCompletDuContact,
+                        hintText: S.of(context)!.entrezVotreNom,
+                        controller: _contactNameController!,
+                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
-                        prefixIcon: Icon(Icons.email_outlined, color: kDeepTeal,),
+                        prefixIcon:const Icon(Icons.email_outlined, color: kDeepTeal,),
                         keyboardType: TextInputType.emailAddress,
-                        label: S.of(context).emailDuContact,
-                        hintText: S.of(context).entrezVotreAddresseEmail,
-                        controller: _contactEmailController,
+                        label: S.of(context)!.emailDuContact,
+                        hintText: S.of(context)!.entrezVotreAddresseEmail,
+                        controller: _contactEmailController!,
                         validator: _emailFieldValidator,
                       ),
                       SizedBox(height: hv*2,),
                       CustomTextField(
-                        prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: S.of(context).aPropos,
-                        hintText: S.of(context).parlezBrivementDeVous,
-                        enabled: aboutEnabled,
+                        prefixIcon: const  Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
+                        label: S.of(context)!.aPropos,
+                        hintText: S.of(context)!.parlezBrivementDeVous,
+                        enabled: aboutEnabled!,
                         multiLine: true,
-                        controller: _aboutController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        controller: _aboutController!,
+                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             aboutEnabled = true;
@@ -384,12 +388,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         children: [
                           SizedBox(height: hv*2,),
                           CustomTextField(
-                            prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
-                            label: S.of(context).votreFunction,
-                            hintText: S.of(context).pharmaciene,
-                            enabled: specialityEnabled,
-                            controller: _specialityController,
-                            validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                            prefixIcon: const Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
+                            label: S.of(context)!.votreFunction,
+                            hintText: S.of(context)!.pharmaciene,
+                            enabled: specialityEnabled!,
+                            controller: _specialityController!,
+                            validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                             editAction: (){
                               setState(() {
                                 specialityEnabled = true;
@@ -404,14 +408,14 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context).typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                            SizedBox(height: 5,),
+                            Text(S.of(context)!.typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                            const SizedBox(height: 5,),
                             Container(
                               constraints: BoxConstraints(minWidth: wv*45),
-                              padding: EdgeInsets.symmetric(horizontal: 15),
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
                               decoration: BoxDecoration(
                                 color: Colors.grey[100],
-                                borderRadius: BorderRadius.all(Radius.circular(20))
+                                borderRadius: const BorderRadius.all(Radius.circular(20))
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: ButtonTheme(
@@ -420,22 +424,22 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                     isExpanded: true,
                                     value: _category,
                                     items: [
-                                      DropdownMenuItem(
-                                        child: Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      const DropdownMenuItem(
+                                        child:  Text("Hôpital", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                         value: "Hôpital",
                                       ),
                                       DropdownMenuItem(
-                                        child: Text(S.of(context).pharmacie, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: S.of(context).pharmacie,
+                                        child: Text(S.of(context)!.pharmacie, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context)!.pharmacie,
                                       ),
                                       DropdownMenuItem(
-                                        child: Text(S.of(context).laboratoire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: S.of(context).laboratoire,
+                                        child: Text(S.of(context)!.laboratoire, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        value: S.of(context)!.laboratoire,
                                       ),
                                     ],
                                     onChanged: (value) {
                                       setState(() {
-                                        _category = value;
+                                        _category = value.toString();
                                       });
                                     }),
                                 ),
@@ -451,14 +455,14 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 5,),
+                                Text(S.of(context)!.region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                const SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[100],
-                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                    borderRadius: const BorderRadius.all(Radius.circular(20))
                                   ),
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
@@ -466,19 +470,19 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _stateCode,
-                                        hint: Text(S.of(context).choisirUneRegion),
+                                        hint: Text(S.of(context)!.choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
-                                            child: SizedBox(child: Text(region["value"], style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                                            child: SizedBox(child: Text(region["value"]!, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
                                             value: region["key"],
                                           );
                                         }).toList(),
                                         onChanged: (value) async {
                                           //List<String> reg = getTownNamesFromRegion(cities, value);
-                                          serviceProvider.setRegion(getRegionFromStateCode(regions, value));
+                                          serviceProvider.setRegion(getRegionFromStateCode(regions, value.toString()));
                                           setState(() {
-                                            _stateCode = value;
-                                            _region = getRegionFromStateCode(regions, value);
+                                            _stateCode = value.toString();
+                                            _region = getRegionFromStateCode(regions, value.toString());
                                             _city = null;
                                             cityChosen = false;
                                             //myCities = reg;
@@ -492,17 +496,17 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             ),
                           ),
                           SizedBox(width: wv*3,),
-                          regionChosen ? Expanded(
+                          regionChosen! ? Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context).choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 5,),
+                                Text(S.of(context)!.choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                const SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[100],
-                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                    borderRadius: const BorderRadius.all(Radius.circular(20))
                                   ),
                                   child: DropdownButtonHideUnderline(
                                     child: ButtonTheme(
@@ -510,18 +514,20 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text(S.of(context).ville),
-                                        items: getTownNamesFromRegion(cities, _stateCode).map((city){
-                                          print("city: "+city);
+                                        hint: Text(S.of(context)!.ville),
+                                        items: getTownNamesFromRegion(cities, _stateCode!).map((city){
+                                          if (kDebugMode) {
+                                            print("city: "+city);
+                                          }
                                           return DropdownMenuItem(
-                                            child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                            child: Text(city, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                             value: city,
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          serviceProvider.setTown(value);
+                                          serviceProvider.setTown(value.toString());
                                           setState(() {
-                                            _city = value;
+                                            _city = value.toString();
                                             cityChosen = true;
                                           });
                                         }),
@@ -536,26 +542,26 @@ class _EditPrestataireState extends State<EditPrestataire> {
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
-                        prefixIcon: Icon(Icons.location_pin, color: kDeepTeal,),
+                        prefixIcon: const Icon(Icons.location_pin, color: kDeepTeal,),
                         keyboardType: TextInputType.emailAddress,
-                        label: S.of(context).preciserLemplacementDeLorganisation,
-                        hintText: S.of(context).exfacePharmacieDuLac,
-                        controller: _localisationController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null
+                        label: S.of(context)!.preciserLemplacementDeLorganisation,
+                        hintText: S.of(context)!.exfacePharmacieDuLac,
+                        controller: _localisationController!,
+                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null
                       ),
                       SizedBox(height: hv*4,),
                       (gpsCoords != null) | (serviceProvider.getServiceProvider.coordGps != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("GPS:", style: TextStyle(fontWeight: FontWeight.w900),),
+                            Text("GPS:", style: const TextStyle(fontWeight: FontWeight.w900),),
                             RichText(text: TextSpan(
                               text: "Lat: ",
                               children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords["latitude"].toString() : serviceProvider.getServiceProvider.coordGps["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : serviceProvider.getServiceProvider.coordGps!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
                                 TextSpan(text: "     Lng: "),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords["longitude"].toString() : serviceProvider.getServiceProvider.coordGps["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : serviceProvider.getServiceProvider.coordGps!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
                               ]
-                            , style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
+                            , style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
                             )
                           ],
                         ),
@@ -568,14 +574,14 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             height: hv*30,
                             margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
                             decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400])],
+                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: (Colors.grey[400])!)],
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: GoogleMap(
                                 myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: serviceProvider.getServiceProvider.coordGps == null ? _initialcameraposition : LatLng(serviceProvider.getServiceProvider.coordGps["latitude"] != null ? serviceProvider.getServiceProvider.coordGps["latitude"] : _initialcameraposition.latitude, serviceProvider.getServiceProvider.coordGps["longitude"] != null ? serviceProvider.getServiceProvider.coordGps["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
+                                initialCameraPosition: CameraPosition(target: serviceProvider.getServiceProvider.coordGps == null ? _initialcameraposition : LatLng(serviceProvider.getServiceProvider!.coordGps!["latitude"] != null ? serviceProvider.getServiceProvider.coordGps["latitude"] : _initialcameraposition.latitude, serviceProvider.getServiceProvider.coordGps["longitude"] != null ? serviceProvider.getServiceProvider.coordGps["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
                                 mapType: MapType.normal,
                                 onMapCreated: _onMapCreated,
                                
@@ -585,14 +591,14 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             Positioned(
                             bottom: hv*2,
                             right: wv*7,
-                            child: !positionSpinner ? TextButton(
+                            child: !positionSpinner! ? TextButton(
                               onPressed: _saveLocation,
-                              child: Text(S.of(context).ajouterMaLocalisation, style: TextStyle(color: whiteColor),),
+                              child: Text(S.of(context)!.ajouterMaLocalisation, style: const TextStyle(color: whiteColor),),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))
                               ),
-                            ) :  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor), strokeWidth: 2.0,),
+                            ) :  const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor), strokeWidth: 2.0,),
                           ),
                         ]),
                         SizedBox(height: hv*1.5,),
@@ -603,28 +609,28 @@ class _EditPrestataireState extends State<EditPrestataire> {
                           padding: EdgeInsets.symmetric(horizontal: wv*3),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(S.of(context).slectionnezVosServices, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                              Text(S.of(context)!.slectionnezVosServices, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
                               SizedBox(height: hv*2,),
                               
                               Row(
                                 children: [
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context).consultation,
+                                    service: S.of(context)!.consultation,
                                     icon: "assets/icons/Bulk/Stethoscope.svg",
-                                    chosen: consultationChosen,
-                                    action: ()=> setState(() {consultationChosen = !consultationChosen;})
+                                    chosen: consultationChosen!,
+                                    action: ()=> setState(() {consultationChosen = !consultationChosen!;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context).ambulances,
+                                    service: S.of(context)!.ambulances,
                                     icon: "assets/icons/Bulk/Danger.svg",
-                                    chosen: soinsAmbulances,
-                                    action: ()=> setState(() {soinsAmbulances = !soinsAmbulances;})
+                                    chosen: soinsAmbulances!,
+                                    action: ()=> setState(() {soinsAmbulances = !soinsAmbulances!;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context).phamarmacie,
+                                    service: S.of(context)!.phamarmacie,
                                     icon: "assets/icons/Bulk/Soins.svg",
-                                    chosen: pharmacie,
-                                    action: ()=> setState(() {pharmacie = !pharmacie;})
+                                    chosen: pharmacie!,
+                                    action: ()=> setState(() {pharmacie = !pharmacie!;})
                                   ),
                                 ],
                               ),
@@ -632,16 +638,16 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               Row(
                                 children: [
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context).laboratoire,
+                                    service: S.of(context)!.laboratoire,
                                     icon: "assets/icons/Bulk/Ordonance.svg",
-                                    chosen: labo,
-                                    action: ()=> setState(() {labo = !labo;})
+                                    chosen: labo!,
+                                    action: ()=> setState(() {labo = !labo!;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context).hospitalisation,
+                                    service: S.of(context)!.hospitalisation,
                                     icon: "assets/icons/Bulk/Hospitalisation.svg",
-                                    chosen: hospitalisation,
-                                    action: ()=> setState(() {hospitalisation = !hospitalisation;})
+                                    chosen: hospitalisation!,
+                                    action: ()=> setState(() {hospitalisation = !hospitalisation!;})
                                   ),
                                 ],
                               ),
@@ -655,21 +661,21 @@ class _EditPrestataireState extends State<EditPrestataire> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context).picesJustificatives, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
+                            Text(S.of(context)!.picesJustificatives, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
                             SizedBox(height: hv*1,),
                             Column(
                               children: [
                                 FileUploadCard(
-                                  title: S.of(context).scanDeLaCni,
-                                  state: cniUploaded,
-                                  loading: cniSpinner,
+                                  title: S.of(context)!.scanDeLaCni,
+                                  state: cniUploaded!,
+                                  loading: cniSpinner!,
                                   action: () async {await getDocFromPhone('CNI');}
                                 ),
                                
                                 FileUploadCard(
-                                  title: S.of(context).autrePiceJustificative,
-                                  state: otherFileUploaded,
-                                  loading: otherFileSpinner,
+                                  title: S.of(context)!.autrePiceJustificative,
+                                  state: otherFileUploaded!,
+                                  loading: otherFileSpinner!,
                                   action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
                                 )
                               ],
@@ -680,8 +686,8 @@ class _EditPrestataireState extends State<EditPrestataire> {
                       SizedBox(height: hv*3),
                        Container(
               child: 
-                !buttonLoading ? CustomTextButton(
-                  text: S.of(context).envoyer,
+                !buttonLoading! ? CustomTextButton(
+                  text: S.of(context)!.envoyer,
                   color: kPrimaryColor,
                   action: () async {
                     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -689,13 +695,13 @@ class _EditPrestataireState extends State<EditPrestataire> {
                       autovalidate = true;
                     });
                    
-                    String contactName = _contactNameController.text;
-                    String email = _contactEmailController.text;
-                    String nomEtab=_nameController.text.toString();
-                     String speciality =_specialityController.text;
-                     String localisation =_localisationController.text;
-                       String about = _aboutController.text;
-                    if (_presptataireEditFormKey.currentState.validate()){
+                    String contactName = _contactNameController!.text;
+                    String email = _contactEmailController!.text;
+                    String nomEtab=_nameController!.text.toString();
+                     String speciality =_specialityController!.text;
+                     String localisation =_localisationController!.text;
+                       String about = _aboutController!.text;
+                    if (_presptataireEditFormKey.currentState!.validate()){
                       setState(() {
                         buttonLoading = true;
                       });
@@ -709,24 +715,24 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               };
                       ServiceProviderModelProvider adherentProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
                       print("$_contactNameController, $_category, $avatarUrl");
-                      adherentProvider.setAvatarUrl(avatarUrl);
+                      adherentProvider.setAvatarUrl(avatarUrl!);
                       //adherentProvider.setFamilyName(fname);
                       adherentProvider.setServiceList(serviceList);
                       adherentProvider.setSpecialite(speciality);
                       adherentProvider.setName(contactName);
-                      adherentProvider.setcoordGps(gpsCoords);
+                      adherentProvider.setcoordGps(gpsCoords!);
                       adherentProvider.setLocalisation(localisation);
                       adherentProvider.setAbout(about);
                       await FirebaseFirestore.instance.collection("USERS")
                         .doc(userProvider.getUserId)
                         .set({
                           'createdDate': DateTime.now(),
-                          "authId": FirebaseAuth.instance.currentUser.uid,
+                          "authId": FirebaseAuth.instance.currentUser!.uid,
                           'emailAdress': email,
                           'fullName': contactName,
                           "enable": true,
                           "regionDorigione": _region,
-                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getServiceProvider.id),
+                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getServiceProvider.id!),
                           "nameKeywords": Algorithms.getKeyWords(contactName)
                         }, SetOptions(merge: true))
                         .then((value) async {
@@ -734,7 +740,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             .doc(userProvider.getUserId)
                             .set({
                               "createdDate": DateTime.now(),
-                              "authId": FirebaseAuth.instance.currentUser.uid,
+                              "authId": FirebaseAuth.instance.currentUser!.uid,
                               "nomEtablissement": nomEtab,
                               "nomCompletPContact": contactName,
                               "emailPContact": email,
@@ -747,12 +753,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               "profil": "PRESTATAIRE",
                               "addresse": localisation,
                               "localisation": gpsCoords != null ? {
-                                "addresse": _localisationController.text,
-                                "latitude": gpsCoords["latitude"],
-                                "longitude": gpsCoords["longitude"],
+                                "addresse": _localisationController!.text,
+                                "latitude": gpsCoords!["latitude"],
+                                "longitude": gpsCoords!["longitude"],
                                 "altitude": 0
                               } : {
-                                "addresse": _localisationController.text,
+                                "addresse": _localisationController!.text,
                               },
                               "serviceList": serviceList,
                               "region": adherentProvider.getServiceProvider.region,
@@ -760,20 +766,22 @@ class _EditPrestataireState extends State<EditPrestataire> {
                               "userCountryCodeIso": userProvider.getCountryCode.toLowerCase(),
                               "userCountryName": userProvider.getCountryName,
                               "phoneKeywords": Algorithms.getKeyWords(userProvider.getUserId),
-                              "nameKeywords": Algorithms.getKeyWords( _companyController.text.toString().isEmpty? contactName: _companyController.text.toString())
+                              "nameKeywords": Algorithms.getKeyWords( _companyController!.text.toString().isEmpty? contactName: _companyController!.text.toString())
                             }, SetOptions(merge: true))
                             .then((value) async {
                               HiveDatabase.setRegisterState(true);
                               HiveDatabase.setAuthPhone(userProvider.getUserId);
-                              HiveDatabase.setSurname( _companyController.text.toString());
-                              HiveDatabase.setImgUrl(avatarUrl);
+                              HiveDatabase.setSurname( _companyController!.text.toString());
+                              HiveDatabase.setImgUrl(avatarUrl!);
                               setState(() {
                                 buttonLoading = false;
                               });
                               
                             })
                             .catchError((e) {
-                              print(e.toString());
+                              if (kDebugMode) {
+                                print(e.toString());
+                              }
                               ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                               setState(() {
                                 buttonLoading = false;
@@ -782,7 +790,9 @@ class _EditPrestataireState extends State<EditPrestataire> {
                             ;
                         })
                         .catchError((e){
-                          print(e.toString());
+                          if (kDebugMode) {
+                            print(e.toString());
+                          }
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                           setState(() {
                             buttonLoading = false;
@@ -816,9 +826,9 @@ class _EditPrestataireState extends State<EditPrestataire> {
       }
     });
     
-    FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path);
+      File file = File(result.files.single.path!);
       uploadDocumentToFirebase(file, name);
     } else {
       setState(() {
@@ -835,11 +845,11 @@ class _EditPrestataireState extends State<EditPrestataire> {
    Future uploadDocumentToFirebase(File file, String name) async {
     ServiceProviderModelProvider PrestatireModelProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     
-    String adherentId = PrestatireModelProvider.getServiceProvider.id;
+    String adherentId = PrestatireModelProvider.getServiceProvider.id!;
     Reference storageReference = FirebaseStorage.instance.ref().child('pieces_didentite/piece_prestatires/$adherentId/$name'); //.child('photos/profils_adherents/$fileName');
     final metadata = SettableMetadata(
       //contentType: 'image/jpeg',
@@ -875,7 +885,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
             .update({
               "urlCNI": url,
             });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
           setState(() {
             cniUploaded = true;
             cniSpinner = false;
@@ -894,7 +904,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
             .update({
               "urlCNI": url,
             });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
           setState(() {
             cniUploaded = true;
             cniSpinner = false;
@@ -908,7 +918,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
         .set({
           "urlAutrePiecesJustificatif": url,
         }, SetOptions(merge: true)).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
           setState(() {
             otherFileUploaded = true;
             otherFileSpinner = false;
@@ -939,18 +949,18 @@ class _EditPrestataireState extends State<EditPrestataire> {
       builder: (BuildContext bc){
         return SafeArea(
           child: Container(
-            child: new Wrap(
+            child:  Wrap(
               children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text('Gallerie'),
-                    onTap: () {
+                 ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const  Text('Gallerie'),
+                    onTap: () async {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text('Camera'),
+                 ListTile(
+                  leading: const  Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();
@@ -974,7 +984,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
         print('No image selected.');
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
    Future getImageFromGallery() async {
     final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
@@ -984,16 +994,18 @@ class _EditPrestataireState extends State<EditPrestataire> {
         imageFileAvatar = File(pickedFile.path);
         //imageLoading = true;
       } else {
-        print('No image selected.');
+        if (kDebugMode) {
+          print('No image selected.');
+        }
       }
     });
-    uploadImageToFirebase(pickedFile);
+    uploadImageToFirebase(pickedFile!);
   }
    Future uploadImageToFirebase(PickedFile file) async {
      ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -1015,13 +1027,13 @@ class _EditPrestataireState extends State<EditPrestataire> {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }
     
-    storageUploadTask = storageReference.putFile(imageFileAvatar);
+    storageUploadTask = storageReference.putFile(imageFileAvatar!);
 
     storageUploadTask.catchError((e){
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).finalisation)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.finalisation)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       HiveDatabase.setImgUrl(url);
@@ -1036,7 +1048,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
         .update({
           "imageUrl": url,
         }).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.photoDeProfilAjoute)));
           setState(() {
             imageSpinner = false;
           });
@@ -1048,29 +1060,26 @@ class _EditPrestataireState extends State<EditPrestataire> {
       imageLoading = false;
     });
   }
-  String getRegionFromStateCode(List origin, String code){
-    String region;
-    for(int i=0; i<origin.length; i++){
+  String getRegionFromStateCode(List? origin, String? code){
+    String region='';
+    for(int i=0; i<origin!.length; i++){
       if (origin[i]["key"] == code){
        region = origin[i]["value"];
       }
     }
     return region;
   }
-  String getStateCodeFromRegion(List origin, String region){
-    String code;
-    for(int i=0; i<origin.length; i++){
+  String getStateCodeFromRegion(List? origin, String? region){
+    String code='';
+    for(int i=0; i<origin!.length; i++){
       if (origin[i]["value"] == region){
        code = origin[i]["key"];
       }
     }
     return code;
   }
-  String _emailFieldValidator(String value) {
-    if (!RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(value)) {
-      return S.of(context).entrerUneAddresseEmailValide;
+  Future<String> _emailFieldValidator(String? value) async {
+    return !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value!)?S.of(context)!.entrerUneAddresseEmailValide: '';
     }
-  }
+  
 }

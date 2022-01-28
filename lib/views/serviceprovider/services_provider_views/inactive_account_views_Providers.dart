@@ -19,6 +19,7 @@ import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_V
 import 'package:danaid/widgets/forms/custom_text_field.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,12 +33,12 @@ import '../../../widgets/home_page_mini_components.dart';
 import '../../../helpers/utils.dart';
 
 class InactiveAccountProvider extends StatefulWidget {
-  final AdherentModel data;
-  final bool isAccountIsExists;
-  final String phoneNumber;
-  final String consultationType;
+  final AdherentModel? data;
+  final bool? isAccountIsExists;
+  final String? phoneNumber;
+  final String? consultationType;
   InactiveAccountProvider(
-      {Key key, this.data, this.isAccountIsExists, this.phoneNumber, this.consultationType})
+      {Key? key, this.data, this.isAccountIsExists, this.phoneNumber, this.consultationType})
       : super(key: key);
 
   @override
@@ -45,28 +46,28 @@ class InactiveAccountProvider extends StatefulWidget {
 }
 
 class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
-  bool isActive;
-  AdherentModelProvider adherentModelProvider;
-  ScrollController scrollController;
-  int userSelected=-1;
-  BeneficiaryModel adherentUserSelected;
-  BeneficiaryModel beneficiary;
-  bool isloading=false;
-  bool isRequestLaunch=false;
-  bool registerClientError=false;
-  String registerClient;
-  UseCaseModelProvider userCaprovider;
-  String famillyDoctorNAme;
-  CarouselController beneficiaryCarouselController = CarouselController();
-  TextEditingController _patientController = new TextEditingController();
-    final GlobalKey<FormState> _FormKey = GlobalKey<FormState>();
+  bool? isActive;
+  AdherentModelProvider? adherentModelProvider;
+  ScrollController? scrollController;
+  int? userSelected=-1;
+  BeneficiaryModel? adherentUserSelected;
+  BeneficiaryModel? beneficiary;
+  bool? isloading=false;
+  bool? isRequestLaunch=false;
+  bool? registerClientError=false;
+  String? registerClient;
+  UseCaseModelProvider? userCaprovider;
+  String? famillyDoctorNAme;
+  CarouselController? beneficiaryCarouselController = CarouselController();
+  TextEditingController? _patientController =  TextEditingController();
+    final GlobalKey<FormState>? _FormKey = GlobalKey<FormState>();
 
-  List<Widget> beneficiaries;
+  List<Widget>? beneficiaries;
   var code;
   @override
   void initState() {
      code= getRandomString(4);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance?.addPostFrameCallback((_) async {
       if (widget.isAccountIsExists == false) {
         await showDialog<String>(
             barrierDismissible: false,
@@ -82,20 +83,20 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   userCaprovider =Provider.of<UseCaseModelProvider>(context, listen: false);
    if(widget.data!=null){
     
-    getFamillyDoctorName(widget.data.familyDoctorId);
+    getFamillyDoctorName(widget.data!.familyDoctorId);
     
    }
   }
- Future<String> createConsultationCode({bool exists=false, String id, String name, String phone}) async {
+ Future<String> createConsultationCode({bool? exists=false, String? id, String? name, String? phone}) async {
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
     var date= DateTime.now();
     var newUseCase =FirebaseFirestore.instance.collection('USECASES').doc();
      newUseCase.set({
       'id': exists==false?newUseCase.id:code,
-      'adherentId':exists==false && phone.isNotEmpty?phone: adherentUserSelected.adherentId,
-      'beneficiaryId':exists==false && phone.isNotEmpty?phone: adherentUserSelected.matricule,
-      'beneficiaryName':exists==false&& name.isNotEmpty ? name:adherentUserSelected.familyName,
+      'adherentId':exists==false && phone!.isNotEmpty?phone: adherentUserSelected!.adherentId,
+      'beneficiaryId':exists==false && phone!.isNotEmpty?phone: adherentUserSelected!.matricule,
+      'beneficiaryName':exists==false&& name!.isNotEmpty ? name:adherentUserSelected!.familyName,
       'otherInfo':'',
       'consultationCode': code,
       'idMedecin' : prestataire.getServiceProvider.id,
@@ -109,9 +110,9 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
         setState(() {
           isloading = false;
         });
-    userCaprovider.getUseCase.consultationCode=code;
-    userCaprovider.getUseCase.dateCreated= Timestamp.fromDate(date);
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
+    userCaprovider!.getUseCase.consultationCode=code;
+    userCaprovider!.getUseCase.dateCreated= Timestamp.fromDate(date);
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
         
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -124,7 +125,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   }
 
   addCodeToAdherent(code) async {
-    await FirebaseFirestore.instance.collection('ADHERENTS').doc(adherentUserSelected.adherentId).set({
+    await FirebaseFirestore.instance.collection('ADHERENTS').doc(adherentUserSelected!.adherentId).set({
       'CurrentcodeConsultation' : code
     },SetOptions(merge: true)).then((value) {
         setState(() {
@@ -134,15 +135,15 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     });
   
   }
-  facturationCode(id,{String name,String phone}) async {
+  facturationCode(id,{String? name,String? phone}) async {
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
     await FirebaseFirestore.instance.collection('USECASES').doc(id)
     .collection('FACTURATIONS').doc().set({
       'id':Utils.createCryptoRandomString(8),
-      'idAdherent': widget.isAccountIsExists==false && phone.isNotEmpty?phone: adherentUserSelected.adherentId,
-      'idFammillyMember': widget.isAccountIsExists==false && phone.isNotEmpty ? widget.phoneNumber : phone,
-      'idBeneficiairy': widget.isAccountIsExists==false && phone.isNotEmpty ? phone: adherentUserSelected.matricule,
+      'idAdherent': widget.isAccountIsExists==false && phone!.isNotEmpty?phone: adherentUserSelected!.adherentId,
+      'idFammillyMember': widget.isAccountIsExists==false && phone!.isNotEmpty ? widget.phoneNumber : phone,
+      'idBeneficiairy': widget.isAccountIsExists==false && phone!.isNotEmpty ? phone: adherentUserSelected!.matricule,
       'idMedecin':prestataire.getServiceProvider.id,
       'amountToPay': 2000,
       'isSolve':false,
@@ -155,7 +156,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
           isloading = false;
         });
         
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("La facture a bien ete generer avec succes ")));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("La facture a bien ete generer avec succes ")));
         
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -172,16 +173,20 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
       userSelected=index;
       adherentUserSelected= adherent;
     });
-    print(userSelected);
-    print(adherentUserSelected.avatarUrl);
+    if (kDebugMode) {
+      print(userSelected);
+      print(adherentUserSelected!.avatarUrl);
+    }
 
     }else if( action=="remove"){
        setState(() {
       userSelected=-1;
       adherentUserSelected= null;
     });
-    print(userSelected);
-    print(adherentUserSelected);
+    if (kDebugMode) {
+      print(userSelected);
+      print(adherentUserSelected);
+    }
     }
   }
   // void writeData() async{
@@ -198,24 +203,29 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     newUseCase.get().then((value){
       if(value.exists){
         setState(() {
-          famillyDoctorNAme=value.data()['cniName']!=null ? value.data()['cniName']: '';
+          famillyDoctorNAme=value.data()!['cniName'] ?? '';
         });
         
       }
     });
      
-   print(famillyDoctorNAme);
+   if (kDebugMode) {
+     print(famillyDoctorNAme);
+   }
   }
   getListOfUser() {
      AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
       BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
       String medecin;
-      print("------------");
-      print(adherentProvider.getAdherent);
-      print("------------");
+      if (kDebugMode) {
+        print(famillyDoctorNAme);
+        print("------------");
+        print(adherentProvider.getAdherent);
+        print("------------");
+      }
       if(adherentProvider.getAdherent.familyDoctorId != null){
         FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent.familyDoctorId).get().then((doc){
-          String name = doc.data()["nomDefamille"];
+          String name = doc.data()!["nomDefamille"];
             if(name != null){
               medecin = "Dr $name";
             }
@@ -226,51 +236,53 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
         print(snapshot.docs.length.toString());
         beneficiaries = [];
         BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
-          avatarUrl: widget.data.imgUrl,
-                        surname: widget.data.surname,
-                        familyName: widget.data.familyName,
-                        matricule: widget.data.matricule,
-                        gender: widget.data.gender,
-                        adherentId: widget.data.adherentId,
-                        birthDate  : widget.data.birthDate,
-                        dateCreated: widget.data.dateCreated,
-                        enabled: widget.data.enable,
+          avatarUrl: widget.data!.imgUrl,
+                        surname: widget.data!.surname,
+                        familyName: widget.data!.familyName,
+                        matricule: widget.data!.matricule,
+                        gender: widget.data!.gender,
+                        adherentId: widget.data!.adherentId,
+                        birthDate  : widget.data!.birthDate,
+                        dateCreated: widget.data!.dateCreated,
+                        enabled: widget.data!.enable,
                         height: null,
                         weight: null,
                         bloodGroup: null,
-                        protectionLevel: widget.data.adherentPlan,
-                        cniName: widget.data.cniName,
-                        marriageCertificateName: widget.data.marriageCertificateName,
-                        marriageCertificateUrl:  widget.data.marriageCertificateUrl,
-                        validityEndDate: widget.data.validityEndDate,
-                        phoneList: widget.data.phoneList,
+                        protectionLevel: widget.data!.adherentPlan!.toInt(),
+                        cniName: widget.data!.cniName,
+                        marriageCertificateName: widget.data!.marriageCertificateName,
+                        marriageCertificateUrl:  widget.data!.marriageCertificateUrl,
+                        validityEndDate: widget.data!.validityEndDate,
+                        phoneList: widget.data!.phoneList,
          );
      
         Widget adherentBeneficiaryCard = InkWell(
                          onTap: ()=>{
-                           beneficiaryCarouselController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                           beneficiaryCarouselController?.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn)
                          }, child: Container(
                         child: Padding(
                             padding: EdgeInsets.all(5),
                             child: HomePageComponents().getAdherentsList(
-                                adherent: adherentBeneficiary, doctorName: famillyDoctorNAme, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected )),
+                                adherent: adherentBeneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected! )),
                       ));
-        beneficiaries.add(adherentBeneficiaryCard);
-        print(snapshot.docs.length);
+        beneficiaries?.add(adherentBeneficiaryCard);
+        if (kDebugMode) {
+          print(snapshot.docs.length);
+        }
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
           Widget content = InkWell(
                          onTap: ()=>{
                            print(i),
-                           beneficiaryCarouselController.animateToPage(0, duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                           beneficiaryCarouselController?.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn)
                          }, child: Container(
                         child: Padding(
-                            padding: EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(5),
                             child: HomePageComponents().getAdherentsList(
-                                adherent: beneficiary, doctorName: famillyDoctorNAme, isAccountIsExists: true, index: i, onclick: getUserSelected, iSelected:userSelected )),
+                                adherent: beneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: i, onclick: getUserSelected, iSelected:userSelected!)),
                       ));
-          beneficiaries.add(content);
+          beneficiaries?.add(content);
         }
         setState(() {
           
@@ -288,7 +300,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     return 'YM'+result;
   } 
   
-  saveSucces(BuildContext context, {String string}) {
+  saveSucces(BuildContext context, {String? string}) {
   // set up the button
   Widget okButton = TextButton(
     child: Text("OK"),
@@ -298,8 +310,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text(S.of(context).infos),
-    content: Text(string.isNotEmpty? string :S.of(context).cetAdherentABienTCrer),
+    title: Text(S.of(context)!.infos),
+    content: Text(string!.isNotEmpty? string :S.of(context)!.cetAdherentABienTCrer),
     actions: [
       okButton,
     ],
@@ -313,29 +325,35 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
 }
   Widget _buildAboutDialog(BuildContext context, bool isIninitState) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
-    AdherentModel adherent = adherentModelProvider.getAdherent;
+    AdherentModel adherent = adherentModelProvider!.getAdherent;
      bool issaveInknowUserLoading=false;
       saveDataForUnknow(name,phone) async { 
         setState(() {issaveInknowUserLoading=true;});
-        print(issaveInknowUserLoading);
+        if (kDebugMode) {
+          print(issaveInknowUserLoading);
+        }
         await createConsultationCode(exists: widget.isAccountIsExists ,name:name,phone:phone).then((value) async {
             await facturationCode(value,name:name,phone:phone);
           setState(() {issaveInknowUserLoading=false;});
         });
-        print(issaveInknowUserLoading);
+        if (kDebugMode) {
+          print(issaveInknowUserLoading);
+        }
       }
     return Container(
       color: backgroundOverlayColor.withOpacity(0.8),
       child: WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           if (isIninitState == true) {
             Navigator.pop(context);
             Navigator.pop(context);
+            return true;
           } else {
             Navigator.pop(context);
+            return true;
           }
         },
-        child: new AlertDialog(
+        child:  AlertDialog(
           contentPadding: EdgeInsets.zero,
           backgroundColor: cardColor,
           scrollable: true,
@@ -345,8 +363,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.all(10),
-                  child: new Column(
+                  margin: const EdgeInsets.all(10),
+                  child:  Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -368,8 +386,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         alignment: Alignment.center,
                         child: Text(
                             widget.isAccountIsExists == false
-                                ? S.of(context).leNumro
-                                : S.of(context).leCompteDeLadherent,
+                                ? S.of(context)!.leNumro
+                                : S.of(context)!.leCompteDeLadherent,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w500,
@@ -381,15 +399,15 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         child: Text(
                             widget.isAccountIsExists == false &&
                                     widget.phoneNumber != null
-                                ? widget.phoneNumber
-                                : S.of(context).estInatif,
+                                ? widget.phoneNumber!
+                                : S.of(context)!.estInatif,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w700,
                               fontSize: fontSize(size: 21),
                             )),
                       ),
-                     issaveInknowUserLoading==true ?  Text('...'): Align(
+                     issaveInknowUserLoading==true ? Text('...'): Align(
                         alignment: Alignment.center,
                         child: SvgPicture.asset(
                           "assets/icons/Bulk/Danger.svg",
@@ -402,8 +420,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         child: Text(
                             widget.isAccountIsExists == false &&
                                     widget.phoneNumber != null
-                                ? S.of(context).nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
-                                : S.of(context).ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
+                                ? S.of(context)!.nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
+                                : S.of(context)!.ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w500,
@@ -419,8 +437,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         child: Text(
                           widget.isAccountIsExists == false &&
                                   widget.phoneNumber != null
-                              ? S.of(context).vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
-                              : S.of(context).poursuivezLaConsultationHorsParcoursDeSoinDanaid,
+                              ? S.of(context)!.vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
+                              : S.of(context)!.poursuivezLaConsultationHorsParcoursDeSoinDanaid,
                           style: TextStyle(
                               color: kBlueForce,
                               fontSize: fontSize(size: 17),
@@ -435,8 +453,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         label: "Nom du patient",
                         hintText:"Jean MArie Nkah",
                         enabled: true,
-                        controller: _patientController,
-                        validator: (String val) => (val.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        controller: _patientController!,
+                        validator: (String val) => (val.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
                       ),
                      
                             ] )
@@ -450,7 +468,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.white,
                   ),
-                  child:   new Container(
+                  child:   Container(
                     width: wv * 100,
                     margin:
                         EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 15),
@@ -461,53 +479,59 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.grey[500],
+                                color: (Colors.grey[500])!,
                                 spreadRadius: 0.5,
                                 blurRadius: 3),
                           ],
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(25),
                           ),
                         ),
                         child:   TextButton(
                           onPressed: () async {
-                            if (_FormKey.currentState.validate()){
-                               print(_patientController.text);
-                               print(widget.phoneNumber);
+                            if (_FormKey!.currentState!.validate()){
+                               if (kDebugMode) {
+                                 print(_patientController!.text);
+                                 print(widget.phoneNumber);
+                               }
                                  ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
                                  var usecase= FirebaseFirestore.instance.collection('USECASES')
                                 .where('adherentId', isEqualTo: widget.phoneNumber ).where('idMedecin',isEqualTo:prestataire.getServiceProvider.id).orderBy('createdDate').limit(1).get(); 
                                 usecase.then((value) async {
                                   if(value.size>0){
-                                      print(value.docs[0].data());
+                                      if (kDebugMode) {
+                                        print(value.docs[0].data());
+                                      }
                                     var useCase= value.docs[0].data();
                                      Timestamp t = useCase['createdDate'].runtimeType==DateTime?Timestamp.fromDate( useCase['createdDate']): useCase['createdDate'];
                                                     DateTime d = t.toDate();
                                                    print(t);
-                                       print(d);
+                                       if (kDebugMode) {
+                                         print(d);
+                                       }
                                     final date2 = DateTime.now(); 
                                     final difference = date2.difference(d).inDays;
                                      if( difference>14 &&  useCase['consultationCode']!=null ){
-                                         saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
-                                          saveSucces(context,string:S.of(context).lePatientABienTAjouter);
-                                          _patientController.clear();
+                                         saveDataForUnknow(_patientController!.text,widget.phoneNumber).then((value){
+                                          saveSucces(context,string:S.of(context)!.lePatientABienTAjouter);
+                                          _patientController!.clear();
                                             setState(() {issaveInknowUserLoading=false;});
                                         });
                                      }else{
-                                        saveSucces(context,string:S.of(context).uneConsultationEnCoursTDtecterPourCePatientDonc);
+                                        saveSucces(context,string:S.of(context)!.uneConsultationEnCoursTDtecterPourCePatientDonc);
                                      }
                                   }else{
-                                     saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
-                                          saveSucces(context,string:S.of(context).lePatientABienTAjouterAuSysteme);
-                                          _patientController.clear();
+                                     saveDataForUnknow(_patientController!.text,widget.phoneNumber).then((value){
+                                          saveSucces(context,string:S.of(context)!.lePatientABienTAjouterAuSysteme);
+                                          _patientController!.clear();
                                            setState(() {issaveInknowUserLoading=false;});
                                         });
                                   }
                                     
                                 }).catchError((onError){
                                   print(onError);
-                                  saveSucces(context,string:S.of(context).uneErreurEstSurvenuVeuillezContacterLeService);
+                                  saveSucces(context,string:S.of(context)!.uneErreurEstSurvenuVeuillezContacterLeService);
                                 });
                             }
                            
@@ -515,7 +539,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                           child:  Text( 
                             widget.isAccountIsExists == false
                                 ? "Ajouter ce patient"
-                                : S.of(context).poursuivreHorsParcours,
+                                : S.of(context)!.poursuivreHorsParcours,
                             style: TextStyle(
                                 color: textColor,
                                 fontSize: wv * 4.5,
@@ -524,11 +548,11 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                           ),
                           style: ButtonStyle(
                               padding: MaterialStateProperty.all(
-                                  EdgeInsets.symmetric(vertical: 15)),
+                                const  EdgeInsets.symmetric(vertical: 15)),
                               backgroundColor:
                                   MaterialStateProperty.all(kFirstIntroColor),
                               shape: MaterialStateProperty.all(
-                                  RoundedRectangleBorder(
+                                  const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(25))))),
                         ),
@@ -547,10 +571,11 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   @override
   Widget build(BuildContext context) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
-    AdherentModel adherent = adherentModelProvider.getAdherent;
-     DoctorModelProvider doctorProvider =
-        Provider.of<DoctorModelProvider>(context, listen: false);
-        print(widget.data);
+    AdherentModel? adherent = adherentModelProvider!.getAdherent;
+     DoctorModelProvider? doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+        if (kDebugMode) {
+          print(widget.data);
+        }
     return SafeArea(
         top: false,
         bottom: false,
@@ -558,7 +583,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
             backgroundColor: kBgTextColor,
             appBar: AppBar(
               leading: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.arrow_back_ios,
                     color: kDateTextColor,
                   ),
@@ -567,10 +592,10 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                 alignment: Alignment.center,
                 child: Container(
                   child: Column(
-                    children: [Text(S.of(context).famille ,style: TextStyle(
+                    children: [Text(S.of(context)!.famille ,style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0.3,
-                              color: kPrimaryColor)), Text('...',style: TextStyle(
+                              color: kPrimaryColor)), Text('...',style: const TextStyle(
                               letterSpacing: 0.3,
                               color: kPrimaryColor))],
                   ),
@@ -590,13 +615,13 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
             body: Container(
               alignment: Alignment.center,
                 child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                       Container(
                         width:double.infinity,
-                        padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
+                        padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
                         child: widget.isAccountIsExists==true ?  Container(
                           margin: EdgeInsets.only(left:2.w),
                           child: Column(
@@ -611,7 +636,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                       child: CarouselSlider(
                                         carouselController: beneficiaryCarouselController,
                                         options: CarouselOptions(
-                                          scrollPhysics: BouncingScrollPhysics(),
+                                          scrollPhysics: const BouncingScrollPhysics(),
                                           height: hv * 60,
                                           aspectRatio: 16 / 9,
                                           viewportFraction: 1,
@@ -640,7 +665,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                           )   
                         ) : Container(
                       child: Padding(
-                          padding: EdgeInsets.all(2),
+                          padding: const EdgeInsets.all(2),
                           child: HomePageComponents().getAdherentsList( isAccountIsExists: false)),
                     ) ,
                       ),
@@ -655,15 +680,17 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                  
                       widget.isAccountIsExists == false
                           ? SizedBox.shrink()
-                          : isRequestLaunch ? Loaders().buttonLoader(kPrimaryColor) :Container(
+                          : isRequestLaunch! ? Loaders().buttonLoader(kPrimaryColor) :Container(
                             alignment: Alignment.bottomCenter,
                             child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: Container(
+                                child: SizedBox(
                                   width: wv * 80,
                                   child: TextButton(
                                     onPressed: () async {
-                                         print("fdskfjgdskjfhdljksflkjsdflkjsdhfkljasdfhjkdasf");
+                                         if (kDebugMode) {
+                                           print("fdskfjgdskjfhdljksflkjsdflkjsdhfkljasdfhjkdasf");
+                                         }
                                       // if (adherent.enable == false) {
                                       //   showDialog(
                                       //       context: context,
@@ -681,38 +708,46 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                         //           )),
                                         // );
                                       //}
-                                      print(userSelected);
+                                      if (kDebugMode) {
+                                        print(userSelected);
+                                      }
                                        final Map<String, dynamic> userData = {
                                             'codeConsultation': code,
                                             'createdDate': DateTime.now()
                                           };
                                        
                                        if(userSelected!=-1){
-                                         print(adherentModelProvider.getAdherent.adherentId);
+                                         if (kDebugMode) {
+                                           print(adherentModelProvider!.getAdherent.adherentId);
+                                         }
                                           ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context,listen: false);
 
                                              var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                              .where('adherentId', isEqualTo: adherentModelProvider.getAdherent.adherentId ).where('idMedecin',isEqualTo:prestataire.getServiceProvider.id).orderBy('createdDate').get(); 
+                                              .where('adherentId', isEqualTo: adherentModelProvider!.getAdherent.adherentId ).where('idMedecin',isEqualTo:prestataire.getServiceProvider.id).orderBy('createdDate').get(); 
                                               usecase.then((value) async {
-                                                print(value.docs.isEmpty);
-                                                    if(value.docs.length==0){    
+                                                if (kDebugMode) {
+                                                  print(value.docs.isEmpty);
+                                                }
+                                                    if(value.docs.isEmpty){    
                                                       // cette consultation existe pas encore    
                                                       //  Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'];
                                                       //   DateTime d = t.toDate();
                                                       //   final date2 = DateTime.now();
                                                       //   final difference = date2.difference(d).inDays;
                                                       //    adherentModelProvider.getAdherent.codeConsult['createdDate']
-                                                       print("-------nnnnnnn--------${adherentModelProvider.getAdherent.codeConsult}");
+                                                       print("-------nnnnnnn--------${adherentModelProvider!.getAdherent.codeConsult}");
                                                       // print("--------------------${adherentModelProvider.getAdherent.codeConsult.isEmpty}");
-                                                      if(adherentModelProvider.getAdherent.codeConsult==null){
-                                                        print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
+                                                      if(adherentModelProvider!.getAdherent.codeConsult==null){
+                                                        if (kDebugMode) {
+                                                          print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
+                                                        }
                                                         setState(() {
                                                               isRequestLaunch=true;
                                                             });
                                                           await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
                                                               await facturationCode(value);
                                                               await addCodeToAdherent(userData);
-                                                              adherentModelProvider.getAdherent.codeConsult=userData;
+                                                              adherentModelProvider!.getAdherent.codeConsult=userData;
                                                               setState(() {
                                                               isRequestLaunch=false;
                                                             });
@@ -726,12 +761,12 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                         idOfAdherent:
                                                                             widget.phoneNumber,
                                                                         beneficiare: adherentUserSelected,
-                                                                        consultationCode:  adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
+                                                                        consultationCode:  adherentModelProvider!.getAdherent.codeConsult!['codeConsultation'],
                                                                         createdAt:  DateTime.now(),
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
+                                                        SnackBar(content: Text(S.of(context)!.uneFactureVientDtreCrerPourCette)));
                                                           });
                                                       }else{
                                                          Navigator.push(
@@ -742,29 +777,35 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                         idOfAdherent:
                                                                             widget.phoneNumber,
                                                                         beneficiare: adherentUserSelected,
-                                                                        consultationCode:  adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
+                                                                        consultationCode:  adherentModelProvider!.getAdherent.codeConsult!['codeConsultation'],
                                                                         createdAt:  DateTime.now(),
                                                                       )),
                                                             ); 
                                                       }
                                                           
                                                     }else if(value.docs.isNotEmpty){
-                                                    Timestamp t = adherentModelProvider.getAdherent.codeConsult['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider.getAdherent.codeConsult['createdDate']):adherentModelProvider.getAdherent.codeConsult['createdDate'];
+                                                    Timestamp t = adherentModelProvider!.getAdherent.codeConsult!['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider!.getAdherent.codeConsult!['createdDate']):adherentModelProvider!.getAdherent.codeConsult!['createdDate'];
                                                     DateTime d = t.toDate();
-                                                   print(t);
-                                                   print(d);
+                                                   if (kDebugMode) {
+                                                     print(t);
+                                                     print(d);
+                                                   }
                                                   final date2 = DateTime.now(); 
                                                   final difference = date2.difference(d).inDays;
-                                                  print(difference);
-                                                        if( difference>14 && adherentModelProvider.getAdherent.codeConsult!=null ){
-                                                                  print('jfhsdkfhdjksf');
+                                                  if (kDebugMode) {
+                                                    print(difference);
+                                                  }
+                                                        if( difference>14 && adherentModelProvider!.getAdherent.codeConsult!=null ){
+                                                                  if (kDebugMode) {
+                                                                    print('jfhsdkfhdjksf');
+                                                                  }
                                                                   setState(() {
                                                                     isRequestLaunch=true;
                                                                   });
                                                                 await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
                                                                     await facturationCode(value);
                                                                     await addCodeToAdherent(userData);
-                                                                    adherentModelProvider.getAdherent.codeConsult=userData;
+                                                                    adherentModelProvider!.getAdherent.codeConsult=userData;
                                                                     setState(() {
                                                                     isRequestLaunch=false;
                                                                   });
@@ -778,12 +819,12 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                               idOfAdherent:
                                                                                   widget.phoneNumber,
                                                                               beneficiare: adherentUserSelected,
-                                                                              consultationCode: adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
+                                                                              consultationCode: adherentModelProvider!.getAdherent.codeConsult!['codeConsultation'],
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 
                                                                     ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
+                                                              SnackBar(content: Text(S.of(context)!.uneFactureVientDtreCrerPourCette)));
                                                                 });
                                                         }else{
                                                           Navigator.push(
@@ -794,12 +835,12 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                               idOfAdherent:
                                                                                   widget.phoneNumber,
                                                                               beneficiare: adherentUserSelected,
-                                                                              consultationCode:  adherentModelProvider.getAdherent.codeConsult['codeConsultation'],
+                                                                              consultationCode:  adherentModelProvider!.getAdherent.codeConsult!['codeConsultation'],
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 
                                                         ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text(S.of(context).redirtectionVersLeCarnet)));
+                                                              SnackBar(content: Text(S.of(context)!.redirtectionVersLeCarnet)));
                                                         }
                                                           
                                                     }
@@ -817,33 +858,33 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text(S.of(context).redirectionVersLeCarnet)));
+                                                        SnackBar(content: Text(S.of(context)!.redirectionVersLeCarnet)));
                                                           }
                                                     });
                                          
                                          
                                         
                                       }else{
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).selectionerUnBeneficiaireAvantDeValider)));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.selectionerUnBeneficiaireAvantDeValider)));
                                       }
                                     },
                                     child:adherentUserSelected!=null ? Row(
                                       children: [
                                       Padding(padding: EdgeInsets.only(left: 10.w),
                                       child: HomePageComponents().getAvatar(
-                                          imgUrl: adherentUserSelected.avatarUrl==null? 'assets/images/avatar-profile.jpg' : adherentUserSelected.avatarUrl ,
+                                          imgUrl: adherentUserSelected!.avatarUrl ?? 'assets/images/avatar-profile.jpg' ,
                                           size: 15.0,
                                           renoveIsConnectedButton: false
                                         ),),
-                                        Spacer(),
+                                        const Spacer(),
                                         Text(
-                                            S.of(context).carnetDe+adherentUserSelected.cniName,
+                                            S.of(context)!.carnetDe+adherentUserSelected!.cniName!,
                                             style: TextStyle(
                                                 color: textColor,
                                                 fontSize: wv * 4.5,
                                                 fontWeight: FontWeight.w600),
                                           ),
-                                        Spacer(),
+                                        const  Spacer(),
                                         Padding(
                                           padding: EdgeInsets.only(right:10.h),
                                           child: SvgPicture.asset(
@@ -854,7 +895,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                         ),
                                       ],
                                     ): Text(
-                                          S.of(context).accederAuCarnetDeSante,
+                                          S.of(context)!.accederAuCarnetDeSante,
                                           style: TextStyle(
                                               color: textColor,
                                               fontSize: wv * 4.5,
@@ -862,12 +903,12 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                         ),
                                     style: ButtonStyle(
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.symmetric(vertical: 10)),
+                                            const EdgeInsets.symmetric(vertical: 10)),
                                         backgroundColor:
                                             MaterialStateProperty.all(
                                                 kFirstIntroColor),
                                         shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
+                                            const RoundedRectangleBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(25))))),
                                   ),

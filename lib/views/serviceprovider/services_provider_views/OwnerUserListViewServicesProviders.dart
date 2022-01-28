@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -16,24 +17,24 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OwnerUserListViewServicesProviders extends StatefulWidget {
-  final String idOfAdherent;
-  final BeneficiaryModel  beneficiare;
-  final String consultationCode;
-  final DateTime createdAt;
-  OwnerUserListViewServicesProviders({Key key, this.consultationCode, this.createdAt, this.idOfAdherent, this.beneficiare}) : super(key: key);
+  final String? idOfAdherent;
+  final BeneficiaryModel?  beneficiare;
+  final String? consultationCode;
+  final DateTime? createdAt;
+  OwnerUserListViewServicesProviders({Key? key, this.consultationCode, this.createdAt, this.idOfAdherent, this.beneficiare}) : super(key: key);
 
   @override
   _OwnerUserListViewServicesProvidersState createState() => _OwnerUserListViewServicesProvidersState();
 }
 
 class _OwnerUserListViewServicesProvidersState extends State<OwnerUserListViewServicesProviders> {
-UseCaseModelProvider userCaprovider;
-double underWeight;
-double normaleWeight;
-double overWeight;
-double svarWeight;
-double imc=0;
- DateTime date;
+UseCaseModelProvider? userCaprovider;
+double? underWeight;
+double? normaleWeight;
+double? overWeight;
+double? svarWeight;
+double? imc=0;
+ DateTime? date;
   @override
   void initState() {
     super.initState();
@@ -54,23 +55,27 @@ double imc=0;
    return value.runtimeType ==String || value.runtimeType ==int && value!=null && value!='' ? double.parse(value)/100  : value!=null && value!='' ? value/100 : 0;
  }
  double toInt(value){
-   print( value.runtimeType);
-   print( value);
+   if (kDebugMode) {
+     print( value.runtimeType);
+     print( value);
+   }
    return  value.runtimeType ==String || value.runtimeType ==int && value!=null && value!='' ? double.parse(value)  : value!=null && value!='' ? value : 0;
  }
  double getNumber( input, {int precision = 2}) {
    return input!=null ? double.parse('$input'.substring(0, '$input'.indexOf('.') + precision + 1)):0.0 ;
  }
  calculWeight(){
-   if(widget.beneficiare.weight!=null && widget.beneficiare.height!=null){
-   print(widget.beneficiare.weight.runtimeType); 
-   print(widget.beneficiare.weight);
-   print(widget.beneficiare.weight.runtimeType);
-     imc=getNumber(toInt(widget.beneficiare.weight) / (convertToMeter(widget.beneficiare.height) * convertToMeter(widget.beneficiare.height)), precision: 1);
-    if(imc<=18.5){setState(() {underWeight=imc;});}
-    else if(imc>=18.5 && imc<=25){setState(() {normaleWeight=imc;});}
-    else if(imc>=25 && imc<=30){setState(() {overWeight=imc;});}
-    else if(imc>30){setState(() {svarWeight=imc;});}
+   if(widget.beneficiare!.weight!=null && widget.beneficiare!.height!=null){
+   if (kDebugMode) {
+      print(widget.beneficiare!.weight.runtimeType);
+      print(widget.beneficiare!.weight);
+      print(widget.beneficiare!.weight.runtimeType);
+   } 
+     imc=getNumber(toInt(widget.beneficiare!.weight) / (convertToMeter(widget.beneficiare!.height) * convertToMeter(widget.beneficiare!.height)), precision: 1);
+    if(imc!<=18.5){setState(() {underWeight=imc;});}
+    else if(imc!>=18.5 && imc!<=25){setState(() {normaleWeight=imc;});}
+    else if(imc!>=25 && imc!<=30){setState(() {overWeight=imc;});}
+    else if(imc!>30){setState(() {svarWeight=imc;});}
    }
  }
 
@@ -84,7 +89,7 @@ double imc=0;
           backgroundColor: kBgTextColor,
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kDateTextColor,
                 ),
@@ -94,8 +99,8 @@ double imc=0;
               child: Container(
                 child: Column(
                   children: [
-                    Text(S.of(context).carnetDeSant),
-                    Text('${DateFormat('dd MMMM yyyy, h:mm').format(widget.beneficiare.dateCreated.toDate())}')
+                    Text(S.of(context)!.carnetDeSant),
+                    Text(DateFormat('dd MMMM yyyy, h:mm').format(widget.beneficiare!.dateCreated!.toDate()))
                   ],
                 ),
               ),
@@ -140,13 +145,13 @@ double imc=0;
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           HomePageComponents().getAvatar(
-                              imgUrl: widget.beneficiare !=null && widget.beneficiare.avatarUrl!=null ?  widget.beneficiare.avatarUrl:  'assets/images/avatar-profile.jpg',
+                              imgUrl: widget.beneficiare !=null && widget.beneficiare!.avatarUrl!=null ?  widget.beneficiare!.avatarUrl!:  'assets/images/avatar-profile.jpg',
                               size: MySize.size36,
                               renoveIsConnectedButton: false),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(widget.beneficiare.cniName,
+                              Text(widget.beneficiare!.cniName!,
                                   style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
@@ -154,20 +159,20 @@ double imc=0;
                                           MySize.getScaledSizeHeight(19.0))),
                               Row(
                                 children: [
-                                  Text(widget.beneficiare.gender=="H"? S.of(context).masculin:S.of(context).feminin,
+                                  Text(widget.beneficiare!.gender=="H"? S.of(context)!.masculin:S.of(context)!.feminin,
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
                                           fontSize:
                                               MySize.getScaledSizeHeight(17))),
                                   SizedBox(width: MySize.getScaledSizeHeight(5),),
-                                  Text('${getAge(widget.beneficiare.birthDate)} ',
+                                  Text('${getAge(widget.beneficiare!.birthDate)} ',
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w800,
                                           fontSize:
                                               MySize.getScaledSizeHeight(17))),
-                                  Text(S.of(context).ans,
+                                  Text(S.of(context)!.ans,
                                       style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w400,
@@ -184,7 +189,7 @@ double imc=0;
                       ),
                     ),
 
-                    widget.beneficiare.weight!=null && widget.beneficiare.height!=null ? Row(
+                    widget.beneficiare!.weight!=null && widget.beneficiare!.height!=null ? Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Column(
@@ -224,16 +229,16 @@ double imc=0;
                                                     Alignment.bottomCenter,
                                                 decoration: BoxDecoration(
                                                   color: kBlueForceLight,
-                                                  borderRadius: underWeight==null ? BorderRadius.only(
+                                                  borderRadius: underWeight==null ? const BorderRadius.only(
                                                           topLeft: Radius
                                                               .circular(3),
                                                           topRight:
                                                               Radius.circular(
-                                                                  0)) :BorderRadius.only(
-                                                          topLeft: Radius
+                                                                  0)) :const BorderRadius.only(
+                                                          topLeft:  Radius
                                                               .circular(3),
                                                           topRight:
-                                                              Radius.circular(
+                                                               Radius.circular(
                                                                   3)),
                                                 ),
                                                 height: underWeight==null ?
@@ -244,7 +249,7 @@ double imc=0;
                                                         25):
                                                     MySize.getScaledSizeWidth(
                                                         35),
-                                                child: Text('')),
+                                                child: const Text('')),
                                           ],
                                         ),
                                         Column(
@@ -262,12 +267,12 @@ double imc=0;
                                             Container(
                                                 decoration: BoxDecoration(
                                                   color: kDeepTealCAdress,
-                                                  borderRadius: normaleWeight==null ? BorderRadius.only(
+                                                  borderRadius: normaleWeight==null ? const BorderRadius.only(
                                                           topLeft: Radius
                                                               .circular(0),
                                                           topRight:
                                                               Radius.circular(
-                                                                  0)) :BorderRadius.only(
+                                                                  0)) : const BorderRadius.only(
                                                           topLeft: Radius
                                                               .circular(3),
                                                           topRight:
@@ -283,7 +288,7 @@ double imc=0;
                                                         25):
                                                     MySize.getScaledSizeWidth(
                                                         35),
-                                                child: Text('')),
+                                                child: const Text('')),
                                           ],
                                         ),
                                         Column(
@@ -415,7 +420,7 @@ double imc=0;
                                                         margin: Spacing.only(
                                                             left: 5, top: 5),
                                                         child: Text(
-                                                          widget.beneficiare.bloodGroup,
+                                                          widget.beneficiare!.bloodGroup!,
                                                           style: TextStyle(
                                                               color: kBlueForce,
                                                               fontWeight:
@@ -431,7 +436,7 @@ double imc=0;
                                                               .getScaledSizeHeight(
                                                                   15)),
                                                       Text(
-                                                        '${ widget.beneficiare.weight} Kg',
+                                                        '${ widget.beneficiare!.weight!} Kg',
                                                         style: TextStyle(
                                                             color: kBlueForce,
                                                             fontWeight:
@@ -465,7 +470,7 @@ double imc=0;
                                       ],
                                     ),
                                     Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: kDeepTealCAdress,
                                         ),
                                         height: MySize.getScaledSizeHeight(3),
@@ -480,25 +485,25 @@ double imc=0;
                                 Column(
                                   children: [
                                     Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: kDeepTealCAdress,
                                         ),
                                         height: MySize.getScaledSizeHeight(2),
                                         width: MySize.getScaledSizeWidth(20),
-                                        child: Text(' ')),
+                                        child: const Text(' ')),
                                     Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: kDeepTealCAdress,
                                         ),
                                         height: MySize.getScaledSizeHeight(10),
                                         width: MySize.getScaledSizeWidth(2),
-                                        child: Text(' ')),
+                                        child: const Text(' ')),
                                   ],
                                 ),
                                 Column(
                                   children: [
                                     Container(
-                                        child: Text('${ widget.beneficiare.height}',
+                                        child: Text('${ widget.beneficiare!.height}',
                                             style: TextStyle(
                                                 color: kBlueForce,
                                                 fontWeight: FontWeight.w600,
@@ -518,20 +523,20 @@ double imc=0;
                                 Column(
                                   children: [
                                     Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: kDeepTealCAdress,
                                         ),
                                         height:
                                             MySize.getScaledSizeHeight(10),
                                         width: MySize.getScaledSizeWidth(2),
-                                        child: Text(' ')),
+                                        child: const Text(' ')),
                                     Container(
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           color: kDeepTealCAdress,
                                         ),
                                         height: MySize.getScaledSizeHeight(2),
                                         width: MySize.getScaledSizeWidth(20),
-                                        child: Text(' ')),
+                                        child: const Text(' ')),
                                   ],
                                 )
                               ]),
@@ -541,17 +546,17 @@ double imc=0;
                       ],
                     ):Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Center(child: Container(child: Text(S.of(context).lesDonnesCommeLePoidsEtLaTailleSontManquantes , textAlign: TextAlign.center))),
+                      child: Center(child: Container(child: Text(S.of(context)!.lesDonnesCommeLePoidsEtLaTailleSontManquantes , textAlign: TextAlign.center))),
                     ),
                     SizedBox(height: MySize.getScaledSizeHeight(5),),
                     GestureDetector(
                         onTap: ()=>{
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).unPeutDePatienceCettePartieEstEnCourDe))) 
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.unPeutDePatienceCettePartieEstEnCourDe))) 
                         },
                         child: Container(
                         height: MySize.getScaledSizeHeight(100),
                         width: double.infinity,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           gradient: kTealsLinearColors),
                         child: Stack(
                           alignment: AlignmentDirectional.centerEnd,
@@ -560,7 +565,7 @@ double imc=0;
                                 right: 0,
                                 top:-2,
                                 child: Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: kDeepDarkTeal,
                                         borderRadius: BorderRadius.only(
                                             bottomRight: Radius.circular(20))),
@@ -576,8 +581,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(S.of(context).profil, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text(S.of(context).dtaill, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.profil, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.dtaill, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -612,8 +617,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text(S.of(context).prochains, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text(S.of(context).rendezvous, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.prochains, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.rendezvous, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -647,8 +652,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text(S.of(context).suiveDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.suiveDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -682,8 +687,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text(S.of(context).suiviDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.suiviDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -717,8 +722,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
-                                              Text(S.of(context).donnes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text(S.of(context).vitales, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.donnes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.vitales, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -752,8 +757,8 @@ double imc=0;
                                           Column(
                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(S.of(context).notesDu,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                              Text(S.of(context).mdecin, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.notesDu,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                              Text(S.of(context)!.mdecin, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                             ],
                                           ),
                                            
@@ -788,7 +793,7 @@ double imc=0;
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
                         children: [
-                          Text(S.of(context).codeDeConsultation,style: TextStyle(
+                          Text(S.of(context)!.codeDeConsultation,style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
                                   fontSize: MySize.getScaledSizeHeight(25))),

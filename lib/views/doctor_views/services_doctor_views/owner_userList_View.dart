@@ -548,17 +548,17 @@ double? imc=0;
                   ],
                 ):Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Center(child: Container(child: Text(S.of(context).lesDonnesCommeLePoidsEtLaTailleSontManquantes , textAlign: TextAlign.center))),
+                  child: Center(child: Container(child: Text(S.of(context)!.lesDonnesCommeLePoidsEtLaTailleSontManquantes , textAlign: TextAlign.center))),
                 ),
                 SizedBox(height: MySize.getScaledSizeHeight(5),),
                 GestureDetector(
                     onTap: ()=>{
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).unPeutDePatienceCettePartieEstEnCourDe))) 
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.unPeutDePatienceCettePartieEstEnCourDe))) 
                     },
                     child: Container(
                     height: MySize.getScaledSizeHeight(100),
                     width: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       gradient: kTealsLinearColors),
                     child: Stack(
                       alignment: AlignmentDirectional.centerEnd,
@@ -567,7 +567,7 @@ double? imc=0;
                             right: 0,
                             top:-2,
                             child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: kDeepDarkTeal,
                                     borderRadius: BorderRadius.only(
                                         bottomRight: Radius.circular(20))),
@@ -583,8 +583,8 @@ double? imc=0;
                                       Column(
                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(S.of(context).profil, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).dtaill, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.profil, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.dtaill, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                        
@@ -603,7 +603,7 @@ double? imc=0;
                             right: MySize.getScaledSizeWidth(70),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color:  Color(0xFF7CA9A9),
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
@@ -619,8 +619,8 @@ double? imc=0;
                                       Column(
                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Text(S.of(context).prochains, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).rendezvous, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.prochains, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.rendezvous, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                        
@@ -654,8 +654,8 @@ double? imc=0;
                                       Column(
                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Text(S.of(context).suiveDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.suiveDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                        
@@ -689,8 +689,8 @@ double? imc=0;
                                       Column(
                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Text(S.of(context).suiviDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.suiviDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                        
@@ -709,7 +709,7 @@ double? imc=0;
                             right: MySize.getScaledSizeWidth(240),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: kTabs2,
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
@@ -724,8 +724,8 @@ double? imc=0;
                                       Column(
                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          Text(S.of(context).donnes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).vitales, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.donnes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.vitales, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                        
@@ -744,7 +744,7 @@ double? imc=0;
                             right: MySize.getScaledSizeWidth(310),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: kDeepDarkTeal,
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
@@ -759,8 +759,8 @@ double? imc=0;
                                       Column(
                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(S.of(context).notesDu,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).mdecin, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.notesDu,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
+                                          Text(S.of(context)!.mdecin, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
                                        
@@ -789,13 +789,13 @@ double? imc=0;
                
                 decoration: BoxDecoration(
                    color: Colors.grey[300],
-                   borderRadius: BorderRadius.all(Radius.circular(10)),
+                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(
                     children: [
-                      Text(S.of(context).codeDeConsultation,style: TextStyle(
+                      Text(S.of(context)!.codeDeConsultation,style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w500,
                               fontSize: MySize.getScaledSizeHeight(25))),

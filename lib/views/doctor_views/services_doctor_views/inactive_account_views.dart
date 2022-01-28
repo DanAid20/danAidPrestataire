@@ -332,13 +332,17 @@ class _InactiveAccountState extends State<InactiveAccount> {
           print(issaveInknowUserLoading);
         }
       }
-     Future<bool> _onWillpop(){
+     Future<bool> _onWillpop() async {
+        
           if (isIninitState == true) {
             Navigator.pop<bool>(context);
             Navigator.pop<bool>(context);
+            return true;
           } else {
             Navigator.pop<bool>(context);
+            return true;
           }
+        
       }
     return Container(
       color: backgroundOverlayColor.withOpacity(0.8),

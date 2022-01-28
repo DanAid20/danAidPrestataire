@@ -10,6 +10,7 @@ import 'package:danaid/views/serviceprovider/PrestationsEnCours.dart';
 import 'package:danaid/views/serviceprovider/paiementHistory/DetailsPrestationHistoryForProvider.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,46 +18,48 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 class PrestationHistoryForProvider extends StatefulWidget {
-  PrestationHistoryForProvider({Key key}) : super(key: key);
+  PrestationHistoryForProvider({Key? key}) : super(key: key);
 
   @override
   _PrestationHistoryForProviderState createState() => _PrestationHistoryForProviderState();
 }
 
 class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvider> {
-   DateFormat dateFormat=DateFormat("MMM yyyy");
-   String data= DateFormat("yyyy").format(DateTime.now());
-   String newsDate='';
-   DateTime today = DateTime.now();
-   List<Facture> facture=[];
-   int currentYears= 0 ;
-   List<Map<int, Map<String, Object>>> paiementHistory= [];
-   int consultationpersonnes=0;
-   int referencemeentPersonnes=0;
-   int totalAnuel=0;
-   int paidYear=0;
-   int notpaidYear=0;
-   bool loading=false;
+   DateFormat? dateFormat=DateFormat("MMM yyyy");
+   String? data= DateFormat("yyyy").format(DateTime.now());
+   String? newsDate='';
+   DateTime? today = DateTime.now();
+   List<Facture>? facture=[];
+   int? currentYears= 0 ;
+   List<Map<int, Map<String, Object>>>? paiementHistory= [];
+   int? consultationpersonnes=0;
+   int? referencemeentPersonnes=0;
+   int? totalAnuel=0;
+   int? paidYear=0;
+   int? notpaidYear=0;
+   bool? loading=false;
     @override
   void initState() {
     
-    print(getMonthsInYear().toString());
-    getPaiement(currentDate: data);
+    if (kDebugMode) {
+      print(getMonthsInYear().toString());
+    }
+    getPaiement(currentDate: data!);
     setState((){
-      currentYears=int.parse(data);
+      currentYears=int.parse(data!);
     }); 
     super.initState();
   }
-   List<String> getMonthsInYear() {
-    List<String> month=[];
+   List<String>? getMonthsInYear() {
+    List<String>? month=[];
      for(int i=1; i<=12; i++){
-        var date = DateFormat("MMMM").format(DateTime(today.year, i));
+        var date = DateFormat("MMMM").format(DateTime(today!.year.toInt(), i));
         month.add(date);
      }
    return month;
   }
 
-  getPaiement({String currentDate }){
+  getPaiement({String? currentDate }){
       paiementHistory=[];
             consultationpersonnes=0;
             referencemeentPersonnes=0;
@@ -67,72 +70,86 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
       setState(() {
           loading=true ;  
         });                            
-    var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate), 1, 1, 0, 0 ));
+    var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate!), 1, 1, 0, 0 ));
  
      ServiceProviderModelProvider prestataireProvider =
         Provider.of<ServiceProviderModelProvider>(context, listen: false);
     
     // on get la listes 
-    print(prestataireProvider.getServiceProvider.id);
+    if (kDebugMode) {
+      print(prestataireProvider.getServiceProvider.id);
+    }
     var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider.id).orderBy('createdAt', descending: true).get();
         facturation.then((querySnapshot){
-        print( querySnapshot.docs.length);
+        if (kDebugMode) {
+          print( querySnapshot.docs.length);
+        }
         // ont get la list des ffacture ici
-        querySnapshot.docs.forEach((doc) {
+        for (var doc in querySnapshot.docs) {
 
            Facture facturesList= Facture.fromDocument(doc);
           print(facturesList.createdAt);
           
            setState(() {
-              facture.add(facturesList);
+              facture?.add(facturesList);
            });
-        });
-       print(facture.length.toString()+"********************");
+        }
+       if (kDebugMode) {
+         print(facture!.length.toString()+"********************");
+       }
 
-      List<String> monthName= getMonthsInYear();
+      List<String>? monthName= getMonthsInYear();
      // print(monthName.length);
-      monthName.asMap().forEach((key, value) {
-          print(key.toString()+'----');
-          print(monthName[key].toString()+'----');
-              var data =facture.where((element){
+      monthName?.asMap().forEach((key, value) {
+          if (kDebugMode) {
+            print(key.toString()+'----');
+            print(monthName[key].toString()+'----');
+          }
+              var data =facture?.where((element){
 
-                DateTime date = element.createdAt;
+                DateTime date = element.createdAt!;
                 String datetime= DateFormat("MMMM").format(date);
                 String year= DateFormat("yyyy").format(date);
                 return datetime==monthName[key] && date.year.toString()==year;
               });
       // print(data.toString());
-            if(data.length>0){
+            if(data!.isNotEmpty){
                 List<Facture> fac=data.toList();
-                print("+++++++++++++++++++++++++"+fac[0].toString());
+                if (kDebugMode) {
+                  print("+++++++++++++++++++++++++"+fac[0].toString());
+                }
                 Facture lastObject= fac.last;
                 var isSolve= fac.every((element) => element.isSolve==true);
                 var ispaidalready= fac.where((element) => element.isSolve==true);
                 var notReadyispaidalready= fac.where((element) => element.isSolve==false && element.canPay==1);
                 var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null && element.canPay==1 );
                 var personesConsultForMonthAll= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null  );
-                var personesReftForMonth= fac.where((element) =>  element.types!=null && element.types.contains('REFERENCEMENT')==true && element.isSolve==true);
-                var personesReftForMonthAll= fac.where((element) => element.types!=null &&  element.types.contains('REFERENCEMENT')==true );
+                var personesReftForMonth= fac.where((element) =>  element.types!=null && element.types!.contains('REFERENCEMENT')==true && element.isSolve==true);
+                var personesReftForMonthAll= fac.where((element) => element.types!=null &&  element.types!.contains('REFERENCEMENT')==true );
                 int sum=0;
                 fac.forEach((e)=>{
                   if(e.amountToPay!=null){
-                     sum += e.amountToPay
+                     sum += e.amountToPay!.toInt()
                   }
                 });
                 int readyPaid=0;
-                ispaidalready.forEach((e) => readyPaid += e.amountToPay);
+                for (var e in ispaidalready) {
+                  readyPaid += e.amountToPay!.toInt();
+                }
                 int readyPaidYet=0;
-                notReadyispaidalready.forEach((e) => readyPaidYet += e.amountToPay);
+                for (var e in notReadyispaidalready) {
+                  readyPaidYet += e.amountToPay!.toInt();
+                }
                 setState((){
-                    consultationpersonnes+=personesConsultForMonth.length;
-                    referencemeentPersonnes+=personesReftForMonth.length;
-                    totalAnuel+=sum;
-                    paidYear+=readyPaid;
-                    notpaidYear+=readyPaidYet;
+                    consultationpersonnes=consultationpersonnes!.toInt()+personesConsultForMonth.length;
+                    referencemeentPersonnes=referencemeentPersonnes!.toInt()+personesReftForMonth.length;
+                    totalAnuel=totalAnuel!+sum;
+                    paidYear=paidYear!+readyPaid;
+                    notpaidYear=notpaidYear!+readyPaidYet;
                 });
-                fac.sort((a, b) => a.createdAt.compareTo(a.createdAt));
-                DateTime lastDayOfMonth = new DateTime(fac.last.createdAt.year, fac.last.createdAt.month + 1, 0);
-                var lastDate= new DateTime(fac.last.createdAt.year, fac.last.createdAt.month, lastDayOfMonth.day+15  );
+                fac.sort((a, b) => a.createdAt!.compareTo(a.createdAt!));
+                DateTime lastDayOfMonth =  DateTime(fac.last.createdAt!.year, fac.last.createdAt!.month + 1, 0);
+                var lastDate=  DateTime(fac.last.createdAt!.year, fac.last.createdAt!.month, lastDayOfMonth.day+15  );
                 var formatedDate= DateFormat("dd-MM-yyyy").format(lastDate);
                 var obj={
                   key :{
@@ -147,13 +164,15 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                   'EnAttente' : isSolve
                   } 
                 };  
-                print(obj);
-                print(consultationpersonnes);
-                print(referencemeentPersonnes);
-                print(totalAnuel);
-                print(readyPaidYet);
-                print(paidYear);
-              paiementHistory.add(obj);
+                if (kDebugMode) {
+                  print(obj);
+                  print(consultationpersonnes);
+                  print(referencemeentPersonnes);
+                  print(totalAnuel);
+                  print(readyPaidYet);
+                  print(paidYear);
+                }
+              paiementHistory?.add(obj);
             }
          
         
@@ -169,25 +188,28 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
   @override
   Widget build(BuildContext context) {
 
-    print(data);
-    int dataTIme= int.parse(data);
+    if (kDebugMode) {
+      print(data);
+    }
+    int dataTIme= int.parse(data!);
     return SafeArea(
         top: false,
         bottom: false,
         child: Scaffold(
           backgroundColor: kBgTextColor,
           appBar: AppBar(
-            leading: IconButton(
-                icon: Icon(
+            leading:  IconButton(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kDateTextColor,
                 ),
-                onPressed: () => Navigator.pop(context)),
+                onPressed: () => Navigator.pop(context)
+              ),
             title: Align(
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text(S.of(context).historiqueDesPrestations), Text(S.of(context).vosConsultationsPaiement)],
+                  children: [Text(S.of(context)!.historiqueDesPrestations), Text(S.of(context)!.vosConsultationsPaiement)],
                 ),
               ),
             ),
@@ -213,7 +235,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
     
       child: Column(
               children: [
-                loading?Container(
+                loading!?SizedBox(
                 width: double.infinity,
                 height: hv*7.5,
                 child: Loaders().buttonLoader(kPrimaryColor),): Container(),
@@ -324,7 +346,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           alignment: Alignment.centerLeft,
                           margin : EdgeInsets.only(
                               left: 15.w,top: 2.h),
-                          child: Text(S.of(context).statusDesPaiements, style: TextStyle(
+                          child: Text(S.of(context)!.statusDesPaiements, style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
                                       
@@ -348,7 +370,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               
                               children: [
-                                Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.consultation, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -377,7 +399,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         ),
                                       Container(
                                         width: 80.w,
-                                        child: Text(S.of(context).beneficiaresJours,style: TextStyle(
+                                        child: Text(S.of(context)!.beneficiaresJours,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -387,7 +409,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                     ),
                                   ],
                                 )),
-                                Text('${consultationpersonnes*2000}f',style: TextStyle(
+                                Text('${consultationpersonnes!*2000}f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
                                       
@@ -400,7 +422,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.rfrencements, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -429,7 +451,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         ),
                                        Container(
                                         width: 80.w,
-                                        child: Text(S.of(context).personnesInscrites,style: TextStyle(
+                                        child: Text(S.of(context)!.personnesInscrites,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -439,7 +461,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                   ],
                                 )),
                                 Spacer(),
-                                Text('${referencemeentPersonnes*2000}f',style: TextStyle(
+                                Text('${referencemeentPersonnes!*2000}f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
                                       
@@ -450,13 +472,13 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
                                           fontSize: wv*3.5)),
                                  Spacer(),
-                                Text('${ referencemeentPersonnes*2000+consultationpersonnes*2000} f',style: TextStyle(
+                                Text('${ referencemeentPersonnes!*2000+consultationpersonnes!*2000} f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
                                       
@@ -469,7 +491,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.pay, textScaleFactor: 1.0, style: TextStyle(
                                           color: kDeepTeal,
                                           fontWeight: FontWeight.w600,
                                           
@@ -488,7 +510,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.restePayer, textScaleFactor: 1.0, style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w600,
                                           
@@ -533,20 +555,20 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                 // HomePageComponents().paiementItem(),
                                 // HomePageComponents().paiementItem(),
                                 // HomePageComponents().paiementItem(),
-                              paiementHistory.length==0 ?   Padding(
+                              paiementHistory!.isEmpty ?   Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Center(child: Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne))),
+                                child: Center(child: Container(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne))),
                               ):
-                               loading? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
+                               loading!? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
                                ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 primary: false,
                                 reverse: true,
-                                itemCount: paiementHistory.length,
+                                itemCount: paiementHistory!.length,
                                 itemBuilder: (context, index) {
-                                  if(paiementHistory.elementAt(index)!=null){
-                                       for (int key in  paiementHistory.elementAt(index).keys){
+                                  if(paiementHistory!.elementAt(index).isNotEmpty){
+                                       for (int key in  paiementHistory!.elementAt(index).keys){
                                         // print( paiementHistory.elementAt(index)[key]);
                                         // print( paiementHistory.elementAt(index)[key]['month']);
                                          return GestureDetector(onTap:(){
@@ -555,24 +577,24 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailsPrestationHistoryForProvider(
-                                                    facture:paiementHistory.elementAt(index)[key]['data'],
-                                                    month: paiementHistory.elementAt(index)[key]['month'],
+                                                    facture:paiementHistory?.elementAt(index)[key]!['data'] as List<Facture>,
+                                                    month: paiementHistory?.elementAt(index)[key]!['month']!.toString(),
                                                   )),
                                         );
                                         },
                                         child: HomePageComponents().paiementItem(
-                                          lastDatePaiement: paiementHistory.elementAt(index)[key]['lasDateOfMonth'],
-                                          month:paiementHistory.elementAt(index)[key]['month'], 
-                                          paidAllReady: paiementHistory.elementAt(index)[key]['paidAllReady'],
-                                          paidOrNot: paiementHistory.elementAt(index)[key]['EnAttente'],
-                                          prix: paiementHistory.elementAt(index)[key]['totlaOfMonths'].toString()
+                                          lastDatePaiement: paiementHistory!.elementAt(index)[key]!['lasDateOfMonth'] as String,
+                                          month:paiementHistory!.elementAt(index)[key]!['month']!.toString(), 
+                                          paidAllReady: paiementHistory!.elementAt(index)[key]!['paidAllReady']!.toString(),
+                                          paidOrNot: paiementHistory?.elementAt(index)[key]!['EnAttente'] as bool,
+                                          prix: paiementHistory?.elementAt(index)[key]!['totlaOfMonths']as String
                                         ));
                                       }
                                  
                                   }else {
-                                    return Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
+                                    return Container(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne));
                                   }
-                                  return  Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
+                                  return  Container(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne));
                              
                                  }
                               ),

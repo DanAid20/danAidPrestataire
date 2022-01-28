@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors_in_immutables, import_of_legacy_library_into_null_safe
+
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/models/facture.dart';
@@ -8,6 +12,7 @@ import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +20,7 @@ import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 class PrestationHistory extends StatefulWidget {
-  PrestationHistory({Key key}) : super(key: key);
+  PrestationHistory({Key? key}) : super(key: key);
 
   @override
   _PrestationHistoryState createState() => _PrestationHistoryState();
@@ -37,7 +42,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
    bool loading=false;
     @override
   void initState() {
-    print(getMonthsInYear().toString());
+    if (kDebugMode) {
+      print(getMonthsInYear().toString());
+    }
     getPaiement(currentDate: data);
     setState((){
       currentYears=int.parse(data);
@@ -53,7 +60,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
    return month;
   }
 
-  getPaiement({String currentDate }){
+  getPaiement({String? currentDate }){
       paiementHistory=[];
             consultationpersonnes=0;
             referencemeentPersonnes=0;
@@ -64,7 +71,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
     setState(() {
           loading=true ;  
         });                          
-    var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate), 1, 1, 0, 0 ));
+    var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate!), 1, 1, 0, 0 ));
  
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
@@ -74,7 +81,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
         facturation.then((querySnapshot){
         print( querySnapshot.docs.length);
         // ont get la list des ffacture ici
-        querySnapshot.docs.forEach((doc) {
+        for (var doc in querySnapshot.docs) {
 
            Facture facturesList= Facture.fromDocument(doc);
           print(facturesList.amountToPay);
@@ -82,38 +89,47 @@ class _PrestationHistoryState extends State<PrestationHistory> {
            setState(() {
               facture.add(facturesList);
            });
-        });
+        }
        print(facture.length);
 
       List<String> monthName= getMonthsInYear();
      // print(monthName.length);
       monthName.asMap().forEach((key, value) {
          // print(key.toString()+'----');
-          print(monthName[key].toString()+'----');
+          if (kDebugMode) {
+            print(monthName[key].toString()+'----');
+          }
               var data =facture.where((element){
                //   print(element.createdAt.month);
-                String data= DateFormat("MMMM").format(element.createdAt);
-                String year= DateFormat("yyyy").format(element.createdAt);
+                String data= DateFormat("MMMM").format(element.createdAt!);
+                String year= DateFormat("yyyy").format(element.createdAt!);
                 return data==monthName[key] && date==year ;
               });
             
-            if(data.length>0){
+            if(data.isNotEmpty){
                 List<Facture> fac=data.toList();
-                print("+++++++++++++++++++++++++"+fac.length.toString());
-                Facture lastObject= fac.last;
+                if (kDebugMode) {
+                  print("+++++++++++++++++++++++++"+fac.length.toString());
+                }
                 var isSolve= fac.every((element) => element.isSolve==true);
                 var ispaidalready= fac.where((element) => element.isSolve==true);
                 var notReadyispaidalready= fac.where((element) => element.isSolve==false && element.canPay==1);
                 var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null && element.canPay==1 );
                 var personesConsultForMonthAll= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null  );
-                var personesReftForMonth= fac.where((element) => element.types.contains('REFERENCEMENT')==true && element.canPay==1);
-                var personesReftForMonthAll= fac.where((element) => element.types.contains('REFERENCEMENT')==true );
+                var personesReftForMonth= fac.where((element) => element.types!.contains('REFERENCEMENT')==true && element.canPay==1);
+                var personesReftForMonthAll= fac.where((element) => element.types!.contains('REFERENCEMENT')==true );
                 int sum=0;
-                fac.forEach((e) => sum += e.amountToPay);
+                for (var e in fac) {
+                  sum += e.amountToPay!;
+                }
                 int readyPaid=0;
-                ispaidalready.forEach((e) => readyPaid += e.amountToPay);
+                for (var e in ispaidalready) {
+                  readyPaid += e.amountToPay!;
+                }
                 int readyPaidYet=0;
-                notReadyispaidalready.forEach((e) => readyPaidYet += e.amountToPay);
+                for (var e in notReadyispaidalready) {
+                  readyPaidYet += e.amountToPay!;
+                }
                 setState((){
                     consultationpersonnes+=personesConsultForMonth.length;
                     referencemeentPersonnes+=personesReftForMonth.length;
@@ -121,9 +137,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                     paidYear+=readyPaid;
                     notpaidYear+=readyPaidYet;
                 });
-                fac.sort((a, b) => a.createdAt.compareTo(a.createdAt));
-                DateTime lastDayOfMonth = new DateTime(fac.last.createdAt.year, fac.last.createdAt.month + 1, 0);
-                var lastDate= new DateTime(fac.last.createdAt.year, fac.last.createdAt.month, lastDayOfMonth.day+15  );
+                fac.sort((a, b) => a.createdAt!.compareTo(a.createdAt!));
+                DateTime lastDayOfMonth = DateTime(fac.last.createdAt!.year, fac.last.createdAt!.month + 1, 0);
+                var lastDate=  DateTime(fac.last.createdAt!.year, fac.last.createdAt!.month, lastDayOfMonth.day+15  );
                 var formatedDate= DateFormat("dd-MM-yyyy").format(lastDate);
                 var obj={
                   key :{
@@ -169,7 +185,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
           backgroundColor: kBgTextColor,
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kDateTextColor,
                 ),
@@ -178,7 +194,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text(S.of(context).historiqueDesPrestations), Text(S.of(context).vosConsultationsPaiement)],
+                  children: [Text(S.of(context)!.historiqueDesPrestations), Text(S.of(context)!.vosConsultationsPaiement)],
                 ),
               ),
             ),
@@ -204,7 +220,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
     
       child: Column(
               children: [
-                loading?Container(
+                loading?SizedBox(
                 width: double.infinity,
                 height: hv*7.5,
                 child: Loaders().buttonLoader(kPrimaryColor),): Container(),
@@ -232,7 +248,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                             fontWeight: FontWeight.w700,
                                             
                                             fontSize: wv*3.5), textScaleFactor: 1.0),
-                                       currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
+                                       currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:const Text('') ,) : Container()
                                       ],
                                     ),
                                   ),
@@ -308,14 +324,14 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(child: Column(
+                    Column(
                        mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           alignment: Alignment.centerLeft,
                           margin : EdgeInsets.only(
                               left: 15.w,top: 2.h),
-                          child: Text(S.of(context).statusDesPaiements, style: TextStyle(
+                          child: Text(S.of(context)!.statusDesPaiements, style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
                                       
@@ -324,12 +340,12 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                            alignment: Alignment.centerLeft,
                            
                           margin: EdgeInsets.only(left: wv*5, top: hv*2, right: wv*5) ,
-                          padding: EdgeInsets.all(20) ,
+                          padding: const EdgeInsets.all(20) ,
                           width: double.infinity,
                               decoration: BoxDecoration(
                                 color:kThirdIntroColor.withOpacity(0.3),
                                 
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                borderRadius: const BorderRadius.all(Radius.circular(10)),
                               ),
                           child: 
                           Column(
@@ -339,7 +355,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               
                               children: [
-                                Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.consultation, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -366,9 +382,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                           fontSize: wv*3.5), textScaleFactor: 1.0,),
                                           ],
                                         ),
-                                      Container(
+                                      SizedBox(
                                         width: 80.w,
-                                        child: Text(S.of(context).beneficiaresJours,style: TextStyle(
+                                        child: Text(S.of(context)!.beneficiaresJours,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -391,7 +407,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.rfrencements, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -418,9 +434,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                           fontSize: wv*3.5), textScaleFactor: 1.0,),
                                           ],
                                         ),
-                                       Container(
+                                       SizedBox(
                                         width: 80.w,
-                                        child: Text(S.of(context).personnesInscrites,style: TextStyle(
+                                        child: Text(S.of(context)!.personnesInscrites,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -429,7 +445,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                     ),
                                   ],
                                 )),
-                                Spacer(),
+                                const Spacer(),
                                 Text('${referencemeentPersonnes*2000}f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
@@ -437,16 +453,16 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                       fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
                             ),
-                            new Divider(),
+                          const Divider(),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
                                           fontSize: wv*3.5)),
-                                 Spacer(),
+                                const Spacer(),
                                 Text('${ referencemeentPersonnes*2000+consultationpersonnes*2000} f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
@@ -460,12 +476,12 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.pay, textScaleFactor: 1.0, style: TextStyle(
                                           color: kDeepTeal,
                                           fontWeight: FontWeight.w600,
                                           
                                           fontSize: wv*3.5)),
-                                 Spacer(),
+                                const Spacer(),
                                 Text('$paidYear f',style: TextStyle(
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
@@ -479,12 +495,12 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context)!.restePayer, textScaleFactor: 1.0, style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w600,
                                           
                                           fontSize: wv*3.5)),
-                                 Spacer(),
+                                const Spacer(),
                                 Text('$notpaidYear f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
@@ -495,7 +511,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                           ],
                         )),
                       ],
-                    )),
+                    ),
                   ],
                 ),
                SizedBox(height: hv * 3,),
@@ -524,9 +540,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                 // HomePageComponents().paiementItem(),
                                 // HomePageComponents().paiementItem(),
                                 // HomePageComponents().paiementItem(),
-                              paiementHistory.length==0 ?   Padding(
+                              paiementHistory.isEmpty ?   Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Center(child: Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne))),
+                                child: Center(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne)),
                               ):
                                loading? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
                                ListView.builder(
@@ -535,7 +551,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                 primary: false,
                                 itemCount: paiementHistory.length,
                                 itemBuilder: (context, index) {
-                                  if(paiementHistory.elementAt(index)!=null){
+                                  if(paiementHistory.elementAt(index).isNotEmpty){
                                        for (int key in  paiementHistory.elementAt(index).keys){
                                         // print( paiementHistory.elementAt(index)[key]);
                                         // print( paiementHistory.elementAt(index)[key]['month']);
@@ -546,24 +562,24 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   DetailsPrestationHistory(
-                                                    facture:paiementHistory.elementAt(index)[key]['data'],
-                                                    month: paiementHistory.elementAt(index)[key]['month'],
+                                                    facture:paiementHistory.elementAt(index)[key]!['data'] as List<Facture>,
+                                                    month: paiementHistory.elementAt(index)[key]!['month']!.toString(),
                                                   )),
                                         );
                                       }, 
                                         child: HomePageComponents().paiementItem(
-                                          lastDatePaiement: paiementHistory.elementAt(index)[key]['lasDateOfMonth'],
-                                          month:paiementHistory.elementAt(index)[key]['month'], 
-                                          paidAllReady: paiementHistory.elementAt(index)[key]['paidAllReady'],
-                                          paidOrNot: paiementHistory.elementAt(index)[key]['EnAttente'],
-                                          prix: paiementHistory.elementAt(index)[key]['totlaOfMonths'].toString()
+                                          lastDatePaiement: paiementHistory.elementAt(index)[key]!['lasDateOfMonth']!.toString(),
+                                          month:paiementHistory.elementAt(index)[key]!['month']!.toString(), 
+                                          paidAllReady: paiementHistory.elementAt(index)[key]!['paidAllReady']!.toString(),
+                                          paidOrNot: paiementHistory.elementAt(index)[key]!['EnAttente'] as bool,
+                                          prix: paiementHistory.elementAt(index)[key]!['totlaOfMonths']!.toString()
                                         ));
                                       }
                                  
                                   }else {
-                                    return Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
+                                    return Text(S.of(context)!.aucuneTransactionPourCetteAnne);
                                   }
-                                  return  Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
+                                  return  Text(S.of(context)!.aucuneTransactionPourCetteAnne);
                              
                                  }
                               ),

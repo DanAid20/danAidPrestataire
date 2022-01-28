@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors_in_immutables
+
 import 'dart:math';
 
 import 'package:danaid/core/utils/config_size.dart';
@@ -13,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DoctorBottomNavigationView extends StatefulWidget {
-  DoctorBottomNavigationView({Key key}) : super(key: key);
+  DoctorBottomNavigationView({Key? key}) : super(key: key);
 
   @override
   _DoctorBottomNavigationViewState createState() =>
@@ -29,7 +31,7 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
   int index = 0;
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
     super.initState();
   }
 
@@ -94,11 +96,11 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context).entraide, onTap: networkView),
-                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context).accueil, onTap: homeView),
-                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context).mesPatients, onTap: patientView),
-                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context).partenaires, onTap: partnerView),
-                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: S.of(context).profile, onTap: profileView),
+                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context)!.entraide, onTap: networkView),
+                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context)!.accueil, onTap: homeView),
+                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context)!.mesPatients, onTap: patientView),
+                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context)!.partenaires, onTap: partnerView),
+                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: S.of(context)!.profile, onTap: profileView),
                     ],
                   ),
                 ),
@@ -136,7 +138,7 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
     });
   }
 
-  bottomIcon({String svgUrl, String title, Function onTap}){
+  bottomIcon({String? svgUrl, String? title, Function? onTap}){
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -144,22 +146,22 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(svgUrl, width: inch*3, color: Colors.white.withOpacity(0.65)),
-            Text(title, style: TextStyle(color: Colors.white.withOpacity(0.7)),)
+            SvgPicture.asset(svgUrl!, width: inch*3, color: Colors.white.withOpacity(0.65)),
+            Text(title!, style: TextStyle(color: Colors.white.withOpacity(0.7)),)
           ],
         ),
       ),
     );
   }
 
-  iconActive({String svgUrl}){
+  iconActive({String? svgUrl}){
     return CircleAvatar(
       radius: width*7.5,
       backgroundColor: kPrimaryColor,
       child: CircleAvatar(
         radius: width*7.2,
         backgroundColor: Colors.white,
-        child: SvgPicture.asset(svgUrl, width: inch*4, color: kPrimaryColor.withOpacity(0.65)),
+        child: SvgPicture.asset(svgUrl!, width: inch*4, color: kPrimaryColor.withOpacity(0.65)),
       ),
     );
   }
