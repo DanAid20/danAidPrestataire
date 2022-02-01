@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
@@ -38,7 +38,7 @@ class IssuseAQuote extends StatefulWidget {
 class _IssuseAQuoteState extends State<IssuseAQuote> {
   final GlobalKey<FormState>? _form = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState>? _scaffoldKey = GlobalKey<ScaffoldState>();
-  GlobalKey<AutoCompleteTextFieldState<String>>? autoCompleteKey =  GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<String>> autoCompleteKey =  GlobalKey();
    final TextEditingController? _ProduitOuServicesController = TextEditingController();
    final TextEditingController? _LibelleController = TextEditingController();
    final TextEditingController? _MontantController = TextEditingController();

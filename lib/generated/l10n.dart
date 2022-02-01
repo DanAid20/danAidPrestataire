@@ -13,7 +13,7 @@ import 'intl/messages_all.dart';
 // ignore_for_file: avoid_redundant_argument_values
 
 class S {
-   S();
+  S();
   
   static S? current;
   
