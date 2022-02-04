@@ -118,8 +118,8 @@ class HiveDatabase {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('town');
   }
-  static Future<bool> getSignInState() async {
-    Box authBox = await Hive.openBox('auth');
+  static Future<bool>? getSignInState() async {
+    Box? authBox = await Hive.openBox('auth');
     return authBox.get('isSignedIn');
   }
   static Future<bool> getRegisterState() async {

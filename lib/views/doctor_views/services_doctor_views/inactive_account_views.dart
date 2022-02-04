@@ -620,7 +620,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                       child: CarouselSlider(
                                         carouselController: beneficiaryCarouselController,
                                         options: CarouselOptions(
-                                          scrollPhysics: BouncingScrollPhysics(),
+                                          scrollPhysics: const BouncingScrollPhysics(),
                                           height: hv * 60,
                                           aspectRatio: 16 / 9,
                                           viewportFraction: 1,

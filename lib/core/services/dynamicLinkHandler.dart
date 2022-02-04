@@ -187,7 +187,7 @@ class DynamicLinkHandler {
             if (adherentProvider.getAdherent?.enable == false){
               await FirebaseFirestore.instance.collection("USERS").doc(adherentProvider.getAdherent?.getAdherentId).set({'friendRequests': FieldValue.arrayUnion(['+'+queryParams["userid"]!.substring(1)])}, SetOptions(merge: true)).then((doc) async {
               await FirebaseFirestore.instance.collection("USERS").doc('+'+queryParams["userid"]!.substring(1).toString()).update({"points": FieldValue.increment(100)}).then((value) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Demande d'amitié en attente")));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Demande d'amitié en attente")));
                 Navigator.pushNamed(context, '/friend-requests');
                 });
               });
@@ -219,7 +219,7 @@ class DynamicLinkHandler {
                   "senderId": ambaId,
                   "sendingInvitationDate": DateTime.now(),
                 });
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Bienvenue sur DanAid")));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Bienvenue sur DanAid")));
                 });
               });
             }

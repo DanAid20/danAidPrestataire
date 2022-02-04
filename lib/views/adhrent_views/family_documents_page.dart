@@ -90,7 +90,7 @@ class _FamilyDocumentsPageState extends State<FamilyDocumentsPage> {
                       CarouselSlider(
                         carouselController: carouselController,
                         options: CarouselOptions(
-                          scrollPhysics: BouncingScrollPhysics(),
+                          scrollPhysics: const BouncingScrollPhysics(),
                           viewportFraction: 0.5,
                           height: 250,
                           initialPage: 0,

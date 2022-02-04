@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math';
 import 'dart:ui';
 
@@ -303,7 +305,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
   saveSucces(BuildContext context, {String? string}) {
   // set up the button
   Widget okButton = TextButton(
-    child: Text("OK"),
+    child: const Text("OK"),
     onPressed: () {
         Navigator.pop(context);
      },
@@ -631,24 +633,21 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                   alignment: Alignment.center,
                                   child: Padding(
                                     padding: EdgeInsets.only(top: hv*2),
-                                    child: Container(
-                                     
-                                      child: CarouselSlider(
-                                        carouselController: beneficiaryCarouselController,
-                                        options: CarouselOptions(
-                                          scrollPhysics: const BouncingScrollPhysics(),
-                                          height: hv * 60,
-                                          aspectRatio: 16 / 9,
-                                          viewportFraction: 1,
-                                          initialPage: 0,
-                                          enableInfiniteScroll: false,
-                                          reverse: false,
-                                          autoPlay: false,
-                                          enlargeCenterPage: true,
-                                          scrollDirection: Axis.horizontal,
-                                        ),
-                                        items: beneficiaries
+                                    child: CarouselSlider(
+                                      carouselController: beneficiaryCarouselController,
+                                      options: CarouselOptions(
+                                        scrollPhysics: const BouncingScrollPhysics(),
+                                        height: hv * 60,
+                                        aspectRatio: 16 / 9,
+                                        viewportFraction: 1,
+                                        initialPage: 0,
+                                        enableInfiniteScroll: false,
+                                        reverse: false,
+                                        autoPlay: false,
+                                        enlargeCenterPage: true,
+                                        scrollDirection: Axis.horizontal,
                                       ),
+                                      items: beneficiaries
                                     ),
                                   ),
                                 ) : Center(child: Loaders().buttonLoader(kCardTextColor)),

@@ -937,7 +937,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               HiveDatabase.setSurname(sname);
                               HiveDatabase.setImgUrl(avatarUrl!);
 
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Informations mises à jour..")));
                               Navigator.pop(context);
                               setState(() {
                                 buttonLoading = false;
@@ -1022,10 +1022,10 @@ class _ProfileEditState extends State<ProfileEdit> {
     //storageUploadTask = storageReference.putFile(imageFileAvatar);
 
     storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+ S.of(context)!.ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(name+ S.of(context)!.ajoute)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       if(name == "Acte_De_Marriage"){

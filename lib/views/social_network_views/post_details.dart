@@ -284,7 +284,7 @@ class _PostDetailsState extends State<PostDetails> {
                       alignment: Alignment.centerLeft,
                       children: [
                         TextField(
-                          scrollPhysics: BouncingScrollPhysics(),
+                          scrollPhysics: const BouncingScrollPhysics(),
                           minLines: 1,
                           maxLines: 5,
                           controller: _commentController,

@@ -48,7 +48,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                   return CarouselSlider(
                     carouselController: buttonCarouselController,
                     options: CarouselOptions(
-                      scrollPhysics: BouncingScrollPhysics(),
+                      scrollPhysics: const BouncingScrollPhysics(),
                       height: hv * 52,
                       aspectRatio: 16 / 9,
                       viewportFraction: 0.7,

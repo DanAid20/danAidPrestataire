@@ -310,13 +310,13 @@ class _PaymentCartState extends State<PaymentCart> {
                                                                   Navigator.pop(context);
                                                                 }
                                                                 else {
-                                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Ce code promo a déjà expiré..."), backgroundColor: Colors.red,));
+                                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Ce code promo a déjà expiré..."), backgroundColor: Colors.red,));
                                                                   _codeController.clear();
                                                                   Navigator.pop(context);
                                                                 }
                                                               } else {
                                                                 _codeController.clear();
-                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Le code promo est incorrecte")));
+                                                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Le code promo est incorrecte")));
                                                               }
                                                             },
                                                           )
@@ -333,7 +333,7 @@ class _PaymentCartState extends State<PaymentCart> {
                                       }
                                     }
                                     else {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Seuls les adhérents s'étant inscrit par lien d'invitation peuvent utiliser un code promo")));
+                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Seuls les adhérents s'étant inscrit par lien d'invitation peuvent utiliser un code promo")));
                                     }
                                   }
                                   else {
@@ -432,7 +432,7 @@ class _PaymentCartState extends State<PaymentCart> {
       }
       return result;
     } on PlatformException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Transaction échouée")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Transaction échouée")));
       //setState(() { spinner2 = false;});
       return "FAILED";
     }
@@ -489,14 +489,14 @@ class _PaymentCartState extends State<PaymentCart> {
     DateTime? end = invPaidEnd == null ? invStart?.add(Duration(days: months!*30)) : invPaidEnd.add(Duration(days: months!*30));
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
 
-    int? monthPaid = widget.?invoice?.monthsPaid == null ? 0 : widget.invoice?.monthsPaid;
+    num? monthPaid = widget.invoice?.monthsPaid ?? 0;
 
     bool campOn = widget.invoice?.campaignsChosen == null ? false : widget.invoice!.campaignsChosen!.isEmpty ? false : true;
 
     String res = await makePayment(cost: amount, isOrange: isOrange);
     if(res == "SUCCESS"){
       try {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Paiement éffectué",)));
         if(widget.invoice?.inscriptionId != null){
           if(payInscription){
             FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent?.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice?.inscriptionId).update({
@@ -517,7 +517,7 @@ class _PaymentCartState extends State<PaymentCart> {
           "currentPaidEndDate": end,
           "promos": FieldValue.arrayUnion(campaignsChosen),
           "invoiceIsSplitted": true,
-          "paid": monthPaid! + months! == 12 ? true : false,
+          "paid": monthPaid + months! == 12 ? true : false,
           "etatValider": monthPaid + months! == 12 ? true : false,
           "montant": campOn ? widget.invoice?.amount : widget.invoice!.amount! - promoSum,
           "paymentDates": FieldValue.arrayUnion([{"date" : DateTime.now(), "amount": amount-registrationFee!}]),
@@ -533,7 +533,7 @@ class _PaymentCartState extends State<PaymentCart> {
 
           Navigator.pop(context);
           Navigator.pop(context);       
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mise à jour des statuts éffectué",)));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Mise à jour des statuts éffectué",)));
 
         });
       }
@@ -542,7 +542,7 @@ class _PaymentCartState extends State<PaymentCart> {
       }
     }
     else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Une erreur de paiement est survenue..",)));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Une erreur de paiement est survenue..",)));
     }
   }
 }

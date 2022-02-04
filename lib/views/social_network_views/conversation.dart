@@ -19,7 +19,7 @@ import 'package:danaid/core/providers/conversationChatModelProvider.dart';
 import 'package:danaid/core/models/conversationChatModel.dart';
 import 'package:danaid/widgets/stateful_wrapper.dart';
 import 'package:provider/provider.dart';
-import 'package:swipeable/swipeable.dart';
+import 'package:swipe_to_action/swipe_to_action.dart';
 
 class Conversation extends StatefulWidget {
   @override
@@ -278,7 +278,7 @@ class _ConversationState extends State<Conversation> {
                         alignment: Alignment.centerLeft,
                         children: [
                           TextField(
-                            scrollPhysics: BouncingScrollPhysics(),
+                            scrollPhysics: const BouncingScrollPhysics(),
                             minLines: 1,
                             maxLines: 5,
                             controller: _textController,
@@ -497,65 +497,62 @@ class _ConversationState extends State<Conversation> {
       return (msg.idFrom == conversation.userId)
           ?
           //My messages
-          Swipeable(
-              threshold: 50.0,
-              onSwipeEnd: () {
-                setState(() {
-                  replyMsg = msg.content!;
-                  showReplyTxt = true;
-                  showReplyImg = false;
-                  showReplySticker = false;
-                  replyIsLocal = true;
-                  replyIsText = true;
-                  replyImgIsSticker = false;
-                  replyIsImage = false;
-                });
-              },
-              background: Container(),
-              child: MessageBox(
-                userAvatar: conversation.userAvatar,
-                targetAvatar: conversation.targetAvatar,
-                message: msg,
-                userName: conversation.userName,
-                targetName: conversation.targetName,
-                userId: conversation.userId,
-                seen: msg.seen,
-              )
+          Swipe(
+            id: msg.id!,
+            onSwipe: () {
+              setState(() {
+                replyMsg = msg.content!;
+                showReplyTxt = true;
+                showReplyImg = false;
+                showReplySticker = false;
+                replyIsLocal = true;
+                replyIsText = true;
+                replyImgIsSticker = false;
+                replyIsImage = false;
+              });
+            },
+            content: MessageBox(
+              userAvatar: conversation.userAvatar,
+              targetAvatar: conversation.targetAvatar,
+              message: msg,
+              userName: conversation.userName,
+              targetName: conversation.targetName,
+              userId: conversation.userId,
+              seen: msg.seen,
             )
-          :
+          )
+        :
           //Target Messages
-          Swipeable(
-              threshold: 50.0,
-              onSwipeEnd: () {
-                print("replyIsText: $replyIsText replyImgIsSticker: $replyImgIsSticker replyIsImage: $replyIsImage");
-                setState(() {
-                  replyMsg = msg.content!;
-                  showReplyTxt = true;
-                  replyIsText = true;
-                  replyImgIsSticker = false;
-                  replyIsImage = false;
-                  showReplyImg = false;
-                  showReplySticker = false;
-                  replyIsLocal = false;
-                });
-              },
-              background: Container(),
-              child: MessageBox(
-                userAvatar: conversation.userAvatar,
-                targetAvatar: conversation.targetAvatar,
-                message: msg,
-                userName: conversation.userName,
-                targetName: conversation.targetName,
-                userId: conversation.userId,
-                seen: msg.seen,
-              ),
-            );
+          Swipe(
+            id: msg.id!,
+            onSwipe: () {
+              print("replyIsText: $replyIsText replyImgIsSticker: $replyImgIsSticker replyIsImage: $replyIsImage");
+              setState(() {
+                replyMsg = msg.content!;
+                showReplyTxt = true;
+                replyIsText = true;
+                replyImgIsSticker = false;
+                replyIsImage = false;
+                showReplyImg = false;
+                showReplySticker = false;
+                replyIsLocal = false;
+              });
+            },
+            content: MessageBox(
+              userAvatar: conversation.userAvatar,
+              targetAvatar: conversation.targetAvatar,
+              message: msg,
+              userName: conversation.userName,
+              targetName: conversation.targetName,
+              userId: conversation.userId,
+              seen: msg.seen,
+            ),
+          );
     } else if (msg.type == 1) {
       //Images
-      return Swipeable(
-        threshold: 50,
-        background: Container(),
-        onSwipeEnd: () {
+      return Swipe(
+        id: msg.id!,
+        onSwipe: () {
           print(
               "replyIsText: $replyIsText replyImgIsSticker: $replyImgIsSticker replyIsImage: $replyIsImage");
           (msg.idFrom== conversation.userId)
@@ -577,7 +574,7 @@ class _ConversationState extends State<Conversation> {
             replyIsImage = true;
           });
         },
-        child: Row(
+        content: Row(
           mainAxisAlignment:
               msg.idFrom== conversation.userId
                   ? MainAxisAlignment.end
@@ -625,12 +622,10 @@ class _ConversationState extends State<Conversation> {
       );
     } else {
       //Stickers
-      return Swipeable(
-        threshold: 50,
-        background: Container(),
-        onSwipeEnd: () {
-          print(
-              "replyIsText: $replyIsText replyImgIsSticker: $replyImgIsSticker replyIsImage: $replyIsImage");
+      return Swipe(
+        id: msg.id!,
+        onSwipe: () {
+          print("replyIsText: $replyIsText replyImgIsSticker: $replyImgIsSticker replyIsImage: $replyIsImage");
           (msg.idFrom == conversation.userId)
               ? setState(() {
                   replyIsLocal = true;
@@ -650,7 +645,7 @@ class _ConversationState extends State<Conversation> {
             replyIsImage = false;
           });
         },
-        child: Row(
+        content: Row(
           mainAxisAlignment:
               msg.idFrom== conversation.userId
                   ? MainAxisAlignment.end
@@ -911,4 +906,29 @@ class MessageBox extends StatelessWidget {
         });
       }
     }
+}
+
+class Swipe extends StatelessWidget {
+  final Function onSwipe;
+  final String id;
+  final Widget content;
+  const Swipe({ Key? key, required this.onSwipe, required this.content, required this.id }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Swipeable(
+      key: ValueKey(id),
+      onSwipe: (direction) {
+        if (direction == SwipeDirection.startToEnd) {
+          onSwipe();
+        } else {
+          // ignore: avoid_print
+          print("Swiped left");
+        }
+      },
+      background: Container(),
+      
+      child: content
+    );
+  }
 }

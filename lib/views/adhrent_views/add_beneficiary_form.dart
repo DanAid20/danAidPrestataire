@@ -904,7 +904,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
     //storageUploadTask = storageReference.putFile(imageFileAvatar);
 
     storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context)!.ajoute)));

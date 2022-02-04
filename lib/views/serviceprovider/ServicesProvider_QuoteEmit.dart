@@ -27,7 +27,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:qrscan2/qrscan2.dart' as scanner;
 class IssuseAQuote extends StatefulWidget {
   IssuseAQuote({Key? key}) : super(key: key);
 

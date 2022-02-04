@@ -105,7 +105,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
       }
       return result;
     } on PlatformException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Transaction échouée")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Transaction échouée")));
       //setState(() { spinner2 = false;});
       return "FAILED";
     }
@@ -157,7 +157,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
     String res = await makePayment(cost: amount, isOrange: isOrange);
     if(res == "SUCCESS"){
       try {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Paiement éffectué",)));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Paiement éffectué",)));
         FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(widget.invoice!.id).collection('SOUS_FACTURATIONS_ADHERENT').doc(mini.id).update({
           "paymentDate": DateTime.now(),
           "status": 1
@@ -178,7 +178,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
             "paid": true,
           });
         
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Mise à jour des statuts éffectué",)));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Mise à jour des statuts éffectué",)));
 
         });
       }
@@ -187,7 +187,7 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
       }
     }
     else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Une erreur de paiement est survenue..",)));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Une erreur de paiement est survenue..",)));
     }
   }
 }

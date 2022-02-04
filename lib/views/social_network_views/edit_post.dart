@@ -151,7 +151,7 @@ class _EditPostState extends State<EditPost> {
                       maxLines: 7,
                       controller: textController,
                       onChanged: (val) => setState((){}),
-                      scrollPhysics: BouncingScrollPhysics(),
+                      scrollPhysics: const BouncingScrollPhysics(),
                       style: TextStyle(color: kDeepTeal),
                       decoration: InputDecoration(
                         errorBorder: OutlineInputBorder(
