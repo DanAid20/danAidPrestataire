@@ -32,45 +32,41 @@ dependencies:
   flutter_screenutil: ^5.0.0
   google_fonts: ^2.0.0
   shared_preferences: ^2.0.4
-  provider: ^4.3.3
-  get_it: ^5.0.6
+  provider: ^6.0.2
+  get_it: ^7.2.0
   connectivity: null
   line_icons: null
-  flutter_skeleton: null
   cached_network_image: ^3.0.0
   intl: null
-  flutter_spinkit: ^4.1.2+1
-  font_awesome_flutter: ^8.11.0
-  flutter_vector_icons: ^0.3.0
+  font_awesome_flutter: ^9.2.0
+  flutter_vector_icons: ^1.0.0
   #freezed: ^0.14.3
   simple_moment: null
   percent_indicator: null
   simple_animations: null
-  getwidget: ^1.2.4
-  data_connection_checker: ^0.3.4
-  flutter_share: ^1.0.5
+  flutter_share: ^2.0.0
   flutter_svg: ^0.21.0-nullsafety.0
   google_maps_flutter: null
-  material_design_icons_flutter: ^4.0.5955
+  material_design_icons_flutter: ^5.0.6595
   carousel_slider: null
-  firebase_core: ^1.11.0
+  firebase_core: ^1.12.0
   cloud_firestore: ^3.1.6
   firebase_auth: ^3.3.5
   firebase_storage: ^10.2.5
   country_pickers: ^2.0.0
-  hive: ^2.0.4
-  hive_flutter: ^1.0.0
+  hive: ^2.0.5
+  hive_flutter: ^1.1.0
   image_picker: ^0.7.3
   path_provider: ^2.0.1
   location: ^4.1.1
   file_picker: ^3.0.1
   table_calendar: ^3.0.0
   intl_phone_number_input: ^0.7.0+1
-  autocomplete_textfield: ^1.7.3
+  autocomplete_textfield_ns: ^2.0.0
   simple_tags: ^0.0.4
-  qrscan: ^0.3.2
+  qrscan2: ^0.1.0
   permission_handler: ^7.0.0
-  swipeable: ^1.1.0
+  swipe_to_action: ^0.2.0
   url_launcher: ^6.0.3
   flutter_google_places: ^0.3.0
   pretty_qr_code: ^2.0.1

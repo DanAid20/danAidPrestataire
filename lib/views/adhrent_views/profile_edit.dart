@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
+import 'package:autocomplete_textfield_ns/autocomplete_textfield_ns.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
@@ -937,7 +937,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               HiveDatabase.setSurname(sname);
                               HiveDatabase.setImgUrl(avatarUrl!);
 
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Informations mises à jour..")));
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Informations mises à jour..")));
                               Navigator.pop(context);
                               setState(() {
                                 buttonLoading = false;
@@ -1022,10 +1022,10 @@ class _ProfileEditState extends State<ProfileEdit> {
     //storageUploadTask = storageReference.putFile(imageFileAvatar);
 
     storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+ S.of(context)!.ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(name+ S.of(context)!.ajoute)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
       if(name == "Acte_De_Marriage"){

@@ -1,4 +1,4 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -844,7 +844,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
     //storageUploadTask = storageReference.putFile(imageFileAvatar);
 
     storageUploadTask.catchError((e){
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context)!.ajoute)));

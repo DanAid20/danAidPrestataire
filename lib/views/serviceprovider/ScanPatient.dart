@@ -23,7 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:qrscan2/qrscan2.dart' as scanner;
 class ScanPatient extends StatefulWidget {
   ScanPatient({Key? key}) : super(key: key);
 

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, import_of_legacy_library_into_null_safe
 
-import 'dart:ffi';
+//import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';

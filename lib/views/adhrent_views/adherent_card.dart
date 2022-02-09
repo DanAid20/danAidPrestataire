@@ -18,7 +18,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:qrscan2/qrscan2.dart' as scanner;
 
 class AdherentCard extends StatefulWidget {
   @override
@@ -104,7 +104,7 @@ class _AdherentCardState extends State<AdherentCard> {
                 child: CarouselSlider(
                   carouselController: beneficiaryCarouselController,
                   options: CarouselOptions(
-                    scrollPhysics: BouncingScrollPhysics(),
+                    scrollPhysics: const BouncingScrollPhysics(),
                     height: hv * 65,
                     aspectRatio: 16 / 9,
                     viewportFraction: 0.8,

@@ -38,10 +38,11 @@
        https://developers.google.com/web/fundamentals/primers/service-workers -->
 
   <!-- Initialisation de firebase -->
+  <!--
   <script type="module">
     // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.3/firebase-analytics.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -62,6 +63,7 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
   </script>
+  -->
 
 
   <script>
@@ -127,6 +129,28 @@
       // Service workers not supported. Just drop the <script> tag.
       loadMainDartJs();
     }
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+
+  <!--<script src="https://www.gstatic.com/firebase/8.10.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebase/7.8.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebase/7.17.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebase/8.10.0/firebase-messaging.js"></script>
+  <script src="https://www.gstatic.com/firebase/8.10.0/firebase-storage.js"></script>-->
+
+  <script>
+    var firebaseConfig = {
+      apiKey: "AIzaSyCDuAOSaTTSA7qbfn1MqpVHr9GoFsci1Ts",
+      authDomain: "danaidapp.firebaseapp.com",
+      databaseURL: "https://danaidapp.firebaseio.com",
+      projectId: "danaidapp",
+      storageBucket: "danaidapp.appspot.com",
+      messagingSenderId: "907608334806",
+      appId: "1:907608334806:web:3a87627cb0bf5d73458477",
+      measurementId: "G-0YQF0R2JX1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    //firebase.analytics();
   </script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/danaid.dart';
@@ -7,8 +9,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'helpers/constants.dart';
 import 'locator.dart';
@@ -16,12 +20,12 @@ import 'locator.dart';
 
 Future<void> _showNotification({required int id, required String title, String? body}) async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettingsIOS = new IOSInitializationSettings();
-  var initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettingsIOS = const IOSInitializationSettings();
+  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
   print("showing..");
-  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+  var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
       'com.danaid.danaidmobile', 'DanAid',
       channelDescription: 'Mutuelle Santé 100% mobile',
       importance: Importance.max,
@@ -34,14 +38,14 @@ Future<void> _showNotification({required int id, required String title, String? 
       ticker: 'test ticker'
   );
 
-  var iOSChannelSpecifics = IOSNotificationDetails();
+  var iOSChannelSpecifics = const IOSNotificationDetails();
   var platformChannelSpecifics = NotificationDetails(android : androidPlatformChannelSpecifics, iOS: iOSChannelSpecifics);
   await flutterLocalNotificationsPlugin.show(id, title, body, platformChannelSpecifics, payload: 'new_notification');
 }
 
 Future<void> _messageHandler(RemoteMessage message) async {
   print("background notifications");
-  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
+  Directory directory = await path_provider.getApplicationDocumentsDirectory();
   await Firebase.initializeApp();
   Hive.init(directory.path);
   Hive.registerAdapter(NotificationModelAdapter());
@@ -113,14 +117,18 @@ Future<void> _messageHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
+  if(kIsWeb){
+    setUrlStrategy(PathUrlStrategy());}
+  else {
+    Directory directory = await path_provider.getApplicationDocumentsDirectory();
+    Hive.init(directory.path);
+  }
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
-  Hive.init(directory.path);
   Hive.registerAdapter(NotificationModelAdapter());
   await chechIfExists();
   setupLocator();
-  runApp(Danaid(env: "prod",));
+  runApp(const Danaid(env: "prod",));
 }
 
 chechIfExists() async {

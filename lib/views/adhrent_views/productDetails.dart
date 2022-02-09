@@ -48,7 +48,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       backgroundColor: kDeepTeal,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: whiteColor),
+          icon: const Icon(Icons.arrow_back_ios, color: whiteColor),
           onPressed: ()=>Navigator.pop(context)
         ),
         title: Text(widget.product!.name!, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
@@ -61,7 +61,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             child: CarouselSlider(
               carouselController: carouselController,
               options: CarouselOptions(
-                scrollPhysics: BouncingScrollPhysics(),
+                scrollPhysics: const BouncingScrollPhysics(),
                 height: 200,
                 aspectRatio: 16 / 9,
                 viewportFraction: 0.6,
@@ -151,7 +151,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     }
                                   }
                                   else {
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous n'avez pas assez de points pour en commander plus..",)));
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Vous n'avez pas assez de points pour en commander plus..",)));
                                   }
                                 },
                                 child: Container(
@@ -214,14 +214,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                         setState(() {
                           buttonSpinner = false;
                         });
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Votre commande est en cours de traitemaent..",)));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Votre commande est en cours de traitemaent..",)));
                         Navigator.pop(context);
                       }
                       catch(e){
                         setState(() {
                           buttonSpinner = false;
                         });
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Désolé une erreur a surgie..",)));
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Désolé une erreur a surgie..",)));
                       }
                       setState(() {
                         buttonSpinner = false;
