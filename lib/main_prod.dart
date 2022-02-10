@@ -118,7 +118,8 @@ Future<void> _messageHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if(kIsWeb){
-    setUrlStrategy(PathUrlStrategy());}
+    //setUrlStrategy(PathUrlStrategy());
+  }
   else {
     Directory directory = await path_provider.getApplicationDocumentsDirectory();
     Hive.init(directory.path);
