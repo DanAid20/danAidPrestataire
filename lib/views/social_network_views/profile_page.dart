@@ -155,14 +155,14 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: hv*7,),
-                        Text(S.of(context)!.activit, style: TextStyle(color: kDeepTeal, fontSize: 16)),
+                        Text(S.of(context).activit, style: TextStyle(color: kDeepTeal, fontSize: 16)),
                         SizedBox(height: hv*2,),
                         Row(children: [
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context)!.publications, occurence: publications, color: kSouthSeas),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).publications, occurence: publications, color: kSouthSeas),
                           HomePageComponents().verticalDivider(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context)!.commentaires, occurence: comments, color: kSouthSeas),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: comments, color: kSouthSeas),
                           HomePageComponents().verticalDivider(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context)!.amis, occurence: friends, color: kSouthSeas),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: friends, color: kSouthSeas),
                         ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                       ],
                     ),
@@ -191,7 +191,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           child: user?.profileType != doctor ? !friendSpinner ? TextButton(
                             child: Text(
-                              targetFriends.contains(userProvider.getUserModel?.userId) ? S.of(context)!.rtirerLami : targetFriendRequests.contains(userProvider.getUserModel!.userId) ? S.of(context)!.annulerLaDemande : S.of(context)!.ajouterUnAmi, 
+                              targetFriends.contains(userProvider.getUserModel?.userId) ? S.of(context).rtirerLami : targetFriendRequests.contains(userProvider.getUserModel!.userId) ? S.of(context).annulerLaDemande : S.of(context).ajouterUnAmi, 
                               style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 15.5)
                             ),
                             style: ButtonStyle(
@@ -211,7 +211,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     targetFriendRequests.remove(userProvider.getUserModel!.userId);
                                   });
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.demandeAnnule)));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).demandeAnnule)));
                               }
                               else {
                                 FirebaseFirestore.instance.collection("USERS").doc(user!.userId).set({'friendRequests': FieldValue.arrayUnion([userProvider.getUserModel!.userId])}, SetOptions(merge: true)).then((doc){
@@ -221,7 +221,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   });
                                   print(targetFriendRequests.toString());
                                 });
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.demandeEnvoye)));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).demandeEnvoye)));
                               }
 
                               if(targetFriends.contains(userProvider.getUserModel!.userId)){
@@ -264,10 +264,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                 conversation.setConversationModel(conversationModel);
                                 Navigator.pushNamed(context, '/conversation');
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.seulsLesAmisPeuventConverser)));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).seulsLesAmisPeuventConverser)));
                               }
                             } else {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.seulsLesAmisPeuventConverser)));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).seulsLesAmisPeuventConverser)));
                             }
                             
                           },

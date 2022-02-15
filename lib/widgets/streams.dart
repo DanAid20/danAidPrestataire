@@ -42,9 +42,9 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Column( 
                   children: [
                     RichText(text: TextSpan(
-                      text: widget.standardUse ? S.of(context)!.bnficiairesn : S.of(context)!.quiEstMaladen,
+                      text: widget.standardUse ? S.of(context).bnficiairesn : S.of(context).quiEstMaladen,
                       children: [
-                        TextSpan(text: widget.standardUse ? (snapshot.data!.docs.length+1).toString()+S.of(context)!.personnes : S.of(context)!.slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
+                        TextSpan(text: widget.standardUse ? (snapshot.data!.docs.length+1).toString()+S.of(context).personnes : S.of(context).slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
                       ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
                     ),
                     SizedBox(height: hv*2,),

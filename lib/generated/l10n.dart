@@ -10,28 +10,43 @@ import 'intl/messages_all.dart';
 
 // ignore_for_file: non_constant_identifier_names, lines_longer_than_80_chars
 // ignore_for_file: join_return_with_assignment, prefer_final_in_for_each
-// ignore_for_file: avoid_redundant_argument_values
+// ignore_for_file: avoid_redundant_argument_values, avoid_escaping_inner_quotes
 
 class S {
   S();
-  
-  static S? current;
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static S? _current;
+
+  static S get current {
+    assert(_current != null,
+        'No instance of S was loaded. Try to initialize the S delegate before accessing S.current.');
+    return _current!;
+  }
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final name = (locale.countryCode?.isEmpty ?? false) ? locale.languageCode : locale.toString();
-    final localeName = Intl.canonicalizedLocale(name); 
+    final name = (locale.countryCode?.isEmpty ?? false)
+        ? locale.languageCode
+        : locale.toString();
+    final localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
-      S.current = S();
-      
-      return S.current!;
-    });
-  } 
+      final instance = S();
+      S._current = instance;
 
-  static S? of(BuildContext context) {
+      return instance;
+    });
+  }
+
+  static S of(BuildContext context) {
+    final instance = S.maybeOf(context);
+    assert(instance != null,
+        'No instance of S present in the widget tree. Did you add S.delegate in localizationsDelegates?');
+    return instance!;
+  }
+
+  static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
 
@@ -548,7 +563,7 @@ class S {
   /// `The DanAid family doctor ensures the long-term follow-up of your family's health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the first point of contact for your family. your family with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family's health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the Your family's first point of contact with health services. \ n \ nThe DanAid family doctor provides long-term monitoring of your family's health, and its action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be your family's first point of contact with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family's health. quality to co is under control. \ nThe family doctor will be your family's first point of contact with health services. \ nThe DanAid family doctor provides long-term follow-up of the s `
   String get leMdecinDeFamilleDanaidAssureLeSuiviLongTerme {
     return Intl.message(
-      'The DanAid family doctor ensures the long-term follow-up of your family\'s health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the first point of contact for your family. your family with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family\'s health. His action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be the Your family\'s first point of contact with health services. \ n \ nThe DanAid family doctor provides long-term monitoring of your family\'s health, and its action allows you to benefit from quality care at a controlled cost. \ nThe family doctor will be your family\'s first point of contact with health services. \ nThe DanAid family doctor ensures the long-term follow-up of your family\'s health. quality to co is under control. \ nThe family doctor will be your family\'s first point of contact with health services. \ nThe DanAid family doctor provides long-term follow-up of the s ',
+      'The DanAid family doctor ensures the long-term follow-up of your family\'s health. His action allows you to benefit from quality care at a controlled cost. \\ nThe family doctor will be the first point of contact for your family. your family with health services. \\ nThe DanAid family doctor ensures the long-term follow-up of your family\'s health. His action allows you to benefit from quality care at a controlled cost. \\ nThe family doctor will be the Your family\'s first point of contact with health services. \\ n \\ nThe DanAid family doctor provides long-term monitoring of your family\'s health, and its action allows you to benefit from quality care at a controlled cost. \\ nThe family doctor will be your family\'s first point of contact with health services. \\ nThe DanAid family doctor ensures the long-term follow-up of your family\'s health. quality to co is under control. \\ nThe family doctor will be your family\'s first point of contact with health services. \\ nThe DanAid family doctor provides long-term follow-up of the s ',
       name: 'leMdecinDeFamilleDanaidAssureLeSuiviLongTerme',
       desc: '',
       args: [],
@@ -7386,10 +7401,12 @@ class S {
   }
 
   /// `Any contests, sweepstakes or other promotions (collectively, “Promotions”) made available through Service may be governed by rules that are separate from these Terms of Service. If you participate in any Promotions, please review the applicable rules as well as our Privacy Policy. If the rules for a Promotion conflict with these Terms of Service, Promotion rules will apply.\n\n`
-  String get anyContestsSweepstakesOrOtherPromotionsCollectivelyPromotionsMadeAvailable {
+  String
+      get anyContestsSweepstakesOrOtherPromotionsCollectivelyPromotionsMadeAvailable {
     return Intl.message(
       'Any contests, sweepstakes or other promotions (collectively, “Promotions”) made available through Service may be governed by rules that are separate from these Terms of Service. If you participate in any Promotions, please review the applicable rules as well as our Privacy Policy. If the rules for a Promotion conflict with these Terms of Service, Promotion rules will apply.\n\n',
-      name: 'anyContestsSweepstakesOrOtherPromotionsCollectivelyPromotionsMadeAvailable',
+      name:
+          'anyContestsSweepstakesOrOtherPromotionsCollectivelyPromotionsMadeAvailable',
       desc: '',
       args: [],
     );
@@ -9054,11 +9071,9 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   bool shouldReload(AppLocalizationDelegate old) => false;
 
   bool _isSupported(Locale locale) {
-    if (locale != null) {
-      for (var supportedLocale in supportedLocales) {
-        if (supportedLocale.languageCode == locale.languageCode) {
-          return true;
-        }
+    for (var supportedLocale in supportedLocales) {
+      if (supportedLocale.languageCode == locale.languageCode) {
+        return true;
       }
     }
     return false;

@@ -34,8 +34,8 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Column(children: [
               SizedBox(height: hv*5,),
-              Text(S.of(context)!.carnetDeSant),
-              Text(S.of(context)!.paramtresTemporairesDconnexion, textAlign: TextAlign.center,),
+              Text(S.of(context).carnetDeSant),
+              Text(S.of(context).paramtresTemporairesDconnexion, textAlign: TextAlign.center,),
               SizedBox(height: hv*2,),
               /*TextField(
                 controller: phone,
@@ -134,7 +134,7 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
               ),*/
               
               TextButton(
-                child: Text(S.of(context)!.seDconnecter),
+                child: Text(S.of(context).seDconnecter),
                 onPressed: () async {
                   print("Disconnectiong..");
                   AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context, listen: false);
@@ -169,7 +169,7 @@ class _HealthBookScreenState extends State<HealthBookScreen> {
                                 child: DropdownButton<String>(
                                   isExpanded: true,
                                   value: currentData.defineCurrentLanguage(context),
-                                  hint: Text(S.of(context)!.choisir),
+                                  hint: Text(S.of(context).choisir),
                                    items: defaultLanguage.languagesListDefault
                                     .map<DropdownMenuItem<String>>(
                                   (String value) {

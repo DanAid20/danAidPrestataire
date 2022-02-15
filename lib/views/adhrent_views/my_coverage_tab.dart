@@ -27,12 +27,12 @@ class MyCoverageTabView extends StatelessWidget {
               SizedBox(height: hv*2,),
               adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
                 title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan)
-                /*adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context)!.vousTesAuNiveau0+S.of(context)!.dcouverte
-                  : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context)!.vousTesAuNiveauI+S.of(context)!.accs
-                    : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context)!.vousTesAuNiveauIi+S.of(context)!.assist
-                      : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context)!.vousTesAuNiveauIii+S.of(context)!.srnit : "..."*/,
-                actionLabel: S.of(context)!.comparerLesServices,
-                subtitle: limitString != null ? S.of(context)!.vousTesCouvertsJusquau+limitString : "...",
+                /*adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
+                  : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
+                    : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
+                      : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "..."*/,
+                actionLabel: S.of(context).comparerLesServices,
+                subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
                 action: (){
                   Navigator.pushNamed(context, '/compare-plans');
                   /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
@@ -86,9 +86,9 @@ class MyCoverageTabView extends StatelessWidget {
                     child: Column(children: [
                       Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
                       SizedBox(height: hv*5,),
-                      Text(S.of(context)!.dmarrerUnePriseEnCharge, style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
+                      Text(S.of(context).dmarrerUnePriseEnCharge, style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
                       SizedBox(height: hv*1,),
-                      Text(S.of(context)!.vousTesMaladesCommencezIcinpourObtenirLaCouvertureDeVos, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
+                      Text(S.of(context).vousTesMaladesCommencezIcinpourObtenirLaCouvertureDeVos, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
                       SizedBox(height: hv*2,),
                     ],crossAxisAlignment: CrossAxisAlignment.start, ),
                   ),
@@ -104,7 +104,7 @@ class MyCoverageTabView extends StatelessWidget {
                       onTap: ()=>Navigator.pushNamed(context, '/adherent-card'),
                       child: HomePageComponents().getMyCoverageOptionsCard(
                         imgUrl: "assets/images/presentCard.png",
-                        label: S.of(context)!.prsenterMaCarteDadhrant,
+                        label: S.of(context).prsenterMaCarteDadhrant,
                         labelColor: kPrimaryColor
                       ),
                     ),
@@ -112,7 +112,7 @@ class MyCoverageTabView extends StatelessWidget {
                       onTap: ()=>Navigator.pushNamed(context, '/contributions'),
                       child: HomePageComponents().getMyCoverageOptionsCard(
                         imgUrl: "assets/images/TrackSavings.png",
-                        label: S.of(context)!.suivreMesCtisations,
+                        label: S.of(context).suivreMesCtisations,
                         labelColor: Colors.white
                       ),
                     ),
@@ -120,7 +120,7 @@ class MyCoverageTabView extends StatelessWidget {
                       onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
                       child: HomePageComponents().getMyCoverageOptionsCard(
                         imgUrl: "assets/images/TrackSavings.png",
-                        label: S.of(context)!.demanderUnRemboursement,
+                        label: S.of(context).demanderUnRemboursement,
                         labelColor: Colors.white
                       ),
                     ),
@@ -134,7 +134,7 @@ class MyCoverageTabView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                   child: Row(children: [
-                    Text(S.of(context)!.utilisation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    Text(S.of(context).utilisation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                     InkWell(
                       onTap: ()=>Navigator.pushNamed(context, "/usecases"),
                       child: Container(
@@ -186,7 +186,7 @@ class MyCoverageTabView extends StatelessWidget {
                             );
                           })
                       : Center(
-                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context)!.aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
+                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
                       );
                     /*return Container(
                       color: whiteColor,

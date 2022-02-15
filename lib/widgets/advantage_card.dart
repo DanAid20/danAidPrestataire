@@ -69,7 +69,7 @@ class AdvantageCard extends StatelessWidget {
                                   shape: MaterialStateProperty.all( RoundedRectangleBorder(borderRadius: BorderRadius.circular(inch*2)) )
                                 ),
                                 child: Row(children: [
-                                  Text(S.of(context)!.demander, style: TextStyle(fontSize: inch*1.6, fontWeight: FontWeight.bold, color: color)),
+                                  Text(S.of(context).demander, style: TextStyle(fontSize: inch*1.6, fontWeight: FontWeight.bold, color: color)),
                                   SizedBox(width: wv*1.5,),
                                   Icon(Icons.arrow_forward_ios, color: color, size: inch*2.3,),
                                 ], mainAxisSize: MainAxisSize.min,),

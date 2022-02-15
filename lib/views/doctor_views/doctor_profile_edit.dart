@@ -411,10 +411,10 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
                       CustomTextField(
                         prefixIcon: const Icon(LineIcons.users, color: kPrimaryColor),
-                        label: S.of(context)!.nomDeFamille,
-                        hintText: S.of(context)!.entrezVotreNomDeFamille,
+                        label: S.of(context).nomDeFamille,
+                        hintText: S.of(context).entrezVotreNomDeFamille,
                         controller: _familynameController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         enabled: nameEnabled!,
                         editAction: (){
                           setState(() {
@@ -424,11 +424,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: const Icon(LineIcons.user, color: kPrimaryColor),
-                        label: S.of(context)!.prnomS,
-                        hintText: S.of(context)!.entrezVotrePrnom,
+                        label: S.of(context).prnomS,
+                        hintText: S.of(context).entrezVotrePrnom,
                         enabled: surnameEnabled!,
                         controller: _surnameController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             surnameEnabled = true;
@@ -438,11 +438,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: const Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: S.of(context)!.nomTelQueSurLaCni,
-                        hintText: S.of(context)!.nomCni,
+                        label: S.of(context).nomTelQueSurLaCni,
+                        hintText: S.of(context).nomCni,
                         enabled: cniNameEnabled!,
                         controller: _cniNameController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             cniNameEnabled = true;
@@ -452,12 +452,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: const Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: S.of(context)!.aPropos,
-                        hintText: S.of(context)!.parlezBrivementDeVous,
+                        label: S.of(context).aPropos,
+                        hintText: S.of(context).parlezBrivementDeVous,
                         enabled: aboutEnabled!,
                         multiLine: true,
                         controller: _aboutController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             aboutEnabled = true;
@@ -467,8 +467,8 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: const Icon(MdiIcons.emailOutline, color: kPrimaryColor),
-                        label: S.of(context)!.email,
-                        hintText: S.of(context)!.entrezVotreAddresseEmail,
+                        label: S.of(context).email,
+                        hintText: S.of(context).entrezVotreAddresseEmail,
                         enabled: emailEnabled!,
                         controller: _emailController!,
                         keyboardType: TextInputType.emailAddress,
@@ -512,11 +512,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: const Icon(LineIcons.mapMarker, color: kPrimaryColor),
-                        label: S.of(context)!.votreAddresse,
-                        hintText: S.of(context)!.exCarrefourTkcBiyemassi,
+                        label: S.of(context).votreAddresse,
+                        hintText: S.of(context).exCarrefourTkcBiyemassi,
                         enabled: addressEnabled!,
                         controller: _addressController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             addressEnabled = true;
@@ -527,12 +527,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       (gpsCoords != null) | (doctorProvider.getDoctor!.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
                         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(S.of(context)!.gps, style: const TextStyle(fontWeight: FontWeight.w900),),
+                            Text(S.of(context).gps, style: const TextStyle(fontWeight: FontWeight.w900),),
                             RichText(text: TextSpan(
-                              text: S.of(context)!.lat,
+                              text: S.of(context).lat,
                               children: [
                                 TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : doctorProvider.getDoctor!.location!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
-                                TextSpan(text: S.of(context)!.lng),
+                                TextSpan(text: S.of(context).lng),
                                 TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : doctorProvider.getDoctor!.location!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
                               ]
                             , style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
@@ -571,7 +571,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             right: wv*7,
                             child: !positionSpinner! ? TextButton(
                               onPressed: _saveLocation,
-                              child: Text(S.of(context)!.ajouterMaLocalisation, style: const TextStyle(color: whiteColor),),
+                              child: Text(S.of(context).ajouterMaLocalisation, style: const TextStyle(color: whiteColor),),
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))
@@ -582,7 +582,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
-                        child: Text(S.of(context)!.nbLajoutDeLaLocationEstRquisePourLaValidation)
+                        child: Text(S.of(context).nbLajoutDeLaLocationEstRquisePourLaValidation)
                       ),
                       const Divider(),
                       SizedBox(height: hv*2,),
@@ -591,7 +591,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context)!.statut, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                            Text(S.of(context).statut, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                             const SizedBox(height: 5,),
                             Container(
                               constraints: BoxConstraints(minWidth: wv*45),
@@ -602,17 +602,17 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               ),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
-                                  hint: Text(S.of(context)!.choisir),
+                                  hint: Text(S.of(context).choisir),
                                   isExpanded: true,
                                   value: _type,
                                   items: [
                                     DropdownMenuItem(
-                                      child: Text(S.of(context)!.gnraliste, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                      value: defaultLocale?.contains('fr')==true? "Généraliste":  S.of(context)!.gnraliste ,
+                                      child: Text(S.of(context).gnraliste, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      value: defaultLocale?.contains('fr')==true? "Généraliste":  S.of(context).gnraliste ,
                                     ),
                                     DropdownMenuItem(
-                                      child: Text(S.of(context)!.spcialiste, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: S.of(context)!.spcialiste,
+                                      child: Text(S.of(context).spcialiste, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      value: S.of(context).spcialiste,
                                     ),
                                   ],
                                   onChanged: (value) {
@@ -626,16 +626,16 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         ),
                       ),
                       
-                      _type == S.of(context)!.spcialiste ? Column(
+                      _type == S.of(context).spcialiste ? Column(
                         children: [
                           SizedBox(height: hv*2.5,),
                           CustomTextField(
                             prefixIcon: const Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
-                            label: S.of(context)!.spcialit,
-                            hintText: S.of(context)!.exChirurgien,
+                            label: S.of(context).spcialit,
+                            hintText: S.of(context).exChirurgien,
                             enabled: specialityEnabled!,
                             controller: _specialityController!,
-                            validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                             editAction: (){
                               setState(() {
                                 specialityEnabled = true;
@@ -648,11 +648,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
                       CustomTextField(
                         prefixIcon:const Icon(MdiIcons.barcode, color: kPrimaryColor),
-                        label: S.of(context)!.numroDenrgistrementLordre,
-                        hintText: S.of(context)!.votreMatricule,
+                        label: S.of(context).numroDenrgistrementLordre,
+                        hintText: S.of(context).votreMatricule,
                         enabled: orderRegNberEnabled!,
                         controller: _orderRegistrationNberController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             orderRegNberEnabled = true;
@@ -664,15 +664,15 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
                       CustomTextField(
                         prefixIcon: const Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: S.of(context)!.votreTarifParHeure,
-                        hintText: S.of(context)!.ex3500,
+                        label: S.of(context).votreTarifParHeure,
+                        hintText: S.of(context).ex3500,
                         enabled: rateEnabled!,
                         controller: _rateController!,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
                         ],
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             rateEnabled = true;
@@ -683,11 +683,11 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
                       CustomTextField(
                         prefixIcon: const Icon(LineIcons.hospital, color: kPrimaryColor),
-                        label: S.of(context)!.nomDeVotreTablissement,
-                        hintText: S.of(context)!.exHpitalDeDistrictDeLimb,
+                        label: S.of(context).nomDeVotreTablissement,
+                        hintText: S.of(context).exHpitalDeDistrictDeLimb,
                         enabled: officeNameEnabled!,
                         controller: _officeNameController!,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                         editAction: (){
                           setState(() {
                             officeNameEnabled = true;
@@ -700,7 +700,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(children: [
-                          Text(S.of(context)!.typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                          Text(S.of(context).typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                           const SizedBox(height: 5,),
                           Container(
                             constraints: BoxConstraints(minWidth: wv*45),
@@ -715,19 +715,19 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 child: DropdownButton(
                                   isExpanded: true,
                                   value: _category,
-                                  hint: Text(S.of(context)!.choisir),
+                                  hint: Text(S.of(context).choisir),
                                   items: [
                                     DropdownMenuItem(
-                                      child: Text(S.of(context)!.publique, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                      value: S.of(context)!.public,
+                                      child: Text(S.of(context).publique, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      value: S.of(context).public,
                                     ),
                                     // DropdownMenuItem(
-                                    //   child: Text(S.of(context)!.confessionel, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    //   value: S.of(context)!.confessionel.toUpperCase(),
+                                    //   child: Text(S.of(context).confessionel, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    //   value: S.of(context).confessionel.toUpperCase(),
                                     // ),
                                     DropdownMenuItem(
-                                      child: Text(S.of(context)!.private, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: S.of(context)!.private,
+                                      child: Text(S.of(context).private, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                      value: S.of(context).private,
                                     ),
                                     // ignore: prefer_const_constructors
                                     DropdownMenuItem(
@@ -776,7 +776,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       SizedBox(height: hv*0.5,),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
-                        child: Text(S.of(context)!.slectionnezVosHoraires, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                        child: Text(S.of(context).slectionnezVosHoraires, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
                       ),
                       SizedBox(height: hv*1.5,),
                       Table(
@@ -788,10 +788,10 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               const TableCell(child: Text('', textAlign: TextAlign.left,)),
                               TableCell(child: Padding(
                                 padding: EdgeInsets.symmetric(vertical: hv*1),
-                                child: Text(S.of(context)!.jours, style: tablehead,),
+                                child: Text(S.of(context).jours, style: tablehead,),
                               )),
-                              TableCell(child: Center(child: Text(S.of(context)!.dbut, style: tablehead,))),
-                              TableCell(child: Center(child: Text(S.of(context)!.fin, style: tablehead,))),
+                              TableCell(child: Center(child: Text(S.of(context).dbut, style: tablehead,))),
+                              TableCell(child: Center(child: Text(S.of(context).fin, style: tablehead,))),
                           ]),
                           TableRow(decoration: BoxDecoration(border: Border(bottom: BorderSide(color: (Colors.grey[200])!))),
                             children: [
@@ -807,7 +807,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 activeColor: kDeepTeal),
                               ),
                             ),
-                            TableCell(child: Text(S.of(context)!.lundiVendredi),),
+                            TableCell(child: Text(S.of(context).lundiVendredi),),
                             TableCell(child: availability!["monday to friday"]["available"] ? DoctorServiceChoiceCard(
                               service: availability!["monday to friday"]["start"].hour.toString().padLeft(2, '0').padLeft(2, '0')+" : "+availability!["monday to friday"]["start"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
@@ -831,7 +831,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 activeTrackColor: kSouthSeas,
                                 activeColor: kDeepTeal),
                               )),
-                            TableCell(child: Text(S.of(context)!.samedi),),
+                            TableCell(child: Text(S.of(context).samedi),),
                             TableCell(child: availability!["saturday"]["available"] ? DoctorServiceChoiceCard(
                               service: availability!["saturday"]["start"].hour.toString().padLeft(2, '0')+" : "+availability!["saturday"]["start"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
@@ -855,7 +855,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                 activeTrackColor: kSouthSeas,
                                 activeColor: kDeepTeal),
                               )),
-                            TableCell(child: Text(S.of(context)!.dimanche),),
+                            TableCell(child: Text(S.of(context).dimanche),),
                             TableCell(child: availability!["sunday"]["available"] ? DoctorServiceChoiceCard(
                               service: availability!["sunday"]["start"].hour.toString().padLeft(2, '0')+" : "+availability!["sunday"]["start"].minute.toString().padLeft(2, '0'),
                               icon: "assets/icons/Bulk/Edit.svg",
@@ -878,24 +878,24 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           padding: EdgeInsets.symmetric(horizontal: wv*3),
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(S.of(context)!.slectionnezVosServices, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                              Text(S.of(context).slectionnezVosServices, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
                               SizedBox(height: hv*2,),
                               Row(
                                 children: [
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context)!.consultation,
+                                    service: S.of(context).consultation,
                                     icon: "assets/icons/Bulk/Chat.svg",
                                     chosen: consultationChosen!,
                                     action: ()=> setState(() {consultationChosen = !consultationChosen!;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context)!.tlconsultation,
+                                    service: S.of(context).tlconsultation,
                                     icon: "assets/icons/Bulk/Video.svg",
                                     chosen: teleConsultationChosen!,
                                     action: ()=> setState(() {teleConsultationChosen = !teleConsultationChosen!;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context)!.chat,
+                                    service: S.of(context).chat,
                                     icon: "assets/icons/Bulk/Chat.svg",
                                     chosen: chatChosen!,
                                     action: ()=> setState(() {chatChosen = !chatChosen!;})
@@ -906,13 +906,13 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                               Row(
                                 children: [
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context)!.rendezvous,
+                                    service: S.of(context).rendezvous,
                                     icon: "assets/icons/Bulk/CalendarLine.svg",
                                     chosen: rdvChosen!,
                                     action: ()=> setState(() {rdvChosen = !rdvChosen!;})
                                   ),
                                   DoctorServiceChoiceCard(
-                                    service: S.of(context)!.visiteDomicile,
+                                    service: S.of(context).visiteDomicile,
                                     icon: "assets/icons/Bulk/Home.svg",
                                     chosen: visiteDomicileChosen!,
                                     action: ()=> setState(() {visiteDomicileChosen = !visiteDomicileChosen!;})
@@ -932,18 +932,18 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context)!.picesJustificatives, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
+                            Text(S.of(context).picesJustificatives, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.w600),),
                             SizedBox(height: hv*2,),
                             Column(
                               children: [
                                 FileUploadCard(
-                                  title: S.of(context)!.scanDeLaPiceDidentitCniPassportEtc,
+                                  title: S.of(context).scanDeLaPiceDidentitCniPassportEtc,
                                   state: cniUploaded!,
                                   loading: cniSpinner!,
                                   action: () async {await getDocFromPhone('CNI');}
                                 ),
                                 FileUploadCard(
-                                  title: S.of(context)!.certificatDenrgistrementLordre,
+                                  title: S.of(context).certificatDenrgistrementLordre,
                                   state: otherFileUploaded!,
                                   loading: otherFileSpinner!,
                                   action: () async {await getDocFromPhone('Order_Registration_Certificate');}
@@ -957,7 +957,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       Container(
                         child: cityChosen! && _officeCityChosen! && _rateController!.text.isNotEmpty && (gpsCoords != null || doctorProvider.getDoctor!.location != null) ?  
                           !buttonLoading! ? CustomTextButton(
-                            text: S.of(context)!.mettreJour,
+                            text: S.of(context).mettreJour,
                             color: kPrimaryColor,
                             action: () async {
                               String fname = _familynameController!.text;
@@ -1077,7 +1077,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                         "nameKeywords": Algorithms.getKeyWords(fname.toLowerCase() + " "+ sname.toLowerCase())
                                       }, SetOptions(merge: true))
                                       .then((value) async {
-                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.informationsMisesJour)));
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).informationsMisesJour)));
                                         Navigator.pop(context, (value) {
                                           setState(() {});
                                         });
@@ -1110,7 +1110,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             },
                           ) : Center(child: Loaders().buttonLoader(kPrimaryColor)) :
                           CustomDisabledTextButton(
-                            text: S.of(context)!.mettreJour,
+                            text: S.of(context).mettreJour,
                           )
                       ,),
                       SizedBox(height: hv*3,),
@@ -1255,7 +1255,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
 
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.aucunDocumentSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucunDocumentSelectionne),));
       return null;
     }
     
@@ -1276,7 +1276,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(name+S.of(context)!.ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(name+S.of(context).ajoute)));
       String url = await storageReference.getDownloadURL();
       if (name == "CNI"){
         doctorProvider.setCNIUrl(url);
@@ -1290,7 +1290,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
             .update({
               "urlCNI": url,
             });
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
           setState(() {
             cniUploaded = true;
             cniSpinner = false;
@@ -1304,7 +1304,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
         .update({
           "urlScaneCertificatEnregDordr": url,
         }).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.documentSauvegard)));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).documentSauvegard)));
           setState(() {
             otherFileUploaded = true;
             otherFileSpinner = false;
@@ -1326,7 +1326,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -1371,7 +1371,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       if (kDebugMode) {
         print("download url: $url");
       }
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.photoDeProfilAjoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
     });
     WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
       imageSpinner = false;

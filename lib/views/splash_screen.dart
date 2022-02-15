@@ -24,14 +24,14 @@ class _SplashScreenState extends State<SplashScreen> {
   checkSignInState() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-    bool? isSignedIn = await HiveDatabase.getSignInState()!;
-    bool isRegistered = await HiveDatabase.getRegisterState();
-    String phone = await HiveDatabase.getAuthPhone();
+    bool? isSignedIn = await HiveDatabase.getSignInState();
+    bool? isRegistered = await HiveDatabase.getRegisterState();
+    String? phone = await HiveDatabase.getAuthPhone();
     //String phone = await HiveDatabase.getAuthPhone();
     //String fname = await HiveDatabase.getFamilyName();
     //String sname = await HiveDatabase.getSurname();
     //String imgUrl = await HiveDatabase.getImgUrl();
-    String profile = await HiveDatabase.getProfileType();
+    String? profile = await HiveDatabase.getProfileType();
     await Future.delayed(const Duration(seconds: 1));
 
     print("state"+ isRegistered.toString());
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (isRegistered == true){
       //print(phone + "phoone");
-      userProvider.setUserId(phone);
+      userProvider.setUserId(phone!);
       userProvider.setProfileType(profile);
       Navigator.pushReplacementNamed(context, '/home');
     }

@@ -91,7 +91,7 @@ class _PharmacyListState extends State<PharmacyList> {
       child: Column(children: [
         Row(
           children: [
-            Text(S.of(context)!.ordonnerPar),
+            Text(S.of(context).ordonnerPar),
             Container(
               margin: EdgeInsets.symmetric(vertical: hv * 1),
               padding:
@@ -110,27 +110,27 @@ class _PharmacyListState extends State<PharmacyList> {
                         color: kPrimaryColor,
                       ),
                       hint: Text(
-                        S.of(context)!.choisir,
+                        S.of(context).choisir,
                         style: TextStyle(
                             color: kPrimaryColor, fontWeight: FontWeight.w600),
                       ),
                       value: filter,
                       items: [
                         DropdownMenuItem(
-                          child: Text(S.of(context)!.nom,
+                          child: Text(S.of(context).nom,
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.bold)),
-                          value: S.of(context)!.name,
+                          value: S.of(context).name,
                         ),
                         DropdownMenuItem(
                           child: Text(
-                            S.of(context)!.distance,
+                            S.of(context).distance,
                             style: TextStyle(
                                 color: kPrimaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          value: S.of(context)!.distance,
+                          value: S.of(context).distance,
                         ),
                       ],
                       onChanged: (value) {

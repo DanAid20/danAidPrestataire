@@ -101,7 +101,7 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(S.of(context)!.aperuDeVotreCouverture),
+                    Text(S.of(context).aperuDeVotreCouverture),
                     TextButton(onPressed: (){}, child: Text(/*"Améliorer..."*/"", style: TextStyle(color: Colors.brown),)),
                   ],
                 ),
@@ -125,16 +125,16 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           RichText(text: TextSpan(
-                            text: S.of(context)!.vousBnficiezDune,
+                            text: S.of(context).vousBnficiezDune,
                             children: [
-                              TextSpan(text: S.of(context)!.rmiseDe5, style: TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text: S.of(context)!.dansCertainesPharmaciesLabosDuRseauDanaid)
+                              TextSpan(text: S.of(context).rmiseDe5, style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: S.of(context).dansCertainesPharmaciesLabosDuRseauDanaid)
                             ]
                           , style: TextStyle(color: kBlueDeep, fontSize: wv*3.5)),
                           ),
                           TextButton(onPressed: ()=>Navigator.pushNamed(context, '/compare-plans'),
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white), shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))), shadowColor: MaterialStateProperty.all(Colors.grey[50]!.withOpacity(0.5))),
-                            child: Text(S.of(context)!.obtenezUneCouvertureComplte70, style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
+                            child: Text(S.of(context).obtenezUneCouvertureComplte70, style: TextStyle(color: kDeepTeal, fontSize: wv*3.5, fontWeight: FontWeight.bold))),
                         ],
                       ),
                     ) : Container(),
@@ -188,10 +188,10 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(S.of(context)!.paramtresDuCompte, style: TextStyle(color: kBlueDeep, fontSize: 18)),
+                    Text(S.of(context).paramtresDuCompte, style: TextStyle(color: kBlueDeep, fontSize: 18)),
                     SizedBox(height: hv*2,),
                     adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
-                      title: S.of(context)!.domicilePrincipale, 
+                      title: S.of(context).domicilePrincipale, 
                       subtitle: adherentProvider.getAdherent?.address != null ? adherentProvider.getAdherent?.address : "Non configurée", 
                       svgIcon: "assets/icons/Two-tone/Home.svg", 
                       action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
@@ -208,32 +208,32 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                               context, '/adherent-profile-edit'))
                     : Container(),*/
                     HomePageComponents.accountParameters(
-                      title: S.of(context)!.mesStatistiques, 
-                      subtitle: S.of(context)!.consulter, 
+                      title: S.of(context).mesStatistiques, 
+                      subtitle: S.of(context).consulter, 
                       svgIcon: "assets/icons/Bulk/Graph.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-stats-page')
                     ),
                     HomePageComponents.accountParameters(
-                      title: S.of(context)!.pointsEtBadges, 
-                      subtitle: S.of(context)!.consulterEtUtiliserSesBnfices, 
+                      title: S.of(context).pointsEtBadges, 
+                      subtitle: S.of(context).consulterEtUtiliserSesBnfices, 
                       svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-points-page')
                     ),
                     userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
-                      title: S.of(context)!.changezDeNiveauDeService, 
-                      subtitle: S.of(context)!.comparerLesNiveauxEtChoisir, 
+                      title: S.of(context).changezDeNiveauDeService, 
+                      subtitle: S.of(context).comparerLesNiveauxEtChoisir, 
                       svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
                       action: ()=>Navigator.pushNamed(context, '/compare-plans')
                     ) : Container(),
                     userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
-                      title: S.of(context)!.changezDeMedecinDeFamille, 
-                      subtitle: S.of(context)!.faitesUneDemande, 
+                      title: S.of(context).changezDeMedecinDeFamille, 
+                      subtitle: S.of(context).faitesUneDemande, 
                       svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
                       action: callDanAid
                     ) : Container(),
                     HomePageComponents.accountParameters(
-                      title: S.of(context)!.documentsDanaid, 
-                      subtitle: S.of(context)!.contratsDocumentsGuides, 
+                      title: S.of(context).documentsDanaid, 
+                      subtitle: S.of(context).contratsDocumentsGuides, 
                       svgIcon: "assets/icons/Two-tone/Paper.svg", 
                       action: ()=>Navigator.pushNamed(context, '/family-documents-page')
                     ),

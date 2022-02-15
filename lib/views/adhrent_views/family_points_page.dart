@@ -49,7 +49,7 @@ class _FamilyPointsPageState extends State<FamilyPointsPage> {
             ),
             title: Column(crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(S.of(context)!.dmarrer, style: TextStyle(color: currentPage == 0 ? kDeepTeal : whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+                Text(S.of(context).dmarrer, style: TextStyle(color: currentPage == 0 ? kDeepTeal : whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
                 Text(DateTime.now().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(DateTime.now())+" "+ DateTime.now().year.toString(), style: TextStyle(color: currentPage == 0 ? kDeepTeal : kSouthSeas, fontSize: wv*3.8, fontWeight: FontWeight.w300),),
               ],
             ),

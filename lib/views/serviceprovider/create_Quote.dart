@@ -98,7 +98,7 @@ class _CreateQuoteState extends State<CreateQuote> {
     MySize().init(context);
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
     var prestatiaireObject= prestataire.getServiceProvider;
-    String doc1 = categoriesType == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
 
@@ -126,7 +126,7 @@ class _CreateQuoteState extends State<CreateQuote> {
             child: Container(
               child: Column(
                 children: [
-                  Text(S.of(context)!.emettreUnDvis, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
+                  Text(S.of(context).emettreUnDvis, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
                   Text(DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now()), style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), )
                 ],
               ),
@@ -166,7 +166,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                 children: [
                     Container(
                       margin: EdgeInsets.only(left: wv*1),
-                      child: Text(S.of(context)!.codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
+                      child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
                     SizedBox(height: hv*0.3,),
                     Container(
                        width: MySize.getScaledSizeWidth(153),
@@ -209,7 +209,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                     SizedBox(height: hv*1,),
                                     Container(
                                       margin: EdgeInsets.only(left: wv*1),
-                                      child: Text(S.of(context)!.montantTotal, style: const TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
+                                      child: Text(S.of(context).montantTotal, style: const TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
                                     SizedBox(height: hv*1,),
                                     Container(
                                       width: double.infinity,
@@ -255,7 +255,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                 SizedBox(height: 5,),
                                  Container(
                                       margin: EdgeInsets.only(left: wv*1),
-                                      child: Text(S.of(context)!.typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
+                                      child: Text(S.of(context).typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
                                     SizedBox(height: hv*1,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -270,7 +270,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: categoriesType,
-                                        hint: Text(S.of(context)!.typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
+                                        hint: Text(S.of(context).typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
                                         items: arrayOfServicesType.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"]!, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
@@ -307,9 +307,9 @@ class _CreateQuoteState extends State<CreateQuote> {
                             child: Column(
                               children: [
                                 SizedBox(height: hv*0.5),
-                                Text(S.of(context)!.scannerDesJustificatifs, style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                                Text(S.of(context).scannerDesJustificatifs, style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                                 SizedBox(height: hv*0.2),
-                                Text(S.of(context)!.unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: const TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                                Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: const TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                                 Center(
                                   child: InkWell(
                                     onTap: (){getDocument(context);},
@@ -345,7 +345,7 @@ class _CreateQuoteState extends State<CreateQuote> {
 
                                 SizedBox(height: hv*1),
                               CustomTextButton(
-                                  text: S.of(context)!.crer,
+                                  text: S.of(context).crer,
                                   enable: true,
                                   isLoading: confirmSpinner!,
                                   noPadding: true,
@@ -465,7 +465,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                           "requested": docs1List!.length > 0 ? true : false,
                                         }).then((doc) {
                                           setState((){confirmSpinner = false;});
-                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.nouvellePrestationAjoute),));
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).nouvellePrestationAjoute),));
                                           Navigator.pop(context);
                                         }).onError((error, stackTrace) {
                                           setState((){confirmSpinner = false;});
@@ -473,10 +473,10 @@ class _CreateQuoteState extends State<CreateQuote> {
                                       } 
                                     
                                     }else if(categoriesType==null){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.choisissezLeTypeDeDevis)));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).choisissezLeTypeDeDevis)));
                                        setState((){confirmSpinner = false;});
                                     }else if(value==null){
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.codeDeConsultationInvalide),));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
                                        setState((){confirmSpinner = false;});
                                     }else{
                                        setState((){confirmSpinner = false;});
@@ -521,7 +521,7 @@ class _CreateQuoteState extends State<CreateQuote> {
            result= null;
         }
       }).onError((error, stackTrace) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.uneErreurSestProduite),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduite),));
       });
     
     return result;
@@ -585,11 +585,11 @@ File changeFileNameOnlySync(File file, String newFileName) {
 
 Future uploadDocumentToFirebase(File file, String name) async {
    
-    String doc1 =categoriesType == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 =categoriesType == consultation ? "Autre" :categoriesType == labo ? "Resultat" : "Medicamment";
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     Reference storageReference = FirebaseStorage.instance.ref()
@@ -612,7 +612,7 @@ Future uploadDocumentToFirebase(File file, String name) async {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context)!.ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context).ajoute)));
       String url = await storageReference.getDownloadURL();
       if (name == doc1){
         setState(() {
@@ -650,7 +650,7 @@ Future uploadDocumentToFirebase(File file, String name) async {
 }
   Future getDocFromGallery(String name) async {
 
-    String doc1 = categoriesType == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
 
@@ -682,7 +682,7 @@ Future uploadDocumentToFirebase(File file, String name) async {
   }
   getDocument(BuildContext context){
 
-    String doc1 =categoriesType == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 =categoriesType == consultation ? "Autre" : categoriesType== labo ? "Resultat" : "Medicamment";
 

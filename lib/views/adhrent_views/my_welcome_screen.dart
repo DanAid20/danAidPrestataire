@@ -54,15 +54,15 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                         Container(
                           margin: EdgeInsets.only(left:inch*2, right:inch*2),
                           child: Row(children: [
-                            Text(S.of(context)!.mesAvantages, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                            Text(S.of(context).mesAvantages, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                             //Text("Voir plus..")
                           ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                         ),
                         SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
                         child: Row(children: [
                           AdvantageCard(
-                            label: S.of(context)!.fondDeSoin,
-                            state: S.of(context)!.disponible,
+                            label: S.of(context).fondDeSoin,
+                            state: S.of(context).disponible,
                             price: adherentProvider.getAdherent?.insuranceLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.insuranceLimit)} f.",
                             color: Colors.teal[500],
                             onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
@@ -81,8 +81,8 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             tag: "loanCard",
                             flightShuttleBuilder: flightShuttleBuilder,
                             child: AdvantageCard(
-                              label: S.of(context)!.prtDeSant,
-                              state: S.of(context)!.disponible,
+                              label: S.of(context).prtDeSant,
+                              state: S.of(context).disponible,
                               price: adherentProvider.getAdherent?.loanLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.loanLimit)} f.",
                               color: Colors.brown.withOpacity(0.7),
                               onTap: ()=>Navigator.pushNamed(context, '/loans'),
@@ -108,7 +108,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                       Container(
                         margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0.5),
                         child: Row(children: [
-                          Text(S.of(context)!.notifications, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                          Text(S.of(context).notifications, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                           //Text("Voir plus..")
                         ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                       ),
@@ -131,8 +131,8 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 onTap: ()=>Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : userProvider.getProfileType == adherent ? '/adherent-profile-edit' : '/serviceprovider-profile-edit'),
                                 child: NotificationCard(
                                   isprestataire: false,
-                                  instruction: S.of(context)!.ouvrirLaPage,
-                                  description: S.of(context)!.mettezJourVotreProfilPourPouvoirPleinementProfiterDeVos,
+                                  instruction: S.of(context).ouvrirLaPage,
+                                  description: S.of(context).mettezJourVotreProfilPourPouvoirPleinementProfiterDeVos,
                                 ),
                               ) : Container(),
 
@@ -140,8 +140,8 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 onTap: ()=>navController.setIndex(4),
                                 child: NotificationCard(
                                   isprestataire: false,
-                                  instruction: S.of(context)!.ouvrirLaPage,
-                                  description: S.of(context)!.ajouterLesMembresDeVotreFamilleVotreListeDeBnficiaires,
+                                  instruction: S.of(context).ouvrirLaPage,
+                                  description: S.of(context).ajouterLesMembresDeVotreFamilleVotreListeDeBnficiaires,
                                 ),
                               ) : Container(),
 
@@ -149,8 +149,8 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 onTap: ()=>navController.setIndex(3),
                                 child: NotificationCard(
                                   isprestataire: false,
-                                  instruction: S.of(context)!.ouvrirLaPage,
-                                  description: S.of(context)!.choisissezVotreMdecinDeFamilleDanaid,
+                                  instruction: S.of(context).ouvrirLaPage,
+                                  description: S.of(context).choisissezVotreMdecinDeFamilleDanaid,
                                 ),
                               ) : Container(),
 
@@ -158,15 +158,15 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                                 onTap: ()=>Navigator.pushNamed(context, '/contributions'),
                                 child: NotificationCard(
                                   isprestataire: false,
-                                  instruction: S.of(context)!.ouvrirLaPage,
-                                  description: S.of(context)!.vousNavezPasEncorePayVotreSouscription,
+                                  instruction: S.of(context).ouvrirLaPage,
+                                  description: S.of(context).vousNavezPasEncorePayVotreSouscription,
                                 ),
                               ) : Container(),
 
                               enable && adherentProvider.getAdherent?.familyDoctorId != null && !(adherentProvider.getAdherent?.paid != true && adherentProvider.getAdherent?.adherentPlan != 0) ?  NotificationCard(
                                   isprestataire: false,
                                   instruction: "",
-                                  description: S.of(context)!.aucuneNotificationsPourLeMoment,
+                                  description: S.of(context).aucuneNotificationsPourLeMoment,
                                 ) : Container()
                             ],),
                             ),

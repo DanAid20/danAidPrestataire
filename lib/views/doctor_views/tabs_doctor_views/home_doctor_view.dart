@@ -46,11 +46,11 @@ Widget notificationWidget(BuildContext context){
         child: Row(
           children: [
             Text(
-              S.of(context)!.notifications,
+              S.of(context).notifications,
               style:
                   const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
             ),
-            Text(S.of(context)!.voirPlus)
+            Text(S.of(context).voirPlus)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),
@@ -76,8 +76,8 @@ Widget notificationWidget(BuildContext context){
                 children: [
                  userProvider.isEnabled==false 
                   ? 
-                  NotificationCard(instruction: S.of(context)!.completer,islinkEnable: true, description:S.of(context)!.veuillezCompleterLesInformationsRelaifAVotreProfilPourNous,isprestataire: isPrestataire)
-                 :Center(child: Text(S.of(context)!.aucuneNotification),),
+                  NotificationCard(instruction: S.of(context).completer,islinkEnable: true, description:S.of(context).veuillezCompleterLesInformationsRelaifAVotreProfilPourNous,isprestataire: isPrestataire)
+                 :Center(child: Text(S.of(context).aucuneNotification),),
                   
 
                  ],
@@ -216,7 +216,7 @@ getDetailDocotor(){
               const SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               const SizedBox(height: 5,),
-              Text(S.of(context)!.aucuneDiscussionPourLeMoment, 
+              Text(S.of(context).aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -340,10 +340,10 @@ Widget questionDuDocteur() {
               child: Column(
                 children: [
                   Row(children: [
-                    Text(S.of(context)!.aujourdhui, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                    Text(S.of(context).aujourdhui, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                     InkWell(
                       onTap: ()=>navController.setIndex(0),
-                      child: Text(S.of(context)!.voirPlus)
+                      child: Text(S.of(context).voirPlus)
                     )
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   
@@ -376,13 +376,13 @@ Widget questionDuDocteur() {
 
                   SizedBox(height: hv*2,),
                   Row(children: [
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context)!.posts, occurence: userProvider.getUserModel!.posts == null ? 0 : userProvider.getUserModel!.posts),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel!.posts == null ? 0 : userProvider.getUserModel!.posts),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context)!.commentaires, occurence: userProvider.getUserModel!.comments == null ? 0 : userProvider.getUserModel!.comments),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: userProvider.getUserModel!.comments == null ? 0 : userProvider.getUserModel!.comments),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context)!.amis, occurence: userProvider.getUserModel!.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: userProvider.getUserModel!.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context)!.chats, occurence: userProvider.getUserModel!.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context).chats, occurence: userProvider.getUserModel!.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   SizedBox(height: hv*2,) 
                 ],
@@ -397,11 +397,11 @@ Widget questionDuDocteur() {
         child: Row(
           children: [
             Text(
-              S.of(context)!.questionAuDocteur,
+              S.of(context).questionAuDocteur,
               style:
                   TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
             ),
-            Text(S.of(context)!.voirPlus)
+            Text(S.of(context).voirPlus)
           ],
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
         ),

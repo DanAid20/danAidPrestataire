@@ -113,8 +113,8 @@ class _IntroSlidesState extends State<IntroSlides> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(S.of(context)!.couverture, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.bold),),
-                      Text(S.of(context)!.soixanteDixpourCent, style: TextStyle(color: whiteColor, fontSize: 50, fontWeight: FontWeight.bold))
+                      Text(S.of(context).couverture, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.bold),),
+                      Text(S.of(context).soixanteDixpourCent, style: TextStyle(color: whiteColor, fontSize: 50, fontWeight: FontWeight.bold))
                     ],
                   ),
                 ),
@@ -128,7 +128,7 @@ class _IntroSlidesState extends State<IntroSlides> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(currentPageValue == 0 ? S.of(context)!.laMutuelleSant100Mobile : currentPageValue == 1 ?  S.of(context)!.unRseauDentraide : S.of(context)!.unMdecinDeFamilleMeSuit, style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*6.2, fontWeight: FontWeight.w900),),
+                      Text(currentPageValue == 0 ? S.of(context).laMutuelleSant100Mobile : currentPageValue == 1 ?  S.of(context).unRseauDentraide : S.of(context).unMdecinDeFamilleMeSuit, style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*6.2, fontWeight: FontWeight.w900),),
                       SizedBox(height: hv*2.5,),
                       SizedBox(
                         width: wv*90,
@@ -137,11 +137,11 @@ class _IntroSlidesState extends State<IntroSlides> {
                           text: TextSpan(
                             style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*5.7, fontWeight: FontWeight.w300),
                             children: [
-                              TextSpan(text: currentPageValue == 0 ? S.of(context)!.avecVotreFamilleBnficiezDuneCouvertureSantDe : currentPageValue == 1 ? S.of(context)!.enCasDeBesoinObtenezLaideDesMembresDuRseau : S.of(context)!.monMdecinDeFamillePersonnelReuRapidementOrientSuiviLong),
-                              TextSpan(text: currentPageValue == 0 ? S.of(context)!.soixanteDixpourCent : currentPageValue == 1 ?  S.of(context)!.prtSant : S.of(context)!.danaid, style: TextStyle(fontWeight: FontWeight.w600)),
-                              TextSpan(text: currentPageValue == 0 ? S.of(context)!.deVosDpensesSantEn : currentPageValue == 1 ?  S.of(context)!.enQuelquesMinutes : S.of(context)!.veilleSurNotreSant),
-                              TextSpan(text: currentPageValue == 0 ? S.of(context)!.UneHeure : currentPageValue == 1 ?  "" : "", style: TextStyle(fontWeight: FontWeight.w600)),
-                              TextSpan(text: currentPageValue == 0 ? S.of(context)!.partout : currentPageValue == 1 ?  "" : ""),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).avecVotreFamilleBnficiezDuneCouvertureSantDe : currentPageValue == 1 ? S.of(context).enCasDeBesoinObtenezLaideDesMembresDuRseau : S.of(context).monMdecinDeFamillePersonnelReuRapidementOrientSuiviLong),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).soixanteDixpourCent : currentPageValue == 1 ?  S.of(context).prtSant : S.of(context).danaid, style: TextStyle(fontWeight: FontWeight.w600)),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).deVosDpensesSantEn : currentPageValue == 1 ?  S.of(context).enQuelquesMinutes : S.of(context).veilleSurNotreSant),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).UneHeure : currentPageValue == 1 ?  "" : "", style: TextStyle(fontWeight: FontWeight.w600)),
+                              TextSpan(text: currentPageValue == 0 ? S.of(context).partout : currentPageValue == 1 ?  "" : ""),
                             ]
                           ),
                         ),
@@ -169,7 +169,7 @@ class _IntroSlidesState extends State<IntroSlides> {
                     Spacer(),
                     currentPageValue == 2 ? SizedBox(width: wv*1,) : TextButton(
                       onPressed: (){_coastController.animateTo(beach: 2, duration: Duration(milliseconds: 500));}, 
-                      child: Text(S.of(context)!.skip, style: TextStyle(color: whiteColor, fontSize: 19, fontWeight: FontWeight.bold),)
+                      child: Text(S.of(context).skip, style: TextStyle(color: whiteColor, fontSize: 19, fontWeight: FontWeight.bold),)
                     )
                   ],
                 ),

@@ -30,7 +30,7 @@ class MutuelleIntroScreen extends StatelessWidget {
               ),
               CoverContainer(),
               FeeContainer(),
-              IntroText(title: S.of(context)!.laMutuelleSant100Mobile, rank: 1,)
+              IntroText(title: S.of(context).laMutuelleSant100Mobile, rank: 1,)
             ],
           ),
         ),

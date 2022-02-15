@@ -65,7 +65,7 @@ class _RefundFormState extends State<RefundForm> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context)!.dmandeDeRemboursement, style: TextStyle(color: kTextBlue, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).dmandeDeRemboursement, style: TextStyle(color: kTextBlue, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
             Text(DateFormat('EEEE', 'fr_FR').format(date)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString() ,style: TextStyle(color: kTextBlue.withOpacity(0.75), fontSize: wv*3.8, fontWeight: FontWeight.w300),
             ),
           ],
@@ -88,7 +88,7 @@ class _RefundFormState extends State<RefundForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(S.of(context)!.slectionnerLePatient, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w600, fontSize: 16),),
+            Text(S.of(context).slectionnerLePatient, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w600, fontSize: 16),),
             Container(
               padding: EdgeInsets.only(left: wv*2),
               decoration: BoxDecoration(
@@ -114,7 +114,7 @@ class _RefundFormState extends State<RefundForm> {
                               labelColor: kTextBlue,
                               controller: _consultationCodeController,
                               onChanged: (val)=>setState((){}),
-                              label: S.of(context)!.codeDeConsultation,
+                              label: S.of(context).codeDeConsultation,
                             ),
                           ),
                           SizedBox(width: wv*2),
@@ -123,7 +123,7 @@ class _RefundFormState extends State<RefundForm> {
                               alignment: Alignment.centerRight,
                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(S.of(context)!.dateDeDbut, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: kTextBlue),),
+                                  Text(S.of(context).dateDeDbut, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: kTextBlue),),
                                   SizedBox(height: 5,),
                                   GestureDetector(
                                     onTap: () => _selectDate(context),
@@ -149,7 +149,7 @@ class _RefundFormState extends State<RefundForm> {
                       ),
                       SizedBox(height: hv*2,),
 
-                      Text(S.of(context)!.circonstance, style: TextStyle(fontSize: 16, color: kTextBlue),),
+                      Text(S.of(context).circonstance, style: TextStyle(fontSize: 16, color: kTextBlue),),
                       SizedBox(height: hv*1,),
                       Container(
                         constraints: BoxConstraints(minWidth: wv*45),
@@ -160,11 +160,11 @@ class _RefundFormState extends State<RefundForm> {
                         ),
                         child: ButtonTheme(alignedDropdown: true,
                           child: DropdownButtonHideUnderline(
-                            child: DropdownButton(isExpanded: true, hint: Text(S.of(context)!.choisir), value: _circumstance,
+                            child: DropdownButton(isExpanded: true, hint: Text(S.of(context).choisir), value: _circumstance,
                               items: [
-                                DropdownMenuItem(child: Text(S.of(context)!.mdecinDeFamille, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "MDF",),
-                                DropdownMenuItem(child: Text(S.of(context)!.spcialiste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "SP",),
-                                DropdownMenuItem(child: Text(S.of(context)!.urgence, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "URGENCE",),
+                                DropdownMenuItem(child: Text(S.of(context).mdecinDeFamille, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "MDF",),
+                                DropdownMenuItem(child: Text(S.of(context).spcialiste, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "SP",),
+                                DropdownMenuItem(child: Text(S.of(context).urgence, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "URGENCE",),
                               ],
                               onChanged: (String? value) => setState(() {_circumstance = value;})
                             ),
@@ -179,14 +179,14 @@ class _RefundFormState extends State<RefundForm> {
                         labelColor: kTextBlue,
                         controller: _establishmentController,
                         onChanged: (val)=>setState((){}),
-                        label: S.of(context)!.etablissement,
+                        label: S.of(context).etablissement,
                       ),
 
                       SizedBox(height: hv*2),
 
                       beneficiary.getBeneficiary.matricule != null ? Column(
                         children: [
-                          Center(child: Text(S.of(context)!.scannerLesDocumentsJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                          Center(child: Text(S.of(context).scannerLesDocumentsJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
                           Center(
                             child: InkWell(
                               onTap: (){getDocument(context);},
@@ -197,28 +197,28 @@ class _RefundFormState extends State<RefundForm> {
                             ),
                           ),
                           FileUploadCard(
-                            title: S.of(context)!.carnet,
+                            title: S.of(context).carnet,
                             state: healthBookUrl != null,
                             loading: healthBookSpinner,
                             action: () async {await getDocFromGallery('Carnet');}
                           ),
                           SizedBox(height: hv*1,),
                           FileUploadCard(
-                            title: S.of(context)!.reuDePaiement,
+                            title: S.of(context).reuDePaiement,
                             state: receiptUrl != null,
                             loading: receiptSpinner,
                             action: () async {await getDocFromGallery('Recu_De_Paiement');}
                           ),
                           SizedBox(height: hv*1,),
                           FileUploadCard(
-                            title: S.of(context)!.rsultatDexamen,
+                            title: S.of(context).rsultatDexamen,
                             state: examResultUrl != null,
                             loading: examResultSpinner,
                             action: () async {await getDocFromGallery('Resultat_Examen');}
                           ),
                           SizedBox(height: hv*1,),
                           FileUploadCard(
-                            title: S.of(context)!.autrePiceJustificative,
+                            title: S.of(context).autrePiceJustificative,
                             state: otherFileUrl != null,
                             loading: otherFileSpinner,
                             action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
@@ -234,7 +234,7 @@ class _RefundFormState extends State<RefundForm> {
             Container(
               color: whiteColor,
               child: CustomTextButton(
-                text: S.of(context)!.envoyer,
+                text: S.of(context).envoyer,
                 isLoading: buttonLoading,
                 enable: _establishmentController.text.isNotEmpty && _circumstance != null && receiptUrl != null && selectedDate != null && beneficiary.getBeneficiary.matricule != null,
                 action: (){
@@ -294,14 +294,14 @@ class _RefundFormState extends State<RefundForm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(LineIcons.book),
-                    title: new Text(S.of(context)!.carnet, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                    title: new Text(S.of(context).carnet, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                     onTap: () {
                       getDocFromPhone("Carnet");
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(LineIcons.receipt),
-                  title: new Text(S.of(context)!.reuDePaiement, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context).reuDePaiement, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Recu_De_Paiement");
                     Navigator.of(context).pop();
@@ -309,7 +309,7 @@ class _RefundFormState extends State<RefundForm> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.medicalNotes),
-                  title: new Text(S.of(context)!.rsultatDexamen, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context).rsultatDexamen, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Resultat_Examen");
                     Navigator.of(context).pop();
@@ -317,7 +317,7 @@ class _RefundFormState extends State<RefundForm> {
                 ),
                 new ListTile(
                   leading: new Icon(LineIcons.stickyNoteAlt),
-                  title: new Text(S.of(context)!.autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                  title: new Text(S.of(context).autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                   onTap: () {
                     getDocFromPhone("Pièce_Justificative_Supplémentaire");
                     Navigator.of(context).pop();
@@ -396,7 +396,7 @@ class _RefundFormState extends State<RefundForm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context)!.ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name"+S.of(context).ajoute)));
       String url = await storageReference.getDownloadURL();
       if(name == "Carnet"){
         setState(() {

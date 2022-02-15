@@ -175,7 +175,7 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                      child: Text(S.of(context)!.aucunDevisNeCorrespondACePatient),
+                      child: Text(S.of(context).aucunDevisNeCorrespondACePatient),
                 ),
                     ),
                   );

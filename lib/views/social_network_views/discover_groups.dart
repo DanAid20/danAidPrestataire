@@ -44,7 +44,7 @@ class _DiscoverGroupsState extends State<DiscoverGroups> {
               SizedBox(height: 50,),
               Icon(LineIcons.userShield, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.aucunGroupePourLeMoment, 
+              Text(S.of(context).aucunGroupePourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -89,7 +89,7 @@ class _DiscoverGroupsState extends State<DiscoverGroups> {
                         ),
                       ),
                     ),
-                    Expanded(flex: 3, child: Text(S.of(context)!.ilYa+time!, style: TextStyle(fontSize: 12), textAlign: TextAlign.end,))
+                    Expanded(flex: 3, child: Text(S.of(context).ilYa+time!, style: TextStyle(fontSize: 12), textAlign: TextAlign.end,))
                   ],
                 ),
                 SizedBox(height: hv*2,),

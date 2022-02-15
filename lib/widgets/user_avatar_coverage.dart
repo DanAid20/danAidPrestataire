@@ -115,10 +115,10 @@ class UserAvatarAndCoverage extends StatelessWidget {
         Container(
           child: Column(crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context)!.bonjour+" ${adherentProvider.getAdherent?.surname} !" : userProvider.getProfileType == doctor ? S.of(context)!.bonjour+" Dr. ${doctorProvider.getDoctor?.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider?.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
+              Text(userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).bonjour+" ${adherentProvider.getAdherent?.surname} !" : userProvider.getProfileType == doctor ? S.of(context).bonjour+" Dr. ${doctorProvider.getDoctor?.surname} !": userProvider.getProfileType == serviceProvider ? "Salut M. ${serviceProviderMP.getServiceProvider?.contactName} !" : "Bonjour !", style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400), overflow: TextOverflow.clip,),
               Text(
                 userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent?.adherentPlan) : 
-                userProvider.getProfileType == doctor ?   S.of(context)!.nousVousAttendions : S.of(context)!.nousVousAttendions
+                userProvider.getProfileType == doctor ?   S.of(context).nousVousAttendions : S.of(context).nousVousAttendions
                 , style: TextStyle(fontSize: wv*2.8, color: kPrimaryColor)),
             ],
           ),
@@ -133,7 +133,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
       children: [
         Loaders().buttonLoader(kPrimaryColor),
         SizedBox(width: wv*3,),
-        Text(S.of(context)!.bonjour, style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400))
+        Text(S.of(context).bonjour, style: TextStyle(fontSize: wv*5, color: kPrimaryColor, fontWeight: FontWeight.w400))
       ],
     )
     

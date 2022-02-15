@@ -33,23 +33,23 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: hv*15,),
-              Text(S.of(context)!.badges, style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: whiteColor),),
+              Text(S.of(context).badges, style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color: whiteColor),),
               SizedBox(height: hv*5,),
               Row(
                 children: [
                   badgeBox(
                     img: 'assets/icons/Bulk/Shield Done.svg',
                     color: kBrownCanyon,
-                    label: S.of(context)!.couvert,
-                    description: S.of(context)!.vousAvezUneCouvertureSantOptimaleAccsAssistOuSrnit,
+                    label: S.of(context).couvert,
+                    description: S.of(context).vousAvezUneCouvertureSantOptimaleAccsAssistOuSrnit,
                     active: adherentProvider.getAdherent?.adherentPlan != 0
                   ),
                   Spacer(),
                   badgeBox(
                     img: 'assets/icons/Bulk/Ticket Star.svg',
                     color: kDeepTeal,
-                    label: S.of(context)!.anciennet,
-                    description: S.of(context)!.vousTesAdhrentDepuisPlusDunAnSansDiscontinuer,
+                    label: S.of(context).anciennet,
+                    description: S.of(context).vousTesAdhrentDepuisPlusDunAnSansDiscontinuer,
                     active: yearsForBadget >= 365
                   ),
                 ],
@@ -58,8 +58,8 @@ class _FamilyBadgePageState extends State<FamilyBadgePage> {
               badgeBox(
                 img: 'assets/icons/Bulk/Heart.svg',
                 color: primaryColor,
-                label: S.of(context)!.contributeur,
-                description: S.of(context)!.vousTesUnContributeurRgulierAansLeRseauDentraideDanaid,
+                label: S.of(context).contributeur,
+                description: S.of(context).vousTesUnContributeurRgulierAansLeRseauDentraideDanaid,
                 active: false
               ),
             ],

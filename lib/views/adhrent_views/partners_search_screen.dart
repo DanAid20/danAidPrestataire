@@ -56,7 +56,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               child: DoctorInfoCard(
                 avatarUrl: doctor.avatarUrl,
                 name: doctor.cniName,
-                title: S.of(context)!.medecinDeFamille + doctor.field!,
+                title: S.of(context).medecinDeFamille + doctor.field!,
                 speciality: doctor.speciality,
                 teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                 consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -84,7 +84,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: kSouthSeas.withOpacity(0.7), size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.aucunMdecinAvecPourNom+":\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunMdecinAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: kSouthSeas )
               , textAlign: TextAlign.center,),
             ],
@@ -149,7 +149,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
                         borderSide:
                             BorderSide(color: Colors.grey.withOpacity(0.0)),
                         borderRadius: BorderRadius.circular(10)),
-                    hintText: S.of(context)!.entrezLeNom,
+                    hintText: S.of(context).entrezLeNom,
                     filled: true,
                     contentPadding:
                         EdgeInsets.only(bottom: 12, left: 15, right: 15),
@@ -195,7 +195,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
               ),
             ),
             Text(
-              S.of(context)!.rechercheDeMdecins,
+              S.of(context).rechercheDeMdecins,
               style: TextStyle(fontSize: 17, color: kSouthSeas, fontWeight: FontWeight.w900),
             )
           ],

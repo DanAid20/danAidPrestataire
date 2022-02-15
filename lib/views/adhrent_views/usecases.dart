@@ -75,7 +75,7 @@ class _UseCaseListState extends State<UseCaseList> {
                   }),
             )
             : Center(
-              child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context)!.aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
+              child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
             );
         }
       ),

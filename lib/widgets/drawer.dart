@@ -42,7 +42,7 @@ class DefaultDrawer extends StatelessWidget {
                       children: [
                         ListTile(
                           leading: SvgPicture.asset("assets/icons/Two-tone/Category.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(S.of(context)!.entraide, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(S.of(context).entraide, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(0);
                             entraide!();
@@ -50,7 +50,7 @@ class DefaultDrawer extends StatelessWidget {
                         ),
                         ListTile(
                           leading: SvgPicture.asset("assets/icons/Two-tone/Home.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(S.of(context)!.accueil, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(S.of(context).accueil, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(1);
                             accueil!();
@@ -58,7 +58,7 @@ class DefaultDrawer extends StatelessWidget {
                         ),
                         ListTile(
                           leading: SvgPicture.asset("assets/icons/Two-tone/Paper.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(S.of(context)!.carnet, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(S.of(context).carnet, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(2);
                             carnet!();
@@ -66,7 +66,7 @@ class DefaultDrawer extends StatelessWidget {
                         ),
                         ListTile(
                           leading: SvgPicture.asset("assets/icons/Two-tone/Location.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(S.of(context)!.partenaires, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(S.of(context).partenaires, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(3);
                             partenaire!();
@@ -74,7 +74,7 @@ class DefaultDrawer extends StatelessWidget {
                         ),
                         ListTile(
                           leading: SvgPicture.asset(userProvider.getProfileType == adherent ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(userProvider.getProfileType == adherent ? S.of(context)!.famille : S.of(context)!.profile, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(userProvider.getProfileType == adherent ? S.of(context).famille : S.of(context).profile, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: (){
                             navController.setIndex(4);
                             famille!();
@@ -82,12 +82,12 @@ class DefaultDrawer extends StatelessWidget {
                         ),
                         ListTile(
                           leading: SvgPicture.asset("assets/icons/Bulk/HeartOutline.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(S.of(context)!.demandesDamitis, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(S.of(context).demandesDamitis, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: ()=>Navigator.pushNamed(context, '/friend-requests'),
                         ),
                         ListTile(
                           leading: SvgPicture.asset("assets/icons/Two-tone/InfoSquare.svg", width: inch*4, color: whiteColor.withOpacity(0.5)),
-                          title: Text(S.of(context)!.conditionsndutilisation, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
+                          title: Text(S.of(context).conditionsndutilisation, style: TextStyle(color: whiteColor.withOpacity(0.7), fontSize: 17, fontWeight: FontWeight.bold),),
                           onTap: ()=>FunctionWidgets.termsAndConditionsDialog(context: context),
                         ),
                         SizedBox(height: hv*3,),

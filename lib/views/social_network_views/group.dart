@@ -97,7 +97,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
                                   widget.group!.membersIds!.length >= 2 ? Positioned(left: wv*5, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group?.membersAvatarsUrls != null ? widget.group!.membersAvatarsUrls![0] : null, size: 8)) : Container(),
                                   widget.group!.membersIds!.length >= 3 ? Positioned(left: wv*10, child: SocialNetworkMiniComponents.getProfileAvatar(avatarUrl: widget.group?.membersAvatarsUrls != null ? widget.group!.membersAvatarsUrls![1] : null, size: 8)) : Container(),
                                 ]),
-                                Text(" ${widget.group!.membersIds!.length} "+S.of(context)!.membres, style: TextStyle(color: kTextBlue))
+                                Text(" ${widget.group!.membersIds!.length} "+S.of(context).membres, style: TextStyle(color: kTextBlue))
                               ],
                             ),
                           ],
@@ -120,9 +120,9 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
                     unselectedLabelColor: Colors.grey[300],
                     labelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 25),
                     tabs: <Widget>[
-                      Tab(text: S.of(context)!.conversations),
-                      Tab(text: S.of(context)!.membres),
-                      Tab(text: S.of(context)!.aPropos)
+                      Tab(text: S.of(context).conversations),
+                      Tab(text: S.of(context).membres),
+                      Tab(text: S.of(context).aPropos)
                     ],
                     controller: groupController,
                   ),
@@ -136,7 +136,7 @@ class _GroupState extends State<Group> with SingleTickerProviderStateMixin {
           children: <Widget>[
             GroupFeeds(group: widget.group,),
             GroupMembers(groupMembers: widget.group!.membersIds,),
-            Center(child: Text(widget.group?.groupDescription != null ? widget.group!.groupDescription! : S.of(context)!.aucuneDescriptionFournie))
+            Center(child: Text(widget.group?.groupDescription != null ? widget.group!.groupDescription! : S.of(context).aucuneDescriptionFournie))
           ],
         )
       ),

@@ -129,7 +129,7 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           isExpanded: true,
-                          hint: Text(S.of(context)!.choisir),
+                          hint: Text(S.of(context).choisir),
                           value: _segments,
                           items: [
                             DropdownMenuItem(

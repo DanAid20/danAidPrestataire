@@ -211,7 +211,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               Navigator.pushNamed(context, "/doctor-profile");
                                             },
                                           child: Text(doctor == null ? "Nom" : "Dr. "+doctor.cniName!, style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),)),
-                                        Text(S.of(context)!.medecinDeFamille+ doctor.field!, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                        Text(S.of(context).medecinDeFamille+ doctor.field!, style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                         SizedBox(height: hv*1.3,),
                                         Text(doctor.officeName == null ? "A SON COMPTE" : doctor.officeName!, style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
                                         Text("Service - ${doctor.speciality.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
@@ -246,7 +246,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                   child: ListTile(
                                     title: Padding(
                                       padding: EdgeInsets.only(bottom: 5.0),
-                                      child: Text(S.of(context)!.servicesOfferts, style: TextStyle(color: whiteColor, fontSize: 15),),
+                                      child: Text(S.of(context).servicesOfferts, style: TextStyle(color: whiteColor, fontSize: 15),),
                                     ),
                                     subtitle: doctor.serviceList != null ? Row(
                                       children: [
@@ -265,7 +265,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         SizedBox(width: 10,),
                                         SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 20, color: doctor.serviceList["visite-a-domicile"] ? whiteColor : kSouthSeas),
                                       ],
-                                    ) : Text(S.of(context)!.nonspcifi, style: TextStyle(color: Colors.white),),
+                                    ) : Text(S.of(context).nonspcifi, style: TextStyle(color: Colors.white),),
                                   ),
                                 ),
                                 Container(
@@ -314,20 +314,20 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                     isExpanded = val;
                                   });
                                 },
-                                title: !isExpanded ? Align(child: Text(S.of(context)!.plusDeDtails, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16)), alignment: Alignment.centerRight,) 
+                                title: !isExpanded ? Align(child: Text(S.of(context).plusDeDtails, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16)), alignment: Alignment.centerRight,) 
                                 : Column(
                                     children: [
                                       Row(
                                         children: [
-                                          doctor.serviceList["consultation"] ? getFeatureCard(title: S.of(context)!.consultations) : Container(),
-                                          doctor.serviceList["tele-consultation"] ? getFeatureCard(title: S.of(context)!.tlconsultations) : Container(),
+                                          doctor.serviceList["consultation"] ? getFeatureCard(title: S.of(context).consultations) : Container(),
+                                          doctor.serviceList["tele-consultation"] ? getFeatureCard(title: S.of(context).tlconsultations) : Container(),
                                         ],
                                       ),
                                       Row(
                                         children: [
-                                          doctor.serviceList["chat"] ? getFeatureCard(title: S.of(context)!.chat) : Container(),
-                                          doctor.serviceList["rdv"] ? getFeatureCard(title: S.of(context)!.rendezvous) : Container(),
-                                          doctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: S.of(context)!.visiteDomicile) : Container(),
+                                          doctor.serviceList["chat"] ? getFeatureCard(title: S.of(context).chat) : Container(),
+                                          doctor.serviceList["rdv"] ? getFeatureCard(title: S.of(context).rendezvous) : Container(),
+                                          doctor.serviceList["visite-a-domicile"] ? getFeatureCard(title: S.of(context).visiteDomicile) : Container(),
                                         ],
                                       )
                                     ],
@@ -359,7 +359,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                 Navigator.pushNamed(context, '/conversation');
                                               },
                                               icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg", color: whiteColor,),
-                                              label: Text(S.of(context)!.ecrire, style: TextStyle(color: whiteColor),),
+                                              label: Text(S.of(context).ecrire, style: TextStyle(color: whiteColor),),
                                               style: ButtonStyle(
                                                 backgroundColor: MaterialStateProperty.all(kPrimaryColor),
                                                 padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
@@ -378,7 +378,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                 padding: const EdgeInsets.only(top: 3.0),
                                                 child: SvgPicture.asset("assets/icons/Bulk/Calendar.svg", color: kPrimaryColor,),
                                               ),
-                                              label: Text(S.of(context)!.prendreRendezvous, style: TextStyle(color: kPrimaryColor),),
+                                              label: Text(S.of(context).prendreRendezvous, style: TextStyle(color: kPrimaryColor),),
                                               style: ButtonStyle(
                                                 backgroundColor: MaterialStateProperty.all(whiteColor),
                                                 padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
@@ -397,12 +397,12 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                             Expanded(
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(S.of(context)!.horaire, style: TextStyle(fontWeight: FontWeight.w800)),
+                                                  Text(S.of(context).horaire, style: TextStyle(fontWeight: FontWeight.w800)),
                                                   availability?["monday to friday"]["available"] ? Container(
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Expanded(child: Text(S.of(context)!.lundiVendredi)),
+                                                        Expanded(child: Text(S.of(context).lundiVendredi)),
                                                         Text("${availability?["monday to friday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability?["monday to friday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability?["monday to friday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability?["monday to friday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
@@ -411,7 +411,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Text(S.of(context)!.samedi),
+                                                        Text(S.of(context).samedi),
                                                         Text("${availability?["saturday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability?["saturday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability?["saturday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability?["saturday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
@@ -420,7 +420,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                     margin: EdgeInsets.only(right: 10),
                                                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
-                                                        Text(S.of(context)!.dimanche),
+                                                        Text(S.of(context).dimanche),
                                                         Text("${availability?["sunday"]["start"].toDate().hour.toString().padLeft(2, '0')}H${availability?["sunday"]["start"].toDate().minute.toString().padLeft(2, '0')} - ${availability?["sunday"]["end"].toDate().hour.toString().padLeft(2, '0')}H${availability?["sunday"]["end"].toDate().minute.toString().padLeft(2, '0')}"),
                                                       ]
                                                     ),
@@ -428,8 +428,8 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
 
                                                   SizedBox(height: 10,),
 
-                                                  Text(S.of(context)!.adresse, style: TextStyle(fontWeight: FontWeight.w800)),
-                                                  Text(doctor.address == null ? S.of(context)!.cameroon : doctor.address! + S.of(context)!.cameroun)
+                                                  Text(S.of(context).adresse, style: TextStyle(fontWeight: FontWeight.w800)),
+                                                  Text(doctor.address == null ? S.of(context).cameroon : doctor.address! + S.of(context).cameroun)
                                                 ],
                                               ),
                                             ),
@@ -442,20 +442,20 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                               ),
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                                 children: [
-                                                  Text(S.of(context)!.tarifPublique, style: TextStyle(fontWeight: FontWeight.w800)),
+                                                  Text(S.of(context).tarifPublique, style: TextStyle(fontWeight: FontWeight.w800)),
                                                   Text("${doctor.rate?["public"]} f."),
                                                   SizedBox(height: 10,),
-                                                  Text(S.of(context)!.couvertureDanaid, style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
+                                                  Text(S.of(context).couvertureDanaid, style: TextStyle(color: Colors.teal[400], fontWeight: FontWeight.w800)),
                                                   Row(
                                                     children: [
-                                                      Text(S.of(context)!.adhrents),
+                                                      Text(S.of(context).adhrents),
                                                       SizedBox(width: 5,),
                                                       Text("70%"),//Text("${doctor.rate["adherent"]} f."),
                                                     ],
                                                   ),
                                                   Row(
                                                     children: [
-                                                      Text(S.of(context)!.autres),
+                                                      Text(S.of(context).autres),
                                                       SizedBox(width: 5,),
                                                       Text("5%"),//Text("${doctor.rate["other"]} f."),
                                                     ],
@@ -504,7 +504,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                       children: [
                         Container(
                           margin: EdgeInsets.only(left: 15),
-                          child: Text(S.of(context)!.mesRendezvous, style: TextStyle(color: Colors.teal[400], fontSize: 17),)
+                          child: Text(S.of(context).mesRendezvous, style: TextStyle(color: Colors.teal[400], fontSize: 17),)
                         ),
                         Spacer(),
                         InkWell(
@@ -543,7 +543,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         return Padding(
                                           padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(
-                                            doctorName: "Dr. ${appointment.doctorName}"+S.of(context)!.mdcinDeFamille,
+                                            doctorName: "Dr. ${appointment.doctorName}"+S.of(context).mdcinDeFamille,
                                             date: appointment.startTime?.toDate(),
                                             state: appointment.status,
                                             type: Algorithms.getConsultationTypeLabel(appointment.consultationType!),
@@ -560,7 +560,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                         );
                                       })
                                   : Center(
-                                      child: Container(child: Text(S.of(context)!.aucunRendezvousEnrgistrPourLeMoment, textAlign: TextAlign.center)),
+                                      child: Container(child: Text(S.of(context).aucunRendezvousEnrgistrPourLeMoment, textAlign: TextAlign.center)),
                                     );
                             }),
                             SizedBox(height: hv*2,),
@@ -621,7 +621,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                         ),
                         child: ListView(children: [
                           SizedBox(height: hv*3,),
-                          RichText(text: TextSpan(text: S.of(context)!.choisissezVotren, children: [TextSpan(text: S.of(context)!.mdecinDeFamille, style: TextStyle(fontWeight: FontWeight.w800))], style: TextStyle(color: kPrimaryColor, fontSize: wv*5.5)), textAlign: TextAlign.center,),
+                          RichText(text: TextSpan(text: S.of(context).choisissezVotren, children: [TextSpan(text: S.of(context).mdecinDeFamille, style: TextStyle(fontWeight: FontWeight.w800))], style: TextStyle(color: kPrimaryColor, fontSize: wv*5.5)), textAlign: TextAlign.center,),
                           SizedBox(height: hv*2),
                           SvgPicture.asset('assets/icons/Bulk/Danger.svg', width: wv*20,),
                           SizedBox(height: hv*2),
@@ -635,7 +635,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                         color: Colors.white,
                         borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
                       ),
-                      child: CustomTextButton(text: S.of(context)!.dmarrer, action: (){controller.setIndex(3);},),
+                      child: CustomTextButton(text: S.of(context).dmarrer, action: (){controller.setIndex(3);},),
                     )
                   ],
                 ),

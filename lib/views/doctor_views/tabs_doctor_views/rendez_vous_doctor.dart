@@ -237,7 +237,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         }
                         
                         if (snapshot.hasError) {
-                          return Text(S.of(context)!.somethingWentWrong);
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -273,7 +273,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         }
                         
                         if (snapshot.hasError) {
-                          return Text(S.of(context)!.somethingWentWrong);
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic> ;
@@ -298,7 +298,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               : Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
-                    child: Text(S.of(context)!.aucunPatientEnSalleDattente),
+                    child: Text(S.of(context).aucunPatientEnSalleDattente),
                   ),
                 );
         });
@@ -315,7 +315,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
       onPressed: _willpop,
     );
     Widget continueButton = TextButton(
-        child: Text(S.of(context)!.ouiJapprouve,
+        child: Text(S.of(context).ouiJapprouve,
             style: TextStyle(
               color: kBlueForce,
               fontWeight: FontWeight.w600,
@@ -347,7 +347,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     }).then((value) {
                       Navigator.pop(context);
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(S.of(context)!.rendevousApprouver)));
+                          SnackBar(content: Text(S.of(context).rendevousApprouver)));
                     })
                   },
               });
@@ -355,14 +355,14 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text(S.of(context)!.infos,
+      title: Text(S.of(context).infos,
           style: TextStyle(
             color: kBlueForce,
             fontWeight: FontWeight.w700,
             fontSize: fontSize(size: 21),
           )),
       content: Text(
-          S.of(context)!.vousTesSurLePointDapprouverCeRendezvousTesvousSr,
+          S.of(context).vousTesSurLePointDapprouverCeRendezvousTesvousSr,
           style: TextStyle(
             color: kBlueForce,
             fontWeight: FontWeight.w400,
@@ -436,7 +436,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text(S.of(context)!.somethingWentWrong);
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -500,7 +500,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text(S.of(context)!.somethingWentWrong);
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -553,7 +553,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     return widget;
                   })
               : Center(
-                  child: Text(S.of(context)!.aucunAdherentDisponiblePourLeMoment),
+                  child: Text(S.of(context).aucunAdherentDisponiblePourLeMoment),
                 );
         });
   }
@@ -668,7 +668,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      S.of(context)!.aujourdhui,
+                      S.of(context).aujourdhui,
                       style: TextStyle(
                           color: isPrestataire ? kBlueForce : whiteColor,
                           fontWeight: isSelected == 'Days'
@@ -692,7 +692,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     margin: EdgeInsets.only(
                         left: wv * 1.5, right: wv * 1.5, top: hv * 1),
                     child: Text(
-                      S.of(context)!.semaine,
+                      S.of(context).semaine,
                       style: TextStyle(
                           color: isPrestataire ? kBlueForce : whiteColor,
                           fontWeight: isSelected == 'week'
@@ -777,12 +777,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(S.of(context)!.salleDattente,
+                      Text(S.of(context).salleDattente,
                           style: TextStyle(
                               color: kBlueDeep,
                               fontWeight: FontWeight.w500,
                               fontSize: 17.sp)),
-                      Text(S.of(context)!.voirPlus,
+                      Text(S.of(context).voirPlus,
                           style: TextStyle(
                               color: kBrownCanyon,
                               fontWeight: FontWeight.w600,

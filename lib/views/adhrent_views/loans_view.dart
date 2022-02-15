@@ -103,8 +103,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context)!.aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text(S.of(context)!.ajouterModifierOuEnvoyerLesPices, 
+            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
@@ -151,9 +151,9 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                         child: Hero(
                           tag: "loanCard",
                           child: AdvantageCard(
-                            label: S.of(context)!.prtDeSant,
-                            description: S.of(context)!.maximumDisponible,
-                            state: S.of(context)!.disponible,
+                            label: S.of(context).prtDeSant,
+                            description: S.of(context).maximumDisponible,
+                            state: S.of(context).disponible,
                             price: adh.loanLimit == null ? "### f." : "#${currency.format(adh.loanLimit)} f.",
                             showLogo: true,
                             color: Colors.brown.withOpacity(0.7),
@@ -173,7 +173,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: kSouthSeas,
                             borderRadius: BorderRadius.circular(20)
                           ),
-                          child: Text(S.of(context)!.rapide, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: Text(S.of(context).rapide, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                         SizedBox(width: wv*5,),
                         Container(
@@ -182,7 +182,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: kPrimaryColor.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(20)
                           ),
-                          child: Text(S.of(context)!.pourTous, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: Text(S.of(context).pourTous, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                         SizedBox(width: wv*5,),
                         Container(
@@ -191,7 +191,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(20)
                           ),
-                          child: Text(S.of(context)!.simple, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: Text(S.of(context).simple, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                       ],
                     ),
@@ -204,9 +204,9 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                       Expanded(
                         flex: 6,
                         child: CustomTextField(
-                          label: S.of(context)!.jeSouhaiteEmprunter,
+                          label: S.of(context).jeSouhaiteEmprunter,
                           noPadding: true,
-                          hintText: S.of(context)!.entrerLeMontant,
+                          hintText: S.of(context).entrerLeMontant,
                           controller: _amountController,
                           keyboardType: TextInputType.number,
                           inputFormatters: <TextInputFormatter>[
@@ -224,12 +224,12 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                           enable: _amountController.text.isNotEmpty && enable == true,
                           fontSize: 14,
                           borderRadius: 20,
-                          text: S.of(context)!.dmanderUnCrdit,
+                          text: S.of(context).dmanderUnCrdit,
                           action: (){
                             num amount = num.parse(_amountController.text);
                             num? maxAmount =  adh.loanLimit;
                             if(amount > maxAmount!){
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
                             }
                             else{
                               //loanProvider.setAmount(double.parse(_amountController.text));
@@ -250,26 +250,26 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
             SizedBox(height: hv*2.5,),
             enable ? HomePageComponents.getInfoActionCard(
               icon: SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
-              title: S.of(context)!.emprunterCoteDeLargent,
-              subtitle: S.of(context)!.unCrditVousEngageEtDoitTreRemboursVrifiezVos,
-              actionLabel: S.of(context)!.faq,
+              title: S.of(context).emprunterCoteDeLargent,
+              subtitle: S.of(context).unCrditVousEngageEtDoitTreRemboursVrifiezVos,
+              actionLabel: S.of(context).faq,
               action: (){}
             ) :  Container(),
             !enable ? Container(
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
-                title: S.of(context)!.completezDabordVotreProfil,
-                subtitle: S.of(context)!.fournirLesInformationsEtPicesDmandesPourPouvoirEmprunter,
-                actionLabel: S.of(context)!.complterMonProfil,
+                title: S.of(context).completezDabordVotreProfil,
+                subtitle: S.of(context).fournirLesInformationsEtPicesDmandesPourPouvoirEmprunter,
+                actionLabel: S.of(context).complterMonProfil,
                 action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
               ),
             ) : Container(),
             adherentProvider.getAdherent?.adherentPlan == 0 ? Container(
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
-                title: S.of(context)!.vousTesAuNiveau0+S.of(context)!.dcouverte,
-                subtitle: S.of(context)!.vousDevezRferer3AmisConnaissancesPourPouvoirEmprunter,
-                actionLabel: S.of(context)!.inviterDesAmis,
+                title: S.of(context).vousTesAuNiveau0+S.of(context).dcouverte,
+                subtitle: S.of(context).vousDevezRferer3AmisConnaissancesPourPouvoirEmprunter,
+                actionLabel: S.of(context).inviterDesAmis,
                 action: (){}
               ),
             ) : Container(),
@@ -282,7 +282,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*2,),
-                  Text(S.of(context)!.statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+                  Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
                   SizedBox(height: hv*2,),
                   Column(
                     children: [
@@ -299,8 +299,8 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             labelStyle: TextStyle(fontWeight: FontWeight.bold),
                             labelColor: kPrimaryColor,
                             tabs: [
-                              Tab(text: S.of(context)!.enCours),
-                              Tab(text: S.of(context)!.achevs),
+                              Tab(text: S.of(context).enCours),
+                              Tab(text: S.of(context).achevs),
                             ],
                           ),
                         ),
@@ -353,7 +353,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                           );
                                         })
                                     : Center(
-                                      child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context)!.aucuneDemandeDeCrditEnrgistrenpourLeMoment, textAlign: TextAlign.center)),
+                                      child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucuneDemandeDeCrditEnrgistrenpourLeMoment, textAlign: TextAlign.center)),
                                     );
                                 }
                               ),

@@ -110,7 +110,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                          child: Text(S.of(context)!.quantit)
+                          child: Text(S.of(context).quantit)
                         )),
                         TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -173,7 +173,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                          child: Text(S.of(context)!.pointsDduire)
+                          child: Text(S.of(context).pointsDduire)
                         )),
                         TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
@@ -185,7 +185,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
                 Center(
                   child: CustomTextButton(
-                    text: S.of(context)!.commander, 
+                    text: S.of(context).commander, 
                     color: kDeepTeal,
                     isLoading: buttonSpinner,
                     enable: qty > 0,

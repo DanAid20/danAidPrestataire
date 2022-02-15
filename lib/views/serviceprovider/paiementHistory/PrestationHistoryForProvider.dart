@@ -209,7 +209,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text(S.of(context)!.historiqueDesPrestations), Text(S.of(context)!.vosConsultationsPaiement)],
+                  children: [Text(S.of(context).historiqueDesPrestations), Text(S.of(context).vosConsultationsPaiement)],
                 ),
               ),
             ),
@@ -346,7 +346,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           alignment: Alignment.centerLeft,
                           margin : EdgeInsets.only(
                               left: 15.w,top: 2.h),
-                          child: Text(S.of(context)!.statusDesPaiements, style: TextStyle(
+                          child: Text(S.of(context).statusDesPaiements, style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
                                       
@@ -370,7 +370,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               
                               children: [
-                                Text(S.of(context)!.consultation, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -399,7 +399,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         ),
                                       Container(
                                         width: 80.w,
-                                        child: Text(S.of(context)!.beneficiaresJours,style: TextStyle(
+                                        child: Text(S.of(context).beneficiaresJours,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -422,7 +422,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(S.of(context)!.rfrencements, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -451,7 +451,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         ),
                                        Container(
                                         width: 80.w,
-                                        child: Text(S.of(context)!.personnesInscrites,style: TextStyle(
+                                        child: Text(S.of(context).personnesInscrites,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3), textScaleFactor: 1.0,),
@@ -472,7 +472,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context)!.totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
@@ -491,7 +491,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context)!.pay, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
                                           color: kDeepTeal,
                                           fontWeight: FontWeight.w600,
                                           
@@ -510,7 +510,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(S.of(context)!.restePayer, textScaleFactor: 1.0, style: TextStyle(
+                                Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w600,
                                           
@@ -557,7 +557,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                 // HomePageComponents().paiementItem(),
                               paiementHistory!.isEmpty ?   Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Center(child: Container(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne))),
+                                child: Center(child: Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne))),
                               ):
                                loading!? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
                                ListView.builder(
@@ -592,9 +592,9 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                       }
                                  
                                   }else {
-                                    return Container(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne));
+                                    return Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
                                   }
-                                  return  Container(child: Text(S.of(context)!.aucuneTransactionPourCetteAnne));
+                                  return  Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
                              
                                  }
                               ),
