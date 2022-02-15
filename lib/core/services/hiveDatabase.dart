@@ -100,7 +100,7 @@ class HiveDatabase {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('fname');
   }
-  static Future<String> getVisit() async {
+  static Future<String?> getVisit() async {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('visit');
   }

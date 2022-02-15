@@ -62,7 +62,7 @@ class _SearchState extends State<Search> {
         }
         List<SearchResult> searchUserResult = [];
         dataSnapshot.data!.docs.forEach((document) {
-          UserModel singleUser = UserModel.fromDocument(document);
+          UserModel singleUser = UserModel.fromDocument(document, document.data() as Map);
           SearchResult userResult = SearchResult(user: singleUser);
 
           if (userId != document["id"]) {
@@ -90,7 +90,7 @@ class _SearchState extends State<Search> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
-            UserModel singleUser = UserModel.fromDocument(userSnapshot);
+            UserModel singleUser = UserModel.fromDocument(userSnapshot, userSnapshot.data() as Map);
             if (singleUser.userId == user?.userId) {
               return Container();
             }

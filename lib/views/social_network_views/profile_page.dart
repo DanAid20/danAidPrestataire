@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getUserProfile() async {
     await FirebaseFirestore.instance.collection('USERS').doc(widget.userId).get().then((docSnapshot) {
-      UserModel user = UserModel.fromDocument(docSnapshot);
+      UserModel user = UserModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
       setState(() {
         this.user = user;
       });

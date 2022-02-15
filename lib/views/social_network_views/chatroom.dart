@@ -113,7 +113,7 @@ class _ChatRoomTileState extends State<ChatRoomTile> {
           if (!snapshot.hasData) {
             return LinearProgressIndicator();
           }
-          UserModel chatBuddy = UserModel.fromDocument(snapshot.data!);
+          UserModel chatBuddy = UserModel.fromDocument(snapshot.data!, snapshot.data?.data() as Map);
           print(chatBuddy.authId);
           print(widget.targetId);
           return Column(

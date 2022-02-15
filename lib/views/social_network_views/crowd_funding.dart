@@ -28,7 +28,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            PostModel post = PostModel.fromDocument(doc);
+            PostModel post = PostModel.fromDocument(doc, doc.data() as Map);
             return getContainers(post: post);
           },
         ) :

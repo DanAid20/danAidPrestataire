@@ -450,7 +450,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           String formattedTime =DateFormat.Hm().format(dateTime);
                           return doc["status"]==2? SizedBox.shrink() : GestureDetector(
                                 onTap: ()=>{
-                                appointmentModel=AppointmentModel.fromDocument(doc),
+                                appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
                                 rendezVous.setAppointmentModel(appointmentModel!),
                                 rendezVous.getAppointment!.adherentId=snapshot.data!.id,
                                 rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
@@ -514,7 +514,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           String formattedTime =DateFormat.Hm().format(dateTime);
                           return doc["status"]==2? const SizedBox.shrink() : GestureDetector(
                                 onTap: ()=>{
-                                appointmentModel=AppointmentModel.fromDocument(doc),
+                                appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
                                 rendezVous.setAppointmentModel(appointmentModel!),
                                 rendezVous.getAppointment!.adherentId=snapshot.data!.id,
                                 rendezVous.getAppointment!.avatarUrl=data["imageUrl"],

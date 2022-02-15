@@ -47,7 +47,7 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
       FirebaseFirestore.instance.collection("ADHERENTS").where("invitedBy", isEqualTo: user.userId).get().then((query) {
         List levels = [1,2,3];
         for (int i = 0; i < query.docs.length; i++){
-          AdherentModel adherent = AdherentModel.fromDocument(query.docs[i]);
+          AdherentModel adherent = AdherentModel.fromDocument(query.docs[i], query.docs[i].data());
           if(adherent.adherentPlan == 0 && !users.contains(adherent.adherentId)){
             total = total + 100;
           }
@@ -90,7 +90,7 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
-                      AdherentModel singleUser = AdherentModel.fromDocument(userSnapshot);
+                      AdherentModel singleUser = AdherentModel.fromDocument(userSnapshot, userSnapshot.data() as Map);
                       if (singleUser.adherentId == user?.userId) {
                         return Container();
                       }

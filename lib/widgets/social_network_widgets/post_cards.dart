@@ -51,8 +51,7 @@ class PostContainer extends StatelessWidget {
       onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post!, groupId: groupId!,),),),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*3),
-        decoration: BoxDecoration(
-        ),
+        //decoration: BoxDecoration(),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(

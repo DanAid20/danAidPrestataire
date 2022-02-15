@@ -42,7 +42,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
     if(usecase.doctorId != null){
       if(usecase.doctorName == null){
         await FirebaseFirestore.instance.collection("MEDECINS").doc(usecase.doctorId).get().then((doc) async {
-          DoctorModel doctorModel = DoctorModel.fromDocument(doc);
+          DoctorModel doctorModel = DoctorModel.fromDocument(doc, doc.data() as Map);
           await FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
             'doctorName' : doctorModel.surname.toString() + ' ' + doctorModel.familyName.toString(), 
             'establishment' : doctorModel.officeName != '' ? doctorModel.officeName : null}).then((value){

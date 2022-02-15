@@ -39,7 +39,7 @@ class _QuestionsState extends State<Questions> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               DocumentSnapshot doc = snapshot.data!.docs[index];
-              PostModel post = PostModel.fromDocument(doc);
+              PostModel post = PostModel.fromDocument(doc, doc.data() as Map);
               return PostContainer(post: post);
             },
           ),

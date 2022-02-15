@@ -29,7 +29,7 @@ class _GroupMembersState extends State<GroupMembers> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
-            UserModel singleUser = UserModel.fromDocument(userSnapshot);
+            UserModel singleUser = UserModel.fromDocument(userSnapshot, userSnapshot.data() as Map);
             return userBox(
               user: singleUser
             );

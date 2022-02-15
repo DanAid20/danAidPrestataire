@@ -118,7 +118,7 @@ class _AddPatientViewState extends State<AddPatientView> {
             if (doc.exists) {
               AdherentModelProvider adherentModelProvider =
                   Provider.of<AdherentModelProvider>(context, listen: false);
-              AdherentModel adherent = AdherentModel.fromDocument(doc);
+              AdherentModel adherent = AdherentModel.fromDocument(doc, doc.data() as Map);
               adherentModelProvider.setAdherentModel(adherent);
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("${adherent.dateCreated} ")));
@@ -690,7 +690,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                             context,
                                             listen: false);
                                     AdherentModel adherent =
-                                        AdherentModel.fromDocument(doc);
+                                        AdherentModel.fromDocument(doc, doc.data() as Map);
                                     adherentModelProvider
                                         .setAdherentModel(adherent);
                                     // ScaffoldMessenger.of(context).showSnackBar(
@@ -742,7 +742,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                             context,
                                             listen: false);
                                     AdherentModel adherent =
-                                        AdherentModel.fromDocument(doc);
+                                        AdherentModel.fromDocument(doc, doc.data() as Map);
                                     adherentModelProvider
                                         .setAdherentModel(adherent);
                                     ScaffoldMessenger.of(context).showSnackBar(

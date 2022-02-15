@@ -421,7 +421,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
 
                                 return GestureDetector(
                                       onTap: ()=>{
-                                      appointmentModel=AppointmentModel.fromDocument(doc),
+                                      appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
                                       rendezVous.setAppointmentModel(appointmentModel),
                                       rendezVous.getAppointment!.adherentId=snapshot.data!.id,
                                       rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
@@ -473,7 +473,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
 
                           return GestureDetector(
                                 onTap: ()=>{
-                                appointmentModel=AppointmentModel.fromDocument(doc),
+                                appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
                                 rendezVous.setAppointmentModel(appointmentModel),
                                 rendezVous.getAppointment!.adherentId=snapshot.data!.id,
                                 rendezVous.getAppointment!.avatarUrl=data["imageUrl"],

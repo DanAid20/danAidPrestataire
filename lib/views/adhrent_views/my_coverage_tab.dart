@@ -148,10 +148,10 @@ class MyCoverageTabView extends StatelessWidget {
               Container(
                 color: whiteColor,
                 child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
+                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent?.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
                         ),
@@ -167,7 +167,7 @@ class MyCoverageTabView extends StatelessWidget {
                           itemBuilder: (context, index) {
                             int lastIndex = snapshot.data!.docs.length - 1;
                             DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                            UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc);
+                            UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                             print("name: ");
                             return Padding(
                               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),

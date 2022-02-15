@@ -31,7 +31,7 @@ class _SocialMediaHomePageState extends State<SocialMediaHomePage> with SingleTi
     if(userProvider.getProfileType != null || userProvider.getProfileType != ""){
       if (userProvider.getUserModel == null) {
         await FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).get().then((docSnapshot) {
-          UserModel user = UserModel.fromDocument(docSnapshot);
+          UserModel user = UserModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
           userProvider.setUserModel(user);
         });
       }

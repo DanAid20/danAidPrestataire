@@ -55,7 +55,7 @@ class _UseCaseListState extends State<UseCaseList> {
                   itemBuilder: (context, index) {
                     int lastIndex = snapshot.data!.docs.length - 1;
                     DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                    UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc);
+                    UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                     print("name: ");
                     return Padding(
                       padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),

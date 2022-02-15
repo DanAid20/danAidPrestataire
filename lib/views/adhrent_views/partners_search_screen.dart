@@ -48,7 +48,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            DoctorModel doctor = DoctorModel.fromDocument(doc);
+            DoctorModel doctor = DoctorModel.fromDocument(doc, doc.data() as Map);
             print("name: ");
 
             return Padding(

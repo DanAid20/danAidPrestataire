@@ -51,7 +51,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
       } else {
         FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId).get()
           .then((doc) {
-            DoctorModel myDoctor = DoctorModel.fromDocument(doc);
+            DoctorModel myDoctor = DoctorModel.fromDocument(doc, doc.data() as Map);
             adherent.setFamilyDoctor(myDoctor);
           })
         ;
@@ -151,26 +151,26 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                 stream: FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData){
-                    return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
+                    return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);
                   }
-                  DoctorModel? doctor = DoctorModel.fromDocument(snapshot.data!);
+                  DoctorModel? doctor = DoctorModel.fromDocument(snapshot.data!, snapshot.data?.data() as Map);
                   _doc = doctor;
                   Map? availability = doctor.availability;
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*3),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      borderRadius: const BorderRadius.all(Radius.circular(15)),
                       boxShadow: [BoxShadow(
                         color: Colors.grey[300]!,
                         spreadRadius: 1.5,
                         blurRadius: 3,
-                        offset: Offset(0, 2)
+                        offset: const Offset(0, 2)
                       )]
                     ),
                     child: Column(
                       children: [
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
                             color: kPrimaryColor,
                           ),
@@ -180,7 +180,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                               child: Row(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       boxShadow: [BoxShadow(
                                         color: Colors.black54,
@@ -294,7 +294,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                           ],),
                         ),
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: kSouthSeas,
                             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
                           ),
@@ -539,7 +539,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                       itemCount: snapshot.data!.docs.length,
                                       itemBuilder: (context, index) {
                                         DocumentSnapshot rdv = snapshot.data!.docs[index];
-                                        AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
+                                        AppointmentModel appointment = AppointmentModel.fromDocument(rdv, rdv.data() as Map);
                                         return Padding(
                                           padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                                           child: HomePageComponents().getMyDoctorAppointmentTile(

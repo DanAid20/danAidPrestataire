@@ -262,7 +262,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
     Future<QuerySnapshot> getSPs= userProvider.getProfileType != serviceProvider ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).get() : FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where(FieldPath.documentId, isNotEqualTo: userProvider.getUserId).get();
     getDocs.then((snap) {
       for(int i = 0; i < snap.docs.length; i++){
-        DoctorModel doc = DoctorModel.fromDocument(snap.docs[i]);
+        DoctorModel doc = DoctorModel.fromDocument(snap.docs[i], snap.docs[i].data() as Map);
         if(doc.location != null){
           if(doc.location!["latitude"] != null){
             _addMarker("Dr. " + doc.cniName!, doctor, doc.location!["latitude"], doc.location!["longitude"], null, doc.field != "Généraliste", null, doc, null);

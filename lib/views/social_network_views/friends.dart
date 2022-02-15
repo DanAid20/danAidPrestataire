@@ -37,7 +37,7 @@ class _FriendsState extends State<Friends> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
-            UserModel singleUser = UserModel.fromDocument(userSnapshot);
+            UserModel singleUser = UserModel.fromDocument(userSnapshot, userSnapshot.data() as Map);
             if (singleUser.userId == user.userId) {
               return Container();
             }

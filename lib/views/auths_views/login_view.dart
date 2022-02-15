@@ -11,6 +11,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/views/auths_views/otp_view.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -234,7 +235,7 @@ class _LoginViewState extends State<LoginView> {
                   });
                   userProvider.setUserId("+$phoneCode${_mPhoneController?.text}");
                   print("+${userProvider.getCountryCode}${_mPhoneController?.text}");
-                  isWeb() ? (){} : verifyPhoneNumber();
+                  isWeb() ? signInWithPhoneNumber() : verifyPhoneNumber();
                   /*bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
                   if(registered == false){
                   } else {
@@ -256,11 +257,11 @@ class _LoginViewState extends State<LoginView> {
   Future<Map> checkIfUserIsAlreadyRegistered(String phone) async {
     String? profile;
     UserModel? userProfile;
-    DocumentSnapshot<Map<String, dynamic>> user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
+    DocumentSnapshot user = await FirebaseFirestore.instance.collection('USERS').doc(phone).get();
     bool exists = (user.exists) ? true : false;
     if (exists) {
       profile = user.get("profil");
-      userProfile = UserModel.fromDocument(user);
+      userProfile = UserModel.fromDocument(user, user.data() as Map);
     }
     return {
       "exists": exists,
@@ -363,6 +364,93 @@ class _LoginViewState extends State<LoginView> {
     } catch (e) {
       showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
     }
+  }
+
+  void signInWithPhoneNumber() async {
+
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+
+    ConfirmationResult signInResult = await _auth.signInWithPhoneNumber(userProvider.getUserId!);
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpView(webRes: signInResult),),);
+
+    /*// ignore: prefer_function_declarations_over_variables
+    PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
+      await _auth.signInWithCredential(phoneAuthCredential);
+      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
+      userProvider.setAuthId(_auth.currentUser!.uid);
+      setState((){
+        loader = false;
+      });
+      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
+      bool registered = res["exists"];
+      String profile = res["profile"];
+      UserModel user = res["user"];
+      
+      if(registered == false){
+        Navigator.pushNamed(context, '/profile-type');
+      } else {
+        userProvider.setUserModel(user);
+        if(profile == beneficiary){
+          if(user.authId == null){
+            FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
+              "authId": _auth.currentUser!.uid,
+              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
+              "userCountryName": userProvider.getCountryName,
+            }).then((value) {
+              showSnackbar("Profil bénéficiaire recupéré..");
+            });
+          }
+        }
+        HiveDatabase.setRegisterState(true);
+        HiveDatabase.setSignInState(true);
+        HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
+        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
+        print("profile:");
+        print(profile);
+        userProvider.setProfileType(profile);
+        HiveDatabase.setProfileType(profile);
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    };*/
+
+    //Listens for errors with verification, such as too many attempts
+    // ignore: prefer_function_declarations_over_variables
+    /*PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
+      setState((){
+        loader = false;
+      });
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message + authException.message!);
+    };*/
+
+    // ignore: prefer_function_declarations_over_variables
+    /*PhoneCodeSent codeSent = (String? verificationId, [int? forceResendingToken]) async {
+      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
+      if(verificationId != null){
+        _verificationId = verificationId;
+        /*setState((){
+          loader = false;
+        });*/
+        //_navigationService.navigateTo('/otp');
+        showSnackbar(S.of(context).leCodeViensDarriverPatientezEncoreUnpeu );
+      }else{
+        setState((){
+          loader = false;
+        });
+      }
+    };
+    */
+
+    /*try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: userProvider.getUserId!,
+          timeout: const Duration(seconds: 40),
+          verificationCompleted: verificationCompleted,
+          verificationFailed: verificationFailed,
+          codeSent: codeSent,
+          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+    } catch (e) {
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
+    }*/
   }
 
   void showSnackbar(String message) {

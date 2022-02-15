@@ -142,7 +142,7 @@ class DynamicLinkHandler {
   void fetchClassicLinkData(BuildContext context) async {
     PendingDynamicLinkData? link = await FirebaseDynamicLinks.instance.getInitialLink();
 
-    handleLinkData(link!, context);
+    link != null ? handleLinkData(link, context) : (){};
 
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) { 
       //Navigator.pushNamed(context, dynamicLinkData.link.path);
@@ -170,7 +170,7 @@ class DynamicLinkHandler {
           String? postId = queryParams["postid"];
           if(queryParams["isgroup"] != '1'){
             await FirebaseFirestore.instance.collection("POSTS").doc(queryParams["postid"]).get().then((doc) async {
-              PostModel post = PostModel.fromDocument(doc);
+              PostModel post = PostModel.fromDocument(doc, doc.data() as Map);
               List? shares = (post.sharesList != null) ? post.sharesList : [];
               bottomAppBarController.setIndex(0);
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostDetails(post: post),),);

@@ -99,7 +99,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
     if(doctorProvider.getDoctor == null){}
     if(adherent.getAdherent?.familyDoctorId != null){
       FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent?.familyDoctorId).get().then((doc) {
-        DoctorModel doctorModel = DoctorModel.fromDocument(doc);
+        DoctorModel doctorModel = DoctorModel.fromDocument(doc, doc.data() as Map);
         doctorProvider.setDoctorModel(doctorModel);
         chosenDoctor = doctorModel;
         setState((){});
@@ -896,7 +896,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            DoctorModel? doctor = isDoctor ? DoctorModel.fromDocument(doc) : null;
+            DoctorModel? doctor = isDoctor ? DoctorModel.fromDocument(doc, doc.data() as Map) : null;
             ServiceProviderModel? sp = !isDoctor ? ServiceProviderModel.fromDocument(doc) : null;
 
             return Padding(

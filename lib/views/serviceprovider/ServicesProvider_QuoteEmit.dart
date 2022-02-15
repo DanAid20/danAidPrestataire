@@ -454,7 +454,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
             if (doc.exists) {
                AdherentModelProvider adherentModelProvider =
                   Provider.of<AdherentModelProvider>(context, listen: false);
-                 adherentInfos = AdherentModel.fromDocument(doc);
+                 adherentInfos = AdherentModel.fromDocument(doc, doc.data() as Map);
                 adherentModelProvider.setAdherentModel(adherentInfos!);
                 BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
                       avatarUrl: adherentInfos!.imgUrl,
@@ -516,7 +516,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
             if (doc.exists) {
                 AdherentModelProvider adherentModelProvider =
                   Provider.of<AdherentModelProvider>(context, listen: false);
-                 adherentInfos = AdherentModel.fromDocument(doc);
+                 adherentInfos = AdherentModel.fromDocument(doc, doc.data() as Map);
                 adherentModelProvider.setAdherentModel(adherentInfos!);
                 BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
                       avatarUrl: adherentInfos!.imgUrl,

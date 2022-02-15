@@ -430,7 +430,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                             context,
                                             listen: false);
                                     AdherentModel adherent =
-                                        AdherentModel.fromDocument(doc);
+                                        AdherentModel.fromDocument(doc, doc.data() as Map);
                                     adherentModelProvider
                                         .setAdherentModel(adherent);
                                     ScaffoldMessenger.of(context).showSnackBar(

@@ -68,7 +68,7 @@ class _AppointmentsListState extends State<AppointmentsList> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot rdv = snapshot.data!.docs[index];
-                    AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
+                    AppointmentModel appointment = AppointmentModel.fromDocument(rdv, rdv.data() as Map);
                     return Padding(
                       padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                       child: HomePageComponents().getMyDoctorAppointmentTile(
