@@ -49,7 +49,7 @@ class _FamilyPointsPageState extends State<FamilyPointsPage> {
             ),
             title: Column(crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(S.of(context)!.dmarrer, style: TextStyle(color: currentPage == 0 ? kDeepTeal : whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+                Text(S.of(context).dmarrer, style: TextStyle(color: currentPage == 0 ? kDeepTeal : whiteColor.withOpacity(0.7), fontSize: 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
                 Text(DateTime.now().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(DateTime.now())+" "+ DateTime.now().year.toString(), style: TextStyle(color: currentPage == 0 ? kDeepTeal : kSouthSeas, fontSize: wv*3.8, fontWeight: FontWeight.w300),),
               ],
             ),
@@ -184,7 +184,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: wv*4),
                   child: Column(
@@ -278,12 +278,12 @@ class _FamilyPointsState extends State<FamilyPoints> {
                             return snapshot.data!.docs.length >= 1 ?
                               ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: snapshot.data!.docs.length,
                                 itemBuilder: (context, index) {
                                   int lastIndex = snapshot.data!.docs.length - 1;
                                   DocumentSnapshot productDoc = snapshot.data!.docs[index];
-                                  ProductModel product = ProductModel.fromDocument(productDoc);
+                                  ProductModel product = ProductModel.fromDocument(productDoc, productDoc.data() as Map);
                                   print("name: ");
                                   return Padding(
                                     padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
@@ -329,7 +329,7 @@ class _FamilyPointsState extends State<FamilyPoints> {
               }
             },
             child: Hero(
-              tag: "prod",
+              tag: product.id.toString(),
               child: Container(
                 width: 150,
                 height: 100,

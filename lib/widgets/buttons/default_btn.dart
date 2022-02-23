@@ -31,7 +31,7 @@ class DefaultBtn extends StatelessWidget {
           vertical: vertical(size: 25)),
       child: RaisedButton(
         child: Text(
-          signText ?? S.of(context)!.connexion,
+          signText ?? S.of(context).connexion,
           textAlign: TextAlign.center,
           softWrap: true,
           style: TextStyle(

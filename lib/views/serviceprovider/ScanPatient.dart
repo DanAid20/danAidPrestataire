@@ -147,7 +147,7 @@ class _ScanPatientState extends State<ScanPatient> {
                           width: wv * 2,
                         ),
                         Text(
-                          S.of(context)!.scannerLaCarteDuPatient,
+                          S.of(context).scannerLaCarteDuPatient,
                           style: TextStyle(
                               fontSize: MySize.size18,
                               fontWeight: FontWeight.w600,
@@ -196,7 +196,7 @@ class _ScanPatientState extends State<ScanPatient> {
                                 children: [
                                   Center(
                                     child: Text(
-                                      S.of(context)!.ouInscrireLeCodeDePaiement,
+                                      S.of(context).ouInscrireLeCodeDePaiement,
                                       style: TextStyle(
                                           fontSize: wv * 4,
                                           color: kBlueForce),
@@ -261,7 +261,7 @@ class _ScanPatientState extends State<ScanPatient> {
                 expand: false,
                           noPadding: true,
         enable: adherentBeneficiaryInfos!=null || _phoneNumber?.text!=null? true: false ,
-        text: S.of(context)!.envoyer, 
+        text: S.of(context).envoyer, 
         action: () async {
           if(_phoneNumber!.text.toString().isEmpty){
              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("entrer le code de paiement"),));
@@ -280,7 +280,7 @@ class _ScanPatientState extends State<ScanPatient> {
                     }
                   var data= value.docs;
                   if (data.isNotEmpty) {
-                     devis=UseCaseServiceModel.fromDocument(value.docs[0]);
+                     devis=UseCaseServiceModel.fromDocument(value.docs[0], value.docs[0].data());
                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devis!)));
                   } else {
                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("code de paiements invalide ")));
@@ -315,7 +315,7 @@ class _ScanPatientState extends State<ScanPatient> {
         if (data.data().isNotEmpty) {
            setState(() { 
              ifFoundDoc= true;
-            devis=UseCaseServiceModel.fromDocument(data);
+            devis=UseCaseServiceModel.fromDocument(data, data.data());
             if (kDebugMode) {
               print("++++++++++++++++++++++++++++++++++++");
               print(devis!.adherentId);
@@ -352,7 +352,7 @@ class _ScanPatientState extends State<ScanPatient> {
         textForQrCode = barcode ?? 'Qr code invaldie';
       });
        ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(S.of(context)!.qrCodeInvaldie)));
+                  SnackBar(content: Text(S.of(context).qrCodeInvaldie)));
 
     } else {
       setState(() {

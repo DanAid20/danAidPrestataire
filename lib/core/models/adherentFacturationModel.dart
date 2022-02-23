@@ -10,22 +10,22 @@ class AdherentBillModel {
 
   AdherentBillModel({this.billId, this.adherentId, this.paymentCategory, this.title, this.receivedNumber, this.dateCreated, this.startCoverageDate, this.endCoverageDate, this.paymentSettlementDate, this.validated, this.amount, this.nbPersonSupplement, this.billTrimesterNber, this.contributionLevel});
 
-  factory AdherentBillModel.fromDocument(DocumentSnapshot doc){
+  factory AdherentBillModel.fromDocument(DocumentSnapshot doc, Map data){
     return AdherentBillModel(
       billId: doc.id,
-      adherentId: doc.get("idAdherent"),
-      paymentCategory: doc.get("categoriePaiement"),
-      title: doc.get("intitule"),
-      receivedNumber: doc.get("numeroRecu"),
-      dateCreated: doc.get("createdDate"),
-      startCoverageDate: doc.get("dateDebutCouvertureAdherent"),
-      endCoverageDate: doc.get("dateFinCouvertureAdherent"),
-      paymentSettlementDate: doc.get("dateReglementDuPaiement"),
-      validated: doc.get("etatValider"),
-      amount: doc.get("montant"),
-      nbPersonSupplement: doc.get("nbPersonneSupplement"),
-      billTrimesterNber: doc.get("numeroTrimestrielleFacture"),
-      contributionLevel: doc.get("niveauCotisation"),
+      adherentId: data["idAdherent"],
+      paymentCategory: data["categoriePaiement"],
+      title: data["intitule"],
+      receivedNumber: data["numeroRecu"],
+      dateCreated: data["createdDate"],
+      startCoverageDate: data["dateDebutCouvertureAdherent"],
+      endCoverageDate: data["dateFinCouvertureAdherent"],
+      paymentSettlementDate: data["dateReglementDuPaiement"],
+      validated: data["etatValider"],
+      amount: data["montant"],
+      nbPersonSupplement: data["nbPersonneSupplement"],
+      billTrimesterNber: data["numeroTrimestrielleFacture"],
+      contributionLevel: data["niveauCotisation"],
     );
   }
 

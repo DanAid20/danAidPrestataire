@@ -50,8 +50,9 @@ class _PartnersScreenState extends State<PartnersScreen> {
   final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
   LatLng? _userCoords;
 
-  BitmapDescriptor getMarkerIcon({required String userType, String? prestataireType, required bool isSpecialist}){
+  BitmapDescriptor getMarkerIcon({required String userType, String? prestataireType, bool? isSpecialist}){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    isSpecialist = isSpecialist ?? false;
     BitmapDescriptor? descriptor;
     if (prestataireType == null){
       if(userType == adherent || userType == beneficiary){
@@ -94,7 +95,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
       markerId: markerId,
       position: LatLng(lat, lng),
       infoWindow: InfoWindow(title: markerIdVal, snippet: userType, onTap: (){_onMarkerTapped(markerId: markerId, userType: userType, doc: doctor, prestataire: sp);}),
-      icon: getMarkerIcon(userType: userType, prestataireType: spType, isSpecialist: isSpecialist!),
+      icon: getMarkerIcon(userType: userType, prestataireType: spType, isSpecialist: isSpecialist),
       onTap: () {
         //_onMarkerTapped(markerId);
       },
@@ -133,7 +134,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                   noShadow: true,
                   avatarUrl: doc.avatarUrl,
                   name: doc.cniName,
-                  title: S.of(context)!.medecinDeFamille + doc.field!,
+                  title: S.of(context).medecinDeFamille + doc.field!,
                   speciality: doc.speciality,
                   teleConsultation: doc.serviceList != null ? doc.serviceList["tele-consultation"] : false,
                   consultation: doc.serviceList != null ? doc.serviceList["consultation"] : false,
@@ -160,7 +161,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                     noShadow: true,
                     avatarUrl: prestataire.avatarUrl,
                     name: prestataire.contactName,
-                    title: S.of(context)!.medecinDeFamille + prestataire.contactName!,
+                    title: S.of(context).medecinDeFamille + prestataire.contactName!,
                     isServiceProvider: true,
                     speciality: prestataire.category,
                     teleConsultation: false,
@@ -262,7 +263,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
     Future<QuerySnapshot> getSPs= userProvider.getProfileType != serviceProvider ? FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).get() : FirebaseFirestore.instance.collection("PRESTATAIRE").where("profilEnabled", isEqualTo: true).where(FieldPath.documentId, isNotEqualTo: userProvider.getUserId).get();
     getDocs.then((snap) {
       for(int i = 0; i < snap.docs.length; i++){
-        DoctorModel doc = DoctorModel.fromDocument(snap.docs[i]);
+        DoctorModel doc = DoctorModel.fromDocument(snap.docs[i], snap.docs[i].data() as Map);
         if(doc.location != null){
           if(doc.location!["latitude"] != null){
             _addMarker("Dr. " + doc.cniName!, doctor, doc.location!["latitude"], doc.location!["longitude"], null, doc.field != "Généraliste", null, doc, null);
@@ -272,7 +273,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
     });
     getSPs.then((snap) {
       for(int i = 0; i < snap.docs.length; i++){
-        ServiceProviderModel sp = ServiceProviderModel.fromDocument(snap.docs[i]);
+        ServiceProviderModel sp = ServiceProviderModel.fromDocument(snap.docs[i], snap.docs[i].data() as Map);
         if(sp.coordGps != null){
           if(sp.coordGps!["latitude"] != null){
             _addMarker(sp.name!, serviceProvider, sp.coordGps!["latitude"], sp.coordGps!["longitude"], sp.category, null, null, null, sp);
@@ -344,7 +345,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 }
                 ),
               ),
-              Text(S.of(context)!.trouverUnPrestataireDeSant, style: TextStyle(color: whiteColor),),
+              Text(S.of(context).trouverUnPrestataireDeSant, style: TextStyle(color: whiteColor),),
             ],
           ),
           actions: [
@@ -376,7 +377,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                     child: Container(
                       color: Colors.grey.shade200.withOpacity(0.5),
                       child: ListView(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         controller: _scrollController,
                         children: [
                           Container(
@@ -411,7 +412,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                                         borderSide: BorderSide(width: 1, color: kBrownCanyon.withOpacity(0.7)),
                                         borderRadius: BorderRadius.all(Radius.circular(15))
                                       ),
-                                      hintText: S.of(context)!.rechercher,
+                                      hintText: S.of(context).rechercher,
                                       hintStyle: TextStyle(color: kBrownCanyon)
                                     ),
                                   ),
@@ -419,7 +420,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ),
                               SizedBox(width: 5,),
                               TextButton(onPressed: ()=>controller.toPreviousIndex(),
-                                child: Text(S.of(context)!.annuler, style: TextStyle(color: kBrownCanyon),)
+                                child: Text(S.of(context).annuler, style: TextStyle(color: kBrownCanyon),)
                               ),
                               //IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})
 
@@ -447,12 +448,12 @@ class _PartnersScreenState extends State<PartnersScreen> {
         child: Column(children: [
           SizedBox(height: hv*1,),
           SvgPicture.asset("assets/icons/Bulk/ArrowUp.svg"),
-          Text(S.of(context)!.recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
+          Text(S.of(context).recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
           
           SizedBox(height: hv*4,),
 
           getDragSheetTiles(
-            title: S.of(context)!.mdcinDeFamille,
+            title: S.of(context).mdcinDeFamille,
             markerColor: kBrownCanyon,
             onTap: (){
               setState(() {
@@ -465,7 +466,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context)!.autresSpcialistes,
+            title: S.of(context).autresSpcialistes,
             markerColor: kPrimaryColor,
             onTap: (){
               setState(() {
@@ -474,7 +475,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context)!.hpitalOuClinique,
+            title: S.of(context).hpitalOuClinique,
             markerColor: kSouthSeas,
             onTap: (){
               setState(() {
@@ -483,7 +484,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context)!.laboratoire,
+            title: S.of(context).laboratoire,
             markerColor: primaryColor,
             onTap: (){
               setState(() {
@@ -492,7 +493,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
             }
           ),
           getDragSheetTiles(
-            title: S.of(context)!.pharmacie,
+            title: S.of(context).pharmacie,
             markerColor: Colors.teal,
             onTap: (){
               setState(() {
@@ -521,9 +522,9 @@ class _PartnersScreenState extends State<PartnersScreen> {
     }
   }
 
-  Widget getDragSheetTiles({required String title, required Color markerColor, Function? onTap}){
+  Widget getDragSheetTiles({required String title, required Color markerColor, required Function() onTap}){
     return Padding(
-      padding: EdgeInsets.only(right: 35.0, top: 3, bottom: 3, left: 20),
+      padding: const EdgeInsets.only(right: 35.0, top: 3, bottom: 3, left: 20),
       child: Row(
         children: [
           SvgPicture.asset("assets/icons/Bulk/Location.svg", color: markerColor,),
@@ -535,7 +536,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 color: kSmoothBrown.withOpacity(0.4),
               ),
               child: ListTile(
-                onTap: ()=>onTap,
+                onTap: onTap,
                 dense: true,
                 title: Text(title, style: TextStyle(color: kBlueForce, fontSize: inch*1.9, fontWeight: FontWeight.w600),),
                 trailing: Icon(Icons.arrow_forward_ios_rounded, color: kBrownCanyon,)

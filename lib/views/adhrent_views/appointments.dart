@@ -62,17 +62,17 @@ class _AppointmentsListState extends State<AppointmentsList> {
                   return true;
                 },
                 child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot rdv = snapshot.data!.docs[index];
-                    AppointmentModel appointment = AppointmentModel.fromDocument(rdv);
+                    AppointmentModel appointment = AppointmentModel.fromDocument(rdv, rdv.data() as Map);
                     return Padding(
                       padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 7 : 0),
                       child: HomePageComponents().getMyDoctorAppointmentTile(
-                        doctorName: "Dr. ${appointment.doctorName}"+S.of(context)!.mdcinDeFamille,
+                        doctorName: "Dr. ${appointment.doctorName}"+S.of(context).mdcinDeFamille,
                         date: appointment.startTime!.toDate(),
                         state: appointment.status,
                         type: Algorithms.getConsultationTypeLabel(appointment.consultationType!),
@@ -88,7 +88,7 @@ class _AppointmentsListState extends State<AppointmentsList> {
                   }),
             )
             : Center(
-              child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context)!.aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
+              child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
             );
         }
       ),

@@ -60,7 +60,7 @@ class _ConversationState extends State<Conversation> {
     await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation!.targetPhoneId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).set({"users": FieldValue.arrayUnion([id, targetId])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((doc) {
-      ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc);
+      ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc, doc.data() as Map);
       conversationChat.setConversationModel(conversationModel);
       print(conversationChat.getConversation!.conversationId);
     });
@@ -193,7 +193,7 @@ class _ConversationState extends State<Conversation> {
                                   children: <Widget>[
                                     Text(
                                       replyIsLocal
-                                          ? S.of(context)!.you
+                                          ? S.of(context).you
                                           : conversation.getConversation!.targetName!,
                                       style: TextStyle(
                                           fontSize: 17,
@@ -298,7 +298,7 @@ class _ConversationState extends State<Conversation> {
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(width: 1, color: Colors.white.withOpacity(0.35)),
                                   borderRadius: BorderRadius.all(Radius.circular(20))),
-                              hintText: S.of(context)!.ecrireVotreCommentaire,
+                              hintText: S.of(context).ecrireVotreCommentaire,
                               hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
                             ),
                           ),
@@ -470,14 +470,14 @@ class _ConversationState extends State<Conversation> {
               markMessagesAsSeen();
               return ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   controller: listScrollController,
                   padding: EdgeInsets.only(bottom: 100),
                   itemCount: snapshot.data!.docs.length,
                   reverse: true,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
-                    MessageModel msg = MessageModel.fromDocument(doc);
+                    MessageModel msg = MessageModel.fromDocument(doc, doc.data() as Map);
                     return Column(
                       children: <Widget>[
                         createMsgBox(index, msg, conversation.getConversation!),
@@ -803,7 +803,7 @@ class MessageBox extends StatelessWidget {
                                       Text(
                                         message?.replierId == conversation.getConversation!.targetId!
                                             ? conversation.getConversation!.targetName!
-                                            : S.of(context)!.you,
+                                            : S.of(context).you,
                                         style: TextStyle(
                                             color: messageIsLocal ? kDeepTeal : kPrimaryColor,
                                             fontWeight: FontWeight.bold),
@@ -821,10 +821,10 @@ class MessageBox extends StatelessWidget {
                                             message?.replyType == 0
                                                 ? message!.replyContent!
                                                 : message?.replyType == 1
-                                                    ? S.of(context)!.image
+                                                    ? S.of(context).image
                                                     : message?.replyType == 2
-                                                        ? S.of(context)!.sticker
-                                                        : S.of(context)!.content,
+                                                        ? S.of(context).sticker
+                                                        : S.of(context).content,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 color: Colors.grey[700]),

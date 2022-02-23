@@ -29,7 +29,7 @@ class _GroupMembersState extends State<GroupMembers> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
-            UserModel singleUser = UserModel.fromDocument(userSnapshot);
+            UserModel singleUser = UserModel.fromDocument(userSnapshot, userSnapshot.data() as Map);
             return userBox(
               user: singleUser
             );
@@ -42,7 +42,7 @@ class _GroupMembersState extends State<GroupMembers> {
               SizedBox(height: hv*15,),
               Icon(LineIcons.userPlus, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.nhsitezPasFaireUneDemandeDami, 
+              Text(S.of(context).nhsitezPasFaireUneDemandeDami, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

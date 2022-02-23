@@ -10,13 +10,24 @@ class AuthProvider with ChangeNotifier {
   bool get getSignInState => _isSignedIn;
   bool get getRegisterState => _isRegistered;
 
-  void setSignInState(bool val){
-    _isSignedIn = val;
+  void setSignInState(bool? val){
+    if(val == null){
+      _isSignedIn = false;
+    }
+    else {
+      _isSignedIn = val;
+    }
+    
     notifyListeners();
   }
 
-  void setRegisterState(bool val){
-    _isRegistered = val;
+  void setRegisterState(bool? val){
+    if(val == null){
+      _isRegistered = false;
+    }
+    else {
+      _isRegistered = val;
+    }
     notifyListeners();
   }
 

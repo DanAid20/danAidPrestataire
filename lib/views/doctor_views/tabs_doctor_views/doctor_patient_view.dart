@@ -138,8 +138,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             flex: 1,
                             child: Text(
                               isPrestataire
-                                  ? S.of(context)!.complterUnePriseEnCharge
-                                  : S.of(context)!.dmarrerUneConsultation,
+                                  ? S.of(context).complterUnePriseEnCharge
+                                  : S.of(context).dmarrerUneConsultation,
                               textScaleFactor: 1.0,
                               style: TextStyle(
                                   color: kCardTextColor,
@@ -160,8 +160,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                             flex: 1,
                             child: Text(
                               isPrestataire
-                                  ? S.of(context)!.vrifierLeStatutDesPaiementsAvantDeRaliserLesServices
-                                  : S.of(context)!.accdezAuCarnetDeSantDigitalDeVosPatientsEt,
+                                  ? S.of(context).vrifierLeStatutDesPaiementsAvantDeRaliserLesServices
+                                  : S.of(context).accdezAuCarnetDeSantDigitalDeVosPatientsEt,
                               textScaleFactor: 0.8,
                               style: TextStyle(
                                   color: kCardTextColor,
@@ -203,8 +203,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         ? 'assets/icons/Bulk/Discount.svg'
                         : 'assets/icons/Bulk/Add User.svg',
                     title: isPrestataire
-                        ? S.of(context)!.emettreUnDevis
-                        : S.of(context)!.ajouterUnPatient,
+                        ? S.of(context).emettreUnDevis
+                        : S.of(context).ajouterUnPatient,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -220,7 +220,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Two-tone/3User.svg',
-                    title:S.of(context)!.prendreRendezvous,
+                    title:S.of(context).prendreRendezvous,
                     isPrestataire: isPrestataire,
                   ),
                 ): SizedBox.shrink(),
@@ -238,7 +238,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Chart.svg',
-                    title: S.of(context)!.suivreMesPaiements,
+                    title: S.of(context).suivreMesPaiements,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -253,7 +253,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   },
                   child: displsOtherServices(
                     iconesUrl: 'assets/icons/Bulk/Message.svg',
-                    title: S.of(context)!.mesMessages,
+                    title: S.of(context).mesMessages,
                     isPrestataire: isPrestataire,
                   ),
                 ),
@@ -304,7 +304,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                       SizedBox(
                         width: 90.r,
                         child: Text(
-                          title ?? S.of(context)!.ajouterUnPatient,
+                          title ?? S.of(context).ajouterUnPatient,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
@@ -353,7 +353,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   //                 padding: const EdgeInsets.all(20.0),
   //                 child: Center(
   //                   child:
-  //                       Text(S.of(context)!.vousNavezAucunRendezvousPourLeMoment),
+  //                       Text(S.of(context).vousNavezAucunRendezvousPourLeMoment),
   //                 ),
   //               );
   //     });
@@ -406,7 +406,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                 );
                               }
                               if (snapshot.hasError) {
-                                return Text(S.of(context)!.somethingWentWrong);
+                                return Text(S.of(context).somethingWentWrong);
                               }
                               if (snapshot.connectionState == ConnectionState.done) {
                                 Map<String, dynamic> data = snapshot.data!.data()  as Map<String, dynamic> ;
@@ -421,7 +421,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
 
                                 return GestureDetector(
                                       onTap: ()=>{
-                                      appointmentModel=AppointmentModel.fromDocument(doc),
+                                      appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
                                       rendezVous.setAppointmentModel(appointmentModel),
                                       rendezVous.getAppointment!.adherentId=snapshot.data!.id,
                                       rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
@@ -438,7 +438,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                     nom: '${data["prenom"]} ${data["nomFamille"]}',
                                     subtitle: '${doc["title"]}'));
                               }
-                              return Text(S.of(context)!.loading);
+                              return Text(S.of(context).loading);
                             },
                           );
                      }else if(doc["adherentId"] == doc["beneficiaryId"]){
@@ -458,7 +458,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           );
                         }
                         if (snapshot.hasError) {
-                          return Text(S.of(context)!.somethingWentWrong);
+                          return Text(S.of(context).somethingWentWrong);
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
@@ -473,7 +473,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
 
                           return GestureDetector(
                                 onTap: ()=>{
-                                appointmentModel=AppointmentModel.fromDocument(doc),
+                                appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
                                 rendezVous.setAppointmentModel(appointmentModel),
                                 rendezVous.getAppointment!.adherentId=snapshot.data!.id,
                                 rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
@@ -490,7 +490,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               nom: '${data["prenom"]} ${data["nomFamille"]}',
                               subtitle: '${doc["title"]}'));
                         }
-                        return Text(S.of(context)!.loading);
+                        return Text(S.of(context).loading);
                       },
                     );
                      }
@@ -501,7 +501,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
                     child:
-                        Text(S.of(context)!.vousNavezAucunRendezvousPourLeMoment),
+                        Text(S.of(context).vousNavezAucunRendezvousPourLeMoment),
                   ),
                 );
         });
@@ -534,7 +534,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                      itemBuilder: (context, index) {
                          DocumentSnapshot doc = snapshot.data.docs[index];
                         // var devis=DevisModel.fromDocument(doc);
-                        UseCaseServiceModel devis= UseCaseServiceModel.fromDocument(doc);
+                        UseCaseServiceModel devis= UseCaseServiceModel.fromDocument(doc, doc.data() as Map);
                         return HomePageComponents()
                          .prestataireItemList(
                             etat: devis.paid!? 1:0,
@@ -578,13 +578,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           child: Row(
             children: [
               Text(
-                S.of(context)!.demandesDeRdv,
+                S.of(context).demandesDeRdv,
                 style: TextStyle(
                     color: kFirstIntroColor,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w500),
               ),
-              Text(S.of(context)!.voirPlus,
+              Text(S.of(context).voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
                       fontSize: 15.sp,
@@ -609,7 +609,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         padding: const EdgeInsets.all(10),
                         child: Center(
                             child:
-                                Text(S.of(context)!.aucunRendezvousPourLinstant)),
+                                Text(S.of(context).aucunRendezvousPourLinstant)),
                       )
               ],
             ))
@@ -639,13 +639,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           child: Row(
             children: [
               Text(
-               isPrestataire? S.of(context)!.derniresPrestations: S.of(context)!.derniresRendezvous,
+               isPrestataire? S.of(context).derniresPrestations: S.of(context).derniresRendezvous,
                 style: TextStyle(
                     color: kFirstIntroColor,
                     fontSize: 15.sp,
                     fontWeight: FontWeight.w500),
               ),
-              Text(S.of(context)!.voirPlus,
+              Text(S.of(context).voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
                       fontSize: 15.sp,

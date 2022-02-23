@@ -60,11 +60,11 @@ class _SubCoveragePaymentState extends State<SubCoveragePayment> {
                     );
                   }
                   return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index){
-                      MiniInvoiceModel inv = MiniInvoiceModel.fromDocument(snapshot.data!.docs[index]);
+                      MiniInvoiceModel inv = MiniInvoiceModel.fromDocument(snapshot.data!.docs[index], snapshot.data!.docs[index].data() as Map);
                       return HomePageComponents.getInvoiceSegmentTile(
                         label: inv.label,
                         firstDate: inv.startDate?.toDate(),

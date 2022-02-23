@@ -53,7 +53,7 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
         title: Text("Montant total: $totalAmount FCFA", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),),
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
           child: Column(
@@ -83,10 +83,10 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                       );
                     }
                     return ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index){
-                        CampaignModel camp = CampaignModel.fromDocument(snapshot.data!.docs[index]);
+                        CampaignModel camp = CampaignModel.fromDocument(snapshot.data!.docs[index], snapshot.data!.docs[index].data() as Map);
                         return HomePageComponents.getPromotionTile(
                           title: camp.name,
                           description: camp.description,
@@ -129,7 +129,7 @@ class _InvoiceSplitState extends State<InvoiceSplit> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           isExpanded: true,
-                          hint: Text(S.of(context)!.choisir),
+                          hint: Text(S.of(context).choisir),
                           value: _segments,
                           items: [
                             DropdownMenuItem(

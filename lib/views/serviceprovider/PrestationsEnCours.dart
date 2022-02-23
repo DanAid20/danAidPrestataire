@@ -153,7 +153,7 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
                      itemBuilder: (context, index) {
                         DocumentSnapshot doc = snapshot.data.docs[index];
                         // var devis=DevisModel.fromDocument(doc);
-                        UseCaseServiceModel service = UseCaseServiceModel.fromDocument(doc);
+                        UseCaseServiceModel service = UseCaseServiceModel.fromDocument(doc, doc.data() as Map);
 
                         return  HomePageComponents().prestataireItemList(
                             etat: service.paid!? 1:0,
@@ -175,7 +175,7 @@ class _PrestationEnCoursState extends State<PrestationEnCours> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
-                      child: Text(S.of(context)!.aucunDevisNeCorrespondACePatient),
+                      child: Text(S.of(context).aucunDevisNeCorrespondACePatient),
                 ),
                     ),
                   );

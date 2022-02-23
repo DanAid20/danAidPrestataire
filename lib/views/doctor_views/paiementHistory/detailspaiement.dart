@@ -68,8 +68,8 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(S.of(context)!.historiqueDesPrestations),
-                  Text(S.of(context)!.vosConsultationsPaiementDetaill)
+                  Text(S.of(context).historiqueDesPrestations),
+                  Text(S.of(context).vosConsultationsPaiementDetaill)
                 ],
               ),
             ),
@@ -125,7 +125,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                             alignment: Alignment.centerLeft,
                             margin: EdgeInsets.only(left: 15.w, top: 2.h),
                             child: Text(
-                              S.of(context)!.statusDesPaiements,
+                              S.of(context).statusDesPaiements,
                               style: TextStyle(
                                   color: kFirstIntroColor,
                                   fontWeight: FontWeight.w500,
@@ -166,7 +166,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                               );
                                             }
                                           if (snapshot.hasError) {
-                                            return Text(S.of(context)!.somethingWentWrong);
+                                            return Text(S.of(context).somethingWentWrong);
                                           }
                                           if (snapshot.connectionState == ConnectionState.done) {
                                             var obj=snapshot.data!.data() as  Map<String, dynamic>;
@@ -180,7 +180,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                               iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
                                                   'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
                                        }
-                                           return Text(S.of(context)!.loading);
+                                           return Text(S.of(context).loading);
                                       });
                                       } else {
                                         userName = widget.facture![index].idFammillyMember!;

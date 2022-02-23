@@ -34,7 +34,7 @@ class _ContributionsState extends State<Contributions> {
     await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').where('categoriePaiement', isEqualTo: "COTISATION_ANNUELLE").get().then((query) {
       DateTime witness = DateTime(2000);
       for(int i = 0; i < query.docs.length; i++){
-        InvoiceModel model = InvoiceModel.fromDocument(query.docs[i]);
+        InvoiceModel model = InvoiceModel.fromDocument(query.docs[i], query.docs[i].data());
         if(model.coverageStartDate!.toDate().isAfter(witness)){
           witness = model.coverageStartDate!.toDate();
           latestInvoice = model;
@@ -67,7 +67,7 @@ class _ContributionsState extends State<Contributions> {
           icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
           onPressed: ()=>Navigator.pop(context)
         ),
-        title: Text(S.of(context)!.historiqueDesPaiements, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+        title: Text(S.of(context).historiqueDesPaiements, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
@@ -86,8 +86,8 @@ class _ContributionsState extends State<Contributions> {
           SizedBox(height: hv*2.5,),
           HomePageComponents.getInfoActionCard(
             title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent?.adherentPlan),
-            actionLabel: S.of(context)!.comparerLesServices,
-            subtitle: limitString != null ? S.of(context)!.vousTesCouvertsJusquau+limitString : "...",
+            actionLabel: S.of(context).comparerLesServices,
+            subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
             action: ()=>Navigator.pushNamed(context, '/compare-plans')
           ),
           SizedBox(height: hv*1,),
@@ -176,7 +176,7 @@ class _ContributionsState extends State<Contributions> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(S.of(context)!.mesDerniresFactures, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
+                  Text(S.of(context).mesDerniresFactures, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
                   SizedBox(height: hv*2,),
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
@@ -192,12 +192,12 @@ class _ContributionsState extends State<Contributions> {
                       return snapshot.data!.docs.length >= 1
                       ? Expanded(
                         child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                              InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc);
+                              InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                               if(invoice.type == "INSCRIPTION"){
                                 inscriptionId = invoice.id!;
                               }
@@ -221,7 +221,7 @@ class _ContributionsState extends State<Contributions> {
                                   }
                                   else {
                                     await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
-                                      InvoiceModel regInvoice = InvoiceModel.fromDocument(doc);
+                                      InvoiceModel regInvoice = InvoiceModel.fromDocument(doc, doc.data() as Map);
                                       regFee = regInvoice.amount != null ? regInvoice.amount! : regFee;
                                     });
                                     if(invoice.invoiceIsSplitted == true){
@@ -273,7 +273,7 @@ class _ContributionsState extends State<Contributions> {
                             }),
                       )
                       : Center(
-                        child: Container(padding: EdgeInsets.only(top: hv*4),child: Text(S.of(context)!.aucuneCtisationEnrgistrePourLeMoment, textAlign: TextAlign.center)),
+                        child: Container(padding: EdgeInsets.only(top: hv*4),child: Text(S.of(context).aucuneCtisationEnrgistrePourLeMoment, textAlign: TextAlign.center)),
                       );
                     }
                   )
@@ -286,10 +286,10 @@ class _ContributionsState extends State<Contributions> {
     );
   }
 
-  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function? action}) {
+  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function()? action}) {
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate!.year.toString();
     return GestureDetector(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
@@ -304,10 +304,10 @@ class _ContributionsState extends State<Contributions> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(type == "INSCRIPTION" ? S.of(context)!.inscription : S.of(context)!.ctisation, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold)),
+                Text(type == "INSCRIPTION" ? S.of(context).inscription : S.of(context).ctisation, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold)),
                 Text(label!, style: TextStyle(color: kDeepTeal, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
                 SizedBox(height: hv*2,),
-                Text(S.of(context)!.montant, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                Text(S.of(context).montant, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
                 Text("$amount f.", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
               ],
             ),
@@ -320,9 +320,9 @@ class _ContributionsState extends State<Contributions> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(child: Text(paid == 1 ? S.of(context)!.paye : paid == 2 ? S.of(context)!.enRetard : paid == 3 ? S.of(context)!.validationEnCours : S.of(context)!.enAttente, style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: wv*3.5))),
+                      Center(child: Text(paid == 1 ? S.of(context).paye : paid == 2 ? S.of(context).enRetard : paid == 3 ? S.of(context).validationEnCours : S.of(context).enAttente, style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: wv*3.5))),
                       SizedBox(height: hv*2,),
-                      Text(S.of(context)!.dlaiDePaiement, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                      Text(S.of(context).dlaiDePaiement, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
                       Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold, decoration: paid == 1 ? TextDecoration.lineThrough : TextDecoration.none),),
                     ],
                   ),
@@ -332,7 +332,7 @@ class _ContributionsState extends State<Contributions> {
                     child: paid != 1 ? Column(
                       children: [
                         Center(child: SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: wv*8,)),
-                        Text(S.of(context)!.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+                        Text(S.of(context).payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
                       ],
                     ) :
                     Container(),

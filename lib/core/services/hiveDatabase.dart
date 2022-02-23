@@ -67,12 +67,18 @@ class HiveDatabase {
     Box adherentBox = await Hive.openBox('adherent');
     adherentBox.put('town', val);
   }
-  static setSignInState(bool val) async {
+  static setSignInState(bool? val) async {
     Box authBox = await Hive.openBox('auth');
+    if(val == null){
+      authBox.put('isSignedIn', false);
+    }
     authBox.put('isSignedIn', val);
   }
-  static setRegisterState(bool val) async {
+  static setRegisterState(bool? val) async {
     Box authBox = await Hive.openBox('auth');
+    /*if(val == null){
+      authBox.put('isRegistered', false);
+    }*/
     authBox.put('isRegistered', val);
   }
   static setLanguage(String val) async {
@@ -86,15 +92,15 @@ class HiveDatabase {
     Box languageBox = await Hive.openBox('language');
     return languageBox.get('language');
   }
-  static Future<String> getProfileType() async {
+  static Future<String?> getProfileType() async {
     Box userBox = await Hive.openBox('user');
     return userBox.get('profile');
   }
-  static Future<String> getFamilyName() async {
+  static Future<String?> getFamilyName() async {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('fname');
   }
-  static Future<String> getVisit() async {
+  static Future<String?> getVisit() async {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('visit');
   }
@@ -118,15 +124,15 @@ class HiveDatabase {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('town');
   }
-  static Future<bool>? getSignInState() async {
-    Box? authBox = await Hive.openBox('auth');
+  static Future<bool?> getSignInState() async {
+    Box authBox = await Hive.openBox('auth');
     return authBox.get('isSignedIn');
   }
-  static Future<bool> getRegisterState() async {
+  static Future<bool?> getRegisterState() async {
     Box authBox = await Hive.openBox('auth');
     return authBox.get('isRegistered');
   }
-  static Future<String> getAuthPhone() async {
+  static Future<String?> getAuthPhone() async {
     Box adherentBox = await Hive.openBox('adherent');
     return adherentBox.get('phone');
   }

@@ -142,7 +142,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-              S.of(context)!.leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
+              S.of(context).leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
     }).catchError((e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -186,7 +186,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(S.of(context)!.laFactureABienEteGenererAvecSucces)));
+          content: Text(S.of(context).laFactureABienEteGenererAvecSucces)));
     }).catchError((e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(e.toString())));
@@ -220,8 +220,8 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(S.of(context)!.dmandeDePriseEnCharge, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text(S.of(context)!.rendezvous, 
+              Text(S.of(context).dmandeDePriseEnCharge, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(S.of(context).rendezvous, 
                 style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
               ),
             ],
@@ -276,7 +276,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                     padding: EdgeInsets.only(top: hv*1),
                                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(S.of(context)!.pourLePatient, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                                        Text(S.of(context).pourLePatient, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                                         SizedBox(height: hv*1,),
                                         Row(children: [
                                           CircleAvatar(
@@ -320,13 +320,13 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                             ],
                           ),
                           SizedBox(height: hv*2.5,),
-                          Text(S.of(context)!.rendezvousChez, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
+                          Text(S.of(context).rendezvousChez, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w900)),
                           SizedBox(height: hv*1.2,),
                           isPrestataire==false && doc != null ? DoctorInfoCard(
                             noPadding: true,
                             avatarUrl: doc!.avatarUrl!,
                             name: doc!.cniName!,
-                            title: S.of(context)!.medecinDeFamille + doc!.field!,
+                            title: S.of(context).medecinDeFamille + doc!.field!,
                             speciality: doc!.speciality!,
                             teleConsultation: doc!.serviceList != null ? doc!.serviceList["tele-consultation"] : false,
                             consultation: doc!.serviceList != null ? doc!.serviceList["consultation"] : false,
@@ -368,7 +368,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(S.of(context)!.quelEnEstLaRaison, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                          Text(S.of(context).quelEnEstLaRaison, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
                           Container(
                             width: double.infinity,
                             margin: EdgeInsets.symmetric(vertical: hv*0.5),
@@ -382,7 +382,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
 
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: hv*2),
-                            child: Text(S.of(context)!.symptmes, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
+                            child: Text(S.of(context).symptmes, style: TextStyle(color: kTextBlue, fontSize: wv*4, fontWeight: FontWeight.w400)),
                           ),
 
                           
@@ -397,7 +397,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ) :
-                          Text(S.of(context)!.aucunSymptmesMentions)
+                          Text(S.of(context).aucunSymptmesMentions)
                         ],
                       ),
                     ),
@@ -430,7 +430,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                             context,
                                             listen: false);
                                     AdherentModel adherent =
-                                        AdherentModel.fromDocument(doc);
+                                        AdherentModel.fromDocument(doc, doc.data() as Map);
                                     adherentModelProvider
                                         .setAdherentModel(adherent);
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -461,7 +461,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     noPadding: true,
                     isLoading: announceLoading!,
                     enable:  appointment.getAppointment!.status==1 ? false: true,
-                    text: S.of(context)!.approuver,
+                    text: S.of(context).approuver,
                     action: () async {
                       setState(() {
                         announceLoading = true;
@@ -544,7 +544,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                        appointment.setAnnouncement(true);
                                       }else{
                                          ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(S.of(context)!.uneFactureADejaTGnererPourCetteConstultation)));
+                                    SnackBar(content: Text(S.of(context).uneFactureADejaTGnererPourCetteConstultation)));
                                       }
                                 });
                             
@@ -619,7 +619,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                                        appointment.setAnnouncement(true);
                                       }else{
                                          ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(S.of(context)!.uneFactureADejaTGnererPourCetteConstultation)));
+                                    SnackBar(content: Text(S.of(context).uneFactureADejaTGnererPourCetteConstultation)));
                                       }
                                 });
                             
@@ -668,7 +668,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                   flex: 3,
                   child: CustomTextButton(
                     noPadding: true,
-                    text: S.of(context)!.rejeter,
+                    text: S.of(context).rejeter,
                     enable:  appointment.getAppointment!.status==2 ? false: true,
                     isLoading: cancelLoading!,
                     color: kSouthSeas,
@@ -680,7 +680,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                         FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment!.id).set({
                           "status": 2
                         },  SetOptions(merge: true)).then((value) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.lannonceATRejeter),));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).lannonceATRejeter),));
                           appointment.setAnnouncement(false);
                            setState(() {
                             cancelLoading = false;
@@ -705,7 +705,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: wv*4),
               child: CustomTextButton(
-                text: S.of(context)!.mettreEnAttente,
+                text: S.of(context).mettreEnAttente,
                 isLoading: saveLoading!,
                 
                 noPadding: true,
@@ -717,7 +717,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                     FirebaseFirestore.instance.collection("APPOINTMENTS").doc(appointment.getAppointment!.id).set({
                       "status": 0
                     },  SetOptions(merge: true)).then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.ceRendezvousATMisEnAttente),));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).ceRendezvousATMisEnAttente),));
                       setState(() {
                             announceLoading = false;
                             edit=false;

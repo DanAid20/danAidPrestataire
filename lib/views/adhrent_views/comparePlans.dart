@@ -38,7 +38,7 @@ class _ComparePlansState extends State<ComparePlans> {
     await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").get().then((snap) {
       var docs = snap.docs;
       for(int i = 0; i < docs.length; i++){
-        PlanModel docModel = PlanModel.fromDocument(docs[i]);
+        PlanModel docModel = PlanModel.fromDocument(docs[i], docs[i].data());
         plans[docModel.planNumber!] = docModel;
       }
       setState(() {
@@ -94,8 +94,8 @@ class _ComparePlansState extends State<ComparePlans> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context)!.comparerLesServices, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text(S.of(context)!.modifierMaCouverture,
+            Text(S.of(context).comparerLesServices, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).modifierMaCouverture,
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
@@ -113,8 +113,8 @@ class _ComparePlansState extends State<ComparePlans> {
               margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
               child: HomePageComponents.getInfoActionCard(
                 title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan),
-                actionLabel: S.of(context)!.comparerLesServices,
-                subtitle: S.of(context)!.vousTesCouvertsJusquau+limitString,
+                actionLabel: S.of(context).comparerLesServices,
+                subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
                 noAction: true
               ),
             ),
@@ -136,8 +136,8 @@ class _ComparePlansState extends State<ComparePlans> {
                               children: [
                                 TextSpan(text: plans[state]!.label! +'\n', style: TextStyle(fontSize: 30)),
                                 TextSpan(text: plans[state]!.monthlyAmount.toString(), style: TextStyle(fontSize: 25)),
-                                TextSpan(text: S.of(context)!.cfan),
-                                TextSpan(text: S.of(context)!.parFamilleMois),
+                                TextSpan(text: S.of(context).cfan),
+                                TextSpan(text: S.of(context).parFamilleMois),
                               ]
                             )
                           ),
@@ -146,12 +146,12 @@ class _ComparePlansState extends State<ComparePlans> {
                     ),
                     TableRow(
                       children: [
-                        defaultCell(text: S.of(context)!.couvertureSant, center: false)
+                        defaultCell(text: S.of(context).couvertureSant, center: false)
                       ]
                     ),
                     TableRow(
                       children: [
-                        defaultCell(text: S.of(context)!.plafondAnnuel, center: false)
+                        defaultCell(text: S.of(context).plafondAnnuel, center: false)
                       ]
                     ),
                     TableRow(
@@ -189,17 +189,17 @@ class _ComparePlansState extends State<ComparePlans> {
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    //physics: BouncingScrollPhysics(),
+                    //physics: const BouncingScrollPhysics(),
                     child: currentPlan != null && state != null ? Table(
                       defaultColumnWidth: FixedColumnWidth(wv*30),
                       children: [
                         TableRow(
                           children: [
-                            headerCell(text: S.of(context)!.niveau0, icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
-                            headerCell(text: S.of(context)!.niveauI, icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
+                            headerCell(text: S.of(context).niveau0, icon: 'assets/icons/Bulk/HeartOutline.svg', isActive: state == isDecouverte),
+                            headerCell(text: S.of(context).niveauI, icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcces),
                             headerCell(text: "Niveau I.I", icon: 'assets/icons/Bulk/ShieldAcces.svg', isActive: state == isAcademik),
-                            headerCell(text: S.of(context)!.niveauIi, icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
-                            headerCell(text: S.of(context)!.niveauIii, icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
+                            headerCell(text: S.of(context).niveauIi, icon: 'assets/icons/Bulk/ShieldAssist.svg', isActive: state == isAssist),
+                            headerCell(text: S.of(context).niveauIii, icon: 'assets/icons/Bulk/ShieldSerenity.svg', isActive: state == isSerenity),
                           ]
                         ),
                         TableRow(

@@ -27,7 +27,7 @@ class _GroupFeedsState extends State<GroupFeeds> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            PostModel post = PostModel.fromDocument(doc);
+            PostModel post = PostModel.fromDocument(doc, doc.data() as Map);
             return PostContainer(post: post, groupId: widget.group!.groupId);
           },
         ) :
@@ -38,7 +38,7 @@ class _GroupFeedsState extends State<GroupFeeds> {
               SizedBox(height: 50,),
               Icon(LineIcons.userShield, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.aucunPostsPourLeMoment, 
+              Text(S.of(context).aucunPostsPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],

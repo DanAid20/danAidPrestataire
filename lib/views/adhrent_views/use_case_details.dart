@@ -42,7 +42,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
     if(usecase.doctorId != null){
       if(usecase.doctorName == null){
         await FirebaseFirestore.instance.collection("MEDECINS").doc(usecase.doctorId).get().then((doc) async {
-          DoctorModel doctorModel = DoctorModel.fromDocument(doc);
+          DoctorModel doctorModel = DoctorModel.fromDocument(doc, doc.data() as Map);
           await FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({
             'doctorName' : doctorModel.surname.toString() + ' ' + doctorModel.familyName.toString(), 
             'establishment' : doctorModel.officeName != '' ? doctorModel.officeName : null}).then((value){
@@ -95,8 +95,8 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context)!.dmandeDu + startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text(S.of(context)!.ajouterDesPrestationsEtJustificatifs,  style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
+            Text(S.of(context).dmandeDu + startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).ajouterDesPrestationsEtJustificatifs,  style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
             ),
           ],
         ),
@@ -107,7 +107,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
         ],
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(height: hv*2,),
@@ -127,7 +127,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           SizedBox(height: hv*5,),
-                          Text(S.of(context)!.statutDeLaDemande,  style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w300)),
+                          Text(S.of(context).statutDeLaDemande,  style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w300)),
                           SizedBox(height: hv*1,),
                           Container(
                             width: wv*50,
@@ -142,7 +142,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                                       border: Border.all(color: whiteColor, width: 2),
                                       borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))
                                     ),
-                                    child: Text(status == 1 ?  "1. "+S.of(context)!.enAttente : "1", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),)),
+                                    child: Text(status == 1 ?  "1. "+S.of(context).enAttente : "1", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),)),
                                 Expanded(
                                   flex: status == 2 ? 45 : 10,
                                   child: Container(
@@ -150,7 +150,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                                       color: kDeepTeal.withOpacity(0.7),
                                       border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
                                     ),
-                                    child: Text(status == 2 ?  "2. "+S.of(context)!.enCours : "2", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    child: Text(status == 2 ?  "2. "+S.of(context).enCours : "2", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
                                 Expanded(
                                   flex: status == 3 ? 45 : 10,
                                   child: Container(
@@ -158,7 +158,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                                       color: kDeepTeal.withOpacity(0.3),
                                       border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
                                     ),
-                                    child: Text(status == 3 ?  "3. "+S.of(context)!.approuv : "3", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    child: Text(status == 3 ?  "3. "+S.of(context).approuv : "3", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
                                 Expanded(
                                   flex: status == 4 ? 45 : 10,
                                   child: Container(
@@ -166,7 +166,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                                       color: primaryColor,
                                       border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2)),
                                     ),
-                                    child: Text(status == 4 ?  "4. "+S.of(context)!.rjt : "4", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    child: Text(status == 4 ?  "4. "+S.of(context).rjt : "4", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
                                 Expanded(
                                   flex: status == 5 ? 45 : 10,
                                   child: Container(
@@ -175,7 +175,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                                       border: Border.all(color: whiteColor, width: 2),
                                       borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10))
                                     ),
-                                    child: Text(status == 5 ?  "5. "+S.of(context)!.cltur : "5", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    child: Text(status == 5 ?  "5. "+S.of(context).cltur : "5", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
                               ],
                             ),
                           ),
@@ -366,13 +366,13 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
 
                                       return snapshot.data!.docs.length >= 1
                                         ? ListView.builder(
-                                            physics: BouncingScrollPhysics(),
+                                            physics: const BouncingScrollPhysics(),
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
                                             itemCount: snapshot.data!.docs.length,
                                             itemBuilder: (context, index) {
                                               DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                                              UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc);
+                                              UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                                               print("name: ");
                                               return getServiceTile(
                                                 service: service,
@@ -505,13 +505,13 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
     );
   }
 
-  Widget getServiceTile({required UseCaseServiceModel service, Function? action}){
+  Widget getServiceTile({required UseCaseServiceModel service, Function()? action}){
     bool executed = service.executed != null ? service.executed! : false;
     bool estimate = service.estimate != null ? service.estimate! : false;
     bool ongoing = service.ongoing != null ? service.ongoing! : false;
     bool requested = service.requested != null ? service.requested! : false;
     return GestureDetector(
-      onTap: ()=> action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1.5),
         margin: EdgeInsets.only(bottom: hv*1),
@@ -561,9 +561,9 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
       ),
     );
   }
-Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, Function? action}){
+Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, Function()? action}){
   return GestureDetector(
-    onTap: ()=> action,
+    onTap: action,
     child: Container(
       margin: EdgeInsets.only(bottom: 0),
       child: Stack(

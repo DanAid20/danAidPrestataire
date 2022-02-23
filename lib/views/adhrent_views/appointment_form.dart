@@ -71,13 +71,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
   
   String currentSymptomText = "";
   List<String> suggestions = [
-    S.current!.migraines,
-    S.current!.fatigue,
-    S.current!.diarrhe,
-    S.current!.fivre,
-    S.current!.mauxDeTte,
-    S.current!.courbatures,
-    S.current!.mauxDeVentre
+    S.current.migraines,
+    S.current.fatigue,
+    S.current.diarrhe,
+    S.current.fivre,
+    S.current.mauxDeTte,
+    S.current.courbatures,
+    S.current.mauxDeVentre
   ];
   List<String> symptoms = [];
 
@@ -99,7 +99,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
     if(doctorProvider.getDoctor == null){}
     if(adherent.getAdherent?.familyDoctorId != null){
       FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent?.familyDoctorId).get().then((doc) {
-        DoctorModel doctorModel = DoctorModel.fromDocument(doc);
+        DoctorModel doctorModel = DoctorModel.fromDocument(doc, doc.data() as Map);
         doctorProvider.setDoctorModel(doctorModel);
         chosenDoctor = doctorModel;
         setState((){});
@@ -187,8 +187,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(purpose != "emergency" ? S.of(context)!.dmanderUnePriseEnCharge : S.of(context)!.dclarerUneUrgence, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-              Text(purpose != "emergency" ? currentPageValue == 0 ? S.of(context)!.leGuideVousAssiste : currentPageValue == 1 ? S.of(context)!.leGuideVousAssiste : currentPageValue == 2 ? S.of(context)!.choisirLaDateEtLaPriode : S.of(context)!.raisonEtSymptme : S.of(context)!.renseignezLtablissement, 
+              Text(purpose != "emergency" ? S.of(context).dmanderUnePriseEnCharge : S.of(context).dclarerUneUrgence, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(purpose != "emergency" ? currentPageValue == 0 ? S.of(context).leGuideVousAssiste : currentPageValue == 1 ? S.of(context).leGuideVousAssiste : currentPageValue == 2 ? S.of(context).choisirLaDateEtLaPriode : S.of(context).raisonEtSymptme : S.of(context).renseignezLtablissement, 
                 style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
               ),
             ],
@@ -216,7 +216,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
               Expanded(
                 child: PageView.builder(
                   pageSnapping: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: pageList?.length,
                   onPageChanged: (int page) {
                     getChangedPageAndMoveBar(page);
@@ -261,7 +261,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
         ) : Center(child: Loaders().buttonLoader(kPrimaryColor))
         : Center(child: Padding(
           padding: const EdgeInsets.all(12),
-          child: CustomTextButton(text: S.of(context)!.choisissezUnMedecinDeFamille, action: (){bottomController.setIndex(3);Navigator.pop(context);},),
+          child: CustomTextButton(text: S.of(context).choisissezUnMedecinDeFamille, action: (){bottomController.setIndex(3);Navigator.pop(context);},),
         )),
       ),
     );
@@ -286,23 +286,23 @@ class _AppointmentFormState extends State<AppointmentForm> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: wv*4),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: hv*2.5,),
                     RichText(text: TextSpan(
-                      text: S.of(context)!.queSouhaitezVousFairen,
+                      text: S.of(context).queSouhaitezVousFairen,
                       children: [
-                        TextSpan(text: S.of(context)!.slectionnerVotreChoix, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
+                        TextSpan(text: S.of(context).slectionnerVotreChoix, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
                       ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
                     ),
                     SizedBox(height: hv*5,),
 
                     HomePageComponents.appointmentPurpose(
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
-                      title: S.of(context)!.consulterAujourdhui,
+                      title: S.of(context).consulterAujourdhui,
                       iconPath: 'assets/icons/Two-tone/Home.svg',
                       action: (){
                         purpose = "consult-today";
@@ -318,7 +318,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     SizedBox(height: hv*2,),
                     HomePageComponents.appointmentPurpose(
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
-                      title: S.of(context)!.prendreRendezvous,
+                      title: S.of(context).prendreRendezvous,
                       iconPath: 'assets/icons/Bulk/CalendarLine.svg',
                       action: (){
                         purpose = "appointment";
@@ -328,7 +328,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     SizedBox(height: hv*2,),
                     HomePageComponents.appointmentPurpose(
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
-                      title: S.of(context)!.dclarerUneUrgence,
+                      title: S.of(context).dclarerUneUrgence,
                       iconPath: 'assets/icons/Bulk/BuyRdv.svg',
                       action: (){
                         purpose = "emergency";
@@ -373,11 +373,11 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               ),
                               child: Column(
                                 children: [
-                                  Text(S.of(context)!.appelerLaMutuelle, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
+                                  Text(S.of(context).appelerLaMutuelle, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
                                   SizedBox(height: hv*1,),
                                   GestureDetector(
                                     onTap: () async {
-                                      String url = S.of(context)!.tel+"+237233419203";
+                                      String url = S.of(context).tel+"+237233419203";
                                       if (await canLaunch(url)) {
                                         await launch(url);
                                       } else {
@@ -410,8 +410,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           text: TextSpan(
                             style: TextStyle(color: kTextBlue, fontSize: 13),
                             children: [
-                              TextSpan(text: S.of(context)!.ouRenseignerLtablissementn, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 17)),
-                              TextSpan(text: S.of(context)!.slectionerLePatient)
+                              TextSpan(text: S.of(context).ouRenseignerLtablissementn, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 17)),
+                              TextSpan(text: S.of(context).slectionerLePatient)
                             ]
                           )
                         ),
@@ -465,7 +465,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   child: CustomTextField(
                     noPadding: true,
                     onChanged: (val)=>setState((){}),
-                    label: S.of(context)!.hpitalDePrfrence,
+                    label: S.of(context).hpitalDePrfrence,
                     controller: _hospitalController,
                   ),
                 )
@@ -475,7 +475,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
         ),
         CustomTextButton(
           enable: _hospitalController.text.isNotEmpty,
-          text: S.of(context)!.continuer,
+          text: S.of(context).continuer,
           action: (){controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);},
         )
       ],
@@ -507,7 +507,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 text: TextSpan(
                                   style: TextStyle(color: kTextBlue, fontSize: 17),
                                   children: [
-                                    TextSpan(text: S.of(context)!.urgenceN, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
+                                    TextSpan(text: S.of(context).urgenceN, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17)),
                                     TextSpan(text: _hospitalController.text),
                                     //TextSpan(text: "LogPom, Douala", style: TextStyle(fontSize: 14)),
                                   ]
@@ -539,13 +539,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     children: [
                       SizedBox(height: hv*2),
                       CustomDropDownButton(
-                        label: S.of(context)!.quelleEstLaRaison,
+                        label: S.of(context).quelleEstLaRaison,
                         value: _emergencyPurpose,
                         items: [
-                          DropdownMenuItem(child: Text(S.of(context)!.accidentDomestique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A-DOMESTIQUE",),
-                          DropdownMenuItem(child: Text(S.of(context)!.accidentRoutier, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "A-ROUTIER",),
-                          DropdownMenuItem(child: Text(S.of(context)!.maladieSubite, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "MALADIE",),
-                          DropdownMenuItem(child: Text(S.of(context)!.autre, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AUTRE",)
+                          DropdownMenuItem(child: Text(S.of(context).accidentDomestique, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A-DOMESTIQUE",),
+                          DropdownMenuItem(child: Text(S.of(context).accidentRoutier, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "A-ROUTIER",),
+                          DropdownMenuItem(child: Text(S.of(context).maladieSubite, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "MALADIE",),
+                          DropdownMenuItem(child: Text(S.of(context).autre, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AUTRE",)
                         ],
                         onChanged: (value) => setState(() {_emergencyPurpose = value;})
                       ),
@@ -553,7 +553,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                       SizedBox(height: hv*2),
 
                       CustomTextField(
-                        label: S.of(context)!.informationSupplmentaire,
+                        label: S.of(context).informationSupplmentaire,
                         controller: _otherInfoController,
                         onChanged: (val)=>setState((){}),
                         noPadding: true,
@@ -570,7 +570,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
         ),
         CustomTextButton(
           enable: _emergencyPurpose != null,
-          text: S.of(context)!.continuer,
+          text: S.of(context).continuer,
           isLoading: buttonLoading,
           action: (){
             setState((){buttonLoading = true;});
@@ -591,7 +591,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 "beneficiaryName":  beneficiary.getBeneficiary.surname!+" "+beneficiary.getBeneficiary.familyName!,
                 "status" : 0 //En attente
               }).then((value) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.lurgenceABienTEnrgistre),));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).lurgenceABienTEnrgistre),));
                 setState(() {
                   buttonLoading = false;
                 });
@@ -631,9 +631,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
                           child: RichText(text: TextSpan(
-                            text: S.of(context)!.demanderUnRendezvousChezn,
+                            text: S.of(context).demanderUnRendezvousChezn,
                             children: [
-                              TextSpan(text: S.of(context)!.slectionnerLeMdecin, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
+                              TextSpan(text: S.of(context).slectionnerLeMdecin, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
                             ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
                           ),
                         ),
@@ -642,7 +642,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             noPadding: true,
                             avatarUrl: chosenDoctor?.avatarUrl,
                             name: chosenDoctor?.cniName,
-                            title: S.of(context)!.medecinDeFamille + chosenDoctor!.field!,
+                            title: S.of(context).medecinDeFamille + chosenDoctor!.field!,
                             speciality: chosenDoctor?.speciality,
                             teleConsultation: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["tele-consultation"] : false,
                             consultation: chosenDoctor?.serviceList != null ? chosenDoctor?.serviceList["consultation"] : false,
@@ -689,7 +689,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               noPadding: true,
                               avatarUrl: chosenSP?.avatarUrl,
                               name: chosenSP?.contactName,
-                              title: S.of(context)!.medecinDeFamille + chosenSP!.contactName!,
+                              title: S.of(context).medecinDeFamille + chosenSP!.contactName!,
                               isServiceProvider: true,
                               speciality: chosenSP?.category,
                               teleConsultation: false,
@@ -741,16 +741,16 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2.5),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context)!.choisirLeTypeDeConsultation, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16),),
+                        Text(S.of(context).choisirLeTypeDeConsultation, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16),),
                         Container(
                           child: SingleChildScrollView(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             child: Row(children: [
                               HomePageComponents.consultationType(
                                 iconPath: 'assets/icons/Bulk/Profile.svg',
-                                title: S.of(context)!.consultation,
-                                type: S.of(context)!.enCabinet,
+                                title: S.of(context).consultation,
+                                type: S.of(context).enCabinet,
                                 price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
                                 selected: consultationType == "Cabinet",
                                 action: (){
@@ -774,8 +774,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               ),
                               HomePageComponents.consultationType(
                                 iconPath: 'assets/icons/Bulk/Home.svg',
-                                title: S.of(context)!.consultation,
-                                type: S.of(context)!.domicile,
+                                title: S.of(context).consultation,
+                                type: S.of(context).domicile,
                                 price: "7500.0",
                                 selected: consultationType == "Domicile",
                                 action: (){
@@ -801,7 +801,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             child: CustomTextButton(
               noPadding: true,
               enable: consultationType != null,
-              text: S.of(context)!.continuer,
+              text: S.of(context).continuer,
               action: (){controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate);},
             )
           )
@@ -849,7 +849,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.4)), borderRadius: BorderRadius.circular(10)),
                           border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
                           enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)), borderRadius: BorderRadius.circular(10)),
-                          hintText: S.of(context)!.entrezLeNom,
+                          hintText: S.of(context).entrezLeNom,
                           filled: true,
                           contentPadding: EdgeInsets.only(bottom: 12, left: 15, right: 15),
                           suffixIcon: IconButton(icon: Icon(Icons.cancel, color: Colors.white,), onPressed: () => _searchController.clear(),),
@@ -892,12 +892,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
         int lastIndex = snapshot.data!.docs.length - 1;
         return snapshot.data!.docs.length >= 1 ? ListView.builder(
           //shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            DoctorModel? doctor = isDoctor ? DoctorModel.fromDocument(doc) : null;
-            ServiceProviderModel? sp = !isDoctor ? ServiceProviderModel.fromDocument(doc) : null;
+            DoctorModel? doctor = isDoctor ? DoctorModel.fromDocument(doc, doc.data() as Map) : null;
+            ServiceProviderModel? sp = !isDoctor ? ServiceProviderModel.fromDocument(doc, doc.data() as Map) : null;
 
             return Padding(
               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 10 : 0),
@@ -905,7 +905,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 actionText: "Choisir",
                 avatarUrl: doctor?.avatarUrl,
                 name: doctor?.cniName,
-                title: S.of(context)!.medecinDeFamille + doctor!.field!,
+                title: S.of(context).medecinDeFamille + doctor!.field!,
                 speciality: doctor.speciality,
                 teleConsultation: doctor.serviceList != null ? doctor.serviceList["tele-consultation"] : false,
                 consultation: doctor.serviceList != null ? doctor.serviceList["consultation"] : false,
@@ -956,7 +956,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: kPrimaryColor.withOpacity(0.7), size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.aucunMdecinAvecPourNom+":\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunMdecinAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: kPrimaryColor )
               , textAlign: TextAlign.center,),
             ],
@@ -1042,12 +1042,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text("Dr. ${doc.surname! + doc.familyName!}", style: TextStyle(color: whiteColor, fontSize: 16, fontWeight: FontWeight.w600),),
-                                Text(S.of(context)!.mdecinDeFamille+" ${doc.field}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                Text(S.of(context).mdecinDeFamille+" ${doc.field}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                 Column(crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     SizedBox(height: hv*1.3,),
                                     Text(doc.officeName.toString(), style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
-                                    Text( S.of(context)!.service+" - ${doc.speciality.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                                    Text( S.of(context).service+" - ${doc.speciality.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                                   ],
                                 ),
                               ],
@@ -1136,7 +1136,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     margin: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*4),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Center(child: Text(S.of(context)!.choisirUnHoraire, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 15.5), textAlign: TextAlign.center)),
+                        Center(child: Text(S.of(context).choisirUnHoraire, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 15.5), textAlign: TextAlign.center)),
                         SizedBox(height: hv*1,),
                         GestureDetector(
                           onTap: () async {
@@ -1150,7 +1150,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Text(
-                                timeSelected != null ? timeSelected.hour.toString().padLeft(2, '0')+" H : "+timeSelected.minute.toString().padLeft(2, '0')+" M" : S.of(context)!.selection
+                                timeSelected != null ? timeSelected.hour.toString().padLeft(2, '0')+" H : "+timeSelected.minute.toString().padLeft(2, '0')+" M" : S.of(context).selection
                                 , style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900, fontSize: wv*5), textAlign: TextAlign.center, overflow: TextOverflow.fade,
                               ),
                             ),
@@ -1162,7 +1162,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   : 
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
-                    child: Text("Dr ${doc.familyName} "+S.of(context)!.nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
+                    child: Text("Dr ${doc.familyName} "+S.of(context).nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
                   )*/
                   checkAvailability(DateFormat('EEEE', 'en_US').format(focusedDay!)) ? Column(
                     children: [
@@ -1246,12 +1246,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   ): 
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
-                    child: Text("Dr ${doc.familyName} "+S.of(context)!.nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay!)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
+                    child: Text("Dr ${doc.familyName} "+S.of(context).nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay!)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
                   )
                   : 
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
-                    child: Center(child: Text(S.of(context)!.choisissezUnJourPourLeRendezvous, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center,))
+                    child: Center(child: Text(S.of(context).choisissezUnJourPourLeRendezvous, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center,))
                   ),
               ),
             ],
@@ -1259,7 +1259,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
         )),
         
         CustomTextButton(
-          text: S.of(context)!.continuer,
+          text: S.of(context).continuer,
           enable: focusedDay != null && timeSelected != null,
           action: ()=>controller.nextPage(duration: Duration(milliseconds: 500), curve: Curves.decelerate),
         ) 
@@ -1295,10 +1295,10 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               Expanded(
                                 flex: 6,
                                 child: RichText(text: TextSpan(
-                                  text: S.of(context)!.rendezvousn,
+                                  text: S.of(context).rendezvousn,
                                   children: [
                                     TextSpan(text: "Dr ${doc?.surname} ${doc?.familyName}\n", style: TextStyle(fontSize: wv*3.8, fontWeight: FontWeight.w400)),
-                                    TextSpan(text: "${doc?.field}"+S.of(context)!.mdecinDeFamille, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
+                                    TextSpan(text: "${doc?.field}"+S.of(context).mdecinDeFamille, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
                                   ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
                                 ),
                               ),
@@ -1322,7 +1322,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     margin: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3.5),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context)!.quelleEnEstLaRaison, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
+                        Text(S.of(context).quelleEnEstLaRaison, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
                         SizedBox(height: hv*1.5,),
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3),
@@ -1337,23 +1337,23 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 icon: Icon(Icons.keyboard_arrow_down_rounded, size: wv*6, color: kPrimaryColor,),
                                 isExpanded: true,
                                 value: reason,
-                                hint: Text(S.of(context)!.choisir),
+                                hint: Text(S.of(context).choisir),
                                 items: [
                                   DropdownMenuItem(
-                                    child: Text(S.of(context)!.nouvelleConsultation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                    value: S.of(context)!.nouvelleconsultation,
+                                    child: Text(S.of(context).nouvelleConsultation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                    value: S.of(context).nouvelleconsultation,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text(S.of(context)!.suivi, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: S.of(context)!.suivi,
+                                    child: Text(S.of(context).suivi, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: S.of(context).suivi,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text(S.of(context)!.rfrencement, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: S.of(context)!.referencement,
+                                    child: Text(S.of(context).rfrencement, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: S.of(context).referencement,
                                   ),
                                   DropdownMenuItem(
-                                    child: Text(S.of(context)!.rsultatDexamen, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                    value: S.of(context)!.resultatexamen,
+                                    child: Text(S.of(context).rsultatDexamen, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                    value: S.of(context).resultatexamen,
                                   ),
                                 ],
                                 onChanged: (value) {
@@ -1367,10 +1367,10 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         SizedBox(height: hv*2.5,),
 
                         
-                        Text(S.of(context)!.listezVosSymptmes, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
+                        Text(S.of(context).listezVosSymptmes, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
                         SizedBox(height: hv*1.5,),
                         Row(children: [
-                        Text(S.of(context)!.symptmes, style: TextStyle(fontSize: 16, color: kTextBlue),), SizedBox(width: wv*3,),
+                        Text(S.of(context).symptmes, style: TextStyle(fontSize: 16, color: kTextBlue),), SizedBox(width: wv*3,),
                         Expanded(
                           child: Stack(
                             children: [
@@ -1439,7 +1439,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
               noPadding: true,
               isLoading: buttonLoading,
               enable: reason != null,
-              text: S.of(context)!.terminer,
+              text: S.of(context).terminer,
               action: () async {
                 setState(() {
                   buttonLoading = true;
@@ -1557,7 +1557,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             timeSelected = DateTime(2000, 1, 1, time.hour, time.minute);
           });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.dsolCetteHoraireNestPasDisponibleChoisissezEnUnAutre), duration: Duration(seconds: 4),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolCetteHoraireNestPasDisponibleChoisissezEnUnAutre), duration: Duration(seconds: 4),));
           setState(() {
             timeSelected = null;
           });
@@ -1573,7 +1573,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             timeSelected = DateTime(2000, 1, 1, time.hour, time.minute);
           });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.dsolCetteHoraireNestPasDisponibleChoisissezEnUnAutre), duration: Duration(seconds: 4),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolCetteHoraireNestPasDisponibleChoisissezEnUnAutre), duration: Duration(seconds: 4),));
           setState(() {
             timeSelected = null;
           });
@@ -1589,7 +1589,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
             timeSelected = DateTime(2000, 1, 1, time.hour, time.minute);
           });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.dsolCetteHoraireNestPasDisponibleChoisissezEnUnAutre), duration: Duration(seconds: 4),));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolCetteHoraireNestPasDisponibleChoisissezEnUnAutre), duration: Duration(seconds: 4),));
           setState(() {
             timeSelected = null;
           });
@@ -1674,7 +1674,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
         padding: EdgeInsets.only(top: hv*1),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(S.of(context)!.pourLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*4, fontWeight: FontWeight.w900)),
+            Text(S.of(context).pourLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*4, fontWeight: FontWeight.w900)),
             SizedBox(height: hv*1,),
             Row(children: [
               CircleAvatar(
@@ -1688,7 +1688,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 child: RichText(text: TextSpan(
                   text: beneficiaryProvider.getBeneficiary.surname! + " " +  beneficiaryProvider.getBeneficiary.familyName! + "\n",
                   children: [
-                    TextSpan(text: (DateTime.now().year - beneficiaryProvider.getBeneficiary.birthDate!.toDate().year).toString() + S.of(context)!.ans, style: TextStyle(fontSize: wv*3.3)),
+                    TextSpan(text: (DateTime.now().year - beneficiaryProvider.getBeneficiary.birthDate!.toDate().year).toString() + S.of(context).ans, style: TextStyle(fontSize: wv*3.3)),
                   ], style: TextStyle(color: kDeepTeal, fontSize: wv*4.2)),
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
@@ -1702,9 +1702,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
     );
   }
 
-  Widget getTimeRangeBox({required TimeOfDay time, bool selected = false, bool enable = true, Function? onSelect}){
+  Widget getTimeRangeBox({required TimeOfDay time, bool selected = false, bool enable = true, Function()? onSelect}){
     return GestureDetector(
-      onTap: enable ? ()=> onSelect : null,
+      onTap: enable ? onSelect : null,
       child: Container(
         width: wv*35,
         padding: EdgeInsets.symmetric(horizontal: wv*1, vertical: hv*1.5),

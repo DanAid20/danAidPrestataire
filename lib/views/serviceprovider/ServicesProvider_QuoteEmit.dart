@@ -282,7 +282,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
                                     children: [
                                       Center(
                                         child: Text(
-                                          S.of(context)!.rechercherParNumeroDeTlphone,
+                                          S.of(context).rechercherParNumeroDeTlphone,
                                           style: TextStyle(
                                               fontSize: wv * 4,
                                               color: kBlueForce),
@@ -301,7 +301,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
                                         child: InternationalPhoneNumberInput(
                                           validator: (String? phone) {
                                             return (phone!.isEmpty)
-                                                ? S.of(context)!.entrerUnNumeroDeTlphoneValide
+                                                ? S.of(context).entrerUnNumeroDeTlphoneValide
                                                 : null;
                                           },
                                           onInputChanged:
@@ -316,7 +316,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
                                               print(value);
                                             }
                                           },
-                                          hintText: S.of(context)!.numeroDeTelephone,
+                                          hintText: S.of(context).numeroDeTelephone,
                                           spaceBetweenSelectorAndTextField: 0,
                                           selectorConfig: const SelectorConfig(
                                             selectorType:
@@ -399,14 +399,14 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
       confirmSpinner! ?
        Center(child: Loaders().buttonLoader(kPrimaryColor)): isUserExists!?  CustomTextButton(
                     enable: true ,
-                    text: S.of(context)!.suivant, 
+                    text: S.of(context).suivant, 
                     action: () async {
                         await getFamillyDoctorName(adherentBeneficiaryInfos!.adherentId);
                         controller!.nextPage(duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
                       //  if(isUserExists)
                     }): CustomTextButton(
                     enable: true ,
-                    text: S.of(context)!.rechercher, 
+                    text: S.of(context).rechercher, 
                     action: (){
                        _scan( isInput: true);
                     })
@@ -427,7 +427,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
         print('nothing return.');
       }
       setState(() {
-        textForQrCode = barcode ?? S.of(context)!.codebarvide;
+        textForQrCode = barcode ?? S.of(context).codebarvide;
       });
     } else {
       setState(() {
@@ -454,7 +454,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
             if (doc.exists) {
                AdherentModelProvider adherentModelProvider =
                   Provider.of<AdherentModelProvider>(context, listen: false);
-                 adherentInfos = AdherentModel.fromDocument(doc);
+                 adherentInfos = AdherentModel.fromDocument(doc, doc.data() as Map);
                 adherentModelProvider.setAdherentModel(adherentInfos!);
                 BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
                       avatarUrl: adherentInfos!.imgUrl,
@@ -491,7 +491,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
-                Text(S.of(context)!.veuillezScannerUnnumeroDeTlphoneValideSvp)));
+                Text(S.of(context).veuillezScannerUnnumeroDeTlphoneValideSvp)));
       }
       setState(() {
         confirmSpinner = false;
@@ -516,7 +516,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
             if (doc.exists) {
                 AdherentModelProvider adherentModelProvider =
                   Provider.of<AdherentModelProvider>(context, listen: false);
-                 adherentInfos = AdherentModel.fromDocument(doc);
+                 adherentInfos = AdherentModel.fromDocument(doc, doc.data() as Map);
                 adherentModelProvider.setAdherentModel(adherentInfos!);
                 BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
                       avatarUrl: adherentInfos!.imgUrl,
@@ -612,7 +612,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
                                   isExpanded: true,
-                                  hint: Text(S.of(context)!.choisir),
+                                  hint: Text(S.of(context).choisir),
                                   value: type,
                                   items:  [
                                    const DropdownMenuItem(
@@ -625,7 +625,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
                                     ),
                                     DropdownMenuItem(
                                       child: Text("Achats", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: S.of(context)!.sibling,
+                                      value: S.of(context).sibling,
                                     ),
                                   ],
                                   onChanged: (value) {
@@ -716,7 +716,7 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
             enable:  _MontantController!.text.isNotEmpty &&
            _descriptionController!.text.isNotEmpty && 
            description!.isNotEmpty && type!.isNotEmpty ? true : false,
-            text: S.of(context)!.suivant, 
+            text: S.of(context).suivant, 
             action: (){
                 if (kDebugMode) {
                   print("jfdklfjdsklf");
@@ -792,13 +792,13 @@ class _IssuseAQuoteState extends State<IssuseAQuote> {
    print(famillyDoctorNAme);
   }   
     List<String> suggestions = [
-    S.current!.lactose,
-    S.current!.pnicilline,
-    S.current!.pollen,
-    S.current!.abeille,
-    S.current!.feu,
-    S.current!.herbes,
-    S.current!.plastique
+    S.current.lactose,
+    S.current.pnicilline,
+    S.current.pollen,
+    S.current.abeille,
+    S.current.feu,
+    S.current.herbes,
+    S.current.plastique
   ];
 
  

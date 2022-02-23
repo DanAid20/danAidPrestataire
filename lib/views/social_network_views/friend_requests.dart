@@ -23,7 +23,7 @@ class _FriendRequestsState extends State<FriendRequests> {
   loadUserProfile() async {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel!.userId).get().then((docSnapshot) {
-      UserModel user = UserModel.fromDocument(docSnapshot);
+      UserModel user = UserModel.fromDocument(docSnapshot, docSnapshot.data()!);
       userProvider.setUserModel(user);
       print(userProvider.getUserModel!.friendRequests.toString());
     });
@@ -46,7 +46,7 @@ class _FriendRequestsState extends State<FriendRequests> {
         backgroundColor: kDeepTeal,
         leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
         centerTitle: true,
-        title: Text(S.of(context)!.demandesDamiti, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
+        title: Text(S.of(context).demandesDamiti, style: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600))
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserModel!.userId).snapshots(),
@@ -54,7 +54,7 @@ class _FriendRequestsState extends State<FriendRequests> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(kSouthSeas),));
           }
-          UserModel user = UserModel.fromDocument(snapshot.data!);
+          UserModel user = UserModel.fromDocument(snapshot.data!, snapshot.data?.data() as Map);
 
           return user.friendRequests != null && user.friendRequests!.isNotEmpty ? StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance.collection("USERS").where(FieldPath.documentId, whereIn: user.friendRequests).snapshots(),
@@ -66,7 +66,7 @@ class _FriendRequestsState extends State<FriendRequests> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 DocumentSnapshot doc = snapshot.data!.docs[index];
-                UserModel user = UserModel.fromDocument(doc);
+                UserModel user = UserModel.fromDocument(doc, doc.data() as Map);
                 return getRequestBox(user: user);
               },
             ) :
@@ -77,7 +77,7 @@ class _FriendRequestsState extends State<FriendRequests> {
                   SizedBox(height: 50,),
                   Icon(LineIcons.comment, color: whiteColor, size: 85,),
                   SizedBox(height: 5,),
-                  Text(S.of(context)!.aucuneDmandeDamiti, 
+                  Text(S.of(context).aucuneDmandeDamiti, 
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: whiteColor )
                   , textAlign: TextAlign.center,),
                 ],
@@ -94,7 +94,7 @@ class _FriendRequestsState extends State<FriendRequests> {
                         SizedBox(height: 50,),
                         Icon(LineIcons.comment, color: whiteColor, size: 85,),
                         SizedBox(height: 5,),
-                        Text(S.of(context)!.aucuneDmandeDamiti, 
+                        Text(S.of(context).aucuneDmandeDamiti, 
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: whiteColor )
                         , textAlign: TextAlign.center,),
                       ],

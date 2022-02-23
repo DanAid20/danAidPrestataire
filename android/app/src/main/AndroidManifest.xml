@@ -13,6 +13,10 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <application
+<<<<<<< HEAD
+=======
+        android:name="${applicationName}"
+>>>>>>> bfc741bbc8e58f632ef37bde68a5429b144da125
         android:usesCleartextTraffic="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher">

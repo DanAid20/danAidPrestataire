@@ -144,7 +144,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
     AdherentModel? adh = adherentProvider.getAdherent;
     UseCaseModel? usecase = usecaseProvider.getUseCase;
     String title = Algorithms.getUseCaseServiceName(type: widget.type, context: context);
-    String doc1 = widget.type == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = widget.type == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = widget.type == consultation ? "Autre" : widget.type == labo ? "Resultat" : "Medicamment";
 
@@ -203,7 +203,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   Container(
@@ -323,7 +323,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                         child: Row(children: [
                                           SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                                           VerticalDivider(),
-                                          Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context)!.choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                          Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                         ],),
                                       ),
                                     ),
@@ -499,9 +499,9 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                           child: Column(
                             children: [
                               SizedBox(height: hv*2,),
-                              Text(S.of(context)!.scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                              Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                               SizedBox(height: hv*0.5,),
-                              Text(S.of(context)!.unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                              Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
                               Center(
                                 child: InkWell(
                                   onTap: (){getDocument(context);},
@@ -746,7 +746,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
   }
   Future getDocFromGallery(String name) async {
 
-    String doc1 = widget.type == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = widget.type == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = widget.type == consultation ? "Autre" : widget.type == labo ? "Resultat" : "Medicamment";
 
@@ -779,7 +779,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
 
   Future getDocFromPhone(String name) async {
 
-    String doc1 = widget.type == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = widget.type == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = widget.type == consultation ? "Autre" : widget.type == labo ? "Resultat" : "Medicamment";
 
@@ -819,11 +819,11 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
     LabServiceProvider labProvider = Provider.of<LabServiceProvider>(context, listen: false);
     UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
     
-    String doc1 = widget.type == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = widget.type == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = widget.type == consultation ? "Autre" : widget.type == labo ? "Resultat" : "Medicamment";
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     
@@ -847,7 +847,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context)!.ajoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("$name "+S.of(context).ajoute)));
       String url = await storageReference.getDownloadURL();
       if (name == doc1){
         if(widget.type == consultation){
@@ -917,7 +917,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
 
   getDocument(BuildContext context){
 
-    String doc1 = widget.type == consultation ? S.of(context)!.carnet : "Devis";
+    String doc1 = widget.type == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = widget.type == consultation ? "Autre" : widget.type == labo ? "Resultat" : "Medicamment";
 

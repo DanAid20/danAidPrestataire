@@ -69,8 +69,8 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
               child:  Container(
                 child: Column(
                   children: [
-                    Text(S.of(context)!.historiqueDesPrestations),
-                    Text(S.of(context)!.vosConsultationsPaiementDetaill)
+                    Text(S.of(context).historiqueDesPrestations),
+                    Text(S.of(context).vosConsultationsPaiementDetaill)
                   ],
                 ),
               ),
@@ -127,7 +127,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                             alignment: Alignment.centerLeft,
                             margin: EdgeInsets.only(left: 15.w, top: 2.h),
                             child: Text(
-                              S.of(context)!.statusDesPaiements,
+                              S.of(context).statusDesPaiements,
                               style: TextStyle(
                                   color: kFirstIntroColor,
                                   fontWeight: FontWeight.w500,
@@ -168,7 +168,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                                               );
                                             }
                                           if (snapshot.hasError) {
-                                            return Text(S.of(context)!.somethingWentWrong);
+                                            return Text(S.of(context).somethingWentWrong);
                                           }
                                           if (snapshot.connectionState == ConnectionState.done) {
                                             return  HomePageComponents()
@@ -182,7 +182,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                                               iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
                                                   'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
                                        }
-                                           return Text(S.of(context)!.loading);
+                                           return Text(S.of(context).loading);
                                       });
                                       } else {
                                         userName = widget.facture![index].idFammillyMember!;

@@ -38,7 +38,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                   List<Widget> groups = [];
                   for (int i = 0; i < snapshot.data!.docs.length; i++){
                     DocumentSnapshot doc = snapshot.data!.docs[i];
-                    GroupModel group = GroupModel.fromDocument(doc);
+                    GroupModel group = GroupModel.fromDocument(doc, doc.data() as Map);
                     Widget content = getContent(
                       switchColor: i.isEven,
                       group: group
@@ -79,7 +79,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                       onPressed: ()=>Navigator.pushNamed(context, '/create-group'),
                     ),
                     SizedBox(
-                      child: Text(S.of(context)!.ajouterUnGroupe, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold,
+                      child: Text(S.of(context).ajouterUnGroupe, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.bold,
                       shadows: [
                         Shadow( // bottomLeft
                           offset: Offset(-1, -1),
@@ -130,14 +130,14 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                 children: [
                   Text(group.groupName!, style: TextStyle(color: whiteColor, fontSize: 22, fontWeight: FontWeight.bold), maxLines: 2, overflow: TextOverflow.ellipsis,),
                   SizedBox(height: hv*0.8,),
-                  Text(group.membersIds!.length.toString()+S.of(context)!.membres, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: !switchColor ? kDeepTeal : kSouthSeas)),
+                  Text(group.membersIds!.length.toString()+S.of(context).membres, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: !switchColor ? kDeepTeal : kSouthSeas)),
                   SizedBox(height: hv*0.7,),
                 ],
               ),
             ),
             Expanded(
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stack(
@@ -174,9 +174,9 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                       ),
                       Expanded(flex: 11,
                         child: RichText(text: TextSpan(
-                          text: S.of(context)!.nouvellesn,
+                          text: S.of(context).nouvellesn,
                           style: TextStyle(color: !switchColor ? kDeepTeal : kSouthSeas, fontSize: 13),
-                          children: [TextSpan(text: S.of(context)!.conversations, style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
+                          children: [TextSpan(text: S.of(context).conversations, style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
                         ),
                       )
                     ],),
@@ -191,9 +191,9 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                       ),
                       Expanded(flex: 11,
                         child: RichText(text: TextSpan(
-                          text: S.of(context)!.nouvellesN,
+                          text: S.of(context).nouvellesN,
                           style: TextStyle(color: !switchColor ? kDeepTeal : kSouthSeas, fontSize: 13),
-                          children: [TextSpan(text: S.of(context)!.conversations, style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
+                          children: [TextSpan(text: S.of(context).conversations, style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.bold))])
                         ),
                       )
                     ],),

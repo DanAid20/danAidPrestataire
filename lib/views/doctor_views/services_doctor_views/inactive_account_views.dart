@@ -112,7 +112,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
         });
     userCaprovider!.getUseCase!.consultationCode=code;
     userCaprovider!.getUseCase!.dateCreated= Timestamp.fromDate(date);
-       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
+       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).leCodeCeConsultationCreerAvecSuccesCommeMdecinDe)));
         
       }).catchError((e){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
@@ -265,7 +265,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
         }
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
-          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
           Widget content = InkWell(
                          onTap: ()=>{
                            // ignore: avoid_print
@@ -303,8 +303,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
   );
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text(S.of(context)!.infos),
-    content: Text(string!.isNotEmpty? string :S.of(context)!.cetAdherentABienTCrer),
+    title: Text(S.of(context).infos),
+    content: Text(string!.isNotEmpty? string :S.of(context).cetAdherentABienTCrer),
     actions: [
       okButton,
     ],
@@ -381,8 +381,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         alignment: Alignment.center,
                         child: Text(
                             widget.isAccountIsExists == false
-                                ? S.of(context)!.leNumro
-                                : S.of(context)!.leCompteDeLadherent,
+                                ? S.of(context).leNumro
+                                : S.of(context).leCompteDeLadherent,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w500,
@@ -392,7 +392,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                       Align(
                         alignment: Alignment.center,
                         child: Text(
-                            widget.isAccountIsExists == false && widget.phoneNumber != null ? widget.phoneNumber!: S.of(context)!.estInatif,
+                            widget.isAccountIsExists == false && widget.phoneNumber != null ? widget.phoneNumber!: S.of(context).estInatif,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w700,
@@ -412,8 +412,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Text(
                             widget.isAccountIsExists == false &&
                                     widget.phoneNumber != null
-                                ? S.of(context)!.nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
-                                : S.of(context)!.ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
+                                ? S.of(context).nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
+                                : S.of(context).ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
                             style: TextStyle(
                               color: kBlueForce,
                               fontWeight: FontWeight.w500,
@@ -429,8 +429,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         child: Text(
                           widget.isAccountIsExists == false &&
                                   widget.phoneNumber != null
-                              ? S.of(context)!.vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
-                              : S.of(context)!.poursuivezLaConsultationHorsParcoursDeSoinDanaid,
+                              ? S.of(context).vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
+                              : S.of(context).poursuivezLaConsultationHorsParcoursDeSoinDanaid,
                           style: TextStyle(
                               color: kBlueForce,
                               fontSize: fontSize(size: 17),
@@ -446,7 +446,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                         hintText:"Jean MArie Nkah",
                         enabled: true,
                         controller: _patientController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       ] )
                       )
@@ -504,16 +504,16 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                     final difference = date2.difference(d).inDays;
                                      if( difference>14 &&  useCase['consultationCode']!=null ){
                                          saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
-                                          saveSucces(context,string:S.of(context)!.lePatientABienTAjouter);
+                                          saveSucces(context,string:S.of(context).lePatientABienTAjouter);
                                           _patientController.clear();
                                             setState(() {issaveInknowUserLoading=false;});
                                         });
                                      }else{
-                                        saveSucces(context,string:S.of(context)!.uneConsultationEnCoursTDtecterPourCePatientDonc);
+                                        saveSucces(context,string:S.of(context).uneConsultationEnCoursTDtecterPourCePatientDonc);
                                      }
                                   }else{
                                      saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
-                                          saveSucces(context,string:S.of(context)!.lePatientABienTAjouterAuSysteme);
+                                          saveSucces(context,string:S.of(context).lePatientABienTAjouterAuSysteme);
                                           _patientController.clear();
                                            setState(() {issaveInknowUserLoading=false;});
                                         });
@@ -523,7 +523,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                   if (kDebugMode) {
                                     print(onError);
                                   }
-                                  saveSucces(context,string:S.of(context)!.uneErreurEstSurvenuVeuillezContacterLeService);
+                                  saveSucces(context,string:S.of(context).uneErreurEstSurvenuVeuillezContacterLeService);
                                 });
 
                             }
@@ -531,8 +531,8 @@ class _InactiveAccountState extends State<InactiveAccount> {
                           },
                           child:  Text( 
                             widget.isAccountIsExists == false
-                                ? S.of(context)!.ajouterCePatient
-                                : S.of(context)!.poursuivreHorsParcours,
+                                ? S.of(context).ajouterCePatient
+                                : S.of(context).poursuivreHorsParcours,
                             style: TextStyle(
                                 color: textColor,
                                 fontSize: wv * 4.5,
@@ -582,7 +582,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
               title: Align(
                 alignment: Alignment.center,
                 child: Column(
-                  children: [Text(S.of(context)!.famille), const Text('...')],
+                  children: [Text(S.of(context).famille), const Text('...')],
                 ),
               ),
               actions: [
@@ -599,7 +599,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
             body: Container(
               alignment: Alignment.center,
                 child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -747,7 +747,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text(S.of(context)!.uneFactureVientDtreCrerPourCette)));
+                                                        SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
                                                           });
                                                       }else{
                                                          Navigator.push(
@@ -805,7 +805,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                             )),
                                                                   ); 
                                                                     ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text(S.of(context)!.uneFactureVientDtreCrerPourCette)));
+                                                              SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
                                                                 });
                                                         }else{
                                                           Navigator.push(
@@ -821,7 +821,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                             )),
                                                                   ); 
                                                         ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text(S.of(context)!.redirtectionVersLeCarnet)));
+                                                              SnackBar(content: Text(S.of(context).redirtectionVersLeCarnet)));
                                                         }
                                                           
                                                     }
@@ -839,14 +839,14 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                                                       )),
                                                             ); 
                                                             ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text(S.of(context)!.redirectionVersLeCarnet)));
+                                                        SnackBar(content: Text(S.of(context).redirectionVersLeCarnet)));
                                                           }
                                                     });
                                          
                                          
                                         
                                       }else{
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.selectionerUnBeneficiaireAvantDeValider)));
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).selectionerUnBeneficiaireAvantDeValider)));
                                       }
                                     },
                                     child:adherentUserSelected!=null ? Row(
@@ -859,7 +859,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         ),),
                                         const Spacer(),
                                         Text(
-                                            S.of(context)!.carnetDe+adherentUserSelected!.cniName!.toString(),
+                                            S.of(context).carnetDe+adherentUserSelected!.cniName!.toString(),
                                             style: TextStyle(
                                                 color: textColor,
                                                 fontSize: wv * 4.5,
@@ -876,7 +876,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         ),
                                       ],
                                     ): Text(
-                                          S.of(context)!.accederAuCarnetDeSante,
+                                          S.of(context).accederAuCarnetDeSante,
                                           style: TextStyle(
                                               color: textColor,
                                               fontSize: wv * 4.5,

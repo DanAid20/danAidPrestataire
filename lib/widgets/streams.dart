@@ -42,9 +42,9 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Column( 
                   children: [
                     RichText(text: TextSpan(
-                      text: widget.standardUse ? S.of(context)!.bnficiairesn : S.of(context)!.quiEstMaladen,
+                      text: widget.standardUse ? S.of(context).bnficiairesn : S.of(context).quiEstMaladen,
                       children: [
-                        TextSpan(text: widget.standardUse ? (snapshot.data!.docs.length+1).toString()+S.of(context)!.personnes : S.of(context)!.slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
+                        TextSpan(text: widget.standardUse ? (snapshot.data!.docs.length+1).toString()+S.of(context).personnes : S.of(context).slectionnerLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
                       ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
                     ),
                     SizedBox(height: hv*2,),
@@ -88,7 +88,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                     ) : Container(),
                     snapshot.data!.docs.length >= 1 ? Expanded(
                       child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index){
@@ -96,7 +96,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                             return Container();
                           }
                           DocumentSnapshot doc = snapshot.data!.docs[index];
-                          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+                          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
                           print("name: ");
                           return widget.standardUse ? HomePageComponents.beneficiaryCard(
                             name: beneficiary.surname, 

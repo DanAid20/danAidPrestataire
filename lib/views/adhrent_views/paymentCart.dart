@@ -231,10 +231,10 @@ class _PaymentCartState extends State<PaymentCart> {
                             borderRadius: BorderRadius.circular(10)
                           ),
                           child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index){
-                              CampaignModel camp = CampaignModel.fromDocument(snapshot.data!.docs[index]);
+                              CampaignModel camp = CampaignModel.fromDocument(snapshot.data!.docs[index], snapshot.data!.docs[index].data() as Map);
                               if((widget.invoice?.inscriptionId == null || payInscription == false || widget.invoice?.registrationPaid == true) && camp.scope == "INSCRIPTION"){
                                 return Container();
                               }

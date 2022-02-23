@@ -42,7 +42,7 @@ class UserProvider with ChangeNotifier {
     _authId = val;
     notifyListeners();
   }
-  void setUserId(String val) {
+  void setUserId(String? val) {
     _userId = val;
     notifyListeners();
   }
@@ -66,7 +66,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setProfileType(String val) {
+  void setProfileType(String? val) {
     _profileType = val;
     notifyListeners();
   }

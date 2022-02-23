@@ -28,7 +28,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            PostModel post = PostModel.fromDocument(doc);
+            PostModel post = PostModel.fromDocument(doc, doc.data() as Map);
             return getContainers(post: post);
           },
         ) :
@@ -39,7 +39,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
               SizedBox(height: 50,),
               Icon(LineIcons.comment, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.aucuneDiscussionPourLeMoment, 
+              Text(S.of(context).aucuneDiscussionPourLeMoment, 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -73,7 +73,7 @@ class _CrowdFundingState extends State<CrowdFunding> {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(post.userName!, style: TextStyle(color: kDeepTeal, fontWeight: FontWeight.w900),),
-                    Text(time!+S.of(context)!.ilYa, style: TextStyle(fontSize: 12)),
+                    Text(time!+S.of(context).ilYa, style: TextStyle(fontSize: 12)),
                     SizedBox(height: hv*1.5,),
                     Text(post.text!, style: TextStyle(color: Colors.black87)),
                     post.imgUrl != null ? Row(

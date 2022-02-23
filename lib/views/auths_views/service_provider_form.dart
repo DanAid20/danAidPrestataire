@@ -94,25 +94,25 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
 
                       CustomTextField(
                         prefixIcon: Icon(MdiIcons.officeBuildingOutline, color: kDeepTeal),
-                        label: S.of(context)!.nomDeLtablissement,
-                        hintText: S.of(context)!.exHpialCentrale,
+                        label: S.of(context).nomDeLtablissement,
+                        hintText: S.of(context).exHpialCentrale,
                         controller: _companyNameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(Icons.account_circle_outlined, color: kDeepTeal,),
-                        label: S.of(context)!.nomCompletDuContact,
-                        hintText: S.of(context)!.entrezVotreNom,
+                        label: S.of(context).nomCompletDuContact,
+                        hintText: S.of(context).entrezVotreNom,
                         controller: _contactNameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context)!.ceChampEstObligatoire : null,
+                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
                       ),
                       SizedBox(height: hv*2.5,),
                       CustomTextField(
                         prefixIcon: Icon(Icons.email_outlined, color: kDeepTeal,),
                         keyboardType: TextInputType.emailAddress,
-                        label: S.of(context)!.emailDuContact,
-                        hintText: S.of(context)!.entrezVotreAddresseEmail,
+                        label: S.of(context).emailDuContact,
+                        hintText: S.of(context).entrezVotreAddresseEmail,
                         controller: _emailController,
                         validator: _emailFieldValidator,
                       ),
@@ -121,7 +121,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(S.of(context)!.typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                            Text(S.of(context).typeDtablissement, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                             SizedBox(height: 5,),
                             Container(
                               constraints: BoxConstraints(minWidth: wv*45),
@@ -138,15 +138,15 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                     value: _category,
                                     items: [
                                       DropdownMenuItem(
-                                        child: Text(S.of(context)!.hpital, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                        child: Text(S.of(context).hpital, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                         value: "Hôpital",
                                       ),
                                       DropdownMenuItem(
-                                        child: Text(S.of(context)!.pharmacie, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        child: Text(S.of(context).pharmacie, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                         value: "Pharmacie",
                                       ),
                                       DropdownMenuItem(
-                                        child: Text(S.of(context)!.laboratoire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                        child: Text(S.of(context).laboratoire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                         value: "Laboratoire",
                                       ),
                                     ],
@@ -168,7 +168,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                           Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context)!.region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -183,7 +183,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                       child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _stateCode,
-                                        hint: Text(S.of(context)!.choisirUneRegion),
+                                        hint: Text(S.of(context).choisirUneRegion),
                                         items: regions.map((region){
                                           return DropdownMenuItem(
                                             child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
@@ -212,7 +212,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                           regionChosen ? Expanded(
                             child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(S.of(context)!.choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                                Text(S.of(context).choixDeLaVille, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
                                 SizedBox(height: 5,),
                                 Container(
                                   constraints: BoxConstraints(minWidth: wv*45),
@@ -227,7 +227,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                                       child: DropdownButton<String>(
                                         isExpanded: true,
                                         value: _city,
-                                        hint: Text(S.of(context)!.ville),
+                                        hint: Text(S.of(context).ville),
                                         items: getTownNamesFromRegion(cities, _stateCode).map((city){
                                           print("city: "+city);
                                           return DropdownMenuItem(
@@ -258,8 +258,8 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                   CheckboxListTile(
                     tristate: false,
                     title: Row(children: [
-                      Text(S.of(context)!.luEtAcceptLes),
-                      InkWell(child: Text(S.of(context)!.termesDesServices, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline,)), 
+                      Text(S.of(context).luEtAcceptLes),
+                      InkWell(child: Text(S.of(context).termesDesServices, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline,)), 
                         onTap: (){
                           showDialog(context: context, 
                           builder: (BuildContext context){
@@ -285,7 +285,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
             Container(
               child: (_serviceTermsAccepted & cityChosen) ?  
                 !buttonLoading ? CustomTextButton(
-                  text: S.of(context)!.envoyer,
+                  text: S.of(context).envoyer,
                   color: kPrimaryColor,
                   action: () async {
                     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -378,7 +378,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                   },
                 ) : Loaders().buttonLoader(kPrimaryColor) :
                 CustomDisabledTextButton(
-                  text: S.of(context)!.envoyer,
+                  text: S.of(context).envoyer,
                 )
             ),
           ],
@@ -403,14 +403,14 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
               child: Column(
                 children: [
                   SizedBox(height: hv*2,),
-                  Text(S.of(context)!.termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
+                  Text(S.of(context).termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                   SizedBox(height: hv*2,),
-                  Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: BouncingScrollPhysics(),)),
+                  Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: const BouncingScrollPhysics(),)),
                 ],
               ),
             ),
             CustomTextButton(
-              text: S.of(context)!.fermer,
+              text: S.of(context).fermer,
               color: kPrimaryColor,
               action: () => Navigator.pop(context),
             )
@@ -423,7 +423,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
   Future uploadImageToFirebase(PickedFile file) async {
 
     if (file == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.aucuneImageSelectionne),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).aucuneImageSelectionne),));
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
@@ -451,7 +451,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${e.toString()}")));
     });
     storageUploadTask.whenComplete(() async {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context)!.photoDeProfilAjoute)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
       String url = await storageReference.getDownloadURL();
       avatarUrl = url;
     });
@@ -496,14 +496,14 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
               children: <Widget>[
                 new ListTile(
                     leading: new Icon(Icons.photo_library),
-                    title: new Text(S.of(context)!.gallerie),
+                    title: new Text(S.of(context).gallerie),
                     onTap: () {
                       getImageFromGallery();
                       Navigator.of(context).pop();
                     }),
                 new ListTile(
                   leading: new Icon(Icons.photo_camera),
-                  title: new Text(S.of(context)!.camera),
+                  title: new Text(S.of(context).camera),
                   onTap: () {
                     getImageFromCamera();
                     Navigator.of(context).pop();
@@ -541,7 +541,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
     if (!RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(value!)) {
-      return S.of(context)!.entrerUneAddresseEmailValide;
+      return S.of(context).entrerUneAddresseEmailValide;
     }
   }
 }

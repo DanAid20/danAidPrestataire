@@ -111,12 +111,12 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         }
         else {
           FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).get().then((docSnapshot) async {
-            AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
+            AdherentModel adherent = AdherentModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
             adherentModelProvider.setAdherentModel(adherent);
 
             if(adherent.insuranceLimit == null || adherent.loanLimit == null){
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
-              PlanModel plan = PlanModel.fromDocument(planDoc);
+              PlanModel plan = PlanModel.fromDocument(planDoc, planDoc.data() as Map);
               await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
                 "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
                 "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
@@ -129,7 +129,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
           });
         }
     } else {
-      String phone = await HiveDatabase.getAuthPhone();
+      String? phone = await HiveDatabase.getAuthPhone();
       userProvider.setUserId(phone);
       if(adherentModelProvider.getAdherent != null){
         adherentModel = adherentModelProvider.getAdherent!;
@@ -138,13 +138,13 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         }
         else {
           FirebaseFirestore.instance.collection('ADHERENTS').doc(phone).get().then((docSnapshot) async {
-            AdherentModel adherent = AdherentModel.fromDocument(docSnapshot);
+            AdherentModel adherent = AdherentModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
             adherentModelProvider.setAdherentModel(adherent);
             userProvider.setUserId(adherent.adherentId!);
 
             if(adherent.insuranceLimit == null || adherent.loanLimit == null){
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
-              PlanModel plan = PlanModel.fromDocument(planDoc);
+              PlanModel plan = PlanModel.fromDocument(planDoc, planDoc.data() as Map);
               await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
                 "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
                 "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
@@ -168,7 +168,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         Map data = Algorithms.getAutomaticCoveragePeriod(trimesterUnit: trimesterUnit, year: year);
 
         FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adhr.adherentPlan.toString()).get().then((serviceDoc){
-          PlanModel plan = PlanModel.fromDocument(serviceDoc);
+          PlanModel plan = PlanModel.fromDocument(serviceDoc, serviceDoc.data() as Map);
           FirebaseFirestore.instance.collection("ADHERENTS").doc(adhr.adherentId).collection('NEW_FACTURATIONS_ADHERENT').add({
             "montant": plan.monthlyAmount,
             "createdDate": DateTime.now(),
@@ -210,7 +210,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       }*/
         print("iiiin1"+userProvider.getUserId.toString());
         FirebaseFirestore.instance.collection('MEDECINS').doc(userProvider.getUserId).get().then((docSnapshot) {
-          DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
+          DoctorModel doc = DoctorModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
           doctorModelProvider.setDoctorModel(doc);
         print("ok");
           userProvider.setUserId(doc.id!);
@@ -218,7 +218,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
 
     } else {
           print("iiiiin2");
-      String phone = await HiveDatabase.getAuthPhone();
+      String? phone = await HiveDatabase.getAuthPhone();
       print("inside");
       print("inside"+phone.toString());
       if(doctorModelProvider.getDoctor != null){
@@ -226,7 +226,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         }
         else {
           FirebaseFirestore.instance.collection('MEDECINS').doc(phone).get().then((docSnapshot) {
-             DoctorModel doc = DoctorModel.fromDocument(docSnapshot);
+             DoctorModel doc = DoctorModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
             doctorModelProvider.setDoctorModel(doc);
             userProvider.setUserId(doc.id!);
           });
@@ -243,13 +243,13 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       print("prestataire"+userProvider.getUserId.toString());
     if(userProvider.getUserId != null && userProvider.getUserId != ""){
       FirebaseFirestore.instance.collection(serviceProvider).doc(userProvider.getUserId).get().then((docSnapshot) {
-        ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
+        ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
         serviceProviderM.setServiceProviderModel(doc);
         print("ok");
       });
     } 
     else {
-      String phone = await HiveDatabase.getAuthPhone();
+      String? phone = await HiveDatabase.getAuthPhone();
       print("inside");
       print("inside"+phone.toString());
       if(serviceProviderM.getServiceProvider != null){
@@ -257,7 +257,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       }
       else {
         FirebaseFirestore.instance.collection(serviceProvider).doc(phone).get().then((docSnapshot) {
-          ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
+          ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
           serviceProviderM.setServiceProviderModel(doc);
           userProvider.setUserId(doc.id!);
         });
@@ -283,16 +283,16 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     if(userProvider.getUserModel != null && adherentModelProvider.getAdherent != null){
 
     } else {
-      String phone = await HiveDatabase.getAuthPhone();
+      String? phone = await HiveDatabase.getAuthPhone();
       String adhPhone = await HiveDatabase.getParentAdherentAuthPhone();
       userProvider.setUserId(phone);
       FirebaseFirestore.instance.collection('USERS').doc(phone).get().then((userSnap) async {
-        user = UserModel.fromDocument(userSnap);
+        user = UserModel.fromDocument(userSnap, userSnap.data()!);
         userProvider.setUserModel(user);
         DocumentSnapshot benSnap = await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel!.adherentId).collection('BENEFICIAIRES').doc(userProvider.getUserModel!.matricule).get();
-        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(benSnap);
+        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(benSnap, benSnap.data() as Map);
         FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel!.adherentId).get().then((adhSnap) async {
-          AdherentModel adherent = AdherentModel.fromDocument(adhSnap);
+          AdherentModel adherent = AdherentModel.fromDocument(adhSnap, adhSnap.data() as Map);
           adherentModelProvider.setAdherentModel(adherent);
           adherentModelProvider.setSurname(beneficiary.surname!);
           adherentModelProvider.setFamilyName(beneficiary.familyName!);
@@ -310,12 +310,12 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     if (userProvider.getUserModel == null) {
       await FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).get().then((docSnapshot) {
-        UserModel user = UserModel.fromDocument(docSnapshot);
+        UserModel user = UserModel.fromDocument(docSnapshot, docSnapshot.data()!);
         userProvider.setUserModel(user);
       });
     }
     if(userProvider.getProfileType == adherent){
-      String lastDateVisited = await HiveDatabase.getVisit();
+      String? lastDateVisited = await HiveDatabase.getVisit();
       if(lastDateVisited != null){
         if(date.toString() != lastDateVisited.toString()){
           FirebaseFirestore.instance.collection('USERS').doc(userProvider.getUserId).set({
@@ -361,7 +361,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       }
     }
     else {
-      String profile = await HiveDatabase.getProfileType();
+      String? profile = await HiveDatabase.getProfileType();
       if(profile != null){
         userProvider.setProfileType(profile);
         if(profile == adherent){
@@ -616,14 +616,14 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context)!.entraide, onTap: entraideTapped),
-                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context)!.accueil, onTap: accueilTapped),
-                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context)!.carnet, onTap: carnetTapped),
-                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context)!.partenaire, onTap: partenaireTapped),
+                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context).entraide, onTap: entraideTapped),
+                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context).accueil, onTap: accueilTapped),
+                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context).carnet, onTap: carnetTapped),
+                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context).partenaire, onTap: partenaireTapped),
                       index == 4 ? SizedBox(width: width*13,) 
                         : bottomIcon(
                           svgUrl: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? "assets/icons/Two-tone/3User.svg" : "assets/icons/Two-tone/Profile.svg", 
-                          title: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context)!.famille : S.of(context)!.profile, 
+                          title: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? S.of(context).famille : S.of(context).profile, 
                           onTap: familleTapped
                         ),
                     ],
@@ -637,29 +637,29 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       ),
     );
   }
-  entraideTapped(){
+  void entraideTapped(){
     Navigator.pushNamed(context, "/social-home");
   }
-  accueilTapped(){
+  void accueilTapped(){
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     controller.setIndex(1);
   }
-  carnetTapped(){
+  void carnetTapped(){
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     controller.setIndex(2);
   }
-  partenaireTapped(){
+  void partenaireTapped(){
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     controller.setIndex(3);
   }
-  familleTapped(){
+  void familleTapped(){
     BottomAppBarControllerProvider controller = Provider.of<BottomAppBarControllerProvider>(context, listen: false);
     controller.setIndex(4);
   }
 
-  bottomIcon({required String svgUrl, required String title, required Function onTap}){
+  bottomIcon({required String svgUrl, required String title, required Function() onTap}){
     return GestureDetector(
-      onTap: ()=>onTap,
+      onTap: onTap,
       child: Container(
         color: Colors.transparent,
         child: Column(

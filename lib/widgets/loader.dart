@@ -7,7 +7,7 @@ class Loader extends StatelessWidget {
     return Column(
       children: [
         Image.asset("assets/images/loading.gif"),
-        Text(S.of(context)!.pleaseWait),
+        Text(S.of(context).pleaseWait),
       ],
     );
   }

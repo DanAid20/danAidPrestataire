@@ -14,19 +14,19 @@ class MessageModel {
   final int? type;
   MessageModel({this.id, this.idFrom, this.idTo, this.content, this.replierId, this.replyContent, this.replyType, this.replying, this.seen, this.timeStamp, this.type});
 
-  factory MessageModel.fromDocument(DocumentSnapshot doc) {
+  factory MessageModel.fromDocument(DocumentSnapshot doc, Map data) {
     return MessageModel(
       id: doc.id,
-      idFrom: doc.get("idFrom"),
-      idTo: doc.get("idTo"),
-      replierId: doc.get("replierId"),
-      content: doc.get("content"),
-      replyContent: doc.get("replyContent"),
-      replyType: doc.get("replyType"),
-      replying: doc.get("replying"),
-      seen: doc.get("seen"),
-      timeStamp: doc.get("timeStamp"),
-      type: doc.get("type"),
+      idFrom: data["idFrom"],
+      idTo: data["idTo"],
+      replierId: data["replierId"],
+      content: data["content"],
+      replyContent: data["replyContent"],
+      replyType: data["replyType"],
+      replying: data["replying"],
+      seen: data["seen"],
+      timeStamp: data["timeStamp"],
+      type: data["type"],
     );
   }
 }

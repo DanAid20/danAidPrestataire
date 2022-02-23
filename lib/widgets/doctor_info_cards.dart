@@ -19,7 +19,7 @@ class DoctorInfoCard extends StatelessWidget {
   final bool? chat, consultation, teleConsultation, rdv, visiteDomicile, noShadow;
   final bool? noPadding, includeHospital, isServiceProvider;
   final String? field, officeName, actionText;
-  final Function? onTap;
+  final Function()? onTap;
 
   const DoctorInfoCard({Key? key, this.name, this.title, this.speciality, this.noShadow = false, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
@@ -75,7 +75,7 @@ class DoctorInfoCard extends StatelessWidget {
                             children: [
                               SizedBox(height: hv*1.3,),
                               Text(officeName.toString(), style: TextStyle(color: whiteColor, fontWeight: FontWeight.w600, fontSize: 16),),
-                              Text(S.of(context)!.service+"- ${field.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
+                              Text(S.of(context).service+"- ${field.toString()}", style: TextStyle(color: whiteColor.withOpacity(0.6), fontSize: 14),),
                             ],
                           ) : Container(),
                         ],
@@ -104,7 +104,7 @@ class DoctorInfoCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 10.0),
-                    child: Text(!isInRdvDetail! ? S.of(context)!.servicesOfferts : S.of(context)!.serviceDemand, style: TextStyle(color: whiteColor, fontSize: 15),),
+                    child: Text(!isInRdvDetail! ? S.of(context).servicesOfferts : S.of(context).serviceDemand, style: TextStyle(color: whiteColor, fontSize: 15),),
                   ),
                   Row(
                     children: [
@@ -158,7 +158,7 @@ class DoctorInfoCard extends StatelessWidget {
                   SizedBox(width: wv*2,),
                   SvgPicture.asset("assets/icons/Bulk/Profile.svg", width: 35, color: whiteColor),
                   SizedBox(width: wv*2,),
-                  Text(service == null ? S.of(context)!.consultation : service!, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
+                  Text(service == null ? S.of(context).consultation : service!, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold, fontSize: 16),)
                 ],
               ),
               SizedBox(height: 5,),
@@ -170,7 +170,7 @@ class DoctorInfoCard extends StatelessWidget {
           )*/
           Container(height: 30,
             child: TextButton(
-              onPressed: ()=>onTap,
+              onPressed: onTap,
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),
@@ -181,14 +181,14 @@ class DoctorInfoCard extends StatelessWidget {
                   text: TextSpan(
                     style: TextStyle(color: whiteColor),
                     children: [
-                      TextSpan(text: S.of(context)!.votreDemandeDeRdvEst),
+                      TextSpan(text: S.of(context).votreDemandeDeRdvEst),
                       TextSpan(text: HomePageComponents().getAppointmentStateText(appointmentState!), style: TextStyle(fontWeight: FontWeight.bold))
                     ]
                   ),
                 ),
               ) :
               Row(children: [
-                Text(actionText != null ? actionText! : includeHospital! ? S.of(context)!.autreMdecin : S.of(context)!.plusDeDtails, style: TextStyle(color: Colors.white),),
+                Text(actionText != null ? actionText! : includeHospital! ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
                 SizedBox(width: 10,),
                 Icon(Icons.arrow_forward_ios, color: Colors.white),
               ],mainAxisAlignment: MainAxisAlignment.end)

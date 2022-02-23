@@ -21,7 +21,7 @@ class ProfileTypeView extends StatefulWidget {
 class _ProfileTypeViewState extends State<ProfileTypeView> {
   final NavigationService _navigationService = locator<NavigationService>();
   final List<String> descList = [Strings.USER_DESC, Strings.DOC_DESC, Strings.OTHER_DESC];
-  final List<String> titleList = [S.current!.utilisateur, S.current!.mdcin, S.current!.prestataireSant];
+  final List<String> titleList = [S.current.utilisateur, S.current.mdcin, S.current.prestataireSant];
   final List<String> imageList = ['assets/images/User.svg', 'assets/images/Doctor.svg', 'assets/images/Health.svg'];
   final List<String> routeList = ['/profile-type-adherent', '/profile-type-doctor', ''];
   //final List<Function> actionList = [adherentAction(), doctorAction(), serviceProviderAction()];
@@ -56,7 +56,7 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
             DanAidDefaultHeader(showDanAidLogo: true,),
             Expanded(
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount: titleList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) => ProfileTypeCard(

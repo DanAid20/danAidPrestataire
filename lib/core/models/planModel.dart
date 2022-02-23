@@ -8,25 +8,25 @@ class PlanModel {
 
   PlanModel({this.paymentMode, this.text, this.label, this.monthlyAmount, this.registrationFee, this.coveragePercentage, this.maxCreditAmount, this.additionalFee, this.planNumber, this.annualLimit, this.creditRate, this.isSelected, this.familyDoctorIsFree, this.familyCoverage, this.canWinPoints, this.socialNetworkEnable, this.id});
 
-  factory PlanModel.fromDocument(DocumentSnapshot doc){
+  factory PlanModel.fromDocument(DocumentSnapshot doc, Map data){
     return PlanModel(
       id: doc.id,
-      monthlyAmount: doc.get("cotisationMensuelleFondDSoint"),
-      coveragePercentage: doc.get("couverture"),
-      text: doc.get("descriptionText"),
-      registrationFee: doc.get("fraisIncription"),
-      paymentMode: doc.get("modeDePaiement"),
-      maxCreditAmount: doc.get("montantMaxPretSante"),
-      additionalFee: doc.get("montantPaiementSupplement"),
-      label: doc.get("nomNiveau"),
-      planNumber: doc.get("numeroNiveau"),
-      annualLimit: doc.get("plafondAnnuelle"),
-      isSelected: doc.get("userSelectedIt"),
-      creditRate: doc.get("rate"),
-      familyDoctorIsFree: doc.get("familyDoctorIsFree"),
-      canWinPoints: doc.get("canWinPoints"),
-      familyCoverage: doc.get("familyCoverage"),
-      socialNetworkEnable: doc.get("socialNetworkEnable")
+      monthlyAmount: data["cotisationMensuelleFondDSoint"],
+      coveragePercentage: data["couverture"],
+      text: data["descriptionText"],
+      registrationFee: data["fraisIncription"],
+      paymentMode: data["modeDePaiement"],
+      maxCreditAmount: data["montantMaxPretSante"],
+      additionalFee: data["montantPaiementSupplement"],
+      label: data["nomNiveau"],
+      planNumber: data["numeroNiveau"],
+      annualLimit: data["plafondAnnuelle"],
+      isSelected: data["userSelectedIt"],
+      creditRate: data["rate"],
+      familyDoctorIsFree: data["familyDoctorIsFree"],
+      canWinPoints: data["canWinPoints"],
+      familyCoverage: data["familyCoverage"],
+      socialNetworkEnable: data["socialNetworkEnable"]
     );
   }
 }

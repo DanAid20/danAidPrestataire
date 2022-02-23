@@ -96,11 +96,11 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context)!.entraide, onTap: networkView),
-                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context)!.accueil, onTap: homeView),
-                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context)!.mesPatients, onTap: patientView),
-                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context)!.partenaires, onTap: partnerView),
-                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: S.of(context)!.profile, onTap: profileView),
+                      index == 0 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Category.svg", title: S.of(context).entraide, onTap: networkView),
+                      index == 1 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Home.svg", title: S.of(context).accueil, onTap: homeView),
+                      index == 2 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Paper.svg", title: S.of(context).mesPatients, onTap: patientView),
+                      index == 3 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/Location.svg", title: S.of(context).partenaires, onTap: partnerView),
+                      index == 4 ? SizedBox(width: width*13,) : bottomIcon(svgUrl: "assets/icons/Two-tone/3User.svg", title: S.of(context).profile, onTap: profileView),
                     ],
                   ),
                 ),
@@ -138,9 +138,9 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
     });
   }
 
-  bottomIcon({String? svgUrl, String? title, Function? onTap}){
+  bottomIcon({String? svgUrl, String? title, Function()? onTap}){
     return GestureDetector(
-      onTap: onTap!(),
+      onTap: onTap,
       child: Container(
         color: Colors.transparent,
         child: Column(

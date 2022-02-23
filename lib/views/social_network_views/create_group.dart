@@ -43,7 +43,7 @@ class _CreateGroupState extends State<CreateGroup> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
-            UserModel singleUser = UserModel.fromDocument(userSnapshot);
+            UserModel singleUser = UserModel.fromDocument(userSnapshot, userSnapshot.data() as Map);
             if (singleUser.userId == user?.userId) {
               return Container();
             }
@@ -90,7 +90,7 @@ class _CreateGroupState extends State<CreateGroup> {
               SizedBox(height: 50,),
               Icon(MdiIcons.databaseRemove, color: Colors.grey[400], size: 85,),
               SizedBox(height: 5,),
-              Text(S.of(context)!.aucunUtilisateurAvecPourNom+":\n \"${_searchController.text}\"", 
+              Text(S.of(context).aucunUtilisateurAvecPourNom+":\n \"${_searchController.text}\"", 
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Colors.grey[400] )
               , textAlign: TextAlign.center,),
             ],
@@ -151,7 +151,7 @@ class _CreateGroupState extends State<CreateGroup> {
                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.0)), borderRadius: BorderRadius.circular(10)),
                     border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.0)), borderRadius: BorderRadius.circular(10)),
                     enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.withOpacity(0.0)), borderRadius: BorderRadius.circular(10)),
-                    hintText: S.of(context)!.entrezLesNomsDesUtilisateursAjouter,
+                    hintText: S.of(context).entrezLesNomsDesUtilisateursAjouter,
                     filled: true,
                     contentPadding:
                         EdgeInsets.only(bottom: 12, left: 15, right: 15),
@@ -180,7 +180,7 @@ class _CreateGroupState extends State<CreateGroup> {
             children: [
               Expanded(child: searches()),
               CustomTextButton(
-                text: S.of(context)!.suivant,
+                text: S.of(context).suivant,
                 color: kDeepTeal,
                 action: ()=>Navigator.pushNamed(context, '/create-group-final'),
               )
@@ -216,7 +216,7 @@ class _CreateGroupState extends State<CreateGroup> {
             ),
           ),
           Text(
-            S.of(context)!.cherchezDesUtilisateurs,
+            S.of(context).cherchezDesUtilisateurs,
             style: TextStyle(fontSize: 20, color: Colors.grey, fontWeight: FontWeight.w900),
           )
         ],
@@ -236,7 +236,7 @@ class SearchResult extends StatelessWidget {
     ConversationChatModel chatRoomModel = ConversationChatModel();
     String conversationId = Algorithms.getConversationId(userId: user?.authId, targetId: target?.authId);
     FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((conversation) {
-      ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation);
+      ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation, conversation.data() as Map);
       chatRoomModel = chatRoom;
     });
     return chatRoomModel;
@@ -256,7 +256,7 @@ class SearchResult extends StatelessWidget {
           child: target!.imgUrl != null ? Container() : Icon(LineIcons.user, color: whiteColor,),
         ),
         title: Text(target!.fullName!),
-        subtitle: Text(target!.profileType == doctor ? S.of(context)!.mdecin : target!.profileType == serviceProvider ? S.of(context)!.prestataire : S.of(context)!.adhrent, style: TextStyle(color: kTextBlue),),
+        subtitle: Text(target!.profileType == doctor ? S.of(context).mdecin : target!.profileType == serviceProvider ? S.of(context).prestataire : S.of(context).adhrent, style: TextStyle(color: kTextBlue),),
         trailing: Icon(
           Icons.arrow_forward_ios,
           color: kDeepTeal,

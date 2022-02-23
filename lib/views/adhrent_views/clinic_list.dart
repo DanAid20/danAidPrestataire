@@ -50,7 +50,7 @@ class _ClinicListState extends State<ClinicList> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
-                    ServiceProviderModel sp = ServiceProviderModel.fromDocument(doc);
+                    ServiceProviderModel sp = ServiceProviderModel.fromDocument(doc, doc.data() as Map);
                     print("name: ");
 
                     return Padding(
@@ -94,7 +94,7 @@ class _ClinicListState extends State<ClinicList> {
       child: Column(children: [
         Row(
           children: [
-            Text(S.of(context)!.ordonnerPar),
+            Text(S.of(context).ordonnerPar),
             Container(
               margin: EdgeInsets.symmetric(vertical: hv * 1),
               padding:
@@ -113,27 +113,27 @@ class _ClinicListState extends State<ClinicList> {
                         color: kPrimaryColor,
                       ),
                       hint: Text(
-                        S.of(context)!.choisir,
+                        S.of(context).choisir,
                         style: TextStyle(
                             color: kPrimaryColor, fontWeight: FontWeight.w600),
                       ),
                       value: filter,
                       items: [
                         DropdownMenuItem(
-                          child: Text(S.of(context)!.nom,
+                          child: Text(S.of(context).nom,
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.bold)),
-                          value: S.of(context)!.name,
+                          value: S.of(context).name,
                         ),
                         DropdownMenuItem(
                           child: Text(
-                            S.of(context)!.distance,
+                            S.of(context).distance,
                             style: TextStyle(
                                 color: kPrimaryColor,
                                 fontWeight: FontWeight.bold),
                           ),
-                          value: S.of(context)!.distance,
+                          value: S.of(context).distance,
                         ),
                       ],
                       onChanged: (String? value) {

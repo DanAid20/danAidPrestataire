@@ -9,18 +9,18 @@ class CampaignModel {
 
   CampaignModel({this.id, this.name, this.description, this.active, this.requireCoupon, this.scope, this.startDate, this.endDate, this.targetLevels, this.amount});
 
-  factory CampaignModel.fromDocument(DocumentSnapshot doc){
+  factory CampaignModel.fromDocument(DocumentSnapshot doc, Map data){
     return CampaignModel(
       id: doc.id,
-      name: doc.get('name'),
-      description: doc.get('description'),
-      active: doc.get('active'),
-      requireCoupon: doc.get('requireCoupon'),
-      startDate: doc.get('startDate'),
-      endDate: doc.get('endDate'),
-      targetLevels: doc.get('niveaux'),
-      scope: doc.get('reductionScope'),
-      amount: doc.get('amount'),
+      name: data['name'],
+      description: data['description'],
+      active: data['active'],
+      requireCoupon: data['requireCoupon'],
+      startDate: data['startDate'],
+      endDate: data['endDate'],
+      targetLevels: data['niveaux'],
+      scope: data['reductionScope'],
+      amount: data['amount'],
     );
   }
 }

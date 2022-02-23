@@ -65,7 +65,7 @@ class _PasswordResetViewState extends State<PasswordResetView> {
                           Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: horizontal(size: 35)),
-                            child: Text(S.of(context)!.reinitialisezVotreMotDePasseGrceVotreTlphoneEtAdresse,
+                            child: Text(S.of(context).reinitialisezVotreMotDePasseGrceVotreTlphoneEtAdresse,
                               softWrap: true,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -89,8 +89,8 @@ class _PasswordResetViewState extends State<PasswordResetView> {
                         child: ListView(
                           children: [
                             loginForm(),
-                            DefaultBtn(formKey: _mFormKey, signText: S.of(context)!.reinitialiserMotDePasse, signRoute: '/home',),
-                            SIgnInUpTag(title: '', subTitle: S.of(context)!.annuler, signRoute: '/login',),
+                            DefaultBtn(formKey: _mFormKey, signText: S.of(context).reinitialiserMotDePasse, signRoute: '/home',),
+                            SIgnInUpTag(title: '', subTitle: S.of(context).annuler, signRoute: '/login',),
                             SizedBox(height: height(size: 25),)
                           ],
                         ),

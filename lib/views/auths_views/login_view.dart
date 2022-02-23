@@ -4,20 +4,23 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:danaid/core/models/userModel.dart';
 import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
+import 'package:danaid/views/auths_views/otp_view.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:danaid/widgets/loaders.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show Platform;
 
 import '../../locator.dart';
 
@@ -43,7 +46,7 @@ class _LoginViewState extends State<LoginView> {
     var registered = await HiveDatabase.getRegisterState();
 
     var signedIn = await HiveDatabase.getSignInState();
-    var name = await HiveDatabase.getFamilyName();
+    String? name = await HiveDatabase.getFamilyName();
     print("registered:");
     print(signedIn.toString());
     print('Name: $name');
@@ -70,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 Container(
                   color: Colors.transparent,
-                  child: DanAidDefaultHeader(showDanAidLogo: true,),
+                  child: const DanAidDefaultHeader(showDanAidLogo: true,),
                 ),
                 Expanded(
                   child: Container(
@@ -82,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
                         )
                     ),
                     child: ListView(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       children: [
                         loginForm(),
                       ],
@@ -102,14 +105,14 @@ class _LoginViewState extends State<LoginView> {
         return Theme(
             data: Theme.of(context).copyWith(primaryColor: Colors.pink),
             child: CountryPickerDialog(
-                titlePadding: EdgeInsets.all(15.0),
+                titlePadding: const EdgeInsets.all(15.0),
                 searchCursorColor: Colors.pinkAccent,
                 searchInputDecoration: InputDecoration(
-                    hintText: S.of(context)!.chercher,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0)
+                    hintText: S.of(context).chercher,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0)
                 ),
                 isSearchable: true,
-                title: Text(S.of(context)!.selectionnezVotrePays),
+                title: Text(S.of(context).selectionnezVotrePays),
                 onValuePicked: (Country country) {
                   print(country.isoCode);
                   print(country.name);
@@ -134,9 +137,9 @@ class _LoginViewState extends State<LoginView> {
     return Row(
       children: <Widget>[
         CountryPickerUtils.getDefaultFlagImage(country),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Text("+${country.phoneCode}"),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Flexible(child: Text(country.name))
       ],
     );
@@ -144,7 +147,7 @@ class _LoginViewState extends State<LoginView> {
 
   Container loginForm() {
     return Container(
-      margin: EdgeInsets.only(top: top(size: 20)),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: kIsWeb ? wv*30 : Platform.isAndroid || Platform.isIOS ? 0 : wv*30),
       child: Form(
         key: _mFormKey,
         autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
@@ -154,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
               margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 boxShadow: [BoxShadow(blurRadius: 2, spreadRadius: 1.0, color: Colors.grey.withOpacity(0.5) )],
                 //border: Border.all(color: kPrimaryColor)
               ),
@@ -162,13 +165,13 @@ class _LoginViewState extends State<LoginView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    child: Text(S.of(context)!.slectionnezVotrePays, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                    padding: const EdgeInsets.only(left: 15.0, top: 15.0),
+                    child: Text(S.of(context).slectionnezVotrePays, style: const TextStyle(color: kPrimaryColor, fontSize: 20, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                   ListTile(
                     onTap: _openCountryPickerDialog,
                     title: _buildCountryDialogItem(_selectedDialogCountry),
-                    trailing: Icon(Icons.arrow_drop_down_circle_sharp, color: kPrimaryColor,),
+                    trailing: const Icon(Icons.arrow_drop_down_circle_sharp, color: kPrimaryColor,),
                   ),
                 ],
               ),
@@ -179,47 +182,47 @@ class _LoginViewState extends State<LoginView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: TextFormField(
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   controller: _mPhoneController,
                   validator: (String? phone) {
                     return (phone!.isEmpty)
                         ? kPhoneNumberNullError
                         : (!digitValidatorRegExp.hasMatch(phone))
-                        ? S.of(context)!.entrerUnNumeroDeTlphoneValide : null;
+                        ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
                   },
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
                   ],
-                  style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: wv*5),
+                  style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
                   decoration: InputDecoration(
-                    prefixIcon: Icon(LineIcons.phone),
+                    prefixIcon: const Icon(LineIcons.phone),
                     errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 1, color: Colors.red[300]!),
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: const BorderRadius.all(Radius.circular(20))
                     ),
                     fillColor: Colors.grey[100],
-                    contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 1, color: kPrimaryColor.withOpacity(0.0)),
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: const BorderRadius.all(Radius.circular(20))
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.2)),
-                      borderRadius: BorderRadius.all(Radius.circular(20))
+                      borderRadius: const BorderRadius.all(Radius.circular(20))
                     ),
-                    hintText: S.of(context)!.numroDeTlphone,
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: wv*4),
+                    hintText: S.of(context).numroDeTlphone,
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 17),
                   ),
                 ),
             ),
 
             SizedBox(height: hv*4,),
-            loader ?
-            Loaders().buttonLoader(kPrimaryColor)
-                : CustomTextButton(
-              text: S.of(context)!.continuer,
+            CustomTextButton(
+              text: S.of(context).continuer,
               color: kPrimaryColor,
+              isLoading: loader,
               action: () async {
+                print("ttt");
                 setState(() {
                   autovalidate = true;
                 });
@@ -232,7 +235,7 @@ class _LoginViewState extends State<LoginView> {
                   });
                   userProvider.setUserId("+$phoneCode${_mPhoneController?.text}");
                   print("+${userProvider.getCountryCode}${_mPhoneController?.text}");
-                  verifyPhoneNumber();
+                  isWeb() ? signInWithPhoneNumber() : verifyPhoneNumber();
                   /*bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
                   if(registered == false){
                   } else {
@@ -258,7 +261,7 @@ class _LoginViewState extends State<LoginView> {
     bool exists = (user.exists) ? true : false;
     if (exists) {
       profile = user.get("profil");
-      userProfile = UserModel.fromDocument(user);
+      userProfile = UserModel.fromDocument(user, user.data() as Map);
     }
     return {
       "exists": exists,
@@ -273,9 +276,10 @@ class _LoginViewState extends State<LoginView> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     PhoneVerificationProvider phoneVerificationProvider = Provider.of<PhoneVerificationProvider>(context, listen: false);
 
+    // ignore: prefer_function_declarations_over_variables
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar(S.of(context)!.phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
+      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
       userProvider.setAuthId(_auth.currentUser!.uid);
       setState((){
         loader = false;
@@ -313,22 +317,24 @@ class _LoginViewState extends State<LoginView> {
     };
 
     //Listens for errors with verification, such as too many attempts
+    // ignore: prefer_function_declarations_over_variables
     PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
       setState((){
         loader = false;
       });
-      showSnackbar(S.of(context)!.phoneNumberVerificationFailedCode+authException.code+S.of(context)!.message + authException.message!);
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message + authException.message!);
     };
 
+    // ignore: prefer_function_declarations_over_variables
     PhoneCodeSent codeSent = (String? verificationId, [int? forceResendingToken]) async {
-      showSnackbar(S.of(context)!.pleaseCheckYourPhoneForTheVerificationCode);
+      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
       if(verificationId != null){
         _verificationId = verificationId;
         /*setState((){
           loader = false;
         });*/
         //_navigationService.navigateTo('/otp');
-        showSnackbar(S.of(context)!.leCodeViensDarriverPatientezEncoreUnpeu );
+        showSnackbar(S.of(context).leCodeViensDarriverPatientezEncoreUnpeu );
       }else{
         setState((){
           loader = false;
@@ -336,9 +342,10 @@ class _LoginViewState extends State<LoginView> {
       }
     };
 
+    // ignore: prefer_function_declarations_over_variables
     PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout = (String verificationId) {
       phoneVerificationProvider.setVerificationId(verificationId);
-      showSnackbar(S.of(context)!.verificationCode + verificationId);
+      showSnackbar(S.of(context).verificationCode + verificationId);
       _navigationService.navigateTo('/otp');
       _verificationId = verificationId;
       setState((){
@@ -355,8 +362,94 @@ class _LoginViewState extends State<LoginView> {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
-      showSnackbar(S.of(context)!.phoneNumberVerificationFailedCode+e.toString());
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
     }
+  }
+
+  void signInWithPhoneNumber() async {
+
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    _auth.signInWithPhoneNumber(userProvider.getUserId!, RecaptchaVerifier()).then((confirmationResult){Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpView(webRes: confirmationResult),),);});
+    
+
+    /*// ignore: prefer_function_declarations_over_variables
+    PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
+      await _auth.signInWithCredential(phoneAuthCredential);
+      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
+      userProvider.setAuthId(_auth.currentUser!.uid);
+      setState((){
+        loader = false;
+      });
+      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
+      bool registered = res["exists"];
+      String profile = res["profile"];
+      UserModel user = res["user"];
+      
+      if(registered == false){
+        Navigator.pushNamed(context, '/profile-type');
+      } else {
+        userProvider.setUserModel(user);
+        if(profile == beneficiary){
+          if(user.authId == null){
+            FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
+              "authId": _auth.currentUser!.uid,
+              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
+              "userCountryName": userProvider.getCountryName,
+            }).then((value) {
+              showSnackbar("Profil bénéficiaire recupéré..");
+            });
+          }
+        }
+        HiveDatabase.setRegisterState(true);
+        HiveDatabase.setSignInState(true);
+        HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
+        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
+        print("profile:");
+        print(profile);
+        userProvider.setProfileType(profile);
+        HiveDatabase.setProfileType(profile);
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    };*/
+
+    //Listens for errors with verification, such as too many attempts
+    // ignore: prefer_function_declarations_over_variables
+    /*PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
+      setState((){
+        loader = false;
+      });
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message + authException.message!);
+    };*/
+
+    // ignore: prefer_function_declarations_over_variables
+    /*PhoneCodeSent codeSent = (String? verificationId, [int? forceResendingToken]) async {
+      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
+      if(verificationId != null){
+        _verificationId = verificationId;
+        /*setState((){
+          loader = false;
+        });*/
+        //_navigationService.navigateTo('/otp');
+        showSnackbar(S.of(context).leCodeViensDarriverPatientezEncoreUnpeu );
+      }else{
+        setState((){
+          loader = false;
+        });
+      }
+    };
+    */
+
+    /*try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: userProvider.getUserId!,
+          timeout: const Duration(seconds: 40),
+          verificationCompleted: verificationCompleted,
+          verificationFailed: verificationFailed,
+          codeSent: codeSent,
+          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+    } catch (e) {
+      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
+    }*/
   }
 
   void showSnackbar(String message) {

@@ -36,8 +36,8 @@ class _GroupsState extends State<Groups> with SingleTickerProviderStateMixin {
             unselectedLabelColor: Colors.grey[300],
             labelStyle: TextStyle(fontWeight: FontWeight.w400, fontSize: 25),
             tabs: <Widget>[
-              Tab(text: S.of(context)!.favoris),
-              Tab(text: S.of(context)!.dcouvrir)
+              Tab(text: S.of(context).favoris),
+              Tab(text: S.of(context).dcouvrir)
             ],
             controller: groupsController,
           ),

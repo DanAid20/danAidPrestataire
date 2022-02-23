@@ -89,7 +89,7 @@ class HomePageComponents {
                                               color: kBlueForce,
                                               fontWeight: FontWeight.w500,
                                               fontSize: wv*3.5), textScaleFactor: 1.0),
-                                            Text(etat==0? S.current!.enAttente: etat==1? 'Payer': etat==2?"Livré" : 'inconue'  , style: TextStyle(
+                                            Text(etat==0? S.current.enAttente: etat==1? 'Payer': etat==2?"Livré" : 'inconue'  , style: TextStyle(
                                               color:  getCOlor(etat) ,
                                               fontWeight: FontWeight.w400,
                                               fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -166,7 +166,7 @@ class HomePageComponents {
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
-                                        Text(etat==0? S.current!.enAttente: etat==1? S.current!.valider: etat==2?S.current!.rejett : ''  , style: TextStyle(
+                                        Text(etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : ''  , style: TextStyle(
                                           color:  getCOlor(etat) ,
                                           fontWeight: FontWeight.w400,
                                           fontSize: wv*3.5), textScaleFactor: 1.0),
@@ -220,7 +220,7 @@ class HomePageComponents {
                                       
                                       fontSize: wv*3.5), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
-                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current!.montant, style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current.montant, style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
@@ -266,7 +266,7 @@ class HomePageComponents {
                                         color: kSouthSeas,
                                         width: wv * 10, 
                                   ),
-                                  Text(S.current!.auditer, style: TextStyle(
+                                  Text(S.current.auditer, style: TextStyle(
                                       color: kSouthSeas,
                                       fontWeight: FontWeight.w600,
                                       
@@ -317,7 +317,7 @@ class HomePageComponents {
                                       
                                       fontSize: wv*3.5), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
-                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current!.montant, style: TextStyle(
+                                   Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current.montant, style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
@@ -427,7 +427,7 @@ class HomePageComponents {
                         fontSize:  14.sp, color: kPrimaryColor),
                   ),
                   Text(
-                    etat==0? S.current!.enAttente: etat==1? S.current!.valider: etat==2?S.current!.rejett : '' ,
+                    etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : '' ,
                     style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
@@ -783,14 +783,14 @@ class HomePageComponents {
               children: [
                 Container(
                     width: wv * 15,
-                    child: Text(S.current!.valideJusquau,
+                    child: Text(S.current.valideJusquau,
                         style: TextStyle(
                             color: textWhiteColor,
                             fontSize: fontSize(size: 15),
                             fontWeight: FontWeight.w500))),
                 Container(
                     width: wv * 20,
-                    child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current!.pasDefini ,
+                    child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                         style: TextStyle(
                             color: whiteColor,
                             fontSize: wv * 4.5,
@@ -837,7 +837,7 @@ class HomePageComponents {
                       child: Text(
                          adherent!=null && adherent.enabled == true
                             ? ''
-                            : S.current!.compteInactif,
+                            : S.current.compteInactif,
                         overflow: TextOverflow.clip,
                         style: TextStyle(
                             color: Colors.red,
@@ -858,7 +858,7 @@ class HomePageComponents {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(S.current!.nonDuBeneficiaire,
+                Text(S.current.nonDuBeneficiaire,
                     style: TextStyle(
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
@@ -876,7 +876,7 @@ class HomePageComponents {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(S.current!.numeroMatricule,
+                Text(S.current.numeroMatricule,
                     style: TextStyle(
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
@@ -884,7 +884,7 @@ class HomePageComponents {
                 Text(
                   (adherent!=null &&  adherent.matricule!=null)
                         ?  adherent.matricule!
-                        : S.current!.pasDefini,
+                        : S.current.pasDefini,
                     style: TextStyle(
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
@@ -897,13 +897,13 @@ class HomePageComponents {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(S.current!.medecinDeFamille,
+                Text(S.current.medecinDeFamille,
                     style: TextStyle(
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
                         fontWeight: FontWeight.w500)),
                 Text(
-                     doctorName!=null ? 'Dr '+doctorName :  S.current!.pasDefinie,
+                     doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
                     style: TextStyle(
                         color: textWhiteColor,
                         fontSize: fontSize(size: 15),
@@ -957,14 +957,14 @@ class HomePageComponents {
                 children: [
                   Container(
                       width: wv * 15,
-                      child: Text(S.current!.valideJusquau,
+                      child: Text(S.current.valideJusquau,
                           style: TextStyle(
                               color: textWhiteColor,
                               fontSize: fontSize(size: 15),
                               fontWeight: FontWeight.w500))),
                   Container(
                       width: wv * 20,
-                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current!.pasDefini ,
+                      child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                           style: TextStyle(
                               color: whiteColor,
                               fontSize: wv * 4.5,
@@ -1011,7 +1011,7 @@ class HomePageComponents {
                         child: Text(
                           isAccountIsExists == true && (adherent!=null && adherent.enabled!) == true
                               ? ''
-                              : S.current!.compteInactif,
+                              : S.current.compteInactif,
                           overflow: TextOverflow.clip,
                           style: TextStyle(
                               color: Colors.red,
@@ -1053,7 +1053,7 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(S.current!.nonDuBeneficiaire,
+                  Text(S.current.nonDuBeneficiaire,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -1071,7 +1071,7 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(S.current!.numeroMatricule,
+                  Text(S.current.numeroMatricule,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -1079,7 +1079,7 @@ class HomePageComponents {
                   Text(
                     (adherent!=null &&  adherent.matricule!=null)
                           ?  adherent.matricule!
-                          : S.current!.pasDefini,
+                          : S.current.pasDefini,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -1092,13 +1092,13 @@ class HomePageComponents {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(S.current!.medecinDeFamille,
+                  Text(S.current.medecinDeFamille,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
-                       doctorName!=null ? 'Dr '+doctorName :  S.current!.pasDefinie,
+                       doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
                       style: TextStyle(
                           color: textWhiteColor,
                           fontSize: fontSize(size: 15),
@@ -1156,7 +1156,7 @@ class HomePageComponents {
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
-                            Text(S.current!.aPosUne,
+                            Text(S.current.aPosUne,
                                 style: TextStyle(
                                     color: kPrimaryColor,
                                     fontWeight: FontWeight.w500,
@@ -1164,7 +1164,7 @@ class HomePageComponents {
                             SizedBox(
                               width: wv * 1,
                             ),
-                            Text(S.current!.question,
+                            Text(S.current.question,
                                 style: TextStyle(
                                     color: kPrimaryColor,
                                     fontWeight: FontWeight.w700,
@@ -1190,15 +1190,15 @@ class HomePageComponents {
                   child: ReadMoreText(
                     text != null
                         ? text
-                        : S.current!.doctaQueReccomendezVousEnCasDeFivreDePlus,
+                        : S.current.doctaQueReccomendezVousEnCasDeFivreDePlus,
                     trimLines: 2,
                     trimLength: 73,
                     style:
                         TextStyle(fontWeight: FontWeight.w500, color: bkgColor),
                     colorClickableText: kDeepTeal,
                     trimMode: TrimMode.Length,
-                    trimCollapsedText: S.current!.voirPlus,
-                    trimExpandedText: S.current!.reduire,
+                    trimCollapsedText: S.current.voirPlus,
+                    trimExpandedText: S.current.reduire,
                   ),
                 ),
                 Container(
@@ -1351,9 +1351,9 @@ class HomePageComponents {
     );
   }
 
-  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function? action}) {
+  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function()? action}) {
     return ListTile(
-      onTap: () => action,
+      onTap: action,
       leading: Container(
         width: wv * 13,
         padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
@@ -1397,7 +1397,7 @@ class HomePageComponents {
     );
   }
 
-  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, Function? action}) {
+  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, required Function() action}) {
     return ListTile(
       leading: Container(
         width: wv * 12,
@@ -1460,11 +1460,11 @@ class HomePageComponents {
           ),
         ],
       ),
-      onTap: ()=>action,
+      onTap: action,
     );
   }
 
-  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
+  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
@@ -1522,25 +1522,25 @@ class HomePageComponents {
             Column(
               children: [
                 SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', height: 35,),
-                Text(S.current!.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+                Text(S.current.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
               ],
             )
           ],
         ),
       ),
-      onTap: ()=>action,
+      onTap: action,
     );
   }
 
   String getUseCaseStateText(num val) {
     if (val == 0)
-      return S.current!.enAttente;
+      return S.current.enAttente;
     else if (val == 1)
-      return S.current!.enCours;
+      return S.current.enCours;
     else if (val == 2)
-      return S.current!.rejett;
+      return S.current.rejett;
     else
-      return S.current!.cltur;
+      return S.current.cltur;
   }
 
   Color getUseCaseStateColor(num val) {
@@ -1556,13 +1556,13 @@ class HomePageComponents {
 
   String getAppointmentStateText(int val) {
     if (val == 0)
-      return S.current!.enAttente;
+      return S.current.enAttente;
     else if (val == 1)
-      return S.current!.enCours;
+      return S.current.enCours;
     else if (val == 2)
-      return S.current!.rejett;
+      return S.current.rejett;
     else
-      return S.current!.cltur;
+      return S.current.cltur;
   }
 
   Color getAppointmentStateColor(int val) {
@@ -1584,7 +1584,7 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function? action}){
+  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function()? action}){
     return Container(
       width: wv*25,
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
@@ -1612,7 +1612,7 @@ class HomePageComponents {
                       boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                     ),
                     child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                  onPressed: () => action
+                  onPressed: action
                 ),
               ) : Container()
             ],
@@ -1622,14 +1622,14 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryChoiceCard({String? name, String? imgUrl, Function? editAction, Function? selectAction, bool isSelected = false}){
+  static beneficiaryChoiceCard({String? name, String? imgUrl, Function()? editAction, Function()? selectAction, bool isSelected = false}){
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
             children: [
               GestureDetector(
-                onTap: ()=>selectAction,
+                onTap: selectAction,
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   margin: EdgeInsets.symmetric(horizontal: wv*1),
@@ -1655,20 +1655,20 @@ class HomePageComponents {
                           boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                         ),
                         child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                      onPressed: () => editAction
+                      onPressed: editAction
                     ),
                   ],
                 ),
               )
             ],
           ),
-          Text(name != null ? name : "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
+          Text(name ?? "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
         ],
       ),
     );
   }
 
-  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function? action}){
+  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function()? action}){
     return Container(
       decoration: BoxDecoration(
         color: kSouthSeas,
@@ -1692,9 +1692,9 @@ class HomePageComponents {
     );
   }
 
-  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function? action}){
+  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function()? action}){
     return  GestureDetector(
-      onTap: () => action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: hv*1.5),
         margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
@@ -1723,9 +1723,9 @@ class HomePageComponents {
     );
   }
   
-  static publicationType({IconData? icon, String? title, bool selected = false, Function? action}){
+  static publicationType({IconData? icon, String? title, bool selected = false, Function()? action}){
     return  GestureDetector(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         height: 120,
         width: wv*28,
@@ -1748,7 +1748,7 @@ class HomePageComponents {
     );
   }
 
-  static accountParameters({String? title, String? subtitle, String? svgIcon, Function? action}){
+  static accountParameters({String? title, String? subtitle, String? svgIcon, Function()? action}){
     return Padding(
       padding: EdgeInsets.only(bottom: 5.0),
       child: ListTile(
@@ -1760,12 +1760,12 @@ class HomePageComponents {
           SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
           Expanded(child: Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
-        trailing: TextButton(onPressed: ()=>action, child: Text(S.current!.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
+        trailing: TextButton(onPressed: action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
       ),
     );
   }
 
-  static termsAndConditionsTile({Function(bool)? onChanged, bool? value, Function? action, Color? activeColor, Color? textColor}){
+  static termsAndConditionsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1777,13 +1777,13 @@ class HomePageComponents {
               style: TextStyle(fontSize: 16),
               children: [
                 TextSpan(
-                  text: S.current!.luEtAcceptLes,
+                  text: S.current.luEtAcceptLes,
                   style: TextStyle(color: textColor == null ? Colors.grey[600] : textColor),
                 ),
                 TextSpan(
-                  text: S.current!.termesDesServices,
+                  text: S.current.termesDesServices,
                   style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()..onTap = () => action,
+                  recognizer: TapGestureRecognizer()..onTap = action,
                 )
               ]
             ),
@@ -1798,7 +1798,7 @@ class HomePageComponents {
     );
   }
 
-  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function? action, Color? activeColor, Color? textColor}){
+  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1807,7 +1807,7 @@ class HomePageComponents {
         child: Container(
           child: Column(
             children: [
-              Text(S.current!.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
+              Text(S.current.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
               SizedBox(height: hv*0.5),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
@@ -1816,13 +1816,13 @@ class HomePageComponents {
                     style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w400,),
                     children: [
                       TextSpan(
-                        text: "\u2022 " + S.current!.desPoursuiteJudiciairesn,
+                        text: "\u2022 " + S.current.desPoursuiteJudiciairesn,
                       ),
                       TextSpan(
-                        text: "\u2022 " + S.current!.incriptionAuFichierPublicDesMauvaisPayeurs,
+                        text: "\u2022 " + S.current.incriptionAuFichierPublicDesMauvaisPayeurs,
                       ),
                       TextSpan(
-                        text: S.current!.creditRiskCameroun,
+                        text: S.current.creditRiskCameroun,
                         style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
                         //recognizer: TapGestureRecognizer()..onTap = action,
                       ),
@@ -1852,7 +1852,7 @@ class HomePageComponents {
         padding: EdgeInsets.only(top: hv*1),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(S.current!.pourLePatient, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
+            Text(S.current.pourLePatient, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.w900)),
             SizedBox(height: hv*1,),
             Row(
               children: [
@@ -1867,7 +1867,7 @@ class HomePageComponents {
                   child: RichText(text: TextSpan(
                     text: surname! + " " +  fname! + "\n",
                     children: birthDate != null ? [
-                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current!.ans, style: TextStyle(fontSize: wv*3.3)),
+                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: wv*3.3)),
                     ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -1917,7 +1917,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, Function? action}){
+  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, Function()? action}){
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
@@ -1950,7 +1950,7 @@ class HomePageComponents {
             !noAction ? Expanded(
               flex: 3,
               child: GestureDetector(
-                onTap: ()=>action,
+                onTap: action,
                 child: Container(
                   margin: EdgeInsets.only(left: 10),
                   padding: EdgeInsets.all(5),
@@ -1980,9 +1980,9 @@ class HomePageComponents {
     );
   }  
   
-  static getIconBox({double size = 15, String? iconPath, Color? color, Function? action}){
+  static getIconBox({double size = 15, String? iconPath, Color? color, Function()? action}){
     return GestureDetector(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -1994,7 +1994,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getPromotionTile({String? title, String? description, num? amount, DateTime? firstDate, DateTime? lastDate, bool? active, bool? chosen, Function? action}) {
+  static Widget getPromotionTile({String? title, String? description, num? amount, DateTime? firstDate, DateTime? lastDate, bool? active, bool? chosen, Function()? action}) {
     String? lastDateString = lastDate!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate!.year.toString();
     return Container(
       margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
@@ -2020,32 +2020,30 @@ class HomePageComponents {
                   Text("$amount f.", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
                 ],
               ),
-              Spacer(),
-              Container(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Fin de la promotion", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
-                        Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),),
-                      ],
-                    ),
-                    SizedBox(width: wv*5,),
-                    Container(
-                      child: CustomTextButton(
-                        text: chosen! ? " Annuler " : " Profiter ",
-                        fontSize: 14,
-                        color: chosen ? kSouthSeas : kDeepTeal,
-                        noPadding: true,
-                        expand: false,
-                        action: action!,
-                      )
+              const Spacer(),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Fin de la promotion", style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                      Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                  SizedBox(width: wv*5,),
+                  Container(
+                    child: CustomTextButton(
+                      text: chosen! ? " Annuler " : " Profiter ",
+                      fontSize: 14,
+                      color: chosen ? kSouthSeas : kDeepTeal,
+                      noPadding: true,
+                      expand: false,
+                      action: action!,
                     )
-                  ],
-                ),
+                  )
+                ],
               )
             ],
           ),
@@ -2054,7 +2052,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
+  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return Container(
@@ -2120,13 +2118,13 @@ class HomePageComponents {
               action == null || state == 1 ? Container() : Column(
                 children: [
                   SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', height: 35,),
-                  Text(S.current!.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
+                  Text(S.current.payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
                 ],
               )
             ],
           ),
         ),
-        onTap: () => action,
+        onTap: action,
       ),
     );
   }
