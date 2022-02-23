@@ -123,7 +123,7 @@ class _DoctorFormViewState extends State<DoctorFormView> {
                       color: whiteColor,
                   ),
                   child: ListView(
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     children: [
                       (!_isPersonal!) ?
                        personalInfosForm()

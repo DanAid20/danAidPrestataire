@@ -50,8 +50,9 @@ class _PartnersScreenState extends State<PartnersScreen> {
   final LatLng _center = const LatLng(4.044656688777058, 9.695724531228858);
   LatLng? _userCoords;
 
-  BitmapDescriptor getMarkerIcon({required String userType, String? prestataireType, required bool isSpecialist}){
+  BitmapDescriptor getMarkerIcon({required String userType, String? prestataireType, bool? isSpecialist}){
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    isSpecialist = isSpecialist ?? false;
     BitmapDescriptor? descriptor;
     if (prestataireType == null){
       if(userType == adherent || userType == beneficiary){
@@ -94,7 +95,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
       markerId: markerId,
       position: LatLng(lat, lng),
       infoWindow: InfoWindow(title: markerIdVal, snippet: userType, onTap: (){_onMarkerTapped(markerId: markerId, userType: userType, doc: doctor, prestataire: sp);}),
-      icon: getMarkerIcon(userType: userType, prestataireType: spType, isSpecialist: isSpecialist!),
+      icon: getMarkerIcon(userType: userType, prestataireType: spType, isSpecialist: isSpecialist),
       onTap: () {
         //_onMarkerTapped(markerId);
       },
@@ -272,7 +273,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
     });
     getSPs.then((snap) {
       for(int i = 0; i < snap.docs.length; i++){
-        ServiceProviderModel sp = ServiceProviderModel.fromDocument(snap.docs[i]);
+        ServiceProviderModel sp = ServiceProviderModel.fromDocument(snap.docs[i], snap.docs[i].data() as Map);
         if(sp.coordGps != null){
           if(sp.coordGps!["latitude"] != null){
             _addMarker(sp.name!, serviceProvider, sp.coordGps!["latitude"], sp.coordGps!["longitude"], sp.category, null, null, null, sp);
@@ -376,7 +377,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                     child: Container(
                       color: Colors.grey.shade200.withOpacity(0.5),
                       child: ListView(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         controller: _scrollController,
                         children: [
                           Container(
@@ -521,9 +522,9 @@ class _PartnersScreenState extends State<PartnersScreen> {
     }
   }
 
-  Widget getDragSheetTiles({required String title, required Color markerColor, Function? onTap}){
+  Widget getDragSheetTiles({required String title, required Color markerColor, required Function() onTap}){
     return Padding(
-      padding: EdgeInsets.only(right: 35.0, top: 3, bottom: 3, left: 20),
+      padding: const EdgeInsets.only(right: 35.0, top: 3, bottom: 3, left: 20),
       child: Row(
         children: [
           SvgPicture.asset("assets/icons/Bulk/Location.svg", color: markerColor,),
@@ -535,7 +536,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                 color: kSmoothBrown.withOpacity(0.4),
               ),
               child: ListTile(
-                onTap: ()=>onTap,
+                onTap: onTap,
                 dense: true,
                 title: Text(title, style: TextStyle(color: kBlueForce, fontSize: inch*1.9, fontWeight: FontWeight.w600),),
                 trailing: Icon(Icons.arrow_forward_ios_rounded, color: kBrownCanyon,)

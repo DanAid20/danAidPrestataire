@@ -7,14 +7,14 @@ class AdvantageCard extends StatelessWidget {
   final String? label, state, description, price;
   final Color? color;
   final bool? showLogo;
-  final Function? onTap;
+  final Function()? onTap;
 
   const AdvantageCard({Key? key, this.label, this.state, this.description, this.price, this.onTap, this.color, this.showLogo = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=>onTap,
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1.5),
         width: wv*50,

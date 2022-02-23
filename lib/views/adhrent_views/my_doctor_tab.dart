@@ -524,16 +524,16 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                             stream: FirebaseFirestore.instance.collection("APPOINTMENTS").where('adherentId', isEqualTo: adherent.getAdherent!.adherentId).orderBy('start-time', descending: true).snapshots(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
                                   ),
                                 );
                               }
                               int lastIndex = snapshot.data!.docs.length - 1;
-                              return snapshot.data!.docs.length >= 1
+                              return snapshot.data!.docs.isNotEmpty
                                   ? ListView.builder(
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics: const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       itemCount: snapshot.data!.docs.length,
@@ -626,7 +626,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                           SvgPicture.asset('assets/icons/Bulk/Danger.svg', width: wv*20,),
                           SizedBox(height: hv*2),
                           Text(text, style: TextStyle(color: kPrimaryColor, fontSize: wv*4), textAlign: TextAlign.center,),
-                        ], physics: BouncingScrollPhysics(),),
+                        ], physics: const BouncingScrollPhysics(),),
                       ),
                     ),
                     Container(

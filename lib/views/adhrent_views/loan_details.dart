@@ -64,7 +64,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
         ],
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
@@ -233,12 +233,12 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                   return snapshot.data!.docs.length >= 1
                                     ? ListView.builder(
                                         scrollDirection: Axis.vertical,
-                                        physics: BouncingScrollPhysics(),
+                                        physics: const BouncingScrollPhysics(),
                                         itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
                                           int lastIndex = snapshot.data!.docs.length - 1;
                                           DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
-                                          MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
+                                          MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc, mensualityDoc.data() as Map);
                                           print("name: ");
                                           return Padding(
                                             padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
@@ -275,12 +275,12 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                   }
                                   return ListView.builder(
                                     scrollDirection: Axis.vertical,
-                                    physics: BouncingScrollPhysics(),
+                                    physics: const BouncingScrollPhysics(),
                                     itemCount: snapshot.data!.docs.length,
                                     itemBuilder: (context, index) {
                                       int lastIndex = snapshot.data!.docs.length - 1;
                                       DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
-                                      MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc);
+                                      MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc, mensualityDoc.data() as Map);
                                       print("name: ");
                                       return Padding(
                                         padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),

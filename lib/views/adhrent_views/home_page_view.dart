@@ -116,7 +116,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
 
             if(adherent.insuranceLimit == null || adherent.loanLimit == null){
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
-              PlanModel plan = PlanModel.fromDocument(planDoc);
+              PlanModel plan = PlanModel.fromDocument(planDoc, planDoc.data() as Map);
               await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
                 "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
                 "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
@@ -144,7 +144,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
 
             if(adherent.insuranceLimit == null || adherent.loanLimit == null){
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
-              PlanModel plan = PlanModel.fromDocument(planDoc);
+              PlanModel plan = PlanModel.fromDocument(planDoc, planDoc.data() as Map);
               await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
                 "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
                 "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
@@ -168,7 +168,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         Map data = Algorithms.getAutomaticCoveragePeriod(trimesterUnit: trimesterUnit, year: year);
 
         FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adhr.adherentPlan.toString()).get().then((serviceDoc){
-          PlanModel plan = PlanModel.fromDocument(serviceDoc);
+          PlanModel plan = PlanModel.fromDocument(serviceDoc, serviceDoc.data() as Map);
           FirebaseFirestore.instance.collection("ADHERENTS").doc(adhr.adherentId).collection('NEW_FACTURATIONS_ADHERENT').add({
             "montant": plan.monthlyAmount,
             "createdDate": DateTime.now(),
@@ -243,7 +243,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       print("prestataire"+userProvider.getUserId.toString());
     if(userProvider.getUserId != null && userProvider.getUserId != ""){
       FirebaseFirestore.instance.collection(serviceProvider).doc(userProvider.getUserId).get().then((docSnapshot) {
-        ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
+        ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
         serviceProviderM.setServiceProviderModel(doc);
         print("ok");
       });
@@ -257,7 +257,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       }
       else {
         FirebaseFirestore.instance.collection(serviceProvider).doc(phone).get().then((docSnapshot) {
-          ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot);
+          ServiceProviderModel doc = ServiceProviderModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
           serviceProviderM.setServiceProviderModel(doc);
           userProvider.setUserId(doc.id!);
         });
@@ -290,7 +290,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         user = UserModel.fromDocument(userSnap, userSnap.data()!);
         userProvider.setUserModel(user);
         DocumentSnapshot benSnap = await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel!.adherentId).collection('BENEFICIAIRES').doc(userProvider.getUserModel!.matricule).get();
-        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(benSnap);
+        BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(benSnap, benSnap.data() as Map);
         FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserModel!.adherentId).get().then((adhSnap) async {
           AdherentModel adherent = AdherentModel.fromDocument(adhSnap, adhSnap.data() as Map);
           adherentModelProvider.setAdherentModel(adherent);

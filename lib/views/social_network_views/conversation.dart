@@ -60,7 +60,7 @@ class _ConversationState extends State<Conversation> {
     await FirebaseFirestore.instance.collection("USERS").doc(conversation.getConversation!.targetPhoneId).set({'chat-users': FieldValue.arrayUnion([id])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).set({"users": FieldValue.arrayUnion([id, targetId])}, SetOptions(merge: true));
     await FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((doc) {
-      ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc);
+      ConversationChatModel conversationModel = ConversationChatModel.fromDocument(doc, doc.data() as Map);
       conversationChat.setConversationModel(conversationModel);
       print(conversationChat.getConversation!.conversationId);
     });
@@ -470,14 +470,14 @@ class _ConversationState extends State<Conversation> {
               markMessagesAsSeen();
               return ListView.builder(
                   shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   controller: listScrollController,
                   padding: EdgeInsets.only(bottom: 100),
                   itemCount: snapshot.data!.docs.length,
                   reverse: true,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
-                    MessageModel msg = MessageModel.fromDocument(doc);
+                    MessageModel msg = MessageModel.fromDocument(doc, doc.data() as Map);
                     return Column(
                       children: <Widget>[
                         createMsgBox(index, msg, conversation.getConversation!),

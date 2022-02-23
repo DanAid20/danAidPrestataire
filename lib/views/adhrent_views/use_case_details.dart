@@ -107,7 +107,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
         ],
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(height: hv*2,),
@@ -366,13 +366,13 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
 
                                       return snapshot.data!.docs.length >= 1
                                         ? ListView.builder(
-                                            physics: BouncingScrollPhysics(),
+                                            physics: const BouncingScrollPhysics(),
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
                                             itemCount: snapshot.data!.docs.length,
                                             itemBuilder: (context, index) {
                                               DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                                              UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc);
+                                              UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                                               print("name: ");
                                               return getServiceTile(
                                                 service: service,
@@ -505,13 +505,13 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
     );
   }
 
-  Widget getServiceTile({required UseCaseServiceModel service, Function? action}){
+  Widget getServiceTile({required UseCaseServiceModel service, Function()? action}){
     bool executed = service.executed != null ? service.executed! : false;
     bool estimate = service.estimate != null ? service.estimate! : false;
     bool ongoing = service.ongoing != null ? service.ongoing! : false;
     bool requested = service.requested != null ? service.requested! : false;
     return GestureDetector(
-      onTap: ()=> action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1.5),
         margin: EdgeInsets.only(bottom: hv*1),
@@ -561,9 +561,9 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
       ),
     );
   }
-Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, Function? action}){
+Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, Function()? action}){
   return GestureDetector(
-    onTap: ()=> action,
+    onTap: action,
     child: Container(
       margin: EdgeInsets.only(bottom: 0),
       child: Stack(

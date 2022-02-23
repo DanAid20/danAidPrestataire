@@ -551,9 +551,9 @@ class _CreatePublicationState extends State<CreatePublication> {
       });
   }
 
-  getPublicationIconButton({String? heroTag, String? iconPath, String? title, Function? action}){
+  getPublicationIconButton({String? heroTag, String? iconPath, String? title, Function()? action}){
     return InkWell(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.all(0),
         margin: EdgeInsets.symmetric(horizontal: wv*1),

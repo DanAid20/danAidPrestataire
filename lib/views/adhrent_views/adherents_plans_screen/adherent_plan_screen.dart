@@ -82,7 +82,7 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
                           List<Widget> plans = [];
                           for (int i = 0; i < snapshot.data!.docs.length; i++){
                             DocumentSnapshot doc = snapshot.data!.docs[i];
-                            PlanModel plan = PlanModel.fromDocument(doc);
+                            PlanModel plan = PlanModel.fromDocument(doc, doc.data() as Map);
                             Widget content = PackageCard(
                               mPackage: plan.label!,
                               mPackageAmount: plan.monthlyAmount.toString(),
@@ -188,7 +188,7 @@ class PackageCard extends StatelessWidget {
           Text(level == "1.1" ? "par Etudiant/an" : S.of(context).parFamilleMois, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: wv*4),),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   Container(

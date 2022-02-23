@@ -50,7 +50,7 @@ class _ClinicListState extends State<ClinicList> {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data!.docs[index];
-                    ServiceProviderModel sp = ServiceProviderModel.fromDocument(doc);
+                    ServiceProviderModel sp = ServiceProviderModel.fromDocument(doc, doc.data() as Map);
                     print("name: ");
 
                     return Padding(

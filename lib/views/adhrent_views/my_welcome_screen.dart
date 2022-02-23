@@ -58,7 +58,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                             //Text("Voir plus..")
                           ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                         ),
-                        SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
+                        SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
                         child: Row(children: [
                           AdvantageCard(
                             label: S.of(context).fondDeSoin,
@@ -125,7 +125,7 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                         ),
                         child: Column(mainAxisSize: MainAxisSize.min,
                           children: [
-                            SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
+                            SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
                             child: Row(children: [
                               !enable ? GestureDetector(
                                 onTap: ()=>Navigator.pushNamed(context, userProvider.getProfileType == doctor ? '/doctor-profile-edit' : userProvider.getProfileType == adherent ? '/adherent-profile-edit' : '/serviceprovider-profile-edit'),

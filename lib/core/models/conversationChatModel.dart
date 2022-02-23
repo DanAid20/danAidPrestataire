@@ -9,17 +9,17 @@ class ConversationChatModel {
 
   ConversationChatModel({this.conversationId, this.phoneIds, this.lastMessageFrom, this.lastMessageTime, this.unseenMessages, this.lastMessageType, this.users, this.lastMessageSeen, this.lastMessage});
 
-  factory ConversationChatModel.fromDocument(DocumentSnapshot doc){
+  factory ConversationChatModel.fromDocument(DocumentSnapshot doc, Map data){
     return ConversationChatModel(
       conversationId: doc.id,
-      lastMessage: doc.get("lastMessage"),
-      lastMessageFrom: doc.get("lastMessageFrom"),
-      lastMessageTime: doc.get("lastMessageTime"),
-      lastMessageSeen: doc.get("lastMessageSeen"),
-      unseenMessages: doc.get("unseenMessages"),
-      lastMessageType: doc.get("lastMessageType"),
-      users: doc.get("users"),
-      phoneIds: doc.get("phoneIds")
+      lastMessage: data["lastMessage"],
+      lastMessageFrom: data["lastMessageFrom"],
+      lastMessageTime: data["lastMessageTime"],
+      lastMessageSeen: data["lastMessageSeen"],
+      unseenMessages: data["unseenMessages"],
+      lastMessageType: data["lastMessageType"],
+      users: data["users"],
+      phoneIds: data["phoneIds"]
     );
   }
 }

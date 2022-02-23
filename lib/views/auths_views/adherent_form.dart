@@ -100,7 +100,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
             ),
             Expanded(
               child: ListView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 children: [
                   Form(
                     key: _adherentFormKey,
@@ -510,7 +510,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                   SizedBox(height: hv*2,),
                   Text(S.of(context).termesDeServices, style: TextStyle(fontSize: wv*6, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                   SizedBox(height: hv*2,),
-                  Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: BouncingScrollPhysics(),)),
+                  Expanded(child: SingleChildScrollView(child: Text(termsAndConditions), physics: const BouncingScrollPhysics(),)),
                 ],
               ),
             ),

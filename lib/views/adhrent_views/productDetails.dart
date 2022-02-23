@@ -57,7 +57,7 @@ class _ProductDetailsState extends State<ProductDetails> {
       body: Column(
         children: [
           Hero(
-            tag: "prod",
+            tag: widget.product!.id.toString(),
             child: CarouselSlider(
               carouselController: carouselController,
               options: CarouselOptions(

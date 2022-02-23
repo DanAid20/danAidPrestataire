@@ -324,14 +324,14 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                   }
                                   return snapshot.data!.docs.length >= 1
                                     ? ListView.builder(
-                                        physics: BouncingScrollPhysics(),
+                                        physics: const BouncingScrollPhysics(),
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
                                         itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
                                           int lastIndex = snapshot.data!.docs.length - 1;
                                           DocumentSnapshot loanDoc = snapshot.data!.docs[index];
-                                          LoanModel loan = LoanModel.fromDocument(loanDoc);
+                                          LoanModel loan = LoanModel.fromDocument(loanDoc, loanDoc.data() as Map);
                                           print("name: ");
                                           return Padding(
                                             padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),

@@ -66,7 +66,7 @@ class _AdherentCardState extends State<AdherentCard> {
         beneficiaries?.add(adherentBeneficiaryCard);
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
-          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
           Widget content = getBeneficiaryCard(adherentModel: adherentProvider.getAdherent!, beneficiary: beneficiary, state: adherentProvider.getAdherent!.adherentPlan!.toInt(), doctor: medecin!);
           beneficiaries?.add(content);
         }

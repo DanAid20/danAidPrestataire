@@ -7,15 +7,15 @@ class ProductModel {
 
   ProductModel({this.id, this.name, this.description, this.imgUrl, this.points, this.qty, this.imgGroup});
 
-  factory ProductModel.fromDocument(DocumentSnapshot doc){
+  factory ProductModel.fromDocument(DocumentSnapshot doc, Map data){
     return ProductModel(
       id: doc.id,
-      name: doc.get("name"),
-      description: doc.get("description"),
-      imgUrl: doc.get("imageUrl"),
-      points: doc.get("points"),
-      qty: doc.get("quantity"),
-      imgGroup: doc.get("imageGroup")
+      name: data["name"],
+      description: data["description"],
+      imgUrl: data["imageUrl"],
+      points: data["points"],
+      qty: data["quantity"],
+      imgGroup: data["imageGroup"]
     );
   }
 }

@@ -151,7 +151,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 Expanded(
                   child: PageView.builder(
                     pageSnapping: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: pageList!.length,
                     onPageChanged: (int page) {
                       getChangedPageAndMoveBar(page);

@@ -273,7 +273,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
         }
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
-          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
           Widget content = InkWell(
                          onTap: ()=>{
                            print(i),

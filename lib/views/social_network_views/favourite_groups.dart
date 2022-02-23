@@ -38,7 +38,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
                   List<Widget> groups = [];
                   for (int i = 0; i < snapshot.data!.docs.length; i++){
                     DocumentSnapshot doc = snapshot.data!.docs[i];
-                    GroupModel group = GroupModel.fromDocument(doc);
+                    GroupModel group = GroupModel.fromDocument(doc, doc.data() as Map);
                     Widget content = getContent(
                       switchColor: i.isEven,
                       group: group
@@ -137,7 +137,7 @@ class _FavouriteGroupsState extends State<FavouriteGroups> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Stack(

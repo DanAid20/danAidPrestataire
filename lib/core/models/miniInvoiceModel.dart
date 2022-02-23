@@ -7,16 +7,16 @@ class MiniInvoiceModel {
 
   MiniInvoiceModel({this.id, this.label, this.startDate, this.endDate, this.paymentDate, this.amount, this.status, this.number});
 
-  factory MiniInvoiceModel.fromDocument(DocumentSnapshot doc){
+  factory MiniInvoiceModel.fromDocument(DocumentSnapshot doc, Map data){
     return MiniInvoiceModel(
       id: doc.id,
-      label: doc.get('label'),
-      startDate: doc.get('startDate'),
-      endDate: doc.get('endDate'),
-      paymentDate: doc.get('paymentDate'),
-      amount: doc.get('amount'),
-      status: doc.get('status'),
-      number: doc.get('number')
+      label: data['label'],
+      startDate: data['startDate'],
+      endDate: data['endDate'],
+      paymentDate: data['paymentDate'],
+      amount: data['amount'],
+      status: data['status'],
+      number: data['number']
     );
   }
 }

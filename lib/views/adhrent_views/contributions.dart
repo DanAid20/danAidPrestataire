@@ -34,7 +34,7 @@ class _ContributionsState extends State<Contributions> {
     await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').where('categoriePaiement', isEqualTo: "COTISATION_ANNUELLE").get().then((query) {
       DateTime witness = DateTime(2000);
       for(int i = 0; i < query.docs.length; i++){
-        InvoiceModel model = InvoiceModel.fromDocument(query.docs[i]);
+        InvoiceModel model = InvoiceModel.fromDocument(query.docs[i], query.docs[i].data());
         if(model.coverageStartDate!.toDate().isAfter(witness)){
           witness = model.coverageStartDate!.toDate();
           latestInvoice = model;
@@ -192,12 +192,12 @@ class _ContributionsState extends State<Contributions> {
                       return snapshot.data!.docs.length >= 1
                       ? Expanded(
                         child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                              InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc);
+                              InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                               if(invoice.type == "INSCRIPTION"){
                                 inscriptionId = invoice.id!;
                               }
@@ -221,7 +221,7 @@ class _ContributionsState extends State<Contributions> {
                                   }
                                   else {
                                     await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
-                                      InvoiceModel regInvoice = InvoiceModel.fromDocument(doc);
+                                      InvoiceModel regInvoice = InvoiceModel.fromDocument(doc, doc.data() as Map);
                                       regFee = regInvoice.amount != null ? regInvoice.amount! : regFee;
                                     });
                                     if(invoice.invoiceIsSplitted == true){
@@ -286,10 +286,10 @@ class _ContributionsState extends State<Contributions> {
     );
   }
 
-  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function? action}) {
+  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function()? action}) {
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate!.year.toString();
     return GestureDetector(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),

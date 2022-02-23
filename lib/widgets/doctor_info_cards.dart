@@ -19,7 +19,7 @@ class DoctorInfoCard extends StatelessWidget {
   final bool? chat, consultation, teleConsultation, rdv, visiteDomicile, noShadow;
   final bool? noPadding, includeHospital, isServiceProvider;
   final String? field, officeName, actionText;
-  final Function? onTap;
+  final Function()? onTap;
 
   const DoctorInfoCard({Key? key, this.name, this.title, this.speciality, this.noShadow = false, this.isServiceProvider = false, this.service, this.appointmentState, this.actionText, this.distance, this.isInRdvDetail = false, this.onTap, this.avatarUrl, this.chat, this.consultation, this.teleConsultation, this.rdv, this.visiteDomicile, this.noPadding = false, this.includeHospital = false, this.field, this.officeName}) : super(key: key);
 
@@ -170,7 +170,7 @@ class DoctorInfoCard extends StatelessWidget {
           )*/
           Container(height: 30,
             child: TextButton(
-              onPressed: ()=>onTap,
+              onPressed: onTap,
               style: ButtonStyle(
                 padding: MaterialStateProperty.all(EdgeInsets.only(bottom: 4, right: 15))
               ),

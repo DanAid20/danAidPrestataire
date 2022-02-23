@@ -280,7 +280,7 @@ class _ScanPatientState extends State<ScanPatient> {
                     }
                   var data= value.docs;
                   if (data.isNotEmpty) {
-                     devis=UseCaseServiceModel.fromDocument(value.docs[0]);
+                     devis=UseCaseServiceModel.fromDocument(value.docs[0], value.docs[0].data());
                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devis!)));
                   } else {
                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("code de paiements invalide ")));
@@ -315,7 +315,7 @@ class _ScanPatientState extends State<ScanPatient> {
         if (data.data().isNotEmpty) {
            setState(() { 
              ifFoundDoc= true;
-            devis=UseCaseServiceModel.fromDocument(data);
+            devis=UseCaseServiceModel.fromDocument(data, data.data());
             if (kDebugMode) {
               print("++++++++++++++++++++++++++++++++++++");
               print(devis!.adherentId);

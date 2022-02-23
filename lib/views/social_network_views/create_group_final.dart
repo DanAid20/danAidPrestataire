@@ -212,7 +212,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
             Expanded(
               child: PageView.builder(
                 pageSnapping: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: pageList!.length,
                 onPageChanged: (int page) => getChangedPageAndMoveBar(page),
                 controller: controller,
@@ -323,7 +323,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: wv*1, vertical: hv*2),
                           child: SingleChildScrollView(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children: usersListProvider.getUsers.map((UserModel user) {
@@ -863,7 +863,7 @@ class SearchResult extends StatelessWidget {
     ConversationChatModel chatRoomModel = ConversationChatModel();
     String conversationId = Algorithms.getConversationId(userId: user!.authId, targetId: target!.authId);
     FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((conversation) {
-      ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation);
+      ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation, conversation.data() as Map);
       chatRoomModel = chatRoom;
     });
     return chatRoomModel;

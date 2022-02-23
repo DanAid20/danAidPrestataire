@@ -38,7 +38,7 @@ class _ComparePlansState extends State<ComparePlans> {
     await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").get().then((snap) {
       var docs = snap.docs;
       for(int i = 0; i < docs.length; i++){
-        PlanModel docModel = PlanModel.fromDocument(docs[i]);
+        PlanModel docModel = PlanModel.fromDocument(docs[i], docs[i].data());
         plans[docModel.planNumber!] = docModel;
       }
       setState(() {
@@ -189,7 +189,7 @@ class _ComparePlansState extends State<ComparePlans> {
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    //physics: BouncingScrollPhysics(),
+                    //physics: const BouncingScrollPhysics(),
                     child: currentPlan != null && state != null ? Table(
                       defaultColumnWidth: FixedColumnWidth(wv*30),
                       children: [

@@ -398,7 +398,7 @@ class _AddPatientViewState extends State<AddPatientView> {
           ),
           body: Container(
             child: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 children: [
                   widget.isLaunchConsultation == true

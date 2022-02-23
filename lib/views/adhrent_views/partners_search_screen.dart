@@ -44,7 +44,7 @@ class _PartnersSearchScreenState extends State<PartnersSearchScreen> {
         int lastIndex = snapshot.data!.docs.length - 1;
         return snapshot.data!.docs.length >= 1 ? ListView.builder(
           //shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];

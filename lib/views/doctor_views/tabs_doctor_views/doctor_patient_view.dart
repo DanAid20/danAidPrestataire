@@ -534,7 +534,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                      itemBuilder: (context, index) {
                          DocumentSnapshot doc = snapshot.data.docs[index];
                         // var devis=DevisModel.fromDocument(doc);
-                        UseCaseServiceModel devis= UseCaseServiceModel.fromDocument(doc);
+                        UseCaseServiceModel devis= UseCaseServiceModel.fromDocument(doc, doc.data() as Map);
                         return HomePageComponents()
                          .prestataireItemList(
                             etat: devis.paid!? 1:0,

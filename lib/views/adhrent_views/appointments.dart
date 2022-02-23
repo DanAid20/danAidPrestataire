@@ -62,7 +62,7 @@ class _AppointmentsListState extends State<AppointmentsList> {
                   return true;
                 },
                 child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   scrollDirection: Axis.vertical,
                   itemCount: snapshot.data!.docs.length,

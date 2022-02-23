@@ -137,7 +137,7 @@ class _LoanFormState extends State<LoanForm> {
                 Expanded(
                   child: PageView.builder(
                     pageSnapping: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: pageList!.length,
                     onPageChanged: (int page) {
                       getChangedPageAndMoveBar(page);
@@ -176,7 +176,7 @@ class _LoanFormState extends State<LoanForm> {
       children: [
         Expanded(
           child: ListView(
-            physics: BouncingScrollPhysics(), children: [
+            physics: const BouncingScrollPhysics(), children: [
             Container(
               padding: EdgeInsets.only(bottom: hv*1.5),
               decoration: BoxDecoration(
@@ -419,7 +419,7 @@ class _LoanFormState extends State<LoanForm> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              //physics: BouncingScrollPhysics(),
+              //physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   Container(
@@ -623,7 +623,7 @@ class _LoanFormState extends State<LoanForm> {
       children: [
         Expanded(
           child: ListView(
-            physics: BouncingScrollPhysics(), children: [
+            physics: const BouncingScrollPhysics(), children: [
             Container(
               padding: EdgeInsets.only(bottom: hv*1.5),
               decoration: BoxDecoration(

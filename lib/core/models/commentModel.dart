@@ -9,20 +9,20 @@ class CommentModel {
 
   CommentModel({this.id, this.replying, this.replies, this.postId, this.userId, this.userName, this.userAvatar, this.content, this.userProfileType, this.dateCreated, this.type, this.likesList});
 
-  factory CommentModel.fromDocument(DocumentSnapshot doc){
+  factory CommentModel.fromDocument(DocumentSnapshot doc, Map data){
     return CommentModel(
       id: doc.id,
-      postId: doc.get("postId"),
-      userId: doc.get("responderId"),
-      userName: doc.get("responderName"),
-      userAvatar: doc.get("responderAvatarUrl"),
-      dateCreated: doc.get("dateCreated"),
-      content: doc.get("content"),
-      type: doc.get("type"),
-      userProfileType: doc.get("responderProfile"),
-      likesList: doc.get("likesList"),
-      replies: doc.get("replies"),
-      replying: doc.get("replying")
+      postId: data["postId"],
+      userId: data["responderId"],
+      userName: data["responderName"],
+      userAvatar: data["responderAvatarUrl"],
+      dateCreated: data["dateCreated"],
+      content: data["content"],
+      type: data["type"],
+      userProfileType: data["responderProfile"],
+      likesList: data["likesList"],
+      replies: data["replies"],
+      replying: data["replying"]
     );
   }
 }

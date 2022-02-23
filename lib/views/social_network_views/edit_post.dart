@@ -117,7 +117,7 @@ class _EditPostState extends State<EditPost> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: wv*3),
                 child: Column(

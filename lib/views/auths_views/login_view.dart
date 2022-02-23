@@ -369,9 +369,8 @@ class _LoginViewState extends State<LoginView> {
   void signInWithPhoneNumber() async {
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    ConfirmationResult signInResult = await _auth.signInWithPhoneNumber(userProvider.getUserId!);
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpView(webRes: signInResult),),);
+    _auth.signInWithPhoneNumber(userProvider.getUserId!, RecaptchaVerifier()).then((confirmationResult){Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpView(webRes: confirmationResult),),);});
+    
 
     /*// ignore: prefer_function_declarations_over_variables
     PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {

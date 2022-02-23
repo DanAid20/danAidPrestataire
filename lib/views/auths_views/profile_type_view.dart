@@ -56,7 +56,7 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
             DanAidDefaultHeader(showDanAidLogo: true,),
             Expanded(
                 child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount: titleList.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) => ProfileTypeCard(

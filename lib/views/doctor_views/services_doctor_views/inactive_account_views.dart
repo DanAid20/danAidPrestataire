@@ -265,7 +265,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
         }
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
-          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
           Widget content = InkWell(
                          onTap: ()=>{
                            // ignore: avoid_print
@@ -599,7 +599,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
             body: Container(
               alignment: Alignment.center,
                 child: SingleChildScrollView(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [

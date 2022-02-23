@@ -10,32 +10,32 @@ class LoanModel {
 
   LoanModel({this.avalistName, this.avalistPhone, this.docsUrls, this.amountPaid, this.employerName, this.monthlySalary, this.employerPhone, this.purpose, this.docUrl, this.mensuality, this.totalToPay, this.duration, this.status, this.firstPaymentDate, this.lastPaymentDate, this.dateCreated, this.mostRecentPaymentDate, this.paymentDates, this.isSalaryMan, this.avalistAdded, this.id, this.amount, this.maxAmount, this.adherentId, this.carnetUrl, this.otherDocUrl});
 
-  factory LoanModel.fromDocument(DocumentSnapshot doc){
+  factory LoanModel.fromDocument(DocumentSnapshot doc, Map data){
     return LoanModel(
       id: doc.id,
-      amount: doc.get("amount"),
-      adherentId: doc.get("adherentId"),
-      mensuality: doc.get("mensuality"),
-      totalToPay: doc.get("totalToPay"),
-      amountPaid: doc.get("amountPaid"),
-      firstPaymentDate: doc.get("firstPaymentDate"),
-      lastPaymentDate: doc.get("lastPaymentDate"),
-      dateCreated: doc.get("createdDate"),
-      mostRecentPaymentDate: doc.get("mostRecentPaymentDate"),
-      paymentDates: doc.get("paymentDates"),
-      avalistAdded: doc.get("avalistAdded"),
-      avalistName: doc.get("avalistName"),
-      avalistPhone: doc.get("avalistPhone"),
-      monthlySalary: doc.get("monthlySalary"),
-      isSalaryMan: doc.get("isSalaryMan"),
-      employerName: doc.get("employerName"),
-      employerPhone: doc.get("employerPhone"),
-      duration: doc.get("frequency"),
-      purpose: doc.get("purpose"),
-      docUrl: doc.get("docUrl"),
-      otherDocUrl: doc.get("otherDocUrl"),
-      docsUrls: doc.get("docsUrls"),
-      status: doc.get("status")
+      amount: data["amount"],
+      adherentId: data["adherentId"],
+      mensuality: data["mensuality"],
+      totalToPay: data["totalToPay"],
+      amountPaid: data["amountPaid"],
+      firstPaymentDate: data["firstPaymentDate"],
+      lastPaymentDate: data["lastPaymentDate"],
+      dateCreated: data["createdDate"],
+      mostRecentPaymentDate: data["mostRecentPaymentDate"],
+      paymentDates: data["paymentDates"],
+      avalistAdded: data["avalistAdded"],
+      avalistName: data["avalistName"],
+      avalistPhone: data["avalistPhone"],
+      monthlySalary: data["monthlySalary"],
+      isSalaryMan: data["isSalaryMan"],
+      employerName: data["employerName"],
+      employerPhone: data["employerPhone"],
+      duration: data["frequency"],
+      purpose: data["purpose"],
+      docUrl: data["docUrl"],
+      otherDocUrl: data["otherDocUrl"],
+      docsUrls: data["docsUrls"],
+      status: data["status"]
     );
   }
 }

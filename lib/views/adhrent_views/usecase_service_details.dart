@@ -203,7 +203,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   Container(

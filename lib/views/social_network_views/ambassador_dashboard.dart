@@ -87,7 +87,7 @@ class _AmbassadorDashboardState extends State<AmbassadorDashboard> {
                   }
                   return snapshot.data!.docs.length >= 1 ? ListView.builder(
                     itemCount: snapshot.data!.docs.length,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       DocumentSnapshot userSnapshot = snapshot.data!.docs[index];
                       AdherentModel singleUser = AdherentModel.fromDocument(userSnapshot, userSnapshot.data() as Map);

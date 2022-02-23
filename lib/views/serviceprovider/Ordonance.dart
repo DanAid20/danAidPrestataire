@@ -213,10 +213,10 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
           ,);
         }
         var userDocument = snapshot.data as DocumentSnapshot<Object>;
-        widget.devis= UseCaseServiceModel.fromDocument(userDocument);
+        widget.devis= UseCaseServiceModel.fromDocument(userDocument, userDocument.data() as Map);
            return Container(
              child:  SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Column(
              mainAxisSize: MainAxisSize.min,
             children: [

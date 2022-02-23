@@ -10,26 +10,24 @@ class FunctionWidgets {
       context: context!, 
       builder: (BuildContext bc){
         return SafeArea(
-          child: Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                    leading: new Icon(Icons.photo_library),
-                    title: new Text('Gallerie'),
-                    onTap: () {
-                      gallery!();
-                      Navigator.of(context).pop();
-                    }),
-                new ListTile(
-                  leading: new Icon(Icons.photo_camera),
-                  title: new Text('Camera'),
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Gallerie'),
                   onTap: () {
-                    camera!();
+                    gallery!();
                     Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+                  }),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  camera!();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           ),
         );
       }
@@ -38,7 +36,7 @@ class FunctionWidgets {
 
   static termsAndConditionsDialog({required BuildContext context}){
     String termsAndConditions = "Le médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\n\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la santé de votre famille. Son action vous permet de bénéficier de soins de qualité à coût maîtrisé.\nLe médecin de famille sera le premier point de contact de votre famille avec les services de santé.\nLe médecin de famille DanAid assure le suivi à long terme de la s";
-    TextStyle bold = TextStyle(fontWeight: FontWeight.bold);
+    TextStyle bold = const TextStyle(fontWeight: FontWeight.bold);
     RichText content = RichText(
       text: TextSpan(
         style: TextStyle(color: Colors.grey[600]),
@@ -185,9 +183,9 @@ class FunctionWidgets {
                   child: Column(
                     children: [
                       SizedBox(height: hv*2,),
-                      Text("TERMS AND CONDITIONS", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: kPrimaryColor),),
+                      const Text("TERMS AND CONDITIONS", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: kPrimaryColor),),
                       SizedBox(height: hv*2,),
-                      Expanded(child: SingleChildScrollView(child: content, physics: BouncingScrollPhysics(),)),
+                      Expanded(child: SingleChildScrollView(child: content, physics: const BouncingScrollPhysics(),)),
                     ],
                   ),
                 ),

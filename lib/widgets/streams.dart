@@ -88,7 +88,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                     ) : Container(),
                     snapshot.data!.docs.length >= 1 ? Expanded(
                       child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
+                        physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemCount: snapshot.data!.docs.length,
                         itemBuilder: (context, index){
@@ -96,7 +96,7 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                             return Container();
                           }
                           DocumentSnapshot doc = snapshot.data!.docs[index];
-                          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc);
+                          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
                           print("name: ");
                           return widget.standardUse ? HomePageComponents.beneficiaryCard(
                             name: beneficiary.surname, 

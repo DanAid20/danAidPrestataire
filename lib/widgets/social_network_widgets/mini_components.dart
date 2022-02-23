@@ -6,11 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:line_icons/line_icons.dart';
 
 class SocialNetworkMiniComponents {
-  static Widget getPublicationIconButton({String? heroTag, String? iconPath, String? title, Function? action}){
+  static Widget getPublicationIconButton({String? heroTag, String? iconPath, String? title, Function()? action}){
     return InkWell(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         margin: EdgeInsets.symmetric(horizontal: wv*1),
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: Column(

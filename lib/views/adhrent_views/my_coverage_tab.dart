@@ -97,7 +97,7 @@ class MyCoverageTabView extends StatelessWidget {
               SizedBox(height: wv*3,),
               Column(mainAxisSize: MainAxisSize.min,
                 children: [
-                  SingleChildScrollView(scrollDirection: Axis.horizontal, physics: BouncingScrollPhysics(),
+                  SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
                   child: Row(children: [
                     SizedBox(width: wv*1.5,),
                     GestureDetector(
@@ -160,7 +160,7 @@ class MyCoverageTabView extends StatelessWidget {
 
                     return snapshot.data!.docs.length >= 1
                       ? ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
                           itemCount: snapshot.data!.docs.length,

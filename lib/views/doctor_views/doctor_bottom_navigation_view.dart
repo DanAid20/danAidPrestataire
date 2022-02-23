@@ -138,9 +138,9 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
     });
   }
 
-  bottomIcon({String? svgUrl, String? title, Function? onTap}){
+  bottomIcon({String? svgUrl, String? title, Function()? onTap}){
     return GestureDetector(
-      onTap: onTap!(),
+      onTap: onTap,
       child: Container(
         color: Colors.transparent,
         child: Column(

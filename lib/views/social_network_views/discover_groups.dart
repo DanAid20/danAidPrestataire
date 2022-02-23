@@ -27,11 +27,11 @@ class _DiscoverGroupsState extends State<DiscoverGroups> {
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
-            GroupModel group = GroupModel.fromDocument(doc);
+            GroupModel group = GroupModel.fromDocument(doc, doc.data() as Map);
             return getGroupContainers(
-              name: group.groupName!,
+              name: group.groupName,
               description: group.groupDescription!,
-              imgUrl: group.imgUrl!,
+              imgUrl: group.imgUrl,
               date: group.dateCreated!.toDate(),
               members: group.membersIds!.length
             );

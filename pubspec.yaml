@@ -46,7 +46,7 @@ dependencies:
   simple_animations: null
   flutter_share: ^2.0.0
   flutter_svg: ^1.0.3
-  google_maps_flutter: null
+  google_maps_flutter: ^2.1.1
   material_design_icons_flutter: ^5.0.6595
   carousel_slider: null
   firebase_core: ^1.12.0

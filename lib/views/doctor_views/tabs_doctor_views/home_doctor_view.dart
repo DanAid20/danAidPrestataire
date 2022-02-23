@@ -426,7 +426,7 @@ Widget questionDuDocteur() {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       child: Column(
         children: [
           notificationWidget(context),

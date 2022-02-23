@@ -33,11 +33,11 @@ class _ChatRoomState extends State<ChatRoom> {
               ? snapshot.data!.docs.length >= 1 ? Expanded(
                   child: ListView.builder(
                       shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         DocumentSnapshot? doc = snapshot.data?.docs[index];
-                        ConversationChatModel conversation = ConversationChatModel.fromDocument(doc!);
+                        ConversationChatModel conversation = ConversationChatModel.fromDocument(doc!, doc.data() as Map);
                         String targetId = (conversation.users![0] == userProvider.getUserModel?.authId) ? conversation.users![1] : conversation.users![0];
 
                         return doc != null

@@ -216,7 +216,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
               Expanded(
                 child: PageView.builder(
                   pageSnapping: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: pageList?.length,
                   onPageChanged: (int page) {
                     getChangedPageAndMoveBar(page);
@@ -286,7 +286,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
           ),
           Expanded(
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: wv*4),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -744,7 +744,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         Text(S.of(context).choisirLeTypeDeConsultation, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16),),
                         Container(
                           child: SingleChildScrollView(
-                            physics: BouncingScrollPhysics(),
+                            physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.horizontal,
                             child: Row(children: [
                               HomePageComponents.consultationType(
@@ -892,12 +892,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
         int lastIndex = snapshot.data!.docs.length - 1;
         return snapshot.data!.docs.length >= 1 ? ListView.builder(
           //shrinkWrap: true,
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
             DocumentSnapshot doc = snapshot.data!.docs[index];
             DoctorModel? doctor = isDoctor ? DoctorModel.fromDocument(doc, doc.data() as Map) : null;
-            ServiceProviderModel? sp = !isDoctor ? ServiceProviderModel.fromDocument(doc) : null;
+            ServiceProviderModel? sp = !isDoctor ? ServiceProviderModel.fromDocument(doc, doc.data() as Map) : null;
 
             return Padding(
               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 10 : 0),
@@ -1702,9 +1702,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
     );
   }
 
-  Widget getTimeRangeBox({required TimeOfDay time, bool selected = false, bool enable = true, Function? onSelect}){
+  Widget getTimeRangeBox({required TimeOfDay time, bool selected = false, bool enable = true, Function()? onSelect}){
     return GestureDetector(
-      onTap: enable ? ()=> onSelect : null,
+      onTap: enable ? onSelect : null,
       child: Container(
         width: wv*35,
         padding: EdgeInsets.symmetric(horizontal: wv*1, vertical: hv*1.5),

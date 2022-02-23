@@ -64,7 +64,7 @@ class _AppointmentState extends State<Appointment> {
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
     if(appointment.getAppointment?.isNotWithDoctor == true){
       FirebaseFirestore.instance.collection(serviceProvider).doc(appointment.getAppointment?.doctorId).get().then((docSnapshot) {
-        ServiceProviderModel serviceP = ServiceProviderModel.fromDocument(docSnapshot);
+        ServiceProviderModel serviceP = ServiceProviderModel.fromDocument(docSnapshot, docSnapshot.data() as Map);
         sp = serviceP;
         setState((){});
       });
@@ -140,7 +140,7 @@ class _AppointmentState extends State<Appointment> {
             SizedBox(height: hv*2,),
             Expanded(
               child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     Container(

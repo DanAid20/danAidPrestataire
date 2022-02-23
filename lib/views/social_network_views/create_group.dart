@@ -236,7 +236,7 @@ class SearchResult extends StatelessWidget {
     ConversationChatModel chatRoomModel = ConversationChatModel();
     String conversationId = Algorithms.getConversationId(userId: user?.authId, targetId: target?.authId);
     FirebaseFirestore.instance.collection("CONVERSATIONS").doc(conversationId).get().then((conversation) {
-      ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation);
+      ConversationChatModel chatRoom = ConversationChatModel.fromDocument(conversation, conversation.data() as Map);
       chatRoomModel = chatRoom;
     });
     return chatRoomModel;

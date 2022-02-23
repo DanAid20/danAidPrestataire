@@ -1351,9 +1351,9 @@ class HomePageComponents {
     );
   }
 
-  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function? action}) {
+  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function()? action}) {
     return ListTile(
-      onTap: () => action,
+      onTap: action,
       leading: Container(
         width: wv * 13,
         padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
@@ -1397,7 +1397,7 @@ class HomePageComponents {
     );
   }
 
-  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, Function? action}) {
+  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, required Function() action}) {
     return ListTile(
       leading: Container(
         width: wv * 12,
@@ -1460,11 +1460,11 @@ class HomePageComponents {
           ),
         ],
       ),
-      onTap: ()=>action,
+      onTap: action,
     );
   }
 
-  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
+  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
@@ -1528,7 +1528,7 @@ class HomePageComponents {
           ],
         ),
       ),
-      onTap: ()=>action,
+      onTap: action,
     );
   }
 
@@ -1584,7 +1584,7 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function? action}){
+  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function()? action}){
     return Container(
       width: wv*25,
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
@@ -1612,7 +1612,7 @@ class HomePageComponents {
                       boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                     ),
                     child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                  onPressed: () => action
+                  onPressed: action
                 ),
               ) : Container()
             ],
@@ -1622,14 +1622,14 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryChoiceCard({String? name, String? imgUrl, Function? editAction, Function? selectAction, bool isSelected = false}){
+  static beneficiaryChoiceCard({String? name, String? imgUrl, Function()? editAction, Function()? selectAction, bool isSelected = false}){
     return Container(
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Stack(
             children: [
               GestureDetector(
-                onTap: ()=>selectAction,
+                onTap: selectAction,
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   margin: EdgeInsets.symmetric(horizontal: wv*1),
@@ -1655,7 +1655,7 @@ class HomePageComponents {
                           boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                         ),
                         child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                      onPressed: () => editAction
+                      onPressed: editAction
                     ),
                   ],
                 ),
@@ -1692,9 +1692,9 @@ class HomePageComponents {
     );
   }
 
-  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function? action}){
+  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function()? action}){
     return  GestureDetector(
-      onTap: () => action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: hv*1.5),
         margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
@@ -1723,9 +1723,9 @@ class HomePageComponents {
     );
   }
   
-  static publicationType({IconData? icon, String? title, bool selected = false, Function? action}){
+  static publicationType({IconData? icon, String? title, bool selected = false, Function()? action}){
     return  GestureDetector(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         height: 120,
         width: wv*28,
@@ -1748,7 +1748,7 @@ class HomePageComponents {
     );
   }
 
-  static accountParameters({String? title, String? subtitle, String? svgIcon, Function? action}){
+  static accountParameters({String? title, String? subtitle, String? svgIcon, Function()? action}){
     return Padding(
       padding: EdgeInsets.only(bottom: 5.0),
       child: ListTile(
@@ -1760,12 +1760,12 @@ class HomePageComponents {
           SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
           Expanded(child: Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
-        trailing: TextButton(onPressed: ()=>action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
+        trailing: TextButton(onPressed: action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
       ),
     );
   }
 
-  static termsAndConditionsTile({Function(bool)? onChanged, bool? value, Function? action, Color? activeColor, Color? textColor}){
+  static termsAndConditionsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1783,7 +1783,7 @@ class HomePageComponents {
                 TextSpan(
                   text: S.current.termesDesServices,
                   style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()..onTap = () => action,
+                  recognizer: TapGestureRecognizer()..onTap = action,
                 )
               ]
             ),
@@ -1798,7 +1798,7 @@ class HomePageComponents {
     );
   }
 
-  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function? action, Color? activeColor, Color? textColor}){
+  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1917,7 +1917,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, Function? action}){
+  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, Function()? action}){
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
@@ -1950,7 +1950,7 @@ class HomePageComponents {
             !noAction ? Expanded(
               flex: 3,
               child: GestureDetector(
-                onTap: ()=>action,
+                onTap: action,
                 child: Container(
                   margin: EdgeInsets.only(left: 10),
                   padding: EdgeInsets.all(5),
@@ -1980,9 +1980,9 @@ class HomePageComponents {
     );
   }  
   
-  static getIconBox({double size = 15, String? iconPath, Color? color, Function? action}){
+  static getIconBox({double size = 15, String? iconPath, Color? color, Function()? action}){
     return GestureDetector(
-      onTap: ()=>action,
+      onTap: action,
       child: Container(
         padding: EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -2052,7 +2052,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function? action}) {
+  static Widget getInvoiceSegmentTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return Container(
@@ -2124,7 +2124,7 @@ class HomePageComponents {
             ],
           ),
         ),
-        onTap: () => action,
+        onTap: action,
       ),
     );
   }
