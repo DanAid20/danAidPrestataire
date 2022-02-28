@@ -281,19 +281,26 @@ class _OtpViewState extends State<OtpView> {
     PhoneVerificationProvider phoneVerificationProvider = Provider.of<PhoneVerificationProvider>(context, listen: false);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     String smsCode = pin1Controller.text+pin2Controller.text+pin3Controller.text+pin4Controller.text+pin5Controller.text+pin6Controller.text;
-    print(phoneVerificationProvider.getVerificationId);
+    print(phoneVerificationProvider.getVerificationId.toString());
     print(smsCode);
     try {
-    final AuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: phoneVerificationProvider.getVerificationId!,
-      smsCode: smsCode,
-    );
 
-    isWeb() ?
+    if(isWeb()){
 
-    widget.webRes!.confirm(smsCode).then((userCredential) => postSignInOperations(userCredential))
+      print("web otp: ${widget.webRes?.verificationId.toString()}");
+
+      widget.webRes!.confirm(smsCode).then((userCredential) => postSignInOperations(userCredential));
     
-    : _auth.signInWithCredential(credential).then((val) async {
+    }
+    
+    else {
+
+      final AuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: phoneVerificationProvider.getVerificationId!,
+        smsCode: smsCode,
+      );
+
+       _auth.signInWithCredential(credential).then((val) async {
       print(userProvider.getUserId);
       
       final User user = val.user!;
@@ -337,12 +344,14 @@ class _OtpViewState extends State<OtpView> {
         Navigator.pushReplacementNamed(context, '/home');
       }
       showSnackbar(S.of(context).successfullySignedInUid+user.uid);
-    }).catchError((e){
-      setState(() {
-        load = false;
+      }).catchError((e){
+        setState(() {
+          load = false;
+        });
+        showSnackbar(S.of(context).failedToSignIn + e.message.toString());
       });
-      showSnackbar(S.of(context).failedToSignIn + e.message.toString());
-    });
+
+    }
 
     
     } on FirebaseAuthException catch (e) {

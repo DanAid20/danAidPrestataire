@@ -147,13 +147,17 @@ class _LoginViewState extends State<LoginView> {
 
   Container loginForm() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: kIsWeb ? wv*30 : Platform.isAndroid || Platform.isIOS ? 0 : wv*30),
+      constraints: BoxConstraints(
+        maxWidth: Device.isSmartphone(context) ? wv*100 : 500
+      ),
+      padding: EdgeInsets.symmetric(vertical: Device.isSmartphone(context) ? 10 : hv*10,),
       child: Form(
         key: _mFormKey,
         autovalidateMode: autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
         child: Column(
           children: [
             Container(
+              width: Device.isSmartphone(context) ? wv*100 : 700,
               margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -179,74 +183,80 @@ class _LoginViewState extends State<LoginView> {
 
             SizedBox(height: hv*2,),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: wv*3),
-              child: TextFormField(
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  controller: _mPhoneController,
-                  validator: (String? phone) {
-                    return (phone!.isEmpty)
-                        ? kPhoneNumberNullError
-                        : (!digitValidatorRegExp.hasMatch(phone))
-                        ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
-                  },
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
-                  ],
-                  style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(LineIcons.phone),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: Colors.red[300]!),
-                      borderRadius: const BorderRadius.all(Radius.circular(20))
+            Container(
+              width: Device.isSmartphone(context) ? wv*100 : 800,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: wv*3),
+                child: TextFormField(
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    controller: _mPhoneController,
+                    validator: (String? phone) {
+                      return (phone!.isEmpty)
+                          ? kPhoneNumberNullError
+                          : (!digitValidatorRegExp.hasMatch(phone))
+                          ? S.of(context).entrerUnNumeroDeTlphoneValide : null;
+                    },
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+                    ],
+                    style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(LineIcons.phone),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: Colors.red[300]!),
+                        borderRadius: const BorderRadius.all(Radius.circular(20))
+                      ),
+                      fillColor: Colors.grey[100],
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: kPrimaryColor.withOpacity(0.0)),
+                        borderRadius: const BorderRadius.all(Radius.circular(20))
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.2)),
+                        borderRadius: const BorderRadius.all(Radius.circular(20))
+                      ),
+                      hintText: S.of(context).numroDeTlphone,
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 17),
                     ),
-                    fillColor: Colors.grey[100],
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: kPrimaryColor.withOpacity(0.0)),
-                      borderRadius: const BorderRadius.all(Radius.circular(20))
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(width: 1, color: Colors.grey.withOpacity(0.2)),
-                      borderRadius: const BorderRadius.all(Radius.circular(20))
-                    ),
-                    hintText: S.of(context).numroDeTlphone,
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 17),
                   ),
-                ),
+              ),
             ),
 
             SizedBox(height: hv*4,),
-            CustomTextButton(
-              text: S.of(context).continuer,
-              color: kPrimaryColor,
-              isLoading: loader,
-              action: () async {
-                print("ttt");
-                setState(() {
-                  autovalidate = true;
-                });
-                UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                print("${_mPhoneController?.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
-
-                if (_mFormKey.currentState!.validate()){
+            SizedBox(
+              width: Device.isSmartphone(context) ? wv*100 : 810,
+              child: CustomTextButton(
+                text: S.of(context).continuer,
+                color: kPrimaryColor,
+                isLoading: loader,
+                action: () async {
+                  print("ttt");
                   setState(() {
-                    loader = true;
+                    autovalidate = true;
                   });
-                  userProvider.setUserId("+$phoneCode${_mPhoneController?.text}");
-                  print("+${userProvider.getCountryCode}${_mPhoneController?.text}");
-                  isWeb() ? signInWithPhoneNumber() : verifyPhoneNumber();
-                  /*bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
-                  if(registered == false){
-                  } else {
-                    HiveDatabase.setSignInState(true);
-                    HiveDatabase.setRegisterState(true);
-                    Navigator.pushReplacementNamed(context, '/home');
-                  }*/
-                  //_navigationService.navigateTo('/otp');
-                }
+                  UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                  print("${_mPhoneController?.text}, ${userProvider.getCountryName}, ${userProvider.getCountryCode}");
 
-              },
+                  if (_mFormKey.currentState!.validate()){
+                    setState(() {
+                      loader = true;
+                    });
+                    userProvider.setUserId("+$phoneCode${_mPhoneController?.text}");
+                    print("+${userProvider.getCountryCode}${_mPhoneController?.text}");
+                    isWeb() ? signInWithPhoneNumber() : verifyPhoneNumber();
+                    /*bool registered = await checkIfUserIsAlreadyRegistered("+${userProvider.getCountryCode}${_mPhoneController.text}");
+                    if(registered == false){
+                    } else {
+                      HiveDatabase.setSignInState(true);
+                      HiveDatabase.setRegisterState(true);
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }*/
+                    //_navigationService.navigateTo('/otp');
+                  }
+
+                },
+              ),
             ),
           ],
         ),
@@ -367,89 +377,16 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void signInWithPhoneNumber() async {
+    print("Web login");
 
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    _auth.signInWithPhoneNumber(userProvider.getUserId!, RecaptchaVerifier()).then((confirmationResult){Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpView(webRes: confirmationResult),),);});
+    var result = await _auth.signInWithPhoneNumber(userProvider.getUserId!, RecaptchaVerifier(
+      onSuccess: () => print('reCAPTCHA Completed!'),
+      onError: (FirebaseAuthException error) => print(error),
+      onExpired: () => print('reCAPTCHA Expired!'),
+    ));
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => OtpView(webRes: result),),);
     
-
-    /*// ignore: prefer_function_declarations_over_variables
-    PhoneVerificationCompleted verificationCompleted = (PhoneAuthCredential phoneAuthCredential) async {
-      await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar(S.of(context).phoneNumberAutomaticallyVerifiedAndUserSignedIn+_auth.currentUser!.uid);
-      userProvider.setAuthId(_auth.currentUser!.uid);
-      setState((){
-        loader = false;
-      });
-      Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
-      bool registered = res["exists"];
-      String profile = res["profile"];
-      UserModel user = res["user"];
-      
-      if(registered == false){
-        Navigator.pushNamed(context, '/profile-type');
-      } else {
-        userProvider.setUserModel(user);
-        if(profile == beneficiary){
-          if(user.authId == null){
-            FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
-              "authId": _auth.currentUser!.uid,
-              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
-              "userCountryName": userProvider.getCountryName,
-            }).then((value) {
-              showSnackbar("Profil bénéficiaire recupéré..");
-            });
-          }
-        }
-        HiveDatabase.setRegisterState(true);
-        HiveDatabase.setSignInState(true);
-        HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
-        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
-        print("profile:");
-        print(profile);
-        userProvider.setProfileType(profile);
-        HiveDatabase.setProfileType(profile);
-        Navigator.pushReplacementNamed(context, '/home');
-      }
-    };*/
-
-    //Listens for errors with verification, such as too many attempts
-    // ignore: prefer_function_declarations_over_variables
-    /*PhoneVerificationFailed verificationFailed = (FirebaseAuthException authException) {
-      setState((){
-        loader = false;
-      });
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+authException.code+S.of(context).message + authException.message!);
-    };*/
-
-    // ignore: prefer_function_declarations_over_variables
-    /*PhoneCodeSent codeSent = (String? verificationId, [int? forceResendingToken]) async {
-      showSnackbar(S.of(context).pleaseCheckYourPhoneForTheVerificationCode);
-      if(verificationId != null){
-        _verificationId = verificationId;
-        /*setState((){
-          loader = false;
-        });*/
-        //_navigationService.navigateTo('/otp');
-        showSnackbar(S.of(context).leCodeViensDarriverPatientezEncoreUnpeu );
-      }else{
-        setState((){
-          loader = false;
-        });
-      }
-    };
-    */
-
-    /*try {
-      await _auth.verifyPhoneNumber(
-          phoneNumber: userProvider.getUserId!,
-          timeout: const Duration(seconds: 40),
-          verificationCompleted: verificationCompleted,
-          verificationFailed: verificationFailed,
-          codeSent: codeSent,
-          codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
-    } catch (e) {
-      showSnackbar(S.of(context).phoneNumberVerificationFailedCode+e.toString());
-    }*/
   }
 
   void showSnackbar(String message) {
