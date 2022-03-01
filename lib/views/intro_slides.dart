@@ -1,3 +1,4 @@
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -86,7 +87,7 @@ class _IntroSlidesState extends State<IntroSlides> {
 
               AnimatedPositioned(
                 top: currentPageValue == 0 ? hv*40 : currentPageValue == 1 ? hv*43 : hv*35,
-                left: currentPageValue == 0 ? wv*70 : currentPageValue == 1 ? wv*48 : wv*70,
+                left: currentPageValue == 0 ? Device.isSmartphone(context) ? wv*70 : 1000 : currentPageValue == 1 ? Device.isSmartphone(context) ? wv*48 : 1200 : Device.isSmartphone(context) ? wv*70 : 1100,
                 duration: Duration(milliseconds: 300),
                 child: Container(
                   width: wv*20,
@@ -100,8 +101,8 @@ class _IntroSlidesState extends State<IntroSlides> {
               ),
 
               AnimatedPositioned(
-                top: currentPageValue == 0 ? hv*35 : currentPageValue == 1 ? hv*30 : hv*4,
-                left: currentPageValue == 0 ? wv*7 : currentPageValue == 1 ? wv*60 : wv*5,
+                top: currentPageValue == 0 ? Device.isSmartphone(context) ? hv*35 : 200 : currentPageValue == 1 ? hv*30 : hv*4,
+                left: currentPageValue == 0 ? Device.isSmartphone(context) ? wv*7 : 600 : currentPageValue == 1 ? Device.isSmartphone(context) ? wv*60 : 1100 : Device.isSmartphone(context) ? wv*5 : 700,
                 duration: Duration(milliseconds: 300),
                 child: Container(
                   height: 200,
@@ -121,21 +122,21 @@ class _IntroSlidesState extends State<IntroSlides> {
               ),
 
               Positioned(
-                bottom: hv*15,
+                bottom: Device.isSmartphone(context) ? hv*15 : 220,
                 child: Container(
-                  width: wv*95,
+                  width: Device.isSmartphone(context) ? wv*95 : 600,
                   padding: EdgeInsets.symmetric(horizontal: wv*2),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(currentPageValue == 0 ? S.of(context).laMutuelleSant100Mobile : currentPageValue == 1 ?  S.of(context).unRseauDentraide : S.of(context).unMdecinDeFamilleMeSuit, style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*6.2, fontWeight: FontWeight.w900),),
+                      Text(currentPageValue == 0 ? S.of(context).laMutuelleSant100Mobile : currentPageValue == 1 ?  S.of(context).unRseauDentraide : S.of(context).unMdecinDeFamilleMeSuit, style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: Device.isSmartphone(context) ? wv*6.2 : 40, fontWeight: FontWeight.w900), textAlign: TextAlign.center,),
                       SizedBox(height: hv*2.5,),
                       SizedBox(
                         width: wv*90,
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: wv*5.7, fontWeight: FontWeight.w300),
+                            style: TextStyle(color: currentPageValue == 2 ? kCardTextColor : whiteColor, fontSize: Device.isSmartphone(context) ? wv*5.7 : 35, fontWeight: FontWeight.w300),
                             children: [
                               TextSpan(text: currentPageValue == 0 ? S.of(context).avecVotreFamilleBnficiezDuneCouvertureSantDe : currentPageValue == 1 ? S.of(context).enCasDeBesoinObtenezLaideDesMembresDuRseau : S.of(context).monMdecinDeFamillePersonnelReuRapidementOrientSuiviLong),
                               TextSpan(text: currentPageValue == 0 ? S.of(context).soixanteDixpourCent : currentPageValue == 1 ?  S.of(context).prtSant : S.of(context).danaid, style: TextStyle(fontWeight: FontWeight.w600)),
@@ -158,12 +159,12 @@ class _IntroSlidesState extends State<IntroSlides> {
                     GestureDetector(
                       onTap: ()=>_coastController.animateTo(beach: currentPageValue-1, duration: Duration(milliseconds: 500)),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: wv*3),
+                        padding: EdgeInsets.all(Device.isSmartphone(context) ? wv*3 : 40),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.6),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(Device.isSmartphone(context) ? 20 : 40),
                         ),
-                        child: Icon(Icons.arrow_back_ios_rounded, color: kDeepTeal, size: wv*8,),
+                        child: Icon(Icons.arrow_back_ios_rounded, color: kDeepTeal, size: Device.isSmartphone(context) ? wv*8 : 60,),
                       ),
                     ),
                     Spacer(),
@@ -180,9 +181,9 @@ class _IntroSlidesState extends State<IntroSlides> {
                 child: Stack(
                   alignment: AlignmentDirectional.center,
                   children: [
-                    Container(
-                      width: wv*16,
-                      height: wv*16,
+                    SizedBox(
+                      width: Device.isSmartphone(context) ? wv*16 : 150,
+                      height: Device.isSmartphone(context) ? wv*16 : 150,
                       child: TweenAnimationBuilder<double>(
                           tween: Tween<double>(begin: 0.0, end: currentPageValue == 0 ? 0.35 : currentPageValue == 1 ? 0.7 : 1),
                           duration: const Duration(milliseconds: 500),
@@ -205,9 +206,9 @@ class _IntroSlidesState extends State<IntroSlides> {
                       elevation: 0,
                       child: Icon(
                         currentPageValue == 2 ? Icons.check : Icons.arrow_forward_ios_rounded,
-                        size: wv*5,
+                        size: Device.isSmartphone(context) ? wv*5 : 50,
                       ),
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(Device.isSmartphone(context) ? 16 : 40),
                       shape: CircleBorder(),
                     )
 
