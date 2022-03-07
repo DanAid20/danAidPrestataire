@@ -98,10 +98,10 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
           print(stackTrace);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).uneErreurSestProduite),));
       });
-   print("--------------------------------");
+    print("--------------------------------");
  }
  
- showAlertDialog(BuildContext context, String title,  VoidCallback function) async {
+ showAlertDialog(BuildContext context, String title,  Function() function) async {
 
   // set up the buttons
   Widget cancelButton = TextButton(
@@ -112,12 +112,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
   );
   Widget continueButton = TextButton(
     child: Text(S.of(context).supprimer),
-    onPressed:  () {
-      function();
-    }
-    
-    
-    
+    onPressed: function(),
   );
 
   // set up the AlertDialog
@@ -194,7 +189,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
       StreamBuilder(
       stream:   FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).snapshots(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (snapshot.hasData==false) {
           return SizedBox(
             //child: Text("Splash Screen Temporaire !!!\n${devEnv.getEnv}", textAlign: TextAlign.center,)
               width: double.infinity,
@@ -648,7 +643,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
   }
 
  
-   Widget getDetailOrdonanceDevis({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+   Widget getDetailOrdonanceDevis({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function()? action}){
   var state= service!.drugsList==null? S.of(context).enCoursDeTraitement :"${Algorithms.getUseCaseServiceName(type: service.type!)}- ${service.drugsUrls!.length} images";
   if (kDebugMode) {
     print(service.drugsList);
@@ -846,7 +841,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             ]
   );
 }
-  Widget getDetailReceipt({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+  Widget getDetailReceipt({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function()? action}){
   return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(), color: kDeepTeal, width: wv*8,),
             title:Text(title!, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -877,7 +872,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             ]
   );
   }
-  Widget getDetailReultExamens({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+  Widget getDetailReultExamens({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function()? action}){
   return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: consultation), color: kDeepTeal, width: wv*8,),
             title:Text(title!, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),
@@ -908,7 +903,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             ]
   );
   }
-  Widget getDetailPrescription({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function? action}){
+  Widget getDetailPrescription({String? title, UseCaseServiceModel? service, List<dynamic>? array, GlobalKey<ExpansionTileCardState>? cardA, int? index,  Function()? action}){
   return ExpansionTileCard(duration:Duration(milliseconds : 800),key: cardA,borderRadius: BorderRadius.circular(20),shadowColor:  (Colors.grey[200])!,expandedTextColor: Colors.red,
             leading: SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: consultation), color: kDeepTeal, width: wv*8,),
             title:Text(title!, style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold)),

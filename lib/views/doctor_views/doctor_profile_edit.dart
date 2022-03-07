@@ -337,20 +337,28 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       }
     }
   }
-
+  
+  saveConsult(){
+    setState(() {
+      consultationChosen = !consultationChosen!;});
+  }
   @override
   void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+    // Add Your Code here.
     initAvailability();
     initRegionDropdown();
     initOfficeRegionDropdown();
     textFieldsControl();
+
+  });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
-    LatLng coords= LatLng(doctorProvider.getDoctor!.location!["latitude"]!,  doctorProvider.getDoctor!.location!["longitude"]);
+    DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context); 
+    LatLng coords= LatLng(doctorProvider.getDoctor?.location?["latitude"] ?? 4.044656688777058,  doctorProvider.getDoctor?.location?["longitude"]?? 9.695724531228858);
     return SafeArea(
       top: false,
       bottom: false,
@@ -359,7 +367,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
           Container(
             margin: EdgeInsets.only(bottom: hv*2),
             child: Stack(clipBehavior: Clip.none, children: [
-              DanAidDefaultHeader(),
+              const DanAidDefaultHeader(),
               Positioned(
                 top: hv*5,
                 child: Stack(children: [
@@ -375,7 +383,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                           padding: const EdgeInsets.all(20.0),
                         ),
-                        imageUrl: doctorProvider.getDoctor!.avatarUrl!,),
+                        imageUrl: doctorProvider.getDoctor!.avatarUrl ?? ""),
                     ),
                       //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                   ),
@@ -886,7 +894,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                     service: S.of(context).consultation,
                                     icon: "assets/icons/Bulk/Chat.svg",
                                     chosen: consultationChosen!,
-                                    action: ()=> setState(() {consultationChosen = !consultationChosen!;})
+                                    action: (){setState(() {consultationChosen = !consultationChosen!;});}
                                   ),
                                   DoctorServiceChoiceCard(
                                     service: S.of(context).tlconsultation,

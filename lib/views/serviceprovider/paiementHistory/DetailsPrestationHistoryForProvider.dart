@@ -25,6 +25,8 @@ class DetailsPrestationHistoryForProvider extends StatefulWidget {
 
 class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationHistoryForProvider> {
   String userName = 'a';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+ 
   @override
   void initState() {
     super.initState();
@@ -89,7 +91,7 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
                   'assets/icons/Bulk/Drawer.svg',
                   color: kSouthSeas,
                 ),
-                onPressed: () {},
+                onPressed: ()=> _scaffoldKey.currentState!.openEndDrawer(),
                 color: kSouthSeas,
               )
             ],

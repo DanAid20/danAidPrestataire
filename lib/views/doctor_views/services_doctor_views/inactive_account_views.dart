@@ -582,14 +582,14 @@ class _InactiveAccountState extends State<InactiveAccount> {
               title: Align(
                 alignment: Alignment.center,
                 child: Column(
-                  children: [Text(S.of(context).famille), const Text('...')],
+                  children: [Text(S.of(context).famille,style: const TextStyle(color: kBlueForce, fontWeight: FontWeight.bold )), const Text('...',style: const TextStyle(color: kBlueForce, fontWeight: FontWeight.bold ))],
                 ),
               ),
               actions: [
                 IconButton(
                   icon: SvgPicture.asset(
                     'assets/icons/Bulk/Setting.svg',
-                    color: whiteColor,
+                    color: kBlueForce,
                   ),
                   onPressed: () {},
                   color: kSouthSeas,

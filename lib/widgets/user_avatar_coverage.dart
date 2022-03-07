@@ -58,7 +58,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                     child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*12,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                     padding: EdgeInsets.all(20.0),
                   ),
-                  imageUrl: doctorProvider.getDoctor!.avatarUrl!),
+                  imageUrl: doctorProvider.getDoctor!.avatarUrl.toString()),
               ),
             ) :
             userProvider.getProfileType == serviceProvider ?
@@ -76,7 +76,7 @@ class UserAvatarAndCoverage extends StatelessWidget {
                     padding: EdgeInsets.all(20.0),
                   ),
                   imageUrl: serviceProviderMP.getServiceProvider != null ? serviceProviderMP.getServiceProvider!.avatarUrl! : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
-              ),
+              ), 
             ) :
             userProvider.getProfileType == beneficiary ?
               CircleAvatar(

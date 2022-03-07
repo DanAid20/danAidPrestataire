@@ -67,7 +67,7 @@ class _SpecialistListState extends State<SpecialistList> {
                             adherentProvider.getAdherent?.location!=null &&  adherentProvider.getAdherent?.location!["latitude"] != null && doctor.location != null
                               ? doctor.location!["latitude"] != null ? (Algorithms.calculateDistance( adherentProvider.getAdherent?.location!["latitude"], adherentProvider.getAdherent?.location!["longitude"], doctor.location!["latitude"], doctor.location!["longitude"]).toStringAsFixed(2)).toString() : null : null
                           :
-                          doctorProvider.getDoctor!.location != null && doctor.location != null
+                          doctorProvider.getDoctor?.location != null && doctor.location != null
                               ? (Algorithms.calculateDistance(doctorProvider.getDoctor?.location!["latitude"], doctorProvider.getDoctor?.location!["longitude"], doctor.location!["latitude"], doctor.location!["longitude"]).toStringAsFixed(2)).toString() : null,
                         onTap: () {
                           doctorTileProvider.setDoctorModel(doctor);

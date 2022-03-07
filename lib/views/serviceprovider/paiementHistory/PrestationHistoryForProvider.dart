@@ -38,6 +38,8 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
    int? paidYear=0;
    int? notpaidYear=0;
    bool? loading=false;
+   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     @override
   void initState() {
     
@@ -77,9 +79,9 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
     
     // on get la listes 
     if (kDebugMode) {
-      print(prestataireProvider.getServiceProvider!.id);
+      print(prestataireProvider.getServiceProvider?.id);
     }
-    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider!.id).orderBy('createdAt', descending: true).get();
+    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider?.id).orderBy('createdAt', descending: true).get();
         facturation.then((querySnapshot){
         if (kDebugMode) {
           print( querySnapshot.docs.length);
@@ -88,7 +90,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
         for (var doc in querySnapshot.docs) {
 
            Facture facturesList= Facture.fromDocument(doc);
-          print(facturesList.createdAt);
+           print(facturesList.createdAt);
           
            setState(() {
               facture?.add(facturesList);
@@ -226,7 +228,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                   'assets/icons/Bulk/Drawer.svg',
                   color: kSouthSeas,
                 ),
-                onPressed: () {},
+               onPressed: ()=> _scaffoldKey.currentState!.openEndDrawer(),
                 color: kSouthSeas,
               )
             ],

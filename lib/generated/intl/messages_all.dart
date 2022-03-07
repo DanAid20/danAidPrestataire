@@ -24,7 +24,7 @@ Map<String, LibraryLoader> _deferredLibraries = {
   'fr_FR': () => new Future.value(null),
 };
 
-MessageLookupByLibrary? _findExact(String localeName) {
+MessageLookupByLibrary ?_findExact(String localeName) {
   switch (localeName) {
     case 'en':
       return messages_en.messages;

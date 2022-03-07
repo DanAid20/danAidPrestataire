@@ -216,15 +216,16 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
    }
   }
   getListOfUser() {
+      
      AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
       BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context, listen: false);
       String medecin;
-      if (kDebugMode) {
+      //if (kDebugMode) {
         print(famillyDoctorNAme);
         print("------------");
         print(adherentProvider.getAdherent);
         print("------------");
-      }
+     // }
       if(adherentProvider.getAdherent!.familyDoctorId != null){
         FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent!.familyDoctorId).get().then((doc){
           String name = doc.data()!["nomDefamille"];
@@ -233,7 +234,6 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
             }
         });
       }
-
       FirebaseFirestore.instance.collection("ADHERENTS").doc('${widget.phoneNumber}').collection("BENEFICIAIRES").get().then((snapshot) async {
         print(snapshot.docs.length.toString());
         beneficiaries = [];
@@ -268,9 +268,9 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                 adherent: adherentBeneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected! )),
                       ));
         beneficiaries?.add(adherentBeneficiaryCard);
-        if (kDebugMode) {
+       // if (kDebugMode) {
           print(snapshot.docs.length);
-        }
+        //}
         for (int i = 0; i < snapshot.docs.length; i++){
           DocumentSnapshot doc = snapshot.docs[i];
           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
@@ -327,7 +327,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
 }
   Widget _buildAboutDialog(BuildContext context, bool isIninitState) {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
-    AdherentModel adherent = adherentModelProvider!.getAdherent!;
+   
      bool issaveInknowUserLoading=false;
       saveDataForUnknow(name,phone) async { 
         setState(() {issaveInknowUserLoading=true;});
@@ -569,15 +569,17 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
       ),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel? adherent = adherentModelProvider!.getAdherent;
      DoctorModelProvider? doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-        if (kDebugMode) {
-          print(widget.data);
-        }
+       // if (kDebugMode) {
+    print(widget.data);
+    print("fidjhfdjskhfdsjkfhdsfjkhdsfjkdshfdjksfhdksjhfdjks");
+       // }
     return SafeArea(
         top: false,
         bottom: false,
@@ -629,7 +631,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              beneficiaries != null ? Align(
+                              beneficiaries != null? Align(
                                   alignment: Alignment.center,
                                   child: Padding(
                                     padding: EdgeInsets.only(top: hv*2),
@@ -678,7 +680,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                   // ))),
                  
                       widget.isAccountIsExists == false
-                          ? SizedBox.shrink()
+                          ? const SizedBox.shrink()
                           : isRequestLaunch! ? Loaders().buttonLoader(kPrimaryColor) :Container(
                             alignment: Alignment.bottomCenter,
                             child: Align(

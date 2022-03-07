@@ -706,8 +706,11 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       return  PartnersScreen();
     }
     else if(controller.getIndex == 4){
-      userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor!) : print("waouu");
-      return userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ?  MyFamilyScreen() : userProvider.getProfileType == serviceProvider  ? PrestataireProfilePage(): DoctorProfilePage();
+      print("******************************************");
+      print(doctorProvider.getDoctor.toString());
+      print("******************************************");
+      userProvider.getProfileType == doctor ?  doctorTileProvider.setDoctorModel(doctorProvider.getDoctor as DoctorModel) : print("waouu");
+      return userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ?  MyFamilyScreen() : userProvider.getProfileType == serviceProvider  ? PrestataireProfilePage():  const DoctorProfilePage() ;//;
     }
   }
 

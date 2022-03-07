@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+
 class PrestationHistory extends StatefulWidget {
   PrestationHistory({Key? key}) : super(key: key);
 
@@ -42,6 +43,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
    bool loading=false;
     @override
   void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+
+    // Add Your Code here.
     if (kDebugMode) {
       print(getMonthsInYear().toString());
     }
@@ -49,6 +53,8 @@ class _PrestationHistoryState extends State<PrestationHistory> {
     setState((){
       currentYears=int.parse(data);
     });
+
+  });
     super.initState();
   }
    List<String> getMonthsInYear() {
@@ -75,6 +81,8 @@ class _PrestationHistoryState extends State<PrestationHistory> {
  
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
+      print("fgfhffgh hgfhgf ghfgh hgf ************** ");
+      print(doctorProvider.getDoctor!.id);
     
     // on get la listes 
     var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: doctorProvider.getDoctor!.id).orderBy('createdAt', descending: true).get();
@@ -92,7 +100,8 @@ class _PrestationHistoryState extends State<PrestationHistory> {
 
       List<String> monthName= getMonthsInYear();
      // print(monthName.length);
-      monthName.asMap().forEach((key, value) {
+     if(monthName.isNotEmpty){
+         monthName.asMap().forEach((key, value) {
          // print(key.toString()+'----');
           if (kDebugMode) {
             print(monthName[key].toString()+'----');
@@ -114,11 +123,13 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                 var notReadyispaidalready= fac.where((element) => element.isSolve==false && element.canPay==1);
                 var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null && element.canPay==1 );
                 var personesConsultForMonthAll= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null  );
-                var personesReftForMonth= fac.where((element) => element.types!.contains('REFERENCEMENT')==true && element.canPay==1);
-                var personesReftForMonthAll= fac.where((element) => element.types!.contains('REFERENCEMENT')==true );
+                var personesReftForMonth= fac.where((element) => element.types?.contains('REFERENCEMENT')==true && element.canPay==1);
+                var personesReftForMonthAll= fac.where((element) => element.types?.contains('REFERENCEMENT')==true );
                 int sum=0;
                 for (var e in fac) {
-                  sum += e.amountToPay!;
+                print(e.amountToPay);
+                print("66666666666666666666666666666666");
+                  sum += e.amountToPay!=null? e.amountToPay!.toInt():0 ;
                 }
                 int readyPaid=0;
                 for (var e in ispaidalready) {
@@ -152,6 +163,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                   'EnAttente' : isSolve
                   } 
                 };  
+                print("0000000000000000000077777777777888888888888999999999999999");
                 print(obj);
                 print(consultationpersonnes);
                 print(referencemeentPersonnes);
@@ -163,6 +175,8 @@ class _PrestationHistoryState extends State<PrestationHistory> {
             
         
       });
+     }
+      
 
      setState((){
        loading=false  ; 
@@ -192,9 +206,12 @@ class _PrestationHistoryState extends State<PrestationHistory> {
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text(S.of(context).historiqueDesPrestations), Text(S.of(context).vosConsultationsPaiement)],
-                ),
-              ),
+                  children: [ 
+                    Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)), 
+                    Text(S.of(context).vosConsultationsPaiement,style:  TextStyle(color: kBlueForce,fontSize:wv*4))
+                  ],
+                ), 
+              ), 
             ),
             actions: [
               IconButton(
@@ -228,7 +245,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                child: Row(
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
                                         if( currentYears!=dataTIme+1){
                                          setState((){
@@ -236,22 +253,21 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                           currentYears=dataTIme+1;
                                          }),
                                         getPaiement(currentDate: newsDate),
-
                                         }
                                       },
                                        child: Column(
                                       children: [
-                                        Text('${dataTIme+1}', style: TextStyle(
+                                      Text('${dataTIme+1}', style: TextStyle(
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
-                                            
                                             fontSize: wv*3.5), textScaleFactor: 1.0),
                                        currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:const Text('') ,) : Container()
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
+                                       
                                         if( currentYears!=dataTIme){
                                            setState((){
                                           newsDate=DateFormat("yyyy").format(DateTime(dataTIme, 1, 1, 0, 0));
@@ -263,19 +279,20 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                         
                                       },child: Column(
                                       children: [
-                                        Text('${dataTIme}', style: TextStyle(
+                                        Text('$dataTIme', style: TextStyle(
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
-                                            
                                             fontSize: wv*3.5), textScaleFactor: 1.0),
                                        currentYears==dataTIme? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
+                                     
                                       onTap: ()=>{
+                                        
                                           if( currentYears!=dataTIme-1){
-                                              setState((){
+                                              setState((){ 
                                             newsDate=DateFormat("yyyy").format(DateTime(dataTIme-1, 1, 1, 0, 0));
                                             print(newsDate);
                                             currentYears=dataTIme-1;
@@ -290,11 +307,11 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                             fontWeight: FontWeight.w700,
                                             
                                             fontSize: wv*3.5), textScaleFactor: 1.0),
-                                       currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
+                                       currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child: const Text('') ,) : Container()
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
                                           if( currentYears!=dataTIme-2){
                                                setState((){

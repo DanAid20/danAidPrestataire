@@ -12,9 +12,7 @@ class DevisModel {
   DevisModel({this.id, this.appointementId, this.adherentId, this.beneficiaryId, this.paiementCode, this.consultationCode, this.prestataireEmitQuoteId, this.intitule, this.status, this.type, this.amount, this.createdDate, this.ispaid, this.isAdminHasTreatedRequest, this.urlImageDevis, this.requestTreatedList});
 
   factory DevisModel.fromDocument(DocumentSnapshot doc){
-    print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-    print(doc.get("urlImagesDevis").runtimeType);
-    print(doc.get("urlImagesDevis").length);
+   
     return DevisModel(
       id: doc.id,
       prestataireEmitQuoteId: doc.get("prestataireId"),

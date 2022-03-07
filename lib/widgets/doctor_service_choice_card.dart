@@ -8,7 +8,7 @@ class DoctorServiceChoiceCard extends StatelessWidget {
   final String? service;
   final String? icon;
   final bool? chosen;
-  final Function? action;
+  final Function()? action;
 
   const DoctorServiceChoiceCard({Key? key, this.service, this.icon, this.chosen = false, this.action}) : super(key: key);
 
@@ -17,7 +17,7 @@ class DoctorServiceChoiceCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: wv*0.75),
       child: GestureDetector(
-        onTap: ()=>action,
+        onTap: action,
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*0.8),
           decoration: BoxDecoration(

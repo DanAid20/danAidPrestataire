@@ -68,8 +68,8 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(S.of(context).historiqueDesPrestations),
-                  Text(S.of(context).vosConsultationsPaiementDetaill)
+                  Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)),
+                  Text(S.of(context).vosConsultationsPaiementDetaill, style:  TextStyle(color: kBlueForce, fontSize: wv*4))
                 ],
               ),
             ),
@@ -154,9 +154,10 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                      
                                     
                                       if (widget.facture![index].types!='REFERENCEMENT') {
+                                       
                                        return FutureBuilder<DocumentSnapshot>(
                                       future:  FirebaseFirestore.instance.collection('ADHERENTS').doc(widget
-                                          .facture![index].idAdherent).get(),
+                                          .facture?[index].idAdherent).get(),
                                       builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
                                            if (snapshot.connectionState==ConnectionState.waiting) {
                                               return const Center(
