@@ -3,6 +3,8 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/clippers.dart';
 import 'package:flutter/material.dart';
 
+import '../core/services/getPlatform.dart';
+
 class DanAidDefaultHeader extends StatelessWidget {
   final bool showDanAidLogo;
   final Widget? title;
@@ -31,25 +33,25 @@ class DanAidDefaultHeader extends StatelessWidget {
         ),
       ),
       Positioned(
-        top: hv*5,
-        left: wv*3,
+        top: Device.isSmartphone(context) ? hv*5 : 20,
+        left: Device.isSmartphone(context) ? wv*3 : 20,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             GestureDetector(
               onTap: (){Navigator.pop(context);},
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: wv*3),
+                padding: EdgeInsets.all(Device.isSmartphone(context) ? wv*3 : 20),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.6),
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(Device.isSmartphone(context) ? 20 : 30),
                 ),
-                child: Icon(Icons.arrow_back_ios_rounded, color: kDeepTeal,),
+                child: Icon(Icons.arrow_back_ios_rounded, color: kDeepTeal, size: Device.isSmartphone(context) ? wv*8 : 40,),
               ),
             ),
-            SizedBox(width: wv*7,),
+            SizedBox(width: Device.isSmartphone(context) ? wv*7 : 60,),
             showDanAidLogo ? Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*10),
+              padding: Device.isSmartphone(context) ? EdgeInsets.symmetric(horizontal: wv*10) : EdgeInsets.zero,
               child: Image.asset('assets/icons/DanaidLogo.png')
             ) :
             title != null ? title! : Container(),

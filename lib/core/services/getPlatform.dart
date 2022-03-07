@@ -63,7 +63,7 @@ class Device {
   static bool get isAndroid => Platform.isAndroid;
   static bool get isFuchsia => Platform.isFuchsia;
   static bool get isIOS => Platform.isIOS;
-  static double get _ppi => (Platform.isAndroid || Platform.isIOS)? 150 : 96;
+  static double get _ppi => kIsWeb ? 96 : (Platform.isAndroid || Platform.isIOS) ? 150 : 96;
   static bool isLandscape(BuildContext c) => MediaQuery.of(c).orientation == Orientation.landscape;
   //PIXELS
   static Size size(BuildContext c) => MediaQuery.of(c).size;

@@ -250,7 +250,7 @@ class _PostDetailsState extends State<PostDetails> {
                           }
                           List<CommentBox> comments = [];
                           for(int i = 0; i < snapshot.data!.docs.length; i++){
-                            comments.add(CommentBox(comment: CommentModel.fromDocument(snapshot.data!.docs[i], snapshot.data!.docs[i].data() as Map), groupId: widget.groupId!, replyFocusNode: _commentFocusNode, notifyReply: replyToComment,));
+                            comments.add(CommentBox(comment: CommentModel.fromDocument(snapshot.data!.docs[i], snapshot.data!.docs[i].data() as Map), groupId: widget.groupId, replyFocusNode: _commentFocusNode, notifyReply: replyToComment,));
                           }
                           return Container(
                             padding: EdgeInsets.symmetric(horizontal: wv*3),

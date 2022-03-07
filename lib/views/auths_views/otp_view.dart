@@ -105,27 +105,29 @@ class _OtpViewState extends State<OtpView> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: darkGreyColor,
-                              fontSize: fontSize(size: 17)
+                              fontSize: Device.isSmartphone(context) ? fontSize(size: 17) : 20 
                             ),
                           ),
                         ),
                         buildTimer(),
                         otpForm(),
                         //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
-                        !(pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty)
-                          ? CustomDisabledTextButton(text: S.of(context).validezLeCode,)
-                          : load ? Center(child: Loaders().buttonLoader(kPrimaryColor))
-                            : CustomTextButton(
-                                text: S.of(context).validezLeCode, 
-                                color: kPrimaryColor, 
-                                action: 
-                                  () async {
-                                    setState(() {
-                                      load = true;
-                                    });
-                                    signInWithPhoneNumber();
-                                  },
-                              ),
+                        SizedBox(
+                          width: Device.isSmartphone(context) ? wv*100 : 810,
+                          child: CustomTextButton(
+                            isLoading: load,
+                            enable: pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty,
+                            text: S.of(context).validezLeCode, 
+                            color: kPrimaryColor, 
+                            action: 
+                              () async {
+                                setState(() {
+                                  load = true;
+                                });
+                                signInWithPhoneNumber();
+                              },
+                          ),
+                        ),
                         SizedBox(height: SizeConfig.screenHeight! * .01),
                         GestureDetector(
                           onTap: () => navigateReplaceTo(context: context, routeName: '/login'),
@@ -134,7 +136,7 @@ class _OtpViewState extends State<OtpView> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 decoration: TextDecoration.underline,
-                                fontSize: fontSize(size: 18),
+                                fontSize: Device.isSmartphone(context) ? fontSize(size: 18) : 20 ,
                                 fontWeight: FontWeight.w700),
                           ),
                         ),
@@ -155,7 +157,7 @@ class _OtpViewState extends State<OtpView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(S.of(context).leCodeExpireDans, style: TextStyle(fontWeight: FontWeight.w700, fontSize: fontSize(size: 18))),
+          Text(S.of(context).leCodeExpireDans, style: TextStyle(fontWeight: FontWeight.w700, fontSize: Device.isSmartphone(context) ? fontSize(size: 18) : 20 )),
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 40.0, end: 0.0),
             duration: Duration(seconds: 120),
@@ -164,7 +166,7 @@ class _OtpViewState extends State<OtpView> {
               style: TextStyle(
                   color: kPrimaryColor,
                   fontWeight: FontWeight.w700,
-                  fontSize: fontSize(size: 18)
+                  fontSize: Device.isSmartphone(context) ? fontSize(size: 18) : 20 
               ),
             ),
           ),
@@ -173,45 +175,60 @@ class _OtpViewState extends State<OtpView> {
     );
   }
 
+  OutlineInputBorder getOutlineInputBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(Device.isSmartphone(context) ? getProportionateScreenWidth(15) : 10),
+      borderSide: BorderSide(color: kTextColor),
+    );
+  }
+
   Container otpForm() {
+    var otpDecoration = InputDecoration(
+      contentPadding: EdgeInsets.symmetric(vertical: Device.isSmartphone(context) ? getProportionateScreenWidth(15) : 100),
+      border: getOutlineInputBorder(),
+      focusedBorder: getOutlineInputBorder(),
+      enabledBorder: getOutlineInputBorder(),
+    );
     return Container(
       padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
       child: Form(
         key: _mFormKey,
         child: Column(
           children: [
-            SizedBox(height: SizeConfig.screenHeight! * .038),
+            SizedBox(height:Device.isSmartphone(context) ? SizeConfig.screenHeight! * .038 : 100 ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: getProportionateScreenWidth(60),
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
                   child: TextFormField(
                     controller: pin1Controller,
                     autofocus: true,
                     //obscureText: true,
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: otpInputDecoration,
+                    decoration: otpDecoration,
                     onChanged: (value) {nextField(value, pin2FocusNode!); setState((){});},
                   ),
                 ),
+                const SizedBox(width: 10),
                 SizedBox(
-                  width: getProportionateScreenWidth(60),
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
                   child: TextFormField(
                     controller: pin2Controller,
                     focusNode: pin2FocusNode,
                     //obscureText: true,
-                    style: TextStyle(fontSize: 24),
+                    style: const TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: otpInputDecoration,
+                    decoration: otpDecoration,
                     onChanged: (value) {nextField(value, pin3FocusNode!); setState((){});},
                   ),
                 ),
+                const SizedBox(width: 10),
                 SizedBox(
-                  width: getProportionateScreenWidth(60),
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
                   child: TextFormField(
                     controller: pin3Controller,
                     focusNode: pin3FocusNode,
@@ -219,12 +236,13 @@ class _OtpViewState extends State<OtpView> {
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: otpInputDecoration,
+                    decoration: otpDecoration,
                     onChanged: (value) {nextField(value, pin4FocusNode!); setState((){});},
                   ),
                 ),
+                const SizedBox(width: 10),
                 SizedBox(
-                  width: getProportionateScreenWidth(60),
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
                   child: TextFormField(
                     controller: pin4Controller,
                     focusNode: pin4FocusNode,
@@ -232,12 +250,13 @@ class _OtpViewState extends State<OtpView> {
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: otpInputDecoration,
+                    decoration: otpDecoration,
                     onChanged: (value) {nextField(value, pin5FocusNode!); setState((){});},
                   ),
                 ),
+                const SizedBox(width: 10),
                 SizedBox(
-                  width: getProportionateScreenWidth(60),
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
                   child: TextFormField(
                     controller: pin5Controller,
                     focusNode: pin5FocusNode,
@@ -245,12 +264,13 @@ class _OtpViewState extends State<OtpView> {
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: otpInputDecoration,
+                    decoration: otpDecoration,
                     onChanged: (value) {nextField(value, pin6FocusNode!); setState((){});},
                   ),
                 ),
+                const SizedBox(width: 10),
                 SizedBox(
-                  width: getProportionateScreenWidth(60),
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
                   child: TextFormField(
                     controller: pin6Controller,
                     focusNode: pin6FocusNode,
@@ -258,7 +278,7 @@ class _OtpViewState extends State<OtpView> {
                     style: TextStyle(fontSize: 24),
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
-                    decoration: otpInputDecoration,
+                    decoration: otpDecoration,
                     onChanged: (value) {
                       setState((){});
                       if (value.length == 1) {
