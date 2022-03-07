@@ -711,10 +711,10 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                       MaterialPageRoute(
                                         builder: (context) => InactiveAccountProvider(
                                           data: adherent,
-                                          phoneNumber: phone!,
+                                          phoneNumber: phone,
                                           isAccountIsExists: true,
                                           consultationType:
-                                              consultationTypeData!,
+                                              consultationTypeData,
                                         ),
                                       ),
                                     );

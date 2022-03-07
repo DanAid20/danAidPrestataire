@@ -246,7 +246,11 @@ class _EditPrestataireState extends State<EditPrestataire> {
     }
 
   }
-
+  
+  saveConsult(){
+    setState(() {
+      consultationChosen = !consultationChosen!;});
+  }
   @override
   void initState() {
     _initializeMap();
@@ -301,7 +305,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                                       padding: const EdgeInsets.all(20.0),
                                     ),
-                                    imageUrl:prestataire.avatarUrl!,),
+                                    imageUrl:prestataire.avatarUrl ?? "",),
                                 ),
                                   //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                               ),

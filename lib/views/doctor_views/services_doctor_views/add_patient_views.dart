@@ -360,7 +360,7 @@ class _AddPatientViewState extends State<AddPatientView> {
           backgroundColor: kBgTextColor,
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.arrow_back_ios,
                   color: kDateTextColor,
                 ),
@@ -370,9 +370,8 @@ class _AddPatientViewState extends State<AddPatientView> {
               child: Container(
                 child: Column(
                   children: [
-                    Text(S.of(context).dmarrer),
-                    Text(
-                        '${DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now())}')
+                    Text(S.of(context).dmarrer,style: const TextStyle(color: kBlueForce ),),
+                    Text(DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now()), style: const TextStyle(color: kBlueForce ),)
                   ],
                 ),
               ),

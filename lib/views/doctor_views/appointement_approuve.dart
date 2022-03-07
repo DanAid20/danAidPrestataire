@@ -101,8 +101,13 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_){
+
+  // Add Your Code here.
     initialization();
-  code = getRandomString(4);
+    code = getRandomString(4);
+
+});
   }
 
   String getRandomString(int length) {
@@ -324,7 +329,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
                           SizedBox(height: hv*1.2,),
                           isPrestataire==false && doc != null ? DoctorInfoCard(
                             noPadding: true,
-                            avatarUrl: doc!.avatarUrl!,
+                            avatarUrl: doc!.avatarUrl?? "",
                             name: doc!.cniName!,
                             title: S.of(context).medecinDeFamille + doc!.field!,
                             speciality: doc!.speciality!,

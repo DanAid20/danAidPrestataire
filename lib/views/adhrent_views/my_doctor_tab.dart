@@ -141,14 +141,15 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
     AdherentModelProvider adherent = Provider.of<AdherentModelProvider>(context);
     ConversationModelProvider conversation = Provider.of<ConversationModelProvider>(context);
     //DoctorModel doctor = adherent.getAdherent.familyDoctor;
+    print(adherent.getAdherent?.familyDoctorId);
     return Container(
       color: Colors.grey[100],
       child: Column(
         children: [
           Expanded(
-            child: adherent.getAdherent?.familyDoctorId != null ? ListView(children: [
+            child: adherent.getAdherent?.familyDoctorId!.toString() != null ? ListView(children: [
               StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId).snapshots(),
+                stream: FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId!.toString()).snapshots(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData){
                     return const Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),);

@@ -179,7 +179,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 2.0),
             height: 110.r,
-            child: new ListView(
+            child:  ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
                 GestureDetector(
@@ -389,7 +389,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   itemBuilder: (context, index) {
                     var componenent;
                     DocumentSnapshot doc = snapshot.data!.docs[index];
-                     if(doc["adherentId"] != doc["beneficiaryId"]){
+                    if(doc["adherentId"] != doc["beneficiaryId"]){
                             CollectionReference users =
                               FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
                           componenent= FutureBuilder<DocumentSnapshot>(
@@ -519,16 +519,17 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       return StreamBuilder(
         stream: query,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-                      return Center(
+          print('fdhdjkshfjdks');
+          if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
                         child: CircularProgressIndicator(
                           valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
                         ),
                       );
-                    }
+          }
           
         
-        return snapshot.data.docs.length!=0? ListView.builder(
+        return snapshot.connectionState == ConnectionState.done && snapshot.data.docs.length!=0? ListView.builder(
                      shrinkWrap: true,
                      itemCount: snapshot.data.docs.length,
                      itemBuilder: (context, index) {
@@ -661,7 +662,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
               mainAxisSize: MainAxisSize.min,
               children: [
                    getPrestataireList(
-                        prestataire.getServiceProvider!.id)
+                        prestataire.getServiceProvider?.id)
                     
               ],
             ))

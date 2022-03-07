@@ -376,13 +376,13 @@ Widget questionDuDocteur() {
 
                   SizedBox(height: hv*2,),
                   Row(children: [
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel!.posts == null ? 0 : userProvider.getUserModel!.posts),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: userProvider.getUserModel!.comments == null ? 0 : userProvider.getUserModel!.comments),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: userProvider.getUserModel!.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context).chats, occurence: userProvider.getUserModel!.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context).chats, occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   SizedBox(height: hv*2,) 
                 ],
@@ -391,7 +391,6 @@ Widget questionDuDocteur() {
           ),
         ),
       Container(
-       
         margin:
             EdgeInsets.only(left: inch * 1.5, right: inch * 1.5, top: inch * 0),
         child: Row(

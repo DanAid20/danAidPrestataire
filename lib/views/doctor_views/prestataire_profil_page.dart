@@ -193,28 +193,28 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 children: [
                                   
                                   SizedBox(height: hv*1),
-                                  prestataire.getServiceProvider!.serviceList==null ? Padding(
+                                  prestataire.getServiceProvider?.serviceList==null ? Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Center(child: Container(margin: EdgeInsets.only(top:10),child:Text('Aucun Services selectioner', textScaleFactor: 1.0, style: TextStyle(color:whiteColor, fontWeight: FontWeight.w500, fontSize: 15.sp)))),
-                                  ): Container(),
-                                 prestataire.getServiceProvider!.serviceList !=null? Row(
+                                    child: Center(child: Container(margin: const EdgeInsets.only(top:10),child:Text('Aucun Services selectioner', textScaleFactor: 1.0, style: TextStyle(color:whiteColor, fontWeight: FontWeight.w500, fontSize: 15.sp)))),
+                                  ):Container(),
+                                 prestataire.getServiceProvider?.serviceList!=null ? Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       getFeatureCard(title: "Services Offerts", isActifService: true),
-                                       prestataire.getServiceProvider!.serviceList['Consultation'] ? getFeatureCard(title: "Consultations") : Container(),
-                                       prestataire.getServiceProvider!.serviceList['SoinsAmbulances'] ? getFeatureCard(title: "Soins Ambulances") : Container(),
+                                       prestataire.getServiceProvider?.serviceList['Consultation'] ?? getFeatureCard(title: "Consultations"),
+                                       prestataire.getServiceProvider?.serviceList['SoinsAmbulances'] ?? getFeatureCard(title: "Soins Ambulances"),
                                     ],
-                                  ): Container(),
-                                   prestataire.getServiceProvider!.serviceList !=null? Row(
+                                  ):Container(),
+                                   prestataire.getServiceProvider?.serviceList!=null ? Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                       prestataire.getServiceProvider!.serviceList['Pharmacie'] ? getFeatureCard(title: "Pharmacie") : Container(),
-                                       prestataire.getServiceProvider!.serviceList['laboratoire'] ? getFeatureCard(title: "Labo") : Container() ,
-                                       prestataire.getServiceProvider!.serviceList['Hospitalisation'] ? getFeatureCard(title: "Hospitalisation") : Container() ,
+                                       prestataire.getServiceProvider?.serviceList['Pharmacie'] ?? getFeatureCard(title: "Pharmacie") ,
+                                       prestataire.getServiceProvider?.serviceList['laboratoire'] ?? getFeatureCard(title: "Labo"),
+                                       prestataire.getServiceProvider?.serviceList['Hospitalisation'] ?? getFeatureCard(title: "Hospitalisation"),
                                     ],
-                                    ): Container(),
+                                    ):Container(),
                                 
                                 ],
                               ),
@@ -240,7 +240,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                         SizedBox(height: 3,),
                         Padding(
                           padding: const EdgeInsets.all(10),
-                          child: Text(prestatiaireObject!.about ?? 'RAS' , textScaleFactor: 1.0,
+                          child: Text(prestatiaireObject?.about ?? 'RAS' , textScaleFactor: 1.0,
                            style: TextStyle(fontSize:14.sp ),),
                         ),
                         SizedBox(height: 2.h,),
@@ -331,7 +331,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                    HomePageComponents().getAvatar(
-                            imgUrl: prestatiaireObject.avatarUrl! ,
+                            imgUrl: prestatiaireObject?.avatarUrl?? "" ,
                             size: wv * 8.3,
                             renoveIsConnectedButton: false),
                                 ],
@@ -349,11 +349,11 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                     fontWeight: FontWeight.w500,
                                   ),),
                                   SizedBox(height: 4.h,),
-                                  Text( prestatiaireObject.specialite!=null ? prestatiaireObject.specialite.toString() : 'non defini' ,
+                                  Text( prestatiaireObject?.specialite ??'non defini' ,
                                     textScaleFactor: 1.0,
                                    style: TextStyle(
                                     fontSize: 14.sp,
-                                    color: prestatiaireObject==null  &&  prestatiaireObject.specialite==null  ? kShadowColor : kBlueDeep,
+                                    color: prestatiaireObject==null  &&  prestatiaireObject?.specialite==null  ? kShadowColor : kBlueDeep,
                                     fontWeight: FontWeight.w500,
                                   ),),
                                   SizedBox(height: 2.h,),  
@@ -377,7 +377,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                   fontWeight: FontWeight.w600,
                                 ) ),
                          
-                          Text(prestatiaireObject.localisation ?? 'localisation non defini '  ,
+                          Text(prestatiaireObject?.localisation ?? 'localisation non defini '  ,
                                 textScaleFactor: 1.0,
                                 style: TextStyle(
                                   fontSize: 12.sp,
@@ -413,12 +413,12 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                            zoomGesturesEnabled: true,
                            markers: markers!,  
                           onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(target: prestatiaireObject.coordGps == null ? _center! : LatLng(
-                            prestatiaireObject.coordGps!["latitude"] != null ?
-                             prestatiaireObject.coordGps!["latitude"]! : 
+                          initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center! : LatLng(
+                            prestatiaireObject?.coordGps!["latitude"] != null ?
+                             prestatiaireObject?.coordGps!["latitude"]! : 
                             _center!.latitude, 
-                          prestatiaireObject.coordGps!["longitude"] != null ? 
-                          prestatiaireObject.coordGps!["longitude"]! :
+                          prestatiaireObject?.coordGps!["longitude"] != null ? 
+                          prestatiaireObject?.coordGps!["longitude"]! :
                            _center!.longitude), zoom: 11.0),
                           
                         ),
@@ -442,7 +442,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                             child: InkWell(
                               onTap: ()=>{
                                 CameraPosition(
-                            target: prestatiaireObject.coordGps == null ? _center! : LatLng(prestatiaireObject.coordGps!["latitude"], prestatiaireObject.coordGps!["longitude"]),
+                            target: prestatiaireObject?.coordGps == null ? _center! : LatLng(prestatiaireObject?.coordGps!["latitude"], prestatiaireObject?.coordGps!["longitude"]),
                             zoom: 11.0,
                           )
                               },

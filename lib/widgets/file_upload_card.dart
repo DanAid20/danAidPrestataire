@@ -10,7 +10,7 @@ class FileUploadCard extends StatelessWidget {
   final bool? state;
   final bool? loading;
   final bool? isMultiple;
-  final Function? action;
+  final Function()? action;
 
   const FileUploadCard({Key? key, this.title, this.state, this.action, this.loading, this.isMultiple = false}) : super(key: key);
 
@@ -41,7 +41,7 @@ class FileUploadCard extends StatelessWidget {
         ),
         Align(alignment: Alignment.centerRight,
           child: !loading! ? TextButton(
-            onPressed: ()=>action, 
+            onPressed: action, 
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(kPrimaryColor),
               shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),

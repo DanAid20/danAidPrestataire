@@ -20,6 +20,8 @@ import 'package:danaid/helpers/constants.dart' as profile;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DoctorProfilePage extends StatefulWidget {
+  const DoctorProfilePage({Key? key}) : super(key: key);
+
   @override
   _DoctorProfilePageState createState() => _DoctorProfilePageState();
 }
@@ -101,8 +103,10 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   @override
   void initState() {
+    WidgetsBinding.instance?.addPostFrameCallback((_){
     initAvailability();
-    // TODO: implement initState
+    });
+   
     super.initState();
   }
   
@@ -128,7 +132,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
           backgroundColor: isPrestataire? kGold:kPrimaryColor,
           leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: ()=> userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? Navigator.pop(context) : doctorProvider.getDoctor?.id == doctor.getDoctor!.id ? controller.setIndex(1) : Navigator.pop(context),),
           actions: [
-            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){},)
+            IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg'), onPressed: (){print("fjdskfjkdlsfj");},)
           ],
         ),
         body: SingleChildScrollView(
@@ -262,7 +266,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                                           child: Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                                           padding: EdgeInsets.all(20.0),
                                         ),
-                                        imageUrl: doctor.getDoctor!.avatarUrl!,),
+                                        imageUrl: doctor.getDoctor!.avatarUrl?? ""),
                                     ),
                                     radius: wv*8,
                                 ),
@@ -418,19 +422,19 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
                   SizedBox(height: 30,
                     child: Row(
                       children: [
-                        SizedBox(width: 5,),
+                        const SizedBox(width: 5,),
                         TextButton.icon(
                           onPressed: (){},
                           icon: SvgPicture.asset("assets/icons/Bulk/Chat.svg", color: whiteColor),
-                          label: Text(S.of(context).ecrire, style: TextStyle(color: whiteColor),),
+                          label: Text(S.of(context).ecrire, style: const TextStyle(color: whiteColor),),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(kPrimaryColor),
-                            padding: MaterialStateProperty.all(EdgeInsets.only(right: 10, left: 8)),
-                            shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                            padding: MaterialStateProperty.all(const EdgeInsets.only(right: 10, left: 8)),
+                            shape: MaterialStateProperty.all(const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
                           ),
                         ),
 
-                        SizedBox(width: 10,),
+                        const SizedBox(width: 10,),
 
                         TextButton.icon(
                           onPressed: (){},

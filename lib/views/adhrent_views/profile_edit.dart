@@ -329,9 +329,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => Container(
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
-                                      padding: EdgeInsets.all(20.0),
+                                      padding: const EdgeInsets.all(20.0),
                                     ),
-                                    imageUrl: adherentModelProvider.getAdherent!.imgUrl!),
+                                    imageUrl: adherentModelProvider.getAdherent!.imgUrl.toString()),
                                 ),
                                   //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                               ),
@@ -339,7 +339,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                               imageSpinner ? Positioned(
                                 top: hv*7,
                                 right: wv*13,
-                                child: CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
+                                child: const CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
                               ) : Container(),
 
                               Positioned(
