@@ -373,15 +373,15 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         stream: query,
         builder: (context, snapshot) {
           //print(snapshot.data.docs.length);
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
           }
-          if (snapshot.data == null) return const  CircularProgressIndicator();
-          return snapshot.hasData
+          
+          return snapshot.connectionState == ConnectionState.done && snapshot.hasData==true
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -519,7 +519,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       return StreamBuilder(
         stream: query,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          print('fdhdjkshfjdks');
+         
           if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: CircularProgressIndicator(
