@@ -47,6 +47,8 @@ class _CreateQuoteState extends State<CreateQuote> {
   bool? isAllOk=false;
   bool? buttonLoading = false;
   String? devisId;
+  String? namePrestataire;
+  String? prestatataireId;
   String? categoriesType=consultation;
   String? appontementId, userId, adherentId, beneficiaryId;
   int? numberOfImagesuploaded=0;
@@ -91,20 +93,29 @@ class _CreateQuoteState extends State<CreateQuote> {
     return 'Devis N.' + result;
   }
 
-
+   getPrestatarieInfos(id)async{
+     var newUseCase = FirebaseFirestore.instance.collection('MEDECINS').doc(id);
+    newUseCase.get().then((value){
+      var result= value.data() as Map<String, dynamic>;
+      if(value.exists){
+        setState(() {
+           namePrestataire=result['name'] ?? '';
+           prestatataireId=result['id'] ?? '';
+        });
+        
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     MySize().init(context);
-     ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
-    var prestatiaireObject= prestataire.getServiceProvider;
+     UserProvider userInfos = Provider.of<UserProvider>(context, listen: false);
     String doc1 = categoriesType == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
     String doc3 = categoriesType == consultation ? "Autre" : categoriesType == labo ? "Resultat" : "Medicamment";
-
-    setState(() {
-          prestataireInfos=prestatiaireObject;
-        });
+    getPrestatarieInfos(userInfos.getAuthId);
+   
     return WillPopScope(
       onWillPop:()async{
           Navigator.pop(context);
@@ -374,59 +385,67 @@ class _CreateQuoteState extends State<CreateQuote> {
                                     //                     "PrixCOuvert": 7000,
                                     //                 },
                                     //             ];
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
                                     
-                                        await checkIfDocExists( _codeConsultationController!.text.toString()).then((value){
-                                          setState((){confirmSpinner = true;});
-                                      if(value!=null && _montantController!.text.toString().isNotEmpty  &&  _codeConsultationController!.text.toString().isNotEmpty){
-                                      if(categoriesType == pharmacy || categoriesType == labo){
-                                       FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
-                                          "usecaseId": value["id"],
-                                          "adherentId": adherentId,
-                                          "beneficiaryId": beneficiaryId,
-                                          "isConfirmDrugList": false,
-                                          "status": 2,
-                                          "paid": false,
-                                          "PaiementCode":null,
-                                          "drugsList" : null,
-                                          "appointementId": value["idAppointement"],
-                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
-                                          "titleDuDEvis":devisId,
-                                          "consultationCode": _codeConsultationController!.text.toString(),
-                                          "amountToPay":num.parse(_montantController!.text.toString()),
-                                          "establishment": prestataireInfos!.name,
-                                          "prestataireId":prestataireInfos!.id,
-                                          "adminFeedback": null,
-                                          "justifiedFees": null,
-                                          "type": categoriesType,
-                                          "createdDate": DateTime.now(),
-                                          "serviceDate": null,
-                                          "precriptionUrls": FieldValue.arrayUnion(docs1List!),
-                                          "receiptUrls": FieldValue.arrayUnion(docs2List!),
-                                          "drugsUrls": categoriesType == pharmacy ? FieldValue.arrayUnion(docs3List!) : [],
-                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
-                                          'closed': true,
-                                          "precriptionIsValid": null,
-                                          "receiptIsValid": null,
-                                          "drugsIsValid": null,
-                                          "resultsIsValid": null,
-                                          "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
-                                          "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
-                                          "drugsUploadDate": docs3List!.isNotEmpty && categoriesType == pharmacy ? DateTime.now() : null,
-                                          "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
-                                          "executed": docs2List!.isNotEmpty ? true : false,
-                                          "estimated": docs1List!.isNotEmpty ? true : false
-                                        }).then((doc) {
+                                        await checkIfDocExists( _codeConsultationController!.text).then((value) async {
+                                          setState((){confirmSpinner = true;});  
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_montantController!.text)));
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(categoriesType.toString())));
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value.toString())));
+                                    //  
+                                     if(value!=null && _montantController!.text.isNotEmpty  &&  _codeConsultationController!.text.isNotEmpty){
+                                      if(categoriesType == pharmacy || categoriesType == labo || categoriesType == consultation){
+                                      //  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("fdsfdsf")));
+                                       await FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').doc().set({
+                                           "usecaseId": value["id"],
+                                           "adherentId": adherentId,
+                                           "beneficiaryId": beneficiaryId,
+                                           "isConfirmDrugList": false,
+                                           "status": 2,
+                                           "paid": false,
+                                           "PaiementCode":null,
+                                           "drugsList" : null,
+                                           "appointementId": value["idAppointement"],
+                                           "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
+                                           "titleDuDEvis":devisId,
+                                           "consultationCode": _codeConsultationController!.text.toString(),
+                                           "amountToPay":num.parse(_montantController!.text.toString()),
+                                           "establishment": namePrestataire,
+                                           "prestataireId":prestatataireId,
+                                           "adminFeedback": null,
+                                           "justifiedFees": null,
+                                           "type": categoriesType,
+                                           "createdDate": DateTime.now(),
+                                           "serviceDate": null,
+                                           "precriptionUrls": FieldValue.arrayUnion(docs1List!),
+                                           "receiptUrls": FieldValue.arrayUnion(docs2List!),
+                                           "drugsUrls": categoriesType == pharmacy || categoriesType == consultation? FieldValue.arrayUnion(docs3List!) : [],
+                                           "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
+                                           'closed': true,
+                                           "precriptionIsValid": null,
+                                           "receiptIsValid": null,
+                                           "drugsIsValid": null,
+                                           "resultsIsValid": null,
+                                           "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
+                                           "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
+                                           "drugsUploadDate": docs3List!.isNotEmpty && categoriesType == pharmacy || categoriesType == consultation ? DateTime.now() : null,
+                                           "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
+                                           "executed": docs2List!.isNotEmpty ? true : false,
+                                           "estimated": docs1List!.isNotEmpty ? true : false
+                                        }, SetOptions(merge: true)).then((doc) {
                                           
                                           setState((){confirmSpinner = false;});
                                           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Nouvelle prestation ajoutée'),));
                                           Navigator.pop(context);
                                         }).onError((error, stackTrace) {
                                           setState((){confirmSpinner = false;});
+                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
                                         });
                                     }
                                     if(categoriesType == hospitalization || categoriesType == ambulance){
-                                    
-                                        FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
+
+                                      await FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
                                           "usecaseId": value["id"],
                                           "adherentId": adherentId,
                                           "beneficiaryId": beneficiaryId,
@@ -440,7 +459,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                           "titleDuDEvis":devisId,
                                           "consultationCode": _codeConsultationController!.text.toString(),
                                           "amountToPay":num.parse(_montantController!.text.toString()),
-                                          "establishment": prestataireInfos!.name,
+                                          "establishment": namePrestataire,
                                           "adminFeedback": null,
                                           "justifiedFees": 0,
                                           "type": categoriesType,
@@ -469,9 +488,12 @@ class _CreateQuoteState extends State<CreateQuote> {
                                           Navigator.pop(context);
                                         }).onError((error, stackTrace) {
                                           setState((){confirmSpinner = false;});
+                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+
                                         });
                                       } 
-                                    
+
+                                       setState((){confirmSpinner = false;}); 
                                     }else if(categoriesType==null){
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).choisissezLeTypeDeDevis)));
                                        setState((){confirmSpinner = false;});
@@ -480,7 +502,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                        setState((){confirmSpinner = false;});
                                     }else{
                                        setState((){confirmSpinner = false;});
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: const Text("veuillez remplir le formulaire "),));
+                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("veuillez remplir le formulaire "),));
                                     }
                                   });
                                   

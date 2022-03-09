@@ -131,7 +131,7 @@ double? imc=0;
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const  BoxDecoration(
                     color: whiteColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10),

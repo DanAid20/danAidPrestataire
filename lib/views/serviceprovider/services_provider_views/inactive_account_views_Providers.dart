@@ -1,5 +1,5 @@
-// ignore_for_file: avoid_print
 
+import 'package:flutter/foundation.dart';
 import 'dart:math';
 import 'dart:ui';
 
@@ -29,7 +29,9 @@ import 'package:line_icons/line_icons.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../../../core/models/serviceProviderModel.dart';
 import '../../../core/providers/doctorModelProvider.dart';
+import '../../../core/providers/userProvider.dart';
 import '../../../helpers/constants.dart';
 import '../../../widgets/home_page_mini_components.dart';
 import '../../../helpers/utils.dart';
@@ -576,7 +578,11 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     adherentModelProvider = Provider.of<AdherentModelProvider>(context);
     AdherentModel? adherent = adherentModelProvider!.getAdherent;
      DoctorModelProvider? doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    ServiceProviderModelProvider prestataireProvider = Provider.of<ServiceProviderModelProvider>(context,listen: false);
+    ServiceProviderModel? prestataire = prestataireProvider.getServiceProvider;
+     
        // if (kDebugMode) {
+
     print(widget.data);
     print("fidjhfdjskhfdsjkfhdsfjkhdsfjkdshfdjksfhdksjhfdjks");
        // }
@@ -681,7 +687,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                  
                       widget.isAccountIsExists == false
                           ? const SizedBox.shrink()
-                          : isRequestLaunch! ? Loaders().buttonLoader(kPrimaryColor) :Container(
+                          : isRequestLaunch==true ? Loaders().buttonLoader(kPrimaryColor) :Container(
                             alignment: Alignment.bottomCenter,
                             child: Align(
                                 alignment: Alignment.bottomCenter,
@@ -689,9 +695,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                   width: wv * 80,
                                   child: TextButton(
                                     onPressed: () async {
-                                         if (kDebugMode) {
                                            print("fdskfjgdskjfhdljksflkjsdflkjsdhfkljasdfhjkdasf");
-                                         }
+                                      
                                       // if (adherent.enable == false) {
                                       //   showDialog(
                                       //       context: context,
@@ -709,98 +714,40 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                         //           )),
                                         // );
                                       //}
-                                      if (kDebugMode) {
+                                     // if (kDebugMode) {
                                         print(userSelected);
-                                      }
+                                    //  }
                                        final Map<String, dynamic> userData = {
                                             'codeConsultation': code,
                                             'createdDate': DateTime.now()
                                           };
                                        
                                        if(userSelected!=-1){
-                                         if (kDebugMode) {
-                                           print(adherentModelProvider!.getAdherent!.adherentId);
-                                         }
-                                          ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context,listen: false);
-
-                                             var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                              .where('adherentId', isEqualTo: adherentModelProvider!.getAdherent!.adherentId ).where('idMedecin',isEqualTo:prestataire.getServiceProvider!.id).orderBy('createdDate').get(); 
-                                              usecase.then((value) async {
-                                                if (kDebugMode) {
-                                                  print(value.docs.isEmpty);
-                                                }
-                                                    if(value.docs.isEmpty){    
-                                                      // cette consultation existe pas encore    
-                                                      //  Timestamp t = adherentModelProvider.getAdherent!.codeConsult['createdDate'];
-                                                      //   DateTime d = t.toDate();
-                                                      //   final date2 = DateTime.now();
-                                                      //   final difference = date2.difference(d).inDays;
-                                                      //    adherentModelProvider.getAdherent!.codeConsult['createdDate']
-                                                       print("-------nnnnnnn--------${adherentModelProvider!.getAdherent!.codeConsult}");
-                                                      // print("--------------------${adherentModelProvider.getAdherent!.codeConsult.isEmpty}");
-                                                      if(adherentModelProvider!.getAdherent!.codeConsult==null){
-                                                        if (kDebugMode) {
-                                                          print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
-                                                        }
-                                                        setState(() {
-                                                              isRequestLaunch=true;
-                                                            });
-                                                          await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
-                                                              await facturationCode(value);
-                                                              await addCodeToAdherent(userData);
-                                                              adherentModelProvider!.getAdherent!.codeConsult=userData;
+                                        // if (kDebugMode) {
+                                           // ignore: avoid_print
+                                        print(adherentModelProvider!.getAdherent!.adherentId);
+                                        // }
+                                                    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                                                    var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                                    .where('adherentId', isEqualTo: adherentModelProvider?.getAdherent!.adherentId ).where('idMedecin',isEqualTo:userProvider.getUserId).orderBy('createdDate').get(); 
+                                                    usecase.then((value) async {
+                                                        debugPrint('movieTitle: lkmjkljkljkljkljlk');
+                                                        print(value.docs.isEmpty);
+                                                    
+                                                          if(value.docs.isEmpty){    
+                                                            // cette consultation existe pas encore    
+                                                            //  Timestamp t = adherentModelProvider.getAdherent!.codeConsult['createdDate'];
+                                                            //   DateTime d = t.toDate();
+                                                            //   final date2 = DateTime.now();
+                                                            //   final difference = date2.difference(d).inDays;
+                                                            //    adherentModelProvider.getAdherent!.codeConsult['createdDate']
+                                                            print("-------nnnnnnn--------${adherentModelProvider!.getAdherent!.codeConsult}");
+                                                            // print("--------------------${adherentModelProvider.getAdherent!.codeConsult.isEmpty}");
+                                                            if(adherentModelProvider!.getAdherent!.codeConsult==null){
+                                                              if (kDebugMode) {
+                                                                print('dksjfhdsjkfhsdjklfhdskjfhdsjkfh');
+                                                              }
                                                               setState(() {
-                                                              isRequestLaunch=false;
-                                                            });
-                                                            
-                                                          }).then((value){
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      OwnerUserListView(
-                                                                        idOfAdherent:
-                                                                            widget.phoneNumber,
-                                                                        beneficiare: adherentUserSelected,
-                                                                        consultationCode:  adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
-                                                                        createdAt:  DateTime.now(),
-                                                                      )),
-                                                            ); 
-                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
-                                                          });
-                                                      }else{
-                                                         Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      OwnerUserListView(
-                                                                        idOfAdherent:
-                                                                            widget.phoneNumber,
-                                                                        beneficiare: adherentUserSelected,
-                                                                        consultationCode:  adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
-                                                                        createdAt:  DateTime.now(),
-                                                                      )),
-                                                            ); 
-                                                      }
-                                                          
-                                                    }else if(value.docs.isNotEmpty){
-                                                    Timestamp t = adherentModelProvider!.getAdherent!.codeConsult!['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider!.getAdherent!.codeConsult!['createdDate']):adherentModelProvider!.getAdherent!.codeConsult!['createdDate'];
-                                                    DateTime d = t.toDate();
-                                                   if (kDebugMode) {
-                                                     print(t);
-                                                     print(d);
-                                                   }
-                                                  final date2 = DateTime.now(); 
-                                                  final difference = date2.difference(d).inDays;
-                                                  if (kDebugMode) {
-                                                    print(difference);
-                                                  }
-                                                        if( difference>14 && adherentModelProvider!.getAdherent!.codeConsult!=null ){
-                                                                  if (kDebugMode) {
-                                                                    print('jfhsdkfhdjksf');
-                                                                  }
-                                                                  setState(() {
                                                                     isRequestLaunch=true;
                                                                   });
                                                                 await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
@@ -811,24 +758,8 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                     isRequestLaunch=false;
                                                                   });
                                                                   
-                                                                }).then((value){
-                                                                  Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) =>
-                                                                            OwnerUserListView(
-                                                                              idOfAdherent:
-                                                                                  widget.phoneNumber,
-                                                                              beneficiare: adherentUserSelected,
-                                                                              consultationCode: adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
-                                                                              createdAt:  DateTime.now(),
-                                                                            )),
-                                                                  ); 
-                                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
-                                                                });
-                                                        }else{
-                                                          Navigator.push(
+                                                                }).then((value) async {
+                                                                  await Navigator.push(
                                                                     context,
                                                                     MaterialPageRoute(
                                                                         builder: (context) =>
@@ -840,30 +771,103 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                                                               createdAt:  DateTime.now(),
                                                                             )),
                                                                   ); 
-                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                              SnackBar(content: Text(S.of(context).redirtectionVersLeCarnet)));
+                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
+                                                                });
+                                                            }else{
+                                                              await  Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            OwnerUserListView(
+                                                                              idOfAdherent:
+                                                                                  widget.phoneNumber,
+                                                                              beneficiare: adherentUserSelected,
+                                                                              consultationCode:  adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
+                                                                              createdAt:  DateTime.now(),
+                                                                            )),
+                                                                  ); 
+                                                            }
+                                                                
+                                                          }else if(value.docs.isNotEmpty){
+                                                          Timestamp t = adherentModelProvider!.getAdherent!.codeConsult!['createdDate'].runtimeType==DateTime?Timestamp.fromDate(adherentModelProvider!.getAdherent!.codeConsult!['createdDate']):adherentModelProvider!.getAdherent!.codeConsult!['createdDate'];
+                                                          DateTime d = t.toDate();
+                                                        if (kDebugMode) {
+                                                          print(t);
+                                                          print(d);
                                                         }
-                                                          
-                                                    }
-                                                    else{
-                                                        Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      OwnerUserListView(
-                                                                        idOfAdherent:
-                                                                            widget.phoneNumber,
-                                                                        beneficiare: adherentUserSelected,
-                                                                        consultationCode:  code,
-                                                                        createdAt:  DateTime.now(),
-                                                                      )),
-                                                            ); 
-                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                        SnackBar(content: Text(S.of(context).redirectionVersLeCarnet)));
+                                                        final date2 = DateTime.now(); 
+                                                        final difference = date2.difference(d).inDays;
+                                                        if (kDebugMode) {
+                                                          print(difference);
+                                                        }
+                                                              if( difference>14 && adherentModelProvider!.getAdherent!.codeConsult!=null ){
+                                                                        if (kDebugMode) {
+                                                                          print('jfhsdkfhdjksf');
+                                                                        }
+                                                                        setState(() {
+                                                                          isRequestLaunch=true;
+                                                                        });
+                                                                      await createConsultationCode(exists: widget.isAccountIsExists, id: null).then((value) async {
+                                                                          await facturationCode(value);
+                                                                          await addCodeToAdherent(userData);
+                                                                          adherentModelProvider!.getAdherent!.codeConsult=userData;
+                                                                          setState(() {
+                                                                          isRequestLaunch=false;
+                                           
+                                                                        });
+                                                                        
+                                                                      }).then((value) async {
+                                                                      await  Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) =>
+                                                                                  OwnerUserListView(
+                                                                                    idOfAdherent:
+                                                                                        widget.phoneNumber,
+                                                                                    beneficiare: adherentUserSelected,
+                                                                                    consultationCode: adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
+                                                                                    createdAt:  DateTime.now(),
+                                                                                  )),
+                                                                        ); 
+                                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                                    SnackBar(content: Text(S.of(context).uneFactureVientDtreCrerPourCette)));
+                                                                      });
+                                                              }else{
+                                                              await Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) =>
+                                                                                  OwnerUserListView(
+                                                                                    idOfAdherent:
+                                                                                        widget.phoneNumber,
+                                                                                    beneficiare: adherentUserSelected,
+                                                                                    consultationCode:  adherentModelProvider!.getAdherent!.codeConsult!['codeConsultation'],
+                                                                                    createdAt:  DateTime.now(),
+                                                                                  )),
+                                                                        ); 
+                                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                                    SnackBar(content: Text(S.of(context).redirtectionVersLeCarnet)));
+                                                              }
+                                                                
                                                           }
-                                                    });
-                                         
-                                         
+                                                          else{
+                                                              await Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            OwnerUserListView(
+                                                                              idOfAdherent:
+                                                                                  widget.phoneNumber,
+                                                                              beneficiare: adherentUserSelected,
+                                                                              consultationCode:  code,
+                                                                              createdAt:  DateTime.now(),
+                                                                            )),
+                                                                  ); 
+                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                              SnackBar(content: Text(S.of(context).redirectionVersLeCarnet)));
+                                                                }
+                                                          });
                                         
                                       }else{
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).selectionerUnBeneficiaireAvantDeValider)));

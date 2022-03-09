@@ -3,6 +3,7 @@ import 'package:danaid/core/models/facture.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
+import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -29,7 +30,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
    String? data= DateFormat("yyyy").format(DateTime.now());
    String? newsDate='';
    DateTime? today = DateTime.now();
-   List<Facture>? facture=[];
+   List<Facture> facture=[];
    int? currentYears= 0 ;
    List<Map<int, Map<String, Object>>>? paiementHistory= [];
    int? consultationpersonnes=0;
@@ -42,7 +43,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
 
     @override
   void initState() {
-    
+    WidgetsBinding.instance?.addPostFrameCallback((_){ 
     if (kDebugMode) {
       print(getMonthsInYear().toString());
     }
@@ -50,10 +51,12 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
     setState((){
       currentYears=int.parse(data!);
     }); 
+
+     });
     super.initState();
   }
-   List<String>? getMonthsInYear() {
-    List<String>? month=[];
+   List<String> getMonthsInYear() {
+    List<String> month=[];
      for(int i=1; i<=12; i++){
         var date = DateFormat("MMMM").format(DateTime(today!.year.toInt(), i));
         month.add(date);
@@ -72,16 +75,18 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
       setState(() {
           loading=true ;  
         });                            
-    var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate!), 1, 1, 0, 0 ));
- 
-     ServiceProviderModelProvider prestataireProvider =
-        Provider.of<ServiceProviderModelProvider>(context, listen: false);
-    
+    var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate!.toString()), 1, 1, 0, 0 ));
+  
+     UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+     ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(date)));
+                                    
     // on get la listes 
     if (kDebugMode) {
-      print(prestataireProvider.getServiceProvider?.id);
+      print(userProvider.getAuthId);
     }
-    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: prestataireProvider.getServiceProvider?.id).orderBy('createdAt', descending: true).get();
+    var facturation =  FirebaseFirestore.instance.collectionGroup('FACTURATIONS').where('idMedecin',  isEqualTo: userProvider.getUserId).orderBy('createdAt', descending: true).get();
         facturation.then((querySnapshot){
         if (kDebugMode) {
           print( querySnapshot.docs.length);
@@ -93,29 +98,30 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
            print(facturesList.createdAt);
           
            setState(() {
-              facture?.add(facturesList);
+              facture.add(facturesList);
            });
         }
        if (kDebugMode) {
-         print(facture!.length.toString()+"********************");
+         print(facture.length.toString()+"********************");
        }
 
-      List<String>? monthName= getMonthsInYear();
+      List<String> monthName= getMonthsInYear();
      // print(monthName.length);
-      monthName?.asMap().forEach((key, value) {
+      monthName.asMap().forEach((key, value) {
           if (kDebugMode) {
             print(key.toString()+'----');
             print(monthName[key].toString()+'----');
           }
-              var data =facture?.where((element){
+              var data =facture.where((element){
 
-                DateTime date = element.createdAt!;
-                String datetime= DateFormat("MMMM").format(date);
-                String year= DateFormat("yyyy").format(date);
-                return datetime==monthName[key] && date.year.toString()==year;
+                DateTime dates = element.createdAt!;
+                String datetime= DateFormat("MMMM").format(dates);
+                String year= DateFormat("yyyy").format(dates);
+                return datetime==monthName[key] && date==year;
               });
-      // print(data.toString());
-            if(data!.isNotEmpty){
+            print(" opppppppppoooooooooooooooooooooeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+            print(data.toString());
+            if(data.isNotEmpty){
                 List<Facture> fac=data.toList();
                 if (kDebugMode) {
                   print("+++++++++++++++++++++++++"+fac[0].toString());
@@ -126,14 +132,18 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                 var notReadyispaidalready= fac.where((element) => element.isSolve==false && element.canPay==1);
                 var personesConsultForMonth= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null && element.canPay==1 );
                 var personesConsultForMonthAll= fac.where((element) => element.types!='REFERENCEMENT' && element.types!=null  );
-                var personesReftForMonth= fac.where((element) =>  element.types!=null && element.types!.contains('REFERENCEMENT')==true && element.isSolve==true);
-                var personesReftForMonthAll= fac.where((element) => element.types!=null &&  element.types!.contains('REFERENCEMENT')==true );
+                var personesReftForMonth= fac.where((element) =>  element.types!=null && element.types?.contains('REFERENCEMENT')==true && element.isSolve==true);
+                var personesReftForMonthAll= fac.where((element) => element.types!=null &&  element.types?.contains('REFERENCEMENT')==true );
                 int sum=0;
-                fac.forEach((e)=>{
+                for (var e in fac) {
+                  print("222222222222222222222222222222222222222");
+                  print(e.amountToPay);
                   if(e.amountToPay!=null){
-                     sum += e.amountToPay!.toInt()
+                     sum += e.amountToPay!;
                   }
-                });
+                
+                }
+                print(personesConsultForMonth.length);
                 int readyPaid=0;
                 for (var e in ispaidalready) {
                   readyPaid += e.amountToPay!.toInt();
@@ -165,15 +175,16 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                   'lasDateOfMonth': formatedDate,
                   'EnAttente' : isSolve
                   } 
-                };  
-                if (kDebugMode) {
-                  print(obj);
+                };
+                debugPrint("dlsmadlksamdla");
+                 print(obj);
+               // if (kDebugMode) {
                   print(consultationpersonnes);
                   print(referencemeentPersonnes);
                   print(totalAnuel);
                   print(readyPaidYet);
                   print(paidYear);
-                }
+              //  }
               paiementHistory?.add(obj);
             }
          
@@ -211,7 +222,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
               alignment: Alignment.center,
               child: Container(
                 child: Column(
-                  children: [Text(S.of(context).historiqueDesPrestations), Text(S.of(context).vosConsultationsPaiement)],
+                  children: [Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)), Text(S.of(context).vosConsultationsPaiement, style:  TextStyle(color: kBlueForce, fontSize: wv*4))],
                 ),
               ),
             ),
@@ -247,7 +258,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                child: Row(
                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
                                         if( currentYears!=dataTIme+1){
                                          setState((){
@@ -269,7 +280,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
                                         if( currentYears!=dataTIme){
                                            setState((){
@@ -291,7 +302,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
                                           if( currentYears!=dataTIme-1){
                                               setState((){
@@ -313,7 +324,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                       ],
                                     ),
                                   ),
-                                  GestureDetector(
+                                  InkWell(
                                       onTap: ()=>{
                                           if( currentYears!=dataTIme-2){
                                                setState((){
@@ -538,7 +549,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                   margin: EdgeInsets.only(top: hv * 2),
                               child: Column(
                                 children: [
-                                  GestureDetector(
+                                  InkWell(
                                     onTap: ()=>{
                                       getPaiement()
                                     },
@@ -589,14 +600,14 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           month:paiementHistory!.elementAt(index)[key]!['month']!.toString(), 
                                           paidAllReady: paiementHistory!.elementAt(index)[key]!['paidAllReady']!.toString(),
                                           paidOrNot: paiementHistory?.elementAt(index)[key]!['EnAttente'] as bool,
-                                          prix: paiementHistory?.elementAt(index)[key]!['totlaOfMonths']as String
+                                          prix: paiementHistory?.elementAt(index)[key]!['totlaOfMonths']!.toString()
                                         ));
                                       }
                                  
                                   }else {
-                                    return Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
+                                    return Text(S.of(context).aucuneTransactionPourCetteAnne);
                                   }
-                                  return  Container(child: Text(S.of(context).aucuneTransactionPourCetteAnne));
+                                  return  Text(S.of(context).aucuneTransactionPourCetteAnne);
                              
                                  }
                               ),

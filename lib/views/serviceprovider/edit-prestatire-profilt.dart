@@ -156,12 +156,12 @@ class _EditPrestataireState extends State<EditPrestataire> {
     ServiceProviderModelProvider servicetProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
    
       setState(() {
-        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider!.region!);
-        _region = servicetProvider.getServiceProvider!.region;
+        _stateCode = getStateCodeFromRegion(regions, servicetProvider.getServiceProvider?.region!);
+        _region = servicetProvider.getServiceProvider?.region;
         regionChosen = true;
       cityChosen = true;
       
-      _city = servicetProvider.getServiceProvider!.town;
+      _city = servicetProvider.getServiceProvider?.town;
       });
    
     
@@ -171,53 +171,53 @@ class _EditPrestataireState extends State<EditPrestataire> {
 
     ServiceProviderModelProvider serviceProvider = Provider.of<ServiceProviderModelProvider>(context, listen: false);
     
-    if((serviceProvider.getServiceProvider!.about != null) & (serviceProvider.getServiceProvider!.about != "")){
+    if((serviceProvider.getServiceProvider?.about != null) & (serviceProvider.getServiceProvider?.about != "")){
       setState(() {
         _aboutController!.text = serviceProvider.getServiceProvider!.about!;
         aboutEnabled = false;
       });
     }
-    if((serviceProvider.getServiceProvider!.name != null) & (serviceProvider.getServiceProvider!.name != "")){
+    if((serviceProvider.getServiceProvider?.name != null) & (serviceProvider.getServiceProvider?.name != "")){
       setState(() {
         _nameController!.text = serviceProvider.getServiceProvider!.name!;
         nameEnabled = false; 
       });
     }
-    if((serviceProvider.getServiceProvider!.avatarUrl != null) & (serviceProvider.getServiceProvider!.avatarUrl != "")){
+    if((serviceProvider.getServiceProvider?.avatarUrl != null) & (serviceProvider.getServiceProvider?.avatarUrl != "")){
       setState(() {
         avatarUrl= serviceProvider.getServiceProvider!.avatarUrl;
        
       });
     }
-    if((serviceProvider.getServiceProvider!.contactName != null) & (serviceProvider.getServiceProvider!.contactName  != "")){
+    if((serviceProvider.getServiceProvider?.contactName != null) & (serviceProvider.getServiceProvider?.contactName  != "")){
       setState(() {
         _contactNameController!.text = serviceProvider.getServiceProvider!.contactName!;
         contactEnabled = false;
       });
     }
-    if((serviceProvider.getServiceProvider!.contactEmail  != null) & (serviceProvider.getServiceProvider!.contactEmail  != "")){
+    if((serviceProvider.getServiceProvider?.contactEmail  != null) & (serviceProvider.getServiceProvider?.contactEmail  != "")){
       setState(() {
         _contactEmailController!.text = serviceProvider.getServiceProvider!.contactEmail! ;
         contactEmail = false;
       });
     }
-    if((serviceProvider.getServiceProvider!.category  != null) & (serviceProvider.getServiceProvider!.category  != "")){
+    if((serviceProvider.getServiceProvider?.category  != null) & (serviceProvider.getServiceProvider?.category  != "")){
       setState(() {
        _category=serviceProvider.getServiceProvider!.category;
       });
     }
-    if((serviceProvider.getServiceProvider!.localisation  != null) & (serviceProvider.getServiceProvider!.localisation != "")){
+    if((serviceProvider.getServiceProvider?.localisation  != null) & (serviceProvider.getServiceProvider?.localisation != "")){
       setState(() {
         _localisationController!.text=serviceProvider.getServiceProvider!.localisation!;
         localisation=false;
       });
     }
-    if((serviceProvider.getServiceProvider!.specialite  != null) & (serviceProvider.getServiceProvider!.specialite != "")){
+    if((serviceProvider.getServiceProvider?.specialite  != null) & (serviceProvider.getServiceProvider?.specialite != "")){
       setState(() {
        _specialityController!.text =serviceProvider.getServiceProvider!.specialite!;
       });
     }
-    if(( serviceProvider.getServiceProvider!.serviceList != "") & ( serviceProvider.getServiceProvider!.serviceList != null)){
+    if(( serviceProvider.getServiceProvider?.serviceList != "") & ( serviceProvider.getServiceProvider?.serviceList != null)){
      
       setState(() {
           consultationChosen = serviceProvider.getServiceProvider!.serviceList["Consultation"];
@@ -230,9 +230,9 @@ class _EditPrestataireState extends State<EditPrestataire> {
     if (kDebugMode) {
       print("inside");
     }
-    if (serviceProvider.getServiceProvider!.coordGps != null){
+    if (serviceProvider.getServiceProvider?.coordGps != null){
       //print(serviceProvider.getServiceProvider!.coordGps"inside+");
-      if ((serviceProvider.getServiceProvider!.coordGps!["latitude"] != null) | (serviceProvider.getServiceProvider!.coordGps!["longitude"] != null) | true){
+      if ((serviceProvider.getServiceProvider?.coordGps!["latitude"] != null) | (serviceProvider.getServiceProvider?.coordGps!["longitude"] != null) | true){
         setState(() {
           gpsCoords = {
           "latitude": serviceProvider.getServiceProvider!.coordGps!["latitude"],
@@ -251,6 +251,7 @@ class _EditPrestataireState extends State<EditPrestataire> {
     setState(() {
       consultationChosen = !consultationChosen!;});
   }
+
   @override
   void initState() {
     _initializeMap();

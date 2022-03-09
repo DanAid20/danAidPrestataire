@@ -496,10 +496,10 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*3),
                         child: LocationDropdown(
-                          city: _city!,
-                          stateCode: _stateCode!,
-                          cityChosen: cityChosen!,
-                          regionChosen: regionChosen!,
+                          city: _city,
+                          stateCode: _stateCode,
+                          cityChosen: cityChosen,
+                          regionChosen: regionChosen,
                           regionOnChanged: (value) async {
                             setState(() {
                               _stateCode = value;
@@ -539,9 +539,9 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                             RichText(text: TextSpan(
                               text: S.of(context).lat,
                               children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : doctorProvider.getDoctor!.location!["latitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : doctorProvider.getDoctor!.location!["latitude"].toString(), style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
                                 TextSpan(text: S.of(context).lng),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : doctorProvider.getDoctor!.location!["longitude"], style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : doctorProvider.getDoctor!.location!["longitude"].toString(), style: const TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
                               ]
                             , style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
                             )
@@ -740,7 +740,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                     // ignore: prefer_const_constructors
                                     DropdownMenuItem(
                                       child: const Text('Confessionel', style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                      value: 'Confessionel',
+                                      value: 'CONFESSIONEL',
                                     ),
                                   ],
                                   onChanged: (value) {
@@ -755,10 +755,10 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                           SizedBox(height: hv*2.5,),
 
                           LocationDropdown(
-                            city: _officeCity!,
-                            stateCode: _officeStateCode!,
-                            cityChosen: _officeCityChosen!,
-                            regionChosen: _officeRegionChosen!,
+                            city: _officeCity,
+                            stateCode: _officeStateCode,
+                            cityChosen: _officeCityChosen,
+                            regionChosen: _officeRegionChosen,
                             regionOnChanged: (value) async {
                               setState(() {
                                 _officeStateCode = value;

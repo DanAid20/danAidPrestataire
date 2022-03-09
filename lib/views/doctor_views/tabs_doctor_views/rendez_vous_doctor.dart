@@ -202,17 +202,15 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
-          if (snapshot.hasData==false) {
+          if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
           }
-          if (kDebugMode) {
-            print(snapshot.data!.docs.length);
-          }
-          return snapshot.data!.docs.length >= 1
+         
+          return snapshot.connectionState == ConnectionState.done && snapshot.hasData==false
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
                   //shrinkWrap: true,
@@ -324,7 +322,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         onPressed: () async {
           var data = FirebaseFirestore.instance
               .collection("APPOINTMENTS")
-              .where("doctorId", isEqualTo: "+237694160832")
+              .where("doctorId", isEqualTo: doctorId)
               .where("adherentId", isEqualTo: adherentId);
           data.get().then((docSnapshot) => {
                 if (docSnapshot.docs.isEmpty)
@@ -405,15 +403,15 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         stream: query,
         builder: (context, snapshot) {
           
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
           }
-          print(snapshot.data!.docs.length);
-          return snapshot.data!.docs.length >= 1
+          
+          return snapshot.connectionState == ConnectionState.done  && snapshot.hasData
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -429,7 +427,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                       future: users.doc(doc["adherentId"]).get(),
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.hasData==false) {
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData==false) {
                           return const Center(
                             child: CircularProgressIndicator(
                               valueColor:
@@ -760,7 +758,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           doctorProvider.getDoctor!.id)
                      
                       :  getListOfUser(startDays, endDay, _selectedDay,
-                          prestataire.getServiceProvider?.id)
+                          userProvider.getAuthId)
                         )
                         ),
           Container(
@@ -803,7 +801,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           ? waitingRoomFuture(startDays, endDay, _selectedDay,
                               doctorProvider.getDoctor?.id)
                           :  waitingRoomFuture(startDays, endDay, _selectedDay,
-                               prestataire.getServiceProvider?.id)
+                               userProvider.getAuthId)
                   ),
                 ),
               ],

@@ -76,9 +76,8 @@ class _PrestationHistoryState extends State<PrestationHistory> {
             facture=[];
     setState(() {
           loading=true ;  
-        });                          
+        });
     var date = DateFormat("yyyy").format(DateTime(int.parse(currentDate!), 1, 1, 0, 0 ));
- 
      DoctorModelProvider doctorProvider =
         Provider.of<DoctorModelProvider>(context, listen: false);
       print("fgfhffgh hgfhgf ghfgh hgf ************** ");
@@ -536,7 +535,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                   margin: EdgeInsets.only(top: hv * 2),
                               child: Column(
                                 children: [
-                                  GestureDetector(
+                                  InkWell(
                                     onTap: ()=>{
                                       getPaiement()
                                     },

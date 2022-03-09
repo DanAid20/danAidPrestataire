@@ -936,7 +936,6 @@ class _ProfileEditState extends State<ProfileEdit> {
                               HiveDatabase.setFamilyName(fname);
                               HiveDatabase.setSurname(sname);
                               HiveDatabase.setImgUrl(avatarUrl!);
-
                               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Informations mises à jour..")));
                               Navigator.pop(context);
                               setState(() {

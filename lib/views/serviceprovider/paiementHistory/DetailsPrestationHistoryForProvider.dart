@@ -71,8 +71,8 @@ class _DetailsPrestationHistoryForProviderState extends State<DetailsPrestationH
               child:  Container(
                 child: Column(
                   children: [
-                    Text(S.of(context).historiqueDesPrestations),
-                    Text(S.of(context).vosConsultationsPaiementDetaill)
+                    Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)),
+                    Text(S.of(context).vosConsultationsPaiementDetaill, style:  TextStyle(color: kBlueForce, fontSize: wv*4))
                   ],
                 ),
               ),
