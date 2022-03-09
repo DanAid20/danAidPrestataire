@@ -1765,7 +1765,7 @@ class HomePageComponents {
     );
   }
 
-  static termsAndConditionsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
+  static termsAndConditionsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1793,7 +1793,7 @@ class HomePageComponents {
       ),
       value: value,
       activeColor: activeColor ?? primaryColor,
-      onChanged: (bool)=>onChanged,
+      onChanged: onChanged,
       controlAffinity: ListTileControlAffinity.leading,
     );
   }

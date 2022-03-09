@@ -296,13 +296,13 @@ class _LoginViewState extends State<LoginView> {
       });
       Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
       bool registered = res["exists"];
-      String profile = res["profile"];
-      UserModel user = res["user"];
+      String? profile = res["profile"];
+      UserModel? user = res["user"];
       
       if(registered == false){
         Navigator.pushNamed(context, '/profile-type');
       } else {
-        userProvider.setUserModel(user);
+        userProvider.setUserModel(user!);
         if(profile == beneficiary){
           if(user.authId == null){
             FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
@@ -321,7 +321,7 @@ class _LoginViewState extends State<LoginView> {
         print("profile:");
         print(profile);
         userProvider.setProfileType(profile);
-        HiveDatabase.setProfileType(profile);
+        HiveDatabase.setProfileType(profile!);
         Navigator.pushReplacementNamed(context, '/home');
       }
     };

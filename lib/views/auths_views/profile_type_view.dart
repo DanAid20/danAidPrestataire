@@ -97,7 +97,7 @@ class ProfileTypeCard extends StatelessWidget {
   final String? title;
   final String? description;
   final String? image;
-  final Function? action;
+  final Function()? action;
   final String? route;
 
 
@@ -164,7 +164,7 @@ class ProfileTypeCard extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => action,
+      onTap: action,
     );
   }
 }

@@ -327,10 +327,12 @@ class _OtpViewState extends State<OtpView> {
       userProvider.setAuthId(user.uid);
       HiveDatabase.setSignInState(true);
       HiveDatabase.setAuthPhone(userProvider.getUserId!);
+      print("checking if exist..");
       Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
       bool registered = res["exists"];
-      String profile = res["profile"];
-      UserModel userModel = res["user"];
+      String? profile = res["profile"];
+      UserModel? userModel = res["user"];
+      print(res.toString());
 
       if(registered == false){
         print("not registered");
@@ -340,7 +342,7 @@ class _OtpViewState extends State<OtpView> {
         Navigator.pushNamed(context, '/profile-type');
       } else {
         print("registered");
-        userProvider.setUserModel(userModel);
+        userProvider.setUserModel(userModel!);
         if(profile == beneficiary){
           if(userModel.authId == null){
             FirebaseFirestore.instance.collection("USERS").doc(userModel.userId).update({
@@ -351,6 +353,7 @@ class _OtpViewState extends State<OtpView> {
               showSnackbar("Profil bénéficiaire recupéré..");
             });
           }
+          HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
         }
         HiveDatabase.setRegisterState(true);
         setState(() {
@@ -358,7 +361,7 @@ class _OtpViewState extends State<OtpView> {
         });
         print("profile");
         print(profile);
-        HiveDatabase.setProfileType(profile);
+        HiveDatabase.setProfileType(profile!);
         userProvider.setProfileType(profile);
         userProvider.setAuthId(user.uid);
         Navigator.pushReplacementNamed(context, '/home');
@@ -368,7 +371,7 @@ class _OtpViewState extends State<OtpView> {
         setState(() {
           load = false;
         });
-        showSnackbar(S.of(context).failedToSignIn + e.message.toString());
+        showSnackbar(S.of(context).failedToSignIn + e.toString());
       });
 
     }
@@ -392,8 +395,8 @@ class _OtpViewState extends State<OtpView> {
       HiveDatabase.setAuthPhone(userProvider.getUserId!);
       Map res = await checkIfUserIsAlreadyRegistered(userProvider.getUserId!);
       bool registered = res["exists"];
-      String profile = res["profile"];
-      UserModel userModel = res["user"];
+      String? profile = res["profile"];
+      UserModel? userModel = res["user"];
 
       if(registered == false){
         print("not registered");
@@ -403,7 +406,7 @@ class _OtpViewState extends State<OtpView> {
         Navigator.pushNamed(context, '/profile-type');
       } else {
         print("registered");
-        userProvider.setUserModel(userModel);
+        userProvider.setUserModel(userModel!);
         if(profile == beneficiary){
           if(userModel.authId == null){
             FirebaseFirestore.instance.collection("USERS").doc(userModel.userId).update({
@@ -421,7 +424,7 @@ class _OtpViewState extends State<OtpView> {
         });
         print("profile");
         print(profile);
-        HiveDatabase.setProfileType(profile);
+        HiveDatabase.setProfileType(profile!);
         userProvider.setProfileType(profile);
         userProvider.setAuthId(user.uid);
         Navigator.pushReplacementNamed(context, '/home');

@@ -147,7 +147,7 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
       child: Column(
         children: [
           Expanded(
-            child: adherent.getAdherent?.familyDoctorId!.toString() != null ? ListView(children: [
+            child: adherent.getAdherent?.familyDoctorId != null ? ListView(children: [
               StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance.collection("MEDECINS").doc(adherent.getAdherent!.familyDoctorId!.toString()).snapshots(),
                 builder: (context, snapshot) {

@@ -726,7 +726,7 @@ class _LoanFormState extends State<LoanForm> {
               activeColor: primaryColor,
               onChanged: (newValue) {
                 setState(() {
-                  _serviceTermsAccepted = newValue;
+                  _serviceTermsAccepted = newValue!;
                 });
               },
             ),

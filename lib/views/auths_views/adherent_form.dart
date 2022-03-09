@@ -324,7 +324,7 @@ class _AdherentRegistrationFormmState extends State<AdherentRegistrationFormm> {
                     activeColor: primaryColor,
                     onChanged: (newValue) {
                       setState(() {
-                        _serviceTermsAccepted = newValue;
+                        _serviceTermsAccepted = newValue!;
                       });
                     },
                   ),

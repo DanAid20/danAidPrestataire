@@ -666,7 +666,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                           activeColor: primaryColor,
                           onChanged: (newValue) {
                             setState(() {
-                              _serviceTermsAccepted = newValue;
+                              _serviceTermsAccepted = newValue!;
                             });
                           },
                         ),
