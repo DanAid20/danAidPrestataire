@@ -190,7 +190,7 @@ class _OtpViewState extends State<OtpView> {
       enabledBorder: getOutlineInputBorder(),
     );
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
+      padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? horizontal(size: 1) : 20),
       child: Form(
         key: _mFormKey,
         child: Column(
@@ -200,7 +200,7 @@ class _OtpViewState extends State<OtpView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(59) : 80,
                   child: TextFormField(
                     controller: pin1Controller,
                     autofocus: true,
@@ -214,7 +214,7 @@ class _OtpViewState extends State<OtpView> {
                 ),
                 const SizedBox(width: 10),
                 SizedBox(
-                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(59) : 80,
                   child: TextFormField(
                     controller: pin2Controller,
                     focusNode: pin2FocusNode,
@@ -228,7 +228,7 @@ class _OtpViewState extends State<OtpView> {
                 ),
                 const SizedBox(width: 10),
                 SizedBox(
-                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(59) : 80,
                   child: TextFormField(
                     controller: pin3Controller,
                     focusNode: pin3FocusNode,
@@ -242,7 +242,7 @@ class _OtpViewState extends State<OtpView> {
                 ),
                 const SizedBox(width: 10),
                 SizedBox(
-                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(59) : 80,
                   child: TextFormField(
                     controller: pin4Controller,
                     focusNode: pin4FocusNode,
@@ -256,7 +256,7 @@ class _OtpViewState extends State<OtpView> {
                 ),
                 const SizedBox(width: 10),
                 SizedBox(
-                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(60) : 80,
+                  width: Device.isSmartphone(context) ? getProportionateScreenWidth(59) : 80,
                   child: TextFormField(
                     controller: pin5Controller,
                     focusNode: pin5FocusNode,

@@ -1636,7 +1636,7 @@ class HomePageComponents {
                   height: isSelected ? hv*21 : hv*18,
                   width: isSelected ? wv*28 : wv*25,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: CachedNetworkImageProvider(imgUrl!), fit: BoxFit.cover),
+                    image: imgUrl == null ? null : DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]

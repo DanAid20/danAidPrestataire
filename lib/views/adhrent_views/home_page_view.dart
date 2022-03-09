@@ -50,11 +50,12 @@ import 'package:provider/provider.dart';
 
 Future<void> _showNotification({required int id, required String title, String? body}) async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  var initializationSettingsAndroid = new AndroidInitializationSettings('@mipmap/ic_launcher');
-  var initializationSettingsIOS = new IOSInitializationSettings();
-  var initializationSettings = new InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
+  var initializationSettingsIOS = const IOSInitializationSettings();
+  var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
   print("showing..");
+  String msgBody = body ?? "New notification";
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'com.danaid.danaidmobile', 'DanAid',
       channelDescription: 'Mutuelle Santé 100% mobile',
@@ -65,7 +66,9 @@ Future<void> _showNotification({required int id, required String title, String? 
       enableVibration: true,
       enableLights: true,
       priority: Priority.high,
-      ticker: 'test ticker'
+      ticker: 'test ticker',
+      fullScreenIntent: true,
+      styleInformation: BigTextStyleInformation(msgBody)
   );
 
   var iOSChannelSpecifics = IOSNotificationDetails();
@@ -118,8 +121,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
               PlanModel plan = PlanModel.fromDocument(planDoc, planDoc.data() as Map);
               await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
-                "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
-                "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
+                "plafond": adherent.insuranceLimit ?? plan.annualLimit,
+                "creditLimit": adherent.loanLimit ?? plan.maxCreditAmount
               }).then((value) {
                 adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit! : adherent.insuranceLimit!);
                 adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount! : adherent.loanLimit!);
@@ -146,8 +149,8 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
               DocumentSnapshot planDoc = await FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").doc(adherent.adherentPlan.toString()).get();
               PlanModel plan = PlanModel.fromDocument(planDoc, planDoc.data() as Map);
               await FirebaseFirestore.instance.collection('ADHERENTS').doc(userProvider.getUserId).update({
-                "plafond": adherent.insuranceLimit == null ? plan.annualLimit : adherent.insuranceLimit,
-                "creditLimit": adherent.loanLimit == null ? plan.maxCreditAmount : adherent.loanLimit
+                "plafond": adherent.insuranceLimit ?? plan.annualLimit,
+                "creditLimit": adherent.loanLimit ?? plan.maxCreditAmount
               }).then((value) {
                 adherentModelProvider.setInsuranceLimit(adherent.insuranceLimit == null ? plan.annualLimit! : adherent.insuranceLimit!);
                 adherentModelProvider.setLoanLimit(adherent.loanLimit == null ? plan.maxCreditAmount! : adherent.loanLimit!);
@@ -497,7 +500,7 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         FirebaseFirestore.instance.collection('USERS').doc(message.data["friendWhoAddedId"]).get().then((doc) async {
           name = doc.data()!['fullName'];
           type = doc.data()!['profil'] == adherent ? "l'adhérent" : doc.data()!['profil'] == doctor ? "le médecin" : "le prestataire";
-          await _showNotification(id: 7, title: "Demande d'amitié acceptée", body: "Vous et $type $name êtes désormais amis");
+          await _showNotification(id: 8, title: "Demande d'amitié acceptée", body: "Vous et $type $name êtes désormais amis");
         });
       }
       else if (message.data['type'] == "LIKE_GROUP_POST"){
@@ -506,15 +509,15 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
         if(message.data['groupId'] != null){
           FirebaseFirestore.instance.collection('GROUPS').doc(message.data['groupId']).get().then((doc) async {
             String groupName = doc.data()!['groupName'];
-            await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like de votre publication dans le groupe $groupName");
+            await _showNotification(id: 9, title: "Nouveau like", body: "Nouveau like de votre publication dans le groupe $groupName");
           });
         }
       }
       else if (message.data['type'] == "LIKE_CLASSICAL_POST"){
-        await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
+        await _showNotification(id: 10, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
       }
       else if (message.data['type'] == "DANAID_POST"){
-        await _showNotification(id: 6, title: "Alerte: ${message.data['title']}", body: message.data['body']);
+        await _showNotification(id: 11, title: "Important !", body: message.data['body']);
       }
       else {
         print("No type recognized");

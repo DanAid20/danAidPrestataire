@@ -23,9 +23,10 @@ Future<void> _showNotification({required int id, required String title, String? 
   var initializationSettingsAndroid = const AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettingsIOS = const IOSInitializationSettings();
   var initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings/*, onSelectNotification: onSelectNotification*/);
+  String msgBody = body ?? "New notification";
   print("showing..");
-  var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
+  var androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'com.danaid.danaidmobile', 'DanAid',
       channelDescription: 'Mutuelle Santé 100% mobile',
       importance: Importance.max,
@@ -34,8 +35,9 @@ Future<void> _showNotification({required int id, required String title, String? 
       showProgress: true,
       enableVibration: true,
       enableLights: true,
-      priority: Priority.high,
-      ticker: 'test ticker'
+      priority: Priority.max,
+      ticker: 'test ticker',
+      styleInformation: BigTextStyleInformation(msgBody)
   );
 
   var iOSChannelSpecifics = const IOSNotificationDetails();
@@ -73,7 +75,10 @@ Future<void> _messageHandler(RemoteMessage message) async {
     ));
   }
   else if (message.data['type'] == "LIKE_CLASSICAL_POST"){
-    await _showNotification(id: 5, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
+    await _showNotification(id: 10, title: "Nouveau like", body: "Nouveau like d'une de vos publications");
+  }
+  else if (message.data['type'] == "DANAID_POST"){
+    await _showNotification(id: 11, title: "Important!", body: message.data['body']);
   }
   else if (message.data['type'] == "LIKE_COMMMENT"){
     String name = "";

@@ -313,11 +313,11 @@ class _LoginViewState extends State<LoginView> {
               showSnackbar("Profil bénéficiaire recupéré..");
             });
           }
+          HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
         }
         HiveDatabase.setRegisterState(true);
         HiveDatabase.setSignInState(true);
         HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
-        HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
         print("profile:");
         print(profile);
         userProvider.setProfileType(profile);
