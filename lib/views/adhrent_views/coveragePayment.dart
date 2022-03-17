@@ -15,6 +15,10 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterwave/flutterwave.dart';
+import 'package:flutterwave/models/responses/charge_response.dart';
+import 'package:flutterwave/utils/flutterwave_currency.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class CoveragePayment extends StatefulWidget {
@@ -23,8 +27,8 @@ class CoveragePayment extends StatefulWidget {
 }
 
 class _CoveragePaymentState extends State<CoveragePayment> {
-  static const _hoverChannel = const MethodChannel('danaid.mobile.cm/hover');
   //final HoverUssd _hoverUssd = HoverUssd();
+  final String currency = FlutterwaveCurrency.XAF;
 
   int om = 1;
   int momo = 2;
@@ -33,29 +37,9 @@ class _CoveragePaymentState extends State<CoveragePayment> {
   bool spinner2 = false;
 
   var reqi;
-
-  static const platform = const MethodChannel('danaidproject.sendmoney');
   String receivedString = "";
 
-  Future<String> makePayment({required num cost, required bool isOrange}) async {
-    //String amount = "60", data = "", phoneNumber = "650913861";
-    String amount = cost.toString();
-    String operator = isOrange ? 'moneyTransferOrangeAction' : 'moneyTransferMTNAction';
-    String phoneNumber = isOrange ? '658112605' : '673662062';
-
-    //moneyTransferMTNAction, moneyTransferOrangeAction
-    try {
-      final String result = await platform.invokeMethod(operator, {"amount": amount, "phoneNumber": phoneNumber});
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result == "SUCCESS" ? "Transaction réussie" : "Transaction échouée")));
-      if(result == null){
-        setState(() { spinner2 = false;});
-      }
-      return result;
-    } on PlatformException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Transaction échouée")));
-      setState(() { spinner2 = false;});
-      return "FAILED";
-    }
+  makePayment({required num cost, required bool isOrange}) async {
   }
 
 
@@ -65,6 +49,47 @@ class _CoveragePaymentState extends State<CoveragePayment> {
   bool campaignOn = false;
 
   init() async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    showDialog(context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context){
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: Dialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*5,),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.white,
+                  ),
+                  child: Column(children: [
+                    SizedBox(height: hv*4),
+                    Icon(LineIcons.timesCircle, color: kDeepTeal, size: 70,),
+                    SizedBox(height: hv*2,),
+                    Text("Méthode de paiement en cours de révision", style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.w700), textAlign: TextAlign.center,),
+                    SizedBox(height: hv*2,),
+                    Text("Il sera disponible dans la prochaine mise à jour sous une forme ameliorée, plus flexible et plus sécurisée", style: TextStyle(color: Colors.grey[600], fontSize: 18), textAlign: TextAlign.center),
+                    SizedBox(height: hv*2),
+                    CustomTextButton(
+                      text: "OK",
+                      color: kDeepTeal,
+                      action: (){Navigator.pop(context); Navigator.pop(context);},
+                    )
+                    
+                  ], mainAxisAlignment: MainAxisAlignment.center, ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
     DocumentSnapshot doc = await FirebaseFirestore.instance.collection('DANAID_DATA').doc('CAMPAGNE').get();
     setState(() {
       campaignOn = doc.get("active");
@@ -113,270 +138,186 @@ class _CoveragePaymentState extends State<CoveragePayment> {
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: hv*2,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
+              children: [
+                SizedBox(height: hv*2,),
+                
+                invoice.planNumber == 1 && campaignOn ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+                  margin: EdgeInsets.symmetric(horizontal: wv*4),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[100],
+                    boxShadow: [BoxShadow(color: Colors.grey[400]!, spreadRadius: 0.5, blurRadius: 1.0)],
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        onTap: ()=>setState((){choice = om;}),
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              height: wv*30,
-                              width: wv*40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(image: AssetImage('assets/images/om.jpg'), fit: BoxFit.cover)
-                              ),
-                            ),
-                            choice == om ? Positioned(
-                              bottom: -5,
-                              right: -5,
-                              child: CircleAvatar(
-                                backgroundColor: kPrimaryColor,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.check, color: whiteColor,),
-                                ),
-                              ),
-                            ) : Container()
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: wv*5,),
-                      GestureDetector(
-                        onTap: ()=>setState((){choice = momo;}),
-                        child: Stack(
-                          clipBehavior: Clip.none,
-                          children: [
-                            Container(
-                              height: wv*30,
-                              width: wv*40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                image: DecorationImage(image: AssetImage('assets/images/momo.jpg'), fit: BoxFit.cover)
-                              ),
-                            ),
-                            choice == momo ? Positioned(
-                              bottom: -5,
-                              right: -5,
-                              child: CircleAvatar(
-                                backgroundColor: kPrimaryColor,
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(Icons.check, color: whiteColor,),
-                                ),
-                              ),
-                            ) : Container()
-                          ],
-                        ),
-                      ),
+                      Text(S.of(context).important, style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
+                      SizedBox(height: hv*1,),
+                      Text("Obtenez $removedAmount FCFA de réduction pour l'achat de ce plan de service", style: TextStyle(color: kTextBlue, fontSize: 15)),
+                      SizedBox(height: hv*1,),
+                      CustomTextButton(
+                        noPadding: true,
+                        text: reduction ? "Annuler" : "Reçevoir",
+                        color: kSouthSeas,
+                        action: ()=>setState((){reduction = !reduction;}),
+                      )
                     ],
                   ),
-                  SizedBox(height: hv*3,),
-                  
-                  invoice.planNumber == 1 && campaignOn ? Container(
-                    padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
-                    margin: EdgeInsets.symmetric(horizontal: wv*4),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      boxShadow: [BoxShadow(color: Colors.grey[400]!, spreadRadius: 0.5, blurRadius: 1.0)],
-                      borderRadius: BorderRadius.circular(20)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                ) : Container(),
+                const Spacer(),
+                SizedBox(height: hv*4,),
+                Table(
+                  children: [
+                    TableRow(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey[300]!))
+                      ),
                       children: [
-                        Text(S.of(context).important, style: TextStyle(color: Colors.grey[600], fontSize: 20, fontWeight: FontWeight.bold)),
-                        SizedBox(height: hv*1,),
-                        Text("Obtenez $removedAmount FCFA de réduction pour l'achat de ce plan de service", style: TextStyle(color: kTextBlue, fontSize: 15)),
-                        SizedBox(height: hv*1,),
-                        CustomTextButton(
-                          noPadding: true,
-                          text: reduction ? "Annuler" : "Reçevoir",
-                          color: kSouthSeas,
-                          action: ()=>setState((){reduction = !reduction;}),
-                        )
-                      ],
-                    ),
-                  ) : Container(),
-                  //Spacer(),
-                  SizedBox(height: hv*4,),
-                  Table(
-                    children: [
-                      TableRow(
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
-                        ),
-                        children: [
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Row(
-                              children: [
-                                Container(
-                                  
-                                  height: wv*7,
-                                  width: wv*7,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(image: AssetImage('assets/images/momo.jpg'), fit: BoxFit.cover)
-                                  ),
-                                ),
-                                SizedBox(width: wv*2,),
-                                Expanded(child: Text("MTN MoMo\n(FABRICE MBANGA):", style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold),)),
-                              ],
-                            )
-                          )),
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text("673 66 20 62", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,)
-                          )),
-                        ]
-                      ),
-                      TableRow(
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
-                        ),
-                        children: [
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: wv*7,
-                                  width: wv*7,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(image: AssetImage('assets/images/om.jpg'), fit: BoxFit.cover)
-                                  ),
-                                ),
-                                SizedBox(width: wv*2,),
-                                Expanded(child: Text("Orange Money\n(NYETTO)", style: TextStyle(color: Colors.grey[600], fontWeight: FontWeight.bold))),
-                              ],
-                            )
-                          )),
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text("658 11 26 05", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,)
-                          )),
-                        ]
-                      ),
-                      TableRow(
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
-                        ),
-                        children: [
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text(S.of(context).fraisDinscription)
-                          )),
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text(registrationFee.toString() + "Cfa", textAlign: TextAlign.end,)
-                          )),
-                        ]
-                      ),
-                      TableRow(
-                        decoration: BoxDecoration(
-                          border: Border(bottom: BorderSide(color: Colors.grey[300]!))
-                        ),
-                        children: [
-                          TableCell(child: Container(
+                        TableCell(child: Container(
                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                          child: Text("Paiement annuelle")
-                          )),
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text((invoice.amount!/12).toString()+" X 12", textAlign: TextAlign.end,)
-                          )),
-                        ]
+                          child: Text(S.of(context).fraisDinscription)
+                        )),
+                        TableCell(child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                          child: Text(registrationFee.toString() + "Cfa", textAlign: TextAlign.end,)
+                        )),
+                      ]
+                    ),
+                    TableRow(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey[300]!))
                       ),
-                      TableRow(
-                        children: [
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: Text(S.of(context).totalPayer)
-                          )),
-                          TableCell(child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                            child: !reduction ? Text("$total Cfa", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,) :
-                                      RichText(
-                                        textAlign: TextAlign.end,
-                                        text: TextSpan(
-                                          style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
-                                          children: [
-                                            TextSpan(text: "${total + removedAmount}", style: TextStyle(decoration: TextDecoration.lineThrough, fontWeight: FontWeight.w400)),
-                                            TextSpan(text: "  $total Cfa", style: TextStyle(color: kDeepTeal))
-                                          ]
-                                        ),
-                                      )
-                          )),
-                        ]
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      children: [
+                        TableCell(child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                        child: Text("Paiement annuelle")
+                        )),
+                        TableCell(child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                          child: Text((invoice.amount!/12).toString()+" X 12", textAlign: TextAlign.end,)
+                        )),
+                      ]
+                    ),
+                    TableRow(
+                      children: [
+                        TableCell(child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                          child: Text(S.of(context).totalPayer)
+                        )),
+                        TableCell(child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                          child: !reduction ? Text("$total Cfa", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18), textAlign: TextAlign.end,) :
+                                    RichText(
+                                      textAlign: TextAlign.end,
+                                      text: TextSpan(
+                                        style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 18),
+                                        children: [
+                                          TextSpan(text: "${total + removedAmount}", style: TextStyle(decoration: TextDecoration.lineThrough, fontWeight: FontWeight.w400)),
+                                          TextSpan(text: "  $total Cfa", style: TextStyle(color: kDeepTeal))
+                                        ]
+                                      ),
+                                    )
+                        )),
+                      ]
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
 
-          Container(
-            child: CustomTextButton(
-              isLoading: spinner2,
-              text: S.of(context).confirmer,
-              enable: choice != null,
-              action: () async {
-                setState(() {spinner2 = true;});
-                //_confirm(context);
-                String result = await makePayment(cost: total, isOrange: choice == om);
-                if(result == "SUCCESS"){
-                  print("Paiement effectué");
-                  if(!adherentProvider.getAdherent!.havePaid! && invoice.inscriptionId != null){
-                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).update({
+          CustomTextButton(
+            isLoading: spinner2,
+            text: S.of(context).confirmer,
+            action: () async {
+              //setState(() {spinner2 = true;});
+              AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+              String txref = adherentProvider.getAdherent!.adherentId.toString() + "_" + DateTime.now().toString();
+              final Flutterwave flutterwave = Flutterwave.forUIPayment(
+                  context: this.context,
+                  encryptionKey: "90ca704f5c5cef5382cc73a5",
+                  publicKey: "FLWPUBK-89f133d0d410d4b2bb10007de429ea41-X",
+                  currency: currency,
+                  amount: total.toString(),
+                  email: adherentProvider.getAdherent?.email != null ? adherentProvider.getAdherent!.email! : "info@danaid.org",
+                  fullName: adherentProvider.getAdherent!.familyName.toString(),
+                  txRef: txref,
+                  isDebugMode: false,
+                  phoneNumber: adherentProvider.getAdherent!.adherentId!.substring(1),
+                  acceptCardPayment: true,
+                  acceptUSSDPayment: false,
+                  acceptAccountPayment: false,
+                  acceptFrancophoneMobileMoney: true,
+                  acceptGhanaPayment: false,
+                  acceptMpesaPayment: false,
+                  acceptRwandaMoneyPayment: false,
+                  acceptUgandaPayment: false,
+                  acceptZambiaPayment: false);
+          
+              try {
+                final ChargeResponse response = await flutterwave.initializeForUiPayments();
+                if (response == null) {
+                  setState(() {spinner2 = false;});
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Transaction intérrompue..",)));
+                } else {
+                  final isSuccessful = checkPaymentIsSuccessful(response, total.toString(), txref);
+                  if (isSuccessful) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Transaction réussie..",)));
+                    print("Paiement effectué");
+                    if(!adherentProvider.getAdherent!.havePaid! && invoice.inscriptionId != null){
+                      await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).update({
+                        "paymentDate": DateTime.now(),
+                        "etatValider": true,
+                        "paid": true
+                      });
+                    }
+                    FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
                       "paymentDate": DateTime.now(),
                       "etatValider": true,
+                      "amountPaid": (total - registrationFee),
+                      "reduction": reduction,
                       "paid": true
+                    }).then((value) async {
+                      await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).set({
+                        "datDebutvalidite" : invoice.coverageStartDate,
+                        "havePaidBefore": true,
+                        "paymentDate": DateTime.now(),
+                        "datFinvalidite": invoice.coverageEndDate,
+                        "paid": true,
+                      }, SetOptions(merge: true));
+                    
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Plan modifié",)));
+                      adherentProvider.setAdherentPlan(invoice.planNumber!);
+                      adherentProvider.setValidityEndDate(invoice.coverageEndDate!.toDate());
+                      setState(() {spinner2 = false;});
+                      setState(() {
+                        spinner2 = false;
+                      });
+                      Navigator.pop(context);
                     });
-                  }
-                  FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.id).update({
-                    "paymentDate": DateTime.now(),
-                    "etatValider": true,
-                    "amountPaid": (total - registrationFee),
-                    "reduction": reduction,
-                    "paid": true
-                  }).then((value) async {
-                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).set({
-                      "datDebutvalidite" : invoice.coverageStartDate,
-                      "havePaidBefore": true,
-                      "paymentDate": DateTime.now(),
-                      "datFinvalidite": invoice.coverageEndDate,
-                      "paid": true,
-                    }, SetOptions(merge: true));
-                  
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Plan modifié",)));
-                    adherentProvider.setAdherentPlan(invoice.planNumber!);
-                    adherentProvider.setValidityEndDate(invoice.coverageEndDate!.toDate());
+                    // provide value to customer
+                  } else {
                     setState(() {spinner2 = false;});
-                    setState(() {
-                      spinner2 = false;
-                    });
-                    Navigator.pop(context);
-                  });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: ${response.message}",)));
+                    print(response.message); print(response.status); print(response.data!.processorResponse);
+                  }
                 }
-                else {
-                  setState(() {spinner2 = false;});
-                }
+              } catch (error, stacktrace) {
+                // handleError(error);
               }
-            ),
+            }
           ), 
 
           SizedBox(height: hv*2)
         ],
       ),
     );
+  }
+
+  bool checkPaymentIsSuccessful(final ChargeResponse response, String amount, String txref) {
+    return response.data!.status == FlutterwaveConstants.SUCCESSFUL && response.data!.currency == this.currency && response.data!.amount == amount && response.data!.txRef == txref;
   }
 
   _confirm (BuildContext context){

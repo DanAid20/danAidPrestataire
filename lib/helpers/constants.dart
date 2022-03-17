@@ -70,9 +70,6 @@ const String beneficiary = "BENEFICIAIRE";
 // consultation Types 
 enum ConsultationTypes { Encabinet, Videos, Message }
 
-//Hover action Ids
-const String transferOrangeMoney = "d68d2e79";
-const String transferMTNMobileMoney = "e33f1918";
 
 //Use case service types
 const  String consultation = "CONSULTATION";

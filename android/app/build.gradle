@@ -35,6 +35,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 31
 
+    //ndkVersion "25.0.8151533"
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -68,7 +70,7 @@ android {
         prod {
             dimension "my-flavor"
             applicationId "com.danaid.danaidmobile"
-            versionCode 210020023
+            versionCode 210020028
             versionName "2.0.0"
         }
     }
@@ -85,8 +87,14 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile(
+                'proguard-android-optimize.txt'),
+                'proguard-rules.pro'
+            /*ndk {
+                debugSymbolLevel 'SYMBOL_TABLE'
+            }*/
         }
     }
 }
@@ -99,7 +107,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.hover:android-sdk:1.7.2-noSMS'
     //implementation 'com.google.firebase: firebase-auth-ktx'
     //implementation 'com.google.firebase: firebase-firestore-ktx'
     //implementation 'com.google.firebase: firebase-storage-ktx'
