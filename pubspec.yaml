@@ -83,6 +83,7 @@ dependencies:
   expansion_tile_card: ^2.0.0
   flutterwave: ^1.0.1
   flutterwave_standard: ^1.0.3
+  fluttertoast: ^8.0.9
 
 
 dev_dependencies:

@@ -5,6 +5,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/models/facture.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -206,15 +207,15 @@ class _PrestationHistoryState extends State<PrestationHistory> {
               child: Container(
                 child: Column(
                   children: [ 
-                    Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)), 
-                    Text(S.of(context).vosConsultationsPaiement,style:  TextStyle(color: kBlueForce,fontSize:wv*4))
+                    Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: Device.isSmartphone(context)?  wv*4 : 16)), 
+                    Text(S.of(context).vosConsultationsPaiement,style:  TextStyle(color: kBlueForce,fontSize:Device.isSmartphone(context)?  wv*4 : 16))
                   ],
                 ), 
               ), 
             ),
             actions: [
               IconButton(
-                icon: Icon(MdiIcons.refresh, color: kSouthSeas, size: wv*8,),
+                icon: Icon(MdiIcons.refresh, color: kSouthSeas, size: Device.isSmartphone(context)? wv*8 : wv*3,),
                 onPressed: () {
                    getPaiement(currentDate: data);
                 },
@@ -239,6 +240,9 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                 height: hv*7.5,
                 child: Loaders().buttonLoader(kPrimaryColor),): Container(),
                 Container(  
+                  constraints: BoxConstraints(
+                    maxWidth: Device.isSmartphone(context) ? double.infinity : 500
+                  ),
                    margin : EdgeInsets.only(
                               left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,
                                child: Row(
@@ -259,7 +263,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                       Text('${dataTIme+1}', style: TextStyle(
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
-                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
                                        currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:const Text('') ,) : Container()
                                       ],
                                     ),
@@ -281,7 +285,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                         Text('$dataTIme', style: TextStyle(
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
-                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
                                        currentYears==dataTIme? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
@@ -305,7 +309,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
                                             
-                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
                                        currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child: const Text('') ,) : Container()
                                       ],
                                     ),
@@ -327,7 +331,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
                                             
-                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
                                        currentYears==dataTIme-2? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
@@ -335,202 +339,203 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                  
                                 ],
                               )),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin : EdgeInsets.only(
-                              left: 15.w,top: 2.h),
-                          child: Text(S.of(context).statusDesPaiements, style: TextStyle(
-                                      color: kFirstIntroColor,
-                                      fontWeight: FontWeight.w500,
-                                      
-                                      fontSize:  16.sp), textScaleFactor: 1.0,)),
-                        Container(
-                           alignment: Alignment.centerLeft,
-                           
-                          margin: EdgeInsets.only(left: wv*5, top: hv*2, right: wv*5) ,
-                          padding: const EdgeInsets.all(20) ,
-                          width: double.infinity,
-                              decoration: BoxDecoration(
-                                color:kThirdIntroColor.withOpacity(0.3),
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: Device.isSmartphone(context) ? double.infinity : 900
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin : EdgeInsets.only(
+                                left: 15.w,top: 2.h),
+                            child: Text(S.of(context).statusDesPaiements, style: TextStyle(
+                                        color: kFirstIntroColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize:  Device.isSmartphone(context) ? 16.sp : 19 ), textScaleFactor: 1.0,)),
+                          Container(
+                             alignment: Alignment.centerLeft,
+                             
+                            margin: EdgeInsets.only(left: wv*5, top: hv*2, right: wv*5) ,
+                            padding: const EdgeInsets.all(20) ,
+                            width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color:kThirdIntroColor.withOpacity(0.3),
+                                  
+                                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                ),
+                            child: 
+                            Column(
+                              mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 
-                                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                children: [
+                                  Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w500,
+                                            
+                                            fontSize:  Device.isSmartphone(context) ? wv*3.5 :16)),
+                                  Container(
+                                    margin: EdgeInsets.only(left:wv*6),
+                                    child: Column(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text('$consultationpersonnes x',textScaleFactor: 1.0, style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w600,
+                                            
+                                            fontSize:  Device.isSmartphone(context) ? wv*3.5 :18)),
+                                              Text('2000 f.',style: TextStyle(
+                                            color: kSimpleForce,
+                                            fontWeight: FontWeight.w500,
+                                            
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 :18), textScaleFactor: 1.0,),
+                                            ],
+                                          ),
+                                        SizedBox(
+                                          width: 80.w,
+                                          child: Text(S.of(context).beneficiaresJours,style: TextStyle(
+                                            color: kSimpleForce,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize:  Device.isSmartphone(context) ? wv*3 :16), textScaleFactor: 1.0,),
+                                        ),
+                                          
+                                                                            ],
+                                      ),
+                                    ],
+                                  )),
+                                  Text('${consultationpersonnes*2000}f',style: TextStyle(
+                                        color: kFirstIntroColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: Device.isSmartphone(context) ? wv*3.5 :20 ), textScaleFactor: 1.0,),
+                                ],
                               ),
-                          child: 
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              
-                              children: [
-                                Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w500,
-                                          
-                                          fontSize: wv*3.5)),
-                                Container(
-                                  margin: EdgeInsets.only(left:wv*6),
-                                  child: Column(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text('$consultationpersonnes x',textScaleFactor: 1.0, style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w600,
-                                          
-                                          fontSize: wv*3.5)),
-                                            Text('2000 f.',style: TextStyle(
-                                          color: kSimpleForce,
-                                          fontWeight: FontWeight.w500,
-                                          
-                                          fontSize: wv*3.5), textScaleFactor: 1.0,),
-                                          ],
+                               SizedBox(
+                            height: hv * 1.3,
+                          ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w500,
+                                            
+                                            fontSize: Device.isSmartphone(context) ? wv*3 :16)),
+                                  Container(
+                                    margin: EdgeInsets.only(left:hv*4),
+                                    child: Column(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Text('$referencemeentPersonnes x',textScaleFactor: 1.0, style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w600,
+                                            
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                              Text('2000f.',style: TextStyle(
+                                            color: kSimpleForce,
+                                            fontWeight: FontWeight.w500,
+                                            
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                            ],
+                                          ),
+                                         SizedBox(
+                                          width: Device.isSmartphone(context) ? 80.w :80.w ,
+                                          child: Text(S.of(context).personnesInscrites,style: TextStyle(
+                                            color: kSimpleForce,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: Device.isSmartphone(context) ? wv*3 :16), textScaleFactor: 1.0,),
                                         ),
-                                      SizedBox(
-                                        width: 80.w,
-                                        child: Text(S.of(context).beneficiaresJours,style: TextStyle(
-                                          color: kSimpleForce,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: wv*3), textScaleFactor: 1.0,),
+                                        ],
                                       ),
+                                    ],
+                                  )),
+                                  const Spacer(),
+                                  Text('${referencemeentPersonnes*2000}f',style: TextStyle(
+                                        color: kFirstIntroColor,
+                                        fontWeight: FontWeight.w700,
                                         
-                                                                          ],
-                                    ),
-                                  ],
-                                )),
-                                Text('${consultationpersonnes*2000}f',style: TextStyle(
-                                      color: kFirstIntroColor,
-                                      fontWeight: FontWeight.w500,
-                                      
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
-                              ],
-                            ),
-                             SizedBox(
-                          height: hv * 1.3,
-                        ),
+                                        fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                ],
+                              ),
+                            const Divider(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w500,
-                                          
-                                          fontSize: wv*3.5)),
-                                Container(
-                                  margin: EdgeInsets.only(left:hv*4),
-                                  child: Column(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text('$referencemeentPersonnes x',textScaleFactor: 1.0, style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w600,
-                                          
-                                          fontSize: wv*3.5)),
-                                            Text('2000f.',style: TextStyle(
-                                          color: kSimpleForce,
-                                          fontWeight: FontWeight.w500,
-                                          
-                                          fontSize: wv*3.5), textScaleFactor: 1.0,),
-                                          ],
-                                        ),
-                                       SizedBox(
-                                        width: 80.w,
-                                        child: Text(S.of(context).personnesInscrites,style: TextStyle(
-                                          color: kSimpleForce,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: wv*3), textScaleFactor: 1.0,),
-                                      ),
-                                      ],
-                                    ),
-                                  ],
-                                )),
-                                const Spacer(),
-                                Text('${referencemeentPersonnes*2000}f',style: TextStyle(
-                                      color: kFirstIntroColor,
-                                      fontWeight: FontWeight.w700,
-                                      
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
-                              ],
-                            ),
-                          const Divider(),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w500,
-                                          
-                                          fontSize: wv*3.5)),
-                                const Spacer(),
-                                Text('${ referencemeentPersonnes*2000+consultationpersonnes*2000} f',style: TextStyle(
-                                      color: kFirstIntroColor,
-                                      fontWeight: FontWeight.w700,
-                                      
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
-                              ],
-                            ),
-                           SizedBox(
-                          height: hv * 1.3,
-                        ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
-                                          color: kDeepTeal,
-                                          fontWeight: FontWeight.w600,
-                                          
-                                          fontSize: wv*3.5)),
-                                const Spacer(),
-                                Text('$paidYear f',style: TextStyle(
-                                      color: kDeepTeal,
-                                      fontWeight: FontWeight.w700,
-                                      
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
-                              ],
-                            ),
-                           SizedBox(
-                          height: hv * 1.3,
-                        ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
-                                          color: kSimpleForce,
-                                          fontWeight: FontWeight.w600,
-                                          
-                                          fontSize: wv*3.5)),
-                                const Spacer(),
-                                Text('$notpaidYear f',style: TextStyle(
-                                      color: kFirstIntroColor,
-                                      fontWeight: FontWeight.w700,
-                                      
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
-                              ],
-                            ),
-                          ],
-                        )),
-                      ],
-                    ),
-                  ],
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w500,
+                                            
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                  const Spacer(),
+                                  Text('${ referencemeentPersonnes*2000+consultationpersonnes*2000} f',style: TextStyle(
+                                        color: kFirstIntroColor,
+                                        fontWeight: FontWeight.w700,
+                                        
+                                        fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                ],
+                              ),
+                             SizedBox(height: hv * 1.3),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
+                                            color: kDeepTeal,
+                                            fontWeight: FontWeight.w600,
+                                            
+                                            fontSize: wv*3.5)),
+                                  const Spacer(),
+                                  Text('$paidYear f',style: TextStyle(
+                                        color: kDeepTeal,
+                                        fontWeight: FontWeight.w700,
+                                        
+                                        fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                ],
+                              ),
+                             SizedBox(
+                            height: hv * 1.3,
+                          ),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
+                                            color: kSimpleForce,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                  const Spacer(),
+                                  Text('$notpaidYear f',style: TextStyle(
+                                        color: kFirstIntroColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                ],
+                              ),
+                            ],
+                          )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                SizedBox(height: hv * 3,),
                Container(
-                 width: double.infinity,
+                  constraints: BoxConstraints(
+                    maxWidth: Device.isSmartphone(context) ? double.infinity : 900
+                  ),
                   color: Colors.white,
                   margin: EdgeInsets.only(top: hv * 2),
                               child: Column(

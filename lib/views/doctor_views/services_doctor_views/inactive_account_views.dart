@@ -10,6 +10,7 @@ import 'package:danaid/core/models/usecaseModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/beneficiaryModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -258,6 +259,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                          }, child:  Padding(
                              padding: const EdgeInsets.all(5),
                              child: HomePageComponents().getAdherentsList(
+                               context: context,
                                  adherent: adherentBeneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected! )));
         beneficiaries?.add(adherentBeneficiaryCard);
         if (kDebugMode) {
@@ -274,6 +276,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                          }, child: Padding(
                              padding: const EdgeInsets.all(5),
                              child: HomePageComponents().getAdherentsList(
+                                context: context,
                                  adherent: beneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: i, onclick: getUserSelected, iSelected:userSelected! )));
           beneficiaries?.add(content);
         }
@@ -353,205 +356,210 @@ class _InactiveAccountState extends State<InactiveAccount> {
           backgroundColor: cardColor,
           scrollable: true,
           elevation: 8.0,
-          content:  SizedBox(
-            width: wv * 100,
-            child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  child:  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Align(
-                        alignment: Alignment.topRight,
-                        child:GestureDetector(
-                          onTap: (){
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration:BoxDecoration(
-                               borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Icon(MdiIcons.close, color: kPrimaryColor, size: wv*10,)),
-                        )
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                            widget.isAccountIsExists == false
-                                ? S.of(context).leNumro
-                                : S.of(context).leCompteDeLadherent,
-                            style: TextStyle(
-                              color: kBlueForce,
-                              fontWeight: FontWeight.w500,
-                              fontSize: fontSize(size: 21),
-                            )),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                            widget.isAccountIsExists == false && widget.phoneNumber != null ? widget.phoneNumber!: S.of(context).estInatif,
-                            style: TextStyle(
-                              color: kBlueForce,
-                              fontWeight: FontWeight.w700,
-                              fontSize: fontSize(size: 21),
-                            )),
-                      ),
-                     issaveInknowUserLoading==true ? const  Text('...'): Align(
-                        alignment: Alignment.center,
-                        child: SvgPicture.asset(
-                          "assets/icons/Bulk/Danger.svg",
-                          height: hv * 20,
-                          width: wv * 20,
+          content:  Container(
+            constraints: BoxConstraints(
+              maxWidth:Device.isSmartphone(context)? 0 : 700,
+            ),
+            child: SizedBox(
+              width: wv * 100,
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(10),
+                    child:  Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child:GestureDetector(
+                            onTap: (){
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                            },
+                            child: Container(
+                              decoration:BoxDecoration(
+                                 borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Icon(MdiIcons.close, color: kPrimaryColor, size: Device.isSmartphone(context)? wv*10 : 40,)),
+                          )
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                              widget.isAccountIsExists == false
+                                  ? S.of(context).leNumro
+                                  : S.of(context).leCompteDeLadherent,
+                              style: TextStyle(
+                                color: kBlueForce,
+                                fontWeight: FontWeight.w500,
+                                fontSize: fontSize(size: Device.isSmartphone(context)? 21 : 10),
+                              )),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                              widget.isAccountIsExists == false && widget.phoneNumber != null ? widget.phoneNumber!: S.of(context).estInatif,
+                              style: TextStyle(
+                                color: kBlueForce,
+                                fontWeight: FontWeight.w700,
+                                fontSize: fontSize(size: Device.isSmartphone(context)? 21 : 10),
+                              )),
+                        ),
+                       issaveInknowUserLoading==true ? const  Text('...'): Align(
+                          alignment: Alignment.center,
+                          child: SvgPicture.asset(
+                            "assets/icons/Bulk/Danger.svg",
+                            height: hv * 20,
+                            width: wv * 20,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                              widget.isAccountIsExists == false &&
+                                      widget.phoneNumber != null
+                                  ? S.of(context).nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
+                                  : S.of(context).ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
+                              style: TextStyle(
+                                color: kBlueForce,
+                                fontWeight: FontWeight.w500,
+                                fontSize: fontSize(size: Device.isSmartphone(context)? 17 : 10 ),
+                              ),
+                              textAlign: TextAlign.center),
+                        ),
+                        SizedBox(
+                          height: hv * 2,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
                             widget.isAccountIsExists == false &&
                                     widget.phoneNumber != null
-                                ? S.of(context).nestPasEncoreAdherentALaMutuelleSanteDanaidrecommncerLa
-                                : S.of(context).ladhrentNetantPasJourDeSesCotisationVousNeBnficierez,
+                                ? S.of(context).vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
+                                : S.of(context).poursuivezLaConsultationHorsParcoursDeSoinDanaid,
                             style: TextStyle(
-                              color: kBlueForce,
-                              fontWeight: FontWeight.w500,
-                              fontSize: fontSize(size: 17),
+                                color: kBlueForce,
+                                fontSize: fontSize(size: Device.isSmartphone(context)? 17 : 10 ),
+                                fontWeight: FontWeight.w500),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: hv*2.5,),
+                          Form(key: _FormKey,
+                             child: Column(children: [
+                        CustomTextField(
+                          label:"Nom du patient",
+                          hintText:"Jean MArie Nkah",
+                          enabled: true,
+                          controller: _patientController,
+                          validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                        ),
+                        ] )
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: Device.isSmartphone(context)? hv * 10.5 : hv * 10.5 ,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.white,
+                    ),
+                    child:   Container(
+                      width: wv * 100,
+                      margin:
+                        const  EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 15),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: issaveInknowUserLoading==true ? Loaders().buttonLoader(kPrimaryColor) :  Container(
+                          width: wv * 100, 
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: (Colors.grey[500])!,
+                                  spreadRadius: 0.5,
+                                  blurRadius: 3),
+                            ],
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(25),
                             ),
-                            textAlign: TextAlign.center),
-                      ),
-                      SizedBox(
-                        height: hv * 2,
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.isAccountIsExists == false &&
-                                  widget.phoneNumber != null
-                              ? S.of(context).vousRecevrezLaCompensationDanaid2000CfaSiLaFamilleAdherent
-                              : S.of(context).poursuivezLaConsultationHorsParcoursDeSoinDanaid,
-                          style: TextStyle(
-                              color: kBlueForce,
-                              fontSize: fontSize(size: 17),
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: hv*2.5,),
-                        Form(key: _FormKey,
-                           child: Column(children: [
-                      CustomTextField(
-                        label:"Nom du patient",
-                        hintText:"Jean MArie Nkah",
-                        enabled: true,
-                        controller: _patientController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
-                      ),
-                      ] )
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  height: hv * 10.5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white,
-                  ),
-                  child:   Container(
-                    width: wv * 100,
-                    margin:
-                      const  EdgeInsets.only(left: 8, right: 8, top: 0, bottom: 15),
-                    child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: issaveInknowUserLoading==true ? Loaders().buttonLoader(kPrimaryColor) :  Container(
-                        width: wv * 100, 
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: (Colors.grey[500])!,
-                                spreadRadius: 0.5,
-                                blurRadius: 3),
-                          ],
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(25),
                           ),
-                        ),
-                        child:   TextButton(
-                          onPressed: () async {
-                            if (_FormKey.currentState!.validate()){
-                               if (kDebugMode) {
-                                 print(_patientController.text);
-                                  print(widget.phoneNumber);
-                               }
-                               DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
-                                 var usecase= FirebaseFirestore.instance.collection('USECASES')
-                                .where('adherentId', isEqualTo: widget.phoneNumber ).where('idMedecin',isEqualTo:doctorProvider.getDoctor!.id).orderBy('createdDate').limit(1).get(); 
-                                usecase.then((value) async {
-                                  if(value.size>0){
-                                      if (kDebugMode) {
-                                        print(value.docs[0].data());
-                                      }
-                                    var useCase= value.docs[0].data();
-                                     Timestamp t = useCase['createdDate'].runtimeType==DateTime?Timestamp.fromDate( useCase['createdDate']): useCase['createdDate'];
-                                                    DateTime d = t.toDate();
-                                       if (kDebugMode) {
-                                         print(t);
-                                         print(d);
+                          child:   TextButton(
+                            onPressed: () async {
+                              if (_FormKey.currentState!.validate()){
+                                 if (kDebugMode) {
+                                   print(_patientController.text);
+                                    print(widget.phoneNumber);
+                                 }
+                                 DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+                                   var usecase= FirebaseFirestore.instance.collection('USECASES')
+                                  .where('adherentId', isEqualTo: widget.phoneNumber ).where('idMedecin',isEqualTo:doctorProvider.getDoctor!.id).orderBy('createdDate').limit(1).get(); 
+                                  usecase.then((value) async {
+                                    if(value.size>0){
+                                        if (kDebugMode) {
+                                          print(value.docs[0].data());
+                                        }
+                                      var useCase= value.docs[0].data();
+                                       Timestamp t = useCase['createdDate'].runtimeType==DateTime?Timestamp.fromDate( useCase['createdDate']): useCase['createdDate'];
+                                                      DateTime d = t.toDate();
+                                         if (kDebugMode) {
+                                           print(t);
+                                           print(d);
+                                         }
+                                      final date2 = DateTime.now(); 
+                                      final difference = date2.difference(d).inDays;
+                                       if( difference>14 &&  useCase['consultationCode']!=null ){
+                                           saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
+                                            saveSucces(context,string:S.of(context).lePatientABienTAjouter);
+                                            _patientController.clear();
+                                              setState(() {issaveInknowUserLoading=false;});
+                                          });
+                                       }else{
+                                          saveSucces(context,string:S.of(context).uneConsultationEnCoursTDtecterPourCePatientDonc);
                                        }
-                                    final date2 = DateTime.now(); 
-                                    final difference = date2.difference(d).inDays;
-                                     if( difference>14 &&  useCase['consultationCode']!=null ){
-                                         saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
-                                          saveSucces(context,string:S.of(context).lePatientABienTAjouter);
-                                          _patientController.clear();
-                                            setState(() {issaveInknowUserLoading=false;});
-                                        });
-                                     }else{
-                                        saveSucces(context,string:S.of(context).uneConsultationEnCoursTDtecterPourCePatientDonc);
-                                     }
-                                  }else{
-                                     saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
-                                          saveSucces(context,string:S.of(context).lePatientABienTAjouterAuSysteme);
-                                          _patientController.clear();
-                                           setState(() {issaveInknowUserLoading=false;});
-                                        });
-                                  }
-                                    
-                                }).catchError((onError){
-                                  if (kDebugMode) {
-                                    print(onError);
-                                  }
-                                  saveSucces(context,string:S.of(context).uneErreurEstSurvenuVeuillezContacterLeService);
-                                });
+                                    }else{
+                                       saveDataForUnknow(_patientController.text,widget.phoneNumber).then((value){
+                                            saveSucces(context,string:S.of(context).lePatientABienTAjouterAuSysteme);
+                                            _patientController.clear();
+                                             setState(() {issaveInknowUserLoading=false;});
+                                          });
+                                    }
+                                      
+                                  }).catchError((onError){
+                                    if (kDebugMode) {
+                                      print(onError);
+                                    }
+                                    saveSucces(context,string:S.of(context).uneErreurEstSurvenuVeuillezContacterLeService);
+                                  });
 
-                            }
-                           
-                          },
-                          child:  Text( 
-                            widget.isAccountIsExists == false
-                                ? S.of(context).ajouterCePatient
-                                : S.of(context).poursuivreHorsParcours,
-                            style: TextStyle(
-                                color: textColor,
-                                fontSize: wv * 4.5,
-                                letterSpacing: 0.8,
-                                fontWeight: FontWeight.w600),
+                              }
+                             
+                            },
+                            child:  Text( 
+                              widget.isAccountIsExists == false
+                                  ? S.of(context).ajouterCePatient
+                                  : S.of(context).poursuivreHorsParcours,
+                              style: TextStyle(
+                                  color: textColor,
+                                  fontSize:Device.isSmartphone(context)? wv * 4.5 : 15  ,
+                                  letterSpacing: 0.8,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            style: ButtonStyle(
+                                padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(vertical: 15)),
+                                backgroundColor:
+                                    MaterialStateProperty.all(kFirstIntroColor),
+                                shape: MaterialStateProperty.all(
+                                  const  RoundedRectangleBorder(borderRadius:  BorderRadius.all( Radius.circular(25))))),
                           ),
-                          style: ButtonStyle(
-                              padding: MaterialStateProperty.all(
-                                const EdgeInsets.symmetric(vertical: 15)),
-                              backgroundColor:
-                                  MaterialStateProperty.all(kFirstIntroColor),
-                              shape: MaterialStateProperty.all(
-                                const  RoundedRectangleBorder(borderRadius:  BorderRadius.all( Radius.circular(25))))),
                         ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -616,7 +624,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: hv*2),
                                     child: Container(
-                                     
+                       
                                       child: CarouselSlider(
                                         carouselController: beneficiaryCarouselController,
                                         options: CarouselOptions(

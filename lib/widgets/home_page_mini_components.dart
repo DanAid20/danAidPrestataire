@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -924,7 +925,7 @@ class HomePageComponents {
     );
   }
  
-  getAdherentsList({int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}) {
+  getAdherentsList({ BuildContext? context, int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}) {
     return GestureDetector(
       onTap: ()=>{
          
@@ -937,7 +938,7 @@ class HomePageComponents {
          }
       },
       child: Container(
-        width: wv * 78,
+        width: Device.isSmartphone(context!)? wv * 78 : 500,
         decoration: BoxDecoration(
           color: kBlueForce,
           borderRadius: BorderRadius.all(
@@ -956,18 +957,18 @@ class HomePageComponents {
               child: Row(
                 children: [
                   Container(
-                      width: wv * 15,
+                      width:  Device.isSmartphone(context)? wv * 15: wv * 8  ,
                       child: Text(S.current.valideJusquau,
                           style: TextStyle(
                               color: textWhiteColor,
-                              fontSize: fontSize(size: 15),
+                              fontSize: fontSize(size:  Device.isSmartphone(context)? 15 : 5 ),
                               fontWeight: FontWeight.w500))),
                   Container(
-                      width: wv * 20,
+                      width: Device.isSmartphone(context)? wv * 20: wv * 10,
                       child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                           style: TextStyle(
                               color: whiteColor,
-                              fontSize: wv * 4.5,
+                              fontSize: Device.isSmartphone(context)? wv * 4.5 : wv * 3 ,
                               fontWeight: FontWeight.w700))),
                   Spacer(),
                   SvgPicture.asset(
@@ -1001,8 +1002,8 @@ class HomePageComponents {
                       ),
                       color: Colors.red,
                       shape: BoxShape.circle),
-                  width: wv * 40,
-                  height: hv * 20,
+                  width: Device.isSmartphone(context)? wv * 40: wv * 10,
+                  height: Device.isSmartphone(context)? hv * 20: hv * 10 ,
                   child: Stack(children: <Widget>[
                     Align(
                       alignment: Alignment.center,
