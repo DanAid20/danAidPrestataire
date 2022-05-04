@@ -90,7 +90,7 @@ class Algorithms {
 
   static List getKeyWords(String input) {
     List getKeys(String input) {
-      var keyWords = new List.filled(input.length, "", growable: true);
+      var keyWords = List.filled(input.length, "", growable: true);
       for (int i = 0; i < input.length; i++) {
         keyWords[i] = input.substring(0, i + 1).toLowerCase();
       }
@@ -98,7 +98,7 @@ class Algorithms {
     }
 
     List getKeysReversed(String input) {
-      var keyWords = new List.filled(input.length, "", growable: true);
+      var keyWords = List.filled(input.length, "", growable: true);
       for (int i = 0; i < input.length; i++) {
         keyWords[i] =
             input.substring(0, i + 1).toLowerCase().split('').reversed.join('');
@@ -108,8 +108,8 @@ class Algorithms {
 
     var results = [];
     String inputReversed = input.split('').reversed.join('');
-    var words = input.toLowerCase().split(new RegExp('\\s+'));
-    var wordsReversed = inputReversed.toLowerCase().split(new RegExp('\\s+'));
+    var words = input.toLowerCase().split(RegExp('\\s+'));
+    var wordsReversed = inputReversed.toLowerCase().split(RegExp('\\s+'));
 
     for (int i = 0; i < words.length; i++) {
       results = results + getKeys(words[i]);

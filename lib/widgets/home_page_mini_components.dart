@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/services/algorithms.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -388,11 +389,13 @@ class HomePageComponents {
       String? subtitle,
       String? apointementDate,
       int? etat,
+      required BuildContext context,
       bool isSpontane = false}) {
     return ListTile(
       leading: HomePageComponents().getAvatar(
           imgUrl: imgUrl!,
           size: wv * 8,
+          context: context,
           renoveIsConnectedButton: false),
       title: Text(
         nom != null ? nom : '',
@@ -1127,6 +1130,7 @@ class HomePageComponents {
       String? text,
       int? likeCount,
       int? commentCount,
+      required BuildContext context,
       int? sendcountNumber}) {
     return Container(
       child: Column(
@@ -1142,7 +1146,8 @@ class HomePageComponents {
                     getAvatar(
                         imgUrl: imgUrl!,
                         size: wv * 8.3,
-                        renoveIsConnectedButton: false),
+                        renoveIsConnectedButton: false, 
+                        context: context),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1277,7 +1282,7 @@ class HomePageComponents {
     );
   }
 
-  getAvatar({String? imgUrl, double? size, bool renoveIsConnectedButton = true}) {
+  getAvatar({String? imgUrl, double? size, bool renoveIsConnectedButton = true, required BuildContext context}) {
       var stringToComparedev="https://firebasestorage.googleapis.com/v0/b/danaid-dev";
       var stringToCompareprod="https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com";
 
@@ -1286,7 +1291,7 @@ class HomePageComponents {
       child: Stack(
         children: [
          imgUrl!=null &&  imgUrl.contains(stringToComparedev) || imgUrl!=null && imgUrl.contains(stringToCompareprod)  ? CircleAvatar(
-                radius:  size != null ? size : wv * 5.5,
+                radius:  size != null ? size : Device.isSmartphone(context) ? wv * 5.5 : 40,
                 backgroundImage: NetworkImage(imgUrl),
                 backgroundColor: Colors.transparent,
           ):
@@ -1299,10 +1304,10 @@ class HomePageComponents {
           ),
           renoveIsConnectedButton
               ? Positioned(
-                  top: wv * 7,
-                  left: wv * 8,
+                  top: Device.isSmartphone(context) ? wv * 7 : 55,
+                  left: Device.isSmartphone(context) ? wv * 8 : 55,
                   child: CircleAvatar(
-                    radius: wv * 1.5,
+                    radius: Device.isSmartphone(context) ? wv * 1.5 : 11,
                     backgroundColor: primaryColor,
                   ),
                 )
@@ -1312,13 +1317,13 @@ class HomePageComponents {
     );
   }
 
-  getProfileStat({String? imgUrl, String? title, int? occurence, Color color = primaryColor}) {
+  getProfileStat({String? imgUrl, String? title, int? occurence, Color color = primaryColor, required BuildContext context}) {
     return Row(children: [
       Container(
         margin: EdgeInsets.only(right: wv * 1),
         child: SvgPicture.asset(
           imgUrl!,
-          width: wv * 7,
+          width: Device.isSmartphone(context) ? wv * 7 : 50,
           color: color,
         ),
       ),
@@ -1326,98 +1331,62 @@ class HomePageComponents {
         children: [
           Text("$occurence",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-          Text(title!, style: TextStyle(fontSize: inch * 1.3))
+          Text(title!, style: TextStyle(fontSize: Device.isSmartphone(context) ? inch * 1.3 : 20))
         ],
       )
     ]);
   }
 
-  Widget getMyCoverageOptionsCard(
-      {String? imgUrl, String? label, Color? labelColor}) {
+  Widget getMyCoverageOptionsCard({String? imgUrl, String? label, Color? labelColor, required BuildContext context}) {
     return Container(
-      width: wv * 35,
-      height: hv * 17,
-      padding: EdgeInsets.symmetric(horizontal: wv * 3, vertical: hv * 2.5),
-      margin: EdgeInsets.symmetric(horizontal: wv * 1.5),
+      width: Device.isSmartphone(context) ? wv * 35 : 300,
+      height: Device.isSmartphone(context) ? hv * 17 : 170,
+      padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 3 : 40, vertical: Device.isSmartphone(context) ? hv * 2.5 : 25),
+      margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 1.5 : 0),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(inch * 2.5)),
+          borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch * 2.5 : 40)),
           image: DecorationImage(image: AssetImage(imgUrl!), fit: BoxFit.cover)),
       child: Align(
         child: Text(label!,
             style: TextStyle(
-                color: labelColor, fontSize: 16, fontWeight: FontWeight.w800)),
+                color: labelColor, fontSize: Device.isSmartphone(context) ? 16 : 20, fontWeight: FontWeight.w800)),
         alignment: Alignment.bottomLeft,
       ),
     );
   }
 
-  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function()? action}) {
+  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function()? action, required BuildContext context}) {
     return ListTile(
       onTap: action,
       leading: Container(
-        width: wv * 13,
-        padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
-        decoration: BoxDecoration(
-            color: Colors.teal,
-            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
-        child: Center(
-            child: Text(initial!,
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.7),
-                    fontSize: inch * 2,
-                    fontWeight: FontWeight.w700))),
-      ),
-      title: Text(
-        name!,
-        style: TextStyle(
-            color: kPrimaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: inch * 1.6),
-      ),
-      subtitle: Text(
-        DateFormat('EEEE', 'fr_FR').format(date!)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(),
-        style: TextStyle(color: kPrimaryColor),
-      ),
+        width: Device.isSmartphone(context) ? wv * 13 : 100,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: Device.isSmartphone(context) ? hv*2 : 15),
+        decoration: BoxDecoration(color: Colors.teal, borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch*1 : 15))),
+        child: Center(child: Text(initial!, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: Device.isSmartphone(context) ? inch*2 : 24, fontWeight: FontWeight.w700))),),
+      title: Text(name!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: Device.isSmartphone(context) ? inch*1.6 : 18),),
+      subtitle: Text(DateFormat('EEEE', 'fr_FR').format(date!)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(), style: const TextStyle(color: kPrimaryColor),),
       trailing: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            price.toString()+ "f.",
-            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.5),
-          ),
-          Text(
-            getUseCaseStateText(state!),
-            style: TextStyle(
-                color: getUseCaseStateColor(state),
-                fontSize: inch * 1.5),
-          ),
+          Text(price.toString()+ "f.", style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch*1.5 : 17),),
+          Text(getUseCaseStateText(state!), style: TextStyle(color: getUseCaseStateColor(state), fontSize: Device.isSmartphone(context) ? inch*1.5 : 17),),
         ],
       ),
     );
   }
 
-  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, required Function() action}) {
+  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, required Function() action, required BuildContext context}) {
     return ListTile(
       leading: Container(
-        width: wv * 12,
-        padding: EdgeInsets.symmetric(horizontal: wv * 1),
-        decoration: BoxDecoration(
-            color: Colors.teal,
-            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
+        width: Device.isSmartphone(context) ? wv*12 :  100,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: Device.isSmartphone(context) ? 0 : 5),
+        decoration: BoxDecoration(color: Colors.teal, borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch * 1 : 10))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(date!.day.toString().padLeft(2, '0'),
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: inch * 1.7,
-                    fontWeight: FontWeight.w700)),
-            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: inch * 1.5,
-                    fontWeight: FontWeight.w400)),
+            Text(date!.day.toString().padLeft(2, '0'), style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: Device.isSmartphone(context) ? inch*1.7 : 20, fontWeight: FontWeight.w700)),
+            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}", style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: Device.isSmartphone(context) ? inch * 1.5 : 15, fontWeight: FontWeight.w400)),
           ],
         ),
       ),
@@ -1428,7 +1397,7 @@ class HomePageComponents {
           style: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.w700,
-              fontSize: inch * 2),
+              fontSize: Device.isSmartphone(context) ? inch * 2 : 22),
           overflow: TextOverflow.ellipsis,
         ),
       ),
@@ -1437,11 +1406,11 @@ class HomePageComponents {
         children: [
           Text(
             Algorithms.getFormattedDate(date).trim().substring(0, 1).toUpperCase() + Algorithms.getFormattedDate(date).trim().substring(1),
-            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
+            style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.4 : 15),
           ),
           Text(
             doctorName!,
-            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
+            style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.4 : 15),
           ),
         ],
       ),
@@ -1451,12 +1420,11 @@ class HomePageComponents {
         children: [
           Text(
             type!,
-            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),
+            style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.7 : 17),
           ),
           Text(
             getAppointmentStateText(state!),
-            style: TextStyle(
-                color: getAppointmentStateColor(state), fontSize: inch * 1.7),
+            style: TextStyle(color: getAppointmentStateColor(state), fontSize: Device.isSmartphone(context) ? inch * 1.7 : 17),
           ),
         ],
       ),
@@ -1464,29 +1432,29 @@ class HomePageComponents {
     );
   }
 
-  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action}) {
+  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action, required BuildContext context}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: wv*2),
       leading: Container(
-        width: wv * 12,
-        padding: EdgeInsets.symmetric(horizontal: wv * 1),
+        width: Device.isSmartphone(context) ? wv * 12 : 85,
+        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 1 : 10),
         decoration: BoxDecoration(
             color: kBrownCanyon,
-            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
+            borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch * 1 : 10))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(date!.day.toString().padLeft(2, '0'),
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
-                    fontSize: inch * 1.7,
+                    fontSize: Device.isSmartphone(context) ? inch * 1.7 : 22,
                     fontWeight: FontWeight.w700)),
             Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
-                fontSize: inch * 1.5,
+                fontSize: Device.isSmartphone(context) ? inch * 1.5 : 15,
                 fontWeight: FontWeight.w400)),
           ],
         ),
@@ -1505,7 +1473,7 @@ class HomePageComponents {
         ],
       ),
       trailing: Container(
-        width: 120,
+        width: Device.isSmartphone(context) ? 120 : 250,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -1515,7 +1483,7 @@ class HomePageComponents {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(mensuality.toString()+" .f", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("", style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),),
+                Text("", style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.7 : 16),),
               ],
             ),
             SizedBox(width: wv*2,),
@@ -1584,34 +1552,35 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function()? action}){
+  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function()? action, required BuildContext context}){
     return Container(
-      width: wv*25,
+      width: Device.isSmartphone(context) ? wv*25 : 200,
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(name!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
           Stack(
             children: [
               Container(
-                margin: EdgeInsets.only(right: wv*2),
-                height: hv*18, width: wv*25,
+                margin: EdgeInsets.only(right: Device.isSmartphone(context) ? wv*2 : 7),
+                height: Device.isSmartphone(context) ? hv*18 : 200, width: Device.isSmartphone(context) ? wv*25 : 200,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: CachedNetworkImageProvider(imgUrl!), fit: BoxFit.cover),
+                  image: imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover) : null,
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
+                  boxShadow: const [BoxShadow(color: Colors.black54, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
                 ),
-                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: wv*25,) : Container(),
+                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: Device.isSmartphone(context) ? wv*25 : 150) : Container(),
               ),
               edit ? Positioned(
-                bottom: hv*0,
+                bottom: Device.isSmartphone(context) ? hv*0 : 5,
+                left: Device.isSmartphone(context) ? 0 : 3,
                 child: IconButton(padding: EdgeInsets.all(0),
                   icon: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                     ),
-                    child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
+                    child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: Device.isSmartphone(context) ? wv*4.5 : 28,), backgroundColor: whiteColor, radius: Device.isSmartphone(context) ? wv*4 : 20,)), 
                   onPressed: action
                 ),
               ) : Container()
@@ -1622,53 +1591,52 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryChoiceCard({String? name, String? imgUrl, Function()? editAction, Function()? selectAction, bool isSelected = false}){
-    return Container(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            children: [
-              GestureDetector(
-                onTap: selectAction,
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(horizontal: wv*1),
-                  height: isSelected ? hv*21 : hv*18,
-                  width: isSelected ? wv*28 : wv*25,
-                  decoration: BoxDecoration(
-                    image: imgUrl == null ? null : DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
-                  ),
-                  child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: wv*25,) : Container(),
+  static beneficiaryChoiceCard({String? name, String? imgUrl, Function()? editAction, Function()? selectAction, bool isSelected = false, required BuildContext context}){
+    return Column(mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            GestureDetector(
+              onTap: selectAction,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                margin: EdgeInsets.symmetric(horizontal:Device.isSmartphone(context) ? wv*1 : 7),
+                height: isSelected ? Device.isSmartphone(context) ? hv*21 : 200 : Device.isSmartphone(context) ? hv*18 : 160,
+                width: isSelected ? Device.isSmartphone(context) ? wv*28 : 190 : Device.isSmartphone(context) ? wv*25 : 150,
+                decoration: BoxDecoration(
+                  image: imgUrl == null ? null : DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [BoxShadow(color: Colors.black54, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
                 ),
+                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: Device.isSmartphone(context) ? wv*25 : 150) : Container(),
               ),
-              Positioned(
-                bottom: hv*0,
-                child: Column(
-                  children: [
-                    IconButton(padding: EdgeInsets.all(0),
-                      icon: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
-                        ),
-                        child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
-                      onPressed: editAction
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          Text(name ?? "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
-        ],
-      ),
+            ),
+            Positioned(
+              bottom: Device.isSmartphone(context) ? hv*0 : 5,
+              left: Device.isSmartphone(context) ? 0 : 10,
+              child: Column(
+                children: [
+                  IconButton(padding: EdgeInsets.all(0),
+                    icon: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
+                      ),
+                      child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: Device.isSmartphone(context) ? wv*4.5 : 28,), backgroundColor: whiteColor, radius: Device.isSmartphone(context) ? wv*4 : 20,)), 
+                    onPressed: editAction
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        Text(name ?? "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
+      ],
     );
   }
 
-  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function()? action}){
+  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function()? action, required BuildContext context}){
     return Container(
       decoration: BoxDecoration(
         color: kSouthSeas,
@@ -1676,9 +1644,9 @@ class HomePageComponents {
         boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
       ),
       child: Row(children: [
-        SizedBox(width: wv*2.5,),
-        SvgPicture.asset(iconPath!, width: wv*7, color: whiteColor,),
-        SizedBox(width: wv*3,),
+        SizedBox(width: Device.isSmartphone(context) ? wv*2.5 : 15,),
+        SvgPicture.asset(iconPath!, width: Device.isSmartphone(context) ? wv*7 : 35, color: whiteColor,),
+        SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15,),
         Expanded(child: 
           CustomTextButton(
             enable: enable,
@@ -1692,12 +1660,12 @@ class HomePageComponents {
     );
   }
 
-  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function()? action}){
+  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function()? action, required BuildContext context}){
     return  GestureDetector(
       onTap: action,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: hv*1.5),
-        margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
+        margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*1.5 : 8, vertical: hv*1.5),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -1706,17 +1674,17 @@ class HomePageComponents {
         ),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(width: wv*1.5),
-            SvgPicture.asset(iconPath!, width: wv*9.5, color: kSouthSeas,),
-            SizedBox(width: wv*2),
+            SizedBox(width: Device.isSmartphone(context) ? wv*1.5 : 10),
+            SvgPicture.asset(iconPath!, width: Device.isSmartphone(context) ? wv*9.5 : 50, color: kSouthSeas,),
+            SizedBox(width: Device.isSmartphone(context) ? wv*2 : 10),
             RichText(text: TextSpan(
               text: "$title\n",
               children: [
-                TextSpan(text: "$type\n\n", style: TextStyle(fontSize: wv*4.2, fontWeight: FontWeight.bold),),
-                TextSpan(text: "$price Cfa", style: TextStyle(fontSize: wv*4.2, color: kBlueDeep),)
-              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8)),
+                TextSpan(text: "$type\n\n", style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*4.2 : 17, fontWeight: FontWeight.bold),),
+                TextSpan(text: "$price Cfa", style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*4.2 : 17, color: kBlueDeep),)
+              ], style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*3.8 : 16)),
             ),
-            SizedBox(width: wv*4,)
+            SizedBox(width: Device.isSmartphone(context) ? wv*4 : 35,)
           ],
         ),
       ),
@@ -1748,16 +1716,16 @@ class HomePageComponents {
     );
   }
 
-  static accountParameters({String? title, String? subtitle, String? svgIcon, Function()? action}){
+  static accountParameters({String? title, String? subtitle, String? svgIcon, Function()? action, required BuildContext context}){
     return Padding(
-      padding: EdgeInsets.only(bottom: 5.0),
+      padding: EdgeInsets.only(bottom: Device.isSmartphone(context) ? 5.0 : 10),
       child: ListTile(
         title: Padding(
           padding: EdgeInsets.only(bottom: 5.0),
           child: Text(title!, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17)),
         ),
         subtitle: Row(children: [
-          SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
+          SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: Device.isSmartphone(context) ? wv*2 : 10,),
           Expanded(child: Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
         trailing: TextButton(onPressed: action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
@@ -1765,7 +1733,7 @@ class HomePageComponents {
     );
   }
 
-  static termsAndConditionsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
+  static Widget termsAndConditionsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1798,7 +1766,7 @@ class HomePageComponents {
     );
   }
 
-  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
+  static confirmTermsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1806,14 +1774,15 @@ class HomePageComponents {
         excluding: true,
         child: Container(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(S.current.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
+              Text(S.current.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontSize: 14, fontWeight: FontWeight.w600),),
               SizedBox(height: hv*0.5),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w400,),
+                    style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontSize: 16, fontWeight: FontWeight.w400,),
                     children: [
                       TextSpan(
                         text: "\u2022 " + S.current.desPoursuiteJudiciairesn,
@@ -1837,14 +1806,14 @@ class HomePageComponents {
       ),
       value: value,
       activeColor: activeColor ?? primaryColor,
-      onChanged: (bool)=>onChanged,
+      onChanged: onChanged,
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
 
-  static Widget head({String? surname, String? fname, String? avatarUrl, Timestamp? birthDate}){
+  static Widget head({String? surname, String? fname, String? avatarUrl, Timestamp? birthDate, required BuildContext context}){
     return Container(
-      padding: EdgeInsets.only(left: wv*4),
+      padding: EdgeInsets.only(left: Device.isSmartphone(context) ? wv*4 : 30),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
@@ -1859,15 +1828,15 @@ class HomePageComponents {
                 CircleAvatar(
                   backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
                   backgroundColor: whiteColor,
-                  radius: wv*5,
-                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
+                  radius: Device.isSmartphone(context) ? wv*5 : 40,
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: Device.isSmartphone(context) ? wv*8 : 65),
                 ),
-                SizedBox(width: wv*3,),
+                SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15,),
                 Expanded(
                   child: RichText(text: TextSpan(
                     text: surname! + " " +  fname! + "\n",
                     children: birthDate != null ? [
-                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: wv*3.3)),
+                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16)),
                     ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -1880,9 +1849,9 @@ class HomePageComponents {
     );
   }
 
-  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor}){
+  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor, required BuildContext context}){
     return Container(
-      padding: EdgeInsets.only(left: wv*4),
+      padding: EdgeInsets.only(left: Device.isSmartphone(context) ? wv*4 : 40),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
@@ -1896,16 +1865,16 @@ class HomePageComponents {
                 CircleAvatar(
                   backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
                   backgroundColor: whiteColor,
-                  radius: wv*5,
+                  radius: Device.isSmartphone(context) ? wv*5 : 30,
                   child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
                 ),
-                SizedBox(width: wv*3,),
+                SizedBox(width: Device.isSmartphone(context) ? wv*3 : 20,),
                 Expanded(
                   child: RichText(text: TextSpan(
                     text: title! + "\n",
                     children: [
-                      TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
-                    ], style: TextStyle(color: titleColor, fontSize: 16.5)),
+                      TextSpan(text: subtitle, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16)),
+                    ], style: TextStyle(color: titleColor, fontSize: Device.isSmartphone(context) ? 16.5 : 18)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1917,14 +1886,14 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, Function()? action}){
+  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, bool noPadding = false, Function()? action, required context}){
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
         boxShadow: [BoxShadow(color: Colors.grey[350]!, spreadRadius: 0.5, blurRadius: 1.0)],
         borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*1), topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),)
       ),
-      margin: EdgeInsets.symmetric(horizontal: wv*3),
+      margin: EdgeInsets.symmetric(horizontal: noPadding ? 0 : wv*3),
       child: IntrinsicHeight(
         child: Row(crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -1932,7 +1901,7 @@ class HomePageComponents {
               flex: 2,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: icon == null ? Icon(Icons.message, size: 35, color: Colors.teal[300],) : icon,
+                child: icon == null ? Icon(Icons.message, size: Device.isSmartphone(context) ? 35 : 50, color: Colors.teal[300],) : icon,
               ),
             ),
             Expanded(
@@ -1940,9 +1909,9 @@ class HomePageComponents {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: hv*1,),
-                  Text(title!, style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.bold)
+                  Text(title!, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? 14 : 20, fontWeight: FontWeight.bold)
                   ),
-                  Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 12)),
+                  Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? 12 : 18)),
                   SizedBox(height: hv*1,),
                 ],
               ),
@@ -1958,7 +1927,7 @@ class HomePageComponents {
                   borderRadius: BorderRadius.only(topRight: Radius.circular(inch*1), bottomLeft: Radius.circular(inch*1),),
                     color: kPrimaryColor,
                   ),
-                  child: Center(child: Text(actionLabel!, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
+                  child: Center(child: Text(actionLabel!, style: TextStyle(color: Colors.white, fontSize: Device.isSmartphone(context) ? 14 : 18, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)),
                 ),
               ),
             ): Container()
@@ -2125,6 +2094,48 @@ class HomePageComponents {
           ),
         ),
         onTap: action,
+      ),
+    );
+  }
+
+  static Widget navigationArrows({Color fillColor = kCardTextColor, Color outlineColor = whiteColor, required Function() prevAction, required Function() nextAction}){
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+        roundButtonBack(fillColor: fillColor, outlineColor: outlineColor.withOpacity(0.8), prevAction: prevAction),
+        roundButtonForward(fillColor: fillColor, outlineColor: outlineColor.withOpacity(0.8), nextAction: nextAction)
+      ],),
+    );
+  }
+
+  static Widget roundButtonForward({required Color fillColor, required Color outlineColor, required Function() nextAction}){
+    return GestureDetector(
+      onTap: nextAction,
+      child: Container(
+        decoration: BoxDecoration(
+          color: fillColor,
+          shape: BoxShape.circle,
+          border: Border.all(width: 4, color: outlineColor)
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Icon(Icons.arrow_forward_rounded, color: whiteColor.withOpacity(0.8), size: 35,),
+      ),
+    );
+  }
+
+  static Widget roundButtonBack({required Color fillColor, required Color outlineColor, required Function() prevAction}){
+    return GestureDetector(
+      onTap: prevAction,
+      child: Container(
+        decoration: BoxDecoration(
+          color: kCardTextColor,
+          shape: BoxShape.circle,
+          border: Border.all(width: 4, color: whiteColor.withOpacity(0.8))
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Icon(Icons.arrow_back, color: whiteColor.withOpacity(0.8), size: 35,),
       ),
     );
   }

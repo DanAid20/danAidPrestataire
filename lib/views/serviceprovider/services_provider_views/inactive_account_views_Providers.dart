@@ -879,7 +879,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                       child: HomePageComponents().getAvatar(
                                           imgUrl: adherentUserSelected!.avatarUrl ?? 'assets/images/avatar-profile.jpg' ,
                                           size: 15.0,
-                                          renoveIsConnectedButton: false
+                                          renoveIsConnectedButton: false, context: context
                                         ),),
                                         const Spacer(),
                                         Text(

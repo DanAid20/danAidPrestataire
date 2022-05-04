@@ -16,6 +16,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class LoanDetails extends StatefulWidget {
   const LoanDetails({ Key? key }) : super(key: key);
 
@@ -51,7 +53,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 18, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
             Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
@@ -65,251 +67,255 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: hv*2),
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: hv*1.5),
-                    decoration: BoxDecoration(
-                      color: kBrownCanyon.withOpacity(0.2),
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(bottom: hv*1.5),
-                          decoration: BoxDecoration(
-                            color: kBrownCanyon.withOpacity(0.3),
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-                          ),
-                          child: Column(
-                            children: [
-                              HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
-                              SizedBox(height: hv*2),
-                              Row(
-                                children: [
-                                  SizedBox(width: wv*4,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(S.of(context).totalPayer, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
-                                      Text(loanProvider.getLoan!.totalToPay.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(S.of(context).vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
-                                      Container(
-                                        margin: EdgeInsets.only(top: hv*0.2),
-                                        padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*0.25),
-                                        decoration: BoxDecoration(
-                                          color: kBrownCanyon.withOpacity(0.5),
-                                          borderRadius: BorderRadius.circular(20)
-                                        ),
-                                        child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan!.amount, rate: adherentProvider.getAdherent?.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: loan!.duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(width: wv*4,),
-                                ],
-                              )
-                            ],
-                        )),
-                        SizedBox(height: hv*1.5,),
-                        Row(
-                          children: [
-                            SizedBox(width: wv*5),
-                            SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
-                            SizedBox(width: wv*2),
-                            Expanded(child: Text("Rembourser à temps augmente votre niveau de crédit.", style: TextStyle(fontSize: 15, color: kTextBlue))),
-                            SizedBox(width: wv*5)
-                          ],
-                        ),
-                      ],
-                    ),
+        child: Center(
+          child: SizedBox(
+            width: Device.isSmartphone(context) ? wv*100 : 1000,
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: hv*2),
+                  decoration: BoxDecoration(
+                    color: whiteColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [BoxShadow(color: Colors.grey[700]!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: Offset(0,4))]
                   ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1.5),
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Durée", style: TextStyle(fontSize: 15, color: kTextBlue)),
-                            SizedBox(height: 5),
-                            Container(
-                              width: wv*40,
-                              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: Text(loan.duration.toString() + S.of(context).mois, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(S.of(context).dateDeFin, style: TextStyle(fontSize: 15, color: kTextBlue)),
-                            SizedBox(height: 5),
-                            Container(
-                              width: wv*40,
-                              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(15)
-                              ),
-                              child: Text(loan.lastPaymentDate!.toDate().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(loan.lastPaymentDate!.toDate())+" "+ loan.lastPaymentDate!.toDate().year.toString(), style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: hv*5,),
-            Container(
-              decoration: BoxDecoration(
-                color: whiteColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: hv*2,),
-                  Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
-                  SizedBox(height: hv*2,),
-                  Column(
+                  child: Column(
                     children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          height: 40,
-                          padding: EdgeInsets.only(left: wv*3),
-                          child: TabBar(
-                            controller: _loanDetailTabController,
-                            indicatorWeight: 5,
-                            indicatorColor: kPrimaryColor,
-                            isScrollable: true,
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                            labelColor: kPrimaryColor,
-                            tabs: [
-                              Tab(text: S.of(context).enCours),
-                              Tab(text: S.of(context).effectus),
-                            ],
-                          ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: hv*1.5),
+                        decoration: BoxDecoration(
+                          color: kBrownCanyon.withOpacity(0.2),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(bottom: hv*1.5),
+                              decoration: BoxDecoration(
+                                color: kBrownCanyon.withOpacity(0.3),
+                                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                              ),
+                              child: Column(
+                                children: [
+                                  HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                                  SizedBox(height: hv*2),
+                                  Row(
+                                    children: [
+                                      SizedBox(width:Device.isSmartphone(context) ? wv*4 : 40,),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(S.of(context).totalPayer, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                          Text(loanProvider.getLoan!.totalToPay.toString() + " .f", style: TextStyle(fontSize: 25, color: kTextBlue, fontWeight: FontWeight.w400)),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(S.of(context).vosMensualits, style: TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w600)),
+                                          Container(
+                                            margin: EdgeInsets.only(top: hv*0.2),
+                                            padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*6 : 50, vertical: hv*0.25),
+                                            decoration: BoxDecoration(
+                                              color: kBrownCanyon.withOpacity(0.5),
+                                              borderRadius: BorderRadius.circular(20)
+                                            ),
+                                            child: Text(Algorithms.getFixedMonthlyMortgageRate(amount: loanProvider.getLoan!.amount, rate: adherentProvider.getAdherent?.adherentPlan == 0 ? 0.16/12 : 0.05/12, months: loan!.duration).toInt().toString() + " .f", style: TextStyle(fontSize: 20, color: kTextBlue, fontWeight: FontWeight.bold))
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(width: Device.isSmartphone(context) ? wv*4 : 40,),
+                                    ],
+                                  )
+                                ],
+                            )),
+                            SizedBox(height: hv*1.5,),
+                            Row(
+                              children: [
+                                SizedBox(width: Device.isSmartphone(context) ? wv*5 : 40),
+                                SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
+                                SizedBox(width: wv*2),
+                                Expanded(child: Text("Rembourser à temps augmente votre niveau de crédit.", style: TextStyle(fontSize: 15, color: kTextBlue))),
+                                SizedBox(width: wv*5)
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       Container(
-                        height: hv*50,
-                        child: TabBarView(
-                          controller: _loanDetailTabController,
+                        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*5 : 40, vertical: hv*1.5),
+                        child: Row(
                           children: [
-                            Container(
-                              //margin: EdgeInsets.symmetric(vertical: hv*2),
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 0).orderBy('number').snapshots(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                                      ),
-                                    );
-                                  }
-                                  return snapshot.data!.docs.length >= 1
-                                    ? ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        physics: const BouncingScrollPhysics(),
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          int lastIndex = snapshot.data!.docs.length - 1;
-                                          DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
-                                          MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc, mensualityDoc.data() as Map);
-                                          print("name: ");
-                                          return Padding(
-                                            padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                                            child: HomePageComponents.getLoanTile(
-                                              label: "hhgfhfghfh",
-                                              subtitle: "",
-                                              date: mensuality.startDate?.toDate(),
-                                              firstDate: mensuality.startDate?.toDate(),
-                                              lastDate: mensuality.endDate?.toDate(),
-                                              mensuality: mensuality.amount?.toInt(),
-                                              type: "gfg",
-                                              state: mensuality.status,
-                                              action: (){pay(amount: mensuality.amount!, id: mensuality.id!);}
-                                            ),
-                                          );
-                                        })
-                                    : Center(
-                                      child: Container(padding: EdgeInsets.only(bottom: hv*4, right: wv*5, left: wv*5),child: Text("Aucune mensualité en cours", textAlign: TextAlign.center)),
-                                    );
-                                }
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Durée", style: TextStyle(fontSize: 15, color: kTextBlue)),
+                                SizedBox(height: 5),
+                                Container(
+                                  width: Device.isSmartphone(context) ? wv*40 : 440,
+                                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child: Text(loan.duration.toString() + S.of(context).mois, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
+                                )
+                              ],
                             ),
-                            Container(
-                              //margin: EdgeInsets.symmetric(vertical: hv*2),
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 1).orderBy('number').snapshots(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                                      ),
-                                    );
-                                  }
-                                  return ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemCount: snapshot.data!.docs.length,
-                                    itemBuilder: (context, index) {
-                                      int lastIndex = snapshot.data!.docs.length - 1;
-                                      DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
-                                      MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc, mensualityDoc.data() as Map);
-                                      print("name: ");
-                                      return Padding(
-                                        padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                                        child: HomePageComponents.getLoanTile(
-                                          label: "hhgfhfghfh",
-                                          subtitle: "",
-                                          date: mensuality.startDate?.toDate(),
-                                          firstDate: mensuality.startDate?.toDate(),
-                                          lastDate: mensuality.endDate?.toDate(),
-                                          mensuality: mensuality.amount?.toInt(),
-                                          type: "gfg",
-                                          state: mensuality.status,
-                                          action: (){}
-                                        ),
-                                      );
-                                    });
-                                }
-                              ),
-                            )
+                            Spacer(),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(S.of(context).dateDeFin, style: TextStyle(fontSize: 15, color: kTextBlue)),
+                                SizedBox(height: 5),
+                                Container(
+                                  width: Device.isSmartphone(context) ? wv*40 : 440,
+                                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(15)
+                                  ),
+                                  child: Text(loan.lastPaymentDate!.toDate().day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(loan.lastPaymentDate!.toDate())+" "+ loan.lastPaymentDate!.toDate().year.toString(), style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w600, fontSize: 16),),
+                                )
+                              ],
+                            ),
                           ],
                         ),
                       )
                     ],
-                  )
-                ],
-              ),
-            )
-            
-          ],
+                  ),
+                ),
+                SizedBox(height: hv*5,),
+                Container(
+                  decoration: BoxDecoration(
+                    color: whiteColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: hv*2,),
+                      Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+                      SizedBox(height: hv*2,),
+                      Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              height: 40,
+                              padding: EdgeInsets.only(left: wv*3),
+                              child: TabBar(
+                                controller: _loanDetailTabController,
+                                indicatorWeight: 5,
+                                indicatorColor: kPrimaryColor,
+                                isScrollable: true,
+                                labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                                labelColor: kPrimaryColor,
+                                tabs: [
+                                  Tab(text: S.of(context).enCours),
+                                  Tab(text: S.of(context).effectus),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: hv*50,
+                            child: TabBarView(
+                              controller: _loanDetailTabController,
+                              children: [
+                                Container(
+                                  //margin: EdgeInsets.symmetric(vertical: hv*2),
+                                  child: StreamBuilder<QuerySnapshot>(
+                                    stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 0).orderBy('number').snapshots(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                            valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                          ),
+                                        );
+                                      }
+                                      return snapshot.data!.docs.length >= 1
+                                        ? ListView.builder(
+                                            scrollDirection: Axis.vertical,
+                                            physics: const BouncingScrollPhysics(),
+                                            itemCount: snapshot.data!.docs.length,
+                                            itemBuilder: (context, index) {
+                                              int lastIndex = snapshot.data!.docs.length - 1;
+                                              DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
+                                              MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc, mensualityDoc.data() as Map);
+                                              print("name: ");
+                                              return Padding(
+                                                padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                                child: HomePageComponents.getLoanTile(
+                                                  context: context,
+                                                  label: "hhgfhfghfh",
+                                                  subtitle: "",
+                                                  date: mensuality.startDate?.toDate(),
+                                                  firstDate: mensuality.startDate?.toDate(),
+                                                  lastDate: mensuality.endDate?.toDate(),
+                                                  mensuality: mensuality.amount?.toInt(),
+                                                  type: "gfg",
+                                                  state: mensuality.status,
+                                                  action: (){pay(amount: mensuality.amount!, id: mensuality.id!);}
+                                                ),
+                                              );
+                                            })
+                                        : Center(
+                                          child: Container(padding: EdgeInsets.only(bottom: hv*4, right: wv*5, left: wv*5),child: Text("Aucune mensualité en cours", textAlign: TextAlign.center)),
+                                        );
+                                    }
+                                  ),
+                                ),
+                                StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance.collectionGroup("MENSUALITES").where('loanId', isEqualTo: loan.id).where('status', isEqualTo: 1).orderBy('number').snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                        ),
+                                      );
+                                    }
+                                    return ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: snapshot.data!.docs.length,
+                                      itemBuilder: (context, index) {
+                                        int lastIndex = snapshot.data!.docs.length - 1;
+                                        DocumentSnapshot mensualityDoc = snapshot.data!.docs[index];
+                                        MensualityModel mensuality = MensualityModel.fromDocument(mensualityDoc, mensualityDoc.data() as Map);
+                                        print("name: ");
+                                        return Padding(
+                                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                          child: HomePageComponents.getLoanTile(
+                                            context: context,
+                                            label: "hhgfhfghfh",
+                                            subtitle: "",
+                                            date: mensuality.startDate?.toDate(),
+                                            firstDate: mensuality.startDate?.toDate(),
+                                            lastDate: mensuality.endDate?.toDate(),
+                                            mensuality: mensuality.amount?.toInt(),
+                                            type: "gfg",
+                                            state: mensuality.status,
+                                            action: (){}
+                                          ),
+                                        );
+                                      });
+                                  }
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                )
+                
+              ],
+            ),
+          ),
         ),
       ),
     

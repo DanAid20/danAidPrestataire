@@ -243,7 +243,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                                       Row(
                                         children: [
                                           Expanded(child:
-                                           HomePageComponents.header(label: S.of(context).pourLePatient, title: username ?? S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis!.dateCreated!.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage?? "" , titleColor: kTextBlue)),
+                                           HomePageComponents.header(context: context, label: S.of(context).pourLePatient, title: username ?? S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis!.dateCreated!.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage?? "" , titleColor: kTextBlue)),
                                           HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: kDeepTeal, size: 25, action: ()=>setState((){
                                             if (kDebugMode) {
                                               print(edit);

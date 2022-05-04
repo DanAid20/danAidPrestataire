@@ -333,7 +333,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
                                    HomePageComponents().getAvatar(
                             imgUrl: prestatiaireObject?.avatarUrl?? "" ,
                             size: wv * 8.3,
-                            renoveIsConnectedButton: false),
+                            renoveIsConnectedButton: false, context: context),
                                 ],
                               ),
                                Column(

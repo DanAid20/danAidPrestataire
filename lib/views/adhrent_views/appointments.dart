@@ -82,7 +82,8 @@ class _AppointmentsListState extends State<AppointmentsList> {
                           appointmentProvider.setAppointmentModel(appointment);
                           widget.doc != null ? doctorProvider.setDoctorModel(widget.doc!) : print("nope");
                           Navigator.pushNamed(context, '/appointment');
-                        }
+                        },
+                        context: context
                       ),
                     );
                   }),

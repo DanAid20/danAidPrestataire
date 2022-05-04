@@ -30,6 +30,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class PartnersScreen extends StatefulWidget {
   @override
   _PartnersScreenState createState() => _PartnersScreenState();
@@ -331,8 +333,8 @@ class _PartnersScreenState extends State<PartnersScreen> {
           title: Row(
             children: [
               SizedBox(
-                width: wv*8,
-                child: IconButton(icon: Icon(Icons.arrow_back_ios), 
+                width: Device.isSmartphone(context) ? wv*8 : 70,
+                child: IconButton(icon: const Icon(Icons.arrow_back_ios), 
                 onPressed: (){
                   if(contentIndex == 0){
                     controller.toPreviousIndex();
@@ -394,6 +396,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               ]
                             ),
                             child: Row(children: [
+                              Device.isSmartphone(context) ? Container() : Expanded(child: Container()),
                               SizedBox(width: 10,),
                               Expanded(
                                 child: GestureDetector(
@@ -422,6 +425,7 @@ class _PartnersScreenState extends State<PartnersScreen> {
                               TextButton(onPressed: ()=>controller.toPreviousIndex(),
                                 child: Text(S.of(context).annuler, style: TextStyle(color: kBrownCanyon),)
                               ),
+                              Device.isSmartphone(context) ? Container() : Expanded(child: Container())
                               //IconButton(icon: SvgPicture.asset("assets/icons/Bulk/Filter.svg"), onPressed: (){})
 
                             ],),
@@ -444,11 +448,11 @@ class _PartnersScreenState extends State<PartnersScreen> {
   getSheetContent(){
     if(contentIndex == 0){
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? 15 : 100),
         child: Column(children: [
           SizedBox(height: hv*1,),
           SvgPicture.asset("assets/icons/Bulk/ArrowUp.svg"),
-          Text(S.of(context).recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: 13), textAlign: TextAlign.center,),
+          Text(S.of(context).recherchezEnInscrivantDirectementLeNomDuPraticienOuDe, style: TextStyle(fontSize: Device.isSmartphone(context) ? 13 : 17), textAlign: TextAlign.center,),
           
           SizedBox(height: hv*4,),
 
@@ -522,28 +526,31 @@ class _PartnersScreenState extends State<PartnersScreen> {
     }
   }
 
-  Widget getDragSheetTiles({required String title, required Color markerColor, required Function() onTap}){
+  Widget  getDragSheetTiles({required String title, required Color markerColor, required Function() onTap}){
     return Padding(
       padding: const EdgeInsets.only(right: 35.0, top: 3, bottom: 3, left: 20),
-      child: Row(
-        children: [
-          SvgPicture.asset("assets/icons/Bulk/Location.svg", color: markerColor,),
-          SizedBox(width: 10,),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: kSmoothBrown.withOpacity(0.4),
+      child: SizedBox(
+        width: Device.isSmartphone(context) ? wv*100 : 1000,
+        child: Row(
+          children: [
+            SvgPicture.asset("assets/icons/Bulk/Location.svg", color: markerColor,),
+            const SizedBox(width: 10,),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: kSmoothBrown.withOpacity(0.4),
+                ),
+                child: ListTile(
+                  onTap: onTap,
+                  dense: true,
+                  title: Text(title, style: TextStyle(color: kBlueForce, fontSize: Device.isSmartphone(context) ? inch*1.9 : 20, fontWeight: FontWeight.w600),),
+                  trailing: const Icon(Icons.arrow_forward_ios_rounded, color: kBrownCanyon,)
+                )
               ),
-              child: ListTile(
-                onTap: onTap,
-                dense: true,
-                title: Text(title, style: TextStyle(color: kBlueForce, fontSize: inch*1.9, fontWeight: FontWeight.w600),),
-                trailing: Icon(Icons.arrow_forward_ios_rounded, color: kBrownCanyon,)
-              )
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

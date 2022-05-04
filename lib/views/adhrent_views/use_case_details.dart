@@ -20,6 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class UseCaseDetails extends StatefulWidget {
   @override
   _UseCaseDetailsState createState() => _UseCaseDetailsState();
@@ -95,8 +97,8 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context).dmandeDu + startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
-            Text(S.of(context).ajouterDesPrestationsEtJustificatifs,  style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
+            Text(S.of(context).dmandeDu + startTime.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(startTime)+" "+ startTime.year.toString(), style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 22, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).ajouterDesPrestationsEtJustificatifs,  style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*3.8 : 17, fontWeight: FontWeight.w300),
             ),
           ],
         ),
@@ -107,399 +109,409 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
         ],
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SizedBox(height: hv*2,),
-            Container(
-              padding: EdgeInsets.only(bottom: hv*1),
-              decoration: BoxDecoration(
-                color: kSouthSeas.withOpacity(0.3),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        child: Center(
+          child: SizedBox(
+            width: Device.isSmartphone(context) ? wv*100 : 1000,
+            child: Column(
+              children: [
+                SizedBox(height: hv*2,),
+                Container(
+                  padding: EdgeInsets.only(bottom: hv*1),
+                  decoration: BoxDecoration(
+                    color: kSouthSeas.withOpacity(0.3),
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                  ),
+                  child: Column(
                     children: [
-                      Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase?.beneficiaryName, fname: "")),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: hv*5,),
-                          Text(S.of(context).statutDeLaDemande,  style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w300)),
-                          SizedBox(height: hv*1,),
-                          Container(
-                            width: wv*50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+                          Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase?.beneficiaryName, fname: "", context: context)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              SizedBox(height: Device.isSmartphone(context) ? hv*5 : 15,),
+                              Text(S.of(context).statutDeLaDemande,  style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w300)),
+                              SizedBox(height: hv*1,),
+                              SizedBox(
+                                width: Device.isSmartphone(context) ? wv*50 : 250,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                      flex: status == 1 ? 45 : 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: kDeepTeal,
+                                          border: Border.all(color: whiteColor, width: 2),
+                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))
+                                        ),
+                                        child: Text(status == 1 ?  "1. "+S.of(context).enAttente : "1", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),)),
+                                    Expanded(
+                                      flex: status == 2 ? 45 : 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: kDeepTeal.withOpacity(0.7),
+                                          border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
+                                        ),
+                                        child: Text(status == 2 ?  "2. "+S.of(context).enCours : "2", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    Expanded(
+                                      flex: status == 3 ? 45 : 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: kDeepTeal.withOpacity(0.3),
+                                          border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
+                                        ),
+                                        child: Text(status == 3 ?  "3. "+S.of(context).approuv : "3", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    Expanded(
+                                      flex: status == 4 ? 45 : 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: primaryColor,
+                                          border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2)),
+                                        ),
+                                        child: Text(status == 4 ?  "4. "+S.of(context).rjt : "4", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                    Expanded(
+                                      flex: status == 5 ? 45 : 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          border: Border.all(color: whiteColor, width: 2),
+                                          borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10))
+                                        ),
+                                        child: Text(status == 5 ?  "5. "+S.of(context).cltur : "5", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*3 : 30,)
+                        ],
+                      ),
+                      SizedBox(height: Device.isSmartphone(context) ? hv*1 : 0,),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*4 : 30, vertical: Device.isSmartphone(context) ? hv*1 : 0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            usecase.doctorName != null && usecase.doctorName != "" ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  flex: status == 1 ? 45 : 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: kDeepTeal,
-                                      border: Border.all(color: whiteColor, width: 2),
-                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10))
-                                    ),
-                                    child: Text(status == 1 ?  "1. "+S.of(context).enAttente : "1", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),)),
-                                Expanded(
-                                  flex: status == 2 ? 45 : 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: kDeepTeal.withOpacity(0.7),
-                                      border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
-                                    ),
-                                    child: Text(status == 2 ?  "2. "+S.of(context).enCours : "2", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
-                                Expanded(
-                                  flex: status == 3 ? 45 : 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: kDeepTeal.withOpacity(0.3),
-                                      border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2), right: BorderSide(color: whiteColor, width: 2)),
-                                    ),
-                                    child: Text(status == 3 ?  "3. "+S.of(context).approuv : "3", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
-                                Expanded(
-                                  flex: status == 4 ? 45 : 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: primaryColor,
-                                      border: Border(top: BorderSide(color: whiteColor, width: 2), bottom: BorderSide(color: whiteColor, width: 2)),
-                                    ),
-                                    child: Text(status == 4 ?  "4. "+S.of(context).rjt : "4", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
-                                Expanded(
-                                  flex: status == 5 ? 45 : 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      border: Border.all(color: whiteColor, width: 2),
-                                      borderRadius: BorderRadius.only(topRight: Radius.circular(10), bottomRight: Radius.circular(10))
-                                    ),
-                                    child: Text(status == 5 ?  "5. "+S.of(context).cltur : "5", style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center))),
+                                Text("Médecin", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
+                                Text(usecase.doctorName!, style: TextStyle(color: kTextBlue, fontSize: 17)),
+                                Text("Médecin de famille", style: TextStyle(color: kTextBlue, fontSize: 14))
                               ],
+                            ) : Container(),
+                            Spacer(),
+                            usecase.establishment != null && usecase.establishment != "" ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Etablissement", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
+                                Text(usecase.establishment!, style: TextStyle(color: kTextBlue, fontSize: 15)),
+                              ],
+                            ) : Container(),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
+                  decoration: BoxDecoration(
+                    color: whiteColor,
+                    borderRadius: BorderRadius.only(bottomRight: Radius.circular(20))
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Code de consultation", style: TextStyle(color: kTextBlue, fontSize: 17),),
+                                  SizedBox(height: hv*1,),
+                                  Text(usecase.consultationCode != null ? usecase.consultationCode! : "Non spécifié", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
+                                ],
+                              )
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Date de démarrage", style: TextStyle(color: kTextBlue, fontSize: 17),),
+                                  SizedBox(height: hv*1,),
+                                  Text("${startTime.day}/${startTime.month}/${startTime.year}", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
+                                ],
+                              )
+                            ),
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text("Date de clôture", style: TextStyle(color: kTextBlue, fontSize: 17),),
+                                    SizedBox(height: hv*1,),
+                                    Text("--/--/--", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
+                                  ],
+                                )
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      SizedBox(width: wv*3,)
+                      SizedBox(height: hv*3,),
+                      Row(
+                        children: [
+                          Text("Commentaire", style: TextStyle(color: kTextBlue, fontSize: 18.5),),
+                          Spacer(),
+                          IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Edit Square.svg', color: kSouthSeas, width: wv*8,), onPressed: ()=>setState((){canComment = !canComment;}),) 
+                        ],
+                      ),
+                      CustomTextField(
+                        minLines: 3,
+                        noPadding: true,
+                        hintText: "",
+                        multiLine: true,
+                        controller: _commentController,
+                        onChanged: (val)=>setState((){}),
+                        seal: !canComment
+                      ),
+                      canComment ? Row(
+                        children: [
+                          Spacer(),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CustomTextButton(
+                              text: "  Envoyer le commentaire  ",
+                              color: kSouthSeas,
+                              isLoading: commentButtonSpinner,
+                              expand: false,
+                              noPadding: true,
+                              action: () async {
+                                setState((){commentButtonSpinner = true;});
+                                await FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({"otherInfo" : _commentController.text}).then((value){
+                                  setState((){commentButtonSpinner = false; canComment = false;});
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouveau commentaire ajouté'),));
+                                }).onError((error, stackTrace){
+                                  setState((){commentButtonSpinner = false;});
+                                });
+                              },
+                            ),
+                          ),
+                          Device.isSmartphone(context) ? Container() : const Spacer()
+                        ],
+                      ) : Container()
                     ],
                   ),
-                  SizedBox(height: hv*1,),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        usecase.doctorName != null && usecase.doctorName != "" ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Médecin", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                            Text(usecase.doctorName!, style: TextStyle(color: kTextBlue, fontSize: 17)),
-                            Text("Médecin de famille", style: TextStyle(color: kTextBlue, fontSize: 14))
-                          ],
-                        ) : Container(),
-                        Spacer(),
-                        usecase.establishment != null && usecase.establishment != "" ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Etablissement", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                            Text(usecase.establishment!, style: TextStyle(color: kTextBlue, fontSize: 15)),
-                          ],
-                        ) : Container(),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(20))
-              ),
-              child: Column(
-                children: [
-                  Row(
+                ),
+                SizedBox(height: hv*2,),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
+                  decoration: BoxDecoration(
+                    color: whiteColor
+                  ),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Code de consultation", style: TextStyle(color: kTextBlue, fontSize: 17),),
-                              SizedBox(height: hv*1,),
-                              Text(usecase.consultationCode != null ? usecase.consultationCode! : "Non spécifié", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
-                            ],
-                          )
-                        ),
+                      Row(
+                        children: [
+                          Text('Suivie des prestations', style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
+                        ],
                       ),
-                      Expanded(
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Date de démarrage", style: TextStyle(color: kTextBlue, fontSize: 17),),
-                              SizedBox(height: hv*1,),
-                              Text("${startTime.day}/${startTime.month}/${startTime.year}", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                            ],
-                          )
-                        ),
-                      ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text("Date de clôture", style: TextStyle(color: kTextBlue, fontSize: 17),),
-                                SizedBox(height: hv*1,),
-                                Text("--/--/--", style: TextStyle(color: kTextBlue, fontSize: 17, fontWeight: FontWeight.bold)),
-                              ],
-                            )
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: hv*3,),
-                  Row(
-                    children: [
-                      Text("Commentaire", style: TextStyle(color: kTextBlue, fontSize: 18.5),),
-                      Spacer(),
-                      IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Edit Square.svg', color: kSouthSeas, width: wv*8,), onPressed: ()=>setState((){canComment = !canComment;}),) 
-                    ],
-                  ),
-                  CustomTextField(
-                    minLines: 3,
-                    noPadding: true,
-                    hintText: "",
-                    multiLine: true,
-                    controller: _commentController,
-                    onChanged: (val)=>setState((){}),
-                    seal: !canComment
-                  ),
-                  canComment ? Row(
-                    children: [
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: CustomTextButton(
-                          text: "Envoyer le commentaire",
-                          color: kSouthSeas,
-                          isLoading: commentButtonSpinner,
-                          expand: false,
-                          noPadding: true,
-                          action: () async {
-                            setState((){commentButtonSpinner = true;});
-                            await FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).update({"otherInfo" : _commentController.text}).then((value){
-                              setState((){commentButtonSpinner = false; canComment = false;});
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Nouveau commentaire ajouté'),));
-                            }).onError((error, stackTrace){
-                              setState((){commentButtonSpinner = false;});
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ) : Container()
-                ],
-              ),
-            ),
-            SizedBox(height: hv*2,),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*3),
-              decoration: BoxDecoration(
-                color: whiteColor
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text('Suivie des prestations', style: TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
-                    ],
-                  ),
-                  SizedBox(height: hv*1,),
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: hv*1.5),
-                        height: 500,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20)
-                        ),
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(LineIcons.stethoscope, size: 100, color: Colors.grey,),
-                                  Text(" Liste des prestations ", style: TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                                  SizedBox(height: 30,)
-                                ],
-                              ),
+                      SizedBox(height: hv*1,),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*2.5 : 15, vertical: hv*1.5),
+                            height: Device.isSmartphone(context) ? 500 : 600,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(20)
                             ),
-                            Column(
+                            child: Stack(
                               children: [
-                                usecase.consultationCode != null || usecase.consultationId != null ? SizedBox(height: 85,) : Container(),
-                                Expanded(
-                                  child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').snapshots(),
-                                    builder: (context, snapshot) {
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: CircularProgressIndicator(
-                                            valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                                          ),
-                                        );
-                                      }
+                                Container(
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(LineIcons.stethoscope, size: 100, color: Colors.grey,),
+                                      Text(" Liste des prestations ", style: TextStyle(color: Colors.grey, fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                                      SizedBox(height: 30,)
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    usecase.consultationCode != null || usecase.consultationId != null ? SizedBox(height: Device.isSmartphone(context) ? 85 : 110,) : Container(),
+                                    Expanded(
+                                      child: StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance.collection('USECASES').doc(usecase.id).collection('PRESTATIONS').snapshots(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                              ),
+                                            );
+                                          }
 
-                                      return snapshot.data!.docs.length >= 1
-                                        ? ListView.builder(
-                                            physics: const BouncingScrollPhysics(),
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.vertical,
-                                            itemCount: snapshot.data!.docs.length,
-                                            itemBuilder: (context, index) {
-                                              DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                                              UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
-                                              print("name: ");
-                                              return getServiceTile(
-                                                service: service,
-                                                action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: service.type!, service: service,),),)
-                                              );
-                                            })
-                                        : Center(
-                                          child: Container(),
-                                        );
-                                    }
+                                          return snapshot.data!.docs.length >= 1
+                                            ? ListView.builder(
+                                                physics: const BouncingScrollPhysics(),
+                                                shrinkWrap: true,
+                                                scrollDirection: Axis.vertical,
+                                                itemCount: snapshot.data!.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
+                                                  UseCaseServiceModel service = UseCaseServiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
+                                                  print("name: ");
+                                                  return getServiceTile(
+                                                    service: service,
+                                                    action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: service.type!, service: service,),),)
+                                                  );
+                                                })
+                                            : Center(
+                                              child: Container(),
+                                            );
+                                        }
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          usecase.consultationCode != null || usecase.consultationId != null ? getServiceTile(
+                            action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: consultation, service: consultationService,),),),
+                            service: consultationService
+                            
+                          ) : Container(),
+                          Positioned(
+                            right: 10,
+                            bottom: 10,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                AnimatedContainer(
+                                  duration: Duration(milliseconds: 500),
+                                  height: showServiceMenu ? 500 : 0,
+                                  width: showServiceMenu ? Device.isSmartphone(context) ? 250 : 300 : 0,
+                                  child: SingleChildScrollView(
+                                    reverse: true,
+                                    child: Column(
+                                      children: [
+                                        usecase.ambulanceId == null ? getServiceMenuItem(
+                                          type: ambulance,
+                                          title: "Ajouter des",
+                                          label: "Soins",
+                                          icon: 'assets/icons/Bulk/Consultation.svg',
+                                          color: kPrimaryColor,
+                                          action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: ambulance,),),)
+                                        ) : Container(),
+                                        usecase.hospitalizationId == null ? getServiceMenuItem(
+                                          type: hospitalization,
+                                          title: "Ajouter une",
+                                          label: "Hospitalisation",
+                                          icon: 'assets/icons/Bulk/Hospitalisation.svg',
+                                          color: kBrownCanyon,
+                                          action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: hospitalization,),),)
+                                        ) : Container(),
+                                        getServiceMenuItem(
+                                          type: labo,
+                                          title: "Ajouter un",
+                                          label: "Examen de labo",
+                                          icon: 'assets/icons/Bulk/Labo.svg',
+                                          color: kSouthSeas,
+                                          action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: labo,),),)
+                                        ),
+                                        getServiceMenuItem(
+                                          type: pharmacy,
+                                          title: "Ajouter une",
+                                          label: "Ordonance",
+                                          icon: 'assets/icons/Bulk/Ordonance.svg',
+                                          color: primaryColor,
+                                          action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: pharmacy,),),)
+                                        ),
+                                        usecase.consultationCode == null ? getServiceMenuItem(
+                                          type: consultation,
+                                          title: "Ajouter une",
+                                          label: "Consultation",
+                                          icon: 'assets/icons/Bulk/Consultation.svg',
+                                          color: kDeepTeal,
+                                          action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: consultation,),),)
+                                        ) : Container(),
+                                        SizedBox(height: 10,),
+                                        //Align(alignment: Alignment.bottomRight,child: FloatingActionButton(child: Icon(LineIcons.times), backgroundColor: kPrimaryColor, onPressed: ()=>setState((){showServiceMenu = false;})))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      FloatingActionButton(child: Icon(showServiceMenu ? LineIcons.times : LineIcons.plus), heroTag: "usecase_fab", backgroundColor: kPrimaryColor, onPressed: ()=>setState((){showServiceMenu = !showServiceMenu;})),
+                                    ],
                                   ),
                                 ),
                               ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      usecase.consultationCode != null || usecase.consultationId != null ? getServiceTile(
-                        action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: consultation, service: consultationService,),),),
-                        service: consultationService
-                        
-                      ) : Container(),
-                      Positioned(
-                        right: 10,
-                        bottom: 10,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            AnimatedContainer(
-                              duration: Duration(milliseconds: 500),
-                              height: showServiceMenu ? 500 : 0,
-                              width: showServiceMenu ? 250 : 0,
-                              child: SingleChildScrollView(
-                                reverse: true,
-                                child: Column(
-                                  children: [
-                                    usecase.ambulanceId == null ? getServiceMenuItem(
-                                      title: "Ajouter des",
-                                      label: "Soins",
-                                      icon: 'assets/icons/Bulk/Consultation.svg',
-                                      color: kPrimaryColor,
-                                      action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: ambulance,),),)
-                                    ) : Container(),
-                                    usecase.hospitalizationId == null ? getServiceMenuItem(
-                                      title: "Ajouter une",
-                                      label: "Hospitalisation",
-                                      icon: 'assets/icons/Bulk/Hospitalisation.svg',
-                                      color: kBrownCanyon,
-                                      action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: hospitalization,),),)
-                                    ) : Container(),
-                                    getServiceMenuItem(
-                                      title: "Ajouter un",
-                                      label: "Examen de labo",
-                                      icon: 'assets/icons/Bulk/Labo.svg',
-                                      color: kSouthSeas,
-                                      action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: labo,),),)
-                                    ),
-                                    getServiceMenuItem(
-                                      title: "Ajouter une",
-                                      label: "Ordonance",
-                                      icon: 'assets/icons/Bulk/Ordonance.svg',
-                                      color: primaryColor,
-                                      action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: pharmacy,),),)
-                                    ),
-                                    usecase.consultationCode == null ? getServiceMenuItem(
-                                      title: "Ajouter une",
-                                      label: "Consultation",
-                                      icon: 'assets/icons/Bulk/Consultation.svg',
-                                      color: kDeepTeal,
-                                      action: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => UseCaseServiceDetails(type: consultation,),),)
-                                    ) : Container(),
-                                    SizedBox(height: 10,),
-                                    //Align(alignment: Alignment.bottomRight,child: FloatingActionButton(child: Icon(LineIcons.times), backgroundColor: kPrimaryColor, onPressed: ()=>setState((){showServiceMenu = false;})))
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  FloatingActionButton(child: Icon(showServiceMenu ? LineIcons.times : LineIcons.plus), heroTag: "usecase_fab", backgroundColor: kPrimaryColor, onPressed: ()=>setState((){showServiceMenu = !showServiceMenu;})),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
+                            )
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            Container(
-              color: whiteColor,
-              child: Container(
-                color: kSouthSeas.withOpacity(0.3),
-                padding: EdgeInsets.symmetric(horizontal: wv*7, vertical: hv*1.5),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text("Votre demande", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.w400),),
-                        Spacer(),
-                        Text("$amount f.", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.w400))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Votre copaiement", style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w400),),
-                        Spacer(),
-                        Text("${amount - danAidCov} f.", style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w400))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Couverture DanAid", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.bold),),
-                        Spacer(),
-                        Text("$danAidCov f.", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.bold))
-                      ],
-                    ),
-                  ],
                 ),
-              ),
-            )
-          ],
+                Container(
+                  color: whiteColor,
+                  child: Container(
+                    color: kSouthSeas.withOpacity(0.3),
+                    padding: EdgeInsets.symmetric(horizontal: wv*7, vertical: hv*1.5),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text("Votre demande", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.w400),),
+                            Spacer(),
+                            Text("$amount f.", style: TextStyle(color: kTextBlue, fontSize: 15, fontWeight: FontWeight.w400))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("Votre copaiement", style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w400),),
+                            Spacer(),
+                            Text("${amount - danAidCov} f.", style: TextStyle(color: kBlueDeep, fontSize: 15, fontWeight: FontWeight.w400))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text("Couverture DanAid", style: TextStyle(color: kTextBlue, fontSize: 16, fontWeight: FontWeight.bold),),
+                            Spacer(),
+                            Text("$danAidCov f.", style: TextStyle(color: kTextBlue, fontSize: 20, fontWeight: FontWeight.bold))
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -513,12 +525,12 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
     return GestureDetector(
       onTap: action,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1.5),
+        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*4 : 30, vertical: hv*1.5),
         margin: EdgeInsets.only(bottom: hv*1),
         decoration: BoxDecoration(
         color: whiteColor,
         boxShadow: [BoxShadow(color: Colors.grey[200]!, spreadRadius: 1.5, blurRadius: 3.0, offset: Offset(0,3))],
-        borderRadius: BorderRadius.circular(20)
+        borderRadius: BorderRadius.circular(Device.isSmartphone(context) ? 20 : 25)
         ),
         child: Row(
         children: [
@@ -539,8 +551,8 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: service.type), color: kDeepTeal, width: wv*8,),
-                  SizedBox(width: wv*2.5,),
+                  SvgPicture.asset(Algorithms.getUseCaseServiceIcon(type: service.type), color: kDeepTeal, width: Device.isSmartphone(context) ? wv*8 : 50,),
+                  SizedBox(width: Device.isSmartphone(context) ? wv*2.5 : 10,),
                   Text(Algorithms.getUseCaseServiceName(type: service.type), style: TextStyle(color: kDeepTeal, fontSize: 20, fontWeight: FontWeight.bold))
                 ],
               )
@@ -550,18 +562,18 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
           Column(
             children: [
               Text(service.date != null ? "${service.date?.toDate().day}/${service.date?.toDate().month.toString().padLeft(2, '0')}/${service.date?.toDate().year}" : "--/--/--", style: TextStyle(color: kBrownCanyon, fontSize: 17, fontWeight: FontWeight.bold)),
-              SizedBox(height: hv*2,),
+              SizedBox(height: Device.isSmartphone(context) ? hv*2 : 10,),
               Text(service.amount != null ? "${service.amount} f." : "-- f.", style: TextStyle(color: kTextBlue, fontSize: 17),),
             ],
           ),
-          SizedBox(width: wv*3,),
+          SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15),
           HomePageComponents.getStatusIndicator(status: service.status)
         ],
         ),
       ),
     );
   }
-Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, Function()? action}){
+Widget getServiceMenuItem({String? title, String? label, String? icon, Color? color, required String type, Function()? action}){
   return GestureDetector(
     onTap: action,
     child: Container(
@@ -571,7 +583,7 @@ Widget getServiceMenuItem({String? title, String? label, String? icon, Color? co
         children: [
           Container(
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-            padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: 13.5),
+            padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*4 : 30, vertical: 13.5),
             decoration: BoxDecoration(
               color: whiteColor,
               borderRadius: BorderRadius.circular(35),
@@ -591,10 +603,10 @@ Widget getServiceMenuItem({String? title, String? label, String? icon, Color? co
             ),
           ),
           Positioned(
-            child: Container(
+            child: SizedBox(
               width: 70, height: 70,
               child: FittedBox(
-                child: FloatingActionButton(heroTag: 'hero_$label', child: SvgPicture.asset(icon!, width: 25, color: whiteColor,), backgroundColor: color, onPressed: ()=> action)),
+                child: FloatingActionButton(heroTag: type, child: SvgPicture.asset(icon!, width: 25, color: whiteColor,), backgroundColor: color, onPressed: action)),
             ), 
             right: 0,
             top: 4,

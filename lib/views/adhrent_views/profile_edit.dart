@@ -10,6 +10,7 @@ import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/buttons/custom_text_button.dart';
+import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:danaid/widgets/forms/defaultInputDecoration.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:file_picker/file_picker.dart';
@@ -32,6 +33,8 @@ import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/getCities.dart';
 import 'package:danaid/widgets/file_upload_card.dart';
 import 'package:simple_tags/simple_tags.dart';
+
+import '../../core/services/getPlatform.dart';
 
 class ProfileEdit extends StatefulWidget {
   @override
@@ -294,38 +297,23 @@ class _ProfileEditState extends State<ProfileEdit> {
             Expanded(
               child: ListView(
                 children: [
-                  Container(
-                    child: Column(
-                      children: [
-                        Stack(clipBehavior: Clip.none, children: [
-                          ClipPath(
-                            clipper: WaveClipperTop2(),
-                            child: Container(
-                              height: wv*42,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200]
-                              ),
-                            ),
-                          ),
-                          ClipPath(
-                            clipper: WaveClipperTop(),
-                            child: Container(
-                              height: wv*42,
-                              decoration: BoxDecoration(
-                                color: kPrimaryColor.withOpacity(0.6)
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            top: hv*5,
-                            child: Stack(children: [
-                              CircleAvatar(
+                  Column(
+                    children: [
+                      Stack(clipBehavior: Clip.none, children: [
+                        SizedBox(height: Device.isSmartphone(context) ? hv*25 : hv*30),
+                        DanAidDefaultHeader(showBackButton: Device.isSmartphone(context) ? false : true),
+                        Positioned(
+                          top: hv*5,
+                          child: Stack(children: [
+                            Hero(
+                              tag: "home_avatar",
+                              child: CircleAvatar(
                                 backgroundColor: Colors.grey[300],
-                                radius: wv*18,
+                                radius: Device.isSmartphone(context) ? wv*18 : 100,
                                 child: ClipOval(
                                   child: CachedNetworkImage(
-                                    height: wv*36,
-                                    width: wv*36,
+                                    height: Device.isSmartphone(context) ? wv*36 : 200,
+                                    width: Device.isSmartphone(context) ? wv*36 : 200,
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) => Container(
                                       child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
@@ -335,519 +323,524 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 ),
                                   //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                               ),
-
-                              imageSpinner ? Positioned(
-                                top: hv*7,
-                                right: wv*13,
-                                child: const CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
-                              ) : Container(),
-
-                              Positioned(
-                                bottom: 2,
-                                right: 5,
-                                child: CircleAvatar(
-                                  backgroundColor: kDeepTeal,
-                                  radius: wv*5,
-                                  child: IconButton(icon: Icon(Icons.add, color: whiteColor,), color: kPrimaryColor, onPressed: (){getImage(context);}),
-                                ),
-                              )
-                            ],),
-                          ),
-                          Positioned(
-                            top: hv*2,
-                            left: wv*3,
-                            child: GestureDetector(
-                              onTap: (){Navigator.pop(context);},
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: wv*3),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.6),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Icon(Icons.arrow_back_ios_rounded),
-                              ),
                             ),
-                          )
-                        ], alignment: AlignmentDirectional.topCenter,)
-                      ],
-                    ),
+
+                            imageSpinner ? Positioned(
+                              top: hv*7,
+                              right: wv*13,
+                              child: const CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(whiteColor),)
+                            ) : Container(),
+
+                            Positioned(
+                              bottom: 2,
+                              right: 5,
+                              child: CircleAvatar(
+                                backgroundColor: kDeepTeal,
+                                radius: Device.isSmartphone(context) ? wv*5 : 25,
+                                child: IconButton(icon: Icon(Icons.add, color: whiteColor,), color: kPrimaryColor, onPressed: (){getImage(context);}),
+                              ),
+                            )
+                          ],),
+                        ),
+                        Device.isSmartphone(context) ? Positioned(
+                          top: hv*2,
+                          left: wv*3,
+                          child: GestureDetector(
+                            onTap: (){Navigator.pop(context);},
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: wv*3),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.6),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Icon(Icons.arrow_back_ios_rounded),
+                            ),
+                          ),
+                        ) : Container()
+                      ], alignment: AlignmentDirectional.topCenter,)
+                    ],
                   ),
                   Form(
                     key: _adherentEditFormKey,
                     //autovalidateMode:  AutovalidateMode.always, //autovalidate ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
-                    child: Column(children: [
-                      SizedBox(height: hv*6,),
+                    child: Align(
+                      child: SizedBox(
+                        width: Device.isSmartphone(context) ? wv*100 : 1000,
+                        child: Column(children: [
+                          SizedBox(height: Device.isSmartphone(context) ? hv*6 : 20,),
 
-                      CustomTextField(
-                        prefixIcon: Icon(LineIcons.users, color: kPrimaryColor),
-                        label: S.of(context).nomDeFamille,
-                        hintText: S.of(context).entrezVotreNomDeFamille,
-                        controller: _familynameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
-                        enabled: nameEnabled,
-                        editAction: (){
-                          setState(() {
-                            nameEnabled = true;
-                          });}
-                      ),
-                      SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
-                        label: S.of(context).prnomS,
-                        hintText: S.of(context).entrezVotrePrnom,
-                        enabled: surnameEnabled,
-                        controller: _surnameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
-                        editAction: (){
-                          setState(() {
-                            surnameEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
-                        label: S.of(context).nomSurLeRseauSocial,
-                        hintText: "ex: Eric_87",
-                        enabled: cniNameEnabled,
-                        controller: _cniNameController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
-                        editAction: (){
-                          setState(() {
-                            cniNameEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.emailOutline, color: kPrimaryColor),
-                        label: S.of(context).email,
-                        hintText: S.of(context).entrezVotreAddresseEmail,
-                        enabled: emailEnabled,
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        validator:  (String? mail) {
-                          return (mail!.isEmpty)
-                              ? kEmailNullErrorFr
-                              : (!emailValidatorRegExp.hasMatch(mail))
-                              ? kInvalidEmailError : null;
-                        },
-                        editAction: (){
-                          setState(() {
-                            emailEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
-                        label: S.of(context).profession,
-                        hintText: S.of(context).exMchanicien,
-                        enabled: professionEnabled,
-                        controller: _professionController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
-                        editAction: (){
-                          setState(() {
-                            professionEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*2,),
-                      Divider(),
-                      SizedBox(height: hv*2,),
-                      Row(
-                        children: [
-                          SizedBox(width: wv*3,),
-                          Expanded(
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(S.of(context).region, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 5,),
-                                Container(
-                                  constraints: BoxConstraints(minWidth: wv*45),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[100],
-                                    borderRadius: BorderRadius.all(Radius.circular(20))
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      child: DropdownButton(
-                                        isExpanded: true,
-                                        value: _stateCode,
-                                        hint: Text(S.of(context).choisirUneRegion),
-                                        items: regions.map((region){
-                                          return DropdownMenuItem(
-                                            child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
-                                            value: region["key"],
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? value) async {
-                                          //List<String> reg = getTownNamesFromRegion(cities, value);
-                                          adherentModelProvider.setRegionOfOrigin(getRegionFromStateCode(regions, value!));
-                                          setState(() {
-                                            _stateCode = value;
-                                            _region = getRegionFromStateCode(regions, value);
-                                            _city = null;
-                                            cityChosen = false;
-                                            //myCities = reg;
-                                            regionChosen = true;
-                                          });
-                                        }),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ), 
+                          CustomTextField(
+                            prefixIcon: Icon(LineIcons.users, color: kPrimaryColor),
+                            label: S.of(context).nomDeFamille,
+                            hintText: S.of(context).entrezVotreNomDeFamille,
+                            controller: _familynameController,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                            enabled: nameEnabled,
+                            editAction: (){
+                              setState(() {
+                                nameEnabled = true;
+                              });}
                           ),
-                          SizedBox(width: wv*3,),
-                          regionChosen ? Expanded(
-                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Ville", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 5,),
-                                Container(
-                                  constraints: BoxConstraints(minWidth: wv*45),
-                                  padding: EdgeInsets.symmetric(horizontal: 15),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[100],
-                                    borderRadius: BorderRadius.all(Radius.circular(20))
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: ButtonTheme(
-                                      alignedDropdown: true,
-                                      child: DropdownButton(
-                                        isExpanded: true,
-                                        value: _city,
-                                        hint: Text( (adherentModelProvider.getAdherent!.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent!.town! : S.of(context).ville, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        items: getTownNamesFromRegion(cities, _stateCode).map((city){
-                                          return DropdownMenuItem(
-                                            child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                            value: city,
-                                          );
-                                        }).toList(),
-                                        onChanged: (String? value) {
-                                          adherentModelProvider.setTown(value!);
-                                          setState(() {
-                                            _city = value;
-                                            cityChosen = true;
-                                          });
-                                        }),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ) : Container(),
-                          SizedBox(width: wv*3,),
-                        ],
-                      ),
-                      SizedBox(height: hv*2.5,),
-                      CustomTextField(
-                        prefixIcon: Icon(MdiIcons.homeCityOutline, color: kPrimaryColor),
-                        label: S.of(context).addresse,
-                        hintText: S.of(context).exCarrefourObili,
-                        enabled: addressEnabled,
-                        controller: _addressController,
-                        validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
-                        editAction: (){
-                          setState(() {
-                            addressEnabled = true;
-                          });
-                        },
-                      ),
-                      SizedBox(height: hv*4,),
-                      (gpsCoords != null) | (adherentModelProvider.getAdherent?.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
-                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("GPS:", style: TextStyle(fontWeight: FontWeight.w900),),
-                            RichText(text: TextSpan(
-                              text: "Lat: ",
-                              children: [
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : adherentModelProvider.getAdherent?.location?["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
-                                TextSpan(text: "     Lng: "),
-                                TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : adherentModelProvider.getAdherent?.location?["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
-                              ]
-                            , style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
-                            )
-                          ],
-                        ),
-                      )
-                      : Container(),
-                      Stack(
-                        children: [
-                          Container(
-                            height: hv*30,
-                            margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-                            decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400]!)],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: GoogleMap(
-                                myLocationButtonEnabled: true,
-                                initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent?.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent?.location?["latitude"] != null ? adherentModelProvider.getAdherent?.location!["latitude"] : _initialcameraposition.latitude, adherentModelProvider.getAdherent?.location?["longitude"] != null ? adherentModelProvider.getAdherent?.location!["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
-                                mapType: MapType.normal,
-                                onMapCreated: _onMapCreated,
-                                myLocationEnabled: true,
-                              ),
-                            ),
+                          SizedBox(height: hv*2.5,),
+                          CustomTextField(
+                            prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
+                            label: S.of(context).prnomS,
+                            hintText: S.of(context).entrezVotrePrnom,
+                            enabled: surnameEnabled,
+                            controller: _surnameController,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                            editAction: (){
+                              setState(() {
+                                surnameEnabled = true;
+                              });
+                            },
                           ),
-
-                          Positioned(
-                            bottom: hv*2,
-                            right: wv*7,
-                            child: !positionSpinner ? TextButton(
-                              onPressed: _saveLocation,
-                              child: Text("Ajouter ma location", style: TextStyle(color: whiteColor),),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all(kPrimaryColor),
-                                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))
-                              ),
-                            ) :  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor), strokeWidth: 2.0,),
+                          SizedBox(height: hv*2.5,),
+                          CustomTextField(
+                            prefixIcon: Icon(MdiIcons.cardAccountDetailsOutline, color: kPrimaryColor),
+                            label: S.of(context).nomSurLeRseauSocial,
+                            hintText: "ex: Eric_87",
+                            enabled: cniNameEnabled,
+                            controller: _cniNameController,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                            editAction: (){
+                              setState(() {
+                                cniNameEnabled = true;
+                              });
+                            },
                           ),
-                        ],
-                      ),
-                      Divider(),
-
-                      SizedBox(height: hv*3),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3),
-                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                            Column(children: [
-                              Text("Taille", style: TextStyle(fontSize: 17)), SizedBox(height: hv*0.5,),
-                              Row(children: [
-                                Container(child: SvgPicture.asset('assets/icons/Bulk/row-height.svg', color: kDeepTeal, width: wv*8,)),
-                                SizedBox(width: wv*2,),
-                                Container(
-                                  width: wv*30,
-                                  child: TextFormField(
-                                    controller: _heightController,
-                                    onChanged: (val) => setState((){}),
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                                    ],
-                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                    style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
-                                    decoration: defaultInputDecoration(suffix: "cm")
-                                  ),
-                                ),
-                              ]),
-                            ],),
-
-                            Column(children: [
-                              Text(S.of(context).poids, style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
-                              Row(children: [
-                                Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', color: kDeepTeal, width: wv*8,)),
-                                SizedBox(width: wv*2,),
-                                Container(
-                                  width: wv*30,
-                                  child: TextFormField(
-                                    controller: _weightController,
-                                    inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                                    ],
-                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                    style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
-                                    decoration: defaultInputDecoration(suffix: "Kg")
-                                  ),
-                                ),
-                              ]),
-                            ],),
-                          ],),
-                        ),
-                      SizedBox(height: hv*2),
-
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: wv*3),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Groupe sanguin", style: TextStyle(fontSize: 17),),
-                            SizedBox(height: hv*1,),
-                            Container(
-                              constraints: BoxConstraints(minWidth: wv*45),
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                              child: ButtonTheme(alignedDropdown: true,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(isExpanded: true, hint: Text("Choisir.."), value: _bloodGroup,
-                                    items: [
-                                      DropdownMenuItem(child: Text("A+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A+",),
-                                      DropdownMenuItem(child: Text("B+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B+",),
-                                      DropdownMenuItem(child: Text("A-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "A-",),
-                                      DropdownMenuItem(child: Text("B-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B-",),
-                                      DropdownMenuItem(child: Text("O-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "O-",),
-                                      DropdownMenuItem(child: Text("O+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "O+",),
-                                      DropdownMenuItem(child: Text("AB-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB-",),
-                                      DropdownMenuItem(child: Text("AB+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB+",),
-                                    ],
-                                    onChanged: (String? value) => setState(() {_bloodGroup = value;})
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                        SizedBox(height: hv*3.5,),
-
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3),
-                          child: Column(
+                          SizedBox(height: hv*2.5,),
+                          CustomTextField(
+                            prefixIcon: Icon(MdiIcons.emailOutline, color: kPrimaryColor),
+                            label: S.of(context).email,
+                            hintText: S.of(context).entrezVotreAddresseEmail,
+                            enabled: emailEnabled,
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator:  (String? mail) {
+                              return (mail!.isEmpty)
+                                  ? kEmailNullErrorFr
+                                  : (!emailValidatorRegExp.hasMatch(mail))
+                                  ? kInvalidEmailError : null;
+                            },
+                            editAction: (){
+                              setState(() {
+                                emailEnabled = true;
+                              });
+                            },
+                          ),
+                          SizedBox(height: hv*2.5,),
+                          CustomTextField(
+                            prefixIcon: Icon(MdiIcons.accountTieOutline, color: kPrimaryColor),
+                            label: S.of(context).profession,
+                            hintText: S.of(context).exMchanicien,
+                            enabled: professionEnabled,
+                            controller: _professionController,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                            editAction: (){
+                              setState(() {
+                                professionEnabled = true;
+                              });
+                            },
+                          ),
+                          SizedBox(height: hv*2,),
+                          Divider(),
+                          SizedBox(height: hv*2,),
+                          Row(
                             children: [
-                              Row(children: [
-                                Text(S.of(context).allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
-                                Expanded(
-                                  child: Stack(
-                                    children: [
-                                      SimpleAutoCompleteTextField(
-                                        key: autoCompleteKey,
-                                        suggestions: suggestions,
-                                        controller: _allergyController,
-                                        decoration: defaultInputDecoration(),
-                                        textChanged: (text) => currentAllergyText = text,
-                                        clearOnSubmit: false,
-                                        submitOnSuggestionTap: false,
-                                        textSubmitted: (text) {
-                                          if (text != "") {
-                                            !allergies.contains(_allergyController.text) ? allergies.add(_allergyController.text) : print("yo"); 
-                                          }
-                                        }
+                              SizedBox(width: wv*3,),
+                              Expanded(
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(S.of(context).region, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+                                    SizedBox(height: 5,),
+                                    Container(
+                                      constraints: BoxConstraints(minWidth: wv*45),
+                                      padding: EdgeInsets.symmetric(horizontal: 15),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[100],
+                                        borderRadius: BorderRadius.all(Radius.circular(20))
                                       ),
-                                      Positioned(
-                                        right: 0,
-                                        child: IconButton(
-                                          onPressed: (){
-                                            if (_allergyController.text.isNotEmpty) {
-                                            setState(() {
-                                              !allergies.contains(_allergyController.text) ? allergies.add(_allergyController.text) : print("yo");
-                                              _allergyController.clear();
-                                            });
-                                          }
-                                          },
-                                          icon: CircleAvatar(child: Icon(Icons.add, color: whiteColor), backgroundColor: kDeepTeal,),),
-                                      )
-                                    ],
-                                  ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton(
+                                            isExpanded: true,
+                                            value: _stateCode,
+                                            hint: Text(S.of(context).choisirUneRegion),
+                                            items: regions.map((region){
+                                              return DropdownMenuItem(
+                                                child: SizedBox(child: Text(region["value"]!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), width: wv*50,),
+                                                value: region["key"],
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? value) async {
+                                              //List<String> reg = getTownNamesFromRegion(cities, value);
+                                              adherentModelProvider.setRegionOfOrigin(getRegionFromStateCode(regions, value!));
+                                              setState(() {
+                                                _stateCode = value;
+                                                _region = getRegionFromStateCode(regions, value);
+                                                _city = null;
+                                                cityChosen = false;
+                                                //myCities = reg;
+                                                regionChosen = true;
+                                              });
+                                            }),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ), 
+                              ),
+                              SizedBox(width: wv*3,),
+                              regionChosen ? Expanded(
+                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Ville", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+                                    SizedBox(height: 5,),
+                                    Container(
+                                      constraints: BoxConstraints(minWidth: wv*45),
+                                      padding: EdgeInsets.symmetric(horizontal: 15),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[100],
+                                        borderRadius: BorderRadius.all(Radius.circular(20))
+                                      ),
+                                      child: DropdownButtonHideUnderline(
+                                        child: ButtonTheme(
+                                          alignedDropdown: true,
+                                          child: DropdownButton(
+                                            isExpanded: true,
+                                            value: _city,
+                                            hint: Text( (adherentModelProvider.getAdherent!.town != "") & (regionChosen == false) ? adherentModelProvider.getAdherent!.town! : S.of(context).ville, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                            items: getTownNamesFromRegion(cities, _stateCode).map((city){
+                                              return DropdownMenuItem(
+                                                child: Text(city, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                                value: city,
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? value) {
+                                              adherentModelProvider.setTown(value!);
+                                              setState(() {
+                                                _city = value;
+                                                cityChosen = true;
+                                              });
+                                            }),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ) : Container(),
+                              SizedBox(width: wv*3,),
+                            ],
+                          ),
+                          SizedBox(height: hv*2.5,),
+                          CustomTextField(
+                            prefixIcon: Icon(MdiIcons.homeCityOutline, color: kPrimaryColor),
+                            label: S.of(context).addresse,
+                            hintText: S.of(context).exCarrefourObili,
+                            enabled: addressEnabled,
+                            controller: _addressController,
+                            validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
+                            editAction: (){
+                              setState(() {
+                                addressEnabled = true;
+                              });
+                            },
+                          ),
+                          SizedBox(height: hv*4,),
+                          (gpsCoords != null) | (adherentModelProvider.getAdherent?.location != null) ? Container(margin: EdgeInsets.symmetric(horizontal: wv*4),
+                            child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("GPS:", style: TextStyle(fontWeight: FontWeight.w900),),
+                                RichText(text: TextSpan(
+                                  text: "Lat: ",
+                                  children: [
+                                    TextSpan(text: (gpsCoords != null) ? gpsCoords!["latitude"].toString() : adherentModelProvider.getAdherent?.location?["latitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor)),
+                                    TextSpan(text: "     Lng: "),
+                                    TextSpan(text: (gpsCoords != null) ? gpsCoords!["longitude"].toString() : adherentModelProvider.getAdherent?.location?["longitude"], style: TextStyle(fontWeight: FontWeight.w900, color: kPrimaryColor))
+                                  ]
+                                , style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black54)),
                                 )
-                              ],),
-
-                              Padding(
-                                padding: EdgeInsets.only(top: hv*2),
-                                child: SimpleTags(
-                                  content: allergies,
-                                  wrapSpacing: 4,
-                                  wrapRunSpacing: 4,
-                                  onTagPress: (tag) {
-                                    setState(() {
-                                      allergies.remove(tag);
-                                    });
-                                  },
-                                  tagContainerPadding: EdgeInsets.all(6),
-                                  tagTextStyle: TextStyle(color: kPrimaryColor),
-                                  tagIcon: Icon(Icons.clear, size: 15, color: kPrimaryColor,),
-                                  tagContainerDecoration: BoxDecoration(
-                                    color: kPrimaryColor.withOpacity(0.2),
-                                    borderRadius: BorderRadius.circular(20),
+                              ],
+                            ),
+                          )
+                          : Container(),
+                          Stack(
+                            children: [
+                              Container(
+                                height: hv*30,
+                                margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                                decoration: BoxDecoration(
+                                  boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: Colors.grey[400]!)],
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: GoogleMap(
+                                    myLocationButtonEnabled: true,
+                                    initialCameraPosition: CameraPosition(target: adherentModelProvider.getAdherent?.location == null ? _initialcameraposition : LatLng(adherentModelProvider.getAdherent?.location?["latitude"] != null ? adherentModelProvider.getAdherent?.location!["latitude"] : _initialcameraposition.latitude, adherentModelProvider.getAdherent?.location?["longitude"] != null ? adherentModelProvider.getAdherent?.location!["longitude"] : _initialcameraposition.longitude), zoom: 11.0),
+                                    mapType: MapType.normal,
+                                    onMapCreated: _onMapCreated,
+                                    myLocationEnabled: true,
                                   ),
                                 ),
+                              ),
+
+                              Positioned(
+                                bottom: hv*2,
+                                right: wv*7,
+                                child: !positionSpinner ? TextButton(
+                                  onPressed: _saveLocation,
+                                  child: Text("Ajouter ma location", style: TextStyle(color: whiteColor),),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(kPrimaryColor),
+                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)))
+                                  ),
+                                ) :  CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor), strokeWidth: 2.0,),
                               ),
                             ],
                           ),
-                        ),
+                          Divider(),
 
+                          SizedBox(height: hv*3),
 
-
-                      SizedBox(height: hv*2.5),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: wv*3),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(S.of(context).statutMatrimoniale, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w500),),
-                            SizedBox(height: 5,),
-                            Container(
-                              constraints: BoxConstraints(minWidth: wv*45),
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                              child: DropdownButtonHideUnderline(
-                                child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  child: DropdownButton(
-                                    isExpanded: true,
-                                    hint: Text(S.of(context).choisir),
-                                    value: isMarried,
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text(S.of(context).clibataire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
-                                        value: false,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: wv*3),
+                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                                Column(children: [
+                                  Text("Taille", style: TextStyle(fontSize: 17)), SizedBox(height: hv*0.5,),
+                                  Row(children: [
+                                    Container(child: SvgPicture.asset('assets/icons/Bulk/row-height.svg', color: kDeepTeal, width: Device.isSmartphone(context) ? wv*8 : 50,)),
+                                    SizedBox(width: wv*2,),
+                                    Container(
+                                      width: Device.isSmartphone(context) ? wv*30 : 320,
+                                      child: TextFormField(
+                                        controller: _heightController,
+                                        onChanged: (val) => setState((){}),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                        ],
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                                        decoration: defaultInputDecoration(suffix: "cm")
                                       ),
-                                      DropdownMenuItem(
-                                        child: Text(S.of(context).marriE, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                        value: true,
+                                    ),
+                                  ]),
+                                ],),
+
+                                Column(children: [
+                                  Text(S.of(context).poids, style: TextStyle(fontSize: 17),), SizedBox(height: hv*0.5,),
+                                  Row(children: [
+                                    Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', color: kDeepTeal, width: Device.isSmartphone(context) ? wv*8 : 50,)),
+                                    SizedBox(width: wv*2,),
+                                    Container(
+                                      width: Device.isSmartphone(context) ? wv*30 : 320,
+                                      child: TextFormField(
+                                        controller: _weightController,
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                        ],
+                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                        style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                                        decoration: defaultInputDecoration(suffix: "Kg")
                                       ),
-                                    ],
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        isMarried = value!;
-                                      });
-                                      if(value == true){
-                                        setState(() {
-                                          askMarriageCertificate = true;
-                                        });
-                                      }
-                                    }),
-                                ),
-                              ),
+                                    ),
+                                  ]),
+                                ],),
+                              ],),
                             ),
-                          ],
-                        ),
-                      ),
-                      
-                      SizedBox(height: hv*4.5,),
+                          SizedBox(height: hv*2),
 
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: wv*3),
-                        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(S.of(context).picesJustificatives, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w600),),
-                            SizedBox(height: hv*2,),
-                            Column(
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                isMarried ? FileUploadCard(
-                                  title: S.of(context).acteDeMarriage,
-                                  state: marriageCertificateUploaded,
-                                  loading: marriageCertificateSpinner,
-                                  action: () async {await getDocFromPhone('Acte_De_Marriage');}
-                                ) : Container(),
-                                FileUploadCard(
-                                  title: S.of(context).scanDeLaCni,
-                                  state: cniUploaded,
-                                  loading: cniSpinner,
-                                  action: () async {await getDocFromPhone('CNI');}
+                                Text("Groupe sanguin", style: TextStyle(fontSize: 17),),
+                                SizedBox(height: hv*1,),
+                                Container(
+                                  constraints: BoxConstraints(minWidth: wv*45),
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                  ),
+                                  child: ButtonTheme(alignedDropdown: true,
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton(isExpanded: true, hint: Text("Choisir.."), value: _bloodGroup,
+                                        items: [
+                                          DropdownMenuItem(child: Text("A+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "A+",),
+                                          DropdownMenuItem(child: Text("B+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B+",),
+                                          DropdownMenuItem(child: Text("A-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "A-",),
+                                          DropdownMenuItem(child: Text("B-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "B-",),
+                                          DropdownMenuItem(child: Text("O-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)), value: "O-",),
+                                          DropdownMenuItem(child: Text("O+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "O+",),
+                                          DropdownMenuItem(child: Text("AB-", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB-",),
+                                          DropdownMenuItem(child: Text("AB+", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),), value: "AB+",),
+                                        ],
+                                        onChanged: (String? value) => setState(() {_bloodGroup = value;})
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                FileUploadCard(
-                                  title: S.of(context).autrePiceJustificative,
-                                  state: otherFileUploaded,
-                                  loading: otherFileSpinner,
-                                  action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
-                                )
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                            SizedBox(height: hv*3.5,),
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: wv*3),
+                              child: Column(
+                                children: [
+                                  Row(children: [
+                                    Text(S.of(context).allergies, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(width: wv*3,),
+                                    Expanded(
+                                      child: Stack(
+                                        children: [
+                                          SimpleAutoCompleteTextField(
+                                            key: autoCompleteKey,
+                                            suggestions: suggestions,
+                                            controller: _allergyController,
+                                            decoration: defaultInputDecoration(),
+                                            textChanged: (text) => currentAllergyText = text,
+                                            clearOnSubmit: false,
+                                            submitOnSuggestionTap: false,
+                                            textSubmitted: (text) {
+                                              if (text != "") {
+                                                !allergies.contains(_allergyController.text) ? allergies.add(_allergyController.text) : print("yo"); 
+                                              }
+                                            }
+                                          ),
+                                          Positioned(
+                                            right: 0,
+                                            child: IconButton(
+                                              onPressed: (){
+                                                if (_allergyController.text.isNotEmpty) {
+                                                setState(() {
+                                                  !allergies.contains(_allergyController.text) ? allergies.add(_allergyController.text) : print("yo");
+                                                  _allergyController.clear();
+                                                });
+                                              }
+                                              },
+                                              icon: CircleAvatar(child: Icon(Icons.add, color: whiteColor), backgroundColor: kDeepTeal,),),
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],),
+
+                                  Padding(
+                                    padding: EdgeInsets.only(top: hv*2),
+                                    child: SimpleTags(
+                                      content: allergies,
+                                      wrapSpacing: 4,
+                                      wrapRunSpacing: 4,
+                                      onTagPress: (tag) {
+                                        setState(() {
+                                          allergies.remove(tag);
+                                        });
+                                      },
+                                      tagContainerPadding: EdgeInsets.all(6),
+                                      tagTextStyle: TextStyle(color: kPrimaryColor),
+                                      tagIcon: Icon(Icons.clear, size: 15, color: kPrimaryColor,),
+                                      tagContainerDecoration: BoxDecoration(
+                                        color: kPrimaryColor.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+
+
+                          SizedBox(height: hv*2.5),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(S.of(context).statutMatrimoniale, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                                SizedBox(height: 5,),
+                                Container(
+                                  constraints: BoxConstraints(minWidth: wv*45),
+                                  padding: EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.all(Radius.circular(20))
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                      alignedDropdown: true,
+                                      child: DropdownButton(
+                                        isExpanded: true,
+                                        hint: Text(S.of(context).choisir),
+                                        value: isMarried,
+                                        items: [
+                                          DropdownMenuItem(
+                                            child: Text(S.of(context).clibataire, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                            value: false,
+                                          ),
+                                          DropdownMenuItem(
+                                            child: Text(S.of(context).marriE, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                            value: true,
+                                          ),
+                                        ],
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            isMarried = value!;
+                                          });
+                                          if(value == true){
+                                            setState(() {
+                                              askMarriageCertificate = true;
+                                            });
+                                          }
+                                        }),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          
+                          SizedBox(height: hv*4.5,),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(S.of(context).picesJustificatives, style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),),
+                                SizedBox(height: hv*2,),
+                                Column(
+                                  children: [
+                                    isMarried ? FileUploadCard(
+                                      title: S.of(context).acteDeMarriage,
+                                      state: marriageCertificateUploaded,
+                                      loading: marriageCertificateSpinner,
+                                      action: () async {await getDocFromPhone('Acte_De_Marriage');}
+                                    ) : Container(),
+                                    FileUploadCard(
+                                      title: S.of(context).scanDeLaCni,
+                                      state: cniUploaded,
+                                      loading: cniSpinner,
+                                      action: () async {await getDocFromPhone('CNI');}
+                                    ),
+                                    FileUploadCard(
+                                      title: S.of(context).autrePiceJustificative,
+                                      state: otherFileUploaded,
+                                      loading: otherFileSpinner,
+                                      action: () async {await getDocFromPhone('Pièce_Justificative_Supplémentaire');}
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: hv*3,)
+                        ],),
                       ),
-                      SizedBox(height: hv*3,)
-                    ],)
+                    )
                   ),
                   imageLoading ? Loaders().buttonLoader(kPrimaryColor) : Container(),
                 ],
@@ -855,112 +848,115 @@ class _ProfileEditState extends State<ProfileEdit> {
             ),
             Container(
               child: (cityChosen) ?  
-                !buttonLoading ? CustomTextButton(
-                  text: S.of(context).mettreJour,
-                  color: kPrimaryColor,
-                  action: () async {
-                    setState(() {
-                      autovalidate = true;
-                    });
-                    String fname = _familynameController.text;
-                    String sname = _surnameController.text;
-                    String cniName = _cniNameController.text;
-                    String email = _emailController.text;
-                    String address = _addressController.text;
-                    String profession =_professionController.text;
-                    if (_adherentEditFormKey.currentState!.validate()){
+                !buttonLoading ? SizedBox(
+                  width: Device.isSmartphone(context) ? wv*100 : 1000,
+                  child: CustomTextButton(
+                    text: S.of(context).mettreJour,
+                    color: kPrimaryColor,
+                    action: () async {
                       setState(() {
-                        buttonLoading = true;
+                        autovalidate = true;
                       });
-                      AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
-                      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                      print("$fname, $sname, $avatarUrl");
-                      adherentProvider.setFamilyName(fname);
-                      adherentProvider.setSurname(sname);
-                      adherentProvider.setEmail(email);
-                      adherentProvider.setProfession(profession);
-                      adherentProvider.setAddress(address);
-                      adherentProvider.setCniName(cniName);
-                      userProvider.enable(true);
-                      await FirebaseFirestore.instance.collection("USERS")
-                        .doc(adherentProvider.getAdherent!.getAdherentId)
-                        .set({
-                          "authId": FirebaseAuth.instance.currentUser?.uid,
-                          'emailAdress': email,
-                          'fullName': cniName,
-                          "enable": true,
-                          "regionDorigione": _region,
-                          "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent!.getAdherentId!),
-                          "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
-                        }, SetOptions(merge: true))
-                        .then((value) async {
-                          await FirebaseFirestore.instance.collection("ADHERENTS")
-                            .doc(adherentProvider.getAdherent!.getAdherentId)
-                            .set({
-                              "authId": FirebaseAuth.instance.currentUser!.uid,
-                              "dateCreated": DateTime.now(),
-                              "cniName": cniName,
-                              "emailAdress": email,
-                              "adresse": address,
-                              "profession": profession,
-                              "acteMariageName": cniName,
-                              "nomFamille": fname,
-                              "prenom": sname,
-                              "enabled": true,
-                              "regionDorigione": _region,
-                              "height": _heightController.text,
-                              "weight": _weightController.text,
-                              "bloodGroup": _bloodGroup,
-                              "allergies": allergies,
-                              "statuMatrimonialMarie": isMarried,
-                              "ville": _city == null ? adherentProvider.getAdherent!.town : _city,
-                              "localisation": gpsCoords != null ? {
-                                "addresse": address,
-                                "latitude": gpsCoords!["latitude"],
-                                "longitude": gpsCoords!["longitude"],
-                                "altitude": 0
-                              } : {
-                                "addresse": address,
-                              },
-                                "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent!.getAdherentId!),
-                                "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
-                            }, SetOptions(merge: true))
-                            .then((value) async {
-                              adherentProvider.setEnableState(true);
-                              adherentProvider.setHeight(_heightController.text);
-                              adherentProvider.setWeight(_weightController.text);
-                              adherentProvider.setBloodGroup(_bloodGroup!);
-                              adherentProvider.setAllergies(allergies);
-                              //textFieldsControl();
-                              await HiveDatabase.setRegisterState(true);
-                              HiveDatabase.setFamilyName(fname);
-                              HiveDatabase.setSurname(sname);
-                              HiveDatabase.setImgUrl(avatarUrl!);
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Informations mises à jour..")));
-                              Navigator.pop(context);
-                              setState(() {
-                                buttonLoading = false;
-                              });
-                            })
-                            .catchError((e) {
-                              print(e.toString());
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-                              setState(() {
-                                buttonLoading = false;
-                              });
-                            })
-                            ;
-                        })
-                        .catchError((e){
-                          print(e.toString());
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-                          setState(() {
-                            buttonLoading = false;
-                          });
-                        })
-                        ;
-                    }
-                  },
+                      String fname = _familynameController.text;
+                      String sname = _surnameController.text;
+                      String cniName = _cniNameController.text;
+                      String email = _emailController.text;
+                      String address = _addressController.text;
+                      String profession =_professionController.text;
+                      if (_adherentEditFormKey.currentState!.validate()){
+                        setState(() {
+                          buttonLoading = true;
+                        });
+                        AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+                        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                        print("$fname, $sname, $avatarUrl");
+                        adherentProvider.setFamilyName(fname);
+                        adherentProvider.setSurname(sname);
+                        adherentProvider.setEmail(email);
+                        adherentProvider.setProfession(profession);
+                        adherentProvider.setAddress(address);
+                        adherentProvider.setCniName(cniName);
+                        userProvider.enable(true);
+                        await FirebaseFirestore.instance.collection("USERS")
+                          .doc(adherentProvider.getAdherent!.getAdherentId)
+                          .set({
+                            "authId": FirebaseAuth.instance.currentUser?.uid,
+                            'emailAdress': email,
+                            'fullName': cniName,
+                            "enable": true,
+                            "regionDorigione": _region,
+                            "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent!.getAdherentId!),
+                            "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
+                          }, SetOptions(merge: true))
+                          .then((value) async {
+                            await FirebaseFirestore.instance.collection("ADHERENTS")
+                              .doc(adherentProvider.getAdherent!.getAdherentId)
+                              .set({
+                                "authId": FirebaseAuth.instance.currentUser!.uid,
+                                "dateCreated": DateTime.now(),
+                                "cniName": cniName,
+                                "emailAdress": email,
+                                "adresse": address,
+                                "profession": profession,
+                                "acteMariageName": cniName,
+                                "nomFamille": fname,
+                                "prenom": sname,
+                                "enabled": true,
+                                "regionDorigione": _region,
+                                "height": _heightController.text,
+                                "weight": _weightController.text,
+                                "bloodGroup": _bloodGroup,
+                                "allergies": allergies,
+                                "statuMatrimonialMarie": isMarried,
+                                "ville": _city == null ? adherentProvider.getAdherent!.town : _city,
+                                "localisation": gpsCoords != null ? {
+                                  "addresse": address,
+                                  "latitude": gpsCoords!["latitude"],
+                                  "longitude": gpsCoords!["longitude"],
+                                  "altitude": 0
+                                } : {
+                                  "addresse": address,
+                                },
+                                  "phoneKeywords": Algorithms.getKeyWords(adherentProvider.getAdherent!.getAdherentId!),
+                                  "nameKeywords": Algorithms.getKeyWords(fname + " "+ sname)
+                              }, SetOptions(merge: true))
+                              .then((value) async {
+                                adherentProvider.setEnableState(true);
+                                adherentProvider.setHeight(_heightController.text);
+                                adherentProvider.setWeight(_weightController.text);
+                                adherentProvider.setBloodGroup(_bloodGroup);
+                                adherentProvider.setAllergies(allergies);
+                                //textFieldsControl();
+                                await HiveDatabase.setRegisterState(true);
+                                HiveDatabase.setFamilyName(fname);
+                                HiveDatabase.setSurname(sname);
+                                HiveDatabase.setImgUrl(avatarUrl ?? adherentProvider.getAdherent!.imgUrl);
+                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Informations mises à jour..")));
+                                Navigator.pop(context);
+                                setState(() {
+                                  buttonLoading = false;
+                                });
+                              })
+                              .catchError((e) {
+                                print(e.toString());
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                setState(() {
+                                  buttonLoading = false;
+                                });
+                              })
+                              ;
+                          })
+                          .catchError((e){
+                            print(e.toString());
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                            setState(() {
+                              buttonLoading = false;
+                            });
+                          })
+                          ;
+                      }
+                    },
+                  ),
                 ) : Loaders().buttonLoader(kPrimaryColor) :
                 CustomDisabledTextButton(
                   text: S.of(context).mettreJour,
@@ -1146,7 +1142,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
   Future getImageFromGallery() async {
-    final pickedFile = await ImagePicker().getImage(source: ImageSource.gallery, imageQuality: 50);
+    final pickedFile = await ImagePicker(). getImage(source: ImageSource.gallery, imageQuality: 50);
     setState(() {
       if (pickedFile != null) {
         imageSpinner = true;

@@ -15,6 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class MyWelcomeScreen extends StatefulWidget {
   @override
   _MyWelcomeScreenState createState() => _MyWelcomeScreenState();
@@ -43,70 +45,77 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
               Column(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: hv*2),
-                    padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      //boxShadow: [BoxShadow(color: Colors.grey[300], blurRadius: 2.0, spreadRadius: 1.0)]
-                    ),
-                    child: Column(
+                    color: Colors.white,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
+                        Container(width: wv*100),
                         Container(
-                          margin: EdgeInsets.only(left:inch*2, right:inch*2),
-                          child: Row(children: [
-                            Text(S.of(context).mesAvantages, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                            //Text("Voir plus..")
-                          ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                        ),
-                        SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
-                        child: Row(children: [
-                          AdvantageCard(
-                            label: S.of(context).fondDeSoin,
-                            state: S.of(context).disponible,
-                            price: adherentProvider.getAdherent?.insuranceLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.insuranceLimit)} f.",
-                            color: Colors.teal[500],
-                            onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
+                          margin: EdgeInsets.only(top: hv*2),
+                          padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
+                          width: Device.isSmartphone(context) ? wv*100 : 1000,
+                          decoration: const BoxDecoration(color: Colors.white),
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(left:inch*2, right:inch*2),
+                                child: Row(children: [
+                                  Text(S.of(context).mesAvantages, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                                  //Text("Voir plus..")
+                                ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                              ),
+                              SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
+                              child: Row(children: [
+                                AdvantageCard(
+                                  label: S.of(context).fondDeSoin,
+                                  state: S.of(context).disponible,
+                                  price: adherentProvider.getAdherent?.insuranceLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.insuranceLimit)} f.",
+                                  color: Colors.teal[500],
+                                  onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
+                                ),
+                                /*AdvantageCard(
+                                  label: "Fond de Soins",
+                                  state: "DISPONIBLE",
+                                  price: "#350.000Xaf",
+                                  color: Colors.teal[500],
+                                  onTap: () {
+                                    String url = "tel:+237233419203";
+                                    launch(url);
+                                  },
+                                ),*/
+                                Hero(
+                                  tag: "loanCard",
+                                  flightShuttleBuilder: flightShuttleBuilder,
+                                  child: AdvantageCard(
+                                    label: S.of(context).prtDeSant,
+                                    state: S.of(context).disponible,
+                                    price: adherentProvider.getAdherent?.loanLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.loanLimit)} f.",
+                                    color: Colors.brown.withOpacity(0.7),
+                                    onTap: ()=>Navigator.pushNamed(context, '/loans'),
+                                  ),
+                                ),
+                                /*AdvantageCard(
+                                  label: "Fond de Soins",
+                                  state: "DISPONIBLE",
+                                  price: "#350.000Xaf",
+                                  color: Colors.grey,
+                                  onTap: callDanAid,
+                                ),*/
+                              ],),
+                              ),
+                            ],
                           ),
-                          /*AdvantageCard(
-                            label: "Fond de Soins",
-                            state: "DISPONIBLE",
-                            price: "#350.000Xaf",
-                            color: Colors.teal[500],
-                            onTap: () {
-                              String url = "tel:+237233419203";
-                              launch(url);
-                            },
-                          ),*/
-                          Hero(
-                            tag: "loanCard",
-                            flightShuttleBuilder: flightShuttleBuilder,
-                            child: AdvantageCard(
-                              label: S.of(context).prtDeSant,
-                              state: S.of(context).disponible,
-                              price: adherentProvider.getAdherent?.loanLimit == null ? "### f." : "#${currency.format(adherentProvider.getAdherent?.loanLimit)} f.",
-                              color: Colors.brown.withOpacity(0.7),
-                              onTap: ()=>Navigator.pushNamed(context, '/loans'),
-                            ),
-                          ),
-                          /*AdvantageCard(
-                            label: "Fond de Soins",
-                            state: "DISPONIBLE",
-                            price: "#350.000Xaf",
-                            color: Colors.grey,
-                            onTap: callDanAid,
-                          ),*/
-                        ],),
                         ),
                       ],
                     ),
                   ),
 
                   Container(
-                    margin: EdgeInsets.only(top: hv*2),
+                    margin: EdgeInsets.only(top: hv*2, left: Device.isSmartphone(context) ? 0 : 50),
                     //padding: EdgeInsets.only(top: hv*1.5, bottom: hv*1),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [
                       Container(
-                        margin: EdgeInsets.only(left:inch*2, right:inch*2, top: inch*0.5),
+                        margin: EdgeInsets.only(left: inch*2, right:inch*2, top: inch*0.5),
                         child: Row(children: [
                           Text(S.of(context).notifications, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
                           //Text("Voir plus..")
@@ -176,7 +185,6 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                     ],),
                   )
                   
-                  
                 ],
               ),
             ],
@@ -190,59 +198,70 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
               border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.3), width: 0.3)),
             ),
             padding: EdgeInsets.only(top: hv*1),
-            child: Container(
-              margin: EdgeInsets.only(left:inch*1.5, right:inch*1.5, top: inch*0),
-              child: Column(
-                children: [
-                  Row(children: [
-                    Text("Aujourd'hui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                    InkWell(
-                      onTap: ()=>navController.setIndex(0),
-                      child: Text("Voir plus..")
-                    )
-                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                  
-                  SizedBox(height: hv*2,),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                ),
+                Container(
+                  margin: EdgeInsets.only(left:inch*1.5, right:inch*1.5, top: inch*0),
+                  child: Container(
+                    color: Colors.white,
+                    width: Device.isSmartphone(context) ? wv*100 : 1000,
+                    child: Column(
+                      children: [
+                        Row(children: [
+                          Text("Aujourd'hui", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                          InkWell(
+                            onTap: ()=>navController.setIndex(0),
+                            child: Text("Voir plus..")
+                          )
+                        ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                        
+                        SizedBox(height: hv*2,),
 
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel!.userId).snapshots(),
-                    builder: (context, snapshot) {
-                      if(!snapshot.hasData){
-                        return Center(child: Loaders().buttonLoader(kPrimaryColor),);
-                      }
-                      return Row(children: [
-                        snapshot.data!.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0].get("imageUrl")) : Container(),
-                        snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1].get("imageUrl")) : Container(),
-                        snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2].get("imageUrl")) : Container(),
-                        snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3].get("imageUrl")) : Container(),
-                        snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4].get("imageUrl")) : Container(),
-                        Expanded(child: Container()),
-                        snapshot.data!.docs.length > 5 ? Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(100)
-                          ),
-                          child: Text("+ ${snapshot.data!.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
-                        ) : Container()                       
-                      ],);
-                    }
+                        StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance.collection("USERS").where("friends", arrayContains: userProvider.getUserModel!.userId).snapshots(),
+                          builder: (context, snapshot) {
+                            if(!snapshot.hasData){
+                              return Center(child: Loaders().buttonLoader(kPrimaryColor),);
+                            }
+                            return Device.isSmartphone(context) ? Row(children: [
+                              snapshot.data!.docs.isNotEmpty ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0].get("imageUrl"), context: context) : Container(),
+                              snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1].get("imageUrl"), context: context) : Container(),
+                              snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2].get("imageUrl"), context: context) : Container(),
+                              snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3].get("imageUrl"), context: context) : Container(),
+                              snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4].get("imageUrl"), context: context) : Container(),
+                              Expanded(child: Container()),
+                              snapshot.data!.docs.length > 5 ? Container(
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(100)
+                                ),
+                                child: Text("+ ${snapshot.data!.docs.length-5} Autres...", style: TextStyle(fontWeight: FontWeight.w800, color: kPrimaryColor),),
+                              ) : Container()                       
+                            ],) : Container();
+                          }
+                        ),
+
+                        Device.isSmartphone(context) ? SizedBox(height: hv*2,) : Container(),
+                        
+                        Row(children: [
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts, context: context),
+                          Device.isSmartphone(context) ? HomePageComponents().verticalDivider() : Container(),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments, context: context),
+                          Device.isSmartphone(context) ?HomePageComponents().verticalDivider() : Container(),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length, context: context),
+                          Device.isSmartphone(context) ?HomePageComponents().verticalDivider() : Container(),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length, context: context),
+                        ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                        SizedBox(height: hv*7,)
+                      ],
+                    ),
                   ),
-
-                  SizedBox(height: hv*2,),
-                  
-                  Row(children: [
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts),
-                    HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments),
-                    HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
-                    HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
-                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                  SizedBox(height: hv*7,)
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

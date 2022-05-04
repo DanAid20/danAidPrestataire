@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/models/doctorModel.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class SpecialistList extends StatefulWidget {
   @override
   _SpecialistListState createState() => _SpecialistListState();
@@ -84,77 +86,76 @@ class _SpecialistListState extends State<SpecialistList> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(children: [
-        Row(
-          children: [
-            Text(S.of(context).ordonnerPar),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: hv * 1),
-              padding:
-                  EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 1),
-              decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
-              child: DropdownButtonHideUnderline(
-                child: ButtonTheme(
-                  alignedDropdown: true,
-                  child: DropdownButton(
-                      isDense: true,
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                        size: wv * 8,
-                        color: kPrimaryColor,
-                      ),
-                      hint: Text(
-                        S.of(context).choisir,
-                        style: TextStyle(
-                            color: kPrimaryColor, fontWeight: FontWeight.w600),
-                      ),
-                      value: filter,
-                      items: [
-                        DropdownMenuItem(
-                          child: Text(S.of(context).nom,
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.bold)),
-                          value: S.of(context).name,
-                        ),
-                        DropdownMenuItem(
-                          child: Text(
-                            S.of(context).distance,
+    return Column(children: [
+      Row(
+        children: [
+          Text(S.of(context).ordonnerPar),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: hv * 1),
+            padding:
+                EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 1),
+            decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+            child: DropdownButtonHideUnderline(
+              child: ButtonTheme(
+                alignedDropdown: true,
+                child: DropdownButton(
+                    isDense: true,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      size: Device.isSmartphone(context) ? wv * 8 : 25,
+                      color: kPrimaryColor,
+                    ),
+                    hint: Text(
+                      S.of(context).choisir,
+                      style: TextStyle(
+                          color: kPrimaryColor, fontWeight: FontWeight.w600),
+                    ),
+                    value: filter,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text(S.of(context).nom,
                             style: TextStyle(
                                 color: kPrimaryColor,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          value: S.of(context).distance,
+                                fontWeight: FontWeight.bold)),
+                        value: S.of(context).name,
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          S.of(context).distance,
+                          style: TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
-                      ],
-                      onChanged: (String? value) {
+                        value: S.of(context).distance,
+                      ),
+                    ],
+                    onChanged: (String? value) {
+                      setState(() {
+                        filter = value;
+                      });
+                      if (value == "name") {
                         setState(() {
-                          filter = value;
+                          query = FirebaseFirestore.instance
+                              .collection("MEDECINS")
+                              .where("profilEnabled", isEqualTo: true)
+                              .orderBy('cniName')
+                              .snapshots();
                         });
-                        if (value == "name") {
-                          setState(() {
-                            query = FirebaseFirestore.instance
-                                .collection("MEDECINS")
-                                .where("profilEnabled", isEqualTo: true)
-                                .orderBy('cniName')
-                                .snapshots();
-                          });
-                        }
-                      }),
-                ),
+                      }
+                    }),
               ),
             ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.start,
-        ),
-        Container(
-          height: hv * 70,
-          child: getDoctorsList(),
-        ),
-      ]),
-    );
+          ),
+        ],
+        mainAxisAlignment: Device.isSmartphone(context) ? MainAxisAlignment.start : MainAxisAlignment.center,
+      ),
+      SizedBox(
+        width: Device.isSmartphone(context) ? wv*100 : 1000,
+        height: hv * 70,
+        child: getDoctorsList(),
+      ),
+    ]);
   }
 }

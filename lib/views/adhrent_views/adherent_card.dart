@@ -11,6 +11,7 @@ import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
+import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +20,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:provider/provider.dart';
 import 'package:qrscan2/qrscan2.dart' as scanner;
+
+import '../../core/services/getPlatform.dart';
 
 class AdherentCard extends StatefulWidget {
   @override
@@ -89,7 +92,7 @@ class _AdherentCardState extends State<AdherentCard> {
       appBar: AppBar(
         centerTitle: true,
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: whiteColor,), 
+            icon: const Icon(Icons.arrow_back_ios, color: whiteColor,), 
             onPressed: ()=>Navigator.pop(context),
           ),
         title: Image.asset('assets/icons/DanaidLogo.png'),
@@ -100,23 +103,27 @@ class _AdherentCardState extends State<AdherentCard> {
             alignment: Alignment.center,
             child: Padding(
               padding: EdgeInsets.only(top: hv*7),
-              child: Container(
-                child: CarouselSlider(
-                  carouselController: beneficiaryCarouselController,
-                  options: CarouselOptions(
-                    scrollPhysics: const BouncingScrollPhysics(),
-                    height: hv * 65,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 0.8,
-                    initialPage: 0,
-                    enableInfiniteScroll: false,
-                    reverse: false,
-                    autoPlay: false,
-                    enlargeCenterPage: true,
-                    scrollDirection: Axis.horizontal,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CarouselSlider(
+                    carouselController: beneficiaryCarouselController,
+                    options: CarouselOptions(
+                      scrollPhysics: const BouncingScrollPhysics(),
+                      height: hv * 65,
+                      aspectRatio: Device.isSmartphone(context) ? 16 / 9 : 2,
+                      viewportFraction: Device.isSmartphone(context) ? 0.8 : 0.3,
+                      initialPage: 0,
+                      enableInfiniteScroll: false,
+                      reverse: false,
+                      autoPlay: false,
+                      enlargeCenterPage: true,
+                      scrollDirection: Axis.horizontal,
+                    ),
+                    items: beneficiaries
                   ),
-                  items: beneficiaries
-                ),
+                  Device.isSmartphone(context) ? Container() : HomePageComponents.navigationArrows(prevAction: () => beneficiaryCarouselController.previousPage() ,nextAction: () => beneficiaryCarouselController.nextPage())
+                ],
               ),
             ),
           ) : Center(child: Loaders().buttonLoader(kCardTextColor)),
@@ -130,13 +137,15 @@ class _AdherentCardState extends State<AdherentCard> {
     return Stack(
       children: [
         Container(
+          width: Device.isSmartphone(context) ? wv*100 : 400,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20)
           ),
         ),
         Container(
-          padding: EdgeInsets.only(right: wv*6, left: wv*6, top: hv*2),
+          width: Device.isSmartphone(context) ? wv*100 : 400,
+          padding: EdgeInsets.only(right: Device.isSmartphone(context) ? wv*6 : 30, left: Device.isSmartphone(context) ? wv*6 : 30, top: hv*2),
           decoration: BoxDecoration(
             color: kCardTextColor,
             borderRadius: BorderRadius.circular(20),
@@ -159,8 +168,8 @@ class _AdherentCardState extends State<AdherentCard> {
                   Spacer(),
                   Row(
                     children: [
-                      SvgPicture.asset(beneficiary?.gender == "H" ? 'assets/icons/Two-tone/Male.svg' : 'assets/icons/Two-tone/Female.svg', width: wv*8),
-                      adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset('assets/icons/Bulk/Shield Done.svg', width: wv*8,) : Container()
+                      SvgPicture.asset(beneficiary?.gender == "H" ? 'assets/icons/Two-tone/Male.svg' : 'assets/icons/Two-tone/Female.svg', width: Device.isSmartphone(context) ? wv*8 : 40),
+                      adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset('assets/icons/Bulk/Shield Done.svg', width: Device.isSmartphone(context) ? wv*8 : 40,) : Container()
                     ],
                   )
                 ],
@@ -171,17 +180,17 @@ class _AdherentCardState extends State<AdherentCard> {
                   clipBehavior: Clip.none,
                   children: [
                     CircleAvatar(
-                      radius: wv*15,
+                      radius: Device.isSmartphone(context) ? wv*15 : 70,
                       backgroundColor: whiteColor,
                       backgroundImage: beneficiary?.avatarUrl != null ? CachedNetworkImageProvider(beneficiary!.avatarUrl!) : null,
-                      child: beneficiary?.avatarUrl == null ? Icon(LineIcons.user, color: kCardTextColor, size: wv*18,) : Container(),
+                      child: beneficiary?.avatarUrl == null ? Icon(LineIcons.user, color: kCardTextColor, size: Device.isSmartphone(context) ? wv*18 : 100,) : Container(),
                     ),
                     state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? CircleAvatar(
                       radius: wv*15,
                       backgroundColor: Colors.red.withOpacity(0.3),
                     ) : Container(),
                     Positioned(
-                      right: state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? 0 : wv*19,
+                      right: state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? 0 : Device.isSmartphone(context) ? wv*19 : 120,
                       bottom: 0,
                       child: Container(
                         width: 30,
@@ -195,20 +204,20 @@ class _AdherentCardState extends State<AdherentCard> {
                       ),
                     ),
                     state == 0 || adh!.validityEndDate!.toDate().isBefore(DateTime.now()) ? RotationTransition(
-                      turns: new AlwaysStoppedAnimation(330 / 360),
-                      child: new Text(S.of(context).compteninactif, style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                      turns: const AlwaysStoppedAnimation(330 / 360),
+                      child: Text(S.of(context).compteninactif, style: TextStyle(fontSize: 23, color: Colors.red, fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
                     ) : Container()
                   ],
                 ),
               ),
-              SizedBox(height: hv*2,),
+              SizedBox(height: Device.isSmartphone(context) ? hv*2 : 40,),
               Expanded(
                 child: SingleChildScrollView(
                   child: DefaultTextStyle(
                     style: textStyle,
                     child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                      alignment: Device.isSmartphone(context) ? Alignment.centerLeft : Alignment.center,
+                      child: Column(crossAxisAlignment: Device.isSmartphone(context) ? CrossAxisAlignment.start : CrossAxisAlignment.center,
                         children: [
                           RichText(text: TextSpan(
                             style: textStyle,
@@ -216,7 +225,7 @@ class _AdherentCardState extends State<AdherentCard> {
                               TextSpan(text: S.of(context).nomDuBnficiairen),
                               TextSpan(text: beneficiary!.surname.toString() + " "+ beneficiary.familyName!, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
-                          )),
+                          ), textAlign: Device.isSmartphone(context) ? TextAlign.start : TextAlign.center),
                           SizedBox(height: hv*1.5,),
                           RichText(
                             text: TextSpan(
@@ -225,16 +234,15 @@ class _AdherentCardState extends State<AdherentCard> {
                               TextSpan(text: S.of(context).numroMatriculen),
                               TextSpan(text: beneficiary.matricule, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
-                          )),
+                          ), textAlign: Device.isSmartphone(context) ? TextAlign.start : TextAlign.center),
                           SizedBox(height: hv*1.5,),
-                          RichText(text: 
-                          TextSpan(
+                          RichText(text: TextSpan(
                             style: textStyle,
                             children: [
                               TextSpan(text: S.of(context).mdecinDeFamillen),
                               TextSpan(text: doctor != null ? doctor : S.of(context).aucun, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: whiteColor))
                             ]
-                          )),
+                          ), textAlign: Device.isSmartphone(context) ? TextAlign.start : TextAlign.center),
                         ],
                       ),
                     ),
@@ -247,7 +255,7 @@ class _AdherentCardState extends State<AdherentCard> {
                 child: PrettyQr(
                       typeNumber: 3,
                       roundEdges: true,
-                      size: 80,
+                      size: Device.isSmartphone(context) ? 80 : 100,
                       elementColor: kCardTextColor,
                       data: adherentModel!.adherentId!,
                       errorCorrectLevel: QrErrorCorrectLevel.L,

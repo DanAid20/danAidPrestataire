@@ -34,6 +34,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class AppointmentForm extends StatefulWidget {
   @override
   _AppointmentFormState createState() => _AppointmentFormState();
@@ -187,9 +189,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(purpose != "emergency" ? S.of(context).dmanderUnePriseEnCharge : S.of(context).dclarerUneUrgence, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(purpose != "emergency" ? S.of(context).dmanderUnePriseEnCharge : S.of(context).dclarerUneUrgence, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 22, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
               Text(purpose != "emergency" ? currentPageValue == 0 ? S.of(context).leGuideVousAssiste : currentPageValue == 1 ? S.of(context).leGuideVousAssiste : currentPageValue == 2 ? S.of(context).choisirLaDateEtLaPriode : S.of(context).raisonEtSymptme : S.of(context).renseignezLtablissement, 
-                style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8, fontWeight: FontWeight.w300),
+                style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*3.8 : 17, fontWeight: FontWeight.w300),
               ),
             ],
           ),
@@ -295,12 +297,13 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     RichText(text: TextSpan(
                       text: S.of(context).queSouhaitezVousFairen,
                       children: [
-                        TextSpan(text: S.of(context).slectionnerVotreChoix, style: TextStyle(color: kPrimaryColor, fontSize: wv*3.3)),
-                      ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5)),
+                        TextSpan(text: S.of(context).slectionnerVotreChoix, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*3.3 : 16)),
+                      ], style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.5 : 20)),
                     ),
                     SizedBox(height: hv*5,),
 
                     HomePageComponents.appointmentPurpose(
+                      context: context,
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
                       title: S.of(context).consulterAujourdhui,
                       iconPath: 'assets/icons/Two-tone/Home.svg',
@@ -317,6 +320,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     SizedBox(height: hv*2,),
                     HomePageComponents.appointmentPurpose(
+                      context: context,
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
                       title: S.of(context).prendreRendezvous,
                       iconPath: 'assets/icons/Bulk/CalendarLine.svg',
@@ -327,6 +331,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     SizedBox(height: hv*2,),
                     HomePageComponents.appointmentPurpose(
+                      context: context,
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
                       title: S.of(context).dclarerUneUrgence,
                       iconPath: 'assets/icons/Bulk/BuyRdv.svg',
@@ -347,6 +352,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
   }
 
   Widget emergencyHospital(){
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     return Column(
       children: [
         Expanded(
@@ -362,11 +368,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     children: [
                       Row(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(child: head()),
+                          Expanded(flex: Device.isSmartphone(context) ? 1 : 4, child: HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),),
                           SizedBox(width: wv*2,),
                           Expanded(
+                            flex: Device.isSmartphone(context) ? 1 : 1,
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: hv*1),
+                              padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*2.5 : 10, vertical: hv*1),
                               decoration: BoxDecoration(
                                 color: kSouthSeas.withOpacity(0.5),
                                 borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomLeft: Radius.circular(20))
@@ -374,7 +381,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               child: Column(
                                 children: [
                                   Text(S.of(context).appelerLaMutuelle, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
-                                  SizedBox(height: hv*1,),
+                                  SizedBox(height: Device.isSmartphone(context) ? hv*1 : 15,),
                                   GestureDetector(
                                     onTap: () async {
                                       String url = S.of(context).tel+"+237233419203";
@@ -394,8 +401,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                         ),
                                         child: SvgPicture.asset('assets/icons/Bulk/Calling.svg', color: primaryColor, width: 25,),
                                       ),
-                                      SizedBox(width: wv*2,),
-                                      Expanded(child: Text("+237 233 419 203", style: TextStyle(color: kTextBlue, fontSize: 14)))
+                                      SizedBox(width: Device.isSmartphone(context) ? wv*2 : 10,),
+                                      Expanded(child: Text("+237 233 419 203", style: TextStyle(color: kTextBlue, fontSize: 14))),
                                     ],),
                                   ),
                                 ],
@@ -483,6 +490,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
   }
 
   Widget emergencyComplete(){
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     return Column(
       children: [
         Expanded(
@@ -496,7 +504,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      head(),
+                      HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
                         child: Row(
@@ -520,8 +528,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 alignment: Alignment.centerRight,
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(todayDate()["date"], textAlign: TextAlign.end, style: TextStyle(color: kTextBlue, fontSize: 13, fontWeight: FontWeight.w700)),
-                                    Text(todayDate()["time"], textAlign: TextAlign.end, style: TextStyle(color: kTextBlue, fontSize: 13))
+                                    Text(todayDate()["date"], textAlign: TextAlign.end, style: TextStyle(color: kTextBlue, fontSize: Device.isSmartphone(context) ? 13 : 17, fontWeight: FontWeight.w700)),
+                                    Text(todayDate()["time"], textAlign: TextAlign.end, style: TextStyle(color: kTextBlue, fontSize: Device.isSmartphone(context) ? 13 : 17))
                                   ],
                                 ),
                               ),
@@ -611,6 +619,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
 
   Widget chooseDoctor(DoctorModel doc){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     return Padding(
       padding: EdgeInsets.only(bottom: hv*2),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -627,14 +636,14 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        head(),
+                        HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                          padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 30, vertical: hv*1),
                           child: RichText(text: TextSpan(
                             text: S.of(context).demanderUnRendezvousChezn,
                             children: [
-                              TextSpan(text: S.of(context).slectionnerLeMdecin, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
-                            ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
+                              TextSpan(text: S.of(context).slectionnerLeMdecin, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16, fontWeight: FontWeight.w400)),
+                            ], style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 20, fontWeight: FontWeight.w600)),
                           ),
                         ),
                         Container(
@@ -659,25 +668,23 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 context: context, 
                                 builder: (BuildContext bc){
                                   return SafeArea(
-                                    child: Container(
-                                      child: new Wrap(
-                                        children: <Widget>[
-                                          ListTile(
-                                            contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
-                                            leading: Icon(LineIcons.doctor, size: 45, color: kDeepTeal,),
-                                            title: new Text('Médecin', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                                            subtitle: Text("Voir un médecin"),
-                                            onTap: searchPartners
-                                          ),
-                                          ListTile(
-                                            contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
-                                            leading: Icon(LineIcons.hospital, size: 40, color: kDeepTeal),
-                                            title: new Text('Prestataire', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                                            subtitle: Text("Voir un prestataire"),
-                                            onTap: ()=>searchPartners(isDoctor: false)
-                                          )
-                                        ],
-                                      ),
+                                    child: Wrap(
+                                      children: <Widget>[
+                                        ListTile(
+                                          contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                          leading: Icon(LineIcons.doctor, size: 45, color: kDeepTeal,),
+                                          title: Text('Médecin', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                          subtitle: Text("Voir un médecin"),
+                                          onTap: searchPartners
+                                        ),
+                                        ListTile(
+                                          contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                          leading: Icon(LineIcons.hospital, size: 40, color: kDeepTeal),
+                                          title: Text('Prestataire', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                          subtitle: Text("Voir un prestataire"),
+                                          onTap: ()=>searchPartners(isDoctor: false)
+                                        )
+                                      ],
                                     ),
                                   );
                                 }
@@ -707,25 +714,23 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                   context: context, 
                                   builder: (BuildContext bc){
                                     return SafeArea(
-                                      child: Container(
-                                        child: new Wrap(
-                                          children: <Widget>[
-                                            ListTile(
-                                              contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
-                                              leading: Icon(LineIcons.doctor, size: 45, color: kDeepTeal,),
-                                              title: new Text('Médecin', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                                              subtitle: Text("Voir un médecin"),
-                                              onTap: searchPartners
-                                            ),
-                                            ListTile(
-                                              contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
-                                              leading: Icon(LineIcons.hospital, size: 40, color: kDeepTeal),
-                                              title: new Text('Prestataire', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                                              subtitle: Text("Voir un prestataire"),
-                                              onTap: ()=>searchPartners(isDoctor: false)
-                                            )
-                                          ],
-                                        ),
+                                      child: Wrap(
+                                        children: <Widget>[
+                                          ListTile(
+                                            contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                            leading: Icon(LineIcons.doctor, size: 45, color: kDeepTeal,),
+                                            title: Text('Médecin', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                            subtitle: Text("Voir un médecin"),
+                                            onTap: searchPartners
+                                          ),
+                                          ListTile(
+                                            contentPadding: EdgeInsets.symmetric(vertical: hv*0, horizontal: wv*3),
+                                            leading: Icon(LineIcons.hospital, size: 40, color: kDeepTeal),
+                                            title: Text('Prestataire', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                            subtitle: Text("Voir un prestataire"),
+                                            onTap: ()=>searchPartners(isDoctor: false)
+                                          )
+                                        ],
                                       ),
                                     );
                                   }
@@ -738,55 +743,56 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2.5),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 30, vertical: hv*2.5),
+                    child: Column(crossAxisAlignment: Device.isSmartphone(context) ? CrossAxisAlignment.start : CrossAxisAlignment.center,
                       children: [
-                        Text(S.of(context).choisirLeTypeDeConsultation, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16),),
-                        Container(
-                          child: SingleChildScrollView(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            child: Row(children: [
-                              HomePageComponents.consultationType(
-                                iconPath: 'assets/icons/Bulk/Profile.svg',
-                                title: S.of(context).consultation,
-                                type: S.of(context).enCabinet,
-                                price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
-                                selected: consultationType == "Cabinet",
-                                action: (){
-                                  setState(() {
-                                    consultationType = "Cabinet";
-                                    tarif = doc.rate != null ? doc.rate!["public"] : 2000.0;
-                                  });
-                                }
-                              ),
-                              HomePageComponents.consultationType(
-                                iconPath: 'assets/icons/Bulk/Video.svg',
-                                title: "Consultation",
-                                type: "Vidéo",
-                                price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
-                                selected: consultationType == "Video",
-                                action: (){
-                                  setState(() {
-                                    consultationType = "Video";
-                                  });
-                                }
-                              ),
-                              HomePageComponents.consultationType(
-                                iconPath: 'assets/icons/Bulk/Home.svg',
-                                title: S.of(context).consultation,
-                                type: S.of(context).domicile,
-                                price: "7500.0",
-                                selected: consultationType == "Domicile",
-                                action: (){
-                                  setState(() {
-                                    consultationType = "Domicile";
-                                    tarif = 7500.0;
-                                  });
-                                }
-                              ),
-                            ],),
-                          ),
+                        Text(S.of(context).choisirLeTypeDeConsultation, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.bold, fontSize: 16), textAlign: TextAlign.center,),
+                        SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: [
+                            HomePageComponents.consultationType(
+                              context: context,
+                              iconPath: 'assets/icons/Bulk/Profile.svg',
+                              title: S.of(context).consultation,
+                              type: S.of(context).enCabinet,
+                              price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
+                              selected: consultationType == "Cabinet",
+                              action: (){
+                                setState(() {
+                                  consultationType = "Cabinet";
+                                  tarif = doc.rate != null ? doc.rate!["public"] : 2000.0;
+                                });
+                              }
+                            ),
+                            HomePageComponents.consultationType(
+                              context: context,
+                              iconPath: 'assets/icons/Bulk/Video.svg',
+                              title: "Consultation",
+                              type: "Vidéo",
+                              price: doc.rate != null ? doc.rate!["public"].toString() : "2000.0",
+                              selected: consultationType == "Video",
+                              action: (){
+                                setState(() {
+                                  consultationType = "Video";
+                                });
+                              }
+                            ),
+                            HomePageComponents.consultationType(
+                              context: context,
+                              iconPath: 'assets/icons/Bulk/Home.svg',
+                              title: S.of(context).consultation,
+                              type: S.of(context).domicile,
+                              price: "7500.0",
+                              selected: consultationType == "Domicile",
+                              action: (){
+                                setState(() {
+                                  consultationType = "Domicile";
+                                  tarif = 7500.0;
+                                });
+                              }
+                            ),
+                          ],),
                         ),
                         
                       ],
@@ -991,6 +997,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
   }
 
   Widget schedule(){
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context);
     DoctorModel? doc = doctorProvider.getDoctor;
     List<DateTime> dates = [];
@@ -1011,7 +1018,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 ),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    head(),
+                    HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                     SizedBox(height: hv*1,),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1.5),
@@ -1176,7 +1183,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             selected: timePicked == TimeOfDay(hour: 8, minute: 0),
                             onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 8, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 8, 0); timeSelected = DateTime(2000, 1, 1, 8, 0); })
                           ),
-                          SizedBox(width: wv*10,),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*10 : 20,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 9, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 9, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 9, minute: 0)),
@@ -1195,7 +1202,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             selected: timePicked == TimeOfDay(hour: 10, minute: 0),
                             onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 10, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 10, 0); timeSelected = DateTime(2000, 1, 1, 10, 0); })
                           ),
-                          SizedBox(width: wv*10,),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*10 : 20,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 11, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 11, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 11, minute: 0)),
@@ -1214,7 +1221,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             selected: timePicked == TimeOfDay(hour: 12, minute: 0),
                             onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 12, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 12, 0); timeSelected = DateTime(2000, 1, 1, 12, 0); })
                           ),
-                          SizedBox(width: wv*10,),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*10 : 20,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 13, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 13, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 13, minute: 0)),
@@ -1233,7 +1240,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             selected: timePicked == TimeOfDay(hour: 14, minute: 0),
                             onSelect: ()=>setState((){timePicked = TimeOfDay(hour: 14, minute: 0); focusedDay = DateTime(focusedDay!.year, focusedDay!.month, focusedDay!.day, 14, 0); timeSelected = DateTime(2000, 1, 1, 14, 0); })
                           ),
-                          SizedBox(width: wv*10,),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*10 : 20,),
                           getTimeRangeBox(
                             time: TimeOfDay(hour: 15, minute: 0),
                             enable: checkTimeAvailability(TimeOfDay(hour: 15, minute: 0)) && !bookedSchedule.contains(TimeOfDay(hour: 15, minute: 0)),
@@ -1245,12 +1252,12 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ],
                   ): 
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
+                    margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*10 : 30, vertical: hv*4),
                     child: Text("Dr ${doc.familyName} "+S.of(context).nestPasDisponibleLes+" ${DateFormat('EEEE', 'fr_FR').format(focusedDay!)}s !", style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center)
                   )
                   : 
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: wv*10, vertical: hv*4),
+                    margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*10 : 30, vertical: hv*4),
                     child: Center(child: Text(S.of(context).choisissezUnJourPourLeRendezvous, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17), textAlign: TextAlign.center,))
                   ),
               ),
@@ -1269,6 +1276,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
   Widget finalize(){
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
     DoctorModelProvider doctorProvider = Provider.of<DoctorModelProvider>(context, listen: false);
+    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
     AdherentModel? adherentModel = adherentProvider.getAdherent;
     DoctorModel? doc = doctorProvider.getDoctor;
     return Padding(
@@ -1287,7 +1295,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        head(),
+                        HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                           child: Row(crossAxisAlignment: CrossAxisAlignment.end,
@@ -1297,9 +1305,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 child: RichText(text: TextSpan(
                                   text: S.of(context).rendezvousn,
                                   children: [
-                                    TextSpan(text: "Dr ${doc?.surname} ${doc?.familyName}\n", style: TextStyle(fontSize: wv*3.8, fontWeight: FontWeight.w400)),
-                                    TextSpan(text: "${doc?.field}"+S.of(context).mdecinDeFamille, style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
-                                  ], style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w600)),
+                                    TextSpan(text: "Dr ${doc?.surname} ${doc?.familyName}\n", style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.8 : 18, fontWeight: FontWeight.w400)),
+                                    TextSpan(text: "${doc?.field}, "+S.of(context).mdecinDeFamille, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16, fontWeight: FontWeight.w400)),
+                                  ], style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 20, fontWeight: FontWeight.w600)),
                                 ),
                               ),
                               Expanded(
@@ -1307,8 +1315,8 @@ class _AppointmentFormState extends State<AppointmentForm> {
                                 child: RichText(text: TextSpan(
                                   text: DateFormat('EEEE', 'fr_FR').format(focusedDay!)+", "+ focusedDay!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(focusedDay!)+" "+ focusedDay!.year.toString() +"\n",
                                   children: [
-                                    TextSpan(text: timeSelected!.hour.toString().padLeft(2, '0')+ "H:"+timeSelected!.minute.toString().padLeft(2, '0')+ " à "+ (timeSelected!.hour + ((purpose != "consult-today") ? 1 : 8)).toString().padLeft(2, '0') + "H:"+timeSelected!.minute.toString().padLeft(2, '0'), style: TextStyle(fontSize: wv*3.3, fontWeight: FontWeight.w400)),
-                                  ], style: TextStyle(color: kPrimaryColor, fontSize: wv*3.6, fontWeight: FontWeight.w600)),
+                                    TextSpan(text: timeSelected!.hour.toString().padLeft(2, '0')+ ":"+timeSelected!.minute.toString().padLeft(2, '0')+ " à "+ (timeSelected!.hour + ((purpose != "consult-today") ? 1 : 8)).toString().padLeft(2, '0') + ":"+timeSelected!.minute.toString().padLeft(2, '0'), style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16, fontWeight: FontWeight.w400)),
+                                  ], style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*3.6 : 18, fontWeight: FontWeight.w600)),
                                   textAlign: TextAlign.right,
                                 ),
                               ),
@@ -1325,16 +1333,16 @@ class _AppointmentFormState extends State<AppointmentForm> {
                         Text(S.of(context).quelleEnEstLaRaison, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600, fontSize: 16),),
                         SizedBox(height: hv*1.5,),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3),
+                          padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 15),
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: Colors.grey[100],
                             borderRadius: BorderRadius.circular(20)
                           ),
                           child: DropdownButtonHideUnderline(
                             child: ButtonTheme(
                               alignedDropdown: true,
                               child: DropdownButton<String>(
-                                icon: Icon(Icons.keyboard_arrow_down_rounded, size: wv*6, color: kPrimaryColor,),
+                                icon: Icon(Icons.keyboard_arrow_down_rounded, size: Device.isSmartphone(context) ? wv*6 : 25, color: kPrimaryColor,),
                                 isExpanded: true,
                                 value: reason,
                                 hint: Text(S.of(context).choisir),
@@ -1418,9 +1426,9 @@ class _AppointmentFormState extends State<AppointmentForm> {
                             symptoms.remove(tag);
                           });
                         },
-                        tagContainerPadding: EdgeInsets.all(6),
-                        tagTextStyle: TextStyle(color: kPrimaryColor),
-                        tagIcon: Icon(Icons.clear, size: wv*3, color: kDeepTeal,),
+                        tagContainerPadding: EdgeInsets.all(Device.isSmartphone(context) ? 6 : 12),
+                        tagTextStyle: TextStyle(color: kPrimaryColor, fontWeight: Device.isSmartphone(context) ? FontWeight.normal : FontWeight.bold),
+                        tagIcon: Icon(Icons.clear, size: Device.isSmartphone(context) ? wv*3 : 20, color: kDeepTeal,),
                         tagContainerDecoration: BoxDecoration(
                           color: kPrimaryColor.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
@@ -1650,54 +1658,17 @@ class _AppointmentFormState extends State<AppointmentForm> {
   }
 
   Widget formLayout(Widget content){
-    return Container(
-      //padding: EdgeInsets.symmetric(horizontal: wv*2),
-      margin: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
-      decoration: BoxDecoration(
-        color: whiteColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
-      ),
-      child: content,
-    );
-  }
-
-  Widget head(){
-    BeneficiaryModelProvider beneficiaryProvider = Provider.of<BeneficiaryModelProvider>(context);
-    return Container(
-      padding: EdgeInsets.only(left: wv*4),
-      decoration: BoxDecoration(
-        //color: kSouthSeas.withOpacity(0.3),
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(top: hv*1),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(S.of(context).pourLePatient, style: TextStyle(color: kPrimaryColor, fontSize: wv*4, fontWeight: FontWeight.w900)),
-            SizedBox(height: hv*1,),
-            Row(children: [
-              CircleAvatar(
-                backgroundImage: beneficiaryProvider.getBeneficiary.avatarUrl != null ? CachedNetworkImageProvider(beneficiaryProvider.getBeneficiary.avatarUrl!) : null,
-                backgroundColor: whiteColor,
-                radius: wv*6,
-                child: beneficiaryProvider.getBeneficiary.avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*10),
-              ),
-              SizedBox(width: wv*3,),
-              Expanded(
-                child: RichText(text: TextSpan(
-                  text: beneficiaryProvider.getBeneficiary.surname! + " " +  beneficiaryProvider.getBeneficiary.familyName! + "\n",
-                  children: [
-                    TextSpan(text: (DateTime.now().year - beneficiaryProvider.getBeneficiary.birthDate!.toDate().year).toString() + S.of(context).ans, style: TextStyle(fontSize: wv*3.3)),
-                  ], style: TextStyle(color: kDeepTeal, fontSize: wv*4.2)),
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],),
-            SizedBox(height: hv*0.5,)
-          ],
+    return Center(
+      child: Container(
+        //padding: EdgeInsets.symmetric(horizontal: wv*2),
+        margin: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*1),
+        width: Device.isSmartphone(context) ? wv*100 : 1000,
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
         ),
+        child: content,
       ),
     );
   }
@@ -1706,7 +1677,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
     return GestureDetector(
       onTap: enable ? onSelect : null,
       child: Container(
-        width: wv*35,
+        width: Device.isSmartphone(context) ? wv*35 : 460,
         padding: EdgeInsets.symmetric(horizontal: wv*1, vertical: hv*1.5),
         decoration: BoxDecoration(
           color: Colors.grey[200],
