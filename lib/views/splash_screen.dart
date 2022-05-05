@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:danaid/core/providers/authProvider.dart';
 import 'package:danaid/core/providers/devEnvironmentProvider.dart';
@@ -44,11 +45,13 @@ class _SplashScreenState extends State<SplashScreen> {
       userProvider.setUserId(phone!);
       userProvider.setProfileType(profile);
       Navigator.pushReplacementNamed(context, '/home');
+      //GoRouter.of(context).go('/home');
     }
     else {
       Navigator.pushReplacementNamed(context, '/intro-slides');
+     // GoRouter.of(context).go('/intro-slides');
     }
-    //return true;
+    return true;
     /*{
       "isSignedIn": isSignedIn,
       "isRegistered": isRegistered

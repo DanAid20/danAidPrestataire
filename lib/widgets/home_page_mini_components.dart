@@ -107,6 +107,7 @@ class HomePageComponents {
   
 
   Widget paienementDetailsListItem({
+    BuildContext? context,
     String? nom, 
     String? date,
     String? montant, 
@@ -144,7 +145,7 @@ class HomePageComponents {
                                           child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
                                             color: kBlueForce,
                                             fontWeight: FontWeight.w600,
-                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            fontSize: Device.isSmartphone(context!) ? wv*3.5 : 15 ), textScaleFactor: 1.0),
                                         ),
                                             SizedBox(
                               width: hv * 2.3,
@@ -152,7 +153,7 @@ class HomePageComponents {
                                         Text(date!,  style: TextStyle(
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
                                       ],
                                     ),
                                   ],
@@ -166,11 +167,11 @@ class HomePageComponents {
                                         Text(montant!, style: TextStyle(
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
                                         Text(etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : ''  , style: TextStyle(
                                           color:  getCOlor(etat) ,
                                           fontWeight: FontWeight.w400,
-                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
                                       ],
                                     ),
                                   ],
@@ -188,6 +189,7 @@ class HomePageComponents {
     return couleurs!;
   }
   Widget paiementItem({
+    BuildContext? context,
     String? month, 
     String? prix,
     String? lastDatePaiement,
@@ -219,17 +221,17 @@ class HomePageComponents {
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                      fontSize: Device.isSmartphone(context!) ? wv*3.5: 15), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
                                    Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current.montant, style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),],)),
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0,),],)),
                              ],
                            ),
                           SizedBox(
@@ -243,17 +245,17 @@ class HomePageComponents {
                                       color: kArgent,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
                                    Container(alignment: Alignment.centerRight, child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Text('Delai de paiement ',style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0, ),Container(
                                         alignment: Alignment.centerRight,
                                         child: Text(lastDatePaiement!, style: TextStyle(
                                         color: kBlueForce,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: wv*3.5), textScaleFactor: 1.0),
+                                        fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0),
                                       ),],)),
                              ],
                            ),
@@ -271,7 +273,7 @@ class HomePageComponents {
                                       color: kSouthSeas,
                                       fontWeight: FontWeight.w600,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0),],)),
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0),],)),
                              ],
                            ),
                          ],
@@ -651,6 +653,202 @@ class HomePageComponents {
       ),
     );
   }
+
+  Widget timelineForDeskstop(
+   { BuildContext? context, int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}
+  ) {
+    return GestureDetector(
+      onTap: ()=>{
+         
+           if(iSelected==index){
+            onclick!(index, adherent, 'remove')
+         }else{
+           print(index),
+           print(index),
+            onclick!(index, adherent, 'add')
+         }
+      },
+      child: Container(
+        width: Device.isSmartphone(context!) ? 0  : double.infinity,
+        height: MySize.getScaledSizeHeight(140),
+        child: Column(
+          children: [
+            Container(
+              width: Device.isSmartphone(context) ? 0  : double.infinity,
+              height: MySize.getScaledSizeHeight(130),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Row(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: wv * 14,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                               colorFilter: isAccountIsExists == true &&
+                               adherent!=null && adherent.enabled == true
+                            ? ColorFilter.mode(
+                                Colors.red.withOpacity(1), BlendMode.dstATop)
+                            :  ColorFilter.mode(
+                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                            image: adherent==null
+                                ? AssetImage("assets/images/image 25.png")
+                                : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}") as ImageProvider,
+                            fit: BoxFit.cover,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: kThirdColor,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                            )),
+                      ),
+                      adherent!=null && adherent.protectionLevel==0 ?
+                      Positioned(
+                          bottom: hv * 0.5,
+                          right: wv * 1,
+                          child: SvgPicture.asset(
+                         'assets/icons/Bulk/Shield Done.svg',
+                            width: wv * 4,
+                            
+                          )):Container(),
+                    ],
+                  ),
+                  Container(
+                    width: Device.isSmartphone(context)? wv * 38.5: 200 ,
+                    margin: EdgeInsets.only(left: wv * 1.5),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: hv * 1.5,
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('',
+                                    overflow: TextOverflow.ellipsis,
+                                    style:  TextStyle(
+                                        color: kDateTextColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize:Device.isSmartphone(context)? 14.sp : 14)),
+                              ),
+                              Expanded( 
+                                flex: 1,
+                                child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: kCardTextColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: Device.isSmartphone(context)? 15.sp : 15)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: hv * 0.7,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: wv * 6),
+                              child: Text( (adherent!=null && adherent.cniName !=null)
+                          ?   adherent.cniName!
+                          : S.current.pasDefini,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: MySize.getScaledSizeHeight(15))),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(right: wv * 6),
+                              child: Text( (adherent!=null &&  adherent.matricule!=null)
+                          ?  adherent.matricule!
+                          : S.current.pasDefini,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: MySize.getScaledSizeHeight(15))),
+                            ),
+                            SizedBox(
+                              height: MySize.getScaledSizeHeight(5),
+                            ),
+                            Text( doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: kDeepTeal,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: MySize.getScaledSizeHeight(16))),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          // lien la page de l'appel video
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          width: MySize.getScaledSizeWidth(20), 
+                          height: MySize.getScaledSizeHeight(40),
+                          decoration: const BoxDecoration(
+                              color: kSouthSeas,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              )),
+                          child: SvgPicture.asset(
+                            (adherent!=null && adherent.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                            width: wv * 7,
+                          ),
+                        ),
+                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     approuveAppointement!(adhrentId, doctorId);
+                      //   },
+                      //   child: Container(
+                      //     padding: EdgeInsets.all(3),
+                      //     height: hv * 5,
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.white,
+                      //       borderRadius: BorderRadius.all(Radius.circular(10)),
+                      //     ),
+                      //     child: SvgPicture.asset(
+                      //       'assets/icons/Bulk/ArrowRight Circle.svg',
+                      //       width: wv * 7,
+                      //     ),
+                      //   ),
+                      // )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget waitingRoomListOfUser({
     String? userImage,
     String? nom,
@@ -924,7 +1122,7 @@ class HomePageComponents {
       ),
     );
   }
- 
+
   getAdherentsList({ BuildContext? context, int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}) {
     return GestureDetector(
       onTap: ()=>{
@@ -938,10 +1136,10 @@ class HomePageComponents {
          }
       },
       child: Container(
-        width: Device.isSmartphone(context!)? wv * 78 : 500,
+        width: wv * 78 ,
         decoration: BoxDecoration(
           color: kBlueForce,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(30),
           ),
            boxShadow: [
@@ -957,18 +1155,18 @@ class HomePageComponents {
               child: Row(
                 children: [
                   Container(
-                      width:  Device.isSmartphone(context)? wv * 15: wv * 8  ,
+                      width: wv * 15 ,
                       child: Text(S.current.valideJusquau,
                           style: TextStyle(
                               color: textWhiteColor,
-                              fontSize: fontSize(size:  Device.isSmartphone(context)? 15 : 5 ),
+                              fontSize: fontSize(size:  15  ),
                               fontWeight: FontWeight.w500))),
                   Container(
-                      width: Device.isSmartphone(context)? wv * 20: wv * 10,
+                      width: wv * 20,
                       child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                           style: TextStyle(
                               color: whiteColor,
-                              fontSize: Device.isSmartphone(context)? wv * 4.5 : wv * 3 ,
+                              fontSize: wv * 4.5  ,
                               fontWeight: FontWeight.w700))),
                   Spacer(),
                   SvgPicture.asset(
@@ -991,9 +1189,9 @@ class HomePageComponents {
                       image: DecorationImage(
                         colorFilter: isAccountIsExists == true &&
                                adherent!=null && adherent.enabled == true
-                            ? new ColorFilter.mode(
+                            ? ColorFilter.mode(
                                 Colors.red.withOpacity(1), BlendMode.dstATop)
-                            : new ColorFilter.mode(
+                            :  ColorFilter.mode(
                                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
                         image: adherent==null
                             ? AssetImage("assets/images/image 25.png")
@@ -1002,8 +1200,8 @@ class HomePageComponents {
                       ),
                       color: Colors.red,
                       shape: BoxShape.circle),
-                  width: Device.isSmartphone(context)? wv * 40: wv * 10,
-                  height: Device.isSmartphone(context)? hv * 20: hv * 10 ,
+                  width: wv * 40,
+                  height: hv * 20 ,
                   child: Stack(children: <Widget>[
                     Align(
                       alignment: Alignment.center,
@@ -1017,18 +1215,18 @@ class HomePageComponents {
                           style: TextStyle(
                               color: Colors.red,
                               letterSpacing: 0.5,
-                              fontSize: wv * 6.5,
+                              fontSize: wv * 6.5 ,
                               fontWeight: FontWeight.w500),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                     Positioned(
-                      right: 5,
-                      bottom: -hv * 2,
+                      right:  5 ,
+                      bottom:  -hv * 2 ,
                       child: Container(
-                        height: hv * 10,
-                        width: wv * 10,
+                        height:  hv * 10 ,
+                        width:  wv * 10,
                         decoration: BoxDecoration(
                             color: isAccountIsExists == true &&
                                     (adherent!=null && adherent.enabled!) == true
@@ -1037,7 +1235,7 @@ class HomePageComponents {
                             shape: BoxShape.circle),
                         child:
                             isAccountIsExists == true && (adherent!=null && adherent.enabled!) == true
-                                ? SizedBox.shrink()
+                                ? const SizedBox.shrink()
                                 : Icon(
                                     Icons.priority_high,
                                     color: Colors.white,
@@ -1075,7 +1273,7 @@ class HomePageComponents {
                   Text(S.current.numeroMatricule,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
                     (adherent!=null &&  adherent.matricule!=null)
@@ -1083,7 +1281,7 @@ class HomePageComponents {
                           : S.current.pasDefini,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w700))
                 ],
               ),
@@ -1096,13 +1294,13 @@ class HomePageComponents {
                   Text(S.current.medecinDeFamille,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
                        doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w700))
                 ],
               ),

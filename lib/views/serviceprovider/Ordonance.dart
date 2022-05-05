@@ -5,6 +5,7 @@ import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/models/devisModel.dart';
 import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/ServicesProviderInvoice.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/core/services/algorithms.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -212,400 +213,404 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
            return Container(
              child:  SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Column(
-             mainAxisSize: MainAxisSize.min,
-            children: [
-              IntrinsicHeight(
-                child: Container(
-            color: kGoldlightYellow,
-            height: hv*44.5, 
-            child: Expanded(
-                child: Column(
-                  children: [
-                    Container(
-                            margin: EdgeInsets.only(top: hv*1, left: 5, right: 5),
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [BoxShadow(color: (Colors.grey[700])!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: const Offset(0,4))]
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height: hv*14.1,
-                                  padding: EdgeInsets.only(bottom: hv*1.2),
-                                  decoration: BoxDecoration(
-                                    color: kGoldlightYellow.withOpacity(0.3),
-                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(child:
-                                           HomePageComponents.header(label: S.of(context).pourLePatient, title: username ?? S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis!.dateCreated!.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage?? "" , titleColor: kTextBlue)),
-                                          HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: kDeepTeal, size: 25, action: ()=>setState((){
-                                            if (kDebugMode) {
-                                              print(edit);
-                                            }
-                                            edit = !edit!;
-                                            })),
-                                          SizedBox(width: wv*4,)
-                                        ],
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Column(
+          child: Container(
+               margin: EdgeInsets.only( 
+                left: Device.isSmartphone(context) ? 0 : wv*30  , 
+                right: Device.isSmartphone(context) ? 0 : wv*30),
+            child: Column(
+               mainAxisSize: MainAxisSize.min,
+              children: [
+                IntrinsicHeight(
+                  child: Container(
+              color: kGoldlightYellow,
+              height: hv*44.5, 
+              child: Expanded(
+                  child: Column(
+                    children: [
+                      Container(
+                              margin: EdgeInsets.only(top: hv*1, left: 5, right: 5),
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [BoxShadow(color: (Colors.grey[700])!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: const Offset(0,4))]
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: hv*14.1,
+                                    padding: EdgeInsets.only(bottom: hv*1.2),
+                                    decoration: BoxDecoration(
+                                      color: kGoldlightYellow.withOpacity(0.3),
+                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(child:
+                                             HomePageComponents.header(label: S.of(context).pourLePatient, title: username ?? S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis!.dateCreated!.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage?? "" , titleColor: kTextBlue)),
+                                            HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: kDeepTeal, size: 25, action: ()=>setState((){
+                                              if (kDebugMode) {
+                                                print(edit);
+                                              }
+                                              edit = !edit!;
+                                              })),
+                                            SizedBox(width: wv*4,)
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(S.of(context).codeDeConsultation,
+                                  style: TextStyle(
+                                      fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 5):15,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: 0.2,
+                                      color: kFirstIntroColor),),
+                                                Text("${widget.devis!.consultationCode}",
+                                  style: TextStyle(
+                                      fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 3.5):15,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 0.2,
+                                      color: kFirstIntroColor),),
+                                              ],
+                                            ),
+                                            SizedBox(width: wv*4,)
+                                          ],
+                                        ),
+                                         
+                                      ],
+                                  )),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child:  Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(S.of(context).codeDeConsultation,
-                                style: TextStyle(
-                                    fontSize: fontSize(size: wv * 5),
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: 0.2,
-                                    color: kFirstIntroColor),),
-                                              Text("${widget.devis!.consultationCode}",
-                                style: TextStyle(
-                                    fontSize: fontSize(size: wv * 3.5),
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 0.2,
-                                    color: kFirstIntroColor),),
+                                              const Text( 'Date*', style:  TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
+                                              const SizedBox(height: 3,),
+                                              GestureDetector(
+                                                onTap: () => _selectDate(context),
+                                                child: Container(
+                                                  width: Device.isSmartphone(context) ? wv*50 : wv*50,
+                                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: hv*1.6),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[100],
+                                                    borderRadius: const BorderRadius.all(Radius.circular(20))
+                                                  ),
+                                                  child: Row(children: [
+                                                    SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
+                                                    const VerticalDivider(),
+                                                    Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*50 : wv*5 , color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                                  ],),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ),
+                                        SizedBox(width: wv*2,),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(S.of(context).montantPercu, style:const  TextStyle(fontSize: 15, color: kTextBlue)),
+                                              const SizedBox(height: 5),
+                                              TextFormField(
+                                                controller: _costController,
+                                                onChanged: (val)=>setState((){}),
+                                                enabled: edit,
+                                                inputFormatters: <TextInputFormatter>[
+                                                  FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                                ],
+                                                textAlign: TextAlign.end,
+                                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                                style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
+                                                decoration: defaultInputDecoration(suffix: "f.", hintText: S.of(context).nonEditable)
+                                              )
                                             ],
                                           ),
-                                          SizedBox(width: wv*4,)
-                                        ],
-                                      ),
-                                       
-                                    ],
-                                )),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child:  Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            const Text( 'Date*', style:  TextStyle(fontSize: 16, color: kTextBlue, fontWeight: FontWeight.w400),),
-                                            const SizedBox(height: 3,),
-                                            GestureDetector(
-                                              onTap: () => _selectDate(context),
-                                              child: Container(
-                                                width: wv*50,
-                                                padding: EdgeInsets.symmetric(horizontal: 15, vertical: hv*1.6),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[100],
-                                                  borderRadius: const BorderRadius.all(Radius.circular(20))
-                                                ),
-                                                child: Row(children: [
-                                                  SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
-                                                  const VerticalDivider(),
-                                                  Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
-                                                ],),
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ),
-                                      SizedBox(width: wv*2,),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(S.of(context).montantPercu, style:const  TextStyle(fontSize: 15, color: kTextBlue)),
-                                            const SizedBox(height: 5),
-                                            TextFormField(
-                                              controller: _costController,
-                                              onChanged: (val)=>setState((){}),
-                                              enabled: edit,
-                                              inputFormatters: <TextInputFormatter>[
-                                                FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                                              ],
-                                              textAlign: TextAlign.end,
-                                              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                              style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),
-                                              decoration: defaultInputDecoration(suffix: "f.", hintText: S.of(context).nonEditable)
-                                            )
-                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                    ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                      ),
 
-                    Column(
-                      children: [
-                        Padding(
-                           padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
-                           child: Column(
-                             children: [
-                               SizedBox(height: hv*1,),
-                               Row(
-                                 children: [
-                                    Text(S.of(context).couvertureDanaid, style:const TextStyle(color: kCardTextColor, fontSize: 16,)),
-                                   const Spacer(),
-                                   Text(S.of(context).copaiement, style: const TextStyle(color: kCardTextColor, fontSize: 16,))
-                                 ],
-                               ),
-                               SizedBox(height: hv*1,),
-                               Stack(
-                                 children: [
-                                   Container(
-                                     padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
-                                     decoration: BoxDecoration(
-                                       color: kLightWhite.withOpacity(0.45),
-                                       borderRadius: BorderRadius.circular(15)
-                                     ),
-                                     child: Row(
-                                       children: [
-                                         const Spacer(),
-                                         Text("${prixpatient!.toDouble().round().toString()}.f", style: const TextStyle(color: kCardTextColor, fontSize: 17,))
-                                       ],
-                                     ),
-                                   ),
-                                   Container(
-                                     width: wv*60,
-                                     decoration: BoxDecoration(
-                                       color: whiteColor,
-                                       borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                                       boxShadow: [BoxShadow(color: (Colors.grey[500])!.withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: const Offset(0,4))]
-                                     ),
-                                     child: Column(
-                                       children: [
-                                         Container(
-                                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
-                                           decoration: BoxDecoration(
-                                             color: kLightWhite.withOpacity(0.65),
-                                             borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
-                                           ),
-                                           child: Row(
-                                             children: [
-                                               const Spacer(),
-                                               Text('$prixDAnaid.f', style: const TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold))
-                                             ],
-                                           ),
-                                         ),
-                                         Container(
-                                           padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-                                           child: Column(
-                                             crossAxisAlignment: CrossAxisAlignment.start,
-                                             children: [
-                                               Row(children: [
-                                                 Expanded(
-                                                   child: Text(
-                                                      widget.devis!.status==0? S.of(context).enAttente : widget.devis!.status==1? S.of(context).pay: S.of(context).tatInconue ,
-                                                      style: TextStyle(color:  widget.devis!.status==0? kBlueForce: widget.devis!.status==1? kDeepTeal: kDeepDarkTeal, fontWeight: FontWeight.bold),
-                                                      textAlign: TextAlign.right,
-                                                   ),
-                                                 ),
-                                                 SizedBox(width: wv*1.5,),
-                                                 HomePageComponents.getStatusIndicator(status: widget.devis!.status!.toInt(), size: 12)
-                                               ],)
-                                             ],
-                                           ),
-                                         )
-                                       ],
-                                     ),
-                                   )
-                                 ],
-                               )
-                             ],
-                           ),
-                         ),
-                        
-                      ],
-                    ), 
-                  ],
-                ),
-            ),
-          ),
-              ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
-                  decoration: const BoxDecoration(
-                    color: whiteColor
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
+                      Column(
                         children: [
-                          Text(S.of(context).suivieDesPrestations, style: const TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                      SizedBox(height: hv*1,),
-                      Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          IntrinsicHeight(
-                             child: Stack(
-                              children: [
-                                Column(
-                                  children: [
-                                    widget.devis!.drugsUrls!.isNotEmpty?  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Expanded(
-                                        child: getDetailOrdonanceDevis(
-                                          title: doc1,
-                                          service: widget.devis,
-                                          cardA: cardA!,
-                                         )
-                                        ),
-                                    ): Container(),
-                                    
-                                    widget.devis!.receiptUrls!.isNotEmpty?  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Expanded(
-                                        child: getDetailReceipt(
-                                          title: doc2,
-                                          service: widget.devis,
-                                          cardA: cardB!,
-                                         )
-                                        ),
-                                    ): Container(),
-                                    widget.devis!.resultsUrls!.isNotEmpty?  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Expanded(
-                                        child: getDetailReultExamens(
-                                          title: doc3,
-                                          service: widget.devis,
-                                          cardA: cardC!,
-                                         )
-                                        ),
-                                    ): Container(),
-                                    widget.devis!.precriptionUrls!.isNotEmpty?  Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Expanded(
-                                        child: getDetailPrescription(
-                                          title: doc3,
-                                          service: widget.devis,
-                                          cardA: cardD!,
-                                         )
-                                        ),
-                                    ): Container(),
-                                
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                         
-                        
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-               Padding(
-                   padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1),
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.end,
-                     children: [
-                       Container(
-                         width: wv*30,
-                         height: hv*0.5,
-                         decoration: BoxDecoration(
-                           gradient: LinearGradient(
-                             begin: Alignment.bottomLeft,
-                             end: Alignment.topRight,
-                             colors: [
-                               (Colors.grey[200])!,
-                               Colors.white,
-                             ],
-                           )),
-                         child: const SizedBox.shrink(),
-                           ),
-                       Container(
-                         width: double.infinity,
-                         height: hv*4.5,
-                         child: Row(
-                           mainAxisAlignment: MainAxisAlignment.end,
-                           mainAxisSize: MainAxisSize.max,
-                           children: [
-                             Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                          Padding(
+                             padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
+                             child: Column(
                                children: [
-                                 Container(
-                                   width: wv*65,
-                                   child: Padding(
-                                     padding: const EdgeInsets.all(8.0),
-                                     child: Row(
-                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                       children: [
-                                         Text("TOTAL", style: TextStyle(
-                                 fontSize: fontSize(size: wv * 5),
-                                 fontWeight: FontWeight.w600,
-                                 letterSpacing: 0.3,
-                                 color: kBlueForce)),
-                                         Text("${widget.devis!.amount!}.f",style: TextStyle(
-                                 fontSize: fontSize(size: wv * 5),
-                                 fontWeight: FontWeight.w400,
-                                 letterSpacing: 0.2,
-                                 color: kBlueForce)),
-                                       ],
-                                     ),
-                                   ),
+                                 SizedBox(height: hv*1,),
+                                 Row(
+                                   children: [
+                                      Text(S.of(context).couvertureDanaid, style:const TextStyle(color: kCardTextColor, fontSize: 16,)),
+                                     const Spacer(),
+                                     Text(S.of(context).copaiement, style: const TextStyle(color: kCardTextColor, fontSize: 16,))
+                                   ],
                                  ),
-                                 
+                                 SizedBox(height: hv*1,),
+                                 Stack(
+                                   children: [
+                                     Container(
+                                       padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
+                                       decoration: BoxDecoration(
+                                         color: kLightWhite.withOpacity(0.45),
+                                         borderRadius: BorderRadius.circular(15)
+                                       ),
+                                       child: Row(
+                                         children: [
+                                           const Spacer(),
+                                           Text("${prixpatient!.toDouble().round().toString()}.f", style: const TextStyle(color: kCardTextColor, fontSize: 17,))
+                                         ],
+                                       ),
+                                     ),
+                                     Container(
+                                       width: wv*60,
+                                       decoration: BoxDecoration(
+                                         color: whiteColor,
+                                         borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                                         boxShadow: [BoxShadow(color: (Colors.grey[500])!.withOpacity(0.3), blurRadius: 7, spreadRadius: 1, offset: const Offset(0,4))]
+                                       ),
+                                       child: Column(
+                                         children: [
+                                           Container(
+                                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.75),
+                                             decoration: BoxDecoration(
+                                               color: kLightWhite.withOpacity(0.65),
+                                               borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), bottomLeft: Radius.circular(15))
+                                             ),
+                                             child: Row(
+                                               children: [
+                                                 const Spacer(),
+                                                 Text('$prixDAnaid.f', style: const TextStyle(color: kCardTextColor, fontSize: 17, fontWeight: FontWeight.bold))
+                                               ],
+                                             ),
+                                           ),
+                                           Container(
+                                             padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                                             child: Column(
+                                               crossAxisAlignment: CrossAxisAlignment.start,
+                                               children: [
+                                                 Row(children: [
+                                                   Expanded(
+                                                     child: Text(
+                                                        widget.devis!.status==0? S.of(context).enAttente : widget.devis!.status==1? S.of(context).pay: S.of(context).tatInconue ,
+                                                        style: TextStyle(color:  widget.devis!.status==0? kBlueForce: widget.devis!.status==1? kDeepTeal: kDeepDarkTeal, fontWeight: FontWeight.bold),
+                                                        textAlign: TextAlign.right,
+                                                     ),
+                                                   ),
+                                                   SizedBox(width: wv*1.5,),
+                                                   HomePageComponents.getStatusIndicator(status: widget.devis!.status!.toInt(), size: 12)
+                                                 ],)
+                                               ],
+                                             ),
+                                           )
+                                         ],
+                                       ),
+                                     )
+                                   ],
+                                 )
                                ],
                              ),
-                           ],
+                           ),
+                          
+                        ],
+                      ), 
+                    ],
+                  ),
+              ),
+            ),
+                ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+                    decoration: const BoxDecoration(
+                      color: whiteColor
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(S.of(context).suivieDesPrestations, style: const TextStyle(color: kBlueDeep, fontSize: 17, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        SizedBox(height: hv*1,),
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            IntrinsicHeight(
+                               child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      widget.devis!.drugsUrls!.isNotEmpty?  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Expanded(
+                                          child: getDetailOrdonanceDevis(
+                                            title: doc1,
+                                            service: widget.devis,
+                                            cardA: cardA!,
+                                           )
+                                          ),
+                                      ): Container(),
+                                      
+                                      widget.devis!.receiptUrls!.isNotEmpty?  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Expanded(
+                                          child: getDetailReceipt(
+                                            title: doc2,
+                                            service: widget.devis,
+                                            cardA: cardB!,
+                                           )
+                                          ),
+                                      ): Container(),
+                                      widget.devis!.resultsUrls!.isNotEmpty?  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Expanded(
+                                          child: getDetailReultExamens(
+                                            title: doc3,
+                                            service: widget.devis,
+                                            cardA: cardC!,
+                                           )
+                                          ),
+                                      ): Container(),
+                                      widget.devis!.precriptionUrls!.isNotEmpty?  Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Expanded(
+                                          child: getDetailPrescription(
+                                            title: doc3,
+                                            service: widget.devis,
+                                            cardA: cardD!,
+                                           )
+                                          ),
+                                      ): Container(),
+                                  
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                           
+                          
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                 Padding(
+                     padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1),
+                     child: Column(
+                       mainAxisAlignment: MainAxisAlignment.end,
+                       children: [
+                         Container(
+                           width: wv*30,
+                           height: hv*0.5,
+                           decoration: BoxDecoration(
+                             gradient: LinearGradient(
+                               begin: Alignment.bottomLeft,
+                               end: Alignment.topRight,
+                               colors: [
+                                 (Colors.grey[200])!,
+                                 Colors.white,
+                               ],
+                             )),
+                           child: const SizedBox.shrink(),
+                             ),
+                         Container(
+                           width: double.infinity,
+                           height: hv*4.5,
+                           child: Row(
+                             mainAxisAlignment: MainAxisAlignment.end,
+                             mainAxisSize: MainAxisSize.max,
+                             children: [
+                               Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                 children: [
+                                   SizedBox(
+                                     width: Device.isSmartphone(context) ? wv*65:wv*20,
+                                     child: Padding(
+                                       padding: const EdgeInsets.all(8.0),
+                                       child: Row(
+                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                         children: [
+                                           Text("TOTAL", style: TextStyle(
+                                          fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 5):wv * 2,
+                                          fontWeight: FontWeight.w600,
+                                          letterSpacing: 0.3,
+                                          color: kBlueForce)),
+                                                  Text("${widget.devis!.amount!}.f",style: TextStyle(
+                                          fontSize:Device.isSmartphone(context) ? fontSize(size: wv * 5):wv * 2,
+                                          fontWeight: FontWeight.w400,
+                                          letterSpacing: 0.2,
+                                          color: kBlueForce)),
+                                         ],
+                                       ),
+                                     ),
+                                   ),
+                                   
+                                 ],
+                               ),
+                             ],
+                           ),
                          ),
-                       ),
-                    
-                     ],
+                      
+                       ],
+                     ),
                    ),
-                 ),
-                
+                  
         Row(
        mainAxisAlignment: MainAxisAlignment.spaceBetween,
        children: [
          Expanded(
-          child:  buttonLoading==true?  Loaders().buttonLoader(kPrimaryColor) : 
+            child:  buttonLoading==true?  Loaders().buttonLoader(kPrimaryColor) : 
        Padding(
-          padding: EdgeInsets.only(left:wv*5, right: wv*5, top:hv*3),
-          child:  buttonLoading==true? Center(child: Loaders().buttonLoader(kCardTextColor)) :
-            CustomTextButton(
-               borderRadius:60,
-               text: S.of(context).validerLaPrestation,
-               color: kBlueDeep,
-               noPadding: true ,
-               expand: true,
-               action: () =>{
-                 setState(() {
-                        buttonLoading = true;
-                 }),
-                 print(widget.devis!.receiptUrls!.length),
-                  
-                  FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
-                    {
-                      "closed":true,
-                      "paid": true,
-                    }).then((value) {
-                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
+            padding: EdgeInsets.only(left:wv*5, right: wv*5, top:hv*3),
+            child:  buttonLoading==true? Center(child: Loaders().buttonLoader(kCardTextColor)) :
+              CustomTextButton(
+                 borderRadius:60,
+                 text: S.of(context).validerLaPrestation,
+                 color: kBlueDeep,
+                 noPadding: true ,
+                 expand: true,
+                 action: () =>{
                    setState(() {
-                        buttonLoading = false;
-                        deletedData=[];
-                   });
-                 })
-               },
-             ),
+                          buttonLoading = true;
+                   }),
+                   print(widget.devis!.receiptUrls!.length),
+                    
+                    FirebaseFirestore.instance.collection('USECASES').doc(widget.devis!.usecaseId).collection('PRESTATIONS').doc(widget.devis!.id).update(
+                      {
+                        "closed":true,
+                        "paid": true,
+                      }).then((value) {
+                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).prestationClturer),));
+                     setState(() {
+                          buttonLoading = false;
+                          deletedData=[];
+                     });
+                   })
+                 },
+               ),
         ),),
          Expanded(
-          child:  Padding(
-          padding: EdgeInsets.only(left:wv*5.0, right: wv*5.0, top:hv*3),
-          child: CustomTextButton(
-             borderRadius:60,
-             text: S.of(context).annuler,
-             textColor: kBlueForce, 
-             color: (Colors.grey[200])!,
-             expand: false,
-             action: () => Navigator.pop(context),
-           ),
+            child:  Padding(
+            padding: EdgeInsets.only(left:wv*5.0, right: wv*5.0, top:hv*3),
+            child: CustomTextButton(
+               borderRadius:60,
+               text: S.of(context).annuler,
+               textColor: kBlueForce, 
+               color: (Colors.grey[200])!,
+               expand: false,
+               action: () => Navigator.pop(context),
+             ),
         )
         )
       
@@ -613,9 +618,10 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
     
     ],)
 
-          
+            
          
-            ],
+              ],
+            ),
           )
           
         ),

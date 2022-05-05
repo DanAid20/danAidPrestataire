@@ -134,7 +134,7 @@ void main() async {
   Hive.registerAdapter(NotificationModelAdapter());
   await chechIfExists();
   setupLocator();
-  runApp(const Danaid(env: "prod",));
+  runApp(Danaid(env: "prod",));
 }
 
 chechIfExists() async {

@@ -78,7 +78,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
       constraints: BoxConstraints(
-        maxWidth: Device.isSmartphone(context) ? double.infinity : 800,
+        maxWidth: Device.isSmartphone(context) ? double.infinity : 700,
         maxHeight: Device.isSmartphone(context) ? double.infinity : 420
       ),
       margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
@@ -107,7 +107,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
             child: Container(
                 margin:
                     EdgeInsets.only(left: SizeConfig.defaultSize! * 1.5, right: SizeConfig.defaultSize! * 1.5, top: 20.h),
-                width:  Device.isSmartphone(context) ? 330.w : 800 ,
+                width:  Device.isSmartphone(context) ? 330.w : 700 ,
                 height: Device.isSmartphone(context) ? 140.h : 220 ,
                 decoration: BoxDecoration(
                   color: isPrestataire ? kGold : kThirdIntroColor,
@@ -148,7 +148,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w800, 
-                                  fontSize: Device.isSmartphone(context) ?20.sp : 35),
+                                  fontSize: Device.isSmartphone(context) ?20.sp : 30),
                             ),
                           ),
                         ],
@@ -170,7 +170,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: Device.isSmartphone(context) ?15.5.sp : 26 ),
+                                  fontSize: Device.isSmartphone(context) ?15.5.sp : 22 ),
                               overflow: TextOverflow.clip,
                             ),
                           ),
@@ -276,8 +276,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         Container(
             margin: EdgeInsets.only(
                 left:  Device.isSmartphone(context) ? 20.w : 8.w , right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-            width:  Device.isSmartphone(context) ? 125.r :220.r,
-            height:  Device.isSmartphone(context) ? 85.r : 120.r ,
+            width:  Device.isSmartphone(context) ? 125.r :200.r,
+            height:  Device.isSmartphone(context) ? 85.r : 80.r ,
             decoration: BoxDecoration(
               color: isPrestataire == true ? kGoldlight : kThirdIntroColor,
               boxShadow: const [
@@ -296,7 +296,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     margin: EdgeInsets.only(left: 10.w, top: 4.h),
                     child: SvgPicture.asset(
                         iconesUrl ?? 'assets/icons/Bulk/Bookmark.svg',
-                        width:  Device.isSmartphone(context) ? wv * 6 :wv * 3,
+                        width:  Device.isSmartphone(context) ? wv * 6 :wv * 2,
                         color: isPrestataire == true ? kBlueForce : kDeepTeal),
                   ),
                 ),
@@ -312,7 +312,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                           style: TextStyle( 
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: Device.isSmartphone(context) ? 16.sp : 16 ),
+                              fontSize: Device.isSmartphone(context) ? 16.sp : 14 ),
                         ),
                       ),
                     ],
@@ -572,7 +572,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
        constraints: BoxConstraints(
-        maxWidth: Device.isSmartphone(context) ? double.infinity : 800,
+        maxWidth: Device.isSmartphone(context) ? double.infinity : 700,
       ),
       decoration: const BoxDecoration(
         color: Colors.white,

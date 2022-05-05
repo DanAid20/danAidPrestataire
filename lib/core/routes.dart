@@ -66,6 +66,7 @@ import 'package:danaid/views/social_network_views/create_group.dart';
 import 'package:danaid/views/social_network_views/create_group_final.dart';
 import 'package:danaid/views/social_network_views/friend_requests.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 final Map<String, Widget Function(BuildContext)> routes = {
   "/": (context) => Splashscreen(),
@@ -74,7 +75,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/home": (context) => HomePageView(),
   "/login": (context) => LoginView(),
   "/register": (context) => RegisterView(),
-  "/otp": (context) => OtpView(),
+  "/otp": (context) =>  OtpView(),
   "/reset-password": (context) => PasswordResetView(),
   "/profile-type": (context) => ProfileTypeView(),
   "/profile-type-adherent": (context) => AdherentPlanScreen(),
@@ -147,5 +148,96 @@ final Map<String, Widget Function(BuildContext)> routes = {
   "/create-group": (context) => CreateGroup(),
   "/create-group-final": (context) => CreateGroupFinalStep(),
   "/ambassador-dashboard": (context) => AmbassadorDashboard(),
-  
 };
+  final  router = GoRouter(
+    debugLogDiagnostics:true,
+    urlPathStrategy: UrlPathStrategy.path,
+    errorPageBuilder: (context, state)=> MaterialPage(
+        key:state.pageKey,
+        child: Text(state.error.toString())
+      ),
+    routes: [
+      GoRoute(path: '/',pageBuilder: (context, state) =>  MaterialPage(
+        key:state.pageKey,
+        child: SplashScreen()
+      ),), 
+      GoRoute(path: '/splash',pageBuilder: (context, state) =>   MaterialPage(
+        key:state.pageKey,
+        child: Splashscreen(),)
+      ),
+      GoRoute(path: '/intro-view',builder: (context, state) =>  OnboardScreen(),),
+      GoRoute(path: '/home',builder: (context, state) =>  HomePageView(),),
+      GoRoute(path: '/login',builder: (context, state) =>  LoginView(),),
+      GoRoute(path: '/RegisterView',builder: (context, state) =>  RegisterView(),),
+      GoRoute(path: '/otp',builder: (context, state) =>   PasswordResetView(),),
+      GoRoute(path: '/reset-password',builder: (context, state) =>  PasswordResetView(),),
+      GoRoute(path: '/profile-type',builder: (context, state) =>  ProfileTypeView(),),
+      GoRoute(path: '/profile-type-adherent',builder: (context, state) =>  AdherentPlanScreen(),),
+      GoRoute(path: '/adherent-reg-form',builder: (context, state) =>  AdherentRegistrationFormm(),),
+      GoRoute(path: '/profile-type-doctor',builder: (context, state) =>  DoctorFormView(),),
+      GoRoute(path: '/profile-type-sprovider',builder: (context, state) =>  ServiceProviderForm(),),
+      GoRoute(path: '/adherent-profile-edit',builder: (context, state) =>  ProfileEdit(),),
+      GoRoute(path: '/doctor-profile',builder: (context, state) =>  DoctorProfilePage(),),
+      GoRoute(path: '/add-beneficiary',builder: (context, state) => AddBeneficiaryForm(),),
+      GoRoute(path: '/edit-beneficiary',builder: (context, state) => EditBeneficiary(),),
+      GoRoute(path: '/rdv',builder: (context, state) => AppointmentForm(),),
+      GoRoute(path: '/adherent-card',builder: (context, state) => AdherentCard(),),
+      GoRoute(path: '/refund-form',builder: (context, state) => RefundForm(),),
+      GoRoute(path: '/appointment',builder: (context, state) => Appointment(),),
+      GoRoute(path: '/use-case',builder: (context, state) => UseCaseDetails(),),
+      GoRoute(path: '/loans',builder: (context, state) => Loans(),),
+      GoRoute(path: '/loans',builder: (context, state) => Loans(),),
+      GoRoute(path: '/loan-form',builder: (context, state) => LoanForm(),),
+      GoRoute(path: '/loan-details',builder: (context, state) => LoanDetails(),),
+      GoRoute(path: '/coverage-payment',builder: (context, state) => CoveragePayment(),),
+      GoRoute(path: '/compare-plans',builder: (context, state) => ComparePlans(),),
+      GoRoute(path: '/contributions',builder: (context, state) => Contributions(),),
+      GoRoute(path: '/intro-slides',builder: (context, state) => IntroSlides(),),
+      GoRoute(path: '/family-points-page',builder: (context, state) => FamilyPointsPage(),),
+      GoRoute(path: '/family-badge-page',builder: (context, state) => FamilyBadgePage(),),
+      GoRoute(path: '/family-documents-page',builder: (context, state) => FamilyDocumentsPage(),),
+      GoRoute(path: '/family-stats-page',builder: (context, state) => FamilyStatsPage(),),
+      GoRoute(path: '/product-details',builder: (context, state) => ProductDetails(),),
+      GoRoute(path: '/partners-search',builder: (context, state) => PartnersSearchScreen(),),
+      GoRoute(path: '/friend-requests',builder: (context, state) => FriendRequests(),),
+      GoRoute(path: '/notifications',builder: (context, state) => Notifications(),),
+      GoRoute(path: '/usecases',builder: (context, state) => UseCaseList(),),
+      /**
+     * Start section routes that concern the doctor activities in the
+     * application system
+     */
+      GoRoute(path: '/doctor-home',builder: (context, state) => DoctorBottomNavigationView(),),
+      GoRoute(path: '/doctor-profile-edit',builder: (context, state) => DoctorProfileEdit(),),
+      GoRoute(path: '/doctor-add-patient',builder: (context, state) => AddPatientView(isLaunchConsultation: true,),),
+      GoRoute(path: '/inactive-account-patient',builder: (context, state) => InactiveAccount()),
+      GoRoute(path: '/ownerList-patient',builder: (context, state) => OwnerUserListView()),
+      GoRoute(path: '/history-prestation-doctor',builder: (context, state) => PrestationHistory()),
+      GoRoute(path: '/details-history-prestation-doctor',builder: (context, state) => DetailsPrestationHistory()),
+      GoRoute(path: '/appointment-apointement',builder: (context, state) => AppointmentDetails()),
+      /**
+     * Service provider routes (prestataire)
+     */
+      GoRoute(path: '/serviceprovider-profile-edit',builder: (context, state) => EditPrestataire(),),
+      GoRoute(path: '/serviceprovider-profile',builder: (context, state) => PrestataireProfilePage(),),
+      GoRoute(path: '/QuoteEmit-serviceprovider',builder: (context, state) => CreateQuote(),),
+      GoRoute(path: '/history-prestation-serviceProvider',builder: (context, state) => PrestationHistoryForProvider(),),
+      GoRoute(path: '/scanPatient-serviceprovider',builder: (context, state) => ScanPatient(),),
+      GoRoute(path: '/prestationEncours-serviceprovider',builder: (context, state) => PrestationEnCours(),),
+      GoRoute(path: '/ordonanceDuPatient-serviceprovider',builder: (context, state) => OrdonanceDuPatient(),),
+      GoRoute(path: '/ordonance-serviceprovider',builder: (context, state) => Ordonances(),),
+      GoRoute(path: '/serviceprovider-add-patient',builder: (context, state) => AddPatientViewServiceProvider(),),
+      GoRoute(path: '/inactive-account-patient-serviceProviders',builder: (context, state) => InactiveAccountProvider(),),
+      GoRoute(path: '/serviceprovider-add-patient',builder: (context, state) => OwnerUserListViewServicesProviders(),),
+       /**
+     * Social network screens
+     */
+      GoRoute(path: '/social-home',builder: (context, state) => SocialMediaHomePage(),),
+      GoRoute(path: '/conversation',builder: (context, state) => Conversation(),),
+      GoRoute(path: '/chatroom',builder: (context, state) => ChatRoom(),),
+      GoRoute(path: '/create-publication',builder: (context, state) => CreatePublication(),),
+      GoRoute(path: '/search',builder: (context, state) => Search(),),
+      GoRoute(path: '/create-group',builder: (context, state) => CreateGroup(),),
+      GoRoute(path: '/create-group-final',builder: (context, state) => CreateGroupFinalStep(),),
+      GoRoute(path: '/ambassador-dashboard',builder: (context, state) => AmbassadorDashboard(),),
+    ],
+  );

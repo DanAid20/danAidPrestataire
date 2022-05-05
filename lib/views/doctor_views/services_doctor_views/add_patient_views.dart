@@ -208,8 +208,8 @@ class _AddPatientViewState extends State<AddPatientView> {
         children: [
           Container(
               margin: EdgeInsets.only(
-                  left: wv * 6, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-              width: Device.isSmartphone(context) ? 130.w : 250 ,
+                  left: Device.isSmartphone(context) ? wv * 6 : wv * 1, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
+              width: Device.isSmartphone(context) ? 130.w : 200 ,
               decoration: BoxDecoration(
                 color: cardColor,
                 boxShadow: [
@@ -236,7 +236,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                             : consultationType == S.of(context).message
                                 ? 'assets/icons/Bulk/Message.svg'
                                 : 'assets/icons/Bulk/Profile-color.svg',
-                        width: Device.isSmartphone(context) ? wv * 10 : wv * 5,
+                        width: Device.isSmartphone(context) ? wv * 10 : wv * 3,
                       ),
                     ),
                   ),
@@ -251,14 +251,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w500,
-                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 8)),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                         ),
                         Text(
                           consultationType!,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 8)),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                         ),
                         SizedBox(
                           height: hv * 1.3,
@@ -272,7 +272,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 8)),
+                                  fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                             ),
                           ),
                         ),
@@ -405,7 +405,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                   widget.isLaunchConsultation == true
                       ? Container(
                           constraints: BoxConstraints(
-                            maxWidth: Device.isSmartphone(context) ? double.infinity : 900
+                            maxWidth: Device.isSmartphone(context) ? double.infinity : wv*43
                           ),
                           margin: EdgeInsets.symmetric(vertical: 3.0),
                           color: Colors.white,
@@ -416,16 +416,16 @@ class _AddPatientViewState extends State<AddPatientView> {
                                 alignment: Alignment.topLeft,
                                 child: Container(
                                   margin: EdgeInsets.only(
-                                      left: wv * 5, top: hv * 1),
+                                      left:  Device.isSmartphone(context) ? wv * 5 : 10 , top: hv * 1),
                                   child: Text(
                                       S.of(context).choisirLeTypeDeConsultation,
                                       style: TextStyle(
-                                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 14),
+                                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 6),
                                           fontWeight: FontWeight.w700,
                                           color: kPrimaryColor)),
                                 ),
                               ),
-                              Container(
+                              Container(  
                                 margin: const EdgeInsets.symmetric(vertical: 2.0),
                                 height: Device.isSmartphone(context) ? hv * 17 : hv * 23,
                                 color: Colors.white,
@@ -462,13 +462,13 @@ class _AddPatientViewState extends State<AddPatientView> {
                   ),
                   Container(
                     width:  Device.isSmartphone(context) ? wv * 100 : wv*90 ,
-                    margin: EdgeInsets.symmetric(horizontal:  Device.isSmartphone(context) ? 0 : wv*17),
+                    margin: EdgeInsets.symmetric(horizontal:  Device.isSmartphone(context) ? 0 : wv*28),
                     color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: Device.isSmartphone(context) ? wv * 68 : wv * 45 ,
+                          width: Device.isSmartphone(context) ? wv * 68 : wv * 30 ,
                           decoration:const BoxDecoration(
                             color: kDeepTealClair,
                             borderRadius:  BorderRadius.only(
@@ -496,7 +496,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               Text(
                                 S.of(context).selectionnerOuAjouterLePatient,
                                 style: TextStyle(
-                                    fontSize: fontSize(size:  Device.isSmartphone(context) ?  wv * 4 : 8),
+                                    fontSize: fontSize(size:  Device.isSmartphone(context) ?  wv * 4 : 6),
                                     fontWeight: FontWeight.w500,
                                     color: kFirstIntroColor),
                               )
@@ -613,14 +613,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                                 height: Device.isSmartphone(context) ?  hv * 2 : hv * 4 ,
                               ),
                               widget.isLaunchConsultation == true
-                                  ? Text(S.of(context).ouScannerUneCarteDadherent,
+                                  ? Device.isSmartphone(context) ? Text(S.of(context).ouScannerUneCarteDadherent,
                                       style: TextStyle(
                                           fontSize: fontSize(size: Device.isSmartphone(context) ?  wv * 4 : 8),
                                           fontWeight: FontWeight.w500,
                                           color: kFirstIntroColor))
-                                  : const SizedBox.shrink(),
+                                  : const SizedBox.shrink(): const SizedBox.shrink(),
                               widget.isLaunchConsultation == true
-                                  ? Container(
+                                  ?  Device.isSmartphone(context) ? Container(
                                       margin: EdgeInsets.only(
                                           left: inch * 2,
                                           right: inch * 2,
@@ -634,13 +634,13 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           child: SvgPicture.asset(
                                             'assets/icons/Bulk/Scan.svg',
                                             color: kSouthSeas,
-                                            height: Device.isSmartphone(context) ?  hv * 12 : 150 ,
-                                            width:Device.isSmartphone(context) ?  wv * 12 : 150,
+                                            height: Device.isSmartphone(context) ?  hv * 12 : 100 ,
+                                            width:Device.isSmartphone(context) ?  wv * 12 : 100,
                                           ),
                                         ),
                                       ),
                                     )
-                                  : const SizedBox.shrink(),
+                                  : const SizedBox.shrink():const SizedBox.shrink(),
                               widget.isLaunchConsultation == true
                                   ? Center(
                                       child: Text(
@@ -665,10 +665,9 @@ class _AddPatientViewState extends State<AddPatientView> {
                       : Container(
                           width: wv * 50,
                           padding: EdgeInsets.symmetric(
-                              horizontal: wv * 3.2, vertical: hv * 2),
+                              horizontal: Device.isSmartphone(context) ?  wv * 3.2 : wv * 2.5 , vertical: hv * 2),
                           child: TextButton(
                             onPressed: () async {
-                           
                               if (kDebugMode) {
                                 print(phone);
                               }
@@ -800,12 +799,12 @@ class _AddPatientViewState extends State<AddPatientView> {
                               S.of(context).rechercher,
                               style: TextStyle(
                                   color: textColor,
-                                  fontSize: wv * 4.5,
+                                  fontSize:  Device.isSmartphone(context) ? wv * 4.5 : 14,
                                   fontWeight: FontWeight.w600),
                             ),
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all(
-                                  const  EdgeInsets.symmetric(vertical: 15)),
+                                    EdgeInsets.symmetric(vertical:  Device.isSmartphone(context) ? 12 :15 )),
                                 backgroundColor:
                                     MaterialStateProperty.all(kFirstIntroColor),
                                 shape: MaterialStateProperty.all(

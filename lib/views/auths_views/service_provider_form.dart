@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/adherentProvider.dart';
@@ -301,6 +302,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                       });
                       AdherentProvider adherentProvider = Provider.of<AdherentProvider>(context, listen: false);
                       print("$companyName, $_category, $avatarUrl");
+                      debugPrint("thrjkthrkejth");
                       adherentProvider.setAdherentId(userProvider.getUserId!);
                       adherentProvider.setImgUrl(avatarUrl!);
                       //adherentProvider.setFamilyName(fname);
@@ -373,6 +375,7 @@ class _ServiceProviderFormState extends State<ServiceProviderForm> {
                             buttonLoading = false;
                           });
                         });
+                      print("ghfdkjghdf");
                     }
 
                   },

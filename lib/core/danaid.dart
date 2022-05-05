@@ -13,8 +13,10 @@ import 'package:danaid/helpers/strings.dart';
 import 'package:danaid/helpers/theme.dart';
 import 'package:danaid/language/LanguageProvider.dart';
 import 'package:danaid/language/Language_Helper.dart';
+import 'package:danaid/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
@@ -51,12 +53,27 @@ import '../locator.dart';
 class Danaid extends StatelessWidget {
   final String? env;
 
-  const Danaid({Key? key, this.env}) : super(key: key);
+   Danaid({Key? key, this.env}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     statusBar.setColor(context: context);
     Intl.defaultLocale = 'fr_FR' ;
+
+  //  final GoRouter _routersss = GoRouter(
+  //     urlPathStrategy: UrlPathStrategy.path,
+  //   routes: <GoRoute>[
+  //     GoRoute(
+  //       path: '/',
+  //       builder: (BuildContext context, GoRouterState state) => SplashScreen(),
+  //     ),
+  //     GoRoute(
+  //       path: '/splash',
+  //       builder: (BuildContext context, GoRouterState state) => SplashScreen(),
+  //     ),
+  //   ],
+  // );
+  
     final LanguageProvider currentData = LanguageProvider();
       return ChangeNotifierProvider(
       create: (context) => currentData,
@@ -153,6 +170,8 @@ class Danaid extends StatelessWidget {
                   debugShowCheckedModeBanner: false,
                   routes: routes,
                   initialRoute: '/splash',
+                  //routeInformationParser: router.routeInformationParser,
+                  //routerDelegate: router.routerDelegate,
                   navigatorKey: locator<NavigationService>().navigatorKey,
                   locale:context.watch<LanguageProvider>().locale==Locale('en', 'EN')?  Locale('en', 'EN') : Locale('fr', 'FR'),
                   localizationsDelegates: [
@@ -168,4 +187,6 @@ class Danaid extends StatelessWidget {
       ));
     
   }
+
+ 
 }
