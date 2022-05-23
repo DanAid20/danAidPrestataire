@@ -175,7 +175,7 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
   @override
   Widget build(BuildContext context) {
 
-    BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context, listen: false);
+    BeneficiaryModelProvider beneficiary = Provider.of<BeneficiaryModelProvider>(context);
     
     return SafeArea(
       top: false,
@@ -191,9 +191,10 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                 child: Stack(children: [
                   CircleAvatar(
                     backgroundColor: Colors.grey[300],
+                    backgroundImage: imageFileAvatar != null ? FileImage(imageFileAvatar!) : null,
                     radius: wv*18,
-                    child: ClipOval(
-                      child: CachedNetworkImage(
+                    child: imageFileAvatar == null ? ClipOval(
+                      child: beneficiary.getBeneficiary.avatarUrl != null ? CachedNetworkImage(
                         height: wv*36,
                         width: wv*36,
                         fit: BoxFit.cover,
@@ -201,13 +202,17 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                           child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
                           padding: EdgeInsets.all(20.0),
                         ),
-                        imageUrl: beneficiary.getBeneficiary.avatarUrl!,),
-                    ),
+                        imageUrl: beneficiary.getBeneficiary.avatarUrl!) 
+                        : Container(
+                          child: imageFileAvatar == null ? Center(child: Icon(LineIcons.user, color: Colors.white, size: wv*25,)) : Container(), //CircularProgressIndicator(strokeWidth: 2.0, valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),),
+                          padding: EdgeInsets.all(20.0),
+                        ),
+                    ) : null,
                       //backgroundImage: CachedNetworkImageProvider(adherentModelProvider.getAdherent.imgUrl),
                   ),
                   Positioned(
-                    bottom: 2,
-                    right: 5,
+                    bottom: 5,
+                    right: 10,
                     child: CircleAvatar(
                       backgroundColor: kDeepTeal,
                       radius: wv*5,
@@ -613,8 +618,8 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
                       "enabled": false,
                       "ifVivreMemeDemeure": _confirmFamily,
                       "phoneList": [{"number": phone}],
-                      "height": _heightController.text,
-                      "weight": _weightController.text,
+                      "height": _heightController.text.isNotEmpty ? num.parse(_heightController.text) : null,
+                      "weight": _weightController.text.isNotEmpty ? num.parse(_weightController.text) : null,
                       "allergies": allergies,
                       "relation": _relation,
                     }, SetOptions(merge: true)).then((value) async {
@@ -896,42 +901,40 @@ class _EditBeneficiaryState extends State<EditBeneficiary> {
       context: context, 
       builder: (BuildContext bc){
         return SafeArea(
-          child: Container(
-            child: new Wrap(
-              children: <Widget>[
-                new ListTile(
-                    leading: new Icon(LineIcons.identificationCard),
-                    title: new Text(S.of(context).cniOuPasseport, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                    onTap: () {
-                      getDocFromPhone("CNI");
-                      Navigator.of(context).pop();
-                    }),
-                new ListTile(
-                  leading: new Icon(MdiIcons.babyFaceOutline),
-                  title: new Text(S.of(context).acteDeNaissance, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                  leading: Icon(LineIcons.identificationCard),
+                  title: Text(S.of(context).cniOuPasseport, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                   onTap: () {
-                    getDocFromPhone("Acte_De_Naissance");
+                    getDocFromPhone("CNI");
                     Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(LineIcons.ring),
-                  title: new Text(S.of(context).acteDeMarriage, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
-                  onTap: () {
-                    getDocFromPhone("Acte_De_Marriage");
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new ListTile(
-                  leading: new Icon(LineIcons.certificate),
-                  title: new Text(S.of(context).autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
-                  onTap: () {
-                    getDocFromPhone("Pièce_Justificative_Supplémentaire");
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ),
+                  }),
+              ListTile(
+                leading: Icon(MdiIcons.babyFaceOutline),
+                title: Text(S.of(context).acteDeNaissance, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                onTap: () {
+                  getDocFromPhone("Acte_De_Naissance");
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(LineIcons.ring),
+                title: Text(S.of(context).acteDeMarriage, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                onTap: () {
+                  getDocFromPhone("Acte_De_Marriage");
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(LineIcons.certificate),
+                title: Text(S.of(context).autrePiceJustificative, style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                onTap: () {
+                  getDocFromPhone("Pièce_Justificative_Supplémentaire");
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           ),
         );
       }

@@ -210,7 +210,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             );
           }
          
-          return snapshot.connectionState == ConnectionState.done && snapshot.hasData==false
+          return snapshot.data!.docs.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
                   //shrinkWrap: true,
@@ -411,7 +411,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             );
           }
           
-          return snapshot.connectionState == ConnectionState.done  && snapshot.hasData
+          return snapshot.data!.docs.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,

@@ -63,11 +63,13 @@ Future<void> _messageHandler(RemoteMessage message) async {
     }
   }
   else if(message.data['type'] == "CONSULTATION"){
+    String title = message.data['status'] == '1' ? "Demande Approuvée" : message.data['status'] == '2' ? "Demande rejétée" : message.data['body'];
+    String msg = message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille, vous êtes attendu le jour du rendez-vous" : message.data['status'] == '2' ? "Votre demande de rendez-vous a été réjetée par le médecin de famille. Changez de date et réessayez s'il vous plaît" :  message.data['status'] == '5' ? "Un de vos patients viens d'entrer en salle d'attente" :  message.data['status'] == '0' ? "Nouvelle demande de consultation" : message.data['body'];
     print('Adding notif in background...');
     await HiveDatabase.addNotification(NotificationModel(
       messageId: message.messageId,
-      title: message.data['status'] == '1' ? "Demande Approuvée" : "Demande rejétée",
-      description: message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille." : "Votre demande de rendez-vous a été réjetée par le médecin de famille.",
+      title: title,
+      description: msg,
       type: message.data['type'],
       data: message.data,
       dateReceived: DateTime.now(),

@@ -400,12 +400,14 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
       print("2");
       print('Got a message while in the foreground!');
       print('Message data: ${message.data}');
+      String title = message.data['status'] == '1' ? "Demande Approuvée" : message.data['status'] == '2' ? "Demande rejétée" : message.data['body'];
+      String msg = message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille, vous êtes attendu le jour du rendez-vous" : message.data['status'] == '2' ? "Votre demande de rendez-vous a été réjetée par le médecin de famille. Changez de date et réessayez s'il vous plaît" :  message.data['status'] == '5' ? "Un de vos patients viens d'entrer en salle d'attente" :  message.data['status'] == '0' ? "Nouvelle demande de consultation" : message.data['body'];
 
       if(message.data['type'] == "CONSULTATION"){
         notifications.addNotification(NotificationModel(
           messageId: message.messageId,
-          title: message.data['status'] == '1' ? "Demande Approuvée" : "Demande rejétée",
-          description: message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille." : "Votre demande de rendez-vous a été réjetée par le médecin de famille.",
+          title: title,
+          description: msg,
           type: message.data['type'],
           data: message.data,
           dateReceived: DateTime.now(),
@@ -428,11 +430,11 @@ class _HomePageViewState extends State<HomePageView> with WidgetsBindingObserver
                     ),
                     child: Column(children: [
                       SizedBox(height: hv*4),
-                      Icon(message.data['status'] == '1' ? LineIcons.check : LineIcons.times, color: message.data['status'] == '1' ? kPrimaryColor : Colors.red, size: 45,),
+                      Icon(message.data['status'] == '2' ? LineIcons.times : LineIcons.check, color: message.data['status'] == '1' ? kPrimaryColor : Colors.red, size: 45,),
                       SizedBox(height: hv*2,),
-                      Text(message.data['body'], style: TextStyle(color: kPrimaryColor, fontSize: 20, fontWeight: FontWeight.w700),),
+                      Text(title, style: TextStyle(color: kPrimaryColor, fontSize: 20, fontWeight: FontWeight.w700),),
                       SizedBox(height: hv*2,),
-                      Text(message.data['status'] == '1' ? "Votre rendez-vous a été approuvée par le médecin de famille, vous êtes attendu le jour du rendez-vous" : "Votre demande de rendez-vous a été réjetée par le médecin de famille. Changez de date et réessayez s'il vous plaît", style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
+                      Text(msg, style: TextStyle(color: Colors.grey[600], fontSize: wv*4), textAlign: TextAlign.center),
                       SizedBox(height: hv*2),
                       CustomTextButton(
                         text: "OK",

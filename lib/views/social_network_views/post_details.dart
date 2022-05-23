@@ -576,7 +576,7 @@ class CommentBox extends StatelessWidget {
                   }
                   List<ReplyBox> comments = [];
                   for(int i = 0; i < snapshot.data!.docs.length; i++){
-                    comments.add(ReplyBox(comment: CommentModel.fromDocument(snapshot.data!.docs[i], snapshot.data!.docs[i].data() as Map), isDoctor: isDoctor, isLocal: isLocal, groupId: groupId!, parentCommentId: comment!.id!,));
+                    comments.add(ReplyBox(comment: CommentModel.fromDocument(snapshot.data!.docs[i], snapshot.data!.docs[i].data() as Map), isDoctor: isDoctor, isLocal: isLocal, groupId: groupId, parentCommentId: comment!.id!,));
                   }
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: wv*3),

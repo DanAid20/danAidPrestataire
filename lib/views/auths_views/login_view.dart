@@ -259,7 +259,7 @@ class _LoginViewState extends State<LoginView> {
               ),
             ),
             //const Divider(thickness: 1,),
-            SizedBox(
+            /*SizedBox(
               width: Device.isSmartphone(context) ? wv*100 : 810,
               child: Hero(
                 tag: "login-email-button",
@@ -269,7 +269,7 @@ class _LoginViewState extends State<LoginView> {
                   action: () => Navigator.pushNamed(context, '/login-email'),
                 ),
               ),
-            ),
+            ), */
           ],
         ),
       ),
