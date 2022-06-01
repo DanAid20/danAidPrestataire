@@ -1,5 +1,6 @@
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/loaders.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/services/getPlatform.dart';
@@ -23,12 +24,12 @@ class CustomTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return enable! ? !isLoading! ? Container(
       width: expand! ? double.infinity : null,
-      padding: !noPadding! ? EdgeInsets.symmetric(horizontal: wv * 3.2, vertical: hv * 2) : EdgeInsets.zero,
+      padding: !noPadding! ? EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 3.2 : 30, vertical: hv * 2) : EdgeInsets.zero,
       child: TextButton(
         onPressed: action,
         child: Text(text!, style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
         style: ButtonStyle(
-          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: isWeb() ? 20 : 15)),
+          padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: Device.isSmartphone(context) ? 15 : 20, horizontal: 10)),
           backgroundColor: MaterialStateProperty.all(color),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius!))))),
       ),
@@ -58,7 +59,7 @@ class CustomDisabledTextButton extends StatelessWidget {
           text!,
           style: TextStyle(color: Colors.grey[700], fontSize: fontSize, fontWeight: FontWeight.w600), textAlign: TextAlign.center),
         style: ButtonStyle(
-            padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 15, horizontal: 10)),
+            padding: MaterialStateProperty.all(EdgeInsets.symmetric(vertical: Device.isSmartphone(context) ? 15 : 20, horizontal: 10)),
             backgroundColor: MaterialStateProperty.all(Colors.grey[400]),
             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(borderRadius!))))),
       ),

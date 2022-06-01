@@ -32,7 +32,6 @@ import 'package:danaid/views/doctor_views/services_doctor_views/owner_userList_V
 import 'package:danaid/views/doctor_views/paiementHistory/prestationHistory.dart';
 import 'package:danaid/views/doctor_views/paiementHistory/detailspaiement.dart';
 import 'package:danaid/views/screens/onboard_screen.dart';
-import 'package:danaid/views/screens/splashscreen.dart';
 import 'package:danaid/views/serviceprovider/Ordonance.dart';
 import 'package:danaid/views/serviceprovider/OrdonancePatient.dart';
 import 'package:danaid/views/serviceprovider/PrestationsEnCours.dart';
@@ -68,12 +67,15 @@ import 'package:danaid/views/social_network_views/friend_requests.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../views/auths_views/email_login_view.dart';
+
 final Map<String, Widget Function(BuildContext)> routes = {
-  "/": (context) => Splashscreen(),
+  "/": (context) => SplashScreen(),
   "/splash": (context) => SplashScreen(),
   "/intro-view": (context) => OnboardScreen(),
   "/home": (context) => HomePageView(),
   "/login": (context) => LoginView(),
+  "/login-email": (context) => const EmailLoginView(),
   "/register": (context) => RegisterView(),
   "/otp": (context) =>  OtpView(),
   "/reset-password": (context) => PasswordResetView(),

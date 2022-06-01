@@ -6,6 +6,8 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../core/services/getPlatform.dart';
+
 class DoctorInfoCard extends StatelessWidget {
 
   final String? name;
@@ -50,7 +52,7 @@ class DoctorInfoCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         boxShadow: [BoxShadow(
                           color: Colors.black54,
@@ -112,7 +114,7 @@ class DoctorInfoCard extends StatelessWidget {
                       SizedBox(width: 15,),
                       Container(
                         margin: EdgeInsets.only(right: 10),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [BoxShadow(
                             color: Colors.black54,
@@ -122,11 +124,11 @@ class DoctorInfoCard extends StatelessWidget {
                           )]
                         ),
                         child: CircleAvatar(
-                          radius: 22,
+                          radius: Device.isSmartphone(context) ? 22 : 30,
                           backgroundColor: Colors.white,
                           child: Padding(
                             padding: EdgeInsets.only(top: 5),
-                            child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg", width: 25,),
+                            child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg", width: Device.isSmartphone(context) ? 25 : 35,),
                           ),
                         ),
                       ),
@@ -189,8 +191,8 @@ class DoctorInfoCard extends StatelessWidget {
               ) :
               Row(children: [
                 Text(actionText != null ? actionText! : includeHospital! ? S.of(context).autreMdecin : S.of(context).plusDeDtails, style: TextStyle(color: Colors.white),),
-                SizedBox(width: 10,),
-                Icon(Icons.arrow_forward_ios, color: Colors.white),
+                const SizedBox(width: 10,),
+                const Icon(Icons.arrow_forward_ios, color: Colors.white),
               ],mainAxisAlignment: MainAxisAlignment.end)
             ),
           )

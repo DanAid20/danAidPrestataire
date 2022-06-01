@@ -110,7 +110,7 @@ class AdherentModelProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setBloodGroup(String val){
+  void setBloodGroup(String? val){
     _adherent?.bloodGroup = val;
     notifyListeners();
   }

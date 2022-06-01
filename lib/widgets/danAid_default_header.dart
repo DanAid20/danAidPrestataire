@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 import '../core/services/getPlatform.dart';
 
 class DanAidDefaultHeader extends StatelessWidget {
-  final bool showDanAidLogo;
+  final bool showDanAidLogo, showBackButton;
+  final Color? color;
   final Widget? title;
 
-  const DanAidDefaultHeader({Key? key, this.showDanAidLogo = false, this.title}) : super(key: key);
+  const DanAidDefaultHeader({Key? key, this.showDanAidLogo = false, this.showBackButton = true, this.title, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class DanAidDefaultHeader extends StatelessWidget {
         child: Container(
           height: hv*22,
           decoration: BoxDecoration(
-            color: kPrimaryColor.withOpacity(0.9)
+            color: color ?? kPrimaryColor.withOpacity(0.9)
           ),
         ),
       ),
@@ -38,7 +39,7 @@ class DanAidDefaultHeader extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            GestureDetector(
+            showBackButton ? GestureDetector(
               onTap: (){Navigator.pop(context);},
               child: Container(
                 padding: EdgeInsets.all(Device.isSmartphone(context) ? wv*3 : 20),
@@ -48,7 +49,7 @@ class DanAidDefaultHeader extends StatelessWidget {
                 ),
                 child: Icon(Icons.arrow_back_ios_rounded, color: kDeepTeal, size: Device.isSmartphone(context) ? wv*8 : 40,),
               ),
-            ),
+            ) : Container(),
             SizedBox(width: Device.isSmartphone(context) ? wv*7 : 60,),
             showDanAidLogo ? Container(
               padding: Device.isSmartphone(context) ? EdgeInsets.symmetric(horizontal: wv*10) : EdgeInsets.zero,

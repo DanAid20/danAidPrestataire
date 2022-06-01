@@ -51,7 +51,7 @@ class HiveDatabase {
     Box adherentBox = await Hive.openBox('adherent');
     adherentBox.put('sname', val);
   }
-  static setImgUrl(String val) async {
+  static setImgUrl(String? val) async {
     Box adherentBox = await Hive.openBox('adherent');
     adherentBox.put('imgUrl', val);
   }

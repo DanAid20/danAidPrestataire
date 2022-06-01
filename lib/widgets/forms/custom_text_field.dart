@@ -3,27 +3,30 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:line_icons/line_icons.dart';
+
+import '../../core/services/getPlatform.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? label, hintText, svgIcon;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final FormFieldValidator<String>? validator;
-  final Color? fillColor, labelColor;
+  final Color? fillColor, labelColor, textColor;
   final Widget? prefixIcon, suffixIcon;
-  final bool? enabled;
-  final bool? multiLine, noPadding, seal;
+  final bool? enabled, obscureText;
+  final bool? multiLine, noPadding, seal, isPassword;
   final int? minLines, maxLines;
-  final Function? editAction;
+  final Function()? editAction;
   final Function? onChanged;
   final List<TextInputFormatter>? inputFormatters;
 
-  CustomTextField({Key? key, this.label, this.hintText, this.controller, this.svgIcon, this.validator, this.keyboardType, this.prefixIcon, this.seal = false, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
+  CustomTextField({Key? key, this.label, this.hintText, this.controller, this.svgIcon, this.isPassword = false, this.obscureText = false, this.validator, this.textColor = kPrimaryColor, this.keyboardType, this.prefixIcon, this.seal = false, this.enabled = true, this.editAction, this.inputFormatters, this.multiLine = false, this.suffixIcon, this.fillColor, this.onChanged, this.minLines, this.maxLines, this.noPadding = false, this.labelColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: !noPadding! ? EdgeInsets.symmetric(horizontal: wv * 3) : EdgeInsets.zero,
+      margin: !noPadding! ? EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 3 : 20) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,12 +49,13 @@ class CustomTextField extends StatelessWidget {
                 minLines: multiLine! ? minLines : 1,
                 maxLines: multiLine! ? maxLines : 1,
                 enabled: enabled! && !seal!,
+                obscureText: obscureText!,
                 keyboardType: keyboardType,
                 controller: controller,
                 validator: validator,
                 inputFormatters: inputFormatters,
                 onChanged: (string)=>onChanged,
-                style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold),
+                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
                 decoration: InputDecoration(
                   prefixIcon: prefixIcon,
                   errorBorder: OutlineInputBorder(
@@ -85,18 +89,31 @@ class CustomTextField extends StatelessWidget {
                       child: IconButton(
                         enableFeedback: false,
                         icon: CircleAvatar(
-                          radius: wv * 3.5,
+                          radius: Device.isSmartphone(context) ? wv * 3.5 : 20,
                           backgroundColor: kDeepTeal,
                           child: Icon(
                             Icons.edit,
                             color: whiteColor,
-                            size: wv * 4,
+                            size: Device.isSmartphone(context) ? wv * 4 : 17,
                           ),
                         ),
-                        onPressed: ()=>editAction,
+                        onPressed: editAction,
                       ),
                     )
-                  : Container()
+                  : Container(),
+              isPassword! ? Positioned(
+                right: wv * 0,
+                child: IconButton(
+                  enableFeedback: true,
+                  icon: Icon(
+                    obscureText! ? LineIcons.eyeSlash : LineIcons.eye,
+                    color: Colors.black45,
+                    size: 25,
+                  ),
+                  onPressed: editAction,
+                ),
+              )
+            : Container(),
             ],
           ),
         ],

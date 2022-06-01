@@ -1,6 +1,8 @@
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:flutter/material.dart';
 
+import '../core/services/getPlatform.dart';
+
 class NotificationCard extends StatelessWidget {
 
   final String? instruction, description;
@@ -14,10 +16,10 @@ class NotificationCard extends StatelessWidget {
       onTap: ()=>onTap,
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1.5),
-        constraints: BoxConstraints(maxWidth: wv*60, minHeight: hv*18),
+        constraints: BoxConstraints(maxWidth: Device.isSmartphone(context) ? wv*60 : 400, minHeight: hv*18),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(inch*2), 
+          borderRadius: BorderRadius.circular(Device.isSmartphone(context) ? inch*2 : 20), 
           boxShadow: [
             BoxShadow(color: Colors.grey.withOpacity(0.2), spreadRadius: 2, blurRadius: 7, offset: Offset(0, 3))
           ]
@@ -27,16 +29,16 @@ class NotificationCard extends StatelessWidget {
             isprestataire! ? SizedBox.shrink() :  Container(
               height: hv*8,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(inch*2), topRight: Radius.circular(inch*2)),
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(Device.isSmartphone(context) ? inch*2 : 20), topRight: Radius.circular(Device.isSmartphone(context) ? inch*2 : 20)),
                 image: DecorationImage(image: AssetImage("assets/images/detail_illustration.png"), fit: BoxFit.fitWidth)
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+              padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 20, vertical: hv*1),
               child: Column(children: [
-                Container(child: Text(description!, style: TextStyle(fontSize: inch*1.7), maxLines: 4, overflow: TextOverflow.ellipsis,)),
+                Container(child: Text(description!, style: TextStyle(fontSize: Device.isSmartphone(context) ? inch*1.7 : 20), maxLines: 4, overflow: TextOverflow.ellipsis,)),
                 SizedBox(height: hv*3,),
-                islinkEnable==null || islinkEnable==false ? Text(instruction!, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.bold, color: Colors.teal[200])) :
+                islinkEnable==null || islinkEnable==false ? Text(instruction!, style: TextStyle(fontSize: Device.isSmartphone(context) ? inch*1.7 : 20, fontWeight: FontWeight.bold, color: Colors.teal[200])) :
                 GestureDetector(
                   onTap: (){
                     if(islinkEnable==true && isprestataire==false){
@@ -46,7 +48,7 @@ class NotificationCard extends StatelessWidget {
 
                     }
                   },
-                  child: Text(instruction!, style: TextStyle(fontSize: inch*1.7, fontWeight: FontWeight.bold, color: Colors.teal[200]))),
+                  child: Text(instruction!, style: TextStyle(fontSize: Device.isSmartphone(context) ? inch*1.7 : 20, fontWeight: FontWeight.bold, color: Colors.teal[200]))),
               ], crossAxisAlignment: CrossAxisAlignment.start,)
             )
           ],

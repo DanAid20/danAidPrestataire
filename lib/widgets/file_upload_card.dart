@@ -4,6 +4,8 @@ import 'package:danaid/helpers/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../core/services/getPlatform.dart';
+
 class FileUploadCard extends StatelessWidget {
 
   final String? title;
@@ -34,7 +36,7 @@ class FileUploadCard extends StatelessWidget {
                   state! ? isMultiple! ? LineIcons.medicalFile : LineIcons.file : LineIcons.times, 
                   color: Colors.white,
               )),
-              SizedBox(width: wv*3,),
+              SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15,),
               Expanded(child: Container(child: Text(title!, overflow: TextOverflow.fade,), constraints: BoxConstraints(maxWidth: wv*60), )),
             ],
           ),
