@@ -144,7 +144,7 @@ class _VideoRoomState extends State<VideoRoom> {
     if (_remoteUid != 0) {
       return RtcRemoteView.SurfaceView(
         uid: _remoteUid,
-        //channelId: "123456",
+        channelId: "",
       );
     } else {
       return Text(

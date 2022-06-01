@@ -20,6 +20,8 @@ import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class Loans extends StatefulWidget {
   @override
   _LoansState createState() => _LoansState();
@@ -103,7 +105,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 18, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
             Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
               style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
@@ -131,240 +133,255 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                 color: whiteColor,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20))
               ),
-              child: Column(
-                children: [
-                  Stack(
-                    clipBehavior: Clip.none,
-                    alignment: Alignment.topCenter,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: hv*11),
-                        padding: EdgeInsets.only(bottom: hv*9),
-                        decoration: BoxDecoration(
-                          color: kBrownCanyon.withOpacity(0.3),
-                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
-                        ),
-                        child: HomePageComponents.header(title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl),
-                      ),
-                      Positioned(
-                        top: hv*5.5,
-                        child: Hero(
-                          tag: "loanCard",
-                          child: AdvantageCard(
-                            label: S.of(context).prtDeSant,
-                            description: S.of(context).maximumDisponible,
-                            state: S.of(context).disponible,
-                            price: adh.loanLimit == null ? "### f." : "#${currency.format(adh.loanLimit)} f.",
-                            showLogo: true,
-                            color: Colors.brown.withOpacity(0.7),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    width: wv*90,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+              child: SizedBox(
+                width: Device.isSmartphone(context) ? wv*100 : 1000,
+                child: Column(
+                  children: [
+                    Stack(
+                      clipBehavior: Clip.none,
+                      alignment: Alignment.topCenter,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*0.5),
+                          margin: EdgeInsets.only(bottom: Device.isSmartphone(context) ? hv*11 : 180),
+                          padding: EdgeInsets.only(bottom: Device.isSmartphone(context) ? hv*9 : 100),
                           decoration: BoxDecoration(
-                            color: kSouthSeas,
-                            borderRadius: BorderRadius.circular(20)
+                            color: kBrownCanyon.withOpacity(0.3),
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
                           ),
-                          child: Text(S.of(context).rapide, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          child: HomePageComponents.header(context: context, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl),
                         ),
-                        SizedBox(width: wv*5,),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*0.5),
-                          decoration: BoxDecoration(
-                            color: kPrimaryColor.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(20)
+                        Positioned(
+                          top: Device.isSmartphone(context) ? hv*5.5 : 50,
+                          child: Hero(
+                            tag: "loanCard",
+                            child: AdvantageCard(
+                              label: S.of(context).prtDeSant,
+                              description: S.of(context).maximumDisponible,
+                              state: S.of(context).disponible,
+                              price: adh.loanLimit == null ? "### f." : "#${currency.format(adh.loanLimit)} f.",
+                              showLogo: true,
+                              color: Colors.brown.withOpacity(0.7),
+                            ),
                           ),
-                          child: Text(S.of(context).pourTous, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
-                        ),
-                        SizedBox(width: wv*5,),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*0.5),
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: Text(S.of(context).simple, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: hv*2,),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SizedBox(width: wv*3,),
-                      Expanded(
-                        flex: 6,
-                        child: CustomTextField(
-                          label: S.of(context).jeSouhaiteEmprunter,
-                          noPadding: true,
-                          hintText: S.of(context).entrerLeMontant,
-                          controller: _amountController,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
-                          ],
-                          onChanged: (val)=>setState((){}),
-                        ),
+                    SizedBox(
+                      width: Device.isSmartphone(context) ? wv*90 : 700,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*0.5),
+                            decoration: BoxDecoration(
+                              color: kSouthSeas,
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Text(S.of(context).rapide, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          ),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*5 : 20,),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*0.5),
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor.withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Text(S.of(context).pourTous, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          ),
+                          SizedBox(width: Device.isSmartphone(context) ? wv*5 : 20,),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*0.5),
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              borderRadius: BorderRadius.circular(20)
+                            ),
+                            child: Text(S.of(context).simple, style: TextStyle(color: whiteColor, fontWeight: FontWeight.bold),),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: wv*3,),
-                      Expanded(
-                        flex: 5,
-                        child: CustomTextButton(
-                          noPadding: true,
-                          expand: false,
-                          enable: _amountController.text.isNotEmpty && enable == true,
-                          fontSize: 14,
-                          borderRadius: 20,
-                          text: S.of(context).dmanderUnCrdit,
-                          action: (){
-                            num amount = num.parse(_amountController.text);
-                            num? maxAmount =  adh.loanLimit;
-                            if(amount > maxAmount!){
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
-                            }
-                            else{
-                              //loanProvider.setAmount(double.parse(_amountController.text));
-                              loanProvider.setLoanModel(LoanModel(amount: num.parse(_amountController.text), maxAmount: maxAmount));
-                              //loanProvider.setMaxAmount(maxAmount);
-                              Navigator.pushNamed(context, '/loan-form');
-                            }
-                          },
+                    ),
+                    SizedBox(height: hv*2,),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        SizedBox(width: wv*3,),
+                        Expanded(
+                          flex: 6,
+                          child: CustomTextField(
+                            label: S.of(context).jeSouhaiteEmprunter,
+                            noPadding: true,
+                            hintText: S.of(context).entrerLeMontant,
+                            controller: _amountController,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp(r'^\d+(?:\.\d+)?$')),
+                            ],
+                            onChanged: (val)=>setState((){}),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: wv*3,)
-                    ],
-                  ),
-                  SizedBox(height: hv*1.5,)
-                ],
+                        SizedBox(width: wv*3,),
+                        Expanded(
+                          flex: 5,
+                          child: CustomTextButton(
+                            noPadding: true,
+                            expand: false,
+                            enable: _amountController.text.isNotEmpty && enable == true,
+                            fontSize: 14,
+                            borderRadius: 20,
+                            text: S.of(context).dmanderUnCrdit,
+                            action: (){
+                              num amount = num.parse(_amountController.text);
+                              num? maxAmount =  adh.loanLimit;
+                              if(amount > maxAmount!){
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).dsolVotrePlanActuelNeVousPermetPasDemprunterPlus+maxAmount.toString()+' f.'),));
+                              }
+                              else{
+                                //loanProvider.setAmount(double.parse(_amountController.text));
+                                loanProvider.setLoanModel(LoanModel(amount: num.parse(_amountController.text), maxAmount: maxAmount));
+                                //loanProvider.setMaxAmount(maxAmount);
+                                Navigator.pushNamed(context, '/loan-form');
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(width: wv*3,)
+                      ],
+                    ),
+                    SizedBox(height: hv*1.5,)
+                  ],
+                ),
               ),
             ),
             SizedBox(height: hv*2.5,),
-            enable ? HomePageComponents.getInfoActionCard(
-              icon: SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
-              title: S.of(context).emprunterCoteDeLargent,
-              subtitle: S.of(context).unCrditVousEngageEtDoitTreRemboursVrifiezVos,
-              actionLabel: S.of(context).faq,
-              action: (){}
+            enable ? SizedBox(
+              width: Device.isSmartphone(context) ? wv*100 : 1100,
+              child: HomePageComponents.getInfoActionCard(
+                icon: SvgPicture.asset('assets/icons/Two-tone/Monochrome.svg'),
+                title: S.of(context).emprunterCoteDeLargent,
+                subtitle: S.of(context).unCrditVousEngageEtDoitTreRemboursVrifiezVos,
+                actionLabel: S.of(context).faq,
+                action: (){},
+                context: context
+              ),
             ) :  Container(),
             !enable ? Container(
+              width: Device.isSmartphone(context) ? wv*100 : 1000,
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
                 title: S.of(context).completezDabordVotreProfil,
                 subtitle: S.of(context).fournirLesInformationsEtPicesDmandesPourPouvoirEmprunter,
                 actionLabel: S.of(context).complterMonProfil,
-                action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit')
+                action: ()=>Navigator.pushNamed(context, '/adherent-profile-edit'),
+                context: context
               ),
             ) : Container(),
             adherentProvider.getAdherent?.adherentPlan == 0 ? Container(
+              width: Device.isSmartphone(context) ? wv*100 : 1000,
               padding: EdgeInsets.symmetric(vertical: hv*1),
               child: HomePageComponents.getInfoActionCard(
                 title: S.of(context).vousTesAuNiveau0+S.of(context).dcouverte,
                 subtitle: S.of(context).vousDevezRferer3AmisConnaissancesPourPouvoirEmprunter,
                 actionLabel: S.of(context).inviterDesAmis,
-                action: (){}
+                action: (){},
+                context: context
               ),
             ) : Container(),
             SizedBox(height: hv*2.5,),
-            Container(
-              decoration: BoxDecoration(
-                color: whiteColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: hv*2,),
-                  Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
-                  SizedBox(height: hv*2,),
-                  Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          height: 40,
-                          padding: EdgeInsets.only(left: wv*3),
-                          child: TabBar(
-                            controller: _loanTabController,
-                            indicatorWeight: 5,
-                            indicatorColor: kPrimaryColor,
-                            isScrollable: true,
-                            labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                            labelColor: kPrimaryColor,
-                            tabs: [
-                              Tab(text: S.of(context).enCours),
-                              Tab(text: S.of(context).achevs),
-                            ],
+            SizedBox(
+              width: Device.isSmartphone(context) ? wv*100 : 1000,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: whiteColor,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: hv*2,),
+                    Text(S.of(context).statutDesEmprunts, style: TextStyle(color: kPrimaryColor, fontSize: 16),),
+                    SizedBox(height: hv*2,),
+                    Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            height: 40,
+                            padding: EdgeInsets.only(left: wv*3),
+                            child: TabBar(
+                              controller: _loanTabController,
+                              indicatorWeight: 5,
+                              indicatorColor: kPrimaryColor,
+                              isScrollable: true,
+                              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                              labelColor: kPrimaryColor,
+                              tabs: [
+                                Tab(text: S.of(context).enCours),
+                                Tab(text: S.of(context).achevs),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        height: hv*50,
-                        child: TabBarView(
-                          controller: _loanTabController,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: hv*2),
-                              child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection("CREDITS").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).where('status', isEqualTo: 0).orderBy('createdDate', descending: true).snapshots(),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                                      ),
-                                    );
+                        SizedBox(
+                          height: hv*50,
+                          child: TabBarView(
+                            controller: _loanTabController,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: hv*2),
+                                child: StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance.collection("CREDITS").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).where('status', isEqualTo: 0).orderBy('createdDate', descending: true).snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                        ),
+                                      );
+                                    }
+                                    return snapshot.data!.docs.length >= 1
+                                      ? ListView.builder(
+                                          physics: const BouncingScrollPhysics(),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: snapshot.data!.docs.length,
+                                          itemBuilder: (context, index) {
+                                            int lastIndex = snapshot.data!.docs.length - 1;
+                                            DocumentSnapshot loanDoc = snapshot.data!.docs[index];
+                                            LoanModel loan = LoanModel.fromDocument(loanDoc, loanDoc.data() as Map);
+                                            print("name: ");
+                                            return Padding(
+                                              padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                              child: HomePageComponents.getLoanTile(
+                                                context: context,
+                                                label: "hhgfhfghfh",
+                                                subtitle: loan.purpose,
+                                                date: loan.dateCreated!.toDate(),
+                                                firstDate: loan.firstPaymentDate!.toDate(),
+                                                lastDate: loan.lastPaymentDate!.toDate(),
+                                                mensuality: loan.amount,
+                                                type: "gfg",
+                                                state: loan.status,
+                                                action: (){
+                                                  LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
+                                                  loanProvider.setLoanModel(loan);
+                                                  Navigator.pushNamed(context, '/loan-details');
+                                                }
+                                              ),
+                                            );
+                                          })
+                                      : Center(
+                                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucuneDemandeDeCrditEnrgistrenpourLeMoment, textAlign: TextAlign.center)),
+                                      );
                                   }
-                                  return snapshot.data!.docs.length >= 1
-                                    ? ListView.builder(
-                                        physics: const BouncingScrollPhysics(),
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          int lastIndex = snapshot.data!.docs.length - 1;
-                                          DocumentSnapshot loanDoc = snapshot.data!.docs[index];
-                                          LoanModel loan = LoanModel.fromDocument(loanDoc, loanDoc.data() as Map);
-                                          print("name: ");
-                                          return Padding(
-                                            padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                                            child: HomePageComponents.getLoanTile(
-                                              label: "hhgfhfghfh",
-                                              subtitle: loan.purpose,
-                                              date: loan.dateCreated!.toDate(),
-                                              firstDate: loan.firstPaymentDate!.toDate(),
-                                              lastDate: loan.lastPaymentDate!.toDate(),
-                                              mensuality: loan.amount,
-                                              type: "gfg",
-                                              state: loan.status,
-                                              action: (){
-                                                LoanModelProvider loanProvider = Provider.of<LoanModelProvider>(context, listen: false);
-                                                loanProvider.setLoanModel(loan);
-                                                Navigator.pushNamed(context, '/loan-details');
-                                              }
-                                            ),
-                                          );
-                                        })
-                                    : Center(
-                                      child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucuneDemandeDeCrditEnrgistrenpourLeMoment, textAlign: TextAlign.center)),
-                                    );
-                                }
+                                ),
                               ),
-                            ),
-                            Container(),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
+                              Container(),
+                            ],
+                          ),
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
             

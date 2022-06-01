@@ -12,7 +12,6 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
-import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -211,7 +210,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             );
           }
          
-          return snapshot.connectionState == ConnectionState.done && snapshot.hasData==false
+          return snapshot.data!.docs.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.horizontal,
                   //shrinkWrap: true,
@@ -412,7 +411,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
             );
           }
           
-          return snapshot.connectionState == ConnectionState.done  && snapshot.hasData
+          return snapshot.data!.docs.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -563,11 +562,8 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   Widget calendar({bool? isPrestataire}) {
     return Column(children: [
       Container(
-        constraints: BoxConstraints(
-        maxWidth: Device.isSmartphone(context) ? wv*100 : 700,
-        maxHeight: Device.isSmartphone(context) ? 145: 160
-        ),
-       
+        width: wv * 100,
+        height: 145,
         decoration: BoxDecoration(
           color: isPrestataire! ? kGoldlight : kThirdIntroColor,
           boxShadow:const [
@@ -611,31 +607,31 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   outsideTextStyle:TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14  ) ,
+                      fontSize: calendarTextValue) ,
                   rangeEndTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
+                      fontSize: calendarTextValue),
                   rangeStartTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
+                      fontSize: calendarTextValue),
                   weekendTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w500,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
+                      fontSize: calendarTextValue),
                   defaultTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w500,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
+                      fontSize: calendarTextValue),
                   holidayTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
+                      fontSize: calendarTextValue),
                   todayTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 )),
+                      fontSize: calendarTextValue)),
               headerStyle: HeaderStyle(
                   formatButtonVisible: false,
                   headerMargin: const EdgeInsets.only(left: 18),
@@ -645,7 +641,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   titleTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize:  Device.isSmartphone(context) ? 18 : 16 )),
+                      fontSize: 18)),
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
                   color: isPrestataire ? kBlueForce : whiteColor,
@@ -679,7 +675,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           fontWeight: isSelected == 'Days'
                               ? FontWeight.w600
                               : FontWeight.w500,
-                          fontSize:  fontSize(size: Device.isSmartphone(context) ? wv * 4 : 5)),
+                          fontSize: fontSize(size: wv * 4)),
                     ),
                   ),
                 ),
@@ -703,7 +699,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           fontWeight: isSelected == 'week'
                               ? FontWeight.w600
                               : FontWeight.w500,
-                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 5 )),
+                          fontSize: fontSize(size: wv * 4)),
                     ),
                   ),
                 ),
@@ -726,7 +722,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     style: TextStyle(
                         color: isPrestataire ? kBlueForce : whiteColor,
                         fontWeight: FontWeight.w600,
-                        fontSize: fontSize(size:  Device.isSmartphone(context) ? wv * 4 : 5 )),
+                        fontSize: fontSize(size: wv * 4)),
                   ),
                 )
               ],
@@ -766,12 +762,9 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         )
                         ),
           Container(
-            constraints: BoxConstraints(
-            maxHeight: Device.isSmartphone(context) ? 120.h :150.h,
-            maxWidth: Device.isSmartphone(context) ? double.infinity :190.w
-            ),
+            height: 120.h,
             margin: EdgeInsets.only(bottom: 60.h),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: whiteColor,
             ),
             child: Column(
@@ -789,12 +782,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           style: TextStyle(
                               color: kBlueDeep,
                               fontWeight: FontWeight.w500,
-                              fontSize: Device.isSmartphone(context) ?17.sp :16  )),
+                              fontSize: 17.sp)),
                       Text(S.of(context).voirPlus,
                           style: TextStyle(
                               color: kBrownCanyon,
                               fontWeight: FontWeight.w600,
-                              fontSize: Device.isSmartphone(context) ?17.sp :16 )),
+                              fontSize: 17.sp)),
                     ],
                   ),
                 ),

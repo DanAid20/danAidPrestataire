@@ -147,7 +147,7 @@ double? imc=0;
                           HomePageComponents().getAvatar(
                               imgUrl: widget.beneficiare !=null && widget.beneficiare!.avatarUrl!=null ?  widget.beneficiare!.avatarUrl!:  'assets/images/avatar-profile.jpg',
                               size: MySize.size36,
-                              renoveIsConnectedButton: false),
+                              renoveIsConnectedButton: false, context: context),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

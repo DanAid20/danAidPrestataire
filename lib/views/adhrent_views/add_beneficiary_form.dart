@@ -31,6 +31,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class AddBeneficiaryForm extends StatefulWidget {
   @override
   _AddBeneficiaryFormState createState() => _AddBeneficiaryFormState();
@@ -100,6 +102,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = 16;
     pageList = <Widget>[
       formLayout(getForm1()),
       formLayout(getForm2()),
@@ -126,7 +129,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 controller.previousPage(duration: Duration(milliseconds: 500), curve: Curves.ease);
             }
           ),
-          title: Text(S.of(context).ajouterUnBnficiaire, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.5, fontWeight: FontWeight.w500),),
+          title: Text(S.of(context).ajouterUnBnficiaire, style: TextStyle(color: kPrimaryColor, fontSize: 18, fontWeight: FontWeight.w500),),
           centerTitle: true,
           actions: [
             //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), onPressed: (){}),
@@ -141,41 +144,44 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           famille: (){Navigator.pop(context); Navigator.pop(context);},
         ),
         body: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Text(currentPageValue == 0 ? "1 / 3\n" : currentPageValue == 1 ? "2 / 3\n" : "3 / 3\n", style: TextStyle(fontWeight: FontWeight.w700,color: kBlueDeep),),
-                ),
-                Expanded(
-                  child: PageView.builder(
-                    pageSnapping: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: pageList!.length,
-                    onPageChanged: (int page) {
-                      getChangedPageAndMoveBar(page);
-                    },
-                    controller: controller,
-                    itemBuilder: (context, index) {
-                      return pageList![index];
-                    },
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Text(currentPageValue == 0 ? "1 / 3\n" : currentPageValue == 1 ? "2 / 3\n" : "3 / 3\n", style: TextStyle(fontWeight: FontWeight.w700,color: kBlueDeep),),
+              ),
+              Expanded(
+                child: Center(
+                  child: SizedBox(
+                    width: Device.isSmartphone(context) ? wv*100 : 1000,
+                    child: PageView.builder(
+                      pageSnapping: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: pageList!.length,
+                      onPageChanged: (int page) {
+                        getChangedPageAndMoveBar(page);
+                      },
+                      controller: controller,
+                      itemBuilder: (context, index) {
+                        return pageList![index];
+                      },
+                    ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: hv*3, top: hv*2),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      for (int i = 0; i < pageList!.length; i++)
-                        if (i == currentPageValue) ...[circleBar(true)] else
-                          circleBar(false),
-                    ],
-                  ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: hv*3, top: hv*2),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    for (int i = 0; i < pageList!.length; i++)
+                      if (i == currentPageValue) ...[circleBar(true)] else
+                        circleBar(false),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -190,14 +196,14 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
           Expanded(
             child: ListView(children: [
 
-              SizedBox(height: hv*2,),
+              SizedBox(height: hv*3,),
 
               Center(
                 child: Stack(children: [
                       CircleAvatar(
                         backgroundColor: Colors.grey[300],
-                        radius: wv*14,
-                        child: imageFileAvatar == null ? Icon(LineIcons.user, color: Colors.white, size: wv*20,) : Container(),
+                        radius: Device.isSmartphone(context) ? wv*14 : 85,
+                        child: imageFileAvatar == null ? Icon(LineIcons.user, color: Colors.white, size: Device.isSmartphone(context) ? wv*20 : 150,) : Container(),
                         backgroundImage: imageFileAvatar == null ? null : FileImage(imageFileAvatar!),
                       ),
                       Positioned(
@@ -205,14 +211,14 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         right: 0,
                         child: CircleAvatar(
                           backgroundColor: kDeepTeal,
-                          radius: wv*4,
+                          radius: Device.isSmartphone(context) ? wv*4 : 20,
                           child: IconButton(padding: EdgeInsets.all(0),icon: Icon(Icons.add, color: whiteColor,), color: kPrimaryColor, onPressed: (){getImage(context);}),
                         ),
                       )
                     ],),
               ),
 
-              SizedBox(height: hv*2,),
+              SizedBox(height: hv*3,),
 
               CustomTextField(
                 prefixIcon: Icon(LineIcons.userFriends, color: kPrimaryColor),
@@ -222,7 +228,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null,
               ),
 
-              SizedBox(height: hv*2,),
+              SizedBox(height: hv*3,),
 
               CustomTextField(
                 prefixIcon: Icon(LineIcons.user, color: kPrimaryColor),
@@ -232,13 +238,13 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 validator: (String? val) => (val!.isEmpty) ? S.of(context).ceChampEstObligatoire : null
               ),
 
-              SizedBox(height: hv*2,),
+              SizedBox(height: hv*3,),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: wv*2),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(S.of(context).numroMobile, style: TextStyle(fontSize: wv*4),),
+                    Text(S.of(context).numroMobile, style: TextStyle(fontSize: 16),),
                     SizedBox(height: hv*1,),
                     InternationalPhoneNumberInput(
                       validator: (String? phone) {
@@ -269,11 +275,11 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                       }, 
                     ),
 
-                    SizedBox(height: hv*2,),
+                    SizedBox(height: hv*3,),
 
                     Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context).relationAvecLadhrent, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                        Text(S.of(context).relationAvecLadhrent, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
                         SizedBox(height: 5,),
                         Container(
                           constraints: BoxConstraints(minWidth: wv*45),
@@ -318,11 +324,11 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                       ],
                     ),
                     
-                    SizedBox(height: hv*2,),
+                    SizedBox(height: hv*3,),
 
                     Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w400),),
+                        Text(S.of(context).dateDeNaissance, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
                         SizedBox(height: 5,),
                         GestureDetector(
                           onTap: () => _selectDate(context),
@@ -336,7 +342,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                             child: Row(children: [
                               SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                               VerticalDivider(),
-                              Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: wv*4, color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                              Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: 16, color: kPrimaryColor, fontWeight: FontWeight.bold),),
                             ],),
                           ),
                         ),
@@ -346,7 +352,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                 ),
               ),
 
-              SizedBox(height: hv*2,),
+              SizedBox(height: hv*3,),
 
               
             ],),
@@ -366,7 +372,7 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
   
   Widget getForm2(){
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: wv*2),
+      padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*2 : 25),
       child: Column(
         children: [
           Expanded(
@@ -384,16 +390,16 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
+                        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*6 : 40, vertical: Device.isSmartphone(context) ? hv*2 : 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: _gender != "F" ? whiteColor : kSouthSeas,
                           boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300]!, offset: Offset(0, 1))]
                         ),
-                        child: SvgPicture.asset('assets/icons/Bulk/Woman.svg', width: wv*8, color: _gender != "F" ? kSouthSeas : whiteColor,),
+                        child: SvgPicture.asset('assets/icons/Bulk/Woman.svg', width: Device.isSmartphone(context) ? wv*8 : 60, color: _gender != "F" ? kSouthSeas : whiteColor,),
                       ),
                     ),
-                    SizedBox(width: wv*3,),
+                    SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15,),
                     GestureDetector(
                       onTap: (){
                         setState(() {
@@ -401,13 +407,13 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: wv*6, vertical: hv*2),
+                        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*6 : 40, vertical: Device.isSmartphone(context) ? hv*2 : 20),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: _gender != "H" ? whiteColor : kSouthSeas,
                           boxShadow: [BoxShadow(blurRadius: 2.0, spreadRadius: 1.0, color: Colors.grey[300]!, offset: Offset(0, 1))]
                         ),
-                        child: SvgPicture.asset('assets/icons/Bulk/Man.svg', width: wv*8, color: _gender != "H" ? kSouthSeas : whiteColor,),
+                        child: SvgPicture.asset('assets/icons/Bulk/Man.svg', width: Device.isSmartphone(context) ? wv*8 : 60, color: _gender != "H" ? kSouthSeas : whiteColor,),
                       ),
                     )
                   ],),
@@ -446,10 +452,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     Column(children: [
                       Text(S.of(context).taille, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(height: hv*0.5,),
                       Row(children: [
-                        Container(child: SvgPicture.asset('assets/icons/Bulk/row-height.svg', width: wv*8,)),
-                        SizedBox(width: wv*2,),
-                        Container(
-                          width: wv*30,
+                        SvgPicture.asset('assets/icons/Bulk/row-height.svg', width: Device.isSmartphone(context) ? wv*8 : 50,),
+                        SizedBox(width: Device.isSmartphone(context) ? wv*2 : 15,),
+                        SizedBox(
+                          width: Device.isSmartphone(context) ? wv*30 : 280,
                           child: TextFormField(
                             controller: _heightController,
                             onChanged: (val) => setState((){}),
@@ -467,10 +473,10 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     Column(children: [
                       Text(S.of(context).poids, style: TextStyle(fontSize: 18, color: kTextBlue),), SizedBox(height: hv*0.5,),
                       Row(children: [
-                        Container(child: SvgPicture.asset('assets/icons/Bulk/weight.svg', width: wv*8,)),
-                        SizedBox(width: wv*2,),
-                        Container(
-                          width: wv*30,
+                        SvgPicture.asset('assets/icons/Bulk/weight.svg', width: Device.isSmartphone(context) ? wv*8 : 50,),
+                        SizedBox(width: Device.isSmartphone(context) ? wv*2 : 15,),
+                        SizedBox(
+                          width: Device.isSmartphone(context) ? wv*30 : 280,
                           child: TextFormField(
                             controller: _weightController,
                             inputFormatters: <TextInputFormatter>[
@@ -573,15 +579,15 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*3,),
-                  Text(S.of(context).tlchargerLesPicesJustificatives, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Center(child: Text(S.of(context).tlchargerLesPicesJustificatives, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),)),
                   SizedBox(height: hv*1,),
-                  Text(S.of(context).scannerLesDocumentsJustificatifsCniActesDeNaissancesEtc, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                  Center(child: Text(S.of(context).scannerLesDocumentsJustificatifsCniActesDeNaissancesEtc, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400))),
                   Center(
                     child: InkWell(
                       onTap: (){getDocument(context);},
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: hv*2),
-                        child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                        child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: Device.isSmartphone(context) ? wv*20 : 150,),
                       ),
                     ),
                   ),
@@ -612,12 +618,12 @@ class _AddBeneficiaryFormState extends State<AddBeneficiaryForm> {
                     loading: otherFileSpinner,
                     action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
-                  SizedBox(height: hv*2,),
+                  SizedBox(height: hv*3,),
 
                   Text(S.of(context).dclaration, style: TextStyle(color: kDeepTeal, fontSize: 18, fontWeight: FontWeight.bold),),
                   SizedBox(height: hv*0.5,),
                   Text(S.of(context).pourLesBnficiairesSansFiliationDirecte, style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.w400)),
-                  SizedBox(height: hv*2,),
+                  SizedBox(height: hv*3,),
                   CheckboxListTile(
                     value: _confirmFamily,
                     controlAffinity: ListTileControlAffinity.leading,

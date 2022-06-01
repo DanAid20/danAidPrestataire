@@ -7,7 +7,6 @@ import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
-import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -164,370 +163,357 @@ class _CreateQuoteState extends State<CreateQuote> {
           ],
         ),
       body: SafeArea(child: Container(
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-             constraints: BoxConstraints(
-              maxWidth: Device.isSmartphone(context) ? 0 :500
-            ),
-            child: Column(
-              children: [
-                Container(
-                  height: MySize.getScaledSizeHeight(90),
-                  width: double.infinity,
-                  padding: EdgeInsets.only(bottom: hv*1, left: wv*2),
-                  decoration: const BoxDecoration( color: kDeepYellow),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Container(
-                          margin: EdgeInsets.only(left: wv*1),
-                          child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize:  Device.isSmartphone(context) ? wv*4.8: 14 , fontWeight: FontWeight.w500),)),
-                        SizedBox(height: hv*0.3,),
-                        Container(
-                           width: MySize.getScaledSizeWidth(153),
-                           height: MySize.getScaledSizeHeight(40),
-                           child: TextFormField(
-                             controller: _codeConsultationController,
-                             keyboardType: TextInputType.text,
-                             style: const TextStyle(fontSize: 25, color: kBlueForce, fontWeight: FontWeight.w400),
-                             decoration: InputDecoration(
-                                 fillColor: bgInputGray.withOpacity(0.6), 
-                                 hintText: 'Ex: AX11DEF',
-                                   enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1, color: Colors.transparent),
-                                  borderRadius: BorderRadius.all(Radius.circular(20))),
-                                 hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-                                 focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      width: 1,
-                                      color: Colors.transparent),
-                                  borderRadius: BorderRadius.all(Radius.circular(20))),
-                                contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                             ),
-                           ),
+        child: Column(
+          children: [
+            Container(
+              height: MySize.getScaledSizeHeight(90),
+              width: double.infinity,
+              padding: EdgeInsets.only(bottom: hv*1, left: wv*2),
+              decoration: const BoxDecoration( color: kDeepYellow),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    Container(
+                      margin: EdgeInsets.only(left: wv*1),
+                      child: Text(S.of(context).codeDeConsultation, style: TextStyle( color: kSimpleForce, fontSize: wv*4.8, fontWeight: FontWeight.w500),)),
+                    SizedBox(height: hv*0.3,),
+                    Container(
+                       width: MySize.getScaledSizeWidth(153),
+                       height: MySize.getScaledSizeHeight(40),
+                       child: TextFormField(
+                         controller: _codeConsultationController,
+                         keyboardType: TextInputType.text,
+                         style: const TextStyle(fontSize: 25, color: kBlueForce, fontWeight: FontWeight.w400),
+                         decoration: InputDecoration(
+                             fillColor: bgInputGray.withOpacity(0.6), 
+                             hintText: ' Ex: AX11DEF',
+                               enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1, color: Colors.transparent),
+                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                             hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
+                             focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1, color: Colors.transparent),
+                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                          ),
-                    ],
-                  )),
-               
-                Container(child: Row(
-                     children: [
-                     SizedBox(width: wv*3, height:hv*3),
-                     Expanded(
-                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
+                       ),
+                     ),
+                ],
+              )),
+           
+            Container(child: Row(
+                 children: [
+                 SizedBox(width: wv*3, height:hv*3),
+                 Expanded(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child:Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                    SizedBox(height: hv*1,),
                                     Container(
-                                      child:Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                        SizedBox(height: hv*1,),
-                                        Container(
-                                          margin: EdgeInsets.only(left: wv*1),
-                                          child: Text(S.of(context).montantTotal, style: const TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
-                                        SizedBox(height: hv*1,),
-                                        Container(
-                                          width: double.infinity,
-                                          height: MySize.getScaledSizeHeight(42),
-                                          child: TextFormField(
-                                            controller:_montantController,
-                                            inputFormatters: <TextInputFormatter>[
-                                                  FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
-                                              ],
-                                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(fontSize: 20, color: kBlueForce, fontWeight: FontWeight.w400),
-                                            decoration: InputDecoration(
-                                                fillColor: bgInputGray.withOpacity(0.6),
-                                                hintText: ' Ex: 12000',
-                                                  enabledBorder: const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      width: 1, color: Colors.transparent),
-                                                  borderRadius: BorderRadius.all(Radius.circular(20))),
-                                                hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
-                                                focusedBorder: const OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      width: 1, color: Colors.transparent),
-                                                  borderRadius: BorderRadius.all(Radius.circular(20))),
-                                                contentPadding: EdgeInsets.only(right: wv*10),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                    ),
-                                  ],
-                                ), 
-                              )
-                     ])
-                ),
-                Container(child: Row(
-                     children: [
-                     SizedBox(width: wv*3,),
-                     Expanded(
-                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 5,),
-                                     Container(
-                                          margin: EdgeInsets.only(left: wv*1),
-                                          child: Text(S.of(context).typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
-                                        SizedBox(height: hv*1,),
+                                      margin: EdgeInsets.only(left: wv*1),
+                                      child: Text(S.of(context).montantTotal, style: const TextStyle(color: kSimpleForce, fontSize: 18, fontWeight: FontWeight.w500),)),
+                                    SizedBox(height: hv*1,),
                                     Container(
-                                      constraints: BoxConstraints(minWidth: wv*45),
-                                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[100],
-                                        borderRadius: const BorderRadius.all(Radius.circular(20))
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton(
-                                            isExpanded: true,
-                                            value: categoriesType,
-                                            hint: Text(S.of(context).typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
-                                            items: arrayOfServicesType.map((region){
-                                              return DropdownMenuItem(
-                                                child: SizedBox(child: Text(region["value"]!, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
-                                                value: region["key"],
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) async {
-                                              //List<String> reg = getTownNamesFromRegion(cities, value);
-                                              setState(() {
-                                               categoriesType=value.toString();
-                                              });
-                                            }),
+                                      width: double.infinity,
+                                      height: MySize.getScaledSizeHeight(42),
+                                      child: TextFormField(
+                                        controller:_montantController,
+                                        inputFormatters: <TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(RegExp(r'^(\d+)?\.?\d{0,2}'))
+                                          ],
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(fontSize: 20, color: kBlueForce, fontWeight: FontWeight.w400),
+                                        decoration: InputDecoration(
+                                            fillColor: bgInputGray.withOpacity(0.6),
+                                            hintText: ' Ex: 12000',
+                                              enabledBorder: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.transparent),
+                                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                                            hintStyle: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.w400),
+                                            focusedBorder: const OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  width: 1, color: Colors.transparent),
+                                              borderRadius: BorderRadius.all(Radius.circular(20))),
+                                            contentPadding: EdgeInsets.only(right: wv*10),
                                         ),
                                       ),
                                     ),
-                                  ],
-                                ), 
-                              )
-                     ])
-                ),
-                Expanded(
-                  child: Container(
-                          height:Device.isSmartphone(context) ? MySize.getScaledSizeHeight(100) : MySize.getScaledSizeHeight(50) ,
-                          margin: EdgeInsets.symmetric(horizontal: 8, vertical: hv*2.5),
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [BoxShadow(color: (Colors.grey[700])!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: const Offset(0,4))]
-                          ),
-                          child:Column(
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: hv*0.5),
-                                    Text(S.of(context).scannerDesJustificatifs, style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
-                                    SizedBox(height: hv*0.2),
-                                    Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: const TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
-                                    Center(
-                                      child: InkWell(
-                                        onTap: (){getDocument(context);},
-                                        child: Container(
-                                          margin: EdgeInsets.symmetric(vertical: hv*1),
-                                          child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: Device.isSmartphone(context) ? wv*20 : wv*4),
-                                        ),
-                                      ),
-                                    ),
-                                    FileUploadCard(
-                                      title: doc1+" ($docs1Uploaded)",
-                                      state: doc1Uploaded!,
-                                      isMultiple: true,
-                                      loading: doc1Spinner!,
-                                      action: () async {await getDocFromGallery(doc1);}
-                                    ),
-                                    SizedBox(height: 5,),
-                                    FileUploadCard(
-                                      title: doc2+" ($docs2Uploaded)",
-                                      state: doc2Uploaded!,
-                                      isMultiple: true,
-                                      loading: doc2Spinner!,
-                                      action: () async {await getDocFromGallery(doc2);}
-                                    ),
-                                    SizedBox(height: 5,),
-                                    FileUploadCard(
-                                      title: doc3+" ($docs3Uploaded)",
-                                      state: doc3Uploaded!,
-                                      isMultiple: true,
-                                      loading: doc3Spinner!,
-                                      action: () async {await getDocFromGallery(doc3);}
-                                    ),
-        
-                                  SizedBox(height: hv*1),
-                                  Padding(
-                                    padding: EdgeInsets.only(bottom: Device.isSmartphone(context) ? 0 : 40),
-                                    child: CustomTextButton(
-                                        text: S.of(context).crer,
-                                        enable: true,
-                                        isLoading: confirmSpinner!,
-                                        noPadding: true,
-                                        action: () async {
-                                        
-                                          /**********************
-                                           * Formes des medicaments a entrer dans la partie administration
-                                           */
-                                          // var data= [
-                                          //                 {
-                                          //                     "NomMedicaments": "1 AMOCLAN 8:1 500mg/62,5 Comp. B/10 1.000 f",
-                                          //                     "NonScientifique": "DCI (AMOXICILLINE/ACIDE CLAVULANIQUE)",
-                                          //                     "Prix": 10000,
-                                          //                     "PrixCOuvert": 7000,
-                                          //                 },
-                                          //                 {
-                                          //                     "NomMedicaments": "1 AMOCLAN  500mg/62,5 Comp. B/10 1.000 f",
-                                          //                     "NonScientifique": "DCI (AMOXICILLINE/ CLAVULANIQUE)",
-                                          //                     "Prix": 10000,
-                                          //                     "PrixCOuvert": 7000,
-                                          //                 },
-                                          //                 {
-                                          //                     "NomMedicaments": "1 AMOCLAN 8:1  Comp. B/10 1.000 f",
-                                          //                     "NonScientifique": " (AMOXICILLINE/ACIDE CLAVULANIQUE)",
-                                          //                     "Prix": 10000,
-                                          //                     "PrixCOuvert": 7000,
-                                          //                 },
-                                          //             ];
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
-                                          
-                                              await checkIfDocExists( _codeConsultationController!.text).then((value) async {
-                                                setState((){confirmSpinner = true;});  
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_montantController!.text)));
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(categoriesType.toString())));
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value.toString())));
-                                          //  
-                                           if(value!=null && _montantController!.text.isNotEmpty  &&  _codeConsultationController!.text.isNotEmpty){
-                                            if(categoriesType == pharmacy || categoriesType == labo || categoriesType == consultation){
-                                            //  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("fdsfdsf")));
-                                             await FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').doc().set({
-                                                 "usecaseId": value["id"],
-                                                 "adherentId": adherentId,
-                                                 "beneficiaryId": beneficiaryId,
-                                                 "isConfirmDrugList": false,
-                                                 "status": 2,
-                                                 "paid": false,
-                                                 "PaiementCode":null,
-                                                 "drugsList" : null,
-                                                 "appointementId": value["idAppointement"],
-                                                 "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
-                                                 "titleDuDEvis":devisId,
-                                                 "consultationCode": _codeConsultationController!.text.toString(),
-                                                 "amountToPay":num.parse(_montantController!.text.toString()),
-                                                 "establishment": namePrestataire,
-                                                 "prestataireId":prestatataireId,
-                                                 "adminFeedback": null,
-                                                 "justifiedFees": null,
-                                                 "type": categoriesType,
-                                                 "createdDate": DateTime.now(),
-                                                 "serviceDate": null,
-                                                 "precriptionUrls": FieldValue.arrayUnion(docs1List!),
-                                                 "receiptUrls": FieldValue.arrayUnion(docs2List!),
-                                                 "drugsUrls": categoriesType == pharmacy || categoriesType == consultation? FieldValue.arrayUnion(docs3List!) : [],
-                                                 "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
-                                                 'closed': true,
-                                                 "precriptionIsValid": null,
-                                                 "receiptIsValid": null,
-                                                 "drugsIsValid": null,
-                                                 "resultsIsValid": null,
-                                                 "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
-                                                 "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
-                                                 "drugsUploadDate": docs3List!.isNotEmpty && categoriesType == pharmacy || categoriesType == consultation ? DateTime.now() : null,
-                                                 "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
-                                                 "executed": docs2List!.isNotEmpty ? true : false,
-                                                 "estimated": docs1List!.isNotEmpty ? true : false
-                                              }, SetOptions(merge: true)).then((doc) {
-                                                
-                                                setState((){confirmSpinner = false;});
-                                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Nouvelle prestation ajoutée'),));
-                                                Navigator.pop(context);
-                                              }).onError((error, stackTrace) {
-                                                setState((){confirmSpinner = false;});
-                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
-                                              });
-                                          }
-                                          if(categoriesType == hospitalization || categoriesType == ambulance){
-        
-                                            await FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
-                                                "usecaseId": value["id"],
-                                                "adherentId": adherentId,
-                                                "beneficiaryId": beneficiaryId,
-                                                "advance": 0,
-                                                "status": 2,
-                                                "paid": false,
-                                                "isConfirmDrugList": false,
-                                                "appointementId": value["idAppointement"],
-                                                "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
-                                                "drugsList" :null,
-                                                "titleDuDEvis":devisId,
-                                                "consultationCode": _codeConsultationController!.text.toString(),
-                                                "amountToPay":num.parse(_montantController!.text.toString()),
-                                                "establishment": namePrestataire,
-                                                "adminFeedback": null,
-                                                "justifiedFees": 0,
-                                                "type": categoriesType,
-                                                "createdDate": DateTime.now(),
-                                                "serviceDate": null,
-                                                "precriptionUrls": FieldValue.arrayUnion(docs1List!),
-                                                "receiptUrls": FieldValue.arrayUnion(docs2List!),
-                                                "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List!) : [],
-                                                "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
-                                                'closed': true,
-                                                "precriptionIsValid": null,
-                                                "receiptIsValid": null,
-                                                "drugsIsValid": null,
-                                                "resultsIsValid": null,
-                                                "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
-                                                "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
-                                                "drugsUploadDate": docs3List!.isNotEmpty && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
-                                                "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
-                                                "executed": docs2List!.isNotEmpty ? true : false,
-                                                "estimated": docs1List!.isNotEmpty ? true : false,
-                                                "ongoing": true,
-                                                "requested": docs1List!.length > 0 ? true : false,
-                                              }).then((doc) {
-                                                setState((){confirmSpinner = false;});
-                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).nouvellePrestationAjoute),));
-                                                Navigator.pop(context);
-                                              }).onError((error, stackTrace) {
-                                                setState((){confirmSpinner = false;});
-                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
-        
-                                              });
-                                            } 
-        
-                                             setState((){confirmSpinner = false;}); 
-                                          }else if(categoriesType==null){
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).choisissezLeTypeDeDevis)));
-                                             setState((){confirmSpinner = false;});
-                                          }else if(value==null){
-                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
-                                             setState((){confirmSpinner = false;});
-                                          }else{
-                                             setState((){confirmSpinner = false;});
-                                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("veuillez remplir le formulaire "),));
-                                          }
-                                        });
-                                        
-                                         
-                                        },
-                                      ),
-                                  )
-                                  ,SizedBox(height: Device.isSmartphone(context) ? 0 : hv*1 ),
-                                ]))
-                            ],
-                  )),
-                ),
-              ],
+                                ],
+                              ),
+                                ),
+                              ],
+                            ), 
+                          )
+                 ])
             ),
-          ),
+            Container(child: Row(
+                 children: [
+                 SizedBox(width: wv*3,),
+                 Expanded(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 5,),
+                                 Container(
+                                      margin: EdgeInsets.only(left: wv*1),
+                                      child: Text(S.of(context).typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400),)),
+                                    SizedBox(height: hv*1,),
+                                Container(
+                                  constraints: BoxConstraints(minWidth: wv*45),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: const BorderRadius.all(Radius.circular(20))
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                      alignedDropdown: true,
+                                      child: DropdownButton(
+                                        isExpanded: true,
+                                        value: categoriesType,
+                                        hint: Text(S.of(context).typeDeDevis, style: const TextStyle(color: kBlueForce, fontSize: 12, fontWeight: FontWeight.w400)),
+                                        items: arrayOfServicesType.map((region){
+                                          return DropdownMenuItem(
+                                            child: SizedBox(child: Text(region["value"]!, style: const TextStyle(color: kBlueForce, fontSize: 18, fontWeight: FontWeight.w400)), width: wv*50,),
+                                            value: region["key"],
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) async {
+                                          //List<String> reg = getTownNamesFromRegion(cities, value);
+                                          setState(() {
+                                           categoriesType=value.toString();
+                                          });
+                                        }),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ), 
+                          )
+                 ])
+            ),
+            Expanded(
+              child: Container(
+                        height: MySize.getScaledSizeHeight(100),
+                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: hv*2.5),
+                      decoration: BoxDecoration(
+                        color: whiteColor,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [BoxShadow(color: (Colors.grey[700])!.withOpacity(0.4), blurRadius: 3, spreadRadius: 1.5, offset: const Offset(0,4))]
+                      ),
+                      child:Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                            child: Column(
+                              children: [
+                                SizedBox(height: hv*0.5),
+                                Text(S.of(context).scannerDesJustificatifs, style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                                SizedBox(height: hv*0.2),
+                                Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: const TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                                Center(
+                                  child: InkWell(
+                                    onTap: (){getDocument(context);},
+                                    child: Container(
+                                      margin: EdgeInsets.symmetric(vertical: hv*1),
+                                      child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                                    ),
+                                  ),
+                                ),
+                                FileUploadCard(
+                                  title: doc1+" ($docs1Uploaded)",
+                                  state: doc1Uploaded!,
+                                  isMultiple: true,
+                                  loading: doc1Spinner!,
+                                  action: () async {await getDocFromGallery(doc1);}
+                                ),
+                                SizedBox(height: 5,),
+                                FileUploadCard(
+                                  title: doc2+" ($docs2Uploaded)",
+                                  state: doc2Uploaded!,
+                                  isMultiple: true,
+                                  loading: doc2Spinner!,
+                                  action: () async {await getDocFromGallery(doc2);}
+                                ),
+                                SizedBox(height: 5,),
+                                FileUploadCard(
+                                  title: doc3+" ($docs3Uploaded)",
+                                  state: doc3Uploaded!,
+                                  isMultiple: true,
+                                  loading: doc3Spinner!,
+                                  action: () async {await getDocFromGallery(doc3);}
+                                ),
+
+                                SizedBox(height: hv*1),
+                              CustomTextButton(
+                                  text: S.of(context).crer,
+                                  enable: true,
+                                  isLoading: confirmSpinner!,
+                                  noPadding: true,
+                                  action: () async {
+                                  
+                                    /**********************
+                                     * Formes des medicaments a entrer dans la partie administration
+                                     */
+                                    // var data= [
+                                    //                 {
+                                    //                     "NomMedicaments": "1 AMOCLAN 8:1 500mg/62,5 Comp. B/10 1.000 f",
+                                    //                     "NonScientifique": "DCI (AMOXICILLINE/ACIDE CLAVULANIQUE)",
+                                    //                     "Prix": 10000,
+                                    //                     "PrixCOuvert": 7000,
+                                    //                 },
+                                    //                 {
+                                    //                     "NomMedicaments": "1 AMOCLAN  500mg/62,5 Comp. B/10 1.000 f",
+                                    //                     "NonScientifique": "DCI (AMOXICILLINE/ CLAVULANIQUE)",
+                                    //                     "Prix": 10000,
+                                    //                     "PrixCOuvert": 7000,
+                                    //                 },
+                                    //                 {
+                                    //                     "NomMedicaments": "1 AMOCLAN 8:1  Comp. B/10 1.000 f",
+                                    //                     "NonScientifique": " (AMOXICILLINE/ACIDE CLAVULANIQUE)",
+                                    //                     "Prix": 10000,
+                                    //                     "PrixCOuvert": 7000,
+                                    //                 },
+                                    //             ];
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
+                                    
+                                        await checkIfDocExists( _codeConsultationController!.text).then((value) async {
+                                          setState((){confirmSpinner = true;});  
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_montantController!.text)));
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(categoriesType.toString())));
+                                    //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value.toString())));
+                                    //  
+                                     if(value!=null && _montantController!.text.isNotEmpty  &&  _codeConsultationController!.text.isNotEmpty){
+                                      if(categoriesType == pharmacy || categoriesType == labo || categoriesType == consultation){
+                                      //  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("fdsfdsf")));
+                                       await FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').doc().set({
+                                           "usecaseId": value["id"],
+                                           "adherentId": adherentId,
+                                           "beneficiaryId": beneficiaryId,
+                                           "isConfirmDrugList": false,
+                                           "status": 2,
+                                           "paid": false,
+                                           "PaiementCode":null,
+                                           "drugsList" : null,
+                                           "appointementId": value["idAppointement"],
+                                           "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
+                                           "titleDuDEvis":devisId,
+                                           "consultationCode": _codeConsultationController!.text.toString(),
+                                           "amountToPay":num.parse(_montantController!.text.toString()),
+                                           "establishment": namePrestataire,
+                                           "prestataireId":prestatataireId,
+                                           "adminFeedback": null,
+                                           "justifiedFees": null,
+                                           "type": categoriesType,
+                                           "createdDate": DateTime.now(),
+                                           "serviceDate": null,
+                                           "precriptionUrls": FieldValue.arrayUnion(docs1List!),
+                                           "receiptUrls": FieldValue.arrayUnion(docs2List!),
+                                           "drugsUrls": categoriesType == pharmacy || categoriesType == consultation? FieldValue.arrayUnion(docs3List!) : [],
+                                           "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
+                                           'closed': true,
+                                           "precriptionIsValid": null,
+                                           "receiptIsValid": null,
+                                           "drugsIsValid": null,
+                                           "resultsIsValid": null,
+                                           "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
+                                           "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
+                                           "drugsUploadDate": docs3List!.isNotEmpty && categoriesType == pharmacy || categoriesType == consultation ? DateTime.now() : null,
+                                           "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
+                                           "executed": docs2List!.isNotEmpty ? true : false,
+                                           "estimated": docs1List!.isNotEmpty ? true : false
+                                        }, SetOptions(merge: true)).then((doc) {
+                                          
+                                          setState((){confirmSpinner = false;});
+                                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Nouvelle prestation ajoutée'),));
+                                          Navigator.pop(context);
+                                        }).onError((error, stackTrace) {
+                                          setState((){confirmSpinner = false;});
+                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+                                        });
+                                    }
+                                    if(categoriesType == hospitalization || categoriesType == ambulance){
+
+                                      await FirebaseFirestore.instance.collection('USECASES').doc(value["id"]).collection('PRESTATIONS').add({
+                                          "usecaseId": value["id"],
+                                          "adherentId": adherentId,
+                                          "beneficiaryId": beneficiaryId,
+                                          "advance": 0,
+                                          "status": 2,
+                                          "paid": false,
+                                          "isConfirmDrugList": false,
+                                          "appointementId": value["idAppointement"],
+                                          "title": Algorithms.getUseCaseServiceName(type: categoriesType!),
+                                          "drugsList" :null,
+                                          "titleDuDEvis":devisId,
+                                          "consultationCode": _codeConsultationController!.text.toString(),
+                                          "amountToPay":num.parse(_montantController!.text.toString()),
+                                          "establishment": namePrestataire,
+                                          "adminFeedback": null,
+                                          "justifiedFees": 0,
+                                          "type": categoriesType,
+                                          "createdDate": DateTime.now(),
+                                          "serviceDate": null,
+                                          "precriptionUrls": FieldValue.arrayUnion(docs1List!),
+                                          "receiptUrls": FieldValue.arrayUnion(docs2List!),
+                                          "drugsUrls": categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance ? FieldValue.arrayUnion(docs3List!) : [],
+                                          "resultsUrls": categoriesType == labo ? FieldValue.arrayUnion(docs3List!) : [],
+                                          'closed': true,
+                                          "precriptionIsValid": null,
+                                          "receiptIsValid": null,
+                                          "drugsIsValid": null,
+                                          "resultsIsValid": null,
+                                          "precriptionUploadDate": docs1List!.isNotEmpty ? DateTime.now() : null,
+                                          "receiptUploadDate": docs2List!.isNotEmpty ? DateTime.now() : null,
+                                          "drugsUploadDate": docs3List!.isNotEmpty && (categoriesType == pharmacy || categoriesType == hospitalization || categoriesType == ambulance) ? DateTime.now() : null,
+                                          "resultsUploadDate": docs3List!.isNotEmpty && categoriesType == labo ? DateTime.now() : null,
+                                          "executed": docs2List!.isNotEmpty ? true : false,
+                                          "estimated": docs1List!.isNotEmpty ? true : false,
+                                          "ongoing": true,
+                                          "requested": docs1List!.length > 0 ? true : false,
+                                        }).then((doc) {
+                                          setState((){confirmSpinner = false;});
+                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).nouvellePrestationAjoute),));
+                                          Navigator.pop(context);
+                                        }).onError((error, stackTrace) {
+                                          setState((){confirmSpinner = false;});
+                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.toString())));
+
+                                        });
+                                      } 
+
+                                       setState((){confirmSpinner = false;}); 
+                                    }else if(categoriesType==null){
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).choisissezLeTypeDeDevis)));
+                                       setState((){confirmSpinner = false;});
+                                    }else if(value==null){
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).codeDeConsultationInvalide),));
+                                       setState((){confirmSpinner = false;});
+                                    }else{
+                                       setState((){confirmSpinner = false;});
+                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("veuillez remplir le formulaire "),));
+                                    }
+                                  });
+                                  
+                                   
+                                  },
+                                )
+                            ]))
+                        ],
+              )),
+            ),
+          ],
         ),
       )))
     );

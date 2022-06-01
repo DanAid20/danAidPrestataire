@@ -1,4 +1,5 @@
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
@@ -59,23 +60,30 @@ class _ProfileTypeViewState extends State<ProfileTypeView> {
                   physics: const BouncingScrollPhysics(),
                   itemCount: titleList.length,
                   shrinkWrap: true,
-                  itemBuilder: (context, index) => ProfileTypeCard(
-                    title: titleList.elementAt(index),
-                    description: descList.elementAt(index),
-                    image: imageList.elementAt(index),
-                    navigationService: _navigationService,
-                    action: (){
-                      if (index == 0){
-                        adherentAction();
-                      }
-                      else if(index == 1){
-                        doctorAction();
-                      }
-                      else {
-                        serviceProviderAction();
-                      }
-                    },
-                    //route: routeList.elementAt(index),
+                  itemBuilder: (context, index) => Container(
+                    constraints: BoxConstraints(
+                      maxWidth: Device.isSmartphone(context) ? width(size: 250) : 200,
+                    ),
+                    child: ProfileTypeCard(
+                      title: titleList.elementAt(index),
+                      description: descList.elementAt(index),
+                      image: imageList.elementAt(index),
+                      navigationService: _navigationService,
+                      action: (){
+                        if (index == 0){
+                          setState(() {
+                          });
+                          adherentAction();
+                        }
+                        else if(index == 1){
+                          doctorAction();
+                        }
+                        else {
+                          serviceProviderAction();
+                        }
+                      },
+                      //route: routeList.elementAt(index),
+                    ),
                   ),
                 )
             ),
@@ -105,10 +113,10 @@ class ProfileTypeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        height: height(size: 190),
-        width: width(size: 250),
-        padding: EdgeInsets.only(left: horizontal(size: 20), top: vertical(size: 10), bottom: vertical(size: 10)),
-        margin: EdgeInsets.only(right: horizontal(size: 15), left: horizontal(size: 15), bottom: horizontal(size: 15)),
+        height: Device.isSmartphone(context) ? height(size: 190) : 200,
+        width: Device.isSmartphone(context) ? width(size: 250) : 200,
+        padding: EdgeInsets.symmetric(horizontal: horizontal(size: Device.isSmartphone(context) ? 20 : 10), vertical: vertical(size: Device.isSmartphone(context) ? 10 : 25)),
+        margin: EdgeInsets.symmetric(horizontal:  horizontal(size: 15), vertical: horizontal(size: 7.5)),
         decoration: BoxDecoration(
             color: whiteColor,
             borderRadius: BorderRadius.circular(12),
@@ -121,7 +129,8 @@ class ProfileTypeCard extends StatelessWidget {
               )
             ]
         ),
-        child: Container(
+        child: SizedBox(
+          width: width(size: Device.isSmartphone(context) ?  250 : 200),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -129,18 +138,18 @@ class ProfileTypeCard extends StatelessWidget {
                 child: Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
                         title!,
                         softWrap: true,
                         style: TextStyle(
                             color: kPrimaryColor,
-                            fontSize: fontSize(size: 24),
+                            fontSize: fontSize(size: Device.isSmartphone(context) ? 24 : 10),
                             fontWeight: FontWeight.bold
                         ),
                       ),
-                      VerticalSpacing(of: 5),
+                      VerticalSpacing(of: Device.isSmartphone(context) ? 5 : 2),
                       Flexible(
                         child: Text(
                           description!,
@@ -148,7 +157,7 @@ class ProfileTypeCard extends StatelessWidget {
                           overflow: TextOverflow.fade,
                           style: TextStyle(
                               color: kTextColor.withOpacity(0.7),
-                              fontSize: fontSize(size: 18),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? 17 : 8),
                               letterSpacing: .7,
                               height: 1.4,
                               fontWeight: FontWeight.w300

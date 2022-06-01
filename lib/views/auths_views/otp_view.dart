@@ -113,7 +113,7 @@ class _OtpViewState extends State<OtpView> {
                         otpForm(),
                         //DefaultBtn(formKey: _mFormKey, signText: "Validez le code", signRoute: '/profile-type',),
                         SizedBox(
-                          width: Device.isSmartphone(context) ? wv*100 : 810,
+                          width: Device.isSmartphone(context) ? wv*100 : 400,
                           child: CustomTextButton(
                             isLoading: load,
                             enable: pin1Controller.text.isNotEmpty & pin2Controller.text.isNotEmpty & pin3Controller.text.isNotEmpty & pin4Controller.text.isNotEmpty & pin5Controller.text.isNotEmpty & pin6Controller.text.isNotEmpty,

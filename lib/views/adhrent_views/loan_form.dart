@@ -37,6 +37,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:simple_tags/simple_tags.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class LoanForm extends StatefulWidget {
   @override
   _LoanFormState createState() => _LoanFormState();
@@ -114,7 +116,7 @@ class _LoanFormState extends State<LoanForm> {
           ),
           title: Column(crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+              Text(S.of(context).aperuDeMonPrtSant, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 18, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
               Text(S.of(context).ajouterModifierOuEnvoyerLesPices, 
                 style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
               ),
@@ -127,40 +129,43 @@ class _LoanFormState extends State<LoanForm> {
           ],
         ),
         body: SafeArea(
-          child: Container(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 10),
-                  child: Text(currentPageValue == 0 ? "1 / 3\n" : currentPageValue == 1 ? "2 / 3\n" : "3 / 3\n", style: TextStyle(fontWeight: FontWeight.w700,color: kBlueDeep),),
-                ),
-                Expanded(
-                  child: PageView.builder(
-                    pageSnapping: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: pageList!.length,
-                    onPageChanged: (int page) {
-                      getChangedPageAndMoveBar(page);
-                    },
-                    controller: controller,
-                    itemBuilder: (context, index) {
-                      return pageList![index];
-                    },
+          child: Center(
+            child: SizedBox(
+              width: Device.isSmartphone(context) ? wv*100 : 1000,
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Text(currentPageValue == 0 ? "1 / 3\n" : currentPageValue == 1 ? "2 / 3\n" : "3 / 3\n", style: TextStyle(fontWeight: FontWeight.w700,color: kBlueDeep),),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: hv*3, top: hv*2),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      for (int i = 0; i < pageList!.length; i++)
-                        if (i == currentPageValue) ...[circleBar(true)] else
-                          circleBar(false),
-                    ],
+                  Expanded(
+                    child: PageView.builder(
+                      pageSnapping: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: pageList!.length,
+                      onPageChanged: (int page) {
+                        getChangedPageAndMoveBar(page);
+                      },
+                      controller: controller,
+                      itemBuilder: (context, index) {
+                        return pageList![index];
+                      },
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    margin: EdgeInsets.only(bottom: hv*3, top: hv*2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        for (int i = 0; i < pageList!.length; i++)
+                          if (i == currentPageValue) ...[circleBar(true)] else
+                            circleBar(false),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -193,7 +198,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -341,15 +346,15 @@ class _LoanFormState extends State<LoanForm> {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: hv*3,),
-                  Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Center(child: Text(S.of(context).scannerDesJustificatifs, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),)),
                   SizedBox(height: hv*0.5,),
-                  Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                  Center(child: Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400))),
                   Center(
                     child: InkWell(
                       onTap: (){getDocument(context);},
                       child: Container(
                         margin: EdgeInsets.symmetric(vertical: hv*2),
-                        child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: wv*20,),
+                        child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: Device.isSmartphone(context) ? wv*20 : 100,),
                       ),
                     ),
                   ),
@@ -367,7 +372,7 @@ class _LoanFormState extends State<LoanForm> {
                     action: () async {await getDocFromGallery('Pièce_Justificative_Supplémentaire');}
                   ),
                   SizedBox(height: hv*4,),
-                  Text(S.of(context).picesSupplmentairesMultiples, style: TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                  Text(S.of(context).picesSupplmentairesMultiples, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.bold),),
                   SizedBox(height: hv*1.5,),
                   FileUploadCard(
                     title: S.of(context).documentsMultiples+"($docsUploaded)",
@@ -430,7 +435,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                       ],
                   )),
                   Container(
@@ -521,10 +526,10 @@ class _LoanFormState extends State<LoanForm> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: hv*2,),
+                            SizedBox(height: Device.isSmartphone(context) ? hv*2 : 60,),
                             CheckboxListTile(
-                              title: Text(S.of(context).souhaitezVousAvoirUnAvaliste, style: TextStyle(fontSize: 16, color: kBlueDeep)),
-                              subtitle: Text(S.of(context).votrePouxseEstDeFactoSolidaireDeVotreCrditVous, style: TextStyle(fontSize: 13, color: kTextBlue)),
+                              title: Text(S.of(context).souhaitezVousAvoirUnAvaliste, style: TextStyle(fontSize: Device.isSmartphone(context) ? 16 : 18, color: kBlueDeep)),
+                              subtitle: Text(S.of(context).votrePouxseEstDeFactoSolidaireDeVotreCrditVous, style: TextStyle(fontSize: Device.isSmartphone(context) ? 13 : 14, color: kTextBlue)),
                               activeColor: kSouthSeas,
                               value: _avalist, 
                               onChanged: (bool? val)=>setState((){_avalist = val!;})
@@ -533,7 +538,7 @@ class _LoanFormState extends State<LoanForm> {
                             _avalist ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: hv*2,),
+                                SizedBox(height: Device.isSmartphone(context) ? hv*2 : 30,),
                                 CustomTextField(
                                   labelColor: kTextBlue,
                                   label: S.of(context).nomDeLavaliste,
@@ -640,7 +645,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -711,8 +716,9 @@ class _LoanFormState extends State<LoanForm> {
               value: _trustConditionAccepted,
               activeColor: primaryColor,
               onChanged: (newValue) {
+                print("work");
                 setState(() {
-                  _trustConditionAccepted = newValue;
+                  _trustConditionAccepted = newValue!;
                 });
               },
             ),

@@ -19,6 +19,8 @@ import 'package:danaid/widgets/drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class Contributions extends StatefulWidget {
   @override
   _ContributionsState createState() => _ContributionsState();
@@ -67,7 +69,7 @@ class _ContributionsState extends State<Contributions> {
           icon: Icon(Icons.arrow_back_ios, color: kPrimaryColor,), 
           onPressed: ()=>Navigator.pop(context)
         ),
-        title: Text(S.of(context).historiqueDesPaiements, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+        title: Text(S.of(context).historiqueDesPaiements, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 20, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
         centerTitle: true,
         actions: [
           //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Search.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
@@ -81,218 +83,224 @@ class _ContributionsState extends State<Contributions> {
         partenaire: (){Navigator.pop(context); Navigator.pop(context);},
         famille: (){Navigator.pop(context); Navigator.pop(context);},
       ),
-      body: Column(
-        children: [
-          SizedBox(height: hv*2.5,),
-          HomePageComponents.getInfoActionCard(
-            title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent?.adherentPlan),
-            actionLabel: S.of(context).comparerLesServices,
-            subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
-            action: ()=>Navigator.pushNamed(context, '/compare-plans')
-          ),
-          SizedBox(height: hv*1,),
-          latestInvoice != null ? Container(
-            margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1.5),
-            padding: EdgeInsets.symmetric(horizontal: wv*3.5, vertical: hv*2.25),
-            decoration: BoxDecoration(
-              color: kSouthSeas.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(20)
-            ),
-            child: Column(
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(child: Text("Côtisation de base", style: TextStyle(color: kCardTextColor, fontSize: 16),), width: wv*40,),
-                    SizedBox(width: wv*2,),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("1 X ${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
-                          Text("Famille", style: TextStyle(color: kCardTextColor, fontSize: 13)),
-                          Text("(1 à 5 personnes)", style: TextStyle(color: kCardTextColor, fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: wv*2,),
-                    Text("${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                  ],
+      body: Center(
+        child: SizedBox(
+          width: Device.isSmartphone(context) ? wv*100 : 1000,
+          child: Column(
+            children: [
+              SizedBox(height: hv*2.5,),
+              HomePageComponents.getInfoActionCard(
+                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent?.adherentPlan),
+                noPadding: Device.isSmartphone(context) ? false : true,
+                actionLabel: S.of(context).comparerLesServices,
+                subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
+                action: ()=>Navigator.pushNamed(context, '/compare-plans'),
+                context: context
+              ),
+              SizedBox(height: hv*1,),
+              latestInvoice != null ? Container(
+                margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 0, vertical: hv*1.5),
+                padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3.5 : 40, vertical: hv*2.25),
+                decoration: BoxDecoration(
+                  color: kSouthSeas.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(20)
                 ),
-                SizedBox(height: hv*1.5),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
                   children: [
-                    SizedBox(child: Text("Supplément", style: TextStyle(color: kCardTextColor, fontSize: 16),), width: wv*40,),
-                    SizedBox(width: wv*2,),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("0 X 15000 f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
-                          Text("Personnes", style: TextStyle(color: kCardTextColor, fontSize: 13)),
-                          Text("additionelles", style: TextStyle(color: kCardTextColor, fontSize: 13)),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: wv*2,),
-                    Text("0 f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                SizedBox(height: hv*1.5),
-                Divider(color: kSouthSeas, thickness: 3, height: hv*1.5,),
-                Row(
-                  children: [
-                    Text("Total annuel", style: TextStyle(color: kCardTextColor, fontSize: 16)),
-                    Spacer(),
-                    Text("${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16))
-                  ],
-                ),
-                SizedBox(height: hv*0.5),
-                Row(
-                  children: [
-                    Text("Payé", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold)),
-                    Spacer(),
-                    Text("${latestInvoice?.amountPaid != null ? latestInvoice?.amountPaid : 0} f.", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold))
-                  ],
-                ),
-                SizedBox(height: hv*1.5),
-                Row(
-                  children: [
-                    Text("Reste à payer", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold)),
-                    Spacer(),
-                    Text("${latestInvoice?.amountPaid != null ? latestInvoice!.amount! - latestInvoice!.amountPaid! < 0 ? 0 : latestInvoice!.amount! - latestInvoice!.amountPaid! : latestInvoice!.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold))
-                  ],
-                ),
-              ],
-            ),
-          ) : Container(),
-          SizedBox(height: hv*1,),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*2),
-              width: double.infinity,
-              color: whiteColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(S.of(context).mesDerniresFactures, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
-                  SizedBox(height: hv*2,),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(child: Text("Côtisation de base", style: TextStyle(color: kCardTextColor, fontSize: 16),), width: Device.isSmartphone(context) ? wv*40 : 200,),
+                        SizedBox(width: wv*2,),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("1 X ${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                              Text("Famille", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                              Text("(1 à 5 personnes)", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                            ],
                           ),
-                        );
-                      }
+                        ),
+                        SizedBox(width: wv*2,),
+                        Text("${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    SizedBox(height: hv*1.5),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(child: Text("Supplément", style: TextStyle(color: kCardTextColor, fontSize: 16),), width: Device.isSmartphone(context) ? wv*40 : 200,),
+                        SizedBox(width: wv*2,),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("0 X 15000 f.", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                              Text("Personnes", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                              Text("additionelles", style: TextStyle(color: kCardTextColor, fontSize: 13)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: wv*2,),
+                        Text("0 f.", style: TextStyle(color: kCardTextColor, fontSize: 16, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                    SizedBox(height: hv*1.5),
+                    Divider(color: kSouthSeas, thickness: 3, height: hv*1.5,),
+                    Row(
+                      children: [
+                        Text("Total annuel", style: TextStyle(color: kCardTextColor, fontSize: 16)),
+                        Spacer(),
+                        Text("${latestInvoice?.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 16))
+                      ],
+                    ),
+                    SizedBox(height: hv*0.5),
+                    Row(
+                      children: [
+                        Text("Payé", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold)),
+                        Spacer(),
+                        Text("${latestInvoice?.amountPaid != null ? latestInvoice?.amountPaid : 0} f.", style: TextStyle(color: kDeepTeal, fontSize: 16, fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                    SizedBox(height: hv*1.5),
+                    Row(
+                      children: [
+                        Text("Reste à payer", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold)),
+                        Spacer(),
+                        Text("${latestInvoice?.amountPaid != null ? latestInvoice!.amount! - latestInvoice!.amountPaid! < 0 ? 0 : latestInvoice!.amount! - latestInvoice!.amountPaid! : latestInvoice!.amount} f.", style: TextStyle(color: kCardTextColor, fontSize: 18, fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                  ],
+                ),
+              ) : Container(),
+              SizedBox(height: hv*1,),
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*2),
+                  width: double.infinity,
+                  color: whiteColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(S.of(context).mesDerniresFactures, style: TextStyle(color: kBlueDeep, fontSize: 16, fontWeight: FontWeight.w400)),
+                      SizedBox(height: hv*2,),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').snapshots(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                              ),
+                            );
+                          }
 
-                      return snapshot.data!.docs.length >= 1
-                      ? Expanded(
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                              InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
-                              if(invoice.type == "INSCRIPTION"){
-                                inscriptionId = invoice.id!;
-                              }
-                              print("name: ");
-                              return getContributionTile(
-                                label : invoice.trimester == null ? invoice.label : invoice.trimester, 
-                                doctorName : "bdbd", 
-                                date : DateTime.now(), 
-                                amount: invoice.amount, 
-                                firstDate : invoice.type == "INSCRIPTION" ? invoice.dateCreated!.toDate() : invoice.coverageStartDate!.toDate(), 
-                                lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate!.toDate() : invoice.coverageEndDate!.toDate(),
-                                paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate!.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
-                                type : invoice.type, state : 0, 
-                                action : () async {
-                                  num regFee = 10000;
+                          return snapshot.data!.docs.length >= 1
+                          ? Expanded(
+                            child: ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
+                                  InvoiceModel invoice = InvoiceModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
                                   if(invoice.type == "INSCRIPTION"){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
+                                    inscriptionId = invoice.id!;
                                   }
-                                  else if(invoice.stateValidate == true || invoice.paid == true){
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Côtisation éffectuée",)));
-                                  }
-                                  else {
-                                    await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
-                                      InvoiceModel regInvoice = InvoiceModel.fromDocument(doc, doc.data() as Map);
-                                      regFee = regInvoice.amount != null ? regInvoice.amount! : regFee;
-                                    });
-                                    if(invoice.invoiceIsSplitted == true){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee,),),);
-                                    }
-                                    else {
-                                      showModalBottomSheet(
-                                        context: context, 
-                                        builder: (BuildContext bc){
-                                          return SafeArea(
-                                            child: Container(
-                                              child: new Wrap(
-                                                children: <Widget>[
-                                                  ListTile(
-                                                    contentPadding: EdgeInsets.symmetric(vertical: hv*0.75),
-                                                    leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
-                                                    title: new Text('Payer en une fois', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                                                    subtitle: Text("Opérer un paiement unique pour votre couverture annuelle"),
-                                                    onTap: () {
-                                                      //Paiement unique
-                                                      PlanModel plan = PlanModel(
-                                                        id: inscriptionId,
-                                                        monthlyAmount: invoice.amount,
-                                                        label: invoice.label,
-                                                        registrationFee: regFee,
-                                                        text: {"titreNiveau": invoice.label}
-                                                      );
-                                                      planProvider.setPlanModel(plan);
-                                                      invoiceProvider.setInvoiceModel(invoice);
-                                                      Navigator.pushNamed(context, '/coverage-payment');
-                                                  }),
-                                                  ListTile(
-                                                    contentPadding: EdgeInsets.symmetric(vertical: hv*0.75),
-                                                    leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
-                                                    title: new Text('Segmenter la facture', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
-                                                    subtitle: Text("Des frais de gestion supplémentaires de 250FCFA s'appliqueront à chaque segmentation"),
-                                                    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee),),),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
+                                  print("name: ");
+                                  return getContributionTile(
+                                    context: context,
+                                    label : invoice.trimester == null ? invoice.label : invoice.trimester, 
+                                    doctorName : "bdbd", 
+                                    date : DateTime.now(), 
+                                    amount: invoice.amount, 
+                                    firstDate : invoice.type == "INSCRIPTION" ? invoice.dateCreated!.toDate() : invoice.coverageStartDate!.toDate(), 
+                                    lastDate : invoice.paymentDelayDate != null ? invoice.paymentDelayDate!.toDate() : invoice.coverageEndDate!.toDate(),
+                                    paid: invoice.stateValidate == true ? 1 : invoice.paid == true && invoice.stateValidate == false ? 3 : invoice.paymentDelayDate != null ? invoice.paymentDelayDate!.toDate().compareTo(DateTime.now()) > 0 ? 2 : 0 : 2,
+                                    type : invoice.type, state : 0, 
+                                    action : () async {
+                                      num regFee = 10000;
+                                      if(invoice.type == "INSCRIPTION"){
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Vous devez sélectionner la côtisation pour payer l'inscription",)));
+                                      }
+                                      else if(invoice.stateValidate == true || invoice.paid == true){
+                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Côtisation éffectuée",)));
+                                      }
+                                      else {
+                                        await FirebaseFirestore.instance.collection("ADHERENTS").doc(adherentProvider.getAdherent!.adherentId).collection('NEW_FACTURATIONS_ADHERENT').doc(invoice.inscriptionId).get().then((doc) {
+                                          InvoiceModel regInvoice = InvoiceModel.fromDocument(doc, doc.data() as Map);
+                                          regFee = regInvoice.amount != null ? regInvoice.amount! : regFee;
+                                        });
+                                        if(invoice.invoiceIsSplitted == true){
+                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee,),),);
+                                        }
+                                        else {
+                                          showModalBottomSheet(
+                                            context: context, 
+                                            builder: (BuildContext bc){
+                                              return SafeArea(
+                                                child: Wrap(
+                                                  children: <Widget>[
+                                                    ListTile(
+                                                      contentPadding: EdgeInsets.symmetric(vertical: hv*0.75),
+                                                      leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
+                                                      title: Text('Payer en une fois', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                                      subtitle: Text("Opérer un paiement unique pour votre couverture annuelle"),
+                                                      onTap: () {
+                                                        //Paiement unique
+                                                        PlanModel plan = PlanModel(
+                                                          id: inscriptionId,
+                                                          monthlyAmount: invoice.amount,
+                                                          label: invoice.label,
+                                                          registrationFee: regFee,
+                                                          text: {"titreNiveau": invoice.label}
+                                                        );
+                                                        planProvider.setPlanModel(plan);
+                                                        invoiceProvider.setInvoiceModel(invoice);
+                                                        Navigator.pushNamed(context, '/coverage-payment');
+                                                    }),
+                                                    ListTile(
+                                                      contentPadding: EdgeInsets.symmetric(vertical: hv*0.75),
+                                                      leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
+                                                      title: Text('Segmenter la facture', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                                      subtitle: Text("Des frais de gestion supplémentaires de 250FCFA s'appliqueront à chaque segmentation"),
+                                                      onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentCart(invoice: invoice, regFee: regFee),),),
+                                                    )
+                                                  ],
+                                                ),
+                                              );
+                                            }
                                           );
                                         }
-                                      );
+                                      }
                                     }
-                                  }
-                                }
-                              );
-                            }),
+                                  );
+                                }),
+                          )
+                          : Center(
+                            child: Container(padding: EdgeInsets.only(top: hv*4),child: Text(S.of(context).aucuneCtisationEnrgistrePourLeMoment, textAlign: TextAlign.center)),
+                          );
+                        }
                       )
-                      : Center(
-                        child: Container(padding: EdgeInsets.only(top: hv*4),child: Text(S.of(context).aucuneCtisationEnrgistrePourLeMoment, textAlign: TextAlign.center)),
-                      );
-                    }
-                  )
-                ],
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function()? action}) {
+  Widget getContributionTile({String? label, String? doctorName, DateTime? date, num? amount, DateTime? firstDate, DateTime? lastDate, String? type, int? state, required int paid, Function()? action, required BuildContext context}) {
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(lastDate)+" "+ firstDate!.year.toString();
     return GestureDetector(
       onTap: action,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: hv*0.5, horizontal: wv*2),
-        padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
+        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*4 : 50, vertical: hv*2),
         decoration: BoxDecoration(
           color: whiteColor,
           borderRadius: BorderRadius.circular(15),
@@ -311,34 +319,32 @@ class _ContributionsState extends State<Contributions> {
                 Text("$amount f.", style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold), overflow: TextOverflow.fade),
               ],
             ),
-            Spacer(),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
+            const Spacer(),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(child: Text(paid == 1 ? S.of(context).paye : paid == 2 ? S.of(context).enRetard : paid == 3 ? S.of(context).validationEnCours : S.of(context).enAttente, style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: Device.isSmartphone(context) ? wv*3.5 : 17))),
+                    SizedBox(height: hv*2,),
+                    Text(S.of(context).dlaiDePaiement, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
+                    Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold, decoration: paid == 1 ? TextDecoration.lineThrough : TextDecoration.none),),
+                  ],
+                ),
+                paid != 1 ? SizedBox(width: wv*5,) : Container(),
+                Container(
+                  padding: EdgeInsets.only(bottom: hv*3),
+                  child: paid != 1 ? Column(
                     children: [
-                      Center(child: Text(paid == 1 ? S.of(context).paye : paid == 2 ? S.of(context).enRetard : paid == 3 ? S.of(context).validationEnCours : S.of(context).enAttente, style: TextStyle(color: paid == 1 ? Colors.teal[500] : paid == 2 ? Colors.red : kGoldDeep, fontWeight: FontWeight.bold, fontSize: wv*3.5))),
-                      SizedBox(height: hv*2,),
-                      Text(S.of(context).dlaiDePaiement, style: TextStyle(color: kPrimaryColor, fontSize: 14)),
-                      Text(lastDateString, style: TextStyle(color: kPrimaryColor, fontSize: 16, fontWeight: FontWeight.bold, decoration: paid == 1 ? TextDecoration.lineThrough : TextDecoration.none),),
+                      Center(child: SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: Device.isSmartphone(context) ? wv*8 : 50,)),
+                      Text(S.of(context).payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: Device.isSmartphone(context) ? 12 : 14)),
                     ],
-                  ),
-                  paid != 1 ? SizedBox(width: wv*5,) : Container(),
-                  Container(
-                    padding: EdgeInsets.only(bottom: hv*3),
-                    child: paid != 1 ? Column(
-                      children: [
-                        Center(child: SvgPicture.asset('assets/icons/Two-tone/Wallet.svg', width: wv*8,)),
-                        Text(S.of(context).payer, style: TextStyle(color: kSouthSeas, fontWeight: FontWeight.bold, fontSize: 12)),
-                      ],
-                    ) :
-                    Container(),
-                  )
-                ],
-              ),
+                  ) :
+                  Container(),
+                )
+              ],
             )
           ],
         ),

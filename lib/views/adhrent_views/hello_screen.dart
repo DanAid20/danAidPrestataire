@@ -4,6 +4,7 @@ import 'package:danaid/core/providers/adherentProvider.dart';
 import 'package:danaid/core/providers/bottomAppBarControllerProvider.dart';
 import 'package:danaid/core/providers/notificationModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -29,76 +30,6 @@ class HelloScreen extends StatefulWidget {
 
 class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  List<Widget> tabs = <Widget>[
-    Tab(
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/icons/Bulk/Hands.svg'),
-          SizedBox(
-            width: wv * 2,
-          ),
-          Text(S.current.bienvenue)
-        ],
-      )
-    ),
-    Tab(
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/icons/Bulk/people-safe.svg'),
-          SizedBox(
-            width: wv * 2,
-          ),
-          Text(S.current.maCouverture)
-        ],
-      )
-    ),
-    Tab(
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/icons/Bulk/people-safe-one.svg'),
-          SizedBox(
-            width: wv * 2,
-          ),
-          Text(S.current.monDocteur)
-        ],
-      )
-    ),
-  ];
-  List<Widget> tabsDoctor = <Widget>[
-    Tab(
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/icons/Bulk/Hands.svg'),
-          SizedBox(
-            width: wv * 2,
-          ),
-          Text(S.current.bienvenue)
-        ],
-      ),
-    ),
-    Tab(
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/icons/Bulk/StethoscopeMini.svg'),
-          SizedBox(
-            width: wv * 2,
-          ),
-          Text(S.current.mesServices)
-        ],
-      ),
-    ),
-    Tab(
-      child: Row(
-        children: [
-          SvgPicture.asset('assets/icons/Bulk/Vector.svg'),
-          SizedBox(
-            width: wv * 2,
-          ),
-          Text(S.current.mesRendezvous)
-        ],
-      ),
-    )
-  ];
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
@@ -107,6 +38,19 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+  double iconSize = Device.isSmartphone(context) ? 15 : 25;
+  double space = Device.isSmartphone(context) ? wv*2 : 15;
+  EdgeInsetsGeometry iconMargin = EdgeInsets.only(left: Device.isSmartphone(context) ? 0 : 50, bottom: Device.isSmartphone(context) ? 10 : 30);
+  List<Widget> tabs = <Widget>[
+    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Hands.svg', width: iconSize,), SizedBox(width: space), Text(S.current.bienvenue)],), iconMargin: iconMargin,),
+    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/people-safe.svg', width: iconSize), SizedBox(width: space), Text(S.current.maCouverture)],), iconMargin: iconMargin,),
+    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/people-safe-one.svg', width: iconSize), SizedBox(width: space), Text(S.current.monDocteur)],)),
+  ];
+  List<Widget> tabsDoctor = <Widget>[
+    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Hands.svg', width: iconSize), SizedBox(width: space), Text(S.current.bienvenue)],),),
+    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/StethoscopeMini.svg', width: iconSize), SizedBox(width: space), Text(S.current.mesServices)],),),
+    Tab(child: Row(children: [SvgPicture.asset('assets/icons/Bulk/Vector.svg', width: iconSize), SizedBox(width: space), Text(S.current.mesRendezvous)],),)
+  ];
     
     UserProvider userProvider = Provider.of<UserProvider>(context);
     AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context);
@@ -125,12 +69,11 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
           backgroundColor: Colors.grey[100],
             body: NestedScrollView(
                 floatHeaderSlivers: true,
-                headerSliverBuilder:
-                    (BuildContext context, bool innerBoxIsScrolled) {
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                   return <Widget>[
                     SliverAppBar(
                       elevation: 1.0,
-                      toolbarHeight: hv * 12,
+                      toolbarHeight: Device.isSmartphone(context) ? hv * 12 : 125,
                       automaticallyImplyLeading: false,
                       backgroundColor: Colors.white,
                       title: Column(
@@ -146,12 +89,7 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                               right: 0,
                               child: InkWell(
                                 onTap: () => Navigator.pushNamed(context, "/notifications"),
-                                child: Container(
-                                    padding: EdgeInsets.all(wv * 3),
-                                    child: SvgPicture.asset(
-                                      "assets/icons/Two-tone/Notification2.svg",
-                                      width: wv * 7,
-                                    )),
+                                child: Container(padding: EdgeInsets.all(Device.isSmartphone(context) ? wv * 3 : 15), child: SvgPicture.asset("assets/icons/Two-tone/Notification2.svg", width: Device.isSmartphone(context) ? wv*7 : 45,)),
                               ),
                             ),
                             notifications.unSeen == 0 ? Container() : Positioned(
@@ -159,14 +97,14 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                               top: hv * 1,
                               child: Container(
                                 padding: EdgeInsets.all(4.5),
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                     color: Colors.yellow
                                   ),
                                 child: Text(
                                   notifications.unSeen.toString(),
                                   style: TextStyle(
-                                      fontSize: wv * 2.7,
+                                      fontSize: Device.isSmartphone(context) ? wv * 2.7 : 17,
                                       color: Colors.teal,
                                       fontWeight: FontWeight.w900),
                                 ),
@@ -175,32 +113,24 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                             Positioned(
                               right: wv * 1,
                               top: hv * 8,
-                              child: Container(
-                                child: Row(
-                                  children: [
-                                    userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? InkWell(
-                                      onTap: ()=>Navigator.pushNamed(context, '/family-points-page'),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
-                                        child: Text(
-                                          userProvider.getUserModel != null ? "${userProvider.getUserModel?.points != null ? userProvider.getUserModel!.points : 0} pts" : "0 pts",
-                                          style: TextStyle(
-                                              fontSize: inch * 1.3,
-                                              fontWeight: FontWeight.w700,
-                                              color: Colors.teal[400]),
-                                        ),
+                              child: Row(
+                                children: [
+                                  userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? InkWell(
+                                    onTap: ()=>Navigator.pushNamed(context, '/family-points-page'),
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
+                                      child: Text(
+                                        userProvider.getUserModel != null ? "${userProvider.getUserModel?.points != null ? userProvider.getUserModel!.points : 0} pts" : "0 pts",
+                                        style: TextStyle(fontSize: Device.isSmartphone(context) ? inch * 1.3 : 19, fontWeight: FontWeight.w700, color: Colors.teal[400]),
                                       ),
-                                    ) : Container(),
-                                    SizedBox(
-                                      width: wv * 2,
                                     ),
-                                    adherentProvider.getAdherent != null ? adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset(
-                                      "assets/icons/Bulk/Shield Done.svg",
-                                      width: 18,
-                                    ): Container(): Container(),
-                                     yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: 18,) : SizedBox.shrink()
-                                  ],
-                                ),
+                                  ) : Container(),
+                                  SizedBox(
+                                    width:Device.isSmartphone(context) ? wv * 2 : 10,
+                                  ),
+                                  adherentProvider.getAdherent != null ? adherentProvider.getAdherent?.adherentPlan != 0 ? SvgPicture.asset("assets/icons/Bulk/Shield Done.svg", width: Device.isSmartphone(context) ? 18 : 23): Container(): Container(),
+                                   yearsForBadget>=365 ?SvgPicture.asset("assets/icons/Bulk/Ticket Star.svg", width: Device.isSmartphone(context) ? 18 : 23,) : SizedBox.shrink()
+                                ],
                               ),
                             ),
                           ],
@@ -214,13 +144,9 @@ class _HelloScreenState extends State<HelloScreen> with SingleTickerProviderStat
                           isScrollable: true,
                           controller: _tabController,
                           labelColor: kPrimaryColor,
-                          labelStyle: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: inch * 1.7),
-                          unselectedLabelStyle:
-                              TextStyle(fontWeight: FontWeight.w400),
-                          tabs: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary
-                              ? tabs
-                              : tabsDoctor),
+                          labelStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: Device.isSmartphone(context) ? inch * 1.7 : 20),
+                          unselectedLabelStyle:TextStyle(fontWeight: FontWeight.w400),
+                          tabs: userProvider.getProfileType == adherent || userProvider.getProfileType == beneficiary ? tabs : tabsDoctor),
                     )
                   ];
                 },

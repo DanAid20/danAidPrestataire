@@ -54,7 +54,7 @@ class _PaymentCartState extends State<PaymentCart> {
 
     setState(() {});
 
-    /*await Future.delayed(const Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     showDialog(context: context,
       barrierDismissible: false,
       builder: (BuildContext context){
@@ -94,7 +94,7 @@ class _PaymentCartState extends State<PaymentCart> {
           ),
         );
       }
-    );*/
+    );
   }
 
   @override

@@ -5,7 +5,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/models/facture.dart';
-import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -45,6 +44,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
     @override
   void initState() {
     WidgetsBinding.instance?.addPostFrameCallback((_){
+
     // Add Your Code here.
     if (kDebugMode) {
       print(getMonthsInYear().toString());
@@ -206,15 +206,15 @@ class _PrestationHistoryState extends State<PrestationHistory> {
               child: Container(
                 child: Column(
                   children: [ 
-                    Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: Device.isSmartphone(context)?  wv*4 : 16)), 
-                    Text(S.of(context).vosConsultationsPaiement,style:  TextStyle(color: kBlueForce,fontSize:Device.isSmartphone(context)?  wv*4 : 16))
+                    Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)), 
+                    Text(S.of(context).vosConsultationsPaiement,style:  TextStyle(color: kBlueForce,fontSize:wv*4))
                   ],
                 ), 
               ), 
             ),
             actions: [
               IconButton(
-                icon: Icon(MdiIcons.refresh, color: kSouthSeas, size: Device.isSmartphone(context)? wv*8 : wv*3,),
+                icon: Icon(MdiIcons.refresh, color: kSouthSeas, size: wv*8,),
                 onPressed: () {
                    getPaiement(currentDate: data);
                 },
@@ -232,393 +232,387 @@ class _PrestationHistoryState extends State<PrestationHistory> {
           ),
           body: SingleChildScrollView(
     
-      child: Container(
-        child: Column(
-                children: [
-                  loading?SizedBox(
-                  width: double.infinity,
-                  height: hv*7.5,
-                  child: Loaders().buttonLoader(kPrimaryColor),): Container(),
-                  Container(  
-                    constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 500
-                    ),
-                     margin : EdgeInsets.only(
-                                left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,
-                                 child: Row(
-                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    InkWell(
-                                        onTap: ()=>{
-                                          if( currentYears!=dataTIme+1){
-                                           setState((){
-                                            newsDate=DateFormat("yyyy").format(DateTime(dataTIme+1, 1, 1, 0, 0));
-                                            currentYears=dataTIme+1;
-                                           }),
-                                          getPaiement(currentDate: newsDate),
-                                          }
-                                        },
-                                         child: Column(
-                                        children: [
-                                        Text('${dataTIme+1}', style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
-                                         currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:const Text('') ,) : Container()
-                                        ],
-                                      ),
+      child: Column(
+              children: [
+                loading?SizedBox(
+                width: double.infinity,
+                height: hv*7.5,
+                child: Loaders().buttonLoader(kPrimaryColor),): Container(),
+                Container(  
+                   margin : EdgeInsets.only(
+                              left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,
+                               child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                      onTap: ()=>{
+                                        if( currentYears!=dataTIme+1){
+                                         setState((){
+                                          newsDate=DateFormat("yyyy").format(DateTime(dataTIme+1, 1, 1, 0, 0));
+                                          currentYears=dataTIme+1;
+                                         }),
+                                        getPaiement(currentDate: newsDate),
+                                        }
+                                      },
+                                       child: Column(
+                                      children: [
+                                      Text('${dataTIme+1}', style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                       currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:const Text('') ,) : Container()
+                                      ],
                                     ),
-                                    InkWell(
-                                        onTap: ()=>{
-                                          if( currentYears!=dataTIme){
-                                             setState((){
-                                            newsDate=DateFormat("yyyy").format(DateTime(dataTIme, 1, 1, 0, 0));
-                                            print(newsDate);
-                                            currentYears=dataTIme;
-                                           }),
-                                          getPaiement(currentDate: newsDate),
-                                          }
-                                          
-                                        },child: Column(
-                                        children: [
-                                          Text('$dataTIme', style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
-                                         currentYears==dataTIme? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
-                                        ],
-                                      ),
-                                    ),
-                                    InkWell(
+                                  ),
+                                  InkWell(
+                                      onTap: ()=>{
                                        
-                                        onTap: ()=>{
-                                          
-                                            if( currentYears!=dataTIme-1){
-                                                setState((){ 
-                                              newsDate=DateFormat("yyyy").format(DateTime(dataTIme-1, 1, 1, 0, 0));
-                                              print(newsDate);
-                                              currentYears=dataTIme-1;
-                                            }),
+                                        if( currentYears!=dataTIme){
+                                           setState((){
+                                          newsDate=DateFormat("yyyy").format(DateTime(dataTIme, 1, 1, 0, 0));
+                                          print(newsDate);
+                                          currentYears=dataTIme;
+                                         }),
+                                        getPaiement(currentDate: newsDate),
+                                        }
+                                        
+                                      },child: Column(
+                                      children: [
+                                        Text('$dataTIme', style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                       currentYears==dataTIme? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                     
+                                      onTap: ()=>{
+                                        
+                                          if( currentYears!=dataTIme-1){
+                                              setState((){ 
+                                            newsDate=DateFormat("yyyy").format(DateTime(dataTIme-1, 1, 1, 0, 0));
+                                            print(newsDate);
+                                            currentYears=dataTIme-1;
+                                          }),
+                                            getPaiement(currentDate: newsDate),
+                                          }
+                                         
+                                      },child: Column(
+                                      children: [
+                                        Text('${dataTIme-1}', style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w700,
+                                            
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                       currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child: const Text('') ,) : Container()
+                                      ],
+                                    ),
+                                  ),
+                                  InkWell(
+                                      onTap: ()=>{
+                                          if( currentYears!=dataTIme-2){
+                                               setState((){
+                                                newsDate=DateFormat("yyyy").format(DateTime(dataTIme-2, 1, 1, 0, 0));
+                                                print(newsDate);
+                                                currentYears=dataTIme-2;
+                                              }),
                                               getPaiement(currentDate: newsDate),
                                             }
-                                           
-                                        },child: Column(
-                                        children: [
-                                          Text('${dataTIme-1}', style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w700,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
-                                         currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child: const Text('') ,) : Container()
-                                        ],
-                                      ),
-                                    ),
-                                    InkWell(
-                                        onTap: ()=>{
-                                            if( currentYears!=dataTIme-2){
-                                                 setState((){
-                                                  newsDate=DateFormat("yyyy").format(DateTime(dataTIme-2, 1, 1, 0, 0));
-                                                  print(newsDate);
-                                                  currentYears=dataTIme-2;
-                                                }),
-                                                getPaiement(currentDate: newsDate),
-                                              }
-                                          
-                                        }, child: Column(
-                                        children: [
-                                          Text('${dataTIme-2}', style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w700,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
-                                         currentYears==dataTIme-2? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
-                                        ],
-                                      ),
-                                    ),
-                                   
-                                  ],
-                                )),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 700
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Column(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              margin : EdgeInsets.only(
-                                  left: 15.w,top: 2.h),
-                              child: Text(S.of(context).statusDesPaiements, style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize:  Device.isSmartphone(context) ? 16.sp : 19 ), textScaleFactor: 1.0,)),
-                            Container(
-                               alignment: Alignment.centerLeft,
-                               
-                              margin: EdgeInsets.only(left: wv*5, top: hv*2, right: wv*5) ,
-                              padding: const EdgeInsets.all(20) ,
-                              width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color:kThirdIntroColor.withOpacity(0.3),
-                                    
-                                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                  ),
-                              child: 
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  
-                                  children: [
-                                    Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w500,
-                                              
-                                              fontSize:  Device.isSmartphone(context) ? wv*3.5 :16)),
-                                    Container(
-                                      margin: EdgeInsets.only(left:wv*6),
-                                      child: Column(
+                                        
+                                      }, child: Column(
                                       children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Text('$consultationpersonnes x',textScaleFactor: 1.0, style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w600,
-                                              
-                                              fontSize:  Device.isSmartphone(context) ? wv*3.5 :18)),
-                                                Text('2000 f.',style: TextStyle(
-                                              color: kSimpleForce,
-                                              fontWeight: FontWeight.w500,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5 :18), textScaleFactor: 1.0,),
-                                              ],
-                                            ),
-                                          SizedBox(
-                                            width: 80.w,
-                                            child: Text(S.of(context).beneficiaresJours,style: TextStyle(
-                                              color: kSimpleForce,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize:  Device.isSmartphone(context) ? wv*3 :16), textScaleFactor: 1.0,),
-                                          ),
+                                        Text('${dataTIme-2}', style: TextStyle(
+                                            color: kFirstIntroColor,
+                                            fontWeight: FontWeight.w700,
                                             
-                                                                              ],
-                                        ),
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                       currentYears==dataTIme-2? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
-                                    )),
-                                    Text('${consultationpersonnes*2000}f',style: TextStyle(
+                                    ),
+                                  ),
+                                 
+                                ],
+                              )),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                       mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin : EdgeInsets.only(
+                              left: 15.w,top: 2.h),
+                          child: Text(S.of(context).statusDesPaiements, style: TextStyle(
+                                      color: kFirstIntroColor,
+                                      fontWeight: FontWeight.w500,
+                                      
+                                      fontSize:  16.sp), textScaleFactor: 1.0,)),
+                        Container(
+                           alignment: Alignment.centerLeft,
+                           
+                          margin: EdgeInsets.only(left: wv*5, top: hv*2, right: wv*5) ,
+                          padding: const EdgeInsets.all(20) ,
+                          width: double.infinity,
+                              decoration: BoxDecoration(
+                                color:kThirdIntroColor.withOpacity(0.3),
+                                
+                                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              ),
+                          child: 
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              
+                              children: [
+                                Text(S.of(context).consultation, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :20 ), textScaleFactor: 1.0,),
-                                  ],
-                                ),
-                                 SizedBox(
-                              height: hv * 1.3,
-                            ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                          
+                                          fontSize: wv*3.5)),
+                                Container(
+                                  margin: EdgeInsets.only(left:wv*6),
+                                  child: Column(
                                   children: [
-                                    Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w500,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3 :16)),
-                                    Container(
-                                      margin: EdgeInsets.only(left:hv*4),
-                                      child: Column(
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Text('$referencemeentPersonnes x',textScaleFactor: 1.0, style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w600,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
-                                                Text('2000f.',style: TextStyle(
-                                              color: kSimpleForce,
-                                              fontWeight: FontWeight.w500,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
-                                              ],
-                                            ),
-                                           SizedBox(
-                                            width: Device.isSmartphone(context) ? 80.w :80.w ,
-                                            child: Text(S.of(context).personnesInscrites,style: TextStyle(
-                                              color: kSimpleForce,
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: Device.isSmartphone(context) ? wv*3 :16), textScaleFactor: 1.0,),
-                                          ),
+                                            Text('$consultationpersonnes x',textScaleFactor: 1.0, style: TextStyle(
+                                          color: kFirstIntroColor,
+                                          fontWeight: FontWeight.w600,
+                                          
+                                          fontSize: wv*3.5)),
+                                            Text('2000 f.',style: TextStyle(
+                                          color: kSimpleForce,
+                                          fontWeight: FontWeight.w500,
+                                          
+                                          fontSize: wv*3.5), textScaleFactor: 1.0,),
                                           ],
                                         ),
-                                      ],
-                                    )),
-                                    const Spacer(),
-                                    Text('${referencemeentPersonnes*2000}f',style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w700,
-                                          
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                      SizedBox(
+                                        width: 80.w,
+                                        child: Text(S.of(context).beneficiaresJours,style: TextStyle(
+                                          color: kSimpleForce,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: wv*3), textScaleFactor: 1.0,),
+                                      ),
+                                        
+                                                                          ],
+                                    ),
                                   ],
-                                ),
-                              const Divider(),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
-                                              color: kFirstIntroColor,
-                                              fontWeight: FontWeight.w500,
-                                              
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
-                                    const Spacer(),
-                                    Text('${ referencemeentPersonnes*2000+consultationpersonnes*2000} f',style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w700,
-                                          
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
-                                  ],
-                                ),
-                               SizedBox(height: hv * 1.3),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
-                                              color: kDeepTeal,
-                                              fontWeight: FontWeight.w600,
-                                              
-                                              fontSize:Device.isSmartphone(context) ? wv*3.5 :16)),
-                                    const Spacer(),
-                                    Text('$paidYear f',style: TextStyle(
-                                          color: kDeepTeal,
-                                          fontWeight: FontWeight.w700,
-                                          
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
-                                  ],
-                                ),
-                               SizedBox(
-                              height: hv * 1.3,
-                            ),
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
-                                              color: kSimpleForce,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
-                                    const Spacer(),
-                                    Text('$notpaidYear f',style: TextStyle(
-                                          color: kFirstIntroColor,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
-                                  ],
-                                ),
+                                )),
+                                Text('${consultationpersonnes*2000}f',style: TextStyle(
+                                      color: kFirstIntroColor,
+                                      fontWeight: FontWeight.w500,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
-                            )),
-                          ],
+                            ),
+                             SizedBox(
+                          height: hv * 1.3,
                         ),
-                      ],
-                    ),
-                  ),
-                 SizedBox(height: hv * 3,),
-                 Container(
-                    constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 700
-                    ),
-                    color: Colors.white,
-                    margin: EdgeInsets.only(top: hv * 2),
-                                child: Column(
-                                  children: [
-                                    InkWell(
-                                      onTap: ()=>{
-                                        getPaiement()
-                                      },
-                                      child: Container( margin: EdgeInsets.only(left: wv * 4, top: hv * 2,bottom: wv * 2),alignment: Alignment.centerLeft, child: Text('Mes derniers prestations', style: TextStyle(
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(S.of(context).rfrencements, textScaleFactor: 1.0, style: TextStyle(
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :18 ), textScaleFactor: 1.0,)),
+                                          fontSize: wv*3.5)),
+                                Container(
+                                  margin: EdgeInsets.only(left:hv*4),
+                                  child: Column(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text('$referencemeentPersonnes x',textScaleFactor: 1.0, style: TextStyle(
+                                          color: kFirstIntroColor,
+                                          fontWeight: FontWeight.w600,
+                                          
+                                          fontSize: wv*3.5)),
+                                            Text('2000f.',style: TextStyle(
+                                          color: kSimpleForce,
+                                          fontWeight: FontWeight.w500,
+                                          
+                                          fontSize: wv*3.5), textScaleFactor: 1.0,),
+                                          ],
+                                        ),
+                                       SizedBox(
+                                        width: 80.w,
+                                        child: Text(S.of(context).personnesInscrites,style: TextStyle(
+                                          color: kSimpleForce,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: wv*3), textScaleFactor: 1.0,),
+                                      ),
+                                      ],
                                     ),
-                              Column(
+                                  ],
+                                )),
+                                const Spacer(),
+                                Text('${referencemeentPersonnes*2000}f',style: TextStyle(
+                                      color: kFirstIntroColor,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
+                              ],
+                            ),
+                          const Divider(),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(S.of(context).totalAnnuel, textScaleFactor: 1.0, style: TextStyle(
+                                          color: kFirstIntroColor,
+                                          fontWeight: FontWeight.w500,
+                                          
+                                          fontSize: wv*3.5)),
+                                const Spacer(),
+                                Text('${ referencemeentPersonnes*2000+consultationpersonnes*2000} f',style: TextStyle(
+                                      color: kFirstIntroColor,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
+                              ],
+                            ),
+                           SizedBox(
+                          height: hv * 1.3,
+                        ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(S.of(context).pay, textScaleFactor: 1.0, style: TextStyle(
+                                          color: kDeepTeal,
+                                          fontWeight: FontWeight.w600,
+                                          
+                                          fontSize: wv*3.5)),
+                                const Spacer(),
+                                Text('$paidYear f',style: TextStyle(
+                                      color: kDeepTeal,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
+                              ],
+                            ),
+                           SizedBox(
+                          height: hv * 1.3,
+                        ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(S.of(context).restePayer, textScaleFactor: 1.0, style: TextStyle(
+                                          color: kSimpleForce,
+                                          fontWeight: FontWeight.w600,
+                                          
+                                          fontSize: wv*3.5)),
+                                const Spacer(),
+                                Text('$notpaidYear f',style: TextStyle(
+                                      color: kFirstIntroColor,
+                                      fontWeight: FontWeight.w700,
+                                      
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
+                              ],
+                            ),
+                          ],
+                        )),
+                      ],
+                    ),
+                  ],
+                ),
+               SizedBox(height: hv * 3,),
+               Container(
+                 width: double.infinity,
+                  color: Colors.white,
+                  margin: EdgeInsets.only(top: hv * 2),
+                              child: Column(
                                 children: [
-                                  // GestureDetector(onTap:(){
-                                  //   Navigator.pushNamed(context, '/details-history-prestation-doctor');
-                                  // }, 
-                                  //    child: HomePageComponents().paiementItem()),
-                                  // HomePageComponents().paiementItem(),
-                                  // HomePageComponents().paiementItem(),
-                                  // HomePageComponents().paiementItem(),
-                                paiementHistory.isEmpty ?   Padding(
-                                  padding: const EdgeInsets.all(15.0),
-                                  child: Center(child: Text(S.of(context).aucuneTransactionPourCetteAnne)),
-                                ):
-                                 loading? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
-                                 ListView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  primary: false,
-                                  itemCount: paiementHistory.length,
-                                  itemBuilder: (context, index) {
-                                    if(paiementHistory.elementAt(index).isNotEmpty){
-                                         for (int key in  paiementHistory.elementAt(index).keys){
-                                          // print( paiementHistory.elementAt(index)[key]);
-                                          // print( paiementHistory.elementAt(index)[key]['month']);
-                                           return GestureDetector(onTap:(){
-                                           
-                                           Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DetailsPrestationHistory(
-                                                      facture:paiementHistory.elementAt(index)[key]!['data'] as List<Facture>,
-                                                      month: paiementHistory.elementAt(index)[key]!['month']!.toString(),
-                                                    )),
-                                          );
-                                        }, 
-                                          child: HomePageComponents().paiementItem(
-                                            context: context,
-                                            lastDatePaiement: paiementHistory.elementAt(index)[key]!['lasDateOfMonth']!.toString(),
-                                            month:paiementHistory.elementAt(index)[key]!['month']!.toString(), 
-                                            paidAllReady: paiementHistory.elementAt(index)[key]!['paidAllReady']!.toString(),
-                                            paidOrNot: paiementHistory.elementAt(index)[key]!['EnAttente'] as bool,
-                                            prix: paiementHistory.elementAt(index)[key]!['totlaOfMonths']!.toString()
-                                          ));
-                                        }
-                                   
-                                    }else {
-                                      return Text(S.of(context).aucuneTransactionPourCetteAnne);
-                                    }
-                                    return  Text(S.of(context).aucuneTransactionPourCetteAnne);
-                               
-                                   }
-                                ),
-                                ],
+                                  InkWell(
+                                    onTap: ()=>{
+                                      getPaiement()
+                                    },
+                                    child: Container( margin: EdgeInsets.only(left: wv * 4, top: hv * 2,bottom: wv * 2),alignment: Alignment.centerLeft, child: Text('Mes derniers prestations', style: TextStyle(
+                                        color: kFirstIntroColor,
+                                        fontWeight: FontWeight.w500,
+                                        
+                                        fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                  ),
+                            Column(
+                              children: [
+                                // GestureDetector(onTap:(){
+                                //   Navigator.pushNamed(context, '/details-history-prestation-doctor');
+                                // }, 
+                                //    child: HomePageComponents().paiementItem()),
+                                // HomePageComponents().paiementItem(),
+                                // HomePageComponents().paiementItem(),
+                                // HomePageComponents().paiementItem(),
+                              paiementHistory.isEmpty ?   Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Center(child: Text(S.of(context).aucuneTransactionPourCetteAnne)),
+                              ):
+                               loading? Center(child: Loaders().buttonLoader(kPrimaryColor)) : 
+                               ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                primary: false,
+                                itemCount: paiementHistory.length,
+                                itemBuilder: (context, index) {
+                                  if(paiementHistory.elementAt(index).isNotEmpty){
+                                       for (int key in  paiementHistory.elementAt(index).keys){
+                                        // print( paiementHistory.elementAt(index)[key]);
+                                        // print( paiementHistory.elementAt(index)[key]['month']);
+                                         return GestureDetector(onTap:(){
+                                         
+                                         Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DetailsPrestationHistory(
+                                                    facture:paiementHistory.elementAt(index)[key]!['data'] as List<Facture>,
+                                                    month: paiementHistory.elementAt(index)[key]!['month']!.toString(),
+                                                  )),
+                                        );
+                                      }, 
+                                        child: HomePageComponents().paiementItem(
+                                          lastDatePaiement: paiementHistory.elementAt(index)[key]!['lasDateOfMonth']!.toString(),
+                                          month:paiementHistory.elementAt(index)[key]!['month']!.toString(), 
+                                          paidAllReady: paiementHistory.elementAt(index)[key]!['paidAllReady']!.toString(),
+                                          paidOrNot: paiementHistory.elementAt(index)[key]!['EnAttente'] as bool,
+                                          prix: paiementHistory.elementAt(index)[key]!['totlaOfMonths']!.toString()
+                                        ));
+                                      }
+                                 
+                                  }else {
+                                    return Text(S.of(context).aucuneTransactionPourCetteAnne);
+                                  }
+                                  return  Text(S.of(context).aucuneTransactionPourCetteAnne);
+                             
+                                 }
                               ),
-                    //      'month': monthName[key],
-                    // 'data': fac,
-                    // 'patientLenght': fac.length,
-                    // ''
-                    // 'totlaOfMonths': sum,
-                    // 'lasDateOfMonth': formatedDate,
-                    // 'EnAttente' : isSolve
+                              ],
+                            ),
+                  //      'month': monthName[key],
+                  // 'data': fac,
+                  // 'patientLenght': fac.length,
+                  // ''
+                  // 'totlaOfMonths': sum,
+                  // 'lasDateOfMonth': formatedDate,
+                  // 'EnAttente' : isSolve
 
-                   ]
-                                  ,
-                                ),
-                 )
-                ],
-              ),
-      ),
+                 ]
+                                ,
+                              ),
+               )
+              ],
+            ),
           ),
         )
       );

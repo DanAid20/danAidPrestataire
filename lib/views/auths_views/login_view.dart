@@ -73,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 Container(
                   color: Colors.transparent,
-                  child: const DanAidDefaultHeader(showDanAidLogo: true,),
+                  child: const Hero(tag: "danaid-login", child: DanAidDefaultHeader(showDanAidLogo: true,)),
                 ),
                 Expanded(
                   child: Container(
@@ -258,6 +258,18 @@ class _LoginViewState extends State<LoginView> {
                 },
               ),
             ),
+            //const Divider(thickness: 1,),
+            /*SizedBox(
+              width: Device.isSmartphone(context) ? wv*100 : 810,
+              child: Hero(
+                tag: "login-email-button",
+                child: CustomTextButton(
+                  text: "Connection par email",
+                  color: kSouthSeas,
+                  action: () => Navigator.pushNamed(context, '/login-email'),
+                ),
+              ),
+            ), */
           ],
         ),
       ),

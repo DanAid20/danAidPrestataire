@@ -9,7 +9,6 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
-import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -77,15 +76,11 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
-      constraints: BoxConstraints(
-        maxWidth: Device.isSmartphone(context) ? double.infinity : 700,
-        maxHeight: Device.isSmartphone(context) ? double.infinity : 420
-      ),
       margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      child: Column( 
+      child: Column(
         children: [
           GestureDetector(
             onTap: () {
@@ -106,9 +101,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
             },
             child: Container(
                 margin:
-                    EdgeInsets.only(left: SizeConfig.defaultSize! * 1.5, right: SizeConfig.defaultSize! * 1.5, top: 20.h),
-                width:  Device.isSmartphone(context) ? 330.w : 700 ,
-                height: Device.isSmartphone(context) ? 140.h : 220 ,
+                    EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: 20.h),
+                width: 330.w,
+                height: 140.h,
                 decoration: BoxDecoration(
                   color: isPrestataire ? kGold : kThirdIntroColor,
                   boxShadow: const[
@@ -119,17 +114,18 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     Radius.circular(17),
                   ),
                 ),
-                padding: EdgeInsets.only(top: SizeConfig.defaultSize! * 1),
+                padding: EdgeInsets.only(top: hv * 1),
                 child: Column(
                   children: [
                     Align(
                       alignment: Alignment.topRight,
                       child: Container(
-                        margin: EdgeInsets.only(right: SizeConfig.defaultSize! * 3.5, top: SizeConfig.defaultSize! * 0.5),
+                        margin: EdgeInsets.only(right: wv * 3.5, top: hv * 0.5),
                         child: SvgPicture.asset(
                             'assets/icons/Bulk/Bookmark.svg',
-                            width: Device.isSmartphone(context) ? wv*8 : wv*3,
-                            color: isPrestataire == true ? kBlueForce : kDeepTeal),
+                            width: wv * 8,
+                            color:
+                                isPrestataire == true ? kBlueForce : kDeepTeal),
                       ),
                     ),
                     Container(
@@ -147,8 +143,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               textScaleFactor: 1.0,
                               style: TextStyle(
                                   color: kCardTextColor,
-                                  fontWeight: FontWeight.w800, 
-                                  fontSize: Device.isSmartphone(context) ?20.sp : 30),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 20.sp),
                             ),
                           ),
                         ],
@@ -170,7 +166,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: Device.isSmartphone(context) ?15.5.sp : 22 ),
+                                  fontSize: 15.5.sp),
                               overflow: TextOverflow.clip,
                             ),
                           ),
@@ -181,8 +177,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 )),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 2.0),
-            height: 110.r ,
+            margin: EdgeInsets.symmetric(vertical: 2.0),
+            height: 110.r,
             child:  ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
@@ -275,9 +271,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       children: [
         Container(
             margin: EdgeInsets.only(
-                left:  Device.isSmartphone(context) ? 20.w : 8.w , right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-            width:  Device.isSmartphone(context) ? 125.r :200.r,
-            height:  Device.isSmartphone(context) ? 85.r : 80.r ,
+                left: 20.w, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
+            width: 125.r,
+            height: 85.r,
             decoration: BoxDecoration(
               color: isPrestataire == true ? kGoldlight : kThirdIntroColor,
               boxShadow: const [
@@ -296,7 +292,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     margin: EdgeInsets.only(left: 10.w, top: 4.h),
                     child: SvgPicture.asset(
                         iconesUrl ?? 'assets/icons/Bulk/Bookmark.svg',
-                        width:  Device.isSmartphone(context) ? wv * 6 :wv * 2,
+                        width: wv * 6,
                         color: isPrestataire == true ? kBlueForce : kDeepTeal),
                   ),
                 ),
@@ -306,13 +302,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   child: Row(
                     children: [
                       SizedBox(
-                        width:  Device.isSmartphone(context) ? 90.r :100.r   ,
+                        width: 90.r,
                         child: Text(
                           title ?? S.of(context).ajouterUnPatient,
-                          style: TextStyle( 
+                          style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: Device.isSmartphone(context) ? 16.sp : 14 ),
+                              fontSize: 16.sp),
                         ),
                       ),
                     ],
@@ -440,7 +436,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                     etat:doc["status"],
                                     imgUrl: '${data["imageUrl"]}',
                                     nom: '${data["prenom"]} ${data["nomFamille"]}',
-                                    subtitle: '${doc["title"]}'));
+                                    subtitle: '${doc["title"]}', context: context));
                               }
                               return Text(S.of(context).loading);
                             },
@@ -492,7 +488,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               etat:doc["status"],
                               imgUrl: '${data["imageUrl"]}',
                               nom: '${data["prenom"]} ${data["nomFamille"]}',
-                              subtitle: '${doc["title"]}'));
+                              subtitle: '${doc["title"]}', context: context));
                         }
                         return Text(S.of(context).loading);
                       },
@@ -571,9 +567,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
-       constraints: BoxConstraints(
-        maxWidth: Device.isSmartphone(context) ? double.infinity : 700,
-      ),
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
@@ -589,13 +582,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 S.of(context).demandesDeRdv,
                 style: TextStyle(
                     color: kFirstIntroColor,
-                    fontSize:  Device.isSmartphone(context) ? 15.sp : 20 ,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w500),
               ),
               Text(S.of(context).voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
-                      fontSize:  Device.isSmartphone(context) ? 15.sp : 20,
+                      fontSize: 15.sp,
                       fontWeight: FontWeight.w700))
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -635,7 +628,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
         userProvider.getProfileType == serviceProvider ? true : false;
 
     return Container(
-      
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
@@ -687,7 +679,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Container(
-        
         decoration: const BoxDecoration(
           color: kBgTextColor,
         ),

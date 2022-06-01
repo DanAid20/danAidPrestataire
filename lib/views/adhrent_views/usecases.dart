@@ -9,6 +9,8 @@ import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class UseCaseList extends StatefulWidget {
   const UseCaseList({ Key? key }) : super(key: key);
 
@@ -24,14 +26,14 @@ class _UseCaseListState extends State<UseCaseList> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kDeepTeal,
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
-        title: Text("Utilisation du service", style: TextStyle(color: whiteColor),),
+        leading: IconButton(icon: const Icon(Icons.arrow_back_ios_rounded, color: whiteColor,), onPressed: ()=>Navigator.pop(context)),
+        title: const Text("Utilisation du service", style: TextStyle(color: whiteColor),),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent!.adherentId).orderBy('createdDate', descending: true).limit(limit).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
@@ -48,31 +50,37 @@ class _UseCaseListState extends State<UseCaseList> {
                   }
                   return true;
                 },
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    int lastIndex = snapshot.data!.docs.length - 1;
-                    DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                    UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
-                    print("name: ");
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                      child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
-                        initial: useCase.establishment!.toUpperCase().substring(0,3),
-                        name: useCase.establishment,
-                        date: useCase.dateCreated!.toDate(),
-                        state: useCase.status,
-                        price: useCase.amount != null ? useCase.amount : 0,
-                        action: (){
-                          UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
-                          usecaseProvider.setUseCaseModel(useCase);
-                          Navigator.pushNamed(context, '/use-case');
-                        }
-                      ) : Container(),
-                    );
-                  }),
+                child: Center(
+                  child: SizedBox(
+                    width: Device.isSmartphone(context) ? wv*100 : 1000,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        int lastIndex = snapshot.data!.docs.length - 1;
+                        DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
+                        UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
+                        print("name: ");
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                          child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
+                            context: context,
+                            initial: useCase.establishment!.toUpperCase().substring(0,3),
+                            name: useCase.establishment,
+                            date: useCase.dateCreated!.toDate(),
+                            state: useCase.status,
+                            price: useCase.amount != null ? useCase.amount : 0,
+                            action: (){
+                              UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
+                              usecaseProvider.setUseCaseModel(useCase);
+                              Navigator.pushNamed(context, '/use-case');
+                            }
+                          ) : Container(),
+                        );
+                      }),
+                  ),
+                ),
             )
             : Center(
               child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),

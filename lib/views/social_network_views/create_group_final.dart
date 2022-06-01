@@ -678,7 +678,7 @@ class _CreateGroupFinalStepState extends State<CreateGroupFinalStep> {
                           activeColor: primaryColor,
                           onChanged: (newValue) {
                             setState(() {
-                              _trustConditionAccepted = newValue;
+                              _trustConditionAccepted = newValue!;
                             });
                           },
                         ),

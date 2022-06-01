@@ -4,7 +4,6 @@ import 'package:danaid/core/models/serviceProviderModel.dart';
 import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
-import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -253,10 +252,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                 width: double.infinity,
                 height: hv*7.5,
                 child: Loaders().buttonLoader(kPrimaryColor),): Container(),
-                Container(  
-                   constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 500
-                    ), 
+                Container(   
                   margin : EdgeInsets.only(
                               left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,
                                child: Row(
@@ -279,7 +275,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
                                             
-                                             fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
                                        currentYears==dataTIme+1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
@@ -301,7 +297,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
                                             
-                                             fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
                                        currentYears==dataTIme? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
@@ -323,7 +319,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
                                             
-                                             fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
                                        currentYears==dataTIme-1? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
@@ -345,7 +341,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                             color: kFirstIntroColor,
                                             fontWeight: FontWeight.w700,
                                             
-                                             fontSize: Device.isSmartphone(context) ? wv*3.5:18), textScaleFactor: 1.0),
+                                            fontSize: wv*3.5), textScaleFactor: 1.0),
                                        currentYears==dataTIme-2? Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,) : Container()
                                       ],
                                     ),
@@ -366,7 +362,8 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                           child: Text(S.of(context).statusDesPaiements, style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
-                                      fontSize:  Device.isSmartphone(context) ? 16.sp : 19 ), textScaleFactor: 1.0,)),
+                                      
+                                      fontSize:  16.sp), textScaleFactor: 1.0,)),
                         Container(
                            alignment: Alignment.centerLeft,
                            
@@ -390,7 +387,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                          fontSize: wv*3.5)),
                                 Container(
                                   margin: EdgeInsets.only(left:wv*6),
                                   child: Column(
@@ -405,12 +402,12 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w600,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :18)),
+                                          fontSize: wv*3.5)),
                                             Text('2000 f.',style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :18), textScaleFactor: 1.0,),
+                                          fontSize: wv*3.5), textScaleFactor: 1.0,),
                                           ],
                                         ),
                                       Container(
@@ -418,7 +415,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         child: Text(S.of(context).beneficiaresJours,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
-                                          fontSize:  Device.isSmartphone(context) ? wv*3 :16), textScaleFactor: 1.0,),
+                                          fontSize: wv*3), textScaleFactor: 1.0,),
                                       ),
                                         
                                                                           ],
@@ -429,7 +426,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w500,
                                       
-                                      fontSize:  Device.isSmartphone(context) ? wv*3.5 :20), textScaleFactor: 1.0,),
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
                             ),
                              SizedBox(
@@ -442,7 +439,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                          fontSize: wv*3.5)),
                                 Container(
                                   margin: EdgeInsets.only(left:hv*4),
                                   child: Column(
@@ -457,12 +454,12 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w600,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                          fontSize: wv*3.5)),
                                             Text('2000f.',style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                          fontSize: wv*3.5), textScaleFactor: 1.0,),
                                           ],
                                         ),
                                        Container(
@@ -470,7 +467,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         child: Text(S.of(context).personnesInscrites,style: TextStyle(
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                          fontSize: wv*3), textScaleFactor: 1.0,),
                                       ),
                                       ],
                                     ),
@@ -481,7 +478,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
                             ),
                             new Divider(),
@@ -492,13 +489,13 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kFirstIntroColor,
                                           fontWeight: FontWeight.w500,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                          fontSize: wv*3.5)),
                                  Spacer(),
                                 Text('${ referencemeentPersonnes!*2000+consultationpersonnes!*2000} f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
                             ),
                            SizedBox(
@@ -511,13 +508,13 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kDeepTeal,
                                           fontWeight: FontWeight.w600,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                          fontSize: wv*3.5)),
                                  Spacer(),
                                 Text('$paidYear f',style: TextStyle(
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
                             ),
                            SizedBox(
@@ -530,13 +527,13 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                           color: kSimpleForce,
                                           fontWeight: FontWeight.w600,
                                           
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 :16)),
+                                          fontSize: wv*3.5)),
                                  Spacer(),
                                 Text('$notpaidYear f',style: TextStyle(
                                       color: kFirstIntroColor,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: Device.isSmartphone(context) ? wv*3.5 :16), textScaleFactor: 1.0,),
+                                      fontSize: wv*3.5), textScaleFactor: 1.0,),
                               ],
                             ),
                           ],
@@ -560,7 +557,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
                                         color: kFirstIntroColor,
                                         fontWeight: FontWeight.w500,
                                         
-                                        fontSize: Device.isSmartphone(context) ? wv*3.5 :18), textScaleFactor: 1.0,)),
+                                        fontSize: wv*3.5), textScaleFactor: 1.0,)),
                                   ),
                             Column(
                               children: [

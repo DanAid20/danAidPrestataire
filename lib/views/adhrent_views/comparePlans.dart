@@ -16,6 +16,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class ComparePlans extends StatefulWidget {
   @override
   _ComparePlansState createState() => _ComparePlansState();
@@ -94,37 +96,39 @@ class _ComparePlansState extends State<ComparePlans> {
         ),
         title: Column(crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(S.of(context).comparerLesServices, style: TextStyle(color: kPrimaryColor, fontSize: wv*4.2, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
+            Text(S.of(context).comparerLesServices, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*4.2 : 22.5, fontWeight: FontWeight.w400), overflow: TextOverflow.fade,),
             Text(S.of(context).modifierMaCouverture,
-              style: TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
+              style: const TextStyle(color: kPrimaryColor, fontSize: 14, fontWeight: FontWeight.w300),
             ),
           ],
         ),
         centerTitle: true,
-        actions: [
-          //IconButton(icon: SvgPicture.asset('assets/icons/Two-tone/InfoSquare.svg', color: kSouthSeas,), padding: EdgeInsets.all(4), constraints: BoxConstraints(), onPressed: (){}),
-          //IconButton(icon: SvgPicture.asset('assets/icons/Bulk/Drawer.svg', color: kSouthSeas), padding: EdgeInsets.all(8), constraints: BoxConstraints(), onPressed: (){})
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
               margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-              child: HomePageComponents.getInfoActionCard(
-                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan),
-                actionLabel: S.of(context).comparerLesServices,
-                subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
-                noAction: true
+              child: SizedBox(
+                width: Device.isSmartphone(context) ? wv*100 : 1000,
+                child: HomePageComponents.getInfoActionCard(
+                  title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan),
+                  actionLabel: S.of(context).comparerLesServices,
+                  subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
+                  noAction: true,
+                  noPadding: Device.isSmartphone(context) ? false : true,
+                  context: context
+                ),
               ),
             ),
             SizedBox(height: hv*1,),
 
-            Row(
+            currentPlan != null && state != null ? Row(
               children: [
-                currentPlan != null && state != null ? Table(
-                  defaultColumnWidth: FixedColumnWidth(wv*30),
-                  columnWidths: <int, TableColumnWidth>{0 : FixedColumnWidth(200)},
+                Device.isSmartphone(context) ? Container() : Expanded(flex: 1, child: Container()),
+                Table(
+                  defaultColumnWidth: FixedColumnWidth(Device.isSmartphone(context) ? wv*30 : 250),
+                  columnWidths: <int, TableColumnWidth>{0 : FixedColumnWidth(Device.isSmartphone(context) ? 200 : 250)},
                   children: [
                     TableRow(
                       children: [
@@ -132,7 +136,7 @@ class _ComparePlansState extends State<ComparePlans> {
                           padding: EdgeInsets.only(left: wv*2),
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(color: kDeepTeal, fontSize: 16),
+                              style: const TextStyle(color: kDeepTeal, fontSize: 16),
                               children: [
                                 TextSpan(text: plans[state]!.label! +'\n', style: TextStyle(fontSize: 30)),
                                 TextSpan(text: plans[state]!.monthlyAmount.toString(), style: TextStyle(fontSize: 25)),
@@ -144,54 +148,23 @@ class _ComparePlansState extends State<ComparePlans> {
                         )
                       ]
                     ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: S.of(context).couvertureSant, center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: S.of(context).plafondAnnuel, center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: "Prêt santé", center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: "taux d'intérêt", center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: "Médecin de famille gratuit", center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: "Réseau d'entraide", center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: "Gagnez des points", subtitle: "1 pt = 0,5 Cfa", center: false)
-                      ]
-                    ),
-                    TableRow(
-                      children: [
-                        defaultCell(text: "Couverture familiale", subtitle: "Jusqu'a 5 personnes", center: false)
-                      ]
-                    ),
+                    TableRow(children: [defaultCell(text: S.of(context).couvertureSant, center: false)]),
+                    TableRow(children: [defaultCell(text: S.of(context).plafondAnnuel, center: false)]),
+                    TableRow(children: [defaultCell(text: "Prêt santé", center: false)]),
+                    TableRow(children: [defaultCell(text: "taux d'intérêt", center: false)]),
+                    TableRow(children: [defaultCell(text: "Médecin de famille gratuit", center: false)]),
+                    TableRow(children: [defaultCell(text: "Réseau d'entraide", center: false)]),
+                    TableRow(children: [defaultCell(text: "Gagner des points", subtitle: "1 pt = 0,5 Cfa", center: false)]),
+                    TableRow(children: [defaultCell(text: "Couverture familiale", subtitle: "Jusqu'a 5 personnes", center: false)]),
                   ],
-                ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                ),
                 Expanded(
+                  flex: 6,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     //physics: const BouncingScrollPhysics(),
-                    child: currentPlan != null && state != null ? Table(
-                      defaultColumnWidth: FixedColumnWidth(wv*30),
+                    child: Table(
+                      defaultColumnWidth: FixedColumnWidth(Device.isSmartphone(context) ? wv*30 : 200),
                       children: [
                         TableRow(
                           children: [
@@ -279,67 +252,69 @@ class _ComparePlansState extends State<ComparePlans> {
                           ]
                         ),
                       ],
-                    ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
+                    ),
                   ),
                 ),
               ],
-            ),
+            ) : Center(child: Loaders().buttonLoader(kSouthSeas)),
 
             Container(
-              margin: EdgeInsets.symmetric(horizontal: wv*12, vertical: hv*3),
-              child: CustomTextButton(
-                text: "Changer de niveau",
-                enable: currentPlan != null && state != null && userProvider.getUserModel?.profileType != beneficiary,
-                action: (){
-                  adherentProvider.getAdherent?.adherentPlan == 0 ? showModalBottomSheet(
-                    context: context, 
-                    builder: (BuildContext bc){
-                      return SafeArea(
-                        child: Container(
-                          child: new Wrap(
+              margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*12 : 0, vertical: hv*3),
+              child: SizedBox(
+                width: Device.isSmartphone(context) ? wv*100 : 1000,
+                child: CustomTextButton(
+                  text: "Changer de niveau",
+                  enable: currentPlan != null && state != null && userProvider.getUserModel?.profileType != beneficiary,
+                  action: (){
+                    setState(() {});
+                    adherentProvider.getAdherent?.adherentPlan == 0 ? showModalBottomSheet(
+                      context: context, 
+                      builder: (BuildContext bc){
+                        return SafeArea(
+                          child: Wrap(
                             children: <Widget>[
                               state != isDecouverte ? ListTile(
                                   leading: SvgPicture.asset('assets/icons/Bulk/HeartOutline.svg', height: 30, color: kSouthSeas),
-                                  title: new Text('Niveau 0 : Découverte', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
+                                  title: const Text('Niveau 0 : Découverte', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600),),
                                   onTap: () {
                                     Navigator.of(context).pop();
                                   }) : Container(),
                               state != isAcces ? ListTile(
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldAcces.svg', height: 30, color: kSouthSeas),
-                                title: new Text('Niveau I : Accès', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                                title: const Text('Niveau I : Accès', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   changePlan(1);
                                 },
                               ) : Container(),
                               state != isAcademik ? ListTile(
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldAcces.svg', height: 30, color: kSouthSeas),
-                                title: new Text('Niveau I.I : Academik', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                                title: const Text('Niveau I.I : Academik', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   changePlan(1.1);
                                 },
                               ) : Container(),
                               state != isAssist ? ListTile(
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldAssist.svg', height: 30, color: kSouthSeas),
-                                title: new Text('Niveau II : Assist', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                                title: const Text('Niveau II : Assist', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   changePlan(2);
                                 },
                               ) : Container(),
                               state != isSerenity ? ListTile(
                                 leading: SvgPicture.asset('assets/icons/Bulk/ShieldSerenity.svg', height: 30, color: kSouthSeas),
-                                title: new Text('Niveau III : Sérénité', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
+                                title: const Text('Niveau III : Sérénité', style: TextStyle(color: kTextBlue, fontWeight: FontWeight.w600)),
                                 onTap: () {
                                   changePlan(3);
                                 },
                               ) : Container(),
                             ],
                           ),
-                        ),
-                      );
-                    }
-                  ) :
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Opération annulée : vous avez déjà un plan en cours",)));
-                },
+                        );
+                      }
+                    ) :
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Opération annulée : vous avez déjà un plan en cours",)));
+                  },
+                ),
               ),
             )
           ],
@@ -350,16 +325,16 @@ class _ComparePlansState extends State<ComparePlans> {
 
   Widget defaultCell({String? text, Widget? content, String? subtitle, double fontSize = 16, bool isActive = false, bool center = true, Color textColor = kPrimaryColor}){
     return Container(
-      height: 50,
+      height: Device.isSmartphone(context) ? 50 : 60,
       padding: EdgeInsets.symmetric(horizontal: wv*2.5, vertical: 5),
       color: isActive ? kSouthSeas.withOpacity(0.7) : whiteColor,
-      child: content == null ? Column(
+      child: content ?? Column(
         crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(text!, style: TextStyle(color: textColor, fontSize: fontSize, fontWeight: FontWeight.w600), maxLines: 2, overflow: TextOverflow.ellipsis,),
-          subtitle != null ? Text(subtitle, style: TextStyle(color: kPrimaryColor, fontSize: 12, fontWeight: FontWeight.w400), maxLines: 1, overflow: TextOverflow.ellipsis,) : Container(),
+          subtitle != null ? Text(subtitle, style: const TextStyle(color: kPrimaryColor, fontSize: 12, fontWeight: FontWeight.w400), maxLines: 1, overflow: TextOverflow.ellipsis,) : Container(),
         ],
-      ) : content,
+      ),
     );
   }
 
@@ -371,7 +346,7 @@ class _ComparePlansState extends State<ComparePlans> {
         color: isActive ? kSouthSeas.withOpacity(0.7) : Colors.transparent,
         borderRadius: isActive ? BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)) : null
       ),
-      child: content != null ? content : Column(
+      child: content ?? Column(
         mainAxisAlignment: isActive ? MainAxisAlignment.start : MainAxisAlignment.end,
         children: [
           SvgPicture.asset(icon!, height: 35, color: isActive ? whiteColor : kSouthSeas,),

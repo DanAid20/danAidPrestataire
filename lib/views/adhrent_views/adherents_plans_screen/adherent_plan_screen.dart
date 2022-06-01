@@ -16,6 +16,8 @@ import 'package:danaid/widgets/danAid_default_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/services/getPlatform.dart';
 class AdherentPlanScreen extends StatefulWidget {
   @override
   _AdherentPlanScreenState createState() => _AdherentPlanScreenState();
@@ -66,9 +68,14 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
           child: Container(
             child: Column(
               children: [
-                DanAidDefaultHeader(
-                  title: Text(S.of(context).choisirUnNiveauDeServices
-                    , style: TextStyle(color: Colors.white, fontSize: wv*5, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
+                GestureDetector(
+                  onTap: (){
+                    setState((){});
+                  },
+                  child: DanAidDefaultHeader(
+                    title: Text(S.of(context).choisirUnNiveauDeServices
+                      , style: TextStyle(color: Colors.white, fontSize: Device.isSmartphone(context) ? wv*5 : 30, fontWeight: FontWeight.bold), overflow: TextOverflow.fade,),
+                  ),
                 ),
                 Expanded(
                   child: Container(
@@ -77,7 +84,7 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
                         stream: FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION").snapshots(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(child: CircularProgressIndicator());
                           }
                           List<Widget> plans = [];
                           for (int i = 0; i < snapshot.data!.docs.length; i++){
@@ -106,9 +113,10 @@ class _AdherentPlanScreenState extends State<AdherentPlanScreen> {
                           }
                           return CarouselSlider(
                             options: CarouselOptions(
-                              height: hv*65,
-                              enlargeCenterPage: true,
-                              viewportFraction: .7,
+                              height: Device.isSmartphone(context) ? hv*65 : 900,
+                              //enableInfiniteScroll: Device.isSmartphone(context) ? true : false,
+                              enlargeCenterPage: Device.isSmartphone(context) ? true : false,
+                              viewportFraction: Device.isSmartphone(context) ? .7 : .20,
                             ),
                             items: plans,
                           );
@@ -157,10 +165,10 @@ class PackageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height(size: 180),
-      width: wv*70,
+      height: Device.isSmartphone(context) ? height(size: 180) : 900,
+      width: Device.isSmartphone(context) ? wv*70 : 700,
       //padding: EdgeInsets.symmetric(horizontal: horizontal(size: 20)),
-      margin: EdgeInsets.symmetric(horizontal: horizontal(size: 5), vertical: vertical(size: 5)),
+      margin: EdgeInsets.symmetric(horizontal: horizontal(size: Device.isSmartphone(context) ? 5 : 2), vertical: vertical(size: 5)),
       decoration: BoxDecoration(
           color: kPrimaryColor,
           borderRadius: BorderRadius.circular(20),
@@ -175,17 +183,17 @@ class PackageCard extends StatelessWidget {
             ),
             width: double.infinity,
             child: Column(children: [
-              SvgPicture.asset(iconUrl!, color: Colors.white, width: wv*10,),
-              Text(_mPackage!, style: TextStyle(fontSize: hv*5, fontWeight: FontWeight.w600, color: Colors.white), ),
+              SvgPicture.asset(iconUrl!, color: Colors.white, width: Device.isSmartphone(context) ? wv*10 : 60,),
+              Text(_mPackage!, style: TextStyle(fontSize: Device.isSmartphone(context) ? hv*5 : 30, fontWeight: FontWeight.w600, color: Colors.white), ),
             ],),
           ),
           SizedBox(height: 5,),
-          Align(child: Text(" "+S.of(context).niveau+" "+level!, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: wv*4, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
+          Align(child: Text(" "+S.of(context).niveau+" "+level!, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: Device.isSmartphone(context) ? wv*4 : 20, fontWeight: FontWeight.bold)), alignment: Alignment.centerLeft,),
           
           SizedBox(height: hv*2,),
-          RichText(text: TextSpan(text: level == "0" ? "00" : _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: wv*4, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: wv*15))),
+          RichText(text: TextSpan(text: level == "0" ? "00" : _mPackageAmount, children: [TextSpan(text: " Cfa", style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*4 : 40, fontWeight: FontWeight.w300))], style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: Device.isSmartphone(context) ? wv*15 : 90))),
           SizedBox(height: hv*0.25),
-          Text(level == "1.1" ? "par Etudiant/an" : S.of(context).parFamilleMois, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: wv*4),),
+          Text(level == "1.1" ? "par Etudiant/an" : S.of(context).parFamilleMois, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: Device.isSmartphone(context) ? wv*4 : 30),),
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -193,8 +201,8 @@ class PackageCard extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: hv*4),
-                    padding: EdgeInsets.symmetric(horizontal: wv*5),
-                    child: Text(content!, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: wv*3.5, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
+                    padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*5 : 25),
+                    child: Text(content!, style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: Device.isSmartphone(context) ? wv*3.5 : 25, fontWeight: FontWeight.w600), textAlign: TextAlign.center,),
                   ),
                 ],
               ),

@@ -13,6 +13,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/getPlatform.dart';
+
 class MyCoverageTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,205 +24,213 @@ class MyCoverageTabView extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          child: ListView(
-            children: [
-              SizedBox(height: hv*2,),
-              adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
-                title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan)
-                /*adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
-                  : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
-                    : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
-                      : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "..."*/,
-                actionLabel: S.of(context).comparerLesServices,
-                subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
-                action: (){
-                  Navigator.pushNamed(context, '/compare-plans');
-                  /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
-                    .doc("1.1")
-                    .set({
-                      "cotisationMensuelleFondDSoint": 1250,
-                      "couverture": 70,
-                      "descriptionText": {
-                        "textCotisation" : "150000 fcfa/étudiant/an",
-                        "textPeriodeTypePaiement" : "Paiement annuel ou semestriel par virement mobile",
-                        "textSuivi" : "Medecin de famille",
-                        "titreNiveau" : "Niveau 1.1: Academik"
-                      },
-                      "fraisIncription": 5000,
-                      "modeDePaiement": "Paiement annuel ou semestriel par virement mobile",
-                      "montantMaxPretSante": 15000,
-                      "montantPaiementSupplement": 2450,
-                      "nomNiveau": "Academik",
-                      "numeroNiveau": 1.1,
-                      "plafondAnnuelle": 15000,
-                      "userSelectedIt": false,
-                      "rate": 0.05,
-                      "familyDoctorIsFree": true,
-                      "canWinPoints": true,
-                      "familyCoverage": false,
-                      "socialNetworkEnable": true
-                    }, SetOptions(merge: true));*/
-                }
-                //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
-              )
-              : 
-              Center(child: Loaders().buttonLoader(kPrimaryColor)),
+          child: Container(
+            width: Device.isSmartphone(context) ? wv*100 : 1000,
+            child: ListView(
+              children: [
+                SizedBox(height: hv*2,),
+                adherentProvider.getAdherent != null ? HomePageComponents.getInfoActionCard(
+                  title: Algorithms.getPlanDescriptionText(plan: adherentProvider.getAdherent!.adherentPlan)
+                  /*adherentProvider.getAdherent.adherentPlan == 0 ? S.of(context).vousTesAuNiveau0+S.of(context).dcouverte
+                    : adherentProvider.getAdherent.adherentPlan == 1 ? S.of(context).vousTesAuNiveauI+S.of(context).accs
+                      : adherentProvider.getAdherent.adherentPlan == 2 ? S.of(context).vousTesAuNiveauIi+S.of(context).assist
+                        : adherentProvider.getAdherent.adherentPlan == 3 ? S.of(context).vousTesAuNiveauIii+S.of(context).srnit : "..."*/,
+                  actionLabel: S.of(context).comparerLesServices,
+                  subtitle: limitString != null ? S.of(context).vousTesCouvertsJusquau+limitString : "...",
+                  action: (){
+                    Navigator.pushNamed(context, '/compare-plans');
+                    /*FirebaseFirestore.instance.collection("SERVICES_LEVEL_CONFIGURATION")
+                      .doc("1.1")
+                      .set({
+                        "cotisationMensuelleFondDSoint": 1250,
+                        "couverture": 70,
+                        "descriptionText": {
+                          "textCotisation" : "150000 fcfa/étudiant/an",
+                          "textPeriodeTypePaiement" : "Paiement annuel ou semestriel par virement mobile",
+                          "textSuivi" : "Medecin de famille",
+                          "titreNiveau" : "Niveau 1.1: Academik"
+                        },
+                        "fraisIncription": 5000,
+                        "modeDePaiement": "Paiement annuel ou semestriel par virement mobile",
+                        "montantMaxPretSante": 15000,
+                        "montantPaiementSupplement": 2450,
+                        "nomNiveau": "Academik",
+                        "numeroNiveau": 1.1,
+                        "plafondAnnuelle": 15000,
+                        "userSelectedIt": false,
+                        "rate": 0.05,
+                        "familyDoctorIsFree": true,
+                        "canWinPoints": true,
+                        "familyCoverage": false,
+                        "socialNetworkEnable": true
+                      }, SetOptions(merge: true));*/
+                  },
+                  context: context
+                  //action: ()=>Navigator.pushNamed(context, '/coverage-payment')
+                )
+                : 
+                Center(child: Loaders().buttonLoader(kPrimaryColor)),
 
-              SizedBox(height: hv*2,),
+                SizedBox(height: hv*2,),
 
-              GestureDetector(
-                onTap: ()=>Navigator.pushNamed(context, '/rdv'),
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: hv*2),
-                  color: whiteColor,
+                GestureDetector(
+                  onTap: ()=>Navigator.pushNamed(context, '/rdv'),
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
-                    margin: EdgeInsets.symmetric(horizontal: wv*3),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
-                      boxShadow: [
-                        BoxShadow(blurRadius: 5.0, color: Colors.grey[400]!, spreadRadius: 1.0, offset: Offset(0, 5))
-                      ],
-                      image: DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
-                    ),
-                    child: Column(children: [
-                      Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
-                      SizedBox(height: hv*5,),
-                      Text(S.of(context).dmarrerUnePriseEnCharge, style: TextStyle(color: Colors.white, fontSize: 21, fontWeight: FontWeight.w800)),
-                      SizedBox(height: hv*1,),
-                      Text(S.of(context).vousTesMaladesCommencezIcinpourObtenirLaCouvertureDeVos, style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800)),
-                      SizedBox(height: hv*2,),
-                    ],crossAxisAlignment: CrossAxisAlignment.start, ),
-                  ),
-                ),
-              ),
-              SizedBox(height: wv*3,),
-              Column(mainAxisSize: MainAxisSize.min,
-                children: [
-                  SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
-                  child: Row(children: [
-                    SizedBox(width: wv*1.5,),
-                    GestureDetector(
-                      onTap: ()=>Navigator.pushNamed(context, '/adherent-card'),
-                      child: HomePageComponents().getMyCoverageOptionsCard(
-                        imgUrl: "assets/images/presentCard.png",
-                        label: S.of(context).prsenterMaCarteDadhrant,
-                        labelColor: kPrimaryColor
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: ()=>Navigator.pushNamed(context, '/contributions'),
-                      child: HomePageComponents().getMyCoverageOptionsCard(
-                        imgUrl: "assets/images/TrackSavings.png",
-                        label: S.of(context).suivreMesCtisations,
-                        labelColor: Colors.white
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
-                      child: HomePageComponents().getMyCoverageOptionsCard(
-                        imgUrl: "assets/images/TrackSavings.png",
-                        label: S.of(context).demanderUnRemboursement,
-                        labelColor: Colors.white
-                      ),
-                    ),
-                  ],),
-                  ),
-                ],
-              ),
-              SizedBox(height: hv*2),
-              Container(
-                color: whiteColor,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
-                  child: Row(children: [
-                    Text(S.of(context).utilisation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
-                    InkWell(
-                      onTap: ()=>Navigator.pushNamed(context, "/usecases"),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                        child: Text("Voir plus..")
-                      ),
-                    )
-                  ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
-                ),
-              ),
-              Container(
-                color: whiteColor,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent?.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                        ),
-                      );
-                    }
-
-                    return snapshot.data!.docs.length >= 1
-                      ? ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            int lastIndex = snapshot.data!.docs.length - 1;
-                            DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
-                            UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
-                            print("name: ");
-                            return Padding(
-                              padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                              child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
-                                initial: useCase.establishment!.toUpperCase().substring(0,3),
-                                name: useCase.establishment,
-                                date: useCase.dateCreated!.toDate(),
-                                state: useCase.status,
-                                price: useCase.amount != null ? useCase.amount : 0,
-                                action: (){
-                                  UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
-                                  usecaseProvider.setUseCaseModel(useCase);
-                                  Navigator.pushNamed(context, '/use-case');
-                                }
-                              ) : Container(),
-                            );
-                          })
-                      : Center(
-                        child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
-                      );
-                    /*return Container(
-                      color: whiteColor,
-                      child: Column(
-                        children: [
-                          HomePageComponents().getMyCoverageHospitalsTiles(
-                            initial: "HLD",
-                            name: "Hopital Laquintinie de Douala",
-                            date: "Mercredi, 23 Janvier 2021",
-                            price: "127.000 f.",
-                            state: 0,
-                          ),
-                          HomePageComponents().getMyCoverageHospitalsTiles(
-                            initial: "CNM",
-                            name: "Cabinet Dr. Manaouda Malachie",
-                            date: "Mercredi, 23 Janvier 2021",
-                            price: "6.000 f.",
-                            state: 1,
-                          ),
-                          HomePageComponents().getMyCoverageHospitalsTiles(
-                            initial: "HLD",
-                            name: "Hopital Laquintinie de Douala",
-                            date: "Mercredi, 23 Janvier 2021",
-                            price: "127.000 f.",
-                            state: 0,
-                          ),
+                    padding: EdgeInsets.symmetric(vertical: hv*2),
+                    color: whiteColor,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: wv*5, vertical: hv*1),
+                      margin: EdgeInsets.symmetric(horizontal: wv*3),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(inch*2.5)),
+                        boxShadow: [
+                          BoxShadow(blurRadius: 5.0, color: Colors.grey[400]!, spreadRadius: 1.0, offset: const Offset(0, 5))
                         ],
+                        image: const DecorationImage(image: AssetImage("assets/images/CoverageBanner.png"), fit: BoxFit.cover)
                       ),
-                    );*/
-                  }
+                      child: Column(children: [
+                        Align(child: SvgPicture.asset("assets/icons/Two-tone/Bookmark.svg"),alignment: Alignment.topRight,),
+                        SizedBox(height: hv*5,),
+                        Text(S.of(context).dmarrerUnePriseEnCharge, style: TextStyle(color: Colors.white, fontSize: Device.isSmartphone(context) ? 21 : 25, fontWeight: FontWeight.w800)),
+                        SizedBox(height: hv*1,),
+                        Text(S.of(context).vousTesMaladesCommencezIcinpourObtenirLaCouvertureDeVos, style: TextStyle(color: Colors.white, fontSize: Device.isSmartphone(context) ? 14 : 18, fontWeight: FontWeight.w800)),
+                        SizedBox(height: hv*2,),
+                      ],crossAxisAlignment: CrossAxisAlignment.start, ),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: hv*3,),
-            ],
+                SizedBox(height: Device.isSmartphone(context) ? wv*3 : 15,),
+                Column(mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SingleChildScrollView(scrollDirection: Axis.horizontal, physics: const BouncingScrollPhysics(),
+                    child: Row(children: [
+                      SizedBox(width: wv*1.5,),
+                      GestureDetector(
+                        onTap: ()=>Navigator.pushNamed(context, '/adherent-card'),
+                        child: HomePageComponents().getMyCoverageOptionsCard(
+                          imgUrl: "assets/images/presentCard.png",
+                          label: S.of(context).prsenterMaCarteDadhrant,
+                          labelColor: kCardTextColor,
+                          context: context
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: ()=>Navigator.pushNamed(context, '/contributions'),
+                        child: HomePageComponents().getMyCoverageOptionsCard(
+                          imgUrl: "assets/images/TrackSavings.png",
+                          label: S.of(context).suivreMesCtisations,
+                          labelColor: Colors.white,
+                          context: context
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: ()=>Navigator.pushNamed(context, '/refund-form'),
+                        child: HomePageComponents().getMyCoverageOptionsCard(
+                          imgUrl: "assets/images/TrackSavings.png",
+                          label: S.of(context).demanderUnRemboursement,
+                          labelColor: Colors.white,
+                          context: context
+                        ),
+                      ),
+                    ],),
+                    ),
+                  ],
+                ),
+                SizedBox(height: hv*2),
+                Container(
+                  color: whiteColor,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
+                    child: Row(children: [
+                      Text(S.of(context).utilisation, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.w700),),
+                      InkWell(
+                        onTap: ()=>Navigator.pushNamed(context, "/usecases"),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          child: Text("Voir plus..")
+                        ),
+                      )
+                    ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
+                  ),
+                ),
+                Container(
+                  color: whiteColor,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance.collection("USECASES").where('adherentId', isEqualTo: adherentProvider.getAdherent?.adherentId).orderBy('createdDate', descending: true).limit(10).snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                          ),
+                        );
+                      }
+
+                      return snapshot.data!.docs.length >= 1
+                        ? ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              int lastIndex = snapshot.data!.docs.length - 1;
+                              DocumentSnapshot useCaseDoc = snapshot.data!.docs[index];
+                              UseCaseModel useCase = UseCaseModel.fromDocument(useCaseDoc, useCaseDoc.data() as Map);
+                              print("name: ");
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
+                                child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
+                                  context: context,
+                                  initial: useCase.establishment!.toUpperCase().substring(0,3),
+                                  name: useCase.establishment,
+                                  date: useCase.dateCreated!.toDate(),
+                                  state: useCase.status,
+                                  price: useCase.amount != null ? useCase.amount : 0,
+                                  action: (){
+                                    UseCaseModelProvider usecaseProvider = Provider.of<UseCaseModelProvider>(context, listen: false);
+                                    usecaseProvider.setUseCaseModel(useCase);
+                                    Navigator.pushNamed(context, '/use-case');
+                                  }
+                                ) : Container(),
+                              );
+                            })
+                        : Center(
+                          child: Container(padding: EdgeInsets.only(bottom: hv*4),child: Text(S.of(context).aucunCasDutilisationEnrgistrPourLeMoment, textAlign: TextAlign.center)),
+                        );
+                      /*return Container(
+                        color: whiteColor,
+                        child: Column(
+                          children: [
+                            HomePageComponents().getMyCoverageHospitalsTiles(
+                              initial: "HLD",
+                              name: "Hopital Laquintinie de Douala",
+                              date: "Mercredi, 23 Janvier 2021",
+                              price: "127.000 f.",
+                              state: 0,
+                            ),
+                            HomePageComponents().getMyCoverageHospitalsTiles(
+                              initial: "CNM",
+                              name: "Cabinet Dr. Manaouda Malachie",
+                              date: "Mercredi, 23 Janvier 2021",
+                              price: "6.000 f.",
+                              state: 1,
+                            ),
+                            HomePageComponents().getMyCoverageHospitalsTiles(
+                              initial: "HLD",
+                              name: "Hopital Laquintinie de Douala",
+                              date: "Mercredi, 23 Janvier 2021",
+                              price: "127.000 f.",
+                              state: 0,
+                            ),
+                          ],
+                        ),
+                      );*/
+                    }
+                  ),
+                ),
+                SizedBox(height: hv*3,),
+              ],
+            ),
           ),
         ),
       ],

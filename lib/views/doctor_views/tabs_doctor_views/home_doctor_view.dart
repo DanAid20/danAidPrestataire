@@ -30,7 +30,7 @@ class HomeDoctorView extends StatefulWidget {
 
 class _HomeDoctorViewState extends State<HomeDoctorView> {
 
-
+  
 Widget notificationWidget(BuildContext context){
    UserProvider userProvider = Provider.of<UserProvider>(context);
    bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;
@@ -356,11 +356,11 @@ Widget questionDuDocteur() {
                         return Center(child: Loaders().buttonLoader(kPrimaryColor),);
                       }
                       return Row(children: [
-                        snapshot.data!.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0]["imageUrl"]) : Container(),
-                        snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1]["imageUrl"]) : Container(),
-                        snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2]["imageUrl"]) : Container(),
-                        snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3]["imageUrl"]) : Container(),
-                        snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4]["imageUrl"]) : Container(),
+                        snapshot.data!.docs.length >= 1 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0]["imageUrl"], context: context) : Container(),
+                        snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1]["imageUrl"], context: context) : Container(),
+                        snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2]["imageUrl"], context: context) : Container(),
+                        snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3]["imageUrl"], context: context) : Container(),
+                        snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4]["imageUrl"], context: context) : Container(),
                         Expanded(child: Container()),
                         snapshot.data!.docs.length > 5 ? Container(
                           padding: const EdgeInsets.all(10),
@@ -376,13 +376,13 @@ Widget questionDuDocteur() {
 
                   SizedBox(height: hv*2,),
                   Row(children: [
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: S.of(context).posts, occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts, context: context),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: S.of(context).commentaires, occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments, context: context),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: S.of(context).amis, occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length, context: context),
                     HomePageComponents().verticalDivider(),
-                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context).chats, occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
+                    HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: S.of(context).chats, occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length, context: context),
                   ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                   SizedBox(height: hv*2,) 
                 ],
