@@ -725,6 +725,12 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                   value: _category,
                                   hint: Text(S.of(context).choisir),
                                   items: [
+                                   
+                                    DropdownMenuItem(
+                                      child: Text("Hôpital", style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      value: "Hôpital",
+                                      enabled: true,  
+                                    ),
                                     DropdownMenuItem(
                                       child: Text(S.of(context).publique, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                       value: S.of(context).public,

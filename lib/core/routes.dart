@@ -163,10 +163,10 @@ final Map<String, Widget Function(BuildContext)> routes = {
         key:state.pageKey,
         child: SplashScreen()
       ),), 
-      GoRoute(path: '/splash',pageBuilder: (context, state) =>   MaterialPage(
-        key:state.pageKey,
-        child: Splashscreen(),)
-      ),
+      // GoRoute(path: '/splash',pageBuilder: (context, state) =>   MaterialPage(
+      //   key:state.pageKey,
+      //   child: Splashscreen(),)
+      // ),
       GoRoute(path: '/intro-view',builder: (context, state) =>  OnboardScreen(),),
       GoRoute(path: '/home',builder: (context, state) =>  HomePageView(),),
       GoRoute(path: '/login',builder: (context, state) =>  LoginView(),),
