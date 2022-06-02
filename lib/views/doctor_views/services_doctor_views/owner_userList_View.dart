@@ -3,9 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/beneficiaryModel.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
+import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
 import 'package:danaid/helpers/colors.dart';
+import 'package:danaid/helpers/constants.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -104,8 +107,14 @@ double? imc=0;
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(S.of(context).carnetDeSant),
-                  Text(DateFormat('dd MMMM yyyy, h:mm').format(widget.beneficiare!.dateCreated!.toDate()))
+                  Text(S.of(context).carnetDeSant, style: TextStyle(
+                                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 6),
+                                          fontWeight: FontWeight.w700,
+                                          color: kPrimaryColor)),
+                  Text(DateFormat('dd MMMM yyyy, h:mm').format(widget.beneficiare!.dateCreated!.toDate()),  style: TextStyle(
+                                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 6),
+                                          fontWeight: FontWeight.w700,
+                                          color: kPrimaryColor))
                 ],
               ),
             ),
@@ -130,7 +139,17 @@ double? imc=0;
           ),
           body: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
-            child: Column(
+            child:Container(
+           constraints: BoxConstraints(
+            maxWidth:  double.infinity 
+          ),
+          child: Align( 
+            alignment:  Alignment.center,
+            child:  Container(
+              constraints: BoxConstraints(
+                maxWidth:  Device.isSmartphone(context) ? double.infinity:500,
+              ),
+              child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
@@ -233,31 +252,31 @@ double? imc=0;
                                                 Alignment.bottomCenter,
                                             decoration: BoxDecoration(
                                               color: kBlueForceLight,
-                                              borderRadius: underWeight==null ? BorderRadius.only(
+                                              borderRadius: underWeight==null ? const  BorderRadius.only(
                                                       topLeft: Radius
                                                           .circular(3),
                                                       topRight:
                                                           Radius.circular(
-                                                              0)) :BorderRadius.only(
+                                                              0)) :const BorderRadius.only(
                                                       topLeft: Radius
                                                           .circular(3),
                                                       topRight:
                                                           Radius.circular(
                                                               3)),
                                             ),
-                                            height: underWeight==null ?
+                                            height: underWeight==null ?  
                                                  MySize.getScaledSizeWidth(
                                                     5) : MySize.getScaledSizeWidth(
                                                     12),
                                             width: underWeight==null ? MySize.getScaledSizeWidth(
-                                                    25):
+                                                    Device.isSmartphone(context) ? 25 : 10):
                                                 MySize.getScaledSizeWidth(
-                                                    35),
+                                                     Device.isSmartphone(context) ? 35 : 5 ),
                                             child: Text('')),
                                       ],
                                     ),
                                     Column(
-                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisSize: MainAxisSize.min,    
                                       children: [
                                         Text(normaleWeight==null ? '' : normaleWeight.toString(),
                                             textScaleFactor: 1.0,
@@ -289,9 +308,9 @@ double? imc=0;
                                                     5) : MySize.getScaledSizeWidth(
                                                     12),
                                             width: normaleWeight==null ? MySize.getScaledSizeWidth(
-                                                    25):
+                                                    Device.isSmartphone(context) ? 25 : 10):
                                                 MySize.getScaledSizeWidth(
-                                                    35),
+                                                     Device.isSmartphone(context) ? 35 : 5 ),
                                             child: Text('')),
                                       ],
                                     ),
@@ -325,10 +344,10 @@ double? imc=0;
                                                  MySize.getScaledSizeWidth(
                                                     5) : MySize.getScaledSizeWidth(
                                                     12),
-                                            width: overWeight==null ? MySize.getScaledSizeWidth(
-                                                    25):
+                                            width: overWeight==null ?  MySize.getScaledSizeWidth(
+                                                    Device.isSmartphone(context) ? 25 : 10):
                                                 MySize.getScaledSizeWidth(
-                                                    35),
+                                                     Device.isSmartphone(context) ? 35 : 5 ),
                                             child: Text('')),
                                       ],
                                     ),
@@ -362,9 +381,9 @@ double? imc=0;
                                                     5) : MySize.getScaledSizeWidth(
                                                     12),
                                             width: svarWeight==null ? MySize.getScaledSizeWidth(
-                                                    25):
+                                                    Device.isSmartphone(context) ? 25 : 10):
                                                 MySize.getScaledSizeWidth(
-                                                    35),
+                                                     Device.isSmartphone(context) ? 35 : 5 ),
                                             child: Text('')),
                                       ],
                                     ),
@@ -382,21 +401,21 @@ double? imc=0;
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(children: [
+                          Row(children: [  
                             Column(
                               children: [
                                 SvgPicture.asset(
                                   'assets/icons/Bulk/BloodGroup.svg',
-                                  height: MySize.getScaledSizeWidth(25),
-                                  width: MySize.getScaledSizeWidth(25),
+                                  height: MySize.getScaledSizeWidth( Device.isSmartphone(context) ? 25 : 10),
+                                  width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 25 : 10),
                                   color: kDeepTealCAdress,
                                 ),
                                 SizedBox(
                                     height: MySize.getScaledSizeHeight(5)),
                                 SvgPicture.asset(
                                   'assets/icons/Bulk/weight.svg',
-                                  height: MySize.getScaledSizeWidth(25),
-                                  width: MySize.getScaledSizeWidth(25),
+                                  height: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 25 : 10),
+                                  width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 25 : 10),
                                   color: kDeepTealCAdress,
                                 ),
                               ],
@@ -478,7 +497,7 @@ double? imc=0;
                                       color: kDeepTealCAdress,
                                     ),
                                     height: MySize.getScaledSizeHeight(3),
-                                    width: MySize.getScaledSizeWidth(70),
+                                    width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 70 : 20),
                                     child: const Text(' ')),
                               ],
                             )
@@ -493,7 +512,7 @@ double? imc=0;
                                       color: kDeepTealCAdress,
                                     ),
                                     height: MySize.getScaledSizeHeight(2),
-                                    width: MySize.getScaledSizeWidth(20),
+                                    width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 20: 10),
                                     child: const Text(' ')),
                                 Container(
                                     decoration: const BoxDecoration(
@@ -533,12 +552,12 @@ double? imc=0;
                                     width: MySize.getScaledSizeWidth(2),
                                     child: Text(' ')),
                                 Container(
-                                    decoration: BoxDecoration(
+                                    decoration: const  BoxDecoration(
                                       color: kDeepTealCAdress,
                                     ),
                                     height: MySize.getScaledSizeHeight(2),
-                                    width: MySize.getScaledSizeWidth(20),
-                                    child: Text(' ')),
+                                    width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 20: 10),
+                                    child: const Text(' ')),
                               ],
                             )
                           ]),
@@ -556,7 +575,7 @@ double? imc=0;
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).unPeutDePatienceCettePartieEstEnCourDe))) 
                     },
                     child: Container(
-                    height: MySize.getScaledSizeHeight(100),
+                    height:  MySize.getScaledSizeHeight(100),
                     width: double.infinity,
                     decoration: const BoxDecoration(
                       gradient: kTealsLinearColors),
@@ -572,7 +591,7 @@ double? imc=0;
                                     borderRadius: BorderRadius.only(
                                         bottomRight: Radius.circular(20))),
                                 height: MySize.getScaledSizeHeight(85),
-                                width: MySize.getScaledSizeWidth(85),
+                                width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 85: 30 ),
                                 child: Padding(
                                   padding: Spacing.only(left: 15.0, top: 8.0),
                                   child: Column(
@@ -593,22 +612,22 @@ double? imc=0;
                                         ),
                                      SvgPicture.asset(
                                       'assets/icons/Bulk/ArrowDown.svg',
-                                          width:MySize.getScaledSizeWidth(35),
-                                          height:MySize.getScaledSizeHeight(25),
+                                          width:MySize.getScaledSizeWidth(40),
+                                          height:MySize.getScaledSizeHeight(30),
                                       ),
                                     ],
                                   ),
                                 ))),
                       Positioned(
-                            right: MySize.getScaledSizeWidth(70),
+                            right: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 70 : 28),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
                                 decoration: const BoxDecoration(
                                     color:  Color(0xFF7CA9A9),
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
-                                height: MySize.getScaledSizeHeight(85),
-                                width: MySize.getScaledSizeWidth(110),
+                                height: MySize.getScaledSizeHeight(Device.isSmartphone(context) ? 85: 92),
+                                width:  MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 110: 30 ),
                                 child: Padding(
                                   padding: Spacing.only(left:10.0, top: 10.0),
                                   child: Column(
@@ -636,50 +655,15 @@ double? imc=0;
                                   ),
                                 ))),
                       Positioned(
-                            right: MySize.getScaledSizeWidth(170),
+                            right: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 170 : 55 ),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
-                                decoration: BoxDecoration(
+                                decoration: const  BoxDecoration(
                                     color: Color(0xFF82AEAC),
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
-                                height: MySize.getScaledSizeHeight(85),
-                                width: MySize.getScaledSizeWidth(80),
-                                child: Padding(
-                                  padding: Spacing.only(left: 2.0, top: 10.0, right: 10.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.end,                                     
-                                    children: [
-                                      Column(
-                                       crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          Text(S.of(context).suiveDes,  style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                          Text(S.of(context).soins, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
-                                        ],
-                                      ),
-                                       
-                                        SizedBox(
-                                          height: MySize.getScaledSizeWidth(3),
-                                        ),
-                                     SvgPicture.asset(
-                                      'assets/icons/Bulk/More Square.svg',
-                                          width:MySize.getScaledSizeWidth(35),
-                                          height:MySize.getScaledSizeHeight(15),
-                                      ),
-                                    ],
-                                  ),
-                                ))),
-                      Positioned(
-                            right: MySize.getScaledSizeWidth(170),
-                             top:MySize.getScaledSizeWidth(-2),
-                            child: Container(
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF82AEAC),
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(20))),
-                                height: MySize.getScaledSizeHeight(85),
-                                width: MySize.getScaledSizeWidth(80),
+                                height: MySize.getScaledSizeHeight(Device.isSmartphone(context) ? 85 : 92),
+                                width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ?80 : 30),
                                 child: Padding(
                                   padding: Spacing.only(left: 15.0, top: 10.0, right: 10.0),
                                   child: Column(
@@ -699,25 +683,26 @@ double? imc=0;
                                         ),
                                      SvgPicture.asset(
                                       'assets/icons/Bulk/More Square.svg',
-                                          width:MySize.getScaledSizeWidth(35),
-                                          height:MySize.getScaledSizeHeight(25),
+                                         width:MySize.getScaledSizeWidth(40),
+                                          height:MySize.getScaledSizeHeight(30)
                                       ),
                                     ],
                                   ),
                                 ))),
+                     
                       Positioned(
-                            right: MySize.getScaledSizeWidth(240),
+                            right: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 240 : 85  ),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
                                 decoration: const BoxDecoration(
                                     color: kTabs2,
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
-                                height: MySize.getScaledSizeHeight(85),
-                                width: MySize.getScaledSizeWidth(80),
+                                height: MySize.getScaledSizeHeight(Device.isSmartphone(context) ? 85 : 92),
+                                width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ?80 : 30),
                                 child: Padding(
                                   padding: Spacing.only(left: 15.0, top: 10.0, right: 10.0),
-                                  child: Column(
+                                  child: Column(   
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,                                     
                                     children: [
@@ -728,30 +713,29 @@ double? imc=0;
                                           Text(S.of(context).vitales, style: TextStyle(color: whiteColor, fontSize: MySize.getScaledSizeHeight(15), fontWeight: FontWeight.bold),),
                                         ],
                                       ),
-                                       
                                         SizedBox(
                                           height: MySize.getScaledSizeWidth(3),
                                         ),
                                      SvgPicture.asset(
                                       'assets/icons/Bulk/Activity.svg',
-                                          width:MySize.getScaledSizeWidth(35),
-                                          height:MySize.getScaledSizeHeight(25),
+                                           width:MySize.getScaledSizeWidth(40),
+                                          height:MySize.getScaledSizeHeight(30)
                                       ),
                                     ],
                                   ),
                                 ))),
                       Positioned(
-                            right: MySize.getScaledSizeWidth(310),
+                            right: MySize.getScaledSizeWidth(Device.isSmartphone(context) ? 310 : 150  ),
                              top:MySize.getScaledSizeWidth(-2),
                             child: Container(
                                 decoration: const BoxDecoration(
                                     color: kDeepDarkTeal,
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20))),
-                                height: MySize.getScaledSizeHeight(85),
-                                width: MySize.getScaledSizeWidth(100),
+                                height: MySize.getScaledSizeHeight(Device.isSmartphone(context) ? 85 : 92),
+                                width: MySize.getScaledSizeWidth(Device.isSmartphone(context) ?80 : 80),
                                 child: Padding(
-                                  padding: Spacing.only(left:30.0, top: 10.0, right: 10.0),
+                                  padding: Spacing.only(left:15.0, top: 10.0, right: 10.0),   
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,                                     
@@ -769,8 +753,8 @@ double? imc=0;
                                         ),
                                      SvgPicture.asset(
                                       'assets/icons/Bulk/Edit Square.svg',
-                                          width:MySize.getScaledSizeWidth(35),
-                                          height:MySize.getScaledSizeHeight(25),
+                                          width:MySize.getScaledSizeWidth(40),
+                                          height:MySize.getScaledSizeHeight(30),
                                           color: whiteColor,
                                       ),
                                     ],
@@ -811,6 +795,10 @@ double? imc=0;
           ],
             ),
           ),
-        ));
+        )
+          )
+        )
+    )
+    );
   }
 }

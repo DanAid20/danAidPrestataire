@@ -28,7 +28,7 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
-   <base href="/">
+   <base href="./">
   <title>danaid_v2</title>
   <link rel="manifest" href="manifest.json">
 </head>
@@ -65,8 +65,7 @@
     const analytics = getAnalytics(app);
   </script>
   -->
-
-
+  
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;
@@ -87,7 +86,7 @@
         // Wait for registration to finish before dropping the <script> tag.
         // Otherwise, the browser will load the script multiple times,
         // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        var serviceWorkerUrl = 'flutter_service_worker.js';
         navigator.serviceWorker.register(serviceWorkerUrl)
           .then((reg) => {
             function waitForActivation(serviceWorker) {
@@ -131,6 +130,7 @@
       loadMainDartJs();
     }
   </script>
+  <script src="AgoraRtcWrapper.bundle.js" type="application/javascript"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>

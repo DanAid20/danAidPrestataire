@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/facture.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -68,8 +69,8 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
               alignment: Alignment.center,
               child: Column(
                 children: [
-                  Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize: wv*4)),
-                  Text(S.of(context).vosConsultationsPaiementDetaill, style:  TextStyle(color: kBlueForce, fontSize: wv*4))
+                  Text(S.of(context).historiqueDesPrestations, style:  TextStyle(color: kBlueForce, fontSize:  Device.isSmartphone(context) ?  wv*4: 15)),
+                  Text(S.of(context).vosConsultationsPaiementDetaill, style:  TextStyle(color: kBlueForce, fontSize:  Device.isSmartphone(context) ?  wv*4: 15))
                 ],
               ),
             ),
@@ -96,6 +97,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
             child: Column(
               children: [
                 Container(
+                  
                     margin: EdgeInsets.only(left: 15.w, top: 3.h, bottom: 15.h),
                     alignment: Alignment.centerLeft,
                     child: Row(
@@ -107,7 +109,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                 style: TextStyle(
                                     color: kFirstIntroColor,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: wv * 10.5),
+                                    fontSize:  Device.isSmartphone(context) ? wv*7: 15),
                                 textScaleFactor: 1.0),
                             //  Container(height: 4.h, width:30.w, color: kFirstIntroColor, child:Text('') ,)
                           ],
@@ -129,7 +131,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                               style: TextStyle(
                                   color: kFirstIntroColor,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 16.sp),
+                                  fontSize:   Device.isSmartphone(context) ? 16.sp: 19 ),
                               textScaleFactor: 1.0,
                             )),
                         Container(
@@ -173,6 +175,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                             var obj=snapshot.data!.data() as  Map<String, dynamic>;
                                             return  HomePageComponents()
                                           .paienementDetailsListItem(
+                                             context: context,
                                               etat: widget.facture![index].canPay!.toInt(),
                                               montant:
                                                   '${widget.facture![index].amountToPay}f',
@@ -187,6 +190,7 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                                         userName = widget.facture![index].idFammillyMember!;
                                       return HomePageComponents()
                                           .paienementDetailsListItem( 
+                                              context: context,
                                               etat: widget.facture![index].canPay!,
                                               montant:
                                                   '${widget.facture![index].amountToPay}f',

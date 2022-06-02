@@ -6,6 +6,7 @@ import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -22,7 +23,6 @@ import 'package:provider/provider.dart';
 import 'package:qrscan2/qrscan2.dart' as scanner;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../helpers/constants.dart';
 import '../../../helpers/constants.dart';
 
 class AddPatientView extends StatefulWidget {
@@ -207,8 +207,8 @@ class _AddPatientViewState extends State<AddPatientView> {
         children: [
           Container(
               margin: EdgeInsets.only(
-                  left: wv * 6, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-              width: 130.w,
+                  left: Device.isSmartphone(context) ? wv * 6 : wv * 1, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
+              width: Device.isSmartphone(context) ? 130.w : 200 ,
               decoration: BoxDecoration(
                 color: cardColor,
                 boxShadow: [
@@ -235,7 +235,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                             : consultationType == S.of(context).message
                                 ? 'assets/icons/Bulk/Message.svg'
                                 : 'assets/icons/Bulk/Profile-color.svg',
-                        width: wv * 10,
+                        width: Device.isSmartphone(context) ? wv * 10 : wv * 3,
                       ),
                     ),
                   ),
@@ -250,14 +250,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w500,
-                              fontSize: fontSize(size: wv * 4)),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                         ),
                         Text(
                           consultationType!,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: fontSize(size: wv * 4)),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                         ),
                         SizedBox(
                           height: hv * 1.3,
@@ -271,7 +271,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: fontSize(size: wv * 4)),
+                                  fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                             ),
                           ),
                         ),
@@ -396,12 +396,16 @@ class _AddPatientViewState extends State<AddPatientView> {
             ],
           ),
           body: Container(
+            
             child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 children: [
                   widget.isLaunchConsultation == true
                       ? Container(
+                          constraints: BoxConstraints(
+                            maxWidth: Device.isSmartphone(context) ? double.infinity : 500
+                          ),
                           margin: EdgeInsets.symmetric(vertical: 3.0),
                           color: Colors.white,
                           child: Column(
@@ -411,18 +415,18 @@ class _AddPatientViewState extends State<AddPatientView> {
                                 alignment: Alignment.topLeft,
                                 child: Container(
                                   margin: EdgeInsets.only(
-                                      left: wv * 5, top: hv * 1),
+                                      left:  Device.isSmartphone(context) ? wv * 5 : 10 , top: hv * 1),
                                   child: Text(
                                       S.of(context).choisirLeTypeDeConsultation,
                                       style: TextStyle(
-                                          fontSize: fontSize(size: wv * 4),
+                                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 6),
                                           fontWeight: FontWeight.w700,
                                           color: kPrimaryColor)),
                                 ),
                               ),
-                              Container(
+                              Container(  
                                 margin: const EdgeInsets.symmetric(vertical: 2.0),
-                                height: hv * 17,
+                                height: Device.isSmartphone(context) ? hv * 17 : hv * 23,
                                 color: Colors.white,
                                 child:  ListView(
                                   scrollDirection: Axis.horizontal,
@@ -456,13 +460,14 @@ class _AddPatientViewState extends State<AddPatientView> {
                     height: hv * 5,
                   ),
                   Container(
-                    width: wv * 100,
+                    width:  Device.isSmartphone(context) ? wv * 100 : wv*90 ,
+                    margin: EdgeInsets.symmetric(horizontal:  Device.isSmartphone(context) ? 0 : wv*28),
                     color: Colors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          width: wv * 68,
+                          width: Device.isSmartphone(context) ? wv * 68 : wv * 30 ,
                           decoration:const BoxDecoration(
                             color: kDeepTealClair,
                             borderRadius:  BorderRadius.only(
@@ -490,7 +495,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                               Text(
                                 S.of(context).selectionnerOuAjouterLePatient,
                                 style: TextStyle(
-                                    fontSize: fontSize(size: wv * 4),
+                                    fontSize: fontSize(size:  Device.isSmartphone(context) ?  wv * 4 : 6),
                                     fontWeight: FontWeight.w500,
                                     color: kFirstIntroColor),
                               )
@@ -518,7 +523,7 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           Text(
                                             S.of(context).rechercherParNumeroDeTlphone,
                                             style: TextStyle(
-                                                fontSize: wv * 4,
+                                                fontSize: Device.isSmartphone(context) ?  wv * 4 : 14 ,
                                                 color: kBlueForce),
                                           ),
                                           SizedBox(
@@ -604,17 +609,17 @@ class _AddPatientViewState extends State<AddPatientView> {
                                         ])),
                               ),
                               SizedBox(
-                                height: hv * 2,
+                                height: Device.isSmartphone(context) ?  hv * 2 : hv * 4 ,
                               ),
                               widget.isLaunchConsultation == true
-                                  ? Text(S.of(context).ouScannerUneCarteDadherent,
+                                  ? Device.isSmartphone(context) ? Text(S.of(context).ouScannerUneCarteDadherent,
                                       style: TextStyle(
-                                          fontSize: fontSize(size: wv * 4),
+                                          fontSize: fontSize(size: Device.isSmartphone(context) ?  wv * 4 : 8),
                                           fontWeight: FontWeight.w500,
                                           color: kFirstIntroColor))
-                                  : const SizedBox.shrink(),
+                                  : const SizedBox.shrink(): const SizedBox.shrink(),
                               widget.isLaunchConsultation == true
-                                  ? Container(
+                                  ?  Device.isSmartphone(context) ? Container(
                                       margin: EdgeInsets.only(
                                           left: inch * 2,
                                           right: inch * 2,
@@ -628,13 +633,13 @@ class _AddPatientViewState extends State<AddPatientView> {
                                           child: SvgPicture.asset(
                                             'assets/icons/Bulk/Scan.svg',
                                             color: kSouthSeas,
-                                            height: hv * 12,
-                                            width: wv * 12,
+                                            height: Device.isSmartphone(context) ?  hv * 12 : 100 ,
+                                            width:Device.isSmartphone(context) ?  wv * 12 : 100,
                                           ),
                                         ),
                                       ),
                                     )
-                                  : const SizedBox.shrink(),
+                                  : const SizedBox.shrink():const SizedBox.shrink(),
                               widget.isLaunchConsultation == true
                                   ? Center(
                                       child: Text(
@@ -659,10 +664,9 @@ class _AddPatientViewState extends State<AddPatientView> {
                       : Container(
                           width: wv * 50,
                           padding: EdgeInsets.symmetric(
-                              horizontal: wv * 3.2, vertical: hv * 2),
+                              horizontal: Device.isSmartphone(context) ?  wv * 3.2 : wv * 2.5 , vertical: hv * 2),
                           child: TextButton(
                             onPressed: () async {
-                           
                               if (kDebugMode) {
                                 print(phone);
                               }
@@ -794,12 +798,12 @@ class _AddPatientViewState extends State<AddPatientView> {
                               S.of(context).rechercher,
                               style: TextStyle(
                                   color: textColor,
-                                  fontSize: wv * 4.5,
+                                  fontSize:  Device.isSmartphone(context) ? wv * 4.5 : 14,
                                   fontWeight: FontWeight.w600),
                             ),
                             style: ButtonStyle(
                                 padding: MaterialStateProperty.all(
-                                  const  EdgeInsets.symmetric(vertical: 15)),
+                                    EdgeInsets.symmetric(vertical:  Device.isSmartphone(context) ? 12 :15 )),
                                 backgroundColor:
                                     MaterialStateProperty.all(kFirstIntroColor),
                                 shape: MaterialStateProperty.all(

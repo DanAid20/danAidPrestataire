@@ -30,7 +30,7 @@ class HomeDoctorView extends StatefulWidget {
 
 class _HomeDoctorViewState extends State<HomeDoctorView> {
 
-  
+
 Widget notificationWidget(BuildContext context){
    UserProvider userProvider = Provider.of<UserProvider>(context);
    bool isPrestataire=userProvider.getProfileType== serviceProvider ? true : false;

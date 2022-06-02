@@ -9,6 +9,7 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
 import 'package:danaid/core/services/algorithms.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/services/navigation_service.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
@@ -76,11 +77,15 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
+      constraints: BoxConstraints(
+        maxWidth: Device.isSmartphone(context) ? double.infinity : 1000,
+        maxHeight: Device.isSmartphone(context) ? double.infinity : 420
+      ),
       margin: EdgeInsets.only(top: hv * 1.5, bottom: hv * 1.5),
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      child: Column(
+      child: Column( 
         children: [
           GestureDetector(
             onTap: () {
@@ -101,9 +106,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
             },
             child: Container(
                 margin:
-                    EdgeInsets.only(left: wv * 1.5, right: wv * 1.5, top: 20.h),
-                width: 330.w,
-                height: 140.h,
+                    EdgeInsets.only(left: SizeConfig.defaultSize! * 1.5, right: SizeConfig.defaultSize! * 1.5, top: 20.h),
+                width:  Device.isSmartphone(context) ? 330.w : 1000 ,
+                height: Device.isSmartphone(context) ? 140.h : 220 ,
                 decoration: BoxDecoration(
                   color: isPrestataire ? kGold : kThirdIntroColor,
                   boxShadow: const[
@@ -114,18 +119,17 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     Radius.circular(17),
                   ),
                 ),
-                padding: EdgeInsets.only(top: hv * 1),
+                padding: EdgeInsets.only(top: SizeConfig.defaultSize! * 1),
                 child: Column(
                   children: [
                     Align(
                       alignment: Alignment.topRight,
                       child: Container(
-                        margin: EdgeInsets.only(right: wv * 3.5, top: hv * 0.5),
+                        margin: EdgeInsets.only(right: SizeConfig.defaultSize! * 3.5, top: SizeConfig.defaultSize! * 0.5),
                         child: SvgPicture.asset(
                             'assets/icons/Bulk/Bookmark.svg',
-                            width: wv * 8,
-                            color:
-                                isPrestataire == true ? kBlueForce : kDeepTeal),
+                            width: Device.isSmartphone(context) ? wv*8 : wv*3,
+                            color: isPrestataire == true ? kBlueForce : kDeepTeal),
                       ),
                     ),
                     Container(
@@ -143,8 +147,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               textScaleFactor: 1.0,
                               style: TextStyle(
                                   color: kCardTextColor,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 20.sp),
+                                  fontWeight: FontWeight.w800, 
+                                  fontSize: Device.isSmartphone(context) ?20.sp : 30),
                             ),
                           ),
                         ],
@@ -152,7 +156,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     ),
                     Container(
                       margin:
-                          EdgeInsets.only(left: 20.w, right: 60.w, top: 8.h),
+                          EdgeInsets.only(left: 20.w, right: Device.isSmartphone(context) ? 60.w : 30.w, top: 8.h),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -166,7 +170,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 15.5.sp),
+                                  fontSize: Device.isSmartphone(context) ? 15.5.sp : 20 ),
                               overflow: TextOverflow.clip,
                             ),
                           ),
@@ -177,8 +181,8 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 )),
           ),
           Container(
-            margin: EdgeInsets.symmetric(vertical: 2.0),
-            height: 110.r,
+            margin: const EdgeInsets.symmetric(vertical: 2.0),
+            height: 110.r ,
             child:  ListView(
               scrollDirection: Axis.horizontal,
               children: <Widget>[
@@ -271,9 +275,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
       children: [
         Container(
             margin: EdgeInsets.only(
-                left: 20.w, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-            width: 125.r,
-            height: 85.r,
+                left:  Device.isSmartphone(context) ? 20.w : 8.w , right: wv * 1.5, top: hv * 2, bottom: hv * 1),
+            width:  Device.isSmartphone(context) ? 125.r :200.r,
+            height:  Device.isSmartphone(context) ? 85.r : 80.r ,
             decoration: BoxDecoration(
               color: isPrestataire == true ? kGoldlight : kThirdIntroColor,
               boxShadow: const [
@@ -292,7 +296,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     margin: EdgeInsets.only(left: 10.w, top: 4.h),
                     child: SvgPicture.asset(
                         iconesUrl ?? 'assets/icons/Bulk/Bookmark.svg',
-                        width: wv * 6,
+                        width:  Device.isSmartphone(context) ? wv * 6 :wv * 2,
                         color: isPrestataire == true ? kBlueForce : kDeepTeal),
                   ),
                 ),
@@ -302,13 +306,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                   child: Row(
                     children: [
                       SizedBox(
-                        width: 90.r,
+                        width:  Device.isSmartphone(context) ? 90.r :100.r   ,
                         child: Text(
                           title ?? S.of(context).ajouterUnPatient,
-                          style: TextStyle(
+                          style: TextStyle( 
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: 16.sp),
+                              fontSize: Device.isSmartphone(context) ? 16.sp : 14 ),
                         ),
                       ),
                     ],
@@ -320,45 +324,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     );
   }
 
-  // getListOfDevis(startDays, date, prestataireId){
-  //     Stream<QuerySnapshot> query = FirebaseFirestore.instance
-  //       .collection("DEVIS")
-  //       .where("PrestataireId", isEqualTo: prestataireId)
-  //       .where("start-time", isEqualTo: startDays)
-  //       .snapshots();
-  //       ServicesProviderInvoice devis = Provider.of<ServicesProviderInvoice>(context);
-  //   DevisModel devisModel;
-  //   return StreamBuilder(
-  //       stream: query,
-  //       builder: (context, snapshot) {
-  //         //print(snapshot.data.docs.length);
-  //         if (!snapshot.hasData) {
-  //           return Center(
-  //             child: CircularProgressIndicator(
-  //               valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-  //             ),
-  //           );
-  //         }
-  //         if (snapshot.data == null) return CircularProgressIndicator();
-  //         return snapshot.data.docs.length >= 1
-  //             ? ListView.builder( scrollDirection: Axis.vertical,
-  //                 shrinkWrap: true,
-  //                 itemCount: snapshot.data.docs.length,
-  //                 itemBuilder: (context, index) {
-  //                      var componenent;
-  //                     DocumentSnapshot doc = snapshot.data.docs[index];
-  //                       CollectionReference users =
-  //                             FirebaseFirestore.instance.collection("ADHERENTS/${doc.data()["adherentId"]}/BENEFICIAIRES");
-  //                 }): Padding(
-  //                 padding: const EdgeInsets.all(20.0),
-  //                 child: Center(
-  //                   child:
-  //                       Text(S.of(context).vousNavezAucunRendezvousPourLeMoment),
-  //                 ),
-  //               );
-  //     });
-
-  // }
   getListOfUser(startDays, endDay, date, doctorId) {
     print(doctorId);
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
@@ -381,7 +346,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
             );
           }
           
-          return snapshot.connectionState == ConnectionState.done && snapshot.hasData==true
+          return snapshot.data!.docs.isNotEmpty
               ? ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -410,10 +375,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               }
                               if (snapshot.connectionState == ConnectionState.done) {
                                 Map<String, dynamic> data = snapshot.data!.data()  as Map<String, dynamic> ;
-                                Timestamp t = data["dateNaissance"];
-                                DateTime? d = t.toDate();
-                                DateTime dateTimeNow = DateTime.now();
-
                                 Timestamp day = doc["start-time"];
                                 DateTime dateTime = day.toDate();
                                 String formattedTime =
@@ -432,7 +393,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                         
                                       },
                                       child: HomePageComponents().patientsItem(
-                                    apointementDate: "$formattedTime",
+                                    apointementDate: formattedTime,
                                     etat:doc["status"],
                                     imgUrl: '${data["imageUrl"]}',
                                     nom: '${data["prenom"]} ${data["nomFamille"]}',
@@ -462,10 +423,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                         }
                         if (snapshot.connectionState == ConnectionState.done) {
                           Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                          Timestamp t = data["dateNaissance"];
-                          DateTime d = t.toDate();
-                          DateTime dateTimeNow = DateTime.now();
-
                           Timestamp day = doc["start-time"];
                           DateTime dateTime = day.toDate();
                           String formattedTime =
@@ -479,12 +436,11 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                 rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
                                 rendezVous.getAppointment!.username='${data["prenom"]} ${data["nomFamille"]} ',
                                 rendezVous.getAppointment!.birthDate=data["dateNaissance"],
-                                
-                                   Navigator.of(context).pushNamed('/appointment-apointement')
+                                Navigator.of(context).pushNamed('/appointment-apointement')
                                   
                                 },
                                 child: HomePageComponents().patientsItem(
-                              apointementDate: "$formattedTime",
+                              apointementDate: formattedTime,
                               etat:doc["status"],
                               imgUrl: '${data["imageUrl"]}',
                               nom: '${data["prenom"]} ${data["nomFamille"]}',
@@ -508,7 +464,6 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
   }
   
   getPrestataireList( prestatairesId){
-    UserProvider userProvider = Provider.of<UserProvider>(context);
      Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collectionGroup("PRESTATIONS")
         .where("prestataireId", isEqualTo: prestatairesId)
@@ -529,7 +484,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
           }
           
         
-        return snapshot.connectionState == ConnectionState.done && snapshot.data.docs.length!=0? ListView.builder(
+        return snapshot.data.docs.length!=0? ListView.builder(
                      shrinkWrap: true,
                      itemCount: snapshot.data.docs.length,
                      itemBuilder: (context, index) {
@@ -567,6 +522,9 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
     return Container(
+       constraints: BoxConstraints(
+        maxWidth: Device.isSmartphone(context) ? double.infinity : 1000,
+      ),
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
@@ -582,13 +540,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                 S.of(context).demandesDeRdv,
                 style: TextStyle(
                     color: kFirstIntroColor,
-                    fontSize: 15.sp,
+                    fontSize:  Device.isSmartphone(context) ? 15.sp : 20 ,
                     fontWeight: FontWeight.w500),
               ),
               Text(S.of(context).voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
-                      fontSize: 15.sp,
+                      fontSize:  Device.isSmartphone(context) ? 15.sp : 20,
                       fontWeight: FontWeight.w700))
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -622,12 +580,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     UserProvider userProvider = Provider.of<UserProvider>(context);
    ServiceProviderModelProvider prestataire =
         Provider.of<ServiceProviderModelProvider>(context);
-    DoctorModelProvider doctorProvider =
-        Provider.of<DoctorModelProvider>(context, listen: false);
     bool isPrestataire =
         userProvider.getProfileType == serviceProvider ? true : false;
 
     return Container(
+       constraints: BoxConstraints(
+            maxWidth: Device.isSmartphone(context) ?  double.infinity : 1000
+      ),
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
@@ -643,13 +602,13 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                isPrestataire? S.of(context).derniresPrestations: S.of(context).derniresRendezvous,
                 style: TextStyle(
                     color: kFirstIntroColor,
-                    fontSize: 15.sp,
+                    fontSize:  Device.isSmartphone(context) ?  15.sp : 16 ,
                     fontWeight: FontWeight.w500),
               ),
               Text(S.of(context).voirPlus,
                   style: TextStyle(
                       color: kBrownCanyon,
-                      fontSize: 15.sp,
+                      fontSize: Device.isSmartphone(context) ?  15.sp : 16,
                       fontWeight: FontWeight.w700))
             ],
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -679,6 +638,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
       child: Container(
+        
         decoration: const BoxDecoration(
           color: kBgTextColor,
         ),

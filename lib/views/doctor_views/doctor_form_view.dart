@@ -316,10 +316,10 @@ class _DoctorFormViewState extends State<DoctorFormView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: wv*3),
               child: LocationDropdown(
-                city: _city!,
-                stateCode: _stateCode!,
-                cityChosen: cityChosen!,
-                regionChosen: regionChosen!,
+                city: _city!=null?_city!: null,
+                stateCode: _stateCode!=null?_stateCode!: null,
+                cityChosen: cityChosen!=null?cityChosen!:null,
+                regionChosen: regionChosen!=null?regionChosen!:null,
                 regionOnChanged: (value) async {
                   setState(() {
                     _stateCode = value;

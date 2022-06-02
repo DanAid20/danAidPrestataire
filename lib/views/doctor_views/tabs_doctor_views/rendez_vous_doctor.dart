@@ -12,6 +12,7 @@ import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
 import 'package:danaid/core/providers/usecaseModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -410,149 +411,151 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
               ),
             );
           }
-          
-          return snapshot.data!.docs.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data!.docs[index];
-                    var widget;
-                    // si doc["adherentId"] === doc["beneficiaryId"]
-                    if(doc["adherentId"] == doc["beneficiaryId"]){
-                      print("++++++++++++++++++++++++++++++++++++++++++");
-                    CollectionReference users = FirebaseFirestore.instance.collection('ADHERENTS');
-                        widget = FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc["adherentId"]).get(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData==false) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                            ),
-                          );
-                        }
-                        if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
-                        }
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                          Timestamp t = data["dateNaissance"];
-                          DateTime d = t.toDate();
-                          DateTime dateTimeNow = DateTime.now();
-                          final differenceInDays =
-                              dateTimeNow.difference(d).inDays ~/ 365;
-                          Timestamp day = doc["start-time"];
-                          DateTime dateTime = day.toDate();
-                          String formattedTime =DateFormat.Hm().format(dateTime);
-                          return doc["status"]==2? SizedBox.shrink() : GestureDetector(
-                                onTap: ()=>{
-                                appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
-                                rendezVous.setAppointmentModel(appointmentModel!),
-                                rendezVous.getAppointment!.adherentId=snapshot.data!.id,
-                                rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
-                                rendezVous.getAppointment!.username='${data["prenom"]} ${data["nomFamille"]} ',
-                                rendezVous.getAppointment!.birthDate=data["dateNaissance"],
-                                
-                                Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AppointmentDetails(adherent: adherent),
-                                      ),)
+          print(snapshot.data!.docs);
+          return  snapshot.data!.docs.isNotEmpty
+              ? Container(
+                child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot doc = snapshot.data!.docs[index];
+                      var widget;
+                      // si doc["adherentId"] === doc["beneficiaryId"]
+                      if(doc["adherentId"] == doc["beneficiaryId"]){
+                        print("++++++++++++++++++++++++++++++++++++++++++");
+                      CollectionReference users = FirebaseFirestore.instance.collection('ADHERENTS');
+                          widget = FutureBuilder<DocumentSnapshot>(
+                        future: users.doc(doc["adherentId"]).get(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData==false) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                              ),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Text(S.of(context).somethingWentWrong);
+                          }
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                            Timestamp t = data["dateNaissance"];
+                            DateTime d = t.toDate();
+                            DateTime dateTimeNow = DateTime.now();
+                            final differenceInDays =
+                                dateTimeNow.difference(d).inDays ~/ 365;
+                            Timestamp day = doc["start-time"];
+                            DateTime dateTime = day.toDate();
+                            String formattedTime =DateFormat.Hm().format(dateTime);
+                            return doc["status"]==2? SizedBox.shrink() : GestureDetector(
+                                  onTap: ()=>{
+                                  appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
+                                  rendezVous.setAppointmentModel(appointmentModel!),
+                                  rendezVous.getAppointment!.adherentId=snapshot.data!.id,
+                                  rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
+                                  rendezVous.getAppointment!.username='${data["prenom"]} ${data["nomFamille"]} ',
+                                  rendezVous.getAppointment!.birthDate=data["dateNaissance"],
                                   
-                                },
-                                
-                                child: HomePageComponents().timeline(
-                                isanounced: doc["announced"],
-                                adhrentId: doc["adherentId"],
-                                doctorId: isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
-                                consultationtype: doc["consultation-type"],
-                                isPrestataire: isPrestataire,
-                                age: "$differenceInDays ans",
-                                consultationDetails: '${doc["title"]}',
-                                consultationType:
-                                    "${doc["appointment-type"]}",
-                                time: "$formattedTime",
-                                userImage: '${data["imageUrl"]}',
-                                userName:
-                                    '${data["prenom"]} ${data["nomFamille"]} '),
-                          );
-                        }
-                        return const  Text(" ");
-                      },
-                    );
-                    }else if (doc["adherentId"] != doc["beneficiaryId"]){
-                       print("+++++++++++++++++++++");
-                          CollectionReference users =
-                        FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
-                       widget= FutureBuilder<DocumentSnapshot>(
-                      future: users.doc(doc["beneficiaryId"]).get(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<DocumentSnapshot> snapshot) {
-                        if (snapshot.hasData==false) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                            ),
-                          );
-                        }
-                        if (snapshot.hasError) {
-                          return Text(S.of(context).somethingWentWrong);
-                        }
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                          Timestamp t = data["dateNaissance"];
-                          DateTime d = t.toDate();
-                          DateTime dateTimeNow = DateTime.now();
-                          final differenceInDays =
-                              dateTimeNow.difference(d).inDays ~/ 365;
-                          Timestamp day = doc["start-time"];
-                          DateTime dateTime = day.toDate();
-                          String formattedTime =DateFormat.Hm().format(dateTime);
-                          return doc["status"]==2? const SizedBox.shrink() : GestureDetector(
-                                onTap: ()=>{
-                                appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
-                                rendezVous.setAppointmentModel(appointmentModel!),
-                                rendezVous.getAppointment!.adherentId=snapshot.data!.id,
-                                rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
-                                rendezVous.getAppointment!.username= '${data["prenom"]} ${data["nomDFamille"]} ',
-                                rendezVous.getAppointment!.birthDate=data["dateNaissance"],
-                                Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => AppointmentDetails(adherent: adherent),
-                                      ),)
-                                },
-                                
-                                child: HomePageComponents().timeline(
-                                isanounced: doc["announced"],
-                                adhrentId: doc["adherentId"],
-                                doctorId:  isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
-                                consultationtype: doc["consultation-type"],
-                                isPrestataire: false,
-                                age: "$differenceInDays ans",
-                                consultationDetails: '${doc["title"]}',
-                                consultationType:
-                                    "${doc["appointment-type"]}",
-                                time: "$formattedTime",
-                                userImage: '${data["imageUrl"]}',
-                                userName:
-                                    '${data["prenom"]} ${data["nomDFamille"]} '),
-                          );
-                        }
-                        return Text(" ");
-                      },
-                      
-                    );
-                    }
-                    // alors on affiche adherent
-                    // sinom on affiche beneficiares 
-                    return widget;
-                  })
+                                  Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AppointmentDetails(adherent: adherent),
+                                        ),)
+                                    
+                                  },
+                                  
+                                  child: HomePageComponents().timeline(
+                                  isanounced: doc["announced"],
+                                  adhrentId: doc["adherentId"],
+                                  doctorId: isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
+                                  consultationtype: doc["consultation-type"],
+                                  isPrestataire: isPrestataire,
+                                  age: "$differenceInDays ans",
+                                  consultationDetails: '${doc["title"]}',
+                                  consultationType:
+                                      "${doc["appointment-type"]}",
+                                  time: "$formattedTime",
+                                  userImage: '${data["imageUrl"]}',
+                                  userName:
+                                      '${data["prenom"]} ${data["nomFamille"]} '),
+                            );
+                          }
+                          return const  Text(" ");
+                        },
+                      );
+                      }else if (doc["adherentId"] != doc["beneficiaryId"]){
+                         print("+++++++++++++++++++++");
+                            CollectionReference users =
+                          FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
+                         widget= FutureBuilder<DocumentSnapshot>(
+                        future: users.doc(doc["beneficiaryId"]).get(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData==false) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                              ),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return Text(S.of(context).somethingWentWrong);
+                          }
+                          if (snapshot.connectionState == ConnectionState.done) {
+                            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                            Timestamp t = data["dateNaissance"];
+                            DateTime d = t.toDate();
+                            DateTime dateTimeNow = DateTime.now();
+                            final differenceInDays =
+                                dateTimeNow.difference(d).inDays ~/ 365;
+                            Timestamp day = doc["start-time"];
+                            DateTime dateTime = day.toDate();
+                            String formattedTime =DateFormat.Hm().format(dateTime);
+                            return doc["status"]==2? const SizedBox.shrink() : GestureDetector(
+                                  onTap: ()=>{
+                                  appointmentModel=AppointmentModel.fromDocument(doc, doc.data() as Map),
+                                  rendezVous.setAppointmentModel(appointmentModel!),
+                                  rendezVous.getAppointment!.adherentId=snapshot.data!.id,
+                                  rendezVous.getAppointment!.avatarUrl=data["imageUrl"],
+                                  rendezVous.getAppointment!.username= '${data["prenom"]} ${data["nomDFamille"]} ',
+                                  rendezVous.getAppointment!.birthDate=data["dateNaissance"],
+                                  Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AppointmentDetails(adherent: adherent),
+                                        ),)
+                                  },
+                                  
+                                  child: HomePageComponents().timeline(
+                                  isanounced: doc["announced"],
+                                  adhrentId: doc["adherentId"],
+                                  doctorId:  isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
+                                  consultationtype: doc["consultation-type"],
+                                  isPrestataire: false,
+                                  age: "$differenceInDays ans",
+                                  consultationDetails: '${doc["title"]}',
+                                  consultationType:
+                                      "${doc["appointment-type"]}",
+                                  time: "$formattedTime",
+                                  userImage: '${data["imageUrl"]}',
+                                  userName:
+                                      '${data["prenom"]} ${data["nomDFamille"]} '),
+                            );
+                          }
+                          return Text(" ");
+                        },
+                        
+                      );
+                      }
+                      // alors on affiche adherent
+                      // sinom on affiche beneficiares 
+                      return widget;
+                    }),
+              )
               : Center(
                   child: Text(S.of(context).aucunAdherentDisponiblePourLeMoment),
                 );
@@ -562,8 +565,11 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   Widget calendar({bool? isPrestataire}) {
     return Column(children: [
       Container(
-        width: wv * 100,
-        height: 145,
+        constraints: BoxConstraints(
+        maxWidth: Device.isSmartphone(context) ? wv*100 : 1000,
+        maxHeight: Device.isSmartphone(context) ? 145: 160
+        ),
+       
         decoration: BoxDecoration(
           color: isPrestataire! ? kGoldlight : kThirdIntroColor,
           boxShadow:const [
@@ -607,31 +613,31 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   outsideTextStyle:TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: calendarTextValue) ,
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14  ) ,
                   rangeEndTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: calendarTextValue),
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
                   rangeStartTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: calendarTextValue),
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
                   weekendTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w500,
-                      fontSize: calendarTextValue),
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
                   defaultTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w500,
-                      fontSize: calendarTextValue),
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
                   holidayTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: calendarTextValue),
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 ),
                   todayTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: calendarTextValue)),
+                      fontSize: Device.isSmartphone(context) ? calendarTextValue : 14 )),
               headerStyle: HeaderStyle(
                   formatButtonVisible: false,
                   headerMargin: const EdgeInsets.only(left: 18),
@@ -641,7 +647,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                   titleTextStyle: TextStyle(
                       color: isPrestataire ? kBlueForce : whiteColor,
                       fontWeight: FontWeight.w700,
-                      fontSize: 18)),
+                      fontSize:  Device.isSmartphone(context) ? 18 : 16 )),
               daysOfWeekStyle: DaysOfWeekStyle(
                 weekdayStyle: TextStyle(
                   color: isPrestataire ? kBlueForce : whiteColor,
@@ -675,7 +681,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           fontWeight: isSelected == 'Days'
                               ? FontWeight.w600
                               : FontWeight.w500,
-                          fontSize: fontSize(size: wv * 4)),
+                          fontSize:  fontSize(size: Device.isSmartphone(context) ? wv * 4 : 5)),
                     ),
                   ),
                 ),
@@ -699,7 +705,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           fontWeight: isSelected == 'week'
                               ? FontWeight.w600
                               : FontWeight.w500,
-                          fontSize: fontSize(size: wv * 4)),
+                          fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4 : 5 )),
                     ),
                   ),
                 ),
@@ -722,7 +728,7 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     style: TextStyle(
                         color: isPrestataire ? kBlueForce : whiteColor,
                         fontWeight: FontWeight.w600,
-                        fontSize: fontSize(size: wv * 4)),
+                        fontSize: fontSize(size:  Device.isSmartphone(context) ? wv * 4 : 5 )),
                   ),
                 )
               ],
@@ -762,9 +768,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         )
                         ),
           Container(
-            height: 120.h,
+            constraints: BoxConstraints(
+            maxHeight: Device.isSmartphone(context) ? 120.h :150.h,
+            maxWidth: Device.isSmartphone(context) ? double.infinity :1000
+            ),
             margin: EdgeInsets.only(bottom: 60.h),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: whiteColor,
             ),
             child: Column(
@@ -782,12 +791,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           style: TextStyle(
                               color: kBlueDeep,
                               fontWeight: FontWeight.w500,
-                              fontSize: 17.sp)),
+                              fontSize: Device.isSmartphone(context) ?17.sp :16  )),
                       Text(S.of(context).voirPlus,
                           style: TextStyle(
                               color: kBrownCanyon,
                               fontWeight: FontWeight.w600,
-                              fontSize: 17.sp)),
+                              fontSize: Device.isSmartphone(context) ?17.sp :16 )),
                     ],
                   ),
                 ),

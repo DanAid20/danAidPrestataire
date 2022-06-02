@@ -80,9 +80,9 @@ class _VideoRoomState extends State<VideoRoom> {
         home: Scaffold(
           body: Stack(
             children: [
-              Center(
-                child: _switch ? _renderRemoteVideo() : _renderLocalPreview(),
-              ),
+              // Center(
+              //   child: _switch ? _renderRemoteVideo() : _renderLocalPreview(),
+              // ),
               Align(
                 alignment: Alignment.topLeft,
                 child: Container(
@@ -95,10 +95,10 @@ class _VideoRoomState extends State<VideoRoom> {
                         _switch = !_switch;
                       });
                     },
-                    child: Center(
-                      child:
-                      _switch ? _renderLocalPreview() : _renderRemoteVideo(),
-                    ),
+                    // child: Center(
+                    //   child:
+                    //   _switch ? _renderLocalPreview() : _renderRemoteVideo(),
+                    // ),
                   ),
                 ),
               ),
@@ -127,32 +127,32 @@ class _VideoRoomState extends State<VideoRoom> {
     );
   }
 
-  Widget _renderLocalPreview() {
-    if (_joined) {
-      return RtcLocalView.SurfaceView();
-    } else {
-      return Text(
-        "Vous n'êtes pas connecté",
-        style: TextStyle(color: whiteColor),
-        textAlign: TextAlign.center,
-      );
-    }
-  }
+//   Widget _renderLocalPreview() {
+//     if (_joined) {
+//       return RtcLocalView.SurfaceView();
+//     } else {
+//       return Text(
+//         "Vous n'êtes pas connecté",
+//         style: TextStyle(color: whiteColor),
+//         textAlign: TextAlign.center,
+//       );
+//     }
+//   }
 
-  // Remote preview
- Widget _renderRemoteVideo() {
-    if (_remoteUid != 0) {
-      return RtcRemoteView.SurfaceView(
-        uid: _remoteUid,
-        channelId: "",
-      );
-    } else {
-      return Text(
-        "En attente de l'utilisateur distant",
-        style: TextStyle(color: whiteColor),
-        textAlign: TextAlign.center,
-      );
-    }
-  }
+//   // Remote preview
+//  Widget _renderRemoteVideo() {
+//     if (_remoteUid != 0) {
+//       return RtcRemoteView.SurfaceView(
+//         uid: _remoteUid,
+//         channelId: "",
+//       );
+//     } else {
+//       return Text(
+//         "En attente de l'utilisateur distant",
+//         style: TextStyle(color: whiteColor),
+//         textAlign: TextAlign.center,
+//       );
+//     }
+//   }
 
 }

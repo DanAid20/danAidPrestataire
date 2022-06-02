@@ -1,4 +1,5 @@
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/widgets/home_page_mini_components.dart';
 import 'package:flutter/material.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
@@ -100,370 +101,382 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
           leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: whiteColor,), onPressed: (){/*controller.setIndex(1)*/Navigator.pop(context);}),
         ),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-               Container(
-                width:double.infinity,
-        decoration: BoxDecoration(
-         
-           boxShadow: [
-                BoxShadow(color: kThirdColor, spreadRadius: 2.5, blurRadius: 4),
-              ],
-          borderRadius: BorderRadius.only(
-               bottomLeft: Radius.circular(10),
-               bottomRight: Radius.circular(10),
-              ),
-        ),
-        child: Container(
-          width: double.infinity,
-          height:200.h ,
-          child: Stack(
-                fit: StackFit.loose,
-                children: <Widget>[
-                   Column(
-                     mainAxisSize: MainAxisSize.min,
-                     children: [
-                       Container(height: 0.2.sh , width: double.infinity,  decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage("assets/images/image 25.png"),
-                          fit: BoxFit.cover,
-                        ),
-                      
-                      ), child: Text('',)),
-                       Container(height:0.070.sh, margin: EdgeInsets.only(top: 10.h), width: double.infinity,  color:Colors.black.withOpacity(0.1),
-                       child: Text('',)),
-                      
-                     ], 
-                   ),
-                   Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(height: 14*hv,color:kGold.withOpacity(0.7), width: double.infinity, child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                     margin: EdgeInsets.only(left: 10.w),
-                    child: Text('Hopital de district de New Bell ', style: TextStyle(
-                                              color: kBlueForce,
-                                              fontSize: 18.sp,
-                                              fontWeight: FontWeight.w800), ),
-                  ),
-                )),
-
-              )),
-                   Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container( alignment: Alignment.topRight, height:160.h, width: double.infinity, child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child:Container(
-                    width: 105.h,
-                    child: userProvider.getUserModel!.profileType == serviceProvider ? TextButton(
-                                  onPressed: ()=>{
-                                     Navigator.pushNamed(context, '/serviceprovider-profile-edit')
-                                  }, 
-                                  child: Row(
-                                    children: [
-                                      SvgPicture.asset('assets/icons/Bulk/Edit Square.svg', width: 20, color: kPrimaryColor,),
-                                      SizedBox(width: 2,),
-                                      Text("Modifier", style: TextStyle(fontSize: 13.sp, color: kPrimaryColor, fontWeight: FontWeight.w900),),
-                                    ],
-                                  ),
-                                  style: ButtonStyle(
-                                    padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: wv*3)),
-                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
-                                    backgroundColor: MaterialStateProperty.all(whiteColor),
-                                    shadowColor: MaterialStateProperty.all(Colors.grey),
-                                    elevation: MaterialStateProperty.all(3)
-                                  ),
-                                ) : Container(),
-                  ),
-                )),
-
-              )),
-                  
-                  Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 69.h,
-                  padding: EdgeInsets.only(top:3),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  
-                                  SizedBox(height: hv*1),
-                                  prestataire.getServiceProvider?.serviceList==null ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(child: Container(margin: const EdgeInsets.only(top:10),child:Text('Aucun Services selectioner', textScaleFactor: 1.0, style: TextStyle(color:whiteColor, fontWeight: FontWeight.w500, fontSize: 15.sp)))),
-                                  ):Container(),
-                                 prestataire.getServiceProvider?.serviceList!=null ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      getFeatureCard(title: "Services Offerts", isActifService: true),
-                                       prestataire.getServiceProvider?.serviceList['Consultation'] ?? getFeatureCard(title: "Consultations"),
-                                       prestataire.getServiceProvider?.serviceList['SoinsAmbulances'] ?? getFeatureCard(title: "Soins Ambulances"),
-                                    ],
-                                  ):Container(),
-                                   prestataire.getServiceProvider?.serviceList!=null ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                       prestataire.getServiceProvider?.serviceList['Pharmacie'] ?? getFeatureCard(title: "Pharmacie") ,
-                                       prestataire.getServiceProvider?.serviceList['laboratoire'] ?? getFeatureCard(title: "Labo"),
-                                       prestataire.getServiceProvider?.serviceList['Hospitalisation'] ?? getFeatureCard(title: "Hospitalisation"),
-                                    ],
-                                    ):Container(),
-                                
-                                ],
-                              ),
+          child: Container(
+             constraints: const BoxConstraints(
+            maxWidth:  double.infinity 
+          ),
+            child: Align( 
+            alignment:  Alignment.center,
+            child: Container(
+                constraints: BoxConstraints(
+                  maxWidth:   Device.isSmartphone(context) ? double.infinity:1000
                 ),
-              ),
-                  )
-                  
-                ],
-              ),
-        ) /* add child content here */,
-      ),
-              
-              Column(
-                children: [              
-                  DefaultTextStyle(
-                    style:const TextStyle(color: kPrimaryColor),
-                    child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 5, left:10, top:10.h),
-                          child: Text("  A propos", style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold, fontFamily: 'Quicksand'),),
-                        ),
-                        SizedBox(height: 3,),
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Text(prestatiaireObject?.about ?? 'RAS' , textScaleFactor: 1.0,
-                           style: TextStyle(fontSize:14.sp ),),
-                        ),
-                        SizedBox(height: 2.h,),
-                        isPrestataire? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
-                              Container(
-                                width:  80.w,
-                                padding: EdgeInsets.all(6.w),
-                                 decoration: BoxDecoration(
-                                  color: kblueSky.withOpacity(0.6),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Text('Medecin de famille', textScaleFactor: 1.0, textAlign: TextAlign.center, style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize:  11.sp )),
-                                    Text('2',textAlign:TextAlign.center, textScaleFactor: 1.0, style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize:  12.sp )),
-                                  ],
-                                ),
-
+              child: Column(
+                  children: [
+                     Container(
+                      width:double.infinity,
+                      decoration: const  BoxDecoration(
+                 boxShadow: [
+                      BoxShadow(color: kThirdColor, spreadRadius: 2.5, blurRadius: 4),
+                    ],
+                borderRadius: BorderRadius.only(
+                     bottomLeft: Radius.circular(10),
+                     bottomRight: Radius.circular(10),
+                    ),
+                      ),
+                      child: Container(
+                width: double.infinity,
+                height:  Device.isSmartphone(context) ? 200.h : 200 ,
+                child: Stack(
+                      fit: StackFit.loose,
+                      children: <Widget>[
+                         Column(
+                           mainAxisSize: MainAxisSize.min,
+                           children: [
+                             Container(height: 0.2.sh , width: double.infinity,  decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/image 25.png"),
+                                fit: BoxFit.cover,
                               ),
-                              SizedBox(width: 10.w,),
-                              Container(
-                                width:  80.w,
-                                padding: EdgeInsets.all(6.w),
-                                 decoration: BoxDecoration(
-                                  color: kblueSky.withOpacity(0.6),
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text('Personnel inscrit', textScaleFactor: 1.0, textAlign: TextAlign.center, style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w600,
-                                fontSize:  11.sp )),
-                                    Text('2', textAlign: TextAlign.center, textScaleFactor: 1.0,style: TextStyle(
-                                color: kCardTextColor,
-                                fontWeight: FontWeight.w400,
-                                fontSize:  12.sp )),
-                                  ],
-                                ),
-
-                              )
-                            ],
-                          ),
-                        ):SizedBox.shrink(),
+                            
+                            ), child: Text('',)),
+                             Container(height:0.070.sh, margin: EdgeInsets.only(top: 10.h), width: double.infinity,  color:Colors.black.withOpacity(0.1),
+                             child: Text('',)),
+                            
+                           ], 
+                         ),
+                         Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(height: 14*hv,color:kGold.withOpacity(0.7), width: double.infinity, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Container(
+                           margin: EdgeInsets.only(left: 10.w),
+                          child: Text('Hopital de district de New Bell ', style: TextStyle(
+                                                    color: kBlueForce,
+                                                    fontSize:  Device.isSmartphone(context) ? 18.sp :18,
+                                                    fontWeight: FontWeight.w800), ),
+                        ),
+                      )),
+                        
+                    )),
+                         Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container( alignment: Alignment.topRight, height: Device.isSmartphone(context) ? 160.h: 150, width: double.infinity, child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child:Container(
+                          width: 105.h,
+                          child: userProvider.getUserModel!.profileType == serviceProvider ? TextButton(
+                                        onPressed: ()=>{
+                                           Navigator.pushNamed(context, '/serviceprovider-profile-edit')
+                                        }, 
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset('assets/icons/Bulk/Edit Square.svg', width:  Device.isSmartphone(context) ? 20 :25, color: kPrimaryColor,),
+                                            SizedBox(width: 2,),
+                                            Text("Modifier", style: TextStyle(fontSize:  Device.isSmartphone(context) ? 13.sp :14, color: kPrimaryColor, fontWeight: FontWeight.w900),),
+                                          ],
+                                        ),
+                                        style: ButtonStyle(
+                                          padding: MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 5)),
+                                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+                                          backgroundColor: MaterialStateProperty.all(whiteColor),
+                                          shadowColor: MaterialStateProperty.all(Colors.grey),
+                                          elevation: MaterialStateProperty.all(3)
+                                        ),
+                                      ) : Container(),
+                        ),
+                      )),
+                        
+                    )),
+                        
+                        Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 69.h,
+                        padding: EdgeInsets.only(top:3),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        
+                                        SizedBox(height: hv*1),
+                                        prestataire.getServiceProvider?.serviceList==null ? Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(child: Container(margin: const EdgeInsets.only(top:10),child:Text('Aucun Services selectioner', textScaleFactor: 1.0, style: TextStyle(color:whiteColor, fontWeight: FontWeight.w500, fontSize: 15.sp)))),
+                                        ):Container(),
+                                       prestataire.getServiceProvider?.serviceList!=null ? Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            getFeatureCard(title: "Services Offerts", isActifService: true),
+                                             prestataire.getServiceProvider?.serviceList['Consultation'] ?  const SizedBox(): getFeatureCard(title: "Consultations"),
+                                             prestataire.getServiceProvider?.serviceList['SoinsAmbulances'] ? const SizedBox(): getFeatureCard(title: "Soins Ambulances"),
+                                          ],
+                                        ):Container(),
+                                         prestataire.getServiceProvider?.serviceList!=null ? Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                             prestataire.getServiceProvider?.serviceList['Pharmacie'] ? const SizedBox(): getFeatureCard(title: "Pharmacie") ,
+                                             prestataire.getServiceProvider?.serviceList['laboratoire'] ? const SizedBox(): getFeatureCard(title: "Labo"),
+                                             prestataire.getServiceProvider?.serviceList['Hospitalisation'] ? const SizedBox(): getFeatureCard(title: "Hospitalisation"),
+                                          ],
+                                          ):Container(),
+                                      
+                                      ],
+                                    ),
+                      ),
+                    ),
+                        )
                         
                       ],
                     ),
-                  ),
-                  SizedBox(height: hv*1),
-                  Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(left:15, top:5),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(children: [
+                      ) /* add child content here */,
+                    ),
+                    
+                    Column(
+                      children: [              
+                        DefaultTextStyle(
+                          style:const TextStyle(color: kPrimaryColor),
+                          child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text('Personne Contact',
-                                      textScaleFactor: 1.0,
-                                      style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: kBlueForce,
-                                      fontWeight: FontWeight.w600,
-                                    ) ),
+                                padding: EdgeInsets.only(bottom: 5, left:10, top:10.h),
+                                child: Text("  A propos", style: TextStyle(fontSize:  Device.isSmartphone(context) ? 15.sp : 17, fontWeight: FontWeight.bold, fontFamily: 'Quicksand'),),
                               ),
-                            ],),
-                            
-                            Row(children: [
+                              SizedBox(height: 3,),
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Text(prestatiaireObject?.about ?? 'RAS' , textScaleFactor: 1.0,
+                                 style: TextStyle(fontSize: Device.isSmartphone(context) ? 14.sp : 17 ),),
+                              ),
+                              SizedBox(height: 2.h,),
+                              isPrestataire? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: Device.isSmartphone(context) ? 80.w : 150  ,
+                                      padding: EdgeInsets.all(6.w),
+                                       decoration: BoxDecoration(
+                                        color: kblueSky.withOpacity(0.6),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Text('Medecin de famille', textScaleFactor: 1.0, textAlign: TextAlign.center, style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: Device.isSmartphone(context) ? 11.sp : 15 )),
+                                          Text('2',textAlign:TextAlign.center, textScaleFactor: 1.0, style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: Device.isSmartphone(context) ? 12.sp : 15  )),
+                                        ],
+                                      ),
+                        
+                                    ),
+                                    SizedBox(width: 10.w,),
+                                    Container(
+                                      width: Device.isSmartphone(context) ? 80.w : 150,
+                                      padding: EdgeInsets.all(6.w),
+                                       decoration: BoxDecoration(
+                                        color: kblueSky.withOpacity(0.6),
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Personnel inscrit', textScaleFactor: 1.0, textAlign: TextAlign.center, style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: Device.isSmartphone(context) ? 11.sp : 15 )),
+                                          Text('2', textAlign: TextAlign.center, textScaleFactor: 1.0,style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize:Device.isSmartphone(context) ? 12.sp : 15 )),
+                                        ],
+                                      ),
+                        
+                                    )
+                                  ],
+                                ),
+                              ):SizedBox.shrink(),
+                              
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: hv*1),
+                        Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.only(left:15, top:5),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                   HomePageComponents().getAvatar(
-                            imgUrl: prestatiaireObject?.avatarUrl?? "" ,
-                            size: wv * 8.3,
-                            renoveIsConnectedButton: false, context: context),
-                                ],
-                              ),
-                               Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                  Row(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text('Personne Contact',
+                                            textScaleFactor: 1.0,
+                                            style: TextStyle(
+                                            fontSize: Device.isSmartphone(context) ? 14.sp : 17,
+                                            color: kBlueForce,
+                                            fontWeight: FontWeight.w600,
+                                          ) ),
+                                    ),
+                                  ],),
+                                  
+                                  Row(children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                         HomePageComponents().getAvatar(
+                                  imgUrl: prestatiaireObject?.avatarUrl?? "" ,
+                                  size: wv * 8.3,
+                                  renoveIsConnectedButton: false, context: context),
+                                      ],
+                                    ),
+                                     Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text( prestatiaireObject!=null && prestatiaireObject.contactName!=null ? 'Dr '+prestatiaireObject.contactName!: 'pas defini',
+                                          textScaleFactor: 1.0,
+                                         style: TextStyle(
+                                          fontSize:  Device.isSmartphone(context) ? 14.sp : 16,
+                                          color: kBlueForce,
+                                          fontWeight: FontWeight.w500,
+                                        ),),
+                                        SizedBox(height: 4.h,),
+                                        Text( prestatiaireObject?.specialite ??'non defini' ,
+                                          textScaleFactor: 1.0,
+                                         style: TextStyle(
+                                          fontSize: Device.isSmartphone(context) ? 14.sp : 16,
+                                          color: prestatiaireObject==null  &&  prestatiaireObject?.specialite==null  ? kShadowColor : kBlueDeep,
+                                          fontWeight: FontWeight.w500,
+                                        ),),
+                                        SizedBox(height: 2.h,),  
+                                      ],
+                                    ),
+                                  ],),
+                                 
+                                 SizedBox(height: 5.h,),  
+                                  Row(
+                                    children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                 mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text( prestatiaireObject!=null ? 'Dr '+prestatiaireObject.contactName!: 'pas defini',
-                                    textScaleFactor: 1.0,
-                                   style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: kBlueForce,
-                                    fontWeight: FontWeight.w500,
-                                  ),),
-                                  SizedBox(height: 4.h,),
-                                  Text( prestatiaireObject?.specialite ??'non defini' ,
-                                    textScaleFactor: 1.0,
-                                   style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: prestatiaireObject==null  &&  prestatiaireObject?.specialite==null  ? kShadowColor : kBlueDeep,
-                                    fontWeight: FontWeight.w500,
-                                  ),),
-                                  SizedBox(height: 2.h,),  
-                                ],
-                              ),
-                            ],),
-                           
-                           SizedBox(height: 5.h,),  
-                            Row(
-                              children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                           mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                          Text('Adresse ', textScaleFactor: 1.0,  style: TextStyle(
-                                  fontSize: 15.sp,
-                                  color: kBlueForce,
-                                  fontWeight: FontWeight.w600,
-                                ) ),
-                         
-                          Text(prestatiaireObject?.localisation ?? 'localisation non defini '  ,
-                                textScaleFactor: 1.0,
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  color: kBlueForce,
-                                  fontWeight: FontWeight.w500,
-                                ) ),
-                        ],),
-                              ),
-                            ],),
-                        ],),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: hv*1),
-                 
-                  Stack(
-                    children: [
-                        Container(
-                            height: hv*30,
-                            margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
-                            decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: (Colors.grey[400])!)],
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: GoogleMap(
-                           buildingsEnabled: true,
-                           mapType: MapType.normal,
-                           mapToolbarEnabled: true,
-                           minMaxZoomPreference:MinMaxZoomPreference.unbounded ,
-                           scrollGesturesEnabled: true,
-                           zoomGesturesEnabled: true,
-                           markers: markers!,  
-                          onMapCreated: _onMapCreated,
-                          initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center! : LatLng(
-                            prestatiaireObject?.coordGps!["latitude"] != null ?
-                             prestatiaireObject?.coordGps!["latitude"]! : 
-                            _center!.latitude, 
-                          prestatiaireObject?.coordGps!["longitude"] != null ? 
-                          prestatiaireObject?.coordGps!["longitude"]! :
-                           _center!.longitude), zoom: 11.0),
-                          
-                        ),
-                            ),
+                                Text('Adresse ', textScaleFactor: 1.0,  style: TextStyle(
+                                        fontSize:  Device.isSmartphone(context) ? 15.sp : 17,
+                                        color: kBlueForce,
+                                        fontWeight: FontWeight.w600,
+                                      ) ),
+                               
+                                Text(prestatiaireObject?.localisation ?? 'localisation non defini '  ,
+                                      textScaleFactor: 1.0,
+                                      style: TextStyle(
+                                        fontSize:  Device.isSmartphone(context) ? 12.sp : 17,
+                                        color: kBlueForce,
+                                        fontWeight: FontWeight.w500,
+                                      ) ),
+                              ],),
+                                    ),
+                                  ],),
+                              ],),
+                            ],
                           ),
-                      Positioned(
-                        right: wv*3,
-                        bottom: hv*2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              boxShadow: [BoxShadow(
-                                color: (Colors.grey[400])!,
-                                spreadRadius: 1,
-                                blurRadius: 1.5,
-                                offset: const Offset(0, 2)
-                              )]
-                            ),
-                            child: InkWell(
-                              onTap: ()=>{
-                                CameraPosition(
-                            target: prestatiaireObject?.coordGps == null ? _center! : LatLng(prestatiaireObject?.coordGps!["latitude"], prestatiaireObject?.coordGps!["longitude"]),
-                            zoom: 11.0,
-                          )
-                              },
-                              child: CircleAvatar(
-                                radius: wv*6,
-                                backgroundColor: Colors.white,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: inch*1),
-                                  child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
+                        ),
+                        SizedBox(height: hv*1),
+                       
+                        Stack(
+                          children: [
+                              Container(
+                                  height: hv*30,
+                                  margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*1),
+                                  decoration: BoxDecoration(
+                                    boxShadow: [BoxShadow(spreadRadius: 1.5, blurRadius: 2, color: (Colors.grey[400])!)],
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: GoogleMap(
+                                 buildingsEnabled: true,
+                                 mapType: MapType.normal,
+                                 mapToolbarEnabled: true,
+                                 minMaxZoomPreference:MinMaxZoomPreference.unbounded ,
+                                 scrollGesturesEnabled: true,
+                                 zoomGesturesEnabled: true,
+                                 markers: markers!,  
+                                onMapCreated: _onMapCreated,
+                                initialCameraPosition: CameraPosition(target: prestatiaireObject?.coordGps == null ? _center! : LatLng(
+                                  prestatiaireObject?.coordGps!["latitude"] != null ?
+                                   prestatiaireObject?.coordGps!["latitude"]! : 
+                                  _center!.latitude, 
+                                prestatiaireObject?.coordGps!["longitude"] != null ? 
+                                prestatiaireObject?.coordGps!["longitude"]! :
+                                 _center!.longitude), zoom: 11.0),
+                                
+                              ),
+                                  ),
+                                ),
+                            Positioned(
+                              right: wv*3,
+                              bottom: hv*2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    boxShadow: [BoxShadow(
+                                      color: (Colors.grey[400])!,
+                                      spreadRadius: 1,
+                                      blurRadius: 1.5,
+                                      offset: const Offset(0, 2)
+                                    )]
+                                  ),
+                                  child: InkWell(
+                                    onTap: ()=>{
+                                      CameraPosition(
+                                  target: prestatiaireObject?.coordGps == null ? _center! : LatLng(prestatiaireObject?.coordGps!["latitude"], prestatiaireObject?.coordGps!["longitude"]),
+                                  zoom: 11.0,
+                                )
+                                    },
+                                    child: CircleAvatar(
+                                      radius:  Device.isSmartphone(context) ? wv*6 : 30,
+                                      backgroundColor: Colors.white,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(top: inch*1),
+                                        child: SvgPicture.asset("assets/icons/Bulk/MapLocal.svg"),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                   SizedBox(height: hv*10),
-                ],
-              )
-            ],
+                         SizedBox(height: hv*10),
+                      ],
+                    )
+                  ],
+                ),
+            ),
+            ),
           ),
         ),
       ),
@@ -477,7 +490,7 @@ class _PrestataireProfilePageState extends State<PrestataireProfilePage> {
         color: isActifService? Colors.transparent :  whiteColor.withOpacity(0.7),
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Text(title!, textScaleFactor: 1.0, style: TextStyle(color:kPrimaryColor, fontWeight: FontWeight.w500, fontSize: 12.sp)),
+      child: Text(title!, textScaleFactor: 1.0, style: TextStyle(color:kPrimaryColor, fontWeight: FontWeight.w500, fontSize:  Device.isSmartphone(context) ? 12.sp : 18)),
     );
   }
 }

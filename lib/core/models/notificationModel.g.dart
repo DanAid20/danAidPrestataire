@@ -17,15 +17,15 @@ class NotificationModelAdapter extends TypeAdapter<NotificationModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return NotificationModel(
-      messageId: fields[0] as String,
-      title: fields[1] as String,
-      type: fields[3] as String,
-      data: (fields[4] as Map).cast<String, dynamic>(),
-      imgUrl: fields[5] as String,
-      description: fields[2] as String,
-      dateReceived: fields[6] as DateTime,
-      seen: fields[7] as bool,
-      profileImgUrl: fields[8] as String,
+      messageId: fields[0] as String?,
+      title: fields[1] as String?,
+      type: fields[3] as String?,
+      data: (fields[4] as Map?)?.cast<String, dynamic>(),
+      imgUrl: fields[5] as String?,
+      description: fields[2] as String?,
+      dateReceived: fields[6] as DateTime?,
+      seen: fields[7] as bool?,
+      profileImgUrl: fields[8] as String?,
     );
   }
 
