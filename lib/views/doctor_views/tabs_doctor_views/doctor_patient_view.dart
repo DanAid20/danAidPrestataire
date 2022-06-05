@@ -246,9 +246,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                     isPrestataire: isPrestataire,
                   ),
                 ),
-                
-               
-                
+
                 GestureDetector(
                   onTap: () {
                     isPrestataire

@@ -339,7 +339,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                 )),
                   Container(
                     constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 700
+                      maxWidth: Device.isSmartphone(context) ? double.infinity : 1000
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -532,10 +532,10 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                  SizedBox(height: hv * 3,),
                  Container(
                     constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 700
+                      maxWidth: Device.isSmartphone(context) ? double.infinity : 1000
                     ),
                     color: Colors.white,
-                    margin: EdgeInsets.only(top: hv * 2),
+                    margin: EdgeInsets.only(top: hv * 1),
                                 child: Column(
                                   children: [
                                     InkWell(

@@ -982,7 +982,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                             S.of(context).accederAuCarnetDeSante,
                                             style: TextStyle(
                                                 color: textColor,
-                                                fontSize:  Device.isSmartphone(context)? wv * 4.5 : wv * 3 ,
+                                                fontSize:  Device.isSmartphone(context)? wv * 4.5 : 15 ,
                                                 fontWeight: FontWeight.w600),
                                           ),
                                       style: ButtonStyle(

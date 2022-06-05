@@ -1,4 +1,5 @@
 
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:math';
 import 'dart:ui';
@@ -79,7 +80,7 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
             builder: (BuildContext context) =>
                 _buildAboutDialog(context, true));
       }else{
-        getListOfUser();
+         Device.isSmartphone(context) ? displayMobilePart():getListOfUser();
       }
 
     });
@@ -139,6 +140,84 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
     });
   
   }
+displayMobilePart(){
+    AdherentModelProvider adherentProvider = Provider.of<AdherentModelProvider>(context, listen: false);
+     String medecin;
+      if (kDebugMode) {
+        print("------------");
+        print(adherentProvider.getAdherent);
+        print("------------");
+      }
+      if(adherentProvider.getAdherent!.familyDoctorId != null){
+        FirebaseFirestore.instance.collection("MEDECINS").doc(adherentProvider.getAdherent!.familyDoctorId).get().then((doc){
+           var result= doc.data() as Map<String, dynamic>;
+          String name = result["nomDefamille"];
+            medecin = "Dr $name";
+        });
+      }
+
+      FirebaseFirestore.instance.collection("ADHERENTS").doc('${widget.phoneNumber}').collection("BENEFICIAIRES").get().then((snapshot) async {
+        print(snapshot.docs.length.toString());
+        beneficiaries = [];
+        BeneficiaryModel adherentBeneficiary = BeneficiaryModel(
+          avatarUrl: widget.data?.imgUrl,
+                        surname: widget.data?.surname,
+                        familyName: widget.data?.familyName,
+                        matricule: widget.data?.matricule,
+                        gender: widget.data?.gender,
+                        adherentId: widget.data?.adherentId,
+                        birthDate  : widget.data?.birthDate,
+                        dateCreated: widget.data?.dateCreated,
+                        enabled: widget.data?.enable,
+                        height: null,
+                        weight: null,
+                        bloodGroup: null,
+                        protectionLevel: widget.data?.adherentPlan!.toInt(),
+                        cniName: widget.data?.cniName,
+                        marriageCertificateName: widget.data?.marriageCertificateName,
+                        marriageCertificateUrl:  widget.data?.marriageCertificateUrl,
+                        validityEndDate: widget.data?.validityEndDate,
+                        phoneList: widget.data?.phoneList,
+         );
+     
+        Widget adherentBeneficiaryCard =InkWell(
+                         onTap: ()=>{
+                           beneficiaryCarouselController?.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.easeIn)
+                         }, child:  Padding(
+                             padding: const EdgeInsets.all(5),
+                             child: HomePageComponents().getAdherentsList(
+                               context: context,
+                                 adherent: adherentBeneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected! )));
+                                 beneficiaries?.add(adherentBeneficiaryCard);
+        if (kDebugMode) {
+          print(snapshot.docs.length);
+        }
+        for (int i = 0; i < snapshot.docs.length; i++){
+          DocumentSnapshot doc = snapshot.docs[i];
+          BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
+          Widget content =InkWell(
+                         onTap: ()=>{
+                           // ignore: avoid_print
+                           print(i),
+                           beneficiaryCarouselController?.animateToPage(0, duration:const Duration(milliseconds: 500), curve: Curves.easeIn)
+                         }, child: Padding(
+                             padding: const EdgeInsets.all(5),
+                             child: HomePageComponents().getAdherentsList(
+                                context: context,
+                                 adherent: beneficiary, 
+                                 doctorName: famillyDoctorNAme!, 
+                                 isAccountIsExists: true, 
+                                 index: i,
+                                 onclick: getUserSelected, 
+                                 iSelected:userSelected! )));
+          beneficiaries?.add(content);
+        }
+        setState(() {
+          
+        });
+      });
+  }
+
   facturationCode(id,{String? name,String? phone}) async {
      ServiceProviderModelProvider prestataire = Provider.of<ServiceProviderModelProvider>(context);
 
@@ -266,9 +345,10 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                          }, child: Container(
                         child: Padding(
                             padding: EdgeInsets.all(5),
-                            child: HomePageComponents().getAdherentsList(
-                                adherent: adherentBeneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected! )),
-                      ));
+                            child: HomePageComponents().timelineForDeskstop(
+                               context: context,
+                                 adherent: adherentBeneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: 0, onclick: getUserSelected, iSelected:userSelected! ))));
+         
         beneficiaries?.add(adherentBeneficiaryCard);
        // if (kDebugMode) {
           print(snapshot.docs.length);
@@ -283,9 +363,14 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                          }, child: Container(
                         child: Padding(
                             padding: const EdgeInsets.all(5),
-                            child: HomePageComponents().getAdherentsList(
-                                adherent: beneficiary, doctorName: famillyDoctorNAme!, isAccountIsExists: true, index: i, onclick: getUserSelected, iSelected:userSelected!)),
-                      ));
+                            child:HomePageComponents().timelineForDeskstop(
+                                context: context,
+                                 adherent: beneficiary, 
+                                 doctorName: famillyDoctorNAme!, 
+                                 isAccountIsExists: true, 
+                                 index: i,
+                                 onclick: getUserSelected, 
+                                 iSelected:userSelected! ))));
           beneficiaries?.add(content);
         }
         setState(() {
@@ -641,21 +726,32 @@ class _InactiveAccountProviderState extends State<InactiveAccountProvider> {
                                   alignment: Alignment.center,
                                   child: Padding(
                                     padding: EdgeInsets.only(top: hv*2),
-                                    child: CarouselSlider(
-                                      carouselController: beneficiaryCarouselController,
-                                      options: CarouselOptions(
-                                        scrollPhysics: const BouncingScrollPhysics(),
-                                        height: hv * 60,
-                                        aspectRatio: 16 / 9,
-                                        viewportFraction: 1,
-                                        initialPage: 0,
-                                        enableInfiniteScroll: false,
-                                        reverse: false,
-                                        autoPlay: false,
-                                        enlargeCenterPage: true,
-                                        scrollDirection: Axis.horizontal,
+                                    child: Container(
+                                       constraints: BoxConstraints(
+                                        maxWidth: Device.isSmartphone(context) ? 0 :493
                                       ),
-                                      items: beneficiaries
+                                      child: Device.isSmartphone(context)? CarouselSlider(
+                                        carouselController: beneficiaryCarouselController,
+                                        options: CarouselOptions(
+                                          scrollPhysics: const BouncingScrollPhysics(),
+                                          height: hv * 60,
+                                          aspectRatio: 16 / 9,
+                                          viewportFraction: 1,
+                                          initialPage: 0,
+                                          enableInfiniteScroll: false,
+                                          reverse: false,
+                                          autoPlay: false,
+                                          enlargeCenterPage: true,
+                                          scrollDirection: Axis.horizontal,
+                                        ),
+                                        items: beneficiaries
+                                      ):ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: beneficiaries?.length,
+                                     scrollDirection: Axis.vertical,
+                                    itemBuilder: (context, index) {
+                                                  return beneficiaries![index];
+                                          }),
                                     ),
                                   ),
                                 ) : Center(child: Loaders().buttonLoader(kCardTextColor)),

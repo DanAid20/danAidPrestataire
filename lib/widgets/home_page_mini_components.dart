@@ -116,68 +116,80 @@ class HomePageComponents {
   }){
     print(etat.runtimeType);
     return Container(
+        decoration:const BoxDecoration(
+                            color: whiteColor,
+                            borderRadius:  BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                          ),
         margin: EdgeInsets.only( top: hv*2) ,
-      child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                   Container(
-                                       padding: EdgeInsets.all(5) ,
-                                      decoration: BoxDecoration(color: kDeepTeal, boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),],borderRadius: BorderRadius.all(Radius.circular(10))),
-                                     child: SvgPicture.asset(
-                                            iconesConsultationTypes!,
-                                            height: 28.h,
-                                            color: kSouthSeas,
-                                            width: wv * 12, 
-                                      ),
-                                   ),
-                                  ],
-                                ),
-                                SizedBox(
-                              width: wv * 2.3,
-                            ),
-                                Column(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
-                                            color: kBlueForce,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: Device.isSmartphone(context!) ? wv*3.5 : 15 ), textScaleFactor: 1.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+                                children: [
+                                  Column(
+                                    children: [
+                                     Container(
+                                         padding: EdgeInsets.all(5) ,
+                                        decoration: BoxDecoration(color: kDeepTeal, boxShadow: [ BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),],borderRadius: BorderRadius.all(Radius.circular(10))),
+                                       child: SvgPicture.asset(
+                                              iconesConsultationTypes!,
+                                              height: 28.h,
+                                              color: kSouthSeas,
+                                              width: wv * 12, 
                                         ),
-                                            SizedBox(
-                              width: hv * 2.3,
-                            ),
-                                        Text(date!,  style: TextStyle(
-                                          color: kBlueForce,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Spacer(),
-                                Column(
-                                  children: [
-                                    Column(
-                                       crossAxisAlignment: CrossAxisAlignment.end,
-                                      children: [
-                                        Text(montant!, style: TextStyle(
-                                          color: kBlueForce,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
-                                        Text(etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : ''  , style: TextStyle(
-                                          color:  getCOlor(etat) ,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                     ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                width: wv * 1.5,
+                              ),
+                                  Column(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
+                                              color: kBlueForce,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: Device.isSmartphone(context!) ? wv*3.5 : 15 ), textScaleFactor: 1.0),
+                                          ),
+                                              SizedBox(
+                                width: hv * 2.3,
+                              ),
+                                          Text(date!,  style: TextStyle(
+                                            color: kBlueForce,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Spacer(),
+                                  Column(
+                                    children: [
+                                      Column(
+                                         crossAxisAlignment: CrossAxisAlignment.end,
+                                        children: [
+                                          Text(montant!, style: TextStyle(
+                                            color: kBlueForce,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
+                                          Text(etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : ''  , style: TextStyle(
+                                            color:  getCOlor(etat) ,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+      ),
     );
   }
 
@@ -197,8 +209,8 @@ class HomePageComponents {
     String? paidAllReady,
   }){
     return Container(
-        margin: EdgeInsets.all( wv * 3),
-                 decoration: BoxDecoration(
+        margin: EdgeInsets.only(left:wv * 3, right:wv * 3, top:wv * 1),
+                 decoration: BoxDecoration( 
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(color: kShadowColor.withOpacity(0.2), spreadRadius: 0.9, blurRadius: 6),

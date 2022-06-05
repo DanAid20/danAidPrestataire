@@ -7,6 +7,7 @@ import 'package:danaid/core/models/useCaseServiceModel.dart';
 import 'package:danaid/core/providers/ServicesProviderInvoice.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/serviceProviderModelProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/SizeConfig.dart';
@@ -101,7 +102,7 @@ class _ScanPatientState extends State<ScanPatient> {
           ],
         ),
         body: Container(
-           margin: EdgeInsets.only(top: hv*10, left: wv*10, right: wv*10),
+           margin: EdgeInsets.only(top: hv*10, left: Device.isSmartphone(context) ? wv*10 : wv*30  , right: Device.isSmartphone(context) ? wv*10 : wv*30),
           child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -109,7 +110,9 @@ class _ScanPatientState extends State<ScanPatient> {
           Expanded(
           child: ListView(children: [
            Container(
-              width: double.infinity,
+               constraints: BoxConstraints(
+                            maxWidth: Device.isSmartphone(context) ? double.infinity : 500
+                          ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [BoxShadow(color: kGoldlightYellow.withOpacity(0.6), blurRadius: 1.0, spreadRadius:1)],
@@ -120,7 +123,7 @@ class _ScanPatientState extends State<ScanPatient> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width:  MySize.getScaledSizeHeight(250),
+                    width: Device.isSmartphone(context) ?  MySize.getScaledSizeHeight(250) :400,
                     height: hv*6,
                     decoration: const BoxDecoration(
                       color: kDeepTellow,
@@ -198,7 +201,7 @@ class _ScanPatientState extends State<ScanPatient> {
                                     child: Text(
                                       S.of(context).ouInscrireLeCodeDePaiement,
                                       style: TextStyle(
-                                          fontSize: wv * 4,
+                                          fontSize: Device.isSmartphone(context) ?  wv * 4 : 16 ,
                                           color: kBlueForce),
                                     ),
                                   ),
@@ -206,7 +209,7 @@ class _ScanPatientState extends State<ScanPatient> {
                                     height: hv * 3,
                                   ),
                                   Container(
-                                    height: hv*4,
+                                    height:  Device.isSmartphone(context) ? hv*4 : hv*5 ,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       color: Colors.grey[100],
@@ -215,7 +218,6 @@ class _ScanPatientState extends State<ScanPatient> {
                                     ),
                                     child: 
                                    TextFormField (
-                                       
                                       controller:_phoneNumber,
                                       keyboardType: TextInputType.phone,
                                       style: const TextStyle(fontSize: 25, color: kBlueForce, fontWeight: FontWeight.w400),

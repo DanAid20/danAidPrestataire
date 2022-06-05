@@ -97,7 +97,9 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
             child: Column(
               children: [
                 Container(
-                  
+                    constraints: BoxConstraints(
+                      maxWidth: Device.isSmartphone(context) ? double.infinity : 1000
+                    ),
                     margin: EdgeInsets.only(left: 15.w, top: 3.h, bottom: 15.h),
                     alignment: Alignment.centerLeft,
                     child: Row(
@@ -116,110 +118,117 @@ class _DetailsPrestationHistoryState extends State<DetailsPrestationHistory> {
                         ),
                       ],
                     )),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                        child: Column(
+                Center(
+                  child: Container(
+                    constraints: BoxConstraints(
+                        maxWidth: Device.isSmartphone(context) ? double.infinity : 1000
+                      ),
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                            alignment: Alignment.centerLeft,
-                            margin: EdgeInsets.only(left: 15.w, top: 2.h),
-                            child: Text(
-                              S.of(context).statusDesPaiements,
-                              style: TextStyle(
-                                  color: kFirstIntroColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize:   Device.isSmartphone(context) ? 16.sp: 19 ),
-                              textScaleFactor: 1.0,
-                            )),
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            margin:
-                                EdgeInsets.only(left: wv * 1, right: wv * 5),
-                            padding: EdgeInsets.all(10),
-                            width: double.infinity,
                             child: Column(
-                              children: [
-                                ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    primary: false,
-                                    itemCount: widget.facture!.length,
-                                    itemBuilder: (context, index) {
-                                      // print( paiementHistory.elementAt(index)[key]);
-                                      // print( paiementHistory.elementAt(index)[key]['month']);
-                                      // String etat = '';
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                                alignment: Alignment.centerLeft,
+                                margin: EdgeInsets.only(left: 15.w, top: 2.h),
+                                child: Text(
+                                  S.of(context).statusDesPaiements,
+                                  style: TextStyle(
+                                      color: kFirstIntroColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize:   Device.isSmartphone(context) ? 16.sp: 19 ),
+                                  textScaleFactor: 1.0,
+                                )),
+                            Container(
+                                alignment: Alignment.centerLeft,
+                                margin:
+                                    EdgeInsets.only(left: wv * 1, right: wv * 5),
+                                padding: EdgeInsets.all(10),
+                                width: double.infinity,
+                                child: Column(
+                                  children: [
+                                    ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        primary: false,
+                                        itemCount: widget.facture!.length,
+                                        itemBuilder: (context, index) {
+                                          // print( paiementHistory.elementAt(index)[key]);
+                                          // print( paiementHistory.elementAt(index)[key]['month']);
+                                          // String etat = '';
 
-                                      // String userNamem = 'a';
-                                     
-                                    
-                                      if (widget.facture![index].types!='REFERENCEMENT') {
-                                       
-                                       return FutureBuilder<DocumentSnapshot>(
-                                      future:  FirebaseFirestore.instance.collection('ADHERENTS').doc(widget
-                                          .facture?[index].idAdherent).get(),
-                                      builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                           if (snapshot.connectionState==ConnectionState.waiting) {
-                                              return const Center(
-                                                child: CircularProgressIndicator(
-                                                  valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
-                                                ),
-                                              );
-                                            }
-                                          if (snapshot.hasError) {
-                                            return Text(S.of(context).somethingWentWrong);
+                                          // String userNamem = 'a';
+                                         
+                                        
+                                          if (widget.facture![index].types!='REFERENCEMENT') {
+                                           
+                                           return FutureBuilder<DocumentSnapshot>(
+                                          future:  FirebaseFirestore.instance.collection('ADHERENTS').doc(widget
+                                              .facture?[index].idAdherent).get(),
+                                          builder: (BuildContext context,AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                               if (snapshot.connectionState==ConnectionState.waiting) {
+                                                  return const Center(
+                                                    child: CircularProgressIndicator(
+                                                      valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
+                                                    ),
+                                                  );
+                                                }
+                                              if (snapshot.hasError) {
+                                                return Text(S.of(context).somethingWentWrong);
+                                              }
+                                              if (snapshot.connectionState == ConnectionState.done) {
+                                                var obj=snapshot.data!.data() as  Map<String, dynamic>;
+                                                return  HomePageComponents()
+                                              .paienementDetailsListItem(
+                                                 context: context,
+                                                  etat: widget.facture![index].canPay!.toInt(),
+                                                  montant:
+                                                      '${widget.facture![index].amountToPay}f',
+                                                  date: DateFormat("dd MMMM yyy ").format(widget.facture![index].createdAt as DateTime),
+                                                  nom: obj['cniName'],
+                                                  iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
+                                                      'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
+                                           }
+                                               return Text(S.of(context).loading);
+                                          });
+                                          } else {
+                                            userName = widget.facture![index].idFammillyMember!;
+                                          return HomePageComponents()
+                                              .paienementDetailsListItem( 
+                                                  context: context,
+                                                  etat: widget.facture![index].canPay!,
+                                                  montant:
+                                                      '${widget.facture![index].amountToPay}f',
+                                                  date: DateFormat("dd MMMM yyy ")
+                                                      .format(widget.facture![index]
+                                                          .createdAt as DateTime),
+                                                  nom: userName,
+                                                iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
+                                                      'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
                                           }
-                                          if (snapshot.connectionState == ConnectionState.done) {
-                                            var obj=snapshot.data!.data() as  Map<String, dynamic>;
-                                            return  HomePageComponents()
-                                          .paienementDetailsListItem(
-                                             context: context,
-                                              etat: widget.facture![index].canPay!.toInt(),
-                                              montant:
-                                                  '${widget.facture![index].amountToPay}f',
-                                              date: DateFormat("dd MMMM yyy ").format(widget.facture![index].createdAt as DateTime),
-                                              nom: obj['cniName'],
-                                              iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
-                                                  'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
-                                       }
-                                           return Text(S.of(context).loading);
-                                      });
-                                      } else {
-                                        userName = widget.facture![index].idFammillyMember!;
-                                      return HomePageComponents()
-                                          .paienementDetailsListItem( 
-                                              context: context,
-                                              etat: widget.facture![index].canPay!,
-                                              montant:
-                                                  '${widget.facture![index].amountToPay}f',
-                                              date: DateFormat("dd MMMM yyy ")
-                                                  .format(widget.facture![index]
-                                                      .createdAt as DateTime),
-                                              nom: userName,
-                                            iconesConsultationTypes: widget.facture![index].types=='CONSULTATION' || widget.facture![index].types=='REFERENCEMENT' ?
-                                                  'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='En cabinet'?'assets/icons/Bulk/Profile.svg' : widget.facture![index].types=='Video'? 'assets/icons/Bulk/Video.svg': widget.facture![index].types=='Message'? 'assets/icons/Bulk/Message.svg': 'assets/icons/Bulk/Profile.svg'    );
-                                      }
-                                    }),
+                                        }),
 
-                                // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Video.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "En Attente", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Send.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Video.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "En Attente", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Send.svg'),
-                                // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
-                              ],
-                            )),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Video.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "En Attente", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Send.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Video.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "En Attente", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '2.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Jonas Erik Nana', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "Clôturé", montant: '6.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Cabinet Dr. Namaouda Malachie', iconesConsultationTypes: 'assets/icons/Bulk/Send.svg'),
+                                    // HomePageComponents().paienementDetailsListItem(etat: "14:00", montant: '14.000f.', date: 'Mercredi, 22 kanvier 2021', nom:'Hopital Laquintinie de Douala', iconesConsultationTypes: 'assets/icons/Bulk/Profile.svg'),
+                                  ],
+                                )),
+                          ],
+                        )),
                       ],
-                    )),
-                  ],
+                    ),
+                  ),
                 ),
               ],
             ),

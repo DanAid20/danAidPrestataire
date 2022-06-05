@@ -6,6 +6,7 @@ import 'package:danaid/core/models/adherentModel.dart';
 import 'package:danaid/core/providers/adherentModelProvider.dart';
 import 'package:danaid/core/providers/doctorModelProvider.dart';
 import 'package:danaid/core/providers/userProvider.dart';
+import 'package:danaid/core/services/getPlatform.dart';
 import 'package:danaid/core/utils/config_size.dart';
 import 'package:danaid/generated/l10n.dart';
 import 'package:danaid/helpers/colors.dart';
@@ -205,8 +206,8 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
         children: [
           Container(
               margin: EdgeInsets.only(
-                  left: wv * 6, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
-              width: 130.w,
+                  left: Device.isSmartphone(context) ? wv * 6 : wv * 1, right: wv * 1.5, top: hv * 2, bottom: hv * 1),
+               width: Device.isSmartphone(context) ? 130.w : 200 ,
               decoration: BoxDecoration(
                 color: cardColor,
                 boxShadow: [
@@ -233,7 +234,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                             : consultationType == S.of(context).message
                                 ? 'assets/icons/Bulk/Message.svg'
                                 : 'assets/icons/Bulk/Profile-color.svg',
-                        width: wv * 10,
+                         width:Device.isSmartphone(context) ? wv * 10 : wv * 3,
                       ),
                     ),
                   ),
@@ -248,14 +249,14 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w500,
-                              fontSize: fontSize(size: wv * 4)),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                         ),
                         Text(
                           consultationType!,
                           style: TextStyle(
                               color: kCardTextColor,
                               fontWeight: FontWeight.w800,
-                              fontSize: fontSize(size: wv * 4)),
+                              fontSize: fontSize(size: Device.isSmartphone(context) ? wv * 4: 6)),
                         ),
                         SizedBox(
                           height: hv * 1.3,
@@ -269,7 +270,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                               style: TextStyle(
                                   color: kCardTextColor,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: fontSize(size: wv * 4)),
+                                  fontSize: fontSize(size:Device.isSmartphone(context) ? wv * 4: 6)),
                             ),
                           ),
                         ),
@@ -393,69 +394,68 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
             ],
           ),
           body: Container(
-            
             child: SingleChildScrollView(
               physics: const NeverScrollableScrollPhysics(),
               child: Column(
                 children: [
                   widget.isLaunchConsultation == true
-                      ? Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                           
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:  BorderRadius.circular(10),
-                                // ignore: prefer_const_literals_to_create_immutables
-                                boxShadow: [
-                                  const BoxShadow(
-                                      color: Colors.grey,
-                                      spreadRadius: 0.5,
-                                      blurRadius: 2),
-                                ],
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: wv * 5, top: hv * 1),
-                                    child: Text(
-                                        S.of(context).choisirLeTypeDeConsultation,
-                                        style: TextStyle(
-                                            fontSize: fontSize(size: wv * 4),
-                                            fontWeight: FontWeight.w700,
-                                            color: kPrimaryColor)),
-                                  ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.symmetric(vertical: 2.0),
-                                  height: hv * 17,
-                                 
-                                  child:  ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: <Widget>[
-                                      offerPart(
-                                          index: 1,
-                                          consultation: S.of(context).consultation,
-                                          consultationType: S.of(context).enCabinet,
-                                          price: '2000 FCFA',
-                                          typedeConsultation: encabinet),
-                                      offerPart(
-                                          index: 2,
-                                          consultation: S.of(context).consultation,
-                                          consultationType: S.of(context).vidos,
-                                          price: '2000 FCFA',
-                                          typedeConsultation: videos),
-                                    ],
-                                  ),
-                                ),
+                      ? Container(
+                          constraints: BoxConstraints(
+                          maxWidth: Device.isSmartphone(context) ? double.infinity : wv*43
+                        ),
+                        margin: EdgeInsets.symmetric(vertical: 3.0),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:  BorderRadius.circular(10),
+                              // ignore: prefer_const_literals_to_create_immutables
+                              boxShadow: [
+                                const BoxShadow(
+                                    color: Colors.grey,
+                                    spreadRadius: 0.5,
+                                    blurRadius: 2),
                               ],
-                            ),
                           ),
-                      )
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      left: Device.isSmartphone(context) ? wv * 5 : 10 , top: hv * 1),
+                                  child: Text(
+                                      S.of(context).choisirLeTypeDeConsultation,
+                                      style: TextStyle(
+                                          fontSize: fontSize(size:  Device.isSmartphone(context) ? wv * 4 : 6),
+                                          fontWeight: FontWeight.w700,
+                                          color: kPrimaryColor)),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(vertical: 2.0),
+                                height:  Device.isSmartphone(context) ? hv * 17 : hv * 23,
+                               
+                                child:  ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: <Widget>[
+                                    offerPart(
+                                        index: 1,
+                                        consultation: S.of(context).consultation,
+                                        consultationType: S.of(context).enCabinet,
+                                        price: '2000 FCFA',
+                                        typedeConsultation: encabinet),
+                                    offerPart(
+                                        index: 2,
+                                        consultation: S.of(context).consultation,
+                                        consultationType: S.of(context).vidos,
+                                        price: '2000 FCFA',
+                                        typedeConsultation: videos),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : const SizedBox.shrink(),
                   SizedBox(
                     height: hv * 5,
@@ -463,7 +463,11 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      width: wv * 100,
+                       constraints: BoxConstraints(
+                          maxWidth: Device.isSmartphone(context) ? double.infinity : wv*43
+                        ),
+                       margin: EdgeInsets.symmetric(horizontal:  Device.isSmartphone(context) ? 0 : wv*28),
+                      width:Device.isSmartphone(context) ? wv * 100 : wv*90 ,
                        decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius:  BorderRadius.circular(10),
@@ -472,7 +476,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: wv * 68,
+                            width: Device.isSmartphone(context) ? wv * 68 : wv * 30,
                             decoration: const BoxDecoration(
                               color: kDeepTealClair,
                               borderRadius:  BorderRadius.only(
@@ -500,7 +504,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                 Text(
                                   S.of(context).selectionnerOuAjouterLePatient,
                                   style: TextStyle(
-                                      fontSize: fontSize(size: wv * 4),
+                                      fontSize: fontSize(size: Device.isSmartphone(context) ?  wv * 4 : 6),
                                       fontWeight: FontWeight.w500,
                                       color: kFirstIntroColor),
                                 )
@@ -528,7 +532,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                             Text(
                                               S.of(context).rechercherParNumeroDeTlphone,
                                               style: TextStyle(
-                                                  fontSize: wv * 4,
+                                                  fontSize: Device.isSmartphone(context) ?  wv * 4 : 14,
                                                   color: kBlueForce),
                                             ),
                                             SizedBox(
@@ -614,17 +618,17 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                           ])),
                                 ),
                                 SizedBox(
-                                  height: hv * 2,
+                                  height: Device.isSmartphone(context) ?  hv * 2 : hv * 4
                                 ),
                                 widget.isLaunchConsultation == true
-                                    ? Text(S.of(context).ouScannerUneCarteDadherent,
+                                    ? Device.isSmartphone(context) ? Text(S.of(context).ouScannerUneCarteDadherent,
                                         style: TextStyle(
                                             fontSize: fontSize(size: wv * 4),
                                             fontWeight: FontWeight.w500,
                                             color: kFirstIntroColor))
-                                    : const SizedBox.shrink(),
+                                    : const SizedBox.shrink(): const SizedBox.shrink(),
                                 widget.isLaunchConsultation == true
-                                    ? Container(
+                                    ?  Device.isSmartphone(context) ? Container(
                                         margin: EdgeInsets.only(
                                             left: inch * 2,
                                             right: inch * 2,
@@ -638,13 +642,13 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                                             child: SvgPicture.asset(
                                               'assets/icons/Bulk/Scan.svg',
                                               color: kSouthSeas,
-                                              height: hv * 12,
-                                              width: wv * 12,
+                                              height: Device.isSmartphone(context) ?  hv * 12 : 100 ,
+                                              width:Device.isSmartphone(context) ?  wv * 12 : 100,
                                             ),
                                           ),
                                         ),
                                       )
-                                    : SizedBox.shrink(),
+                                    : SizedBox.shrink():const SizedBox.shrink(),
                                 widget.isLaunchConsultation == true
                                     ? Center(
                                         child: Text(
@@ -670,7 +674,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                       : Container(
                           width: wv * 50,
                           padding: EdgeInsets.symmetric(
-                              horizontal: wv * 3.2, vertical: hv * 2),
+                              horizontal:Device.isSmartphone(context) ?  wv * 3.2 : wv * 2.5, vertical: hv * 2),
                           child: TextButton(
                             onPressed: () async {
                               if (kDebugMode) {
@@ -801,7 +805,7 @@ class _AddPatientViewServiceProviderState extends State<AddPatientViewServicePro
                               S.of(context).rechercher,
                               style: TextStyle(
                                   color: textColor,
-                                  fontSize: wv * 4.5,
+                                  fontSize:  Device.isSmartphone(context) ? wv * 4.5 : 14,
                                   fontWeight: FontWeight.w600),
                             ),
                             style: ButtonStyle(
