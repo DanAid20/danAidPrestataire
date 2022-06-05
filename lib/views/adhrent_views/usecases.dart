@@ -65,7 +65,6 @@ class _UseCaseListState extends State<UseCaseList> {
                         return Padding(
                           padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                           child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
-                            context: context,
                             initial: useCase.establishment!.toUpperCase().substring(0,3),
                             name: useCase.establishment,
                             date: useCase.dateCreated!.toDate(),

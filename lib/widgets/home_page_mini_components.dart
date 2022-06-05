@@ -107,6 +107,7 @@ class HomePageComponents {
   
 
   Widget paienementDetailsListItem({
+    BuildContext? context,
     String? nom, 
     String? date,
     String? montant, 
@@ -144,7 +145,7 @@ class HomePageComponents {
                                           child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
                                             color: kBlueForce,
                                             fontWeight: FontWeight.w600,
-                                            fontSize: wv*3.5), textScaleFactor: 1.0),
+                                            fontSize: Device.isSmartphone(context!) ? wv*3.5 : 15 ), textScaleFactor: 1.0),
                                         ),
                                             SizedBox(
                               width: hv * 2.3,
@@ -152,7 +153,7 @@ class HomePageComponents {
                                         Text(date!,  style: TextStyle(
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
                                       ],
                                     ),
                                   ],
@@ -166,11 +167,11 @@ class HomePageComponents {
                                         Text(montant!, style: TextStyle(
                                           color: kBlueForce,
                                           fontWeight: FontWeight.w500,
-                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
                                         Text(etat==0? S.current.enAttente: etat==1? S.current.valider: etat==2?S.current.rejett : ''  , style: TextStyle(
                                           color:  getCOlor(etat) ,
                                           fontWeight: FontWeight.w400,
-                                          fontSize: wv*3.5), textScaleFactor: 1.0),
+                                          fontSize: Device.isSmartphone(context) ? wv*3.5 : 15), textScaleFactor: 1.0),
                                       ],
                                     ),
                                   ],
@@ -188,6 +189,7 @@ class HomePageComponents {
     return couleurs!;
   }
   Widget paiementItem({
+    BuildContext? context,
     String? month, 
     String? prix,
     String? lastDatePaiement,
@@ -219,17 +221,17 @@ class HomePageComponents {
                                       color: kDeepTeal,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                      fontSize: Device.isSmartphone(context!) ? wv*3.5: 15), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
                                    Container(alignment: Alignment.centerLeft, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(S.current.montant, style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0),Text('$prix f', style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,),],)),
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0,),],)),
                              ],
                            ),
                           SizedBox(
@@ -243,17 +245,17 @@ class HomePageComponents {
                                       color: kArgent,
                                       fontWeight: FontWeight.w700,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0,)),
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0,)),
                                    SizedBox( height: hv * 1.3,),
                                    Container(alignment: Alignment.centerRight, child: Column(crossAxisAlignment: CrossAxisAlignment.start,children: [Text('Delai de paiement ',style: TextStyle(
                                       color: kBlueForce,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: wv*3.5), textScaleFactor: 1.0, ),Container(
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0, ),Container(
                                         alignment: Alignment.centerRight,
                                         child: Text(lastDatePaiement!, style: TextStyle(
                                         color: kBlueForce,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: wv*3.5), textScaleFactor: 1.0),
+                                        fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0),
                                       ),],)),
                              ],
                            ),
@@ -271,7 +273,7 @@ class HomePageComponents {
                                       color: kSouthSeas,
                                       fontWeight: FontWeight.w600,
                                       
-                                      fontSize: wv*3.5), textScaleFactor: 1.0),],)),
+                                      fontSize:  Device.isSmartphone(context) ? wv*3.5: 15), textScaleFactor: 1.0),],)),
                              ],
                            ),
                          ],
@@ -389,13 +391,11 @@ class HomePageComponents {
       String? subtitle,
       String? apointementDate,
       int? etat,
-      required BuildContext context,
       bool isSpontane = false}) {
     return ListTile(
       leading: HomePageComponents().getAvatar(
           imgUrl: imgUrl!,
           size: wv * 8,
-          context: context,
           renoveIsConnectedButton: false),
       title: Text(
         nom != null ? nom : '',
@@ -650,6 +650,202 @@ class HomePageComponents {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget timelineForDeskstop(
+   { BuildContext? context, int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}
+  ) {
+    return GestureDetector(
+      onTap: ()=>{
+         
+           if(iSelected==index){
+            onclick!(index, adherent, 'remove')
+         }else{
+           print(index),
+           print(index),
+            onclick!(index, adherent, 'add')
+         }
+      },
+      child: Container(
+        width: Device.isSmartphone(context!) ? 0  : double.infinity,
+        height: MySize.getScaledSizeHeight(140),
+        child: Column(
+          children: [
+            Container(
+              width: Device.isSmartphone(context) ? 0  : double.infinity,
+              height: MySize.getScaledSizeHeight(130),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Row(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        width: wv * 14,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                               colorFilter: isAccountIsExists == true &&
+                               adherent!=null && adherent.enabled == true
+                            ? ColorFilter.mode(
+                                Colors.red.withOpacity(1), BlendMode.dstATop)
+                            :  ColorFilter.mode(
+                                Colors.red.withOpacity(0.5), BlendMode.dstATop),
+                            image: adherent==null
+                                ? AssetImage("assets/images/image 25.png")
+                                : adherent.avatarUrl==null ? AssetImage("assets/images/avatar-profile.jpg"):  CachedNetworkImageProvider("${adherent.avatarUrl}") as ImageProvider,
+                            fit: BoxFit.cover,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: kThirdColor,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                            )),
+                      ),
+                      adherent!=null && adherent.protectionLevel==0 ?
+                      Positioned(
+                          bottom: hv * 0.5,
+                          right: wv * 1,
+                          child: SvgPicture.asset(
+                         'assets/icons/Bulk/Shield Done.svg',
+                            width: wv * 4,
+                            
+                          )):Container(),
+                    ],
+                  ),
+                  Container(
+                    width: Device.isSmartphone(context)? wv * 38.5: 200 ,
+                    margin: EdgeInsets.only(left: wv * 1.5),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: hv * 1.5,
+                        ),
+                        Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text('',
+                                    overflow: TextOverflow.ellipsis,
+                                    style:  TextStyle(
+                                        color: kDateTextColor,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize:Device.isSmartphone(context)? 14.sp : 14)),
+                              ),
+                              Expanded( 
+                                flex: 1,
+                                child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: kCardTextColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: Device.isSmartphone(context)? 15.sp : 15)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: hv * 0.7,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: wv * 6),
+                              child: Text( (adherent!=null && adherent.cniName !=null)
+                          ?   adherent.cniName!
+                          : S.current.pasDefini,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: MySize.getScaledSizeHeight(15))),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(right: wv * 6),
+                              child: Text( (adherent!=null &&  adherent.matricule!=null)
+                          ?  adherent.matricule!
+                          : S.current.pasDefini,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kCardTextColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: MySize.getScaledSizeHeight(15))),
+                            ),
+                            SizedBox(
+                              height: MySize.getScaledSizeHeight(5),
+                            ),
+                            Text( doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: kDeepTeal,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: MySize.getScaledSizeHeight(16))),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          // lien la page de l'appel video
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          width: MySize.getScaledSizeWidth(20), 
+                          height: MySize.getScaledSizeHeight(40),
+                          decoration: const BoxDecoration(
+                              color: kSouthSeas,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              )),
+                          child: SvgPicture.asset(
+                            (adherent!=null && adherent.gender=='H')?'assets/icons/Bulk/Male.svg': (adherent!=null && adherent.gender=='F') ? 'assets/icons/Bulk/Female.svg': '', 
+                            width: wv * 7,
+                          ),
+                        ),
+                      ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     approuveAppointement!(adhrentId, doctorId);
+                      //   },
+                      //   child: Container(
+                      //     padding: EdgeInsets.all(3),
+                      //     height: hv * 5,
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.white,
+                      //       borderRadius: BorderRadius.all(Radius.circular(10)),
+                      //     ),
+                      //     child: SvgPicture.asset(
+                      //       'assets/icons/Bulk/ArrowRight Circle.svg',
+                      //       width: wv * 7,
+                      //     ),
+                      //   ),
+                      // )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -926,8 +1122,8 @@ class HomePageComponents {
       ),
     );
   }
- 
-  getAdherentsList({int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}) {
+
+  getAdherentsList({ BuildContext? context, int? iSelected, String? doctorName, BeneficiaryModel? adherent, bool? isAccountIsExists, int? index, Function? onclick}) {
     return GestureDetector(
       onTap: ()=>{
          
@@ -940,10 +1136,10 @@ class HomePageComponents {
          }
       },
       child: Container(
-        width: wv * 78,
+        width: wv * 78 ,
         decoration: BoxDecoration(
           color: kBlueForce,
-          borderRadius: BorderRadius.all(
+          borderRadius: const BorderRadius.all(
             Radius.circular(30),
           ),
            boxShadow: [
@@ -959,18 +1155,18 @@ class HomePageComponents {
               child: Row(
                 children: [
                   Container(
-                      width: wv * 15,
+                      width: wv * 15 ,
                       child: Text(S.current.valideJusquau,
                           style: TextStyle(
                               color: textWhiteColor,
-                              fontSize: fontSize(size: 15),
+                              fontSize: fontSize(size:  15  ),
                               fontWeight: FontWeight.w500))),
                   Container(
                       width: wv * 20,
                       child: Text(adherent!=null && adherent.validityEndDate!=null ? DateFormat('M/yyyy').format(adherent.validityEndDate!.toDate()) : S.current.pasDefini ,
                           style: TextStyle(
                               color: whiteColor,
-                              fontSize: wv * 4.5,
+                              fontSize: wv * 4.5  ,
                               fontWeight: FontWeight.w700))),
                   Spacer(),
                   SvgPicture.asset(
@@ -993,9 +1189,9 @@ class HomePageComponents {
                       image: DecorationImage(
                         colorFilter: isAccountIsExists == true &&
                                adherent!=null && adherent.enabled == true
-                            ? new ColorFilter.mode(
+                            ? ColorFilter.mode(
                                 Colors.red.withOpacity(1), BlendMode.dstATop)
-                            : new ColorFilter.mode(
+                            :  ColorFilter.mode(
                                 Colors.red.withOpacity(0.5), BlendMode.dstATop),
                         image: adherent==null
                             ? AssetImage("assets/images/image 25.png")
@@ -1005,7 +1201,7 @@ class HomePageComponents {
                       color: Colors.red,
                       shape: BoxShape.circle),
                   width: wv * 40,
-                  height: hv * 20,
+                  height: hv * 20 ,
                   child: Stack(children: <Widget>[
                     Align(
                       alignment: Alignment.center,
@@ -1019,18 +1215,18 @@ class HomePageComponents {
                           style: TextStyle(
                               color: Colors.red,
                               letterSpacing: 0.5,
-                              fontSize: wv * 6.5,
+                              fontSize: wv * 6.5 ,
                               fontWeight: FontWeight.w500),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                     Positioned(
-                      right: 5,
-                      bottom: -hv * 2,
+                      right:  5 ,
+                      bottom:  -hv * 2 ,
                       child: Container(
-                        height: hv * 10,
-                        width: wv * 10,
+                        height:  hv * 10 ,
+                        width:  wv * 10,
                         decoration: BoxDecoration(
                             color: isAccountIsExists == true &&
                                     (adherent!=null && adherent.enabled!) == true
@@ -1039,7 +1235,7 @@ class HomePageComponents {
                             shape: BoxShape.circle),
                         child:
                             isAccountIsExists == true && (adherent!=null && adherent.enabled!) == true
-                                ? SizedBox.shrink()
+                                ? const SizedBox.shrink()
                                 : Icon(
                                     Icons.priority_high,
                                     color: Colors.white,
@@ -1077,7 +1273,7 @@ class HomePageComponents {
                   Text(S.current.numeroMatricule,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
                     (adherent!=null &&  adherent.matricule!=null)
@@ -1085,7 +1281,7 @@ class HomePageComponents {
                           : S.current.pasDefini,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w700))
                 ],
               ),
@@ -1098,13 +1294,13 @@ class HomePageComponents {
                   Text(S.current.medecinDeFamille,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w500)),
                   Text(
                        doctorName!=null ? 'Dr '+doctorName :  S.current.pasDefinie,
                       style: TextStyle(
                           color: textWhiteColor,
-                          fontSize: fontSize(size: 15),
+                          fontSize:  fontSize(size: 15),
                           fontWeight: FontWeight.w700))
                 ],
               ),
@@ -1130,7 +1326,6 @@ class HomePageComponents {
       String? text,
       int? likeCount,
       int? commentCount,
-      required BuildContext context,
       int? sendcountNumber}) {
     return Container(
       child: Column(
@@ -1146,8 +1341,7 @@ class HomePageComponents {
                     getAvatar(
                         imgUrl: imgUrl!,
                         size: wv * 8.3,
-                        renoveIsConnectedButton: false, 
-                        context: context),
+                        renoveIsConnectedButton: false),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1282,7 +1476,7 @@ class HomePageComponents {
     );
   }
 
-  getAvatar({String? imgUrl, double? size, bool renoveIsConnectedButton = true, required BuildContext context}) {
+  getAvatar({String? imgUrl, double? size, bool renoveIsConnectedButton = true}) {
       var stringToComparedev="https://firebasestorage.googleapis.com/v0/b/danaid-dev";
       var stringToCompareprod="https://firebasestorage.googleapis.com/v0/b/danaidapp.appspot.com";
 
@@ -1291,7 +1485,7 @@ class HomePageComponents {
       child: Stack(
         children: [
          imgUrl!=null &&  imgUrl.contains(stringToComparedev) || imgUrl!=null && imgUrl.contains(stringToCompareprod)  ? CircleAvatar(
-                radius:  size != null ? size : Device.isSmartphone(context) ? wv * 5.5 : 40,
+                radius:  size != null ? size : wv * 5.5,
                 backgroundImage: NetworkImage(imgUrl),
                 backgroundColor: Colors.transparent,
           ):
@@ -1304,10 +1498,10 @@ class HomePageComponents {
           ),
           renoveIsConnectedButton
               ? Positioned(
-                  top: Device.isSmartphone(context) ? wv * 7 : 55,
-                  left: Device.isSmartphone(context) ? wv * 8 : 55,
+                  top: wv * 7,
+                  left: wv * 8,
                   child: CircleAvatar(
-                    radius: Device.isSmartphone(context) ? wv * 1.5 : 11,
+                    radius: wv * 1.5,
                     backgroundColor: primaryColor,
                   ),
                 )
@@ -1317,13 +1511,13 @@ class HomePageComponents {
     );
   }
 
-  getProfileStat({String? imgUrl, String? title, int? occurence, Color color = primaryColor, required BuildContext context}) {
+  getProfileStat({String? imgUrl, String? title, int? occurence, Color color = primaryColor}) {
     return Row(children: [
       Container(
         margin: EdgeInsets.only(right: wv * 1),
         child: SvgPicture.asset(
           imgUrl!,
-          width: Device.isSmartphone(context) ? wv * 7 : 50,
+          width: wv * 7,
           color: color,
         ),
       ),
@@ -1331,62 +1525,98 @@ class HomePageComponents {
         children: [
           Text("$occurence",
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800)),
-          Text(title!, style: TextStyle(fontSize: Device.isSmartphone(context) ? inch * 1.3 : 20))
+          Text(title!, style: TextStyle(fontSize: inch * 1.3))
         ],
       )
     ]);
   }
 
-  Widget getMyCoverageOptionsCard({String? imgUrl, String? label, Color? labelColor, required BuildContext context}) {
+  Widget getMyCoverageOptionsCard(
+      {String? imgUrl, String? label, Color? labelColor}) {
     return Container(
-      width: Device.isSmartphone(context) ? wv * 35 : 300,
-      height: Device.isSmartphone(context) ? hv * 17 : 170,
-      padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 3 : 40, vertical: Device.isSmartphone(context) ? hv * 2.5 : 25),
-      margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 1.5 : 0),
+      width: wv * 35,
+      height: hv * 17,
+      padding: EdgeInsets.symmetric(horizontal: wv * 3, vertical: hv * 2.5),
+      margin: EdgeInsets.symmetric(horizontal: wv * 1.5),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch * 2.5 : 40)),
+          borderRadius: BorderRadius.all(Radius.circular(inch * 2.5)),
           image: DecorationImage(image: AssetImage(imgUrl!), fit: BoxFit.cover)),
       child: Align(
         child: Text(label!,
             style: TextStyle(
-                color: labelColor, fontSize: Device.isSmartphone(context) ? 16 : 20, fontWeight: FontWeight.w800)),
+                color: labelColor, fontSize: 16, fontWeight: FontWeight.w800)),
         alignment: Alignment.bottomLeft,
       ),
     );
   }
 
-  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function()? action, required BuildContext context}) {
+  Widget getMyCoverageHospitalsTiles({String? initial, String? name, DateTime? date, num? price, num? state, Function()? action}) {
     return ListTile(
       onTap: action,
       leading: Container(
-        width: Device.isSmartphone(context) ? wv * 13 : 100,
-        padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: Device.isSmartphone(context) ? hv*2 : 15),
-        decoration: BoxDecoration(color: Colors.teal, borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch*1 : 15))),
-        child: Center(child: Text(initial!, style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: Device.isSmartphone(context) ? inch*2 : 24, fontWeight: FontWeight.w700))),),
-      title: Text(name!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: Device.isSmartphone(context) ? inch*1.6 : 18),),
-      subtitle: Text(DateFormat('EEEE', 'fr_FR').format(date!)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(), style: const TextStyle(color: kPrimaryColor),),
+        width: wv * 13,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: hv * 2),
+        decoration: BoxDecoration(
+            color: Colors.teal,
+            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
+        child: Center(
+            child: Text(initial!,
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: inch * 2,
+                    fontWeight: FontWeight.w700))),
+      ),
+      title: Text(
+        name!,
+        style: TextStyle(
+            color: kPrimaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: inch * 1.6),
+      ),
+      subtitle: Text(
+        DateFormat('EEEE', 'fr_FR').format(date!)+", "+ date.day.toString().padLeft(2, '0') + " "+DateFormat('MMMM', 'fr_FR').format(date)+" "+ date.year.toString(),
+        style: TextStyle(color: kPrimaryColor),
+      ),
       trailing: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(price.toString()+ "f.", style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch*1.5 : 17),),
-          Text(getUseCaseStateText(state!), style: TextStyle(color: getUseCaseStateColor(state), fontSize: Device.isSmartphone(context) ? inch*1.5 : 17),),
+          Text(
+            price.toString()+ "f.",
+            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.5),
+          ),
+          Text(
+            getUseCaseStateText(state!),
+            style: TextStyle(
+                color: getUseCaseStateColor(state),
+                fontSize: inch * 1.5),
+          ),
         ],
       ),
     );
   }
 
-  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, required Function() action, required BuildContext context}) {
+  getMyDoctorAppointmentTile({String? label, String? doctorName, DateTime? date, String? type, int? state, required Function() action}) {
     return ListTile(
       leading: Container(
-        width: Device.isSmartphone(context) ? wv*12 :  100,
-        padding: EdgeInsets.symmetric(horizontal: wv * 1, vertical: Device.isSmartphone(context) ? 0 : 5),
-        decoration: BoxDecoration(color: Colors.teal, borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch * 1 : 10))),
+        width: wv * 12,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1),
+        decoration: BoxDecoration(
+            color: Colors.teal,
+            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(date!.day.toString().padLeft(2, '0'), style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: Device.isSmartphone(context) ? inch*1.7 : 20, fontWeight: FontWeight.w700)),
-            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}", style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: Device.isSmartphone(context) ? inch * 1.5 : 15, fontWeight: FontWeight.w400)),
+            Text(date!.day.toString().padLeft(2, '0'),
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: inch * 1.7,
+                    fontWeight: FontWeight.w700)),
+            Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.8),
+                    fontSize: inch * 1.5,
+                    fontWeight: FontWeight.w400)),
           ],
         ),
       ),
@@ -1397,7 +1627,7 @@ class HomePageComponents {
           style: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.w700,
-              fontSize: Device.isSmartphone(context) ? inch * 2 : 22),
+              fontSize: inch * 2),
           overflow: TextOverflow.ellipsis,
         ),
       ),
@@ -1406,11 +1636,11 @@ class HomePageComponents {
         children: [
           Text(
             Algorithms.getFormattedDate(date).trim().substring(0, 1).toUpperCase() + Algorithms.getFormattedDate(date).trim().substring(1),
-            style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.4 : 15),
+            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
           ),
           Text(
             doctorName!,
-            style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.4 : 15),
+            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.4),
           ),
         ],
       ),
@@ -1420,11 +1650,12 @@ class HomePageComponents {
         children: [
           Text(
             type!,
-            style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.7 : 17),
+            style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),
           ),
           Text(
             getAppointmentStateText(state!),
-            style: TextStyle(color: getAppointmentStateColor(state), fontSize: Device.isSmartphone(context) ? inch * 1.7 : 17),
+            style: TextStyle(
+                color: getAppointmentStateColor(state), fontSize: inch * 1.7),
           ),
         ],
       ),
@@ -1432,29 +1663,29 @@ class HomePageComponents {
     );
   }
 
-  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action, required BuildContext context}) {
+  static Widget getLoanTile({String? label, String? subtitle, DateTime? date, num? mensuality, DateTime? firstDate, DateTime? lastDate, String? type, num? state, Function()? action}) {
     String firstDateString = firstDate!.day.toString().padLeft(2, '0') + '/' + firstDate.month.toString().padLeft(2, '0') + '/' + firstDate.year.toString().padLeft(2, '0');
     String lastDateString = lastDate!.day.toString().padLeft(2, '0') + '/' + lastDate.month.toString().padLeft(2, '0') + '/' + lastDate.year.toString().padLeft(2, '0');
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: wv*2),
       leading: Container(
-        width: Device.isSmartphone(context) ? wv * 12 : 85,
-        padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv * 1 : 10),
+        width: wv * 12,
+        padding: EdgeInsets.symmetric(horizontal: wv * 1),
         decoration: BoxDecoration(
             color: kBrownCanyon,
-            borderRadius: BorderRadius.all(Radius.circular(Device.isSmartphone(context) ? inch * 1 : 10))),
+            borderRadius: BorderRadius.all(Radius.circular(inch * 1))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(date!.day.toString().padLeft(2, '0'),
                 style: TextStyle(
                     color: Colors.white.withOpacity(0.8),
-                    fontSize: Device.isSmartphone(context) ? inch * 1.7 : 22,
+                    fontSize: inch * 1.7,
                     fontWeight: FontWeight.w700)),
             Text("${date.month.toString().padLeft(2, '0')}/${date.year.toString().substring(2)}",
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
-                fontSize: Device.isSmartphone(context) ? inch * 1.5 : 15,
+                fontSize: inch * 1.5,
                 fontWeight: FontWeight.w400)),
           ],
         ),
@@ -1473,7 +1704,7 @@ class HomePageComponents {
         ],
       ),
       trailing: Container(
-        width: Device.isSmartphone(context) ? 120 : 250,
+        width: 120,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -1483,7 +1714,7 @@ class HomePageComponents {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(mensuality.toString()+" .f", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold, fontSize: 16)),
-                Text("", style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? inch * 1.7 : 16),),
+                Text("", style: TextStyle(color: kPrimaryColor, fontSize: inch * 1.7),),
               ],
             ),
             SizedBox(width: wv*2,),
@@ -1552,35 +1783,34 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function()? action, required BuildContext context}){
+  static beneficiaryCard({String? name, String? imgUrl, bool edit = true, Function()? action}){
     return Container(
-      width: Device.isSmartphone(context) ? wv*25 : 200,
+      width: wv*25,
       child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(name!, style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
           Stack(
             children: [
               Container(
-                margin: EdgeInsets.only(right: Device.isSmartphone(context) ? wv*2 : 7),
-                height: Device.isSmartphone(context) ? hv*18 : 200, width: Device.isSmartphone(context) ? wv*25 : 200,
+                margin: EdgeInsets.only(right: wv*2),
+                height: hv*18, width: wv*25,
                 decoration: BoxDecoration(
-                  image: imgUrl != null ? DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover) : null,
+                  image: DecorationImage(image: CachedNetworkImageProvider(imgUrl!), fit: BoxFit.cover),
                   color: Colors.grey[100],
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: const [BoxShadow(color: Colors.black54, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
+                  boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
                 ),
-                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: Device.isSmartphone(context) ? wv*25 : 150) : Container(),
+                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: wv*25,) : Container(),
               ),
               edit ? Positioned(
-                bottom: Device.isSmartphone(context) ? hv*0 : 5,
-                left: Device.isSmartphone(context) ? 0 : 3,
+                bottom: hv*0,
                 child: IconButton(padding: EdgeInsets.all(0),
                   icon: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
                       boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
                     ),
-                    child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: Device.isSmartphone(context) ? wv*4.5 : 28,), backgroundColor: whiteColor, radius: Device.isSmartphone(context) ? wv*4 : 20,)), 
+                    child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
                   onPressed: action
                 ),
               ) : Container()
@@ -1591,52 +1821,53 @@ class HomePageComponents {
     );
   }
 
-  static beneficiaryChoiceCard({String? name, String? imgUrl, Function()? editAction, Function()? selectAction, bool isSelected = false, required BuildContext context}){
-    return Column(mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Stack(
-          children: [
-            GestureDetector(
-              onTap: selectAction,
-              child: AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                margin: EdgeInsets.symmetric(horizontal:Device.isSmartphone(context) ? wv*1 : 7),
-                height: isSelected ? Device.isSmartphone(context) ? hv*21 : 200 : Device.isSmartphone(context) ? hv*18 : 160,
-                width: isSelected ? Device.isSmartphone(context) ? wv*28 : 190 : Device.isSmartphone(context) ? wv*25 : 150,
-                decoration: BoxDecoration(
-                  image: imgUrl == null ? null : DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [BoxShadow(color: Colors.black54, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
-                ),
-                child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: Device.isSmartphone(context) ? wv*25 : 150) : Container(),
-              ),
-            ),
-            Positioned(
-              bottom: Device.isSmartphone(context) ? hv*0 : 5,
-              left: Device.isSmartphone(context) ? 0 : 10,
-              child: Column(
-                children: [
-                  IconButton(padding: EdgeInsets.all(0),
-                    icon: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
-                      ),
-                      child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: Device.isSmartphone(context) ? wv*4.5 : 28,), backgroundColor: whiteColor, radius: Device.isSmartphone(context) ? wv*4 : 20,)), 
-                    onPressed: editAction
+  static beneficiaryChoiceCard({String? name, String? imgUrl, Function()? editAction, Function()? selectAction, bool isSelected = false}){
+    return Container(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Stack(
+            children: [
+              GestureDetector(
+                onTap: selectAction,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  margin: EdgeInsets.symmetric(horizontal: wv*1),
+                  height: isSelected ? hv*21 : hv*18,
+                  width: isSelected ? wv*28 : wv*25,
+                  decoration: BoxDecoration(
+                    image: imgUrl == null ? null : DecorationImage(image: CachedNetworkImageProvider(imgUrl), fit: BoxFit.cover),
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [BoxShadow(color: Colors.black38, spreadRadius: 1.0, blurRadius: 2.0, offset: Offset(0, 1))]
                   ),
-                ],
+                  child: ((imgUrl == null) || (imgUrl == "")) ? Icon(LineIcons.user, color: Colors.black26, size: wv*25,) : Container(),
+                ),
               ),
-            )
-          ],
-        ),
-        Text(name ?? "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
-      ],
+              Positioned(
+                bottom: hv*0,
+                child: Column(
+                  children: [
+                    IconButton(padding: EdgeInsets.all(0),
+                      icon: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          boxShadow: [BoxShadow(color: Colors.black45.withOpacity(0.3), spreadRadius: 2.0, blurRadius: 3.0, offset: Offset(0, 2))]
+                        ),
+                        child: CircleAvatar(child: SvgPicture.asset('assets/icons/Bulk/Edit.svg', width: wv*4.5,), backgroundColor: whiteColor, radius: wv*4,)), 
+                      onPressed: editAction
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          Text(name ?? "Aucun nom", style: TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,)
+        ],
+      ),
     );
   }
 
-  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function()? action, required BuildContext context}){
+  static appointmentPurpose({String? iconPath, String? title, bool enable = true, Function()? action}){
     return Container(
       decoration: BoxDecoration(
         color: kSouthSeas,
@@ -1644,9 +1875,9 @@ class HomePageComponents {
         boxShadow: [BoxShadow(color: Colors.grey[300]!, blurRadius: 3.0, spreadRadius: 1.0, offset: Offset(0, 2))]
       ),
       child: Row(children: [
-        SizedBox(width: Device.isSmartphone(context) ? wv*2.5 : 15,),
-        SvgPicture.asset(iconPath!, width: Device.isSmartphone(context) ? wv*7 : 35, color: whiteColor,),
-        SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15,),
+        SizedBox(width: wv*2.5,),
+        SvgPicture.asset(iconPath!, width: wv*7, color: whiteColor,),
+        SizedBox(width: wv*3,),
         Expanded(child: 
           CustomTextButton(
             enable: enable,
@@ -1660,12 +1891,12 @@ class HomePageComponents {
     );
   }
 
-  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function()? action, required BuildContext context}){
+  static consultationType({String? iconPath, String? title, String? type, String? price, bool selected = false, Function()? action}){
     return  GestureDetector(
       onTap: action,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: hv*1.5),
-        margin: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*1.5 : 8, vertical: hv*1.5),
+        margin: EdgeInsets.symmetric(horizontal: wv*1.5, vertical: hv*1.5),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),
@@ -1674,17 +1905,17 @@ class HomePageComponents {
         ),
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(width: Device.isSmartphone(context) ? wv*1.5 : 10),
-            SvgPicture.asset(iconPath!, width: Device.isSmartphone(context) ? wv*9.5 : 50, color: kSouthSeas,),
-            SizedBox(width: Device.isSmartphone(context) ? wv*2 : 10),
+            SizedBox(width: wv*1.5),
+            SvgPicture.asset(iconPath!, width: wv*9.5, color: kSouthSeas,),
+            SizedBox(width: wv*2),
             RichText(text: TextSpan(
               text: "$title\n",
               children: [
-                TextSpan(text: "$type\n\n", style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*4.2 : 17, fontWeight: FontWeight.bold),),
-                TextSpan(text: "$price Cfa", style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*4.2 : 17, color: kBlueDeep),)
-              ], style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? wv*3.8 : 16)),
+                TextSpan(text: "$type\n\n", style: TextStyle(fontSize: wv*4.2, fontWeight: FontWeight.bold),),
+                TextSpan(text: "$price Cfa", style: TextStyle(fontSize: wv*4.2, color: kBlueDeep),)
+              ], style: TextStyle(color: kPrimaryColor, fontSize: wv*3.8)),
             ),
-            SizedBox(width: Device.isSmartphone(context) ? wv*4 : 35,)
+            SizedBox(width: wv*4,)
           ],
         ),
       ),
@@ -1716,16 +1947,16 @@ class HomePageComponents {
     );
   }
 
-  static accountParameters({String? title, String? subtitle, String? svgIcon, Function()? action, required BuildContext context}){
+  static accountParameters({String? title, String? subtitle, String? svgIcon, Function()? action}){
     return Padding(
-      padding: EdgeInsets.only(bottom: Device.isSmartphone(context) ? 5.0 : 10),
+      padding: EdgeInsets.only(bottom: 5.0),
       child: ListTile(
         title: Padding(
           padding: EdgeInsets.only(bottom: 5.0),
           child: Text(title!, style: TextStyle(color: kBlueDeep, fontWeight: FontWeight.w900, fontSize: 17)),
         ),
         subtitle: Row(children: [
-          SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: Device.isSmartphone(context) ? wv*2 : 10,),
+          SvgPicture.asset(svgIcon!, color: kSouthSeas, width: 30,), SizedBox(width: wv*2,),
           Expanded(child: Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: 15), overflow: TextOverflow.fade,))
         ],),
         trailing: TextButton(onPressed: action, child: Text(S.current.modifier, style: TextStyle(color: kBrownCanyon, fontWeight: FontWeight.bold))),
@@ -1733,7 +1964,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget termsAndConditionsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
+  static termsAndConditionsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1766,7 +1997,7 @@ class HomePageComponents {
     );
   }
 
-  static confirmTermsTile({Function(bool?)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
+  static confirmTermsTile({Function(bool)? onChanged, bool? value, Function()? action, Color? activeColor, Color? textColor}){
     return CheckboxListTile(
       tristate: false,
       dense: true,
@@ -1774,15 +2005,14 @@ class HomePageComponents {
         excluding: true,
         child: Container(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(S.current.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontSize: 14, fontWeight: FontWeight.w600),),
+              Text(S.current.jeReconnaisParLaPrsenteQuenCasDeDfautDe, style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w600),),
               SizedBox(height: hv*0.5),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontSize: 16, fontWeight: FontWeight.w400,),
+                    style:  TextStyle(color: textColor == null ? Colors.grey[600] : textColor, fontWeight: FontWeight.w400,),
                     children: [
                       TextSpan(
                         text: "\u2022 " + S.current.desPoursuiteJudiciairesn,
@@ -1806,14 +2036,14 @@ class HomePageComponents {
       ),
       value: value,
       activeColor: activeColor ?? primaryColor,
-      onChanged: onChanged,
+      onChanged: (bool)=>onChanged,
       controlAffinity: ListTileControlAffinity.leading,
     );
   }
 
-  static Widget head({String? surname, String? fname, String? avatarUrl, Timestamp? birthDate, required BuildContext context}){
+  static Widget head({String? surname, String? fname, String? avatarUrl, Timestamp? birthDate}){
     return Container(
-      padding: EdgeInsets.only(left: Device.isSmartphone(context) ? wv*4 : 30),
+      padding: EdgeInsets.only(left: wv*4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
@@ -1828,15 +2058,15 @@ class HomePageComponents {
                 CircleAvatar(
                   backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
                   backgroundColor: whiteColor,
-                  radius: Device.isSmartphone(context) ? wv*5 : 40,
-                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: Device.isSmartphone(context) ? wv*8 : 65),
+                  radius: wv*5,
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
                 ),
-                SizedBox(width: Device.isSmartphone(context) ? wv*3 : 15,),
+                SizedBox(width: wv*3,),
                 Expanded(
                   child: RichText(text: TextSpan(
                     text: surname! + " " +  fname! + "\n",
                     children: birthDate != null ? [
-                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16)),
+                      TextSpan(text: (DateTime.now().year - birthDate.toDate().year).toString() + S.current.ans, style: TextStyle(fontSize: wv*3.3)),
                     ] : [], style: TextStyle(color: kBlueDeep, fontSize: 16.5)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
@@ -1849,9 +2079,9 @@ class HomePageComponents {
     );
   }
 
-  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor, required BuildContext context}){
+  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor}){
     return Container(
-      padding: EdgeInsets.only(left: Device.isSmartphone(context) ? wv*4 : 40),
+      padding: EdgeInsets.only(left: wv*4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
@@ -1865,16 +2095,16 @@ class HomePageComponents {
                 CircleAvatar(
                   backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
                   backgroundColor: whiteColor,
-                  radius: Device.isSmartphone(context) ? wv*5 : 30,
+                  radius: wv*5,
                   child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
                 ),
-                SizedBox(width: Device.isSmartphone(context) ? wv*3 : 20,),
+                SizedBox(width: wv*3,),
                 Expanded(
                   child: RichText(text: TextSpan(
                     text: title! + "\n",
                     children: [
-                      TextSpan(text: subtitle, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 16)),
-                    ], style: TextStyle(color: titleColor, fontSize: Device.isSmartphone(context) ? 16.5 : 18)),
+                      TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
+                    ], style: TextStyle(color: titleColor, fontSize: 16.5)),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1886,7 +2116,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, bool noPadding = false, Function()? action, required context}){
+ static Widget getInfoActionCard({Widget? icon, String? title, String? subtitle, String? actionLabel, bool noAction = false, bool noPadding = false, Function()? action, BuildContext? context}){
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[200],
@@ -1901,7 +2131,7 @@ class HomePageComponents {
               flex: 2,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: icon == null ? Icon(Icons.message, size: Device.isSmartphone(context) ? 35 : 50, color: Colors.teal[300],) : icon,
+                child: icon == null ? Icon(Icons.message, size: Device.isSmartphone(context!) ? 35 : 50, color: Colors.teal[300],) : icon,
               ),
             ),
             Expanded(
@@ -1909,7 +2139,7 @@ class HomePageComponents {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(height: hv*1,),
-                  Text(title!, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? 14 : 20, fontWeight: FontWeight.bold)
+                  Text(title!, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context!) ? 14 : 20, fontWeight: FontWeight.bold)
                   ),
                   Text(subtitle!, style: TextStyle(color: kPrimaryColor, fontSize: Device.isSmartphone(context) ? 12 : 18)),
                   SizedBox(height: hv*1,),
@@ -1936,7 +2166,7 @@ class HomePageComponents {
       ),
     );
   }
-
+  
   static getStatusIndicator({double size = 15, num? status}){
     Color color = status == 0 ? Colors.red : status == 1 ? kDeepTeal : primaryColor;
     return Container(
@@ -2097,8 +2327,7 @@ class HomePageComponents {
       ),
     );
   }
-
-  static Widget navigationArrows({Color fillColor = kCardTextColor, Color outlineColor = whiteColor, required Function() prevAction, required Function() nextAction}){
+   static Widget navigationArrows({Color fillColor = kCardTextColor, Color outlineColor = whiteColor, required Function() prevAction, required Function() nextAction}){
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
@@ -2109,7 +2338,6 @@ class HomePageComponents {
       ],),
     );
   }
-
   static Widget roundButtonForward({required Color fillColor, required Color outlineColor, required Function() nextAction}){
     return GestureDetector(
       onTap: nextAction,

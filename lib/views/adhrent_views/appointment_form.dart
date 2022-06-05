@@ -303,7 +303,6 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     SizedBox(height: hv*5,),
 
                     HomePageComponents.appointmentPurpose(
-                      context: context,
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
                       title: S.of(context).consulterAujourdhui,
                       iconPath: 'assets/icons/Two-tone/Home.svg',
@@ -320,7 +319,6 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     SizedBox(height: hv*2,),
                     HomePageComponents.appointmentPurpose(
-                      context: context,
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
                       title: S.of(context).prendreRendezvous,
                       iconPath: 'assets/icons/Bulk/CalendarLine.svg',
@@ -331,7 +329,6 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     SizedBox(height: hv*2,),
                     HomePageComponents.appointmentPurpose(
-                      context: context,
                       enable: beneficiaryProvider.getBeneficiary.matricule != null,
                       title: S.of(context).dclarerUneUrgence,
                       iconPath: 'assets/icons/Bulk/BuyRdv.svg',
@@ -368,7 +365,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     children: [
                       Row(crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(flex: Device.isSmartphone(context) ? 1 : 4, child: HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),),
+                          Expanded(flex: Device.isSmartphone(context) ? 1 : 4, child: HomePageComponents.head( avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),),
                           SizedBox(width: wv*2,),
                           Expanded(
                             flex: Device.isSmartphone(context) ? 1 : 1,
@@ -504,7 +501,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                   ),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
+                      HomePageComponents.head(avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: wv*4, vertical: hv*2),
                         child: Row(
@@ -636,7 +633,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
+                        HomePageComponents.head(avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: Device.isSmartphone(context) ? wv*3 : 30, vertical: hv*1),
                           child: RichText(text: TextSpan(
@@ -752,7 +749,6 @@ class _AppointmentFormState extends State<AppointmentForm> {
                           scrollDirection: Axis.horizontal,
                           child: Row(children: [
                             HomePageComponents.consultationType(
-                              context: context,
                               iconPath: 'assets/icons/Bulk/Profile.svg',
                               title: S.of(context).consultation,
                               type: S.of(context).enCabinet,
@@ -766,7 +762,6 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               }
                             ),
                             HomePageComponents.consultationType(
-                              context: context,
                               iconPath: 'assets/icons/Bulk/Video.svg',
                               title: "Consultation",
                               type: "Vidéo",
@@ -779,7 +774,6 @@ class _AppointmentFormState extends State<AppointmentForm> {
                               }
                             ),
                             HomePageComponents.consultationType(
-                              context: context,
                               iconPath: 'assets/icons/Bulk/Home.svg',
                               title: S.of(context).consultation,
                               type: S.of(context).domicile,
@@ -1018,7 +1012,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                 ),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
+                    HomePageComponents.head(avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                     SizedBox(height: hv*1,),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: wv*2, vertical: hv*1.5),
@@ -1295,7 +1289,7 @@ class _AppointmentFormState extends State<AppointmentForm> {
                     ),
                     child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        HomePageComponents.head(context: context, avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
+                        HomePageComponents.head( avatarUrl: beneficiaryProvider.getBeneficiary.avatarUrl, surname: beneficiaryProvider.getBeneficiary.surname, fname: beneficiaryProvider.getBeneficiary.familyName, birthDate: beneficiaryProvider.getBeneficiary.birthDate),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: wv*3, vertical: hv*2),
                           child: Row(crossAxisAlignment: CrossAxisAlignment.end,

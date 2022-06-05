@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, import_of_legacy_library_into_null_safe
 
 //import 'dart:ffi';
 
@@ -241,7 +240,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                   child: Loaders().buttonLoader(kPrimaryColor),): Container(),
                   Container(  
                     constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 1000
+                      maxWidth: Device.isSmartphone(context) ? double.infinity : 500
                     ),
                      margin : EdgeInsets.only(
                                 left: 15.w,top: 3.h, bottom: 15.h), alignment: Alignment.centerLeft,
@@ -340,7 +339,7 @@ class _PrestationHistoryState extends State<PrestationHistory> {
                                 )),
                   Container(
                     constraints: BoxConstraints(
-                      maxWidth: Device.isSmartphone(context) ? double.infinity : 1000
+                      maxWidth: Device.isSmartphone(context) ? double.infinity : 700
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,

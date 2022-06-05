@@ -574,7 +574,6 @@ class _MyDoctorTabViewState extends State<MyDoctorTabView> {
                                                   
                                                   
                                                 },
-                                                context: context
                                               ),
                                             );
                                           })

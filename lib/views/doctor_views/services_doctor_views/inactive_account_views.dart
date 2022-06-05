@@ -956,7 +956,6 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                         children: [
                                         Padding(padding: EdgeInsets.only(left: 10.w),
                                         child: HomePageComponents().getAvatar(
-                                            context: context,
                                             imgUrl: adherentUserSelected!.avatarUrl ?? 'assets/images/avatar-profile.jpg' ,
                                             size: 15.0,
                                             renoveIsConnectedButton: false
@@ -966,7 +965,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
                                               S.of(context).carnetDe+adherentUserSelected!.cniName!.toString(),
                                               style: TextStyle(
                                                   color: textColor,
-                                                  fontSize:  Device.isSmartphone(context)? wv * 4.5 : wv * 3,
+                                                  fontSize:  Device.isSmartphone(context)? wv * 4.5 : 15  ,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           const Spacer(),

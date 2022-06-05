@@ -97,7 +97,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                               ),
                               child: Column(
                                 children: [
-                                  HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                                  HomePageComponents.header( label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                                   SizedBox(height: hv*2),
                                   Row(
                                     children: [
@@ -248,7 +248,6 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                               return Padding(
                                                 padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                                                 child: HomePageComponents.getLoanTile(
-                                                  context: context,
                                                   label: "hhgfhfghfh",
                                                   subtitle: "",
                                                   date: mensuality.startDate?.toDate(),
@@ -288,8 +287,7 @@ class _LoanDetailsState extends State<LoanDetails> with TickerProviderStateMixin
                                         print("name: ");
                                         return Padding(
                                           padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
-                                          child: HomePageComponents.getLoanTile(
-                                            context: context,
+                                          child: HomePageComponents.getLoanTile( 
                                             label: "hhgfhfghfh",
                                             subtitle: "",
                                             date: mensuality.startDate?.toDate(),

@@ -397,7 +397,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                                     etat:doc["status"],
                                     imgUrl: '${data["imageUrl"]}',
                                     nom: '${data["prenom"]} ${data["nomFamille"]}',
-                                    subtitle: '${doc["title"]}', context: context));
+                                    subtitle: '${doc["title"]}', ));
                               }
                               return Text(S.of(context).loading);
                             },
@@ -444,7 +444,7 @@ class _DoctorPatientViewState extends State<DoctorPatientView> {
                               etat:doc["status"],
                               imgUrl: '${data["imageUrl"]}',
                               nom: '${data["prenom"]} ${data["nomFamille"]}',
-                              subtitle: '${doc["title"]}', context: context));
+                              subtitle: '${doc["title"]}'));
                         }
                         return Text(S.of(context).loading);
                       },

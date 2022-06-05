@@ -209,7 +209,6 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                           Text(S.of(context).paramtresDuCompte, style: TextStyle(color: kBlueDeep, fontSize: 18)),
                           SizedBox(height: hv*2,),
                           adherentProvider.getAdherent != null && userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
-                            context: context,
                             title: S.of(context).domicilePrincipale, 
                             subtitle: adherentProvider.getAdherent?.address != null ? adherentProvider.getAdherent?.address : "Non configurée", 
                             svgIcon: "assets/icons/Two-tone/Home.svg", 
@@ -231,35 +230,30 @@ class _MyFamilyScreenState extends State<MyFamilyScreen> {
                             subtitle: S.of(context).consulter, 
                             svgIcon: "assets/icons/Bulk/Graph.svg", 
                             action: ()=>Navigator.pushNamed(context, '/family-stats-page'),
-                            context: context
                           ),
                           HomePageComponents.accountParameters(
                             title: S.of(context).pointsEtBadges, 
                             subtitle: S.of(context).consulterEtUtiliserSesBnfices, 
                             svgIcon: "assets/icons/Bulk/TicketStarLine.svg", 
                             action: ()=>Navigator.pushNamed(context, '/family-points-page'),
-                            context: context
                           ),
                           userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
                             title: S.of(context).changezDeNiveauDeService, 
                             subtitle: S.of(context).comparerLesNiveauxEtChoisir, 
                             svgIcon: "assets/icons/Bulk/ShieldLine.svg", 
                             action: ()=>Navigator.pushNamed(context, '/compare-plans'),
-                            context: context
                           ) : Container(),
                           userProvider.getUserModel?.profileType != beneficiary ? HomePageComponents.accountParameters(
                             title: S.of(context).changezDeMedecinDeFamille, 
                             subtitle: S.of(context).faitesUneDemande, 
                             svgIcon: "assets/icons/Bulk/Stethoscope.svg", 
                             action: callDanAid,
-                            context: context
                           ) : Container(),
                           HomePageComponents.accountParameters(
                             title: S.of(context).documentsDanaid, 
                             subtitle: S.of(context).contratsDocumentsGuides, 
                             svgIcon: "assets/icons/Two-tone/Paper.svg", 
                             action: ()=>Navigator.pushNamed(context, '/family-documents-page'),
-                            context: context
                           ),
 
                           SizedBox(height: hv*10,)

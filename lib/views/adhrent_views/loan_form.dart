@@ -198,7 +198,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -435,7 +435,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header(label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                       ],
                   )),
                   Container(
@@ -645,7 +645,7 @@ class _LoanFormState extends State<LoanForm> {
                     ),
                     child: Column(
                       children: [
-                        HomePageComponents.header(context: context, label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
+                        HomePageComponents.header( label: S.of(context).demandeur, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue),
                         SizedBox(height: hv*2),
                         Row(
                           children: [
@@ -718,7 +718,7 @@ class _LoanFormState extends State<LoanForm> {
               onChanged: (newValue) {
                 print("work");
                 setState(() {
-                  _trustConditionAccepted = newValue!;
+                  _trustConditionAccepted = newValue;
                 });
               },
             ),

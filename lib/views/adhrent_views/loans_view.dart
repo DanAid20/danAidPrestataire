@@ -148,7 +148,7 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                             color: kBrownCanyon.withOpacity(0.3),
                             borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20), bottomRight: Radius.circular(20))
                           ),
-                          child: HomePageComponents.header(context: context, title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl),
+                          child: HomePageComponents.header(title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl),
                         ),
                         Positioned(
                           top: Device.isSmartphone(context) ? hv*5.5 : 50,
@@ -351,7 +351,6 @@ class _LoansState extends State<Loans> with TickerProviderStateMixin {
                                             return Padding(
                                               padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                                               child: HomePageComponents.getLoanTile(
-                                                context: context,
                                                 label: "hhgfhfghfh",
                                                 subtitle: loan.purpose,
                                                 date: loan.dateCreated!.toDate(),

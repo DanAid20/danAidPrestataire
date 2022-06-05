@@ -230,7 +230,7 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                 children: [
                                   Row(
                                     children: [
-                                      Expanded(child: HomePageComponents.header(context: context, label: "Pour le patient", title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue)),
+                                      Expanded(child: HomePageComponents.header( label: "Pour le patient", title: adh!.surname! + " " + adh.familyName!, subtitle: adh.address.toString(), avatarUrl: adh.imgUrl, titleColor: kTextBlue)),
                                       widget.service != null ? HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: primaryColor, size: 25, action: ()=>setState((){edit = !edit;})) : Container(),
                                       SizedBox(width: wv*4,)
                                     ],
@@ -734,7 +734,6 @@ class _UseCaseServiceDetailsState extends State<UseCaseServiceDetails> {
                                 title: "Prestation vérouillée",
                                 subtitle: "Les administrateurs ont vérouillés la prestation, vous ne pourrez plus apporter de modifications",
                                 noAction: true,
-                                context: context
                               ),
                             ),
                           ],

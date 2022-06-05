@@ -227,11 +227,11 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                               return Center(child: Loaders().buttonLoader(kPrimaryColor),);
                             }
                             return Device.isSmartphone(context) ? Row(children: [
-                              snapshot.data!.docs.isNotEmpty ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0].get("imageUrl"), context: context) : Container(),
-                              snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1].get("imageUrl"), context: context) : Container(),
-                              snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2].get("imageUrl"), context: context) : Container(),
-                              snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3].get("imageUrl"), context: context) : Container(),
-                              snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4].get("imageUrl"), context: context) : Container(),
+                              snapshot.data!.docs.isNotEmpty ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[0].get("imageUrl")) : Container(),
+                              snapshot.data!.docs.length >= 2 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[1].get("imageUrl")) : Container(),
+                              snapshot.data!.docs.length >= 3 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[2].get("imageUrl")) : Container(),
+                              snapshot.data!.docs.length >= 4 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[3].get("imageUrl")) : Container(),
+                              snapshot.data!.docs.length >= 5 ? HomePageComponents().getAvatar(imgUrl: snapshot.data!.docs[4].get("imageUrl")) : Container(),
                               Expanded(child: Container()),
                               snapshot.data!.docs.length > 5 ? Container(
                                 padding: EdgeInsets.all(10),
@@ -248,13 +248,13 @@ class _MyWelcomeScreenState extends State<MyWelcomeScreen> {
                         Device.isSmartphone(context) ? SizedBox(height: hv*2,) : Container(),
                         
                         Row(children: [
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts, context: context),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/posts.svg", title: "Posts", occurence: userProvider.getUserModel?.posts == null ? 0 : userProvider.getUserModel!.posts),
                           Device.isSmartphone(context) ? HomePageComponents().verticalDivider() : Container(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments, context: context),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/chat.svg", title: "Commentaires", occurence: userProvider.getUserModel?.comments == null ? 0 : userProvider.getUserModel!.comments),
                           Device.isSmartphone(context) ?HomePageComponents().verticalDivider() : Container(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length, context: context),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/2users.svg", title: "Amis", occurence: userProvider.getUserModel?.friends == null ? 0 : userProvider.getUserModel!.friends!.length),
                           Device.isSmartphone(context) ?HomePageComponents().verticalDivider() : Container(),
-                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length, context: context),
+                          HomePageComponents().getProfileStat(imgUrl: "assets/icons/message.svg", title: "Chats", occurence: userProvider.getUserModel?.chats == null ? 0 : userProvider.getUserModel!.chats!.length),
                         ],mainAxisAlignment: MainAxisAlignment.spaceBetween,),
                         SizedBox(height: hv*7,)
                       ],

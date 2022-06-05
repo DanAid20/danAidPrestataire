@@ -117,7 +117,7 @@ class _ComparePlansState extends State<ComparePlans> {
                   subtitle: S.of(context).vousTesCouvertsJusquau+limitString,
                   noAction: true,
                   noPadding: Device.isSmartphone(context) ? false : true,
-                  context: context
+                
                 ),
               ),
             ),

@@ -58,14 +58,12 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                 child: Row(
                   children: [
                     widget.standardUse ? HomePageComponents.beneficiaryCard(
-                      context: context,
                       name: adherentProvider.getAdherent?.cniName != null ? adherentProvider.getAdherent?.cniName : adherentProvider.getAdherent?.surname,
                       edit: userProvider.getUserModel?.profileType != CONST.beneficiary,
                       imgUrl: adherentProvider.getAdherent?.imgUrl, 
                       action: (){Navigator.pushNamed(context, '/adherent-profile-edit');}
                     )
                     : userProvider.getUserModel?.profileType != CONST.beneficiary ? HomePageComponents.beneficiaryChoiceCard(
-                      context: context,
                       name: adherentProvider.getAdherent?.surname, 
                       imgUrl: adherentProvider.getAdherent?.imgUrl,
                       isSelected: selectedMatricule == adherentProvider.getAdherent?.adherentId,
@@ -103,7 +101,6 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                           BeneficiaryModel beneficiary = BeneficiaryModel.fromDocument(doc, doc.data() as Map);
                           print("name: ");
                           return widget.standardUse ? HomePageComponents.beneficiaryCard(
-                            context: context,
                             name: beneficiary.surname, 
                             imgUrl: beneficiary.avatarUrl, 
                             edit: userProvider.getUserModel?.profileType != CONST.beneficiary ? true : userProvider.getUserModel?.matricule == beneficiary.matricule,
@@ -113,7 +110,6 @@ class _BeneficiaryStreamState extends State<BeneficiaryStream> {
                             }
                           )
                           :HomePageComponents.beneficiaryChoiceCard(
-                            context: context,
                             name: beneficiary.surname, 
                             imgUrl: beneficiary.avatarUrl, 
                             isSelected: beneficiary.matricule == selectedMatricule,

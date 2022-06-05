@@ -111,7 +111,6 @@ class MyCoverageTabView extends StatelessWidget {
                           imgUrl: "assets/images/presentCard.png",
                           label: S.of(context).prsenterMaCarteDadhrant,
                           labelColor: kCardTextColor,
-                          context: context
                         ),
                       ),
                       GestureDetector(
@@ -120,7 +119,6 @@ class MyCoverageTabView extends StatelessWidget {
                           imgUrl: "assets/images/TrackSavings.png",
                           label: S.of(context).suivreMesCtisations,
                           labelColor: Colors.white,
-                          context: context
                         ),
                       ),
                       GestureDetector(
@@ -129,7 +127,6 @@ class MyCoverageTabView extends StatelessWidget {
                           imgUrl: "assets/images/TrackSavings.png",
                           label: S.of(context).demanderUnRemboursement,
                           labelColor: Colors.white,
-                          context: context
                         ),
                       ),
                     ],),
@@ -180,7 +177,6 @@ class MyCoverageTabView extends StatelessWidget {
                               return Padding(
                                 padding: EdgeInsets.only(bottom: lastIndex == index ? hv * 5 : 0),
                                 child: useCase.establishment != null ? HomePageComponents().getMyCoverageHospitalsTiles(
-                                  context: context,
                                   initial: useCase.establishment!.toUpperCase().substring(0,3),
                                   name: useCase.establishment,
                                   date: useCase.dateCreated!.toDate(),

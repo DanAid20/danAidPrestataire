@@ -126,7 +126,7 @@ class _UseCaseDetailsState extends State<UseCaseDetails> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase?.beneficiaryName, fname: "", context: context)),
+                          Expanded(child: HomePageComponents.head(surname: usecaseProvider.getUseCase?.beneficiaryName, fname: "")),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
