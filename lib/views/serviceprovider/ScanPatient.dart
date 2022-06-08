@@ -111,8 +111,8 @@ class _ScanPatientState extends State<ScanPatient> {
           child: ListView(children: [
            Container(
                constraints: BoxConstraints(
-                            maxWidth: Device.isSmartphone(context) ? double.infinity : 500
-                          ),
+                  maxWidth: Device.isSmartphone(context) ? double.infinity : 500
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [BoxShadow(color: kGoldlightYellow.withOpacity(0.6), blurRadius: 1.0, spreadRadius:1)],
@@ -265,10 +265,9 @@ class _ScanPatientState extends State<ScanPatient> {
         enable: adherentBeneficiaryInfos!=null || _phoneNumber?.text!=null? true: false ,
         text: S.of(context).envoyer, 
         action: () async {
-          if(_phoneNumber!.text.toString().isEmpty){
-             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("entrer le code de paiement"),));
-          }else if(_phoneNumber!.text.toString().isNotEmpty){
-            if (kDebugMode) {
+          if(_phoneNumber!.text.toString().isNotEmpty && !validateMobile(_phoneNumber!.text.toString())){
+
+             if (kDebugMode) {
               print(_phoneNumber!.text.toString());
             }
               var res= FirebaseFirestore.instance
@@ -285,10 +284,41 @@ class _ScanPatientState extends State<ScanPatient> {
                      devis=UseCaseServiceModel.fromDocument(value.docs[0], value.docs[0].data());
                      Navigator.push(context,MaterialPageRoute(builder: (context) =>Ordonances(devis: devis!)));
                   } else {
-                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("code de paiements invalide ")));
+                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("code de paiements invalideddd ")));
                   }
                   });
-          }
+
+          }else if(_phoneNumber!.text.toString().isNotEmpty && validateMobile(_phoneNumber!.text.toString())) {
+             if (kDebugMode) {
+              print(_phoneNumber!.text.toString());
+            }
+              var res= FirebaseFirestore.instance
+                    .collectionGroup('PRESTATIONS')
+                    .where('adherentId', isEqualTo:  _phoneNumber!.text.toString())
+                    .orderBy('createdDate', descending: true)
+                    .snapshots();
+                  res.first.then((value){
+                    if (kDebugMode) {
+                      print(value.docs.length);
+                    }
+                  var data= value.docs;
+                  if (data.isNotEmpty) {
+                     devis=UseCaseServiceModel.fromDocument(value.docs[0], value.docs[0].data());
+                     Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(
+                        data: null ,
+                        userId: devis?.adherentId,
+                        isbeneficiare: devis?.adherentId.toString()==devis?.beneficiaryId.toString() ? true : false
+                      )));
+                  } else {
+                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("code de paiements invalide6666 ")));
+                  }
+                  });
+          
+            }else{
+             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("entrez sois un code de paiement valide sois un numéro de téléphone valide")));
+
+            }
+
           // else{
           //   Navigator.push(context,MaterialPageRoute(builder: (context) =>PrestationEnCours(
           //         data: adherentBeneficiaryInfos ,
@@ -302,6 +332,18 @@ class _ScanPatientState extends State<ScanPatient> {
       ]),
         )));
 
+  }
+  int validateMobileReg(String value) {
+  String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  int val=0;
+  RegExp regExp =  RegExp(patttern);
+  if (value.isEmpty) {
+        val= -1;
+  }
+  else if (!regExp.hasMatch(value)) {
+        val=  1;
+  }
+  return val;
   }
  Future<bool> checkIfDocExists(String code) async {
        ServicesProviderInvoice devisProvider = Provider.of<ServicesProviderInvoice>(context,listen: false);

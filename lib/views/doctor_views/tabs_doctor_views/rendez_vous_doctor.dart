@@ -193,26 +193,33 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   }
 
   waitingRoomFuture(startDays, endDay, date, doctor) {
+    UserProvider userProvider = Provider.of<UserProvider>(context);
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
         .where("appointment-type", isEqualTo: 'consult-today')
         .where("doctorId", isEqualTo: doctor)
+        .where("rdvPrestataire", isEqualTo:  userProvider.getProfileType == serviceProvider ? true : false)
         .where("start-time", isGreaterThan: startDays, isLessThan: endDay)
         .orderBy("start-time")
         .snapshots();
     return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
+         if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
-          }
-         
-          return snapshot.data!.docs.isNotEmpty
-              ? ListView.builder(
+          } 
+          else if ( snapshot.connectionState == ConnectionState.done){
+              if (snapshot.hasError) {
+                            if (kDebugMode) {
+                              print(snapshot.error.toString());
+                            }
+                            return Text('Error ${snapshot.error.toString()}');
+              } else if (snapshot.hasData) {
+                  return ListView.builder(
                   scrollDirection: Axis.horizontal,
                   //shrinkWrap: true,
                   itemCount: snapshot.data!.docs.length,
@@ -293,13 +300,27 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                     );
                     }
                     return component;
-                  })
-              : Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Center(
-                    child: Text(S.of(context).aucunPatientEnSalleDattente),
-                  ),
+                  });
+              
+               } else {
+                            return   SizedBox(
+                              width: double.infinity,
+                              child:  Padding(
+                                padding:  EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(S
+                                      .of(context)
+                                      .aucunDevisNeCorrespondACePatient),
+                                ),
+                              ),
+                            );
+              }
+          }else{
+            return  Center(
+                  child: Text(S.of(context)
+                                      .aucunDevisNeCorrespondACePatient),
                 );
+          }
         });
   }
 
@@ -383,15 +404,16 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
   }
 
   getListOfUser(startDays, endDay, date, doctorId) {
+     UserProvider userProvider = Provider.of<UserProvider>(context);
     Stream<QuerySnapshot> query = FirebaseFirestore.instance
         .collection("APPOINTMENTS")
         .where("doctorId", isEqualTo: doctorId)
         .where("appointment-type", isEqualTo: 'appointment')
+        .where("rdvPrestataire", isEqualTo:  userProvider.getProfileType == serviceProvider ? true : false)
         .where("start-time",
             isGreaterThanOrEqualTo: startDays, isLessThanOrEqualTo: endDay)
         .orderBy("start-time")
         .snapshots();
-     UserProvider userProvider = Provider.of<UserProvider>(context);
     DoctorModelProvider doctor = Provider.of<DoctorModelProvider>(context);
     AppointmentModelProvider rendezVous = Provider.of<AppointmentModelProvider>(context);
     AppointmentModel? appointmentModel;
@@ -403,33 +425,44 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
     return StreamBuilder<QuerySnapshot>(
         stream: query,
         builder: (context, snapshot) {
-          
           if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kPrimaryColor),
               ),
             );
-          }
-          print(snapshot.data!.docs);
-          return  snapshot.data!.docs.isNotEmpty
-              ? Container(
+          } else if (snapshot.connectionState == ConnectionState.done){
+              if (snapshot.hasError) {
+                            if (kDebugMode) {
+                              print(snapshot.error.toString());
+                            }
+                            return Text('Error ${snapshot.error.toString()}');
+              } else if (snapshot.hasData) {
+                return   Container(
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    itemCount: snapshot.data!.docs.length,
+                    itemCount: snapshot.data?.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot doc = snapshot.data!.docs[index];
                       var widget;
                       // si doc["adherentId"] === doc["beneficiaryId"]
+                       if (snapshot.hasError) {
+                            if (kDebugMode) {
+                              print(snapshot.error.toString());
+                            }
+                            return Text('Error ${snapshot.error.toString()}');
+                          }
                       if(doc["adherentId"] == doc["beneficiaryId"]){
-                        print("++++++++++++++++++++++++++++++++++++++++++");
+                        if (kDebugMode) {
+                          print("++++++++++++++++++++++++++++++++++++++++++");
+                        }
                       CollectionReference users = FirebaseFirestore.instance.collection('ADHERENTS');
                           widget = FutureBuilder<DocumentSnapshot>(
                         future: users.doc(doc["adherentId"]).get(),
                         builder: (BuildContext context,
                             AsyncSnapshot<DocumentSnapshot> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData==false) {
+                          if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
                             return const Center(
                               child: CircularProgressIndicator(
                                 valueColor:
@@ -441,6 +474,15 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                             return Text(S.of(context).somethingWentWrong);
                           }
                           if (snapshot.connectionState == ConnectionState.done) {
+                             if (snapshot.hasError) {
+                            if (kDebugMode) {
+                              print(snapshot.error.toString());
+                            }
+                            return Text('Error ${snapshot.error.toString()}');
+                          }else if (snapshot.hasData) {
+                             if (kDebugMode) {
+                           print("--------------------------------");
+                         }
                             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                             Timestamp t = data["dateNaissance"];
                             DateTime d = t.toDate();
@@ -468,11 +510,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                   },
                                   
                                   child: HomePageComponents().timeline(
+                                  context: context,
                                   isanounced: doc["announced"],
                                   adhrentId: doc["adherentId"],
                                   doctorId: isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
                                   consultationtype: doc["consultation-type"],
-                                  isPrestataire: isPrestataire,
+                                  isPrestataire:  doc["rdvPrestataire"],
                                   age: "$differenceInDays ans",
                                   consultationDetails: '${doc["title"]}',
                                   consultationType:
@@ -483,18 +526,22 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                       '${data["prenom"]} ${data["nomFamille"]} '),
                             );
                           }
+                          }
                           return const  Text(" ");
                         },
                       );
-                      }else if (doc["adherentId"] != doc["beneficiaryId"]){
-                         print("+++++++++++++++++++++");
+
+                      }else if (doc["adherentId"] != doc["beneficiaryId"]){ 
+                         if (kDebugMode) {
+                           print("+++++++++++++++++++++");
+                         }
                             CollectionReference users =
                           FirebaseFirestore.instance.collection("ADHERENTS/${doc["adherentId"]}/BENEFICIAIRES");
                          widget= FutureBuilder<DocumentSnapshot>(
                         future: users.doc(doc["beneficiaryId"]).get(),
                         builder: (BuildContext context,
                             AsyncSnapshot<DocumentSnapshot> snapshot) {
-                          if (snapshot.hasData==false) {
+                          if (snapshot.connectionState == ConnectionState.waiting && snapshot.hasData==false) {
                             return const Center(
                               child: CircularProgressIndicator(
                                 valueColor:
@@ -505,7 +552,10 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                           if (snapshot.hasError) {
                             return Text(S.of(context).somethingWentWrong);
                           }
-                          if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                             if (kDebugMode) {
+                           print("--------------------------------");
+                         }
                             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
                             Timestamp t = data["dateNaissance"];
                             DateTime d = t.toDate();
@@ -531,11 +581,12 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                                   },
                                   
                                   child: HomePageComponents().timeline(
+                                    context: context,
                                   isanounced: doc["announced"],
                                   adhrentId: doc["adherentId"],
                                   doctorId:  isPrestataire? prestataire.getServiceProvider!.id: doctor.getDoctor!.id,
                                   consultationtype: doc["consultation-type"],
-                                  isPrestataire: false,
+                                  isPrestataire:  doc["rdvPrestataire"],
                                   age: "$differenceInDays ans",
                                   consultationDetails: '${doc["title"]}',
                                   consultationType:
@@ -550,15 +601,36 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
                         },
                         
                       );
+                      
                       }
                       // alors on affiche adherent
                       // sinom on affiche beneficiares 
                       return widget;
                     }),
-              )
-              : Center(
-                  child: Text(S.of(context).aucunAdherentDisponiblePourLeMoment),
+              );
+              } else {
+                            return SizedBox(
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(S
+                                      .of(context)
+                                      .aucunDevisNeCorrespondACePatient),
+                                ),
+                              ),
+                            );
+              }
+          }else{
+            return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(S.of(context).aucunRendezvousEnVuePourLinstant),
+                  ),
                 );
+          }
+         
+         
         });
   }
 
@@ -753,20 +825,22 @@ class _RendezVousDoctorViewState extends State<RendezVousDoctorView> {
         children: <Widget>[
           calendar(isPrestataire: isPrestataire),
           Expanded(
+            child: SingleChildScrollView(
               child: Container(
-                  padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                  alignment: Alignment.topCenter,
-                  child: userProvider.getProfileType == doctor &&
-                          doctorProvider.getDoctor?.id != null &&
-                          startDays != null &&
-                          endDay != null
-                      ? getListOfUser(startDays, endDay, _selectedDay,
-                          doctorProvider.getDoctor!.id)
-                     
-                      :  getListOfUser(startDays, endDay, _selectedDay,
-                          userProvider.getAuthId)
-                        )
-                        ),
+                    padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                    alignment: Alignment.topCenter,
+                    child: userProvider.getProfileType == doctor &&
+                            doctorProvider.getDoctor?.id != null &&
+                            startDays != null &&
+                            endDay != null
+                        ? getListOfUser(startDays, endDay, _selectedDay,
+                            doctorProvider.getDoctor!.id)
+                       
+                        :  getListOfUser(startDays, endDay, _selectedDay,
+                            userProvider.getAuthId)
+                          ),
+            ),
+          ),
           Container(
             constraints: BoxConstraints(
             maxHeight: Device.isSmartphone(context) ? 120.h :150.h,

@@ -31,7 +31,7 @@ class _DoctorBottomNavigationViewState extends State<DoctorBottomNavigationView>
   int index = 0;
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     super.initState();
   }
 

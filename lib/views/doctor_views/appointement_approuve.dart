@@ -101,7 +101,7 @@ class _AppointmentDetailsState extends State<AppointmentDetails> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_){
 
   // Add Your Code here.
     initialization();

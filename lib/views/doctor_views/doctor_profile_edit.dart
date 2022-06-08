@@ -344,7 +344,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
   }
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_){
     // Add Your Code here.
     initAvailability();
     initRegionDropdown();
@@ -725,6 +725,10 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
                                   value: _category,
                                   hint: Text(S.of(context).choisir),
                                   items: [
+                                    DropdownMenuItem(
+                                      child: Text("Hôpital", style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
+                                      value: "Hôpital",
+                                    ),
                                     DropdownMenuItem(
                                       child: Text(S.of(context).publique, style: const TextStyle(color: kPrimaryColor, fontWeight: FontWeight.bold)),
                                       value: S.of(context).public,
@@ -1338,7 +1342,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       return null;
     }
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
         imageSpinner = true;
     }));
     String fileName = userProvider.getUserId!;
@@ -1381,7 +1385,7 @@ class _DoctorProfileEditState extends State<DoctorProfileEdit> {
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(S.of(context).photoDeProfilAjoute)));
     });
-    WidgetsBinding.instance?.addPostFrameCallback((_) => setState(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
       imageSpinner = false;
     }));
   }

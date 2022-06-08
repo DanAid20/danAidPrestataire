@@ -1,6 +1,7 @@
 //import 'dart:ffi';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:danaid/core/models/serviceProviderModel.dart';
@@ -138,8 +139,8 @@ class _CreateQuoteState extends State<CreateQuote> {
             child: Container(
               child: Column(
                 children: [
-                  Text(S.of(context).emettreUnDvis, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), ),
-                  Text(DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now()), style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w400), )
+                  Text(S.of(context).emettreUnDvis, style: TextStyle(color: kDateTextColor, fontSize: Device.isSmartphone(context) ? wv*4 : 20, fontWeight: FontWeight.w700), ),
+                  Text(DateFormat('dd MMMM yyyy à h:mm').format(DateTime.now()), style: TextStyle(color: kDateTextColor, fontSize: Device.isSmartphone(context) ? wv*4 : 16, fontWeight: FontWeight.w400), )
                 ],
               ),
             ),
@@ -168,7 +169,7 @@ class _CreateQuoteState extends State<CreateQuote> {
           alignment: Alignment.center,
           child: Container(
              constraints: BoxConstraints(
-              maxWidth: Device.isSmartphone(context) ? 0 :500
+              maxWidth: Device.isSmartphone(context) ? 0 :1000
             ),
             child: Column(
               children: [
@@ -312,7 +313,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                 ),
                 Expanded(
                   child: Container(
-                          height:Device.isSmartphone(context) ? MySize.getScaledSizeHeight(100) : MySize.getScaledSizeHeight(50) ,
+                          height:Device.isSmartphone(context) ? MySize.getScaledSizeHeight(100) : MySize.getScaledSizeHeight(55) ,
                           margin: EdgeInsets.symmetric(horizontal: 8, vertical: hv*2.5),
                           decoration: BoxDecoration(
                             color: whiteColor,
@@ -326,18 +327,20 @@ class _CreateQuoteState extends State<CreateQuote> {
                                 child: Column(
                                   children: [
                                     SizedBox(height: hv*0.5),
-                                    Text(S.of(context).scannerDesJustificatifs, style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
+                                    Text( Device.isSmartphone(context)? S.of(context).scannerDesJustificatifs : "Importez vos pièces justificatives", style: const TextStyle(color: kBlueDeep, fontSize: 18, fontWeight: FontWeight.bold),),
                                     SizedBox(height: hv*0.2),
                                     Text(S.of(context).unDevisUneOrdonnanceOuToutAutrePiceEnAppui, style: const TextStyle(color: kBlueDeep, fontSize: 12, fontWeight: FontWeight.w400)),
+                                    Device.isSmartphone(context) ?
                                     Center(
                                       child: InkWell(
                                         onTap: (){getDocument(context);},
                                         child: Container(
                                           margin: EdgeInsets.symmetric(vertical: hv*1),
-                                          child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width: Device.isSmartphone(context) ? wv*20 : wv*4),
+                                          child: SvgPicture.asset('assets/icons/Bulk/Scan.svg', width:  wv*20 ),
                                         ),
                                       ),
-                                    ),
+                                    ): Container(),
+                                    SizedBox(height: hv*0.2),
                                     FileUploadCard(
                                       title: doc1+" ($docs1Uploaded)",
                                       state: doc1Uploaded!,
@@ -361,7 +364,6 @@ class _CreateQuoteState extends State<CreateQuote> {
                                       loading: doc3Spinner!,
                                       action: () async {await getDocFromGallery(doc3);}
                                     ),
-        
                                   SizedBox(height: hv*1),
                                   Padding(
                                     padding: EdgeInsets.only(bottom: Device.isSmartphone(context) ? 0 : 40),
@@ -399,11 +401,6 @@ class _CreateQuoteState extends State<CreateQuote> {
                                           
                                               await checkIfDocExists( _codeConsultationController!.text).then((value) async {
                                                 setState((){confirmSpinner = true;});  
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_codeConsultationController!.text)));
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_montantController!.text)));
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(categoriesType.toString())));
-                                          //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value.toString())));
-                                          //  
                                            if(value!=null && _montantController!.text.isNotEmpty  &&  _codeConsultationController!.text.isNotEmpty){
                                             if(categoriesType == pharmacy || categoriesType == labo || categoriesType == consultation){
                                             //  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("fdsfdsf")));
@@ -520,7 +517,7 @@ class _CreateQuoteState extends State<CreateQuote> {
                                         },
                                       ),
                                   )
-                                  ,SizedBox(height: Device.isSmartphone(context) ? 0 : hv*1 ),
+                                 
                                 ]))
                             ],
                   )),
@@ -608,8 +605,10 @@ File changeFileNameOnlySync(File file, String newFileName) {
     
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'png', 'jpeg', 'pdf', 'doc'],);
     if(result != null) {
-      File file = File(result.files.single.path!);
-      uploadDocumentToFirebase(file, name);
+      File filephone = File(result.files.single.path!);
+      Uint8List? fileWeb = result.files.first.bytes;
+      
+      uploadDocumentToFirebase(kIsWeb? fileWeb: filephone, name);
     } else {
       setState(() {
         if (name == "CNI"){
@@ -619,7 +618,7 @@ File changeFileNameOnlySync(File file, String newFileName) {
     }
   }
 
-Future uploadDocumentToFirebase(File file, String name) async {
+Future uploadDocumentToFirebase( file, String name) async {
    
     String doc1 =categoriesType == consultation ? S.of(context).carnet : "Devis";
     String doc2 = "Recu";
@@ -637,7 +636,7 @@ Future uploadDocumentToFirebase(File file, String name) async {
 
     UploadTask storageUploadTask;
     if (kIsWeb) {
-      storageUploadTask = storageReference.putData(await file.readAsBytes(), metadata);
+      storageUploadTask = storageReference.putData(file as Uint8List);
     } else {
       storageUploadTask = storageReference.putFile(File(file.path), metadata);
     }

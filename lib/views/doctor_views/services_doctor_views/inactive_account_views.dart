@@ -68,7 +68,7 @@ class _InactiveAccountState extends State<InactiveAccount> {
   @override
   void initState() {
      code= getRandomString(4);
-    WidgetsBinding.instance?.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (widget.isAccountIsExists == false) {
         await showDialog<String>(
             barrierDismissible: false,

@@ -103,7 +103,7 @@ class _DoctorProfilePageState extends State<DoctorProfilePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_){
     initAvailability();
     });
    

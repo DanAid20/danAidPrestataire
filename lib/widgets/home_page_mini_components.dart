@@ -29,6 +29,7 @@ class HomePageComponents {
     int? etat,
     String? iconesConsultationTypes,
     Function? redirectOncliked,
+    BuildContext? context
   }){
     print(etat.runtimeType);
     return GestureDetector(
@@ -67,7 +68,7 @@ class HomePageComponents {
                                               child: Text(nom!, overflow: TextOverflow.clip,  style: TextStyle(
                                                 color: kBlueForce,
                                                 fontWeight: FontWeight.w600,
-                                                fontSize: wv*3.5), textScaleFactor: 1.0),
+                                                fontSize:  Device.isSmartphone(context!) ?  wv*3.5 : 17), textScaleFactor: 1.0),
                                             ),
                                                 SizedBox(
                                   width: hv * 2.3,
@@ -75,7 +76,7 @@ class HomePageComponents {
                                             Text(date!,  style: TextStyle(
                                               color: kBlueForce,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: wv*3.5), textScaleFactor: 1.0),
+                                              fontSize:Device.isSmartphone(context) ?  wv*3.5 : 15), textScaleFactor: 1.0),
                                           ],
                                         ),
                                       ],
@@ -89,11 +90,11 @@ class HomePageComponents {
                                             Text(montant!, style: TextStyle(
                                               color: kBlueForce,
                                               fontWeight: FontWeight.w500,
-                                              fontSize: wv*3.5), textScaleFactor: 1.0),
+                                              fontSize: Device.isSmartphone(context) ?  wv*3.5 : 15), textScaleFactor: 1.0),
                                             Text(etat==0? S.current.enAttente: etat==1? 'Payer': etat==2?"Livré" : 'inconue'  , style: TextStyle(
                                               color:  getCOlor(etat) ,
                                               fontWeight: FontWeight.w400,
-                                              fontSize: wv*3.5), textScaleFactor: 1.0),
+                                              fontSize: Device.isSmartphone(context) ?  wv*3.5 : 15), textScaleFactor: 1.0),
                                           ],
                                         ),
                                       ],
@@ -465,203 +466,208 @@ class HomePageComponents {
     bool? isPrestataire,
     String? consultationtype,
     Function? approuveAppointement,String? adhrentId, String? doctorId,
-    bool isanounced=false
+    bool isanounced=false,
+    required BuildContext context
   }) {
-    return Container(
-      decoration: BoxDecoration(
-       
-      ),
-      width: wv * 100,
-      padding: EdgeInsets.only(left: wv * 3, right: wv * 3.3),
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: wv * .5),
-            child: Row(
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: wv * 1.5),
-                  child: Text(time!,
-                      style: TextStyle(
-                          color: kTextColor,
-                          fontWeight: FontWeight.w500,
-                          fontSize: fontSize(size: wv * 5))),
-                ),
-                SvgPicture.asset(
-                  'assets/icons/Bulk/Line.svg',
-                  height: hv * 3,
-                  color: kPrimaryColor,
-                  width: wv * 5,
-                ),
-              ],
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: Device.isSmartphone(context) ? wv*100 : 700
+        ),
+        padding: EdgeInsets.only(left: wv * 3 , right: wv * 3.3),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(left: wv * .5),
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: wv * 1.5),
+                    child: Text(time!,
+                        style: TextStyle(
+                            color: kTextColor,
+                            fontWeight: FontWeight.w500,
+                            fontSize: Device.isSmartphone(context)? fontSize(size: wv * 5) : 18 )),
+                  ),
+                  SvgPicture.asset(
+                    'assets/icons/Bulk/Line.svg',
+                    height: hv * 3,
+                    color: kPrimaryColor,
+                    width: wv * 5,
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            width: wv * 70,
-            height: MySize.getScaledSizeHeight(90),
-            margin: EdgeInsets.only(bottom: wv * 2),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
-              ],
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Row(
-              children: [
-                Stack(
-                  children: [
-                    Container(
-                      width: wv * 20,
-                      height: hv * 12,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image:  NetworkImage(userImage!),
-                            fit: BoxFit.cover,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: kThirdColor,
-                            ),
-                          ],
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          )),
-                    ),
-                    Positioned(
-                        bottom: hv * 0.5,
-                        right: wv * 1,
-                        child: SvgPicture.asset(
-                         'assets/icons/Bulk/Shield Done.svg',
-                          width: wv * 4,
-                          
-                        )),
-                   isanounced!=null && isanounced!=true? SizedBox.shrink() : Positioned(
-                        top: hv * 0.5,
-                        left: wv * 1,
-                        child: Container(
-                          height: 20,
-                          width: 20,
-                          decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: kDeepTealCAdress, spreadRadius: 0.5, blurRadius: 4
-                            ),
-                          ],
-                          borderRadius: BorderRadius.all(Radius.circular(10))
-                        ),child: Text(''),)
-                    )
+            Padding(
+              padding: const EdgeInsets.only(left:8.0),
+              child: Container(
+                width:  Device.isSmartphone(context)? wv * 70 : 700,
+                height: Device.isSmartphone(context)? MySize.getScaledSizeHeight(90): 120,
+                margin: EdgeInsets.only(bottom: wv * 2),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: kThirdColor, spreadRadius: 0.5, blurRadius: 4),
                   ],
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
-                Container(
-                  width: wv * 38.5,
-                  margin: EdgeInsets.only(left: wv * 1.5),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: hv * 1.5,
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: Text(userName!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style:  TextStyle(
-                                      color: kDateTextColor,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14.sp)),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Text(age!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: kCardTextColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 15.sp)),
-                            ),
-                          ],
+                child: Row(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: Device.isSmartphone(context)? wv * 20 :  wv * 12,
+                          height:  Device.isSmartphone(context)? hv * 12: 120,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image:  NetworkImage(userImage!),
+                                fit: BoxFit.cover,
+                              ),
+                              boxShadow: [
+                               const  BoxShadow(
+                                  color: kThirdColor,
+                                ),
+                              ],
+                              borderRadius: const  BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                              )),
                         ),
-                      ),
-                      SizedBox(
-                        height: hv * 0.7,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        Positioned(
+                            bottom: hv * 0.5,
+                            right: wv * 1,
+                            child: SvgPicture.asset(
+                             'assets/icons/Bulk/Shield Done.svg',
+                              width: wv * 4,
+                              
+                            )),
+                       isanounced!=null && isanounced!=true? SizedBox.shrink() : Positioned(
+                            top: hv * 0.5,
+                            left: wv * 1,
+                            child: Container(
+                              height: 20,
+                              width: 20,
+                              decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: kDeepTealCAdress, spreadRadius: 0.5, blurRadius: 4
+                                ),
+                              ],
+                              borderRadius: BorderRadius.all(Radius.circular(10))
+                            ),child: Text(''),)
+                        )
+                      ],
+                    ),
+                    Container(
+                      width: Device.isSmartphone(context)? wv * 38.5 : 286,
+                      margin: EdgeInsets.only(left: wv * 1.5),
+                      child: Column(
                         children: [
+                          SizedBox(
+                            height: hv * 1.5,
+                          ),
                           Container(
-                            margin: EdgeInsets.only(right: wv * 6),
-                            child: Text(consultationDetails!,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: kCardTextColor,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: MySize.getScaledSizeHeight(15))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: Text(userName!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style:  TextStyle(
+                                          color: kDateTextColor,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: Device.isSmartphone(context)? 14.sp : 16)),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(age!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: kCardTextColor,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize:  Device.isSmartphone(context)? 15.sp : 15 )),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(
-                            height: MySize.getScaledSizeHeight(5),
+                            height: hv * 0.7,
                           ),
-                          Text(consultationType!,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: kDeepTeal,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: MySize.getScaledSizeHeight(16))),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: wv * 6),
+                                child: Text(consultationDetails!,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: kCardTextColor,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: MySize.getScaledSizeHeight(15))),
+                              ),
+                              SizedBox(
+                                height: MySize.getScaledSizeHeight(5),
+                              ),
+                              Text(consultationType!,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: kDeepTeal,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize:  Device.isSmartphone(context)? MySize.getScaledSizeHeight(16) : 16 )),
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-                Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        // lien la page de l'appel video
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        width: MySize.getScaledSizeWidth(38.5), 
-                        height: MySize.getScaledSizeHeight(40),
-                        decoration: BoxDecoration(
-                            color: isPrestataire! ? kGoldForIconesBg:kSouthSeas,
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                            )),
-                        child: SvgPicture.asset(
-                        consultationtype=="vidéos"? 'assets/icons/Bulk/Video.svg': consultationtype=="Cabinet"? "assets/icons/Bulk/Profile.svg" : "assets/icons/Bulk/Home.svg",
-                          width: wv * 7,
-                        ),
-                      ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        approuveAppointement!(adhrentId, doctorId);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(3),
-                        height: hv * 5,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            // lien la page de l'appel video
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(6),
+                            width: MySize.getScaledSizeWidth(38.5), 
+                            height: Device.isSmartphone(context) ? MySize.getScaledSizeHeight(40) : 60,
+                            decoration: BoxDecoration(
+                                color: isPrestataire! ? kGoldForIconesBg:kSouthSeas,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                )),
+                            child: SvgPicture.asset(
+                            consultationtype=="vidéos"? 'assets/icons/Bulk/Video.svg': consultationtype=="Cabinet"? "assets/icons/Bulk/Profile.svg" : "assets/icons/Bulk/Home.svg",
+                              width: wv * 7,
+                            ),
+                          ),
                         ),
-                        child: SvgPicture.asset(
-                          'assets/icons/Bulk/ArrowRight Circle.svg',
-                          width: wv * 7,
-                        ),
-                      ),
+                        InkWell(
+                          onTap: () {
+                            approuveAppointement!(adhrentId, doctorId);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(3),
+                            height: hv * 5,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                            ),
+                            child: SvgPicture.asset(
+                              'assets/icons/Bulk/ArrowRight Circle.svg',
+                              width: wv * 7,
+                            ),
+                          ),
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -2091,7 +2097,7 @@ class HomePageComponents {
     );
   }
 
-  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor}){
+  static Widget header({String? title, String? subtitle, String? avatarUrl, String? label, Color titleColor = kPrimaryColor, BuildContext? context}){
     return Container(
       padding: EdgeInsets.only(left: wv*4),
       decoration: BoxDecoration(
@@ -2107,17 +2113,17 @@ class HomePageComponents {
                 CircleAvatar(
                   backgroundImage: avatarUrl != null ? CachedNetworkImageProvider(avatarUrl) : null,
                   backgroundColor: whiteColor,
-                  radius: wv*5,
-                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size: wv*8),
+                  radius: Device.isSmartphone(context!) ? wv*5 : wv*3,   
+                  child: avatarUrl != null ? Container() : Icon(LineIcons.user, color: kSouthSeas.withOpacity(0.7), size:   Device.isSmartphone(context) ? wv*8 : 35),
                 ),
-                SizedBox(width: wv*3,),
+                SizedBox(width: Device.isSmartphone(context) ? wv*3 : wv*12 ,),
                 Expanded(
                   child: RichText(text: TextSpan(
                     text: title! + "\n",
                     children: [
-                      TextSpan(text: subtitle, style: TextStyle(fontSize: wv*3.3)),
+                      TextSpan(text: subtitle, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*3.3 : 25 )),
                     ], style: TextStyle(color: titleColor, fontSize: 16.5)),
-                    maxLines: 4,
+                    maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),

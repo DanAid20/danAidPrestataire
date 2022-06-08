@@ -44,7 +44,7 @@ class _PrestationHistoryForProviderState extends State<PrestationHistoryForProvi
 
     @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((_){ 
+    WidgetsBinding.instance.addPostFrameCallback((_){ 
     if (kDebugMode) {
       print(getMonthsInYear().toString());
     }

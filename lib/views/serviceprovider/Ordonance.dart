@@ -67,7 +67,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
       print(prixpatient);
     }
     super.initState();
-     WidgetsBinding.instance?.addPostFrameCallback((_){
+     WidgetsBinding.instance.addPostFrameCallback((_){
    
         getPatientInformation(widget.devis!.idAppointement!);
     });
@@ -161,8 +161,8 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             child: Container(
               child: Column(
                 children: [
-                  Text(S.of(context).ordonance, style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w500), ),
-                  Text("${widget.devis!.title}", style: TextStyle(color: kDateTextColor, fontSize: wv*4, fontWeight: FontWeight.w300), ),
+                  Text(S.of(context).ordonance, style: TextStyle(color: kDateTextColor, fontSize: Device.isSmartphone(context) ? wv*4 : 20, fontWeight: FontWeight.w600), ),
+                  Text("${widget.devis!.title}", style: TextStyle(color: kDateTextColor, fontSize:Device.isSmartphone(context) ? wv*4 : 17, fontWeight: FontWeight.w300), ),
                 ],
               ),
             ),
@@ -223,7 +223,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                 IntrinsicHeight(
                   child: Container(
               color: kGoldlightYellow,
-              height: hv*44.5, 
+              height: Device.isSmartphone(context) ? hv*44.5 : 465, 
               child: Expanded(
                   child: Column(
                     children: [
@@ -237,7 +237,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                               child: Column(
                                 children: [
                                   Container(
-                                    height: hv*14.1,
+                                    height: Device.isSmartphone(context) ? hv*14.1 : 202,
                                     padding: EdgeInsets.only(bottom: hv*1.2),
                                     decoration: BoxDecoration(
                                       color: kGoldlightYellow.withOpacity(0.3),
@@ -248,7 +248,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                                         Row(
                                           children: [
                                             Expanded(child:
-                                             HomePageComponents.header(label: S.of(context).pourLePatient, title: username ?? S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis!.dateCreated!.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage?? "" , titleColor: kTextBlue)),
+                                             HomePageComponents.header( context: context, label: S.of(context).pourLePatient, title: username ?? S.of(context).pasDefini, subtitle: "${DateTime.now().year - DateTime.fromMicrosecondsSinceEpoch(widget.devis!.dateCreated!.microsecondsSinceEpoch).year}ans", avatarUrl: urlImage?? "" , titleColor: kTextBlue)),
                                             HomePageComponents.getIconBox(iconPath: 'assets/icons/Bulk/Edit.svg', color: kDeepTeal, size: 25, action: ()=>setState((){
                                               if (kDebugMode) {
                                                 print(edit);
@@ -266,17 +266,17 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                                               children: [
                                                 Text(S.of(context).codeDeConsultation,
                                   style: TextStyle(
-                                      fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 5):15,
+                                      fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 5):19,
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0.2,
                                       color: kFirstIntroColor),),
                                                 Text("${widget.devis!.consultationCode}",
                                   style: TextStyle(
-                                      fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 3.5):15,
+                                      fontSize: Device.isSmartphone(context) ? fontSize(size: wv * 3.5):19,
                                       fontWeight: FontWeight.w600,
                                       letterSpacing: 0.2,
                                       color: kFirstIntroColor),),
-                                              ],
+                                              ],  
                                             ),
                                             SizedBox(width: wv*4,)
                                           ],
@@ -306,7 +306,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                                                   child: Row(children: [
                                                     SvgPicture.asset("assets/icons/Bulk/CalendarLine.svg", color: kDeepTeal,),
                                                     const VerticalDivider(),
-                                                    Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*50 : wv*5 , color: kPrimaryColor, fontWeight: FontWeight.bold),),
+                                                    Text( selectedDate != null ? "${selectedDate!.toLocal()}".split(' ')[0] : S.of(context).choisir, style: TextStyle(fontSize: Device.isSmartphone(context) ? wv*50 : 15 , color: kPrimaryColor, fontWeight: FontWeight.bold),),
                                                   ],),
                                                 ),
                                               ),
@@ -526,7 +526,7 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
                              ),
                          Container(
                            width: double.infinity,
-                           height: hv*4.5,
+                           height: Device.isSmartphone(context)? hv*4.5 : hv*10,
                            child: Row(
                              mainAxisAlignment: MainAxisAlignment.end,
                              mainAxisSize: MainAxisSize.max,
@@ -575,11 +575,10 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             padding: EdgeInsets.only(left:wv*5, right: wv*5, top:hv*3),
             child:  buttonLoading==true? Center(child: Loaders().buttonLoader(kCardTextColor)) :
               CustomTextButton(
-                 borderRadius:60,
+                 borderRadius:20,
                  text: S.of(context).validerLaPrestation,
                  color: kBlueDeep,
                  noPadding: true ,
-                 expand: true,
                  action: () =>{
                    setState(() {
                           buttonLoading = true;
@@ -604,11 +603,11 @@ class _OrdonanceDuPatientState extends State<Ordonances> {
             child:  Padding(
             padding: EdgeInsets.only(left:wv*5.0, right: wv*5.0, top:hv*3),
             child: CustomTextButton(
-               borderRadius:60,
+               borderRadius:20,
                text: S.of(context).annuler,
                textColor: kBlueForce, 
                color: (Colors.grey[200])!,
-               expand: false,
+                noPadding: true ,
                action: () => Navigator.pop(context),
              ),
         )
