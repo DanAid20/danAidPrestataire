@@ -5,7 +5,7 @@ class AppointmentModel {
   Timestamp? birthDate, endTime, startTime, dateCreated;
   bool? announced, enabled, isNotWithDoctor;
   int? status;
-  double? price;
+  num? price;
   List? symptoms;
 
   AppointmentModel({this.id, this.adherentId, this.beneficiaryId, this.status, this.dateCreated, this.isNotWithDoctor, this.token, this.enabled, this.avatarUrl, this.appointmentType, this.consultationType, this.username, this.doctorName, this.doctorId, this.title, this.birthDate, this.endTime, this.startTime, this.announced, this.price, this.symptoms});
