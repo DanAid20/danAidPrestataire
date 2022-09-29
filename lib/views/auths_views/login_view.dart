@@ -23,6 +23,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
 
 import '../../locator.dart';
+import '../../widgets/home_page_mini_components.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -312,21 +313,13 @@ class _LoginViewState extends State<LoginView> {
       UserModel? user = res["user"];
       
       if(registered == false){
-        Navigator.pushNamed(context, '/profile-type');
-      } else {
+        //Navigator.pushNamed(context, '/profile-type');
+        HiveDatabase.setProfileType(serviceProvider);
+        userProvider.setProfileType(serviceProvider);
+        Navigator.pushNamed(context, '/profile-type-sprovider');
+      } 
+      else if(registered == true && profile == serviceProvider) {
         userProvider.setUserModel(user!);
-        if(profile == beneficiary){
-          if(user.authId == null){
-            FirebaseFirestore.instance.collection("USERS").doc(user.userId).update({
-              "authId": _auth.currentUser!.uid,
-              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
-              "userCountryName": userProvider.getCountryName,
-            }).then((value) {
-              showSnackbar("Profil bénéficiaire recupéré..");
-            });
-          }
-          HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
-        }
         HiveDatabase.setRegisterState(true);
         HiveDatabase.setSignInState(true);
         HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
@@ -335,6 +328,10 @@ class _LoginViewState extends State<LoginView> {
         userProvider.setProfileType(profile);
         HiveDatabase.setProfileType(profile!);
         Navigator.pushReplacementNamed(context, '/home');
+      }
+      else if (registered == true && profile != serviceProvider) {
+        //Navigator.pop(context);
+        showSnackbar("Pour votre compte utilisez désormais l'application DanAid ${HomePageComponents.getProfileTypeLabel(profile: profile!)} sur playstore pour vous connecter");
       }
     };
 

@@ -57,7 +57,7 @@ Future<void> _showNotification({required int id, required String title, String? 
   print("showing..");
   String msgBody = body ?? "New notification";
   var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'com.danaid.danaidmobile', 'DanAid',
+      'com.danaidmobile.doctor', 'DanAid',
       channelDescription: 'Mutuelle Santé 100% mobile',
       importance: Importance.max,
       playSound: true,

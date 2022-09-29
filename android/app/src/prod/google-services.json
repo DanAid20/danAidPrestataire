@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "907608334806-76gcdkg6git6s5knm8i6htak9f16ijes.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "f3190917cb69a60d5d72d0cfd640bf102cd372f0"
+          }
+        },
+        {
           "client_id": "907608334806-87ea91ir5cnnpbcr51fa9dec8jqpt4eq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -36,6 +44,14 @@
           "android_info": {
             "package_name": "com.danaid.danaidmobile",
             "certificate_hash": "f9d2e1062083acdab5bcff2f9ad2575e4e72374c"
+          }
+        },
+        {
+          "client_id": "907608334806-i74l0s3s01a7u03tdng87r45o1uotb2s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidmobile",
+            "certificate_hash": "17a212e915765a96296c8213ef7ee5fa734fb335"
           }
         },
         {
@@ -78,6 +94,197 @@
             {
               "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:6b7476145ad9c98f458477",
+        "android_client_info": {
+          "package_name": "com.danaid.danaidsponsor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-kdc8cueg6mp4u64id0k49prbpdn01u0m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidsponsor",
+            "certificate_hash": "9cf6a76b37254bc78777a0f042ee723fb5d8a8c1"
+          }
+        },
+        {
+          "client_id": "907608334806-p2a9hjsvcldtrm7cer948hr3pab32vde.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danaid.danaidsponsor",
+            "certificate_hash": "dfe3e8132148dc3bb72f25b9af4b2565de2c273c"
+          }
+        },
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:85f68c998b6ee1ae458477",
+        "android_client_info": {
+          "package_name": "com.danaidmobile.doctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:6e8d8a4fe09120bc458477",
+        "android_client_info": {
+          "package_name": "com.example.danaid_prestataire_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-sd6g0f419e2pmg5keuiju2he9ublo10f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.danaid_prestataire_app",
+            "certificate_hash": "f3190917cb69a60d5d72d0cfd640bf102cd372f0"
+          }
+        },
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907608334806:android:b9f7192a65a073b3458477",
+        "android_client_info": {
+          "package_name": "com.example.danaid_sponsor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "907608334806-7elrkh3jhjkr59tg4fgqi6i6q62vbrso.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.danaid_sponsor",
+            "certificate_hash": "9cf6a76b37254bc78777a0f042ee723fb5d8a8c1"
+          }
+        },
+        {
+          "client_id": "907608334806-annq0qvep2et2q61i884u1fuhfst0p8r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.danaid_sponsor",
+            "certificate_hash": "145b6ac22640f73177cbf9bed794bbf09b8b4631"
+          }
+        },
+        {
+          "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuTqtXUYUf6h_OgkMD_6mkWWX-mgrY0xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
             }
           ]
         }
@@ -87,7 +294,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:907608334806:android:050e25bd5bc21002458477",
         "android_client_info": {
-          "package_name": "com.danaid.danaidmobile"
+          "package_name": "com.master.danaid"
         }
       },
       "oauth_client": [
@@ -95,7 +302,7 @@
           "client_id": "907608334806-c6o5sfshvstklgcpqiv14d4j9tq4jf18.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.danaid.danaidmobile",
+            "package_name": "com.master.danaid",
             "certificate_hash": "9cf6a76b37254bc78777a0f042ee723fb5d8a8c1"
           }
         },
@@ -115,6 +322,13 @@
             {
               "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
             }
           ]
         }
@@ -152,6 +366,13 @@
             {
               "client_id": "907608334806-qdcebsmkedg04ivfnviaraq82g6g1hbn.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "907608334806-d3utp81m2ss0um2hh1bt6hakl7maul4l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.danaidmobile.doctor"
+              }
             }
           ]
         }

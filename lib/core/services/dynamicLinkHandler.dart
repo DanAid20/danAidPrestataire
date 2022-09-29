@@ -19,11 +19,11 @@ class DynamicLinkHandler {
       uriPrefix: 'https://danaid.page.link',
       link: Uri.parse('https://danaid.page.link/classicinvite?userid=$userId'),
       androidParameters: AndroidParameters(
-        packageName: 'com.danaid.danaidmobile',
+        packageName: 'com.danaidmobile.doctor',
         minimumVersion: 210020010,
       ),
       /*iosParameters: IosParameters(
-        bundleId: 'com.danaid.danaidmobile',
+        bundleId: 'com.danaidmobile.doctor',
         minimumVersion: '210020010',
         appStoreId: '',
       ),*/
@@ -48,11 +48,11 @@ class DynamicLinkHandler {
       ),
       //dynamicLinkParametersOptions: DynamicLinkParametersOptions(shortDynamicLinkPathLength: ShortDynamicLinkPathLength.short),
       androidParameters: AndroidParameters(
-        packageName: 'com.danaid.danaidmobile',
+        packageName: 'com.danaidmobile.doctor',
         minimumVersion: 210020010,
       ),
       /*iosParameters: IosParameters(
-        bundleId: 'com.danaid.danaidmobile',
+        bundleId: 'com.danaidmobile.doctor',
         minimumVersion: '210020010',
         appStoreId: '',
       ),*/
@@ -74,11 +74,11 @@ class DynamicLinkHandler {
         description: "Consultez nos différents plans de service pour profiter de la méga reduction"
       ),
       androidParameters: AndroidParameters(
-        packageName: 'com.danaid.danaidmobile',
+        packageName: 'com.danaidmobile.doctor',
         minimumVersion: 210020010,
       ),
       /*iosParameters: IosParameters(
-        bundleId: 'com.danaid.danaidmobile',
+        bundleId: 'com.danaidmobile.doctor',
         minimumVersion: '210020010',
         appStoreId: '',
       ),*/
@@ -100,11 +100,11 @@ class DynamicLinkHandler {
         description: "A new friend request from DanAid"
       ),
       androidParameters: AndroidParameters(
-        packageName: 'com.danaid.danaidmobile',
+        packageName: 'com.danaidmobile.doctor',
         minimumVersion: 210020010,
       ),
       /*iosParameters: IosParameters(
-        bundleId: 'com.danaid.danaidmobile',
+        bundleId: 'com.danaidmobile.doctor',
         minimumVersion: '210020010',
         appStoreId: '',
       ),*/
@@ -126,11 +126,11 @@ class DynamicLinkHandler {
         description: "Réjoignez la mutuelle DanAid et profitez d'une couverture à hauteur de 70%"
       ),
       androidParameters: AndroidParameters(
-        packageName: 'com.danaid.danaidmobile',
+        packageName: 'com.danaidmobile.doctor',
         minimumVersion: 210020010,
       ),
       /*iosParameters: IosParameters(
-        bundleId: 'com.danaid.danaidmobile',
+        bundleId: 'com.danaidmobile.doctor',
         minimumVersion: '210020010',
         appStoreId: '',
       ),*/

@@ -18,6 +18,8 @@ import 'package:danaid/core/providers/phoneVerificationProvider.dart';
 import 'package:danaid/core/services/hiveDatabase.dart';
 import 'package:danaid/widgets/danAid_default_header.dart';
 
+import '../../widgets/home_page_mini_components.dart';
+
 class OtpView extends StatefulWidget {
   final ConfirmationResult? webRes;
   const OtpView({Key? key, this.webRes}) : super(key: key);
@@ -335,36 +337,25 @@ class _OtpViewState extends State<OtpView> {
       print(res.toString());
 
       if(registered == false){
-        print("not registered");
-        setState(() {
-          load = false;
-        });
-        Navigator.pushNamed(context, '/profile-type');
-      } else {
-        print("registered");
+        //Navigator.pushNamed(context, '/profile-type');
+        HiveDatabase.setProfileType(serviceProvider);
+        userProvider.setProfileType(serviceProvider);
+        Navigator.pushNamed(context, '/profile-type-sprovider');
+      } 
+      else if(registered == true && profile == serviceProvider) {
         userProvider.setUserModel(userModel!);
-        if(profile == beneficiary){
-          if(userModel.authId == null){
-            FirebaseFirestore.instance.collection("USERS").doc(userModel.userId).update({
-              "authId": _auth.currentUser!.uid,
-              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
-              "userCountryName": userProvider.getCountryName,
-            }).then((value) {
-              showSnackbar("Profil bénéficiaire recupéré..");
-            });
-          }
-          HiveDatabase.setAdherentParentAuthPhone(userProvider.getUserModel!.adherentId!);
-        }
         HiveDatabase.setRegisterState(true);
-        setState(() {
-          load = false;
-        });
-        print("profile");
+        HiveDatabase.setSignInState(true);
+        HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
+        print("profile:");
         print(profile);
-        HiveDatabase.setProfileType(profile!);
         userProvider.setProfileType(profile);
-        userProvider.setAuthId(user.uid);
+        HiveDatabase.setProfileType(profile!);
         Navigator.pushReplacementNamed(context, '/home');
+      }
+      else if (registered == true && profile != serviceProvider) {
+        //Navigator.pop(context);
+        showSnackbar("Pour votre compte utilisez désormais l'application DanAid ${HomePageComponents.getProfileTypeLabel(profile: profile!)} sur playstore pour vous connecter");
       }
       showSnackbar(S.of(context).successfullySignedInUid+user.uid);
       }).catchError((e){
@@ -399,35 +390,25 @@ class _OtpViewState extends State<OtpView> {
       UserModel? userModel = res["user"];
 
       if(registered == false){
-        print("not registered");
-        setState(() {
-          load = false;
-        });
-        Navigator.pushNamed(context, '/profile-type');
-      } else {
-        print("registered");
+        //Navigator.pushNamed(context, '/profile-type');
+        HiveDatabase.setProfileType(serviceProvider);
+        userProvider.setProfileType(serviceProvider);
+        Navigator.pushNamed(context, '/profile-type-sprovider');
+      } 
+      else if(registered == true && profile == serviceProvider) {
         userProvider.setUserModel(userModel!);
-        if(profile == beneficiary){
-          if(userModel.authId == null){
-            FirebaseFirestore.instance.collection("USERS").doc(userModel.userId).update({
-              "authId": _auth.currentUser!.uid,
-              "userCountryCodeIso": userProvider.getCountryCode!.toLowerCase(),
-              "userCountryName": userProvider.getCountryName,
-            }).then((value) {
-              showSnackbar("Profil bénéficiaire recupéré..");
-            });
-          }
-        }
         HiveDatabase.setRegisterState(true);
-        setState(() {
-          load = false;
-        });
-        print("profile");
+        HiveDatabase.setSignInState(true);
+        HiveDatabase.setAuthPhone(userProvider.getUserModel!.userId!);
+        print("profile:");
         print(profile);
-        HiveDatabase.setProfileType(profile!);
         userProvider.setProfileType(profile);
-        userProvider.setAuthId(user.uid);
+        HiveDatabase.setProfileType(profile!);
         Navigator.pushReplacementNamed(context, '/home');
+      }
+      else if (registered == true && profile != serviceProvider) {
+        Navigator.pop(context);
+        showSnackbar("Pour votre compte utilisez désormais l'application DanAid ${HomePageComponents.getProfileTypeLabel(profile: profile!)} sur playstore pour vous connecter");
       }
   }
 

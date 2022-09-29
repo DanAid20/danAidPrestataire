@@ -2139,5 +2139,19 @@ class HomePageComponents {
       ),
     );
   }
+
+  static String getProfileTypeLabel({required String profile}){
+    String s = "& Moi";
+    if(profile == doctor){
+      s = "Médecin";
+    }
+    else if (profile == "SPONSOR"){
+      s = "Diaspora";
+    }
+    else if (profile == serviceProvider){
+      s = "Prestataire";
+    }
+    return s;
+  }
 }
 
